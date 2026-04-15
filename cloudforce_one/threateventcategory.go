@@ -39,6 +39,11 @@ func NewThreatEventCategoryService(opts ...option.RequestOption) (r *ThreatEvent
 // Creates a new category
 func (r *ThreatEventCategoryService) New(ctx context.Context, params ThreatEventCategoryNewParams, opts ...option.RequestOption) (res *ThreatEventCategoryNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -51,6 +56,11 @@ func (r *ThreatEventCategoryService) New(ctx context.Context, params ThreatEvent
 // Lists categories across multiple datasets
 func (r *ThreatEventCategoryService) List(ctx context.Context, params ThreatEventCategoryListParams, opts ...option.RequestOption) (res *[]ThreatEventCategoryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,6 +73,11 @@ func (r *ThreatEventCategoryService) List(ctx context.Context, params ThreatEven
 // Deletes a category
 func (r *ThreatEventCategoryService) Delete(ctx context.Context, categoryID string, body ThreatEventCategoryDeleteParams, opts ...option.RequestOption) (res *ThreatEventCategoryDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -79,6 +94,11 @@ func (r *ThreatEventCategoryService) Delete(ctx context.Context, categoryID stri
 // Updates a category
 func (r *ThreatEventCategoryService) Edit(ctx context.Context, categoryID string, params ThreatEventCategoryEditParams, opts ...option.RequestOption) (res *ThreatEventCategoryEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -95,6 +115,11 @@ func (r *ThreatEventCategoryService) Edit(ctx context.Context, categoryID string
 // Reads a category
 func (r *ThreatEventCategoryService) Get(ctx context.Context, categoryID string, query ThreatEventCategoryGetParams, opts ...option.RequestOption) (res *ThreatEventCategoryGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -255,6 +280,8 @@ func (r threatEventCategoryGetResponseJSON) RawJSON() string {
 
 type ThreatEventCategoryNewParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string]   `path:"account_id" api:"required"`
 	KillChain   param.Field[float64]  `json:"killChain" api:"required"`
 	Name        param.Field[string]   `json:"name" api:"required"`
@@ -269,6 +296,8 @@ func (r ThreatEventCategoryNewParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventCategoryListParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of dataset IDs to query categories from. If not provided, uses the default
 	// dataset.
@@ -286,11 +315,15 @@ func (r ThreatEventCategoryListParams) URLQuery() (v url.Values) {
 
 type ThreatEventCategoryDeleteParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ThreatEventCategoryEditParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string]   `path:"account_id" api:"required"`
 	KillChain   param.Field[float64]  `json:"killChain"`
 	MitreAttack param.Field[[]string] `json:"mitreAttack"`
@@ -305,5 +338,7 @@ func (r ThreatEventCategoryEditParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventCategoryGetParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

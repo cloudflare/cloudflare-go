@@ -47,6 +47,11 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,6 +69,11 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 func (r *InstanceService) Update(ctx context.Context, id string, params InstanceUpdateParams, opts ...option.RequestOption) (res *InstanceUpdateResponse, err error) {
 	var env InstanceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -86,6 +96,11 @@ func (r *InstanceService) List(ctx context.Context, params InstanceListParams, o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -112,6 +127,11 @@ func (r *InstanceService) ListAutoPaging(ctx context.Context, params InstanceLis
 func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDeleteParams, opts ...option.RequestOption) (res *InstanceDeleteResponse, err error) {
 	var env InstanceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -133,6 +153,11 @@ func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDe
 // content as context for generating responses.
 func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params InstanceChatCompletionsParams, opts ...option.RequestOption) (res *InstanceChatCompletionsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -150,6 +175,11 @@ func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params
 func (r *InstanceService) Read(ctx context.Context, id string, query InstanceReadParams, opts ...option.RequestOption) (res *InstanceReadResponse, err error) {
 	var env InstanceReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -172,6 +202,11 @@ func (r *InstanceService) Read(ctx context.Context, id string, query InstanceRea
 func (r *InstanceService) Search(ctx context.Context, id string, params InstanceSearchParams, opts ...option.RequestOption) (res *InstanceSearchResponse, err error) {
 	var env InstanceSearchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -193,6 +228,11 @@ func (r *InstanceService) Search(ctx context.Context, id string, params Instance
 func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceStatsParams, opts ...option.RequestOption) (res *InstanceStatsResponse, err error) {
 	var env InstanceStatsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -5177,6 +5217,7 @@ func (r instanceStatsResponseEngineVectorizeJSON) RawJSON() string {
 }
 
 type InstanceNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
 	ID             param.Field[string]                            `json:"id" api:"required"`
@@ -5773,6 +5814,7 @@ func (r instanceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID      param.Field[string]                               `path:"account_id" api:"required"`
 	AIGatewayID    param.Field[string]                               `json:"ai_gateway_id"`
 	AISearchModel  param.Field[InstanceUpdateParamsAISearchModel]    `json:"ai_search_model"`
@@ -6397,6 +6439,7 @@ func (r instanceUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Namespace param.Field[string] `query:"namespace"`
 	// Order By Column Name
@@ -6449,6 +6492,7 @@ func (r InstanceListParamsOrderByDirection) IsKnown() bool {
 }
 
 type InstanceDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -6476,6 +6520,7 @@ func (r instanceDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID       param.Field[string]                                       `path:"account_id" api:"required"`
 	Messages        param.Field[[]InstanceChatCompletionsParamsMessage]       `json:"messages" api:"required"`
 	AISearchOptions param.Field[InstanceChatCompletionsParamsAISearchOptions] `json:"ai_search_options"`
@@ -6783,6 +6828,7 @@ func (r InstanceChatCompletionsParamsModel) IsKnown() bool {
 }
 
 type InstanceReadParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -6810,6 +6856,7 @@ func (r instanceReadResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceSearchParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID       param.Field[string]                              `path:"account_id" api:"required"`
 	AISearchOptions param.Field[InstanceSearchParamsAISearchOptions] `json:"ai_search_options"`
 	Messages        param.Field[[]InstanceSearchParamsMessage]       `json:"messages"`
@@ -7098,6 +7145,7 @@ func (r instanceSearchResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceStatsParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -44,6 +44,11 @@ func NewSettingAllowPolicyService(opts ...option.RequestOption) (r *SettingAllow
 func (r *SettingAllowPolicyService) New(ctx context.Context, params SettingAllowPolicyNewParams, opts ...option.RequestOption) (res *SettingAllowPolicyNewResponse, err error) {
 	var env SettingAllowPolicyNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,6 +67,11 @@ func (r *SettingAllowPolicyService) List(ctx context.Context, params SettingAllo
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -89,6 +99,11 @@ func (r *SettingAllowPolicyService) ListAutoPaging(ctx context.Context, params S
 func (r *SettingAllowPolicyService) Delete(ctx context.Context, policyID int64, body SettingAllowPolicyDeleteParams, opts ...option.RequestOption) (res *SettingAllowPolicyDeleteResponse, err error) {
 	var env SettingAllowPolicyDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -107,6 +122,11 @@ func (r *SettingAllowPolicyService) Delete(ctx context.Context, policyID int64, 
 func (r *SettingAllowPolicyService) Edit(ctx context.Context, policyID int64, params SettingAllowPolicyEditParams, opts ...option.RequestOption) (res *SettingAllowPolicyEditResponse, err error) {
 	var env SettingAllowPolicyEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -125,6 +145,11 @@ func (r *SettingAllowPolicyService) Edit(ctx context.Context, policyID int64, pa
 func (r *SettingAllowPolicyService) Get(ctx context.Context, policyID int64, query SettingAllowPolicyGetParams, opts ...option.RequestOption) (res *SettingAllowPolicyGetResponse, err error) {
 	var env SettingAllowPolicyGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -462,6 +487,8 @@ func (r SettingAllowPolicyGetResponsePatternType) IsKnown() bool {
 
 type SettingAllowPolicyNewParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Messages from this sender will be exempted from Spam, Spoof and Bulk
 	// dispositions. Note: This will not exempt messages with Malicious or Suspicious
@@ -533,6 +560,8 @@ func (r settingAllowPolicyNewResponseEnvelopeJSON) RawJSON() string {
 
 type SettingAllowPolicyListParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The sorting direction.
 	Direction          param.Field[SettingAllowPolicyListParamsDirection] `query:"direction"`
@@ -617,6 +646,8 @@ func (r SettingAllowPolicyListParamsPatternType) IsKnown() bool {
 
 type SettingAllowPolicyDeleteParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -649,6 +680,8 @@ func (r settingAllowPolicyDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SettingAllowPolicyEditParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Comments  param.Field[string] `json:"comments"`
 	// Messages from this sender will be exempted from Spam, Spoof and Bulk
@@ -717,6 +750,8 @@ func (r settingAllowPolicyEditResponseEnvelopeJSON) RawJSON() string {
 
 type SettingAllowPolicyGetParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -47,6 +47,11 @@ func NewNetworkRouteService(opts ...option.RequestOption) (r *NetworkRouteServic
 func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,6 +70,11 @@ func (r *NetworkRouteService) List(ctx context.Context, params NetworkRouteListP
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -91,6 +101,11 @@ func (r *NetworkRouteService) ListAutoPaging(ctx context.Context, params Network
 func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body NetworkRouteDeleteParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -113,6 +128,11 @@ func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body N
 func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params NetworkRouteEditParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -134,6 +154,11 @@ func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params N
 func (r *NetworkRouteService) Get(ctx context.Context, routeID string, query NetworkRouteGetParams, opts ...option.RequestOption) (res *Route, err error) {
 	var env NetworkRouteGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -263,6 +288,8 @@ func (r TeamnetTunType) IsKnown() bool {
 
 type NetworkRouteNewParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network param.Field[string] `json:"network" api:"required"`
@@ -323,6 +350,8 @@ func (r NetworkRouteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkRouteListParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `query:"comment"`
@@ -381,6 +410,8 @@ func (r NetworkRouteListParamsTunType) IsKnown() bool {
 
 type NetworkRouteDeleteParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -429,6 +460,8 @@ func (r NetworkRouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkRouteEditParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
@@ -489,6 +522,8 @@ func (r NetworkRouteEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkRouteGetParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

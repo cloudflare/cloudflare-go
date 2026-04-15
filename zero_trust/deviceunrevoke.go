@@ -46,6 +46,11 @@ func NewDeviceUnrevokeService(opts ...option.RequestOption) (r *DeviceUnrevokeSe
 func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env DeviceUnrevokeNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,6 +65,7 @@ func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNe
 }
 
 type DeviceUnrevokeNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A list of Registration IDs to unrevoke.
 	Body []string `json:"body" api:"required"`

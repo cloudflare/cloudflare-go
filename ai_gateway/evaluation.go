@@ -45,6 +45,11 @@ func NewEvaluationService(opts ...option.RequestOption) (r *EvaluationService) {
 func (r *EvaluationService) New(ctx context.Context, gatewayID string, params EvaluationNewParams, opts ...option.RequestOption) (res *EvaluationNewResponse, err error) {
 	var env EvaluationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -67,6 +72,11 @@ func (r *EvaluationService) List(ctx context.Context, gatewayID string, params E
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -97,6 +107,11 @@ func (r *EvaluationService) ListAutoPaging(ctx context.Context, gatewayID string
 func (r *EvaluationService) Delete(ctx context.Context, gatewayID string, id string, body EvaluationDeleteParams, opts ...option.RequestOption) (res *EvaluationDeleteResponse, err error) {
 	var env EvaluationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -122,6 +137,11 @@ func (r *EvaluationService) Delete(ctx context.Context, gatewayID string, id str
 func (r *EvaluationService) Get(ctx context.Context, gatewayID string, id string, query EvaluationGetParams, opts ...option.RequestOption) (res *EvaluationGetResponse, err error) {
 	var env EvaluationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -984,6 +1004,7 @@ func (r evaluationGetResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string]   `path:"account_id" api:"required"`
 	DatasetIDs        param.Field[[]string] `json:"dataset_ids" api:"required"`
 	EvaluationTypeIDs param.Field[[]string] `json:"evaluation_type_ids" api:"required"`
@@ -1018,6 +1039,7 @@ func (r evaluationNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EvaluationListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Name      param.Field[string] `query:"name"`
 	Page      param.Field[int64]  `query:"page"`
@@ -1036,6 +1058,7 @@ func (r EvaluationListParams) URLQuery() (v url.Values) {
 }
 
 type EvaluationDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1063,6 +1086,7 @@ func (r evaluationDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EvaluationGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

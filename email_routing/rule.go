@@ -46,6 +46,11 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	var env RuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -64,6 +69,11 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 func (r *RuleService) Update(ctx context.Context, ruleIdentifier string, params RuleUpdateParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	var env RuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -86,6 +96,11 @@ func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -112,6 +127,11 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, params RuleListParams,
 func (r *RuleService) Delete(ctx context.Context, ruleIdentifier string, body RuleDeleteParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	var env RuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -133,6 +153,11 @@ func (r *RuleService) Delete(ctx context.Context, ruleIdentifier string, body Ru
 func (r *RuleService) Get(ctx context.Context, ruleIdentifier string, query RuleGetParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	var env RuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -335,6 +360,8 @@ func (r MatcherParam) MarshalJSON() (data []byte, err error) {
 
 type RuleNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List actions patterns.
 	Actions param.Field[[]ActionParam] `json:"actions" api:"required"`
@@ -509,6 +536,8 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List actions patterns.
 	Actions param.Field[[]ActionParam] `json:"actions" api:"required"`
@@ -683,6 +712,8 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Filter by enabled routing rules.
 	Enabled param.Field[RuleListParamsEnabled] `query:"enabled"`
@@ -718,6 +749,8 @@ func (r RuleListParamsEnabled) IsKnown() bool {
 
 type RuleDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -862,6 +895,8 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

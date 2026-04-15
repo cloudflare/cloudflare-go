@@ -41,6 +41,11 @@ func (r *RequestAssetService) New(ctx context.Context, requestID string, params 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,6 +76,11 @@ func (r *RequestAssetService) NewAutoPaging(ctx context.Context, requestID strin
 func (r *RequestAssetService) Update(ctx context.Context, requestID string, assetID string, params RequestAssetUpdateParams, opts ...option.RequestOption) (res *RequestAssetUpdateResponse, err error) {
 	var env RequestAssetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -95,6 +105,11 @@ func (r *RequestAssetService) Update(ctx context.Context, requestID string, asse
 // Removes an asset from a Cloudforce One intelligence request.
 func (r *RequestAssetService) Delete(ctx context.Context, requestID string, assetID string, body RequestAssetDeleteParams, opts ...option.RequestOption) (res *RequestAssetDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -117,6 +132,11 @@ func (r *RequestAssetService) Get(ctx context.Context, requestID string, assetID
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -388,6 +408,8 @@ func (r requestAssetGetResponseJSON) RawJSON() string {
 
 type RequestAssetNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of results.
 	Page param.Field[int64] `json:"page" api:"required"`
@@ -401,6 +423,8 @@ func (r RequestAssetNewParams) MarshalJSON() (data []byte, err error) {
 
 type RequestAssetUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Asset file to upload.
 	Source param.Field[string] `json:"source"`
@@ -551,10 +575,14 @@ func (r RequestAssetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestAssetDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestAssetGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

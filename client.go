@@ -241,7 +241,8 @@ type Client struct {
 
 // DefaultClientOptions read from the environment (CLOUDFLARE_API_KEY,
 // CLOUDFLARE_API_USER_SERVICE_KEY, CLOUDFLARE_API_TOKEN, CLOUDFLARE_EMAIL,
-// CLOUDFLARE_BASE_URL). This should be used to initialize new clients.
+// CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_ZONE_ID, CLOUDFLARE_BASE_URL). This should be
+// used to initialize new clients.
 func DefaultClientOptions() []option.RequestOption {
 	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("CLOUDFLARE_BASE_URL"); ok {
@@ -259,14 +260,21 @@ func DefaultClientOptions() []option.RequestOption {
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_USER_SERVICE_KEY"); ok {
 		defaults = append(defaults, option.WithUserServiceKey(o))
 	}
+	if o, ok := os.LookupEnv("CLOUDFLARE_ACCOUNT_ID"); ok {
+		defaults = append(defaults, option.WithAccountID(o))
+	}
+	if o, ok := os.LookupEnv("CLOUDFLARE_ZONE_ID"); ok {
+		defaults = append(defaults, option.WithZoneID(o))
+	}
 	return defaults
 }
 
 // NewClient generates a new client with the default option read from the
 // environment (CLOUDFLARE_API_KEY, CLOUDFLARE_API_USER_SERVICE_KEY,
-// CLOUDFLARE_API_TOKEN, CLOUDFLARE_EMAIL, CLOUDFLARE_BASE_URL). The option passed
-// in as arguments are applied after these default arguments, and all option will
-// be passed down to the services and requests that this client makes.
+// CLOUDFLARE_API_TOKEN, CLOUDFLARE_EMAIL, CLOUDFLARE_ACCOUNT_ID,
+// CLOUDFLARE_ZONE_ID, CLOUDFLARE_BASE_URL). The option passed in as arguments are
+// applied after these default arguments, and all option will be passed down to the
+// services and requests that this client makes.
 func NewClient(opts ...option.RequestOption) (r *Client) {
 	opts = append(DefaultClientOptions(), opts...)
 

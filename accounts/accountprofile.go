@@ -41,6 +41,11 @@ func NewAccountProfileService(opts ...option.RequestOption) (r *AccountProfileSe
 func (r *AccountProfileService) Update(ctx context.Context, params AccountProfileUpdateParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -56,6 +61,11 @@ func (r *AccountProfileService) Update(ctx context.Context, params AccountProfil
 func (r *AccountProfileService) Get(ctx context.Context, query AccountProfileGetParams, opts ...option.RequestOption) (res *AccountProfile, err error) {
 	var env AccountProfileGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -110,6 +120,7 @@ func (r AccountProfileParam) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountProfileUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID      param.Field[string] `path:"account_id" api:"required"`
 	AccountProfile AccountProfileParam `json:"account_profile" api:"required"`
 }
@@ -119,6 +130,7 @@ func (r AccountProfileUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountProfileGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

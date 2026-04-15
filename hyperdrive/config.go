@@ -40,6 +40,11 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	var env ConfigNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -57,6 +62,11 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params ConfigUpdateParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	var env ConfigUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -79,6 +89,11 @@ func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts .
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -105,6 +120,11 @@ func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListPara
 func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body ConfigDeleteParams, opts ...option.RequestOption) (res *ConfigDeleteResponse, err error) {
 	var env ConfigDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -127,6 +147,11 @@ func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body Co
 func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	var env ConfigEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -148,6 +173,11 @@ func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params Co
 func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query ConfigGetParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	var env ConfigGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -169,6 +199,8 @@ type ConfigDeleteResponse = interface{}
 
 type ConfigNewParams struct {
 	// Define configurations using a unique string identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	Hyperdrive HyperdriveParam     `json:"hyperdrive" api:"required"`
 }
@@ -222,6 +254,8 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigUpdateParams struct {
 	// Define configurations using a unique string identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	Hyperdrive HyperdriveParam     `json:"hyperdrive" api:"required"`
 }
@@ -275,11 +309,15 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigListParams struct {
 	// Define configurations using a unique string identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConfigDeleteParams struct {
 	// Define configurations using a unique string identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -328,6 +366,8 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigEditParams struct {
 	// Define configurations using a unique string identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                       `path:"account_id" api:"required"`
 	Caching   param.Field[ConfigEditParamsCachingUnion] `json:"caching"`
 	// mTLS configuration for the origin connection. Cannot be used with VPC Service
@@ -614,6 +654,8 @@ func (r ConfigEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigGetParams struct {
 	// Define configurations using a unique string identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -47,6 +47,11 @@ func NewPageShieldService(opts ...option.RequestOption) (r *PageShieldService) {
 func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateParams, opts ...option.RequestOption) (res *PageShieldUpdateResponse, err error) {
 	var env PageShieldUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -64,6 +69,11 @@ func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateP
 func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, opts ...option.RequestOption) (res *Setting, err error) {
 	var env PageShieldGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -142,6 +152,8 @@ func (r pageShieldUpdateResponseJSON) RawJSON() string {
 
 type PageShieldUpdateParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When true, indicates that Page Shield is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -201,6 +213,8 @@ func (r PageShieldUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageShieldGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

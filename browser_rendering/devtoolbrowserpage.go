@@ -37,6 +37,11 @@ func NewDevtoolBrowserPageService(opts ...option.RequestOption) (r *DevtoolBrows
 func (r *DevtoolBrowserPageService) Get(ctx context.Context, sessionID string, targetID string, query DevtoolBrowserPageGetParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -56,5 +61,7 @@ func (r *DevtoolBrowserPageService) Get(ctx context.Context, sessionID string, t
 
 type DevtoolBrowserPageGetParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

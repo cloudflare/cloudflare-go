@@ -108,6 +108,11 @@ func NewBotManagementService(opts ...option.RequestOption) (r *BotManagementServ
 func (r *BotManagementService) Update(ctx context.Context, params BotManagementUpdateParams, opts ...option.RequestOption) (res *BotManagementUpdateResponse, err error) {
 	var env BotManagementUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -125,6 +130,11 @@ func (r *BotManagementService) Update(ctx context.Context, params BotManagementU
 func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetParams, opts ...option.RequestOption) (res *BotManagementGetResponse, err error) {
 	var env BotManagementGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -1450,6 +1460,8 @@ func (r BotManagementGetResponseSBFMVerifiedBots) IsKnown() bool {
 
 type BotManagementUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]                `path:"zone_id" api:"required"`
 	Body   BotManagementUpdateParamsBodyUnion `json:"body" api:"required"`
 }
@@ -1755,6 +1767,8 @@ func (r BotManagementUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BotManagementGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

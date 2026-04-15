@@ -45,6 +45,11 @@ func NewSmartTieredCacheService(opts ...option.RequestOption) (r *SmartTieredCac
 func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCacheDeleteParams, opts ...option.RequestOption) (res *SmartTieredCacheDeleteResponse, err error) {
 	var env SmartTieredCacheDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -67,6 +72,11 @@ func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCa
 func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCacheEditParams, opts ...option.RequestOption) (res *SmartTieredCacheEditResponse, err error) {
 	var env SmartTieredCacheEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -89,6 +99,11 @@ func (r *SmartTieredCacheService) Edit(ctx context.Context, params SmartTieredCa
 func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCacheGetParams, opts ...option.RequestOption) (res *SmartTieredCacheGetResponse, err error) {
 	var env SmartTieredCacheGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -271,6 +286,8 @@ func (r SmartTieredCacheGetResponseValue) IsKnown() bool {
 
 type SmartTieredCacheDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -319,6 +336,8 @@ func (r SmartTieredCacheDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SmartTieredCacheEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Enable or disable the Smart Tiered Cache.
 	Value param.Field[SmartTieredCacheEditParamsValue] `json:"value" api:"required"`
@@ -389,6 +408,8 @@ func (r SmartTieredCacheEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SmartTieredCacheGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

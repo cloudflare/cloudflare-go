@@ -43,6 +43,11 @@ func NewFraudService(opts ...option.RequestOption) (r *FraudService) {
 func (r *FraudService) Update(ctx context.Context, params FraudUpdateParams, opts ...option.RequestOption) (res *FraudSettings, err error) {
 	var env FraudUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -60,6 +65,11 @@ func (r *FraudService) Update(ctx context.Context, params FraudUpdateParams, opt
 func (r *FraudService) Get(ctx context.Context, query FraudGetParams, opts ...option.RequestOption) (res *FraudSettings, err error) {
 	var env FraudGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -138,6 +148,8 @@ func (r FraudSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type FraudUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID        param.Field[string] `path:"zone_id" api:"required"`
 	FraudSettings FraudSettingsParam  `json:"fraud_settings" api:"required"`
 }
@@ -287,6 +299,8 @@ func (r FraudUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type FraudGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

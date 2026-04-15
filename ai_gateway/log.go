@@ -43,6 +43,11 @@ func (r *LogService) List(ctx context.Context, gatewayID string, params LogListP
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -72,6 +77,11 @@ func (r *LogService) ListAutoPaging(ctx context.Context, gatewayID string, param
 // Delete Gateway Logs
 func (r *LogService) Delete(ctx context.Context, gatewayID string, params LogDeleteParams, opts ...option.RequestOption) (res *LogDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -89,6 +99,11 @@ func (r *LogService) Delete(ctx context.Context, gatewayID string, params LogDel
 func (r *LogService) Edit(ctx context.Context, gatewayID string, id string, params LogEditParams, opts ...option.RequestOption) (res *LogEditResponse, err error) {
 	var env LogEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -114,6 +129,11 @@ func (r *LogService) Edit(ctx context.Context, gatewayID string, id string, para
 func (r *LogService) Get(ctx context.Context, gatewayID string, id string, query LogGetParams, opts ...option.RequestOption) (res *LogGetResponse, err error) {
 	var env LogGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -138,6 +158,11 @@ func (r *LogService) Get(ctx context.Context, gatewayID string, id string, query
 // Retrieves the original request payload for an AI Gateway log entry.
 func (r *LogService) Request(ctx context.Context, gatewayID string, id string, query LogRequestParams, opts ...option.RequestOption) (res *LogRequestResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -158,6 +183,11 @@ func (r *LogService) Request(ctx context.Context, gatewayID string, id string, q
 // Retrieves the response payload for an AI Gateway log entry.
 func (r *LogService) Response(ctx context.Context, gatewayID string, id string, query LogResponseParams, opts ...option.RequestOption) (res *LogResponseResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -327,6 +357,7 @@ type LogRequestResponse = interface{}
 type LogResponseResponse = interface{}
 
 type LogListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID           param.Field[string]                        `path:"account_id" api:"required"`
 	Cached              param.Field[bool]                          `query:"cached"`
 	Direction           param.Field[LogListParamsDirection]        `query:"direction"`
@@ -504,6 +535,7 @@ func (r LogListParamsOrderByDirection) IsKnown() bool {
 }
 
 type LogDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID        param.Field[string]                          `path:"account_id" api:"required"`
 	Filters          param.Field[[]LogDeleteParamsFilter]         `query:"filters"`
 	Limit            param.Field[int64]                           `query:"limit"`
@@ -632,6 +664,7 @@ func (r LogDeleteParamsOrderByDirection) IsKnown() bool {
 }
 
 type LogEditParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                                `path:"account_id" api:"required"`
 	Feedback  param.Field[float64]                               `json:"feedback"`
 	Metadata  param.Field[map[string]LogEditParamsMetadataUnion] `json:"metadata"`
@@ -671,6 +704,7 @@ func (r logEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LogGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -698,9 +732,11 @@ func (r logGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LogRequestParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type LogResponseParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

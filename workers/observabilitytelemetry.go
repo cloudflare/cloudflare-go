@@ -43,6 +43,11 @@ func (r *ObservabilityTelemetryService) Keys(ctx context.Context, params Observa
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -69,6 +74,11 @@ func (r *ObservabilityTelemetryService) KeysAutoPaging(ctx context.Context, para
 func (r *ObservabilityTelemetryService) Query(ctx context.Context, params ObservabilityTelemetryQueryParams, opts ...option.RequestOption) (res *ObservabilityTelemetryQueryResponse, err error) {
 	var env ObservabilityTelemetryQueryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -87,6 +97,11 @@ func (r *ObservabilityTelemetryService) Values(ctx context.Context, params Obser
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -2569,6 +2584,7 @@ func init() {
 }
 
 type ObservabilityTelemetryKeysParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Leave this empty to use the default datasets
 	Datasets param.Field[[]string] `json:"datasets"`
@@ -2900,6 +2916,7 @@ type ObservabilityTelemetryKeysParamsNeedleValueUnion interface {
 }
 
 type ObservabilityTelemetryQueryParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Unique identifier for the query to execute
 	QueryID param.Field[string] `json:"queryId" api:"required"`
@@ -3574,6 +3591,7 @@ func (r ObservabilityTelemetryQueryResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ObservabilityTelemetryValuesParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Leave this empty to use the default datasets
 	Datasets  param.Field[[]string]                                    `json:"datasets" api:"required"`

@@ -38,6 +38,11 @@ func NewEndpointHealthcheckService(opts ...option.RequestOption) (r *EndpointHea
 func (r *EndpointHealthcheckService) New(ctx context.Context, params EndpointHealthcheckNewParams, opts ...option.RequestOption) (res *EndpointHealthcheckNewResponse, err error) {
 	var env EndpointHealthcheckNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -55,6 +60,11 @@ func (r *EndpointHealthcheckService) New(ctx context.Context, params EndpointHea
 func (r *EndpointHealthcheckService) Update(ctx context.Context, id string, params EndpointHealthcheckUpdateParams, opts ...option.RequestOption) (res *EndpointHealthcheckUpdateResponse, err error) {
 	var env EndpointHealthcheckUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -76,6 +86,11 @@ func (r *EndpointHealthcheckService) Update(ctx context.Context, id string, para
 func (r *EndpointHealthcheckService) List(ctx context.Context, query EndpointHealthcheckListParams, opts ...option.RequestOption) (res *EndpointHealthcheckListResponse, err error) {
 	var env EndpointHealthcheckListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -92,6 +107,11 @@ func (r *EndpointHealthcheckService) List(ctx context.Context, query EndpointHea
 // Delete Endpoint Health Check.
 func (r *EndpointHealthcheckService) Delete(ctx context.Context, id string, body EndpointHealthcheckDeleteParams, opts ...option.RequestOption) (res *EndpointHealthcheckDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -109,6 +129,11 @@ func (r *EndpointHealthcheckService) Delete(ctx context.Context, id string, body
 func (r *EndpointHealthcheckService) Get(ctx context.Context, id string, query EndpointHealthcheckGetParams, opts ...option.RequestOption) (res *EndpointHealthcheckGetResponse, err error) {
 	var env EndpointHealthcheckGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -477,6 +502,8 @@ func (r EndpointHealthcheckGetResponseCheckType) IsKnown() bool {
 
 type EndpointHealthcheckNewParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID           param.Field[string]      `path:"account_id" api:"required"`
 	EndpointHealthcheck EndpointHealthcheckParam `json:"endpoint_healthcheck" api:"required"`
 }
@@ -626,6 +653,8 @@ func (r EndpointHealthcheckNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type EndpointHealthcheckUpdateParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID           param.Field[string]      `path:"account_id" api:"required"`
 	EndpointHealthcheck EndpointHealthcheckParam `json:"endpoint_healthcheck" api:"required"`
 }
@@ -776,6 +805,8 @@ func (r EndpointHealthcheckUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type EndpointHealthcheckListParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -920,11 +951,15 @@ func (r EndpointHealthcheckListResponseEnvelopeSuccess) IsKnown() bool {
 
 type EndpointHealthcheckDeleteParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type EndpointHealthcheckGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

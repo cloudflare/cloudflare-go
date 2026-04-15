@@ -96,6 +96,11 @@ func (r *RegistrationService) New(ctx context.Context, params RegistrationNewPar
 		opts = append(opts, option.WithHeader("Prefer", fmt.Sprintf("%v", params.Prefer)))
 	}
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -119,6 +124,11 @@ func (r *RegistrationService) List(ctx context.Context, params RegistrationListP
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -164,6 +174,11 @@ func (r *RegistrationService) Edit(ctx context.Context, domainName string, param
 		opts = append(opts, option.WithHeader("Prefer", fmt.Sprintf("%v", params.Prefer)))
 	}
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -190,6 +205,11 @@ func (r *RegistrationService) Edit(ctx context.Context, domainName string, param
 func (r *RegistrationService) Get(ctx context.Context, domainName string, query RegistrationGetParams, opts ...option.RequestOption) (res *Registration, err error) {
 	var env RegistrationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -209,6 +229,8 @@ func (r *RegistrationService) Get(ctx context.Context, domainName string, query 
 
 type RegistrationNewParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Fully qualified domain name (FQDN) including the extension (e.g., `example.com`,
 	// `mybrand.app`). The domain name uniquely identifies a registration — the same
@@ -399,6 +421,8 @@ func (r RegistrationNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegistrationListParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Opaque token from a previous response's `result_info.cursor`. Pass this value to
 	// fetch the next page of results. Omit (or pass an empty string) for the first
@@ -457,6 +481,8 @@ func (r RegistrationListParamsSortBy) IsKnown() bool {
 
 type RegistrationEditParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Enable or disable automatic renewal. Setting this field to `true` authorizes
 	// Cloudflare to charge the account's default payment method up to 30 days before
@@ -530,6 +556,8 @@ func (r RegistrationEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegistrationGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

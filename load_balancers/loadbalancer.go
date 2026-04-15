@@ -53,6 +53,11 @@ func NewLoadBalancerService(opts ...option.RequestOption) (r *LoadBalancerServic
 func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -70,6 +75,11 @@ func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewPar
 func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string, params LoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -92,6 +102,11 @@ func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListPa
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -118,6 +133,11 @@ func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBala
 func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, body LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
 	var env LoadBalancerDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -139,6 +159,11 @@ func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string,
 func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, params LoadBalancerEditParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -160,6 +185,11 @@ func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, p
 func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, query LoadBalancerGetParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -1651,6 +1681,7 @@ func (r loadBalancerDeleteResponseJSON) RawJSON() string {
 }
 
 type LoadBalancerNewParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
@@ -1812,6 +1843,7 @@ func (r LoadBalancerNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerUpdateParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
@@ -1975,10 +2007,12 @@ func (r LoadBalancerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerListParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type LoadBalancerDeleteParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -2026,6 +2060,7 @@ func (r LoadBalancerDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerEditParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
@@ -2187,6 +2222,7 @@ func (r LoadBalancerEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerGetParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

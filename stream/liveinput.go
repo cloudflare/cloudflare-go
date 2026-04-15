@@ -44,6 +44,11 @@ func NewLiveInputService(opts ...option.RequestOption) (r *LiveInputService) {
 func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, opts ...option.RequestOption) (res *LiveInput, err error) {
 	var env LiveInputNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,6 +66,11 @@ func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, o
 func (r *LiveInputService) Update(ctx context.Context, liveInputIdentifier string, params LiveInputUpdateParams, opts ...option.RequestOption) (res *LiveInput, err error) {
 	var env LiveInputUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -83,6 +93,11 @@ func (r *LiveInputService) Update(ctx context.Context, liveInputIdentifier strin
 func (r *LiveInputService) List(ctx context.Context, params LiveInputListParams, opts ...option.RequestOption) (res *LiveInputListResponse, err error) {
 	var env LiveInputListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -101,6 +116,11 @@ func (r *LiveInputService) List(ctx context.Context, params LiveInputListParams,
 func (r *LiveInputService) Delete(ctx context.Context, liveInputIdentifier string, body LiveInputDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -118,6 +138,11 @@ func (r *LiveInputService) Delete(ctx context.Context, liveInputIdentifier strin
 func (r *LiveInputService) Get(ctx context.Context, liveInputIdentifier string, query LiveInputGetParams, opts ...option.RequestOption) (res *LiveInput, err error) {
 	var env LiveInputGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -513,6 +538,8 @@ func (r liveInputListResponseLiveInputJSON) RawJSON() string {
 
 type LiveInputNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sets the creator ID asssociated with this live input.
 	DefaultCreator param.Field[string] `json:"defaultCreator"`
@@ -726,6 +753,8 @@ func (r LiveInputNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type LiveInputUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sets the creator ID asssociated with this live input.
 	DefaultCreator param.Field[string] `json:"defaultCreator"`
@@ -939,6 +968,8 @@ func (r LiveInputUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type LiveInputListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Includes the total number of videos associated with the submitted query
 	// parameters.
@@ -1094,11 +1125,15 @@ func (r LiveInputListResponseEnvelopeSuccess) IsKnown() bool {
 
 type LiveInputDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type LiveInputGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

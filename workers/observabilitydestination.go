@@ -41,6 +41,11 @@ func NewObservabilityDestinationService(opts ...option.RequestOption) (r *Observ
 func (r *ObservabilityDestinationService) New(ctx context.Context, params ObservabilityDestinationNewParams, opts ...option.RequestOption) (res *ObservabilityDestinationNewResponse, err error) {
 	var env ObservabilityDestinationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -58,6 +63,11 @@ func (r *ObservabilityDestinationService) New(ctx context.Context, params Observ
 func (r *ObservabilityDestinationService) Update(ctx context.Context, slug string, params ObservabilityDestinationUpdateParams, opts ...option.RequestOption) (res *ObservabilityDestinationUpdateResponse, err error) {
 	var env ObservabilityDestinationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -80,6 +90,11 @@ func (r *ObservabilityDestinationService) List(ctx context.Context, params Obser
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -106,6 +121,11 @@ func (r *ObservabilityDestinationService) ListAutoPaging(ctx context.Context, pa
 func (r *ObservabilityDestinationService) Delete(ctx context.Context, slug string, body ObservabilityDestinationDeleteParams, opts ...option.RequestOption) (res *ObservabilityDestinationDeleteResponse, err error) {
 	var env ObservabilityDestinationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -500,6 +520,7 @@ func (r ObservabilityDestinationDeleteResponseConfigurationType) IsKnown() bool 
 }
 
 type ObservabilityDestinationNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID          param.Field[string]                                         `path:"account_id" api:"required"`
 	Configuration      param.Field[ObservabilityDestinationNewParamsConfiguration] `json:"configuration" api:"required"`
 	Enabled            param.Field[bool]                                           `json:"enabled" api:"required"`
@@ -649,6 +670,7 @@ func (r ObservabilityDestinationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ObservabilityDestinationUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]                                            `path:"account_id" api:"required"`
 	Configuration param.Field[ObservabilityDestinationUpdateParamsConfiguration] `json:"configuration" api:"required"`
 	Enabled       param.Field[bool]                                              `json:"enabled" api:"required"`
@@ -780,6 +802,7 @@ func (r ObservabilityDestinationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ObservabilityDestinationListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                                    `path:"account_id" api:"required"`
 	Order     param.Field[ObservabilityDestinationListParamsOrder]   `query:"order"`
 	OrderBy   param.Field[ObservabilityDestinationListParamsOrderBy] `query:"orderBy"`
@@ -827,6 +850,7 @@ func (r ObservabilityDestinationListParamsOrderBy) IsKnown() bool {
 }
 
 type ObservabilityDestinationDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -45,6 +45,11 @@ func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, para
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -78,6 +83,11 @@ func (r *NamespaceKeyService) ListAutoPaging(ctx context.Context, namespaceID st
 func (r *NamespaceKeyService) BulkDelete(ctx context.Context, namespaceID string, params NamespaceKeyBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceKeyBulkDeleteResponse, err error) {
 	var env NamespaceKeyBulkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -103,6 +113,11 @@ func (r *NamespaceKeyService) BulkDelete(ctx context.Context, namespaceID string
 func (r *NamespaceKeyService) BulkGet(ctx context.Context, namespaceID string, params NamespaceKeyBulkGetParams, opts ...option.RequestOption) (res *NamespaceKeyBulkGetResponse, err error) {
 	var env NamespaceKeyBulkGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -131,6 +146,11 @@ func (r *NamespaceKeyService) BulkGet(ctx context.Context, namespaceID string, p
 func (r *NamespaceKeyService) BulkUpdate(ctx context.Context, namespaceID string, params NamespaceKeyBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceKeyBulkUpdateResponse, err error) {
 	var env NamespaceKeyBulkUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -412,6 +432,8 @@ func (r namespaceKeyBulkUpdateResponseJSON) RawJSON() string {
 
 type NamespaceKeyListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Opaque token indicating the position from which to continue when requesting the
 	// next set of records if the amount of list results was limited by the limit
@@ -436,6 +458,8 @@ func (r NamespaceKeyListParams) URLQuery() (v url.Values) {
 
 type NamespaceKeyBulkDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Body      []string            `json:"body" api:"required"`
 }
@@ -489,6 +513,8 @@ func (r NamespaceKeyBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceKeyBulkGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of keys to retrieve (maximum of 100).
 	Keys param.Field[[]string] `json:"keys" api:"required"`
@@ -563,6 +589,8 @@ func (r NamespaceKeyBulkGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceKeyBulkUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                `path:"account_id" api:"required"`
 	Body      []NamespaceKeyBulkUpdateParamsBody `json:"body" api:"required"`
 }

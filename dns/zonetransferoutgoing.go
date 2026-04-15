@@ -40,6 +40,11 @@ func NewZoneTransferOutgoingService(opts ...option.RequestOption) (r *ZoneTransf
 func (r *ZoneTransferOutgoingService) New(ctx context.Context, params ZoneTransferOutgoingNewParams, opts ...option.RequestOption) (res *ZoneTransferOutgoingNewResponse, err error) {
 	var env ZoneTransferOutgoingNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -57,6 +62,11 @@ func (r *ZoneTransferOutgoingService) New(ctx context.Context, params ZoneTransf
 func (r *ZoneTransferOutgoingService) Update(ctx context.Context, params ZoneTransferOutgoingUpdateParams, opts ...option.RequestOption) (res *ZoneTransferOutgoingUpdateResponse, err error) {
 	var env ZoneTransferOutgoingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -74,6 +84,11 @@ func (r *ZoneTransferOutgoingService) Update(ctx context.Context, params ZoneTra
 func (r *ZoneTransferOutgoingService) Delete(ctx context.Context, body ZoneTransferOutgoingDeleteParams, opts ...option.RequestOption) (res *ZoneTransferOutgoingDeleteResponse, err error) {
 	var env ZoneTransferOutgoingDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -92,6 +107,11 @@ func (r *ZoneTransferOutgoingService) Delete(ctx context.Context, body ZoneTrans
 func (r *ZoneTransferOutgoingService) Disable(ctx context.Context, params ZoneTransferOutgoingDisableParams, opts ...option.RequestOption) (res *DisableTransfer, err error) {
 	var env ZoneTransferOutgoingDisableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -109,6 +129,11 @@ func (r *ZoneTransferOutgoingService) Disable(ctx context.Context, params ZoneTr
 func (r *ZoneTransferOutgoingService) Enable(ctx context.Context, params ZoneTransferOutgoingEnableParams, opts ...option.RequestOption) (res *EnableTransfer, err error) {
 	var env ZoneTransferOutgoingEnableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -126,6 +151,11 @@ func (r *ZoneTransferOutgoingService) Enable(ctx context.Context, params ZoneTra
 func (r *ZoneTransferOutgoingService) ForceNotify(ctx context.Context, params ZoneTransferOutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
 	var env ZoneTransferOutgoingForceNotifyResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -143,6 +173,11 @@ func (r *ZoneTransferOutgoingService) ForceNotify(ctx context.Context, params Zo
 func (r *ZoneTransferOutgoingService) Get(ctx context.Context, query ZoneTransferOutgoingGetParams, opts ...option.RequestOption) (res *ZoneTransferOutgoingGetResponse, err error) {
 	var env ZoneTransferOutgoingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -299,6 +334,7 @@ func (r zoneTransferOutgoingGetResponseJSON) RawJSON() string {
 }
 
 type ZoneTransferOutgoingNewParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Zone name.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -450,6 +486,7 @@ func (r ZoneTransferOutgoingNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferOutgoingUpdateParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Zone name.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -602,6 +639,7 @@ func (r ZoneTransferOutgoingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferOutgoingDeleteParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -746,6 +784,7 @@ func (r ZoneTransferOutgoingDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferOutgoingDisableParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Body   interface{}         `json:"body" api:"required"`
 }
@@ -897,6 +936,7 @@ func (r ZoneTransferOutgoingDisableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferOutgoingEnableParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Body   interface{}         `json:"body" api:"required"`
 }
@@ -1047,6 +1087,7 @@ func (r ZoneTransferOutgoingEnableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferOutgoingForceNotifyParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Body   interface{}         `json:"body" api:"required"`
 }
@@ -1200,6 +1241,7 @@ func (r ZoneTransferOutgoingForceNotifyResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferOutgoingGetParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

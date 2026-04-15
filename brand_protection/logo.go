@@ -43,6 +43,11 @@ func NewLogoService(opts ...option.RequestOption) (r *LogoService) {
 // Return new saved logo queries created from image files
 func (r *LogoService) New(ctx context.Context, params LogoNewParams, opts ...option.RequestOption) (res *LogoNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -56,6 +61,11 @@ func (r *LogoService) New(ctx context.Context, params LogoNewParams, opts ...opt
 func (r *LogoService) Delete(ctx context.Context, logoID string, body LogoDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -94,6 +104,7 @@ func (r logoNewResponseJSON) RawJSON() string {
 }
 
 type LogoNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]    `path:"account_id" api:"required"`
 	MatchType param.Field[string]    `query:"match_type"`
 	Tag       param.Field[string]    `query:"tag"`
@@ -125,5 +136,6 @@ func (r LogoNewParams) URLQuery() (v url.Values) {
 }
 
 type LogoDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

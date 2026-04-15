@@ -40,6 +40,11 @@ func NewHostnameAssociationService(opts ...option.RequestOption) (r *HostnameAss
 func (r *HostnameAssociationService) Update(ctx context.Context, params HostnameAssociationUpdateParams, opts ...option.RequestOption) (res *HostnameAssociationUpdateResponse, err error) {
 	var env HostnameAssociationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -57,6 +62,11 @@ func (r *HostnameAssociationService) Update(ctx context.Context, params Hostname
 func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAssociationGetParams, opts ...option.RequestOption) (res *HostnameAssociationGetResponse, err error) {
 	var env HostnameAssociationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -130,6 +140,8 @@ func (r hostnameAssociationGetResponseJSON) RawJSON() string {
 
 type HostnameAssociationUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID                 param.Field[string]         `path:"zone_id" api:"required"`
 	TLSHostnameAssociation TLSHostnameAssociationParam `json:"tls_hostname_association" api:"required"`
 }
@@ -280,6 +292,8 @@ func (r HostnameAssociationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type HostnameAssociationGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The UUID to match against for a certificate that was uploaded to the mTLS
 	// Certificate Management endpoint. If no mtls_certificate_id is given, the results
