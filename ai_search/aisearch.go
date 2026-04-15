@@ -13,9 +13,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAISearchService] method instead.
 type AISearchService struct {
-	Options   []option.RequestOption
-	Instances *InstanceService
-	Tokens    *TokenService
+	Options    []option.RequestOption
+	Namespaces *NamespaceService
+	Instances  *InstanceService
+	Tokens     *TokenService
 }
 
 // NewAISearchService generates a new service that applies the given options to
@@ -24,6 +25,7 @@ type AISearchService struct {
 func NewAISearchService(opts ...option.RequestOption) (r *AISearchService) {
 	r = &AISearchService{}
 	r.Options = opts
+	r.Namespaces = NewNamespaceService(opts...)
 	r.Instances = NewInstanceService(opts...)
 	r.Tokens = NewTokenService(opts...)
 	return

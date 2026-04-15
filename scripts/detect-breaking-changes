@@ -703,6 +703,10 @@ TEST_PATHS=(
 	ai/model_test.go
 	ai/modelschema_test.go
 	ai/tomarkdown_test.go
+	ai_search/namespace_test.go
+	ai_search/namespaceinstance_test.go
+	ai_search/namespaceinstancejob_test.go
+	ai_search/namespaceinstanceitem_test.go
 	ai_search/instance_test.go
 	ai_search/instancejob_test.go
 	ai_search/token_test.go
