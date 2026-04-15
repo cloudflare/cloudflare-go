@@ -506,6 +506,7 @@ TEST_PATHS=(
 	vulnerability_scanner/credentialsetcredential_test.go
 	vulnerability_scanner/scan_test.go
 	vulnerability_scanner/targetenvironment_test.go
+	radar/agentreadiness_test.go
 	radar/aitomarkdown_test.go
 	radar/aiinference_test.go
 	radar/aiinferencesummary_test.go
@@ -513,6 +514,7 @@ TEST_PATHS=(
 	radar/aibot_test.go
 	radar/aibotsummary_test.go
 	radar/aitimeseriesgroup_test.go
+	radar/aimarkdownforagent_test.go
 	radar/ct_test.go
 	radar/ctauthority_test.go
 	radar/ctlog_test.go
