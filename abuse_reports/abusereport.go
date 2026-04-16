@@ -46,6 +46,11 @@ func NewAbuseReportService(opts ...option.RequestOption) (r *AbuseReportService)
 func (r *AbuseReportService) New(ctx context.Context, reportParam string, params AbuseReportNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env AbuseReportNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -68,6 +73,11 @@ func (r *AbuseReportService) List(ctx context.Context, params AbuseReportListPar
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -94,6 +104,11 @@ func (r *AbuseReportService) ListAutoPaging(ctx context.Context, params AbuseRep
 func (r *AbuseReportService) Get(ctx context.Context, reportParam string, query AbuseReportGetParams, opts ...option.RequestOption) (res *AbuseReportGetResponse, err error) {
 	var env AbuseReportGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -435,6 +450,7 @@ func (r abuseReportGetResponseSubmitterJSON) RawJSON() string {
 }
 
 type AbuseReportNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]           `path:"account_id" api:"required"`
 	Body      AbuseReportNewParamsBodyUnion `json:"body" api:"required"`
 }
@@ -1241,7 +1257,7 @@ type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport struct {
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	Company param.Field[string] `json:"company"`
-	// ICANN-mandated fields for registrar WHOIS data disclosure requests.
+	// RDP-mandated fields for registrar WHOIS data disclosure requests.
 	RegWhoRequest param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequest] `json:"reg_who_request"`
 	// Text containing 2 characters
 	ReportedCountry param.Field[string] `json:"reported_country"`
@@ -1294,21 +1310,23 @@ func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportOwnerNotificatio
 	return false
 }
 
-// ICANN-mandated fields for registrar WHOIS data disclosure requests.
+// RDP-mandated fields for registrar WHOIS data disclosure requests.
 type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequest struct {
-	// Optional authorization statement or power of attorney per ICANN 10.2.1.3.
+	// Affirmation that the request is made in good faith per RDP 10.2.4. Must be true.
+	RegWhoGoodFaithAffirmation param.Field[bool] `json:"reg_who_good_faith_affirmation" api:"required"`
+	// Agreement to process data lawfully per RDP 10.2.5. Must be true.
+	RegWhoLawfulProcessingAgreement param.Field[bool] `json:"reg_who_lawful_processing_agreement" api:"required"`
+	// Legal rights and rationale for the request per RDP 10.2.3. Required for all
+	// WHOIS requests.
+	RegWhoLegalBasis param.Field[string] `json:"reg_who_legal_basis" api:"required"`
+	// The type of WHOIS data request per RDP procedure.
+	RegWhoRequestType param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestType] `json:"reg_who_request_type" api:"required"`
+	// The specific WHOIS data elements being requested per RDP 10.2.2. Required for
+	// all WHOIS requests.
+	RegWhoRequestedDataElements param.Field[[]AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement] `json:"reg_who_requested_data_elements" api:"required"`
+	// Optional authorization statement or power of attorney per RDP 10.2.1.3.
 	RegWhoAuthorizationStatement param.Field[string] `json:"reg_who_authorization_statement"`
-	// Affirmation that the request is made in good faith per ICANN 10.2.4.
-	RegWhoGoodFaithAffirmation param.Field[bool] `json:"reg_who_good_faith_affirmation"`
-	// Agreement to process data lawfully per ICANN 10.2.5.
-	RegWhoLawfulProcessingAgreement param.Field[bool] `json:"reg_who_lawful_processing_agreement"`
-	// Legal rights and rationale for the request per ICANN 10.2.3.
-	RegWhoLegalBasis param.Field[string] `json:"reg_who_legal_basis"`
-	// The type of WHOIS data request per ICANN procedure.
-	RegWhoRequestType param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestType] `json:"reg_who_request_type"`
-	// The specific WHOIS data elements being requested per ICANN 10.2.2.
-	RegWhoRequestedDataElements param.Field[[]AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement] `json:"reg_who_requested_data_elements"`
-	// The nature of the requestor per ICANN 10.2.1.2.
+	// The nature of the requestor per RDP 10.2.1.2.
 	RegWhoRequestorType param.Field[AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorType] `json:"reg_who_requestor_type"`
 }
 
@@ -1316,7 +1334,7 @@ func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequest) M
 	return apijson.MarshalRoot(r)
 }
 
-// The type of WHOIS data request per ICANN procedure.
+// The type of WHOIS data request per RDP procedure.
 type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestType string
 
 const (
@@ -1335,32 +1353,34 @@ func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestReg
 type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement string
 
 const (
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantName         AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_name"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantOrganization AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_organization"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantEmail        AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_email"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantPhone        AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_phone"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantAddress      AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_address"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminName              AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_name"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminOrganization      AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_organization"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminEmail             AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_email"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminPhone             AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_phone"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminAddress           AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_address"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechName               AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_name"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechOrganization       AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_organization"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechEmail              AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_email"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechPhone              AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_phone"
-	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechAddress            AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_address"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantName              AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_name"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantOrganization      AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_organization"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantEmail             AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_email"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantPhone             AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_phone"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantAddress           AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_address"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantAddressCountry    AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_address_country"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantAddressPostalCode AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "registrant_address_postal_code"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminName                   AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_name"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminOrganization           AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_organization"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminEmail                  AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_email"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminPhone                  AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_phone"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminAddress                AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "admin_address"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechName                    AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_name"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechOrganization            AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_organization"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechEmail                   AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_email"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechPhone                   AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_phone"
+	AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechAddress                 AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement = "tech_address"
 )
 
 func (r AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElement) IsKnown() bool {
 	switch r {
-	case AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantName, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantOrganization, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantEmail, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantPhone, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantAddress, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminName, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminOrganization, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminEmail, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminPhone, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminAddress, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechName, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechOrganization, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechEmail, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechPhone, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechAddress:
+	case AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantName, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantOrganization, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantEmail, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantPhone, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantAddress, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantAddressCountry, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementRegistrantAddressPostalCode, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminName, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminOrganization, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminEmail, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminPhone, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementAdminAddress, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechName, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechOrganization, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechEmail, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechPhone, AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestedDataElementTechAddress:
 		return true
 	}
 	return false
 }
 
-// The nature of the requestor per ICANN 10.2.1.2.
+// The nature of the requestor per RDP 10.2.1.2.
 type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequestRegWhoRequestorType string
 
 const (
@@ -1615,6 +1635,7 @@ func (r abuseReportNewResponseEnvelopeRequestJSON) RawJSON() string {
 }
 
 type AbuseReportListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Returns reports created after the specified date
 	CreatedAfter param.Field[string] `query:"created_after"`
@@ -1703,6 +1724,7 @@ func (r AbuseReportListParamsType) IsKnown() bool {
 }
 
 type AbuseReportGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
