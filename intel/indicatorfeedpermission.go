@@ -38,6 +38,11 @@ func NewIndicatorFeedPermissionService(opts ...option.RequestOption) (r *Indicat
 func (r *IndicatorFeedPermissionService) New(ctx context.Context, params IndicatorFeedPermissionNewParams, opts ...option.RequestOption) (res *IndicatorFeedPermissionNewResponse, err error) {
 	var env IndicatorFeedPermissionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -55,6 +60,11 @@ func (r *IndicatorFeedPermissionService) New(ctx context.Context, params Indicat
 func (r *IndicatorFeedPermissionService) List(ctx context.Context, query IndicatorFeedPermissionListParams, opts ...option.RequestOption) (res *[]IndicatorFeedPermissionListResponse, err error) {
 	var env IndicatorFeedPermissionListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -72,6 +82,11 @@ func (r *IndicatorFeedPermissionService) List(ctx context.Context, query Indicat
 func (r *IndicatorFeedPermissionService) Delete(ctx context.Context, params IndicatorFeedPermissionDeleteParams, opts ...option.RequestOption) (res *IndicatorFeedPermissionDeleteResponse, err error) {
 	var env IndicatorFeedPermissionDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -168,6 +183,8 @@ func (r indicatorFeedPermissionDeleteResponseJSON) RawJSON() string {
 
 type IndicatorFeedPermissionNewParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The Cloudflare account tag of the account to change permissions on
 	AccountTag param.Field[string] `json:"account_tag"`
@@ -321,6 +338,8 @@ func (r IndicatorFeedPermissionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndicatorFeedPermissionListParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -467,6 +486,8 @@ func (r IndicatorFeedPermissionListResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndicatorFeedPermissionDeleteParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The Cloudflare account tag of the account to change permissions on
 	AccountTag param.Field[string] `json:"account_tag"`

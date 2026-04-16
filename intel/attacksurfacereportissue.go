@@ -46,6 +46,11 @@ func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params Attac
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -77,6 +82,11 @@ func (r *AttackSurfaceReportIssueService) ListAutoPaging(ctx context.Context, pa
 func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params AttackSurfaceReportIssueClassParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueClassResponse, err error) {
 	var env AttackSurfaceReportIssueClassResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -96,6 +106,11 @@ func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params Atta
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *AttackSurfaceReportIssueDismissResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -115,6 +130,11 @@ func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID s
 func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params AttackSurfaceReportIssueSeverityParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueSeverityResponse, err error) {
 	var env AttackSurfaceReportIssueSeverityResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -134,6 +154,11 @@ func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params A
 func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params AttackSurfaceReportIssueTypeParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueTypeResponse, err error) {
 	var env AttackSurfaceReportIssueTypeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -213,36 +238,47 @@ func (r attackSurfaceReportIssueListResponseJSON) RawJSON() string {
 }
 
 type AttackSurfaceReportIssueListResponseIssue struct {
-	ID          string                                             `json:"id"`
-	Dismissed   bool                                               `json:"dismissed"`
-	IssueClass  string                                             `json:"issue_class"`
-	IssueType   IssueType                                          `json:"issue_type"`
-	Payload     AttackSurfaceReportIssueListResponseIssuesPayload  `json:"payload"`
-	ResolveLink string                                             `json:"resolve_link"`
-	ResolveText string                                             `json:"resolve_text"`
-	Severity    AttackSurfaceReportIssueListResponseIssuesSeverity `json:"severity"`
-	Since       time.Time                                          `json:"since" format:"date-time"`
-	Subject     string                                             `json:"subject"`
-	Timestamp   time.Time                                          `json:"timestamp" format:"date-time"`
-	JSON        attackSurfaceReportIssueListResponseIssueJSON      `json:"-"`
+	ID        string `json:"id"`
+	Dismissed bool   `json:"dismissed"`
+	// Indicates whether the insight has a large payload that requires fetching via the
+	// context endpoint.
+	HasExtendedContext bool                                               `json:"has_extended_context"`
+	IssueClass         string                                             `json:"issue_class"`
+	IssueType          IssueType                                          `json:"issue_type"`
+	Payload            AttackSurfaceReportIssueListResponseIssuesPayload  `json:"payload"`
+	ResolveLink        string                                             `json:"resolve_link"`
+	ResolveText        string                                             `json:"resolve_text"`
+	Severity           AttackSurfaceReportIssueListResponseIssuesSeverity `json:"severity"`
+	Since              time.Time                                          `json:"since" format:"date-time"`
+	// The current status of the insight.
+	Status    AttackSurfaceReportIssueListResponseIssuesStatus `json:"status"`
+	Subject   string                                           `json:"subject"`
+	Timestamp time.Time                                        `json:"timestamp" format:"date-time"`
+	// User-defined classification for the insight. Can be 'false_positive',
+	// 'accept_risk', 'other', or null.
+	UserClassification AttackSurfaceReportIssueListResponseIssuesUserClassification `json:"user_classification" api:"nullable"`
+	JSON               attackSurfaceReportIssueListResponseIssueJSON                `json:"-"`
 }
 
 // attackSurfaceReportIssueListResponseIssueJSON contains the JSON metadata for the
 // struct [AttackSurfaceReportIssueListResponseIssue]
 type attackSurfaceReportIssueListResponseIssueJSON struct {
-	ID          apijson.Field
-	Dismissed   apijson.Field
-	IssueClass  apijson.Field
-	IssueType   apijson.Field
-	Payload     apijson.Field
-	ResolveLink apijson.Field
-	ResolveText apijson.Field
-	Severity    apijson.Field
-	Since       apijson.Field
-	Subject     apijson.Field
-	Timestamp   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                 apijson.Field
+	Dismissed          apijson.Field
+	HasExtendedContext apijson.Field
+	IssueClass         apijson.Field
+	IssueType          apijson.Field
+	Payload            apijson.Field
+	ResolveLink        apijson.Field
+	ResolveText        apijson.Field
+	Severity           apijson.Field
+	Since              apijson.Field
+	Status             apijson.Field
+	Subject            apijson.Field
+	Timestamp          apijson.Field
+	UserClassification apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AttackSurfaceReportIssueListResponseIssue) UnmarshalJSON(data []byte) (err error) {
@@ -288,6 +324,40 @@ const (
 func (r AttackSurfaceReportIssueListResponseIssuesSeverity) IsKnown() bool {
 	switch r {
 	case AttackSurfaceReportIssueListResponseIssuesSeverityLow, AttackSurfaceReportIssueListResponseIssuesSeverityModerate, AttackSurfaceReportIssueListResponseIssuesSeverityCritical:
+		return true
+	}
+	return false
+}
+
+// The current status of the insight.
+type AttackSurfaceReportIssueListResponseIssuesStatus string
+
+const (
+	AttackSurfaceReportIssueListResponseIssuesStatusActive   AttackSurfaceReportIssueListResponseIssuesStatus = "active"
+	AttackSurfaceReportIssueListResponseIssuesStatusResolved AttackSurfaceReportIssueListResponseIssuesStatus = "resolved"
+)
+
+func (r AttackSurfaceReportIssueListResponseIssuesStatus) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListResponseIssuesStatusActive, AttackSurfaceReportIssueListResponseIssuesStatusResolved:
+		return true
+	}
+	return false
+}
+
+// User-defined classification for the insight. Can be 'false_positive',
+// 'accept_risk', 'other', or null.
+type AttackSurfaceReportIssueListResponseIssuesUserClassification string
+
+const (
+	AttackSurfaceReportIssueListResponseIssuesUserClassificationFalsePositive AttackSurfaceReportIssueListResponseIssuesUserClassification = "false_positive"
+	AttackSurfaceReportIssueListResponseIssuesUserClassificationAcceptRisk    AttackSurfaceReportIssueListResponseIssuesUserClassification = "accept_risk"
+	AttackSurfaceReportIssueListResponseIssuesUserClassificationOther         AttackSurfaceReportIssueListResponseIssuesUserClassification = "other"
+)
+
+func (r AttackSurfaceReportIssueListResponseIssuesUserClassification) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListResponseIssuesUserClassificationFalsePositive, AttackSurfaceReportIssueListResponseIssuesUserClassificationAcceptRisk, AttackSurfaceReportIssueListResponseIssuesUserClassificationOther:
 		return true
 	}
 	return false
@@ -501,6 +571,8 @@ func (r attackSurfaceReportIssueTypeResponseJSON) RawJSON() string {
 
 type AttackSurfaceReportIssueListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]      `path:"account_id" api:"required"`
 	Dismissed     param.Field[bool]        `query:"dismissed"`
 	IssueClass    param.Field[[]string]    `query:"issue_class"`
@@ -530,6 +602,8 @@ func (r AttackSurfaceReportIssueListParams) URLQuery() (v url.Values) {
 
 type AttackSurfaceReportIssueClassParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]               `path:"account_id" api:"required"`
 	Dismissed     param.Field[bool]                 `query:"dismissed"`
 	IssueClass    param.Field[[]string]             `query:"issue_class"`
@@ -696,6 +770,8 @@ func (r AttackSurfaceReportIssueClassResponseEnvelopeSuccess) IsKnown() bool {
 
 type AttackSurfaceReportIssueDismissParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Dismiss   param.Field[bool]   `json:"dismiss"`
 }
@@ -706,6 +782,8 @@ func (r AttackSurfaceReportIssueDismissParams) MarshalJSON() (data []byte, err e
 
 type AttackSurfaceReportIssueSeverityParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]               `path:"account_id" api:"required"`
 	Dismissed     param.Field[bool]                 `query:"dismissed"`
 	IssueClass    param.Field[[]string]             `query:"issue_class"`
@@ -873,6 +951,8 @@ func (r AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess) IsKnown() bool 
 
 type AttackSurfaceReportIssueTypeParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]               `path:"account_id" api:"required"`
 	Dismissed     param.Field[bool]                 `query:"dismissed"`
 	IssueClass    param.Field[[]string]             `query:"issue_class"`
