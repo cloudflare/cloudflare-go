@@ -63,6 +63,7 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 
 // Push a batch of message to a Queue
 func (r *MessageService) BulkPush(ctx context.Context, queueID string, params MessageBulkPushParams, opts ...option.RequestOption) (res *MessageBulkPushResponse, err error) {
+	var env MessageBulkPushResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
@@ -78,8 +79,12 @@ func (r *MessageService) BulkPush(ctx context.Context, queueID string, params Me
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/batch", params.AccountID, queueID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return res, err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // Pull a batch of messages from a Queue
@@ -110,6 +115,7 @@ func (r *MessageService) Pull(ctx context.Context, queueID string, params Messag
 
 // Push a message to a Queue
 func (r *MessageService) Push(ctx context.Context, queueID string, params MessagePushParams, opts ...option.RequestOption) (res *MessagePushResponse, err error) {
+	var env MessagePushResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
@@ -125,8 +131,12 @@ func (r *MessageService) Push(ctx context.Context, queueID string, params Messag
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages", params.AccountID, queueID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return res, err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 type MessageAckResponse struct {
@@ -158,19 +168,14 @@ func (r messageAckResponseJSON) RawJSON() string {
 }
 
 type MessageBulkPushResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	// Indicates if the API call was successful or not.
-	Success MessageBulkPushResponseSuccess `json:"success"`
-	JSON    messageBulkPushResponseJSON    `json:"-"`
+	Metadata MessageBulkPushResponseMetadata `json:"metadata"`
+	JSON     messageBulkPushResponseJSON     `json:"-"`
 }
 
 // messageBulkPushResponseJSON contains the JSON metadata for the struct
 // [MessageBulkPushResponse]
 type messageBulkPushResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
+	Metadata    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -183,25 +188,65 @@ func (r messageBulkPushResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicates if the API call was successful or not.
-type MessageBulkPushResponseSuccess bool
+type MessageBulkPushResponseMetadata struct {
+	// Best-effort metrics for the queue. Values may be approximate due to the
+	// distributed nature of queues.
+	Metrics MessageBulkPushResponseMetadataMetrics `json:"metrics"`
+	JSON    messageBulkPushResponseMetadataJSON    `json:"-"`
+}
 
-const (
-	MessageBulkPushResponseSuccessTrue MessageBulkPushResponseSuccess = true
-)
+// messageBulkPushResponseMetadataJSON contains the JSON metadata for the struct
+// [MessageBulkPushResponseMetadata]
+type messageBulkPushResponseMetadataJSON struct {
+	Metrics     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
 
-func (r MessageBulkPushResponseSuccess) IsKnown() bool {
-	switch r {
-	case MessageBulkPushResponseSuccessTrue:
-		return true
-	}
-	return false
+func (r *MessageBulkPushResponseMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messageBulkPushResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+// Best-effort metrics for the queue. Values may be approximate due to the
+// distributed nature of queues.
+type MessageBulkPushResponseMetadataMetrics struct {
+	// The size in bytes of unacknowledged messages in the queue.
+	BacklogBytes float64 `json:"backlog_bytes" api:"required"`
+	// The number of unacknowledged messages in the queue.
+	BacklogCount float64 `json:"backlog_count" api:"required"`
+	// Unix timestamp in milliseconds of the oldest unacknowledged message in the
+	// queue. Returns 0 if unknown.
+	OldestMessageTimestampMs float64                                    `json:"oldest_message_timestamp_ms" api:"required"`
+	JSON                     messageBulkPushResponseMetadataMetricsJSON `json:"-"`
+}
+
+// messageBulkPushResponseMetadataMetricsJSON contains the JSON metadata for the
+// struct [MessageBulkPushResponseMetadataMetrics]
+type messageBulkPushResponseMetadataMetricsJSON struct {
+	BacklogBytes             apijson.Field
+	BacklogCount             apijson.Field
+	OldestMessageTimestampMs apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *MessageBulkPushResponseMetadataMetrics) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messageBulkPushResponseMetadataMetricsJSON) RawJSON() string {
+	return r.raw
 }
 
 type MessagePullResponse struct {
-	// The number of unacknowledged messages in the queue
+	// The number of unacknowledged messages in the queue.
 	MessageBacklogCount float64                      `json:"message_backlog_count"`
 	Messages            []MessagePullResponseMessage `json:"messages"`
+	Metadata            MessagePullResponseMetadata  `json:"metadata"`
 	JSON                messagePullResponseJSON      `json:"-"`
 }
 
@@ -210,6 +255,7 @@ type MessagePullResponse struct {
 type messagePullResponseJSON struct {
 	MessageBacklogCount apijson.Field
 	Messages            apijson.Field
+	Metadata            apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -255,20 +301,69 @@ func (r messagePullResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 
+type MessagePullResponseMetadata struct {
+	// Best-effort metrics for the queue. Values may be approximate due to the
+	// distributed nature of queues.
+	Metrics MessagePullResponseMetadataMetrics `json:"metrics"`
+	JSON    messagePullResponseMetadataJSON    `json:"-"`
+}
+
+// messagePullResponseMetadataJSON contains the JSON metadata for the struct
+// [MessagePullResponseMetadata]
+type messagePullResponseMetadataJSON struct {
+	Metrics     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MessagePullResponseMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messagePullResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+// Best-effort metrics for the queue. Values may be approximate due to the
+// distributed nature of queues.
+type MessagePullResponseMetadataMetrics struct {
+	// The size in bytes of unacknowledged messages in the queue.
+	BacklogBytes float64 `json:"backlog_bytes" api:"required"`
+	// The number of unacknowledged messages in the queue.
+	BacklogCount float64 `json:"backlog_count" api:"required"`
+	// Unix timestamp in milliseconds of the oldest unacknowledged message in the
+	// queue. Returns 0 if unknown.
+	OldestMessageTimestampMs float64                                `json:"oldest_message_timestamp_ms" api:"required"`
+	JSON                     messagePullResponseMetadataMetricsJSON `json:"-"`
+}
+
+// messagePullResponseMetadataMetricsJSON contains the JSON metadata for the struct
+// [MessagePullResponseMetadataMetrics]
+type messagePullResponseMetadataMetricsJSON struct {
+	BacklogBytes             apijson.Field
+	BacklogCount             apijson.Field
+	OldestMessageTimestampMs apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *MessagePullResponseMetadataMetrics) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messagePullResponseMetadataMetricsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MessagePushResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	// Indicates if the API call was successful or not.
-	Success MessagePushResponseSuccess `json:"success"`
-	JSON    messagePushResponseJSON    `json:"-"`
+	Metadata MessagePushResponseMetadata `json:"metadata"`
+	JSON     messagePushResponseJSON     `json:"-"`
 }
 
 // messagePushResponseJSON contains the JSON metadata for the struct
 // [MessagePushResponse]
 type messagePushResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
+	Metadata    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -281,19 +376,58 @@ func (r messagePushResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicates if the API call was successful or not.
-type MessagePushResponseSuccess bool
+type MessagePushResponseMetadata struct {
+	// Best-effort metrics for the queue. Values may be approximate due to the
+	// distributed nature of queues.
+	Metrics MessagePushResponseMetadataMetrics `json:"metrics"`
+	JSON    messagePushResponseMetadataJSON    `json:"-"`
+}
 
-const (
-	MessagePushResponseSuccessTrue MessagePushResponseSuccess = true
-)
+// messagePushResponseMetadataJSON contains the JSON metadata for the struct
+// [MessagePushResponseMetadata]
+type messagePushResponseMetadataJSON struct {
+	Metrics     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
 
-func (r MessagePushResponseSuccess) IsKnown() bool {
-	switch r {
-	case MessagePushResponseSuccessTrue:
-		return true
-	}
-	return false
+func (r *MessagePushResponseMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messagePushResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+// Best-effort metrics for the queue. Values may be approximate due to the
+// distributed nature of queues.
+type MessagePushResponseMetadataMetrics struct {
+	// The size in bytes of unacknowledged messages in the queue.
+	BacklogBytes float64 `json:"backlog_bytes" api:"required"`
+	// The number of unacknowledged messages in the queue.
+	BacklogCount float64 `json:"backlog_count" api:"required"`
+	// Unix timestamp in milliseconds of the oldest unacknowledged message in the
+	// queue. Returns 0 if unknown.
+	OldestMessageTimestampMs float64                                `json:"oldest_message_timestamp_ms" api:"required"`
+	JSON                     messagePushResponseMetadataMetricsJSON `json:"-"`
+}
+
+// messagePushResponseMetadataMetricsJSON contains the JSON metadata for the struct
+// [MessagePushResponseMetadataMetrics]
+type messagePushResponseMetadataMetricsJSON struct {
+	BacklogBytes             apijson.Field
+	BacklogCount             apijson.Field
+	OldestMessageTimestampMs apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *MessagePushResponseMetadataMetrics) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messagePushResponseMetadataMetricsJSON) RawJSON() string {
+	return r.raw
 }
 
 type MessageAckParams struct {
@@ -483,6 +617,49 @@ func (r MessageBulkPushParamsMessagesContentType) IsKnown() bool {
 	return false
 }
 
+type MessageBulkPushResponseEnvelope struct {
+	Errors   []shared.ResponseInfo   `json:"errors"`
+	Messages []string                `json:"messages"`
+	Result   MessageBulkPushResponse `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success MessageBulkPushResponseEnvelopeSuccess `json:"success"`
+	JSON    messageBulkPushResponseEnvelopeJSON    `json:"-"`
+}
+
+// messageBulkPushResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MessageBulkPushResponseEnvelope]
+type messageBulkPushResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MessageBulkPushResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messageBulkPushResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates if the API call was successful or not.
+type MessageBulkPushResponseEnvelopeSuccess bool
+
+const (
+	MessageBulkPushResponseEnvelopeSuccessTrue MessageBulkPushResponseEnvelopeSuccess = true
+)
+
+func (r MessageBulkPushResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MessageBulkPushResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type MessagePullParams struct {
 	// A Resource identifier.
 	//
@@ -640,6 +817,49 @@ const (
 func (r MessagePushParamsBodyContentType) IsKnown() bool {
 	switch r {
 	case MessagePushParamsBodyContentTypeText, MessagePushParamsBodyContentTypeJson:
+		return true
+	}
+	return false
+}
+
+type MessagePushResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   MessagePushResponse   `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success MessagePushResponseEnvelopeSuccess `json:"success"`
+	JSON    messagePushResponseEnvelopeJSON    `json:"-"`
+}
+
+// messagePushResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MessagePushResponseEnvelope]
+type messagePushResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MessagePushResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r messagePushResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates if the API call was successful or not.
+type MessagePushResponseEnvelopeSuccess bool
+
+const (
+	MessagePushResponseEnvelopeSuccessTrue MessagePushResponseEnvelopeSuccess = true
+)
+
+func (r MessagePushResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MessagePushResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
