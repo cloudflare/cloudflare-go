@@ -40,6 +40,11 @@ func NewSettingAccountService(opts ...option.RequestOption) (r *SettingAccountSe
 func (r *SettingAccountService) Edit(ctx context.Context, params SettingAccountEditParams, opts ...option.RequestOption) (res *SettingAccountEditResponse, err error) {
 	var env SettingAccountEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -57,6 +62,11 @@ func (r *SettingAccountService) Edit(ctx context.Context, params SettingAccountE
 func (r *SettingAccountService) Get(ctx context.Context, query SettingAccountGetParams, opts ...option.RequestOption) (res *SettingAccountGetResponse, err error) {
 	var env SettingAccountGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -468,6 +478,8 @@ func (r SettingAccountGetResponseZoneDefaultsZoneMode) IsKnown() bool {
 
 type SettingAccountEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID    param.Field[string]                               `path:"account_id" api:"required"`
 	ZoneDefaults param.Field[SettingAccountEditParamsZoneDefaults] `json:"zone_defaults"`
 }
@@ -728,6 +740,8 @@ func (r SettingAccountEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingAccountGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

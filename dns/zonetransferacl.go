@@ -39,6 +39,11 @@ func NewZoneTransferACLService(opts ...option.RequestOption) (r *ZoneTransferACL
 func (r *ZoneTransferACLService) New(ctx context.Context, params ZoneTransferACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env ZoneTransferACLNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -56,6 +61,11 @@ func (r *ZoneTransferACLService) New(ctx context.Context, params ZoneTransferACL
 func (r *ZoneTransferACLService) Update(ctx context.Context, aclID string, params ZoneTransferACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env ZoneTransferACLUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -78,6 +88,11 @@ func (r *ZoneTransferACLService) List(ctx context.Context, query ZoneTransferACL
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -104,6 +119,11 @@ func (r *ZoneTransferACLService) ListAutoPaging(ctx context.Context, query ZoneT
 func (r *ZoneTransferACLService) Delete(ctx context.Context, aclID string, body ZoneTransferACLDeleteParams, opts ...option.RequestOption) (res *ZoneTransferACLDeleteResponse, err error) {
 	var env ZoneTransferACLDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -125,6 +145,11 @@ func (r *ZoneTransferACLService) Delete(ctx context.Context, aclID string, body 
 func (r *ZoneTransferACLService) Get(ctx context.Context, aclID string, query ZoneTransferACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env ZoneTransferACLGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -209,6 +234,7 @@ func (r zoneTransferACLDeleteResponseJSON) RawJSON() string {
 }
 
 type ZoneTransferACLNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
@@ -364,6 +390,7 @@ func (r ZoneTransferACLNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferACLUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	ACL       ACLParam            `json:"acl" api:"required"`
 }
@@ -512,10 +539,12 @@ func (r ZoneTransferACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferACLListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferACLDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -659,6 +688,7 @@ func (r ZoneTransferACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferACLGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
