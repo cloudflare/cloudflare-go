@@ -55,6 +55,11 @@ func NewOperationService(opts ...option.RequestOption) (r *OperationService) {
 func (r *OperationService) New(ctx context.Context, params OperationNewParams, opts ...option.RequestOption) (res *OperationNewResponse, err error) {
 	var env OperationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -74,6 +79,11 @@ func (r *OperationService) List(ctx context.Context, params OperationListParams,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -101,6 +111,11 @@ func (r *OperationService) ListAutoPaging(ctx context.Context, params OperationL
 // operation will no longer be tracked or protected by API Shield rules.
 func (r *OperationService) Delete(ctx context.Context, operationID string, body OperationDeleteParams, opts ...option.RequestOption) (res *OperationDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -123,6 +138,11 @@ func (r *OperationService) BulkNew(ctx context.Context, params OperationBulkNewP
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -153,6 +173,11 @@ func (r *OperationService) BulkNewAutoPaging(ctx context.Context, params Operati
 // single request. Efficient for cleaning up unused endpoints.
 func (r *OperationService) BulkDelete(ctx context.Context, body OperationBulkDeleteParams, opts ...option.RequestOption) (res *OperationBulkDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -167,6 +192,11 @@ func (r *OperationService) BulkDelete(ctx context.Context, body OperationBulkDel
 func (r *OperationService) Get(ctx context.Context, operationID string, params OperationGetParams, opts ...option.RequestOption) (res *OperationGetResponse, err error) {
 	var env OperationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -2844,6 +2874,8 @@ func (r OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 
 type OperationNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -2928,6 +2960,8 @@ func (r OperationNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OperationListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Direction to order results.
 	Direction param.Field[OperationListParamsDirection] `query:"direction"`
@@ -3011,11 +3045,15 @@ func (r OperationListParamsOrder) IsKnown() bool {
 
 type OperationDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type OperationBulkNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]          `path:"zone_id" api:"required"`
 	Body   []OperationBulkNewParamsBody `json:"body" api:"required"`
 }
@@ -3065,11 +3103,15 @@ func (r OperationBulkNewParamsBodyMethod) IsKnown() bool {
 
 type OperationBulkDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type OperationGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Add feature(s) to the results. The feature name that is given here corresponds
 	// to the resulting feature object. Have a look at the top-level object description
