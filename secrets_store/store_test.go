@@ -29,7 +29,9 @@ func TestStoreNew(t *testing.T) {
 	)
 	_, err := client.SecretsStore.Stores.New(context.TODO(), secrets_store.StoreNewParams{
 		AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
-		Name:      cloudflare.F("service_x_keys"),
+		Body: []secrets_store.StoreNewParamsBody{{
+			Name: cloudflare.F("service_x_keys"),
+		}},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

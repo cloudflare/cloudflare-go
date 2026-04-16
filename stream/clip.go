@@ -36,14 +36,9 @@ func NewClipService(opts ...option.RequestOption) (r *ClipService) {
 }
 
 // Clips a video based on the specified start and end times provided in seconds.
-func (r *ClipService) New(ctx context.Context, params ClipNewParams, opts ...option.RequestOption) (res *Video, err error) {
+func (r *ClipService) New(ctx context.Context, params ClipNewParams, opts ...option.RequestOption) (res *Clip, err error) {
 	var env ClipNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -57,10 +52,145 @@ func (r *ClipService) New(ctx context.Context, params ClipNewParams, opts ...opt
 	return res, nil
 }
 
+type Clip struct {
+	// Lists the origins allowed to display the video. Enter allowed origin domains in
+	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
+	// viewed on any origin.
+	AllowedOrigins []AllowedOrigins `json:"allowedOrigins"`
+	// The unique video identifier (UID).
+	ClippedFromVideoUID string `json:"clippedFromVideoUID"`
+	// The date and time the clip was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// A user-defined identifier for the media creator.
+	Creator string `json:"creator"`
+	// Specifies the end time for the video clip in seconds.
+	EndTimeSeconds int64 `json:"endTimeSeconds"`
+	// The maximum duration in seconds for a video upload. Can be set for a video that
+	// is not yet uploaded to limit its duration. Uploads that exceed the specified
+	// duration will fail during processing. A value of `-1` means the value is
+	// unknown.
+	MaxDurationSeconds int64 `json:"maxDurationSeconds"`
+	// A user modifiable key-value store used to reference other systems of record for
+	// managing videos.
+	Meta interface{} `json:"meta"`
+	// The date and time the live input was last modified.
+	Modified time.Time    `json:"modified" format:"date-time"`
+	Playback ClipPlayback `json:"playback"`
+	// The video's preview page URI. This field is omitted until encoding is complete.
+	Preview string `json:"preview" format:"uri"`
+	// Indicates whether the video can be a accessed using the UID. When set to `true`,
+	// a signed token must be generated with a signing key to view the video.
+	RequireSignedURLs bool `json:"requireSignedURLs"`
+	// Specifies the start time for the video clip in seconds.
+	StartTimeSeconds int64 `json:"startTimeSeconds"`
+	// Specifies the processing status for all quality levels for a video.
+	Status ClipStatus `json:"status"`
+	// The timestamp for a thumbnail image calculated as a percentage value of the
+	// video's duration. To convert from a second-wise timestamp to a percentage,
+	// divide the desired timestamp by the total duration of the video. If this value
+	// is not set, the default thumbnail image is taken from 0s of the video.
+	ThumbnailTimestampPct float64       `json:"thumbnailTimestampPct"`
+	Watermark             ClipWatermark `json:"watermark"`
+	JSON                  clipJSON      `json:"-"`
+}
+
+// clipJSON contains the JSON metadata for the struct [Clip]
+type clipJSON struct {
+	AllowedOrigins        apijson.Field
+	ClippedFromVideoUID   apijson.Field
+	Created               apijson.Field
+	Creator               apijson.Field
+	EndTimeSeconds        apijson.Field
+	MaxDurationSeconds    apijson.Field
+	Meta                  apijson.Field
+	Modified              apijson.Field
+	Playback              apijson.Field
+	Preview               apijson.Field
+	RequireSignedURLs     apijson.Field
+	StartTimeSeconds      apijson.Field
+	Status                apijson.Field
+	ThumbnailTimestampPct apijson.Field
+	Watermark             apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *Clip) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clipJSON) RawJSON() string {
+	return r.raw
+}
+
+type ClipPlayback struct {
+	// DASH Media Presentation Description for the video.
+	Dash string `json:"dash"`
+	// The HLS manifest for the video.
+	Hls  string           `json:"hls"`
+	JSON clipPlaybackJSON `json:"-"`
+}
+
+// clipPlaybackJSON contains the JSON metadata for the struct [ClipPlayback]
+type clipPlaybackJSON struct {
+	Dash        apijson.Field
+	Hls         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ClipPlayback) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clipPlaybackJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the processing status for all quality levels for a video.
+type ClipStatus string
+
+const (
+	ClipStatusPendingupload  ClipStatus = "pendingupload"
+	ClipStatusDownloading    ClipStatus = "downloading"
+	ClipStatusQueued         ClipStatus = "queued"
+	ClipStatusInprogress     ClipStatus = "inprogress"
+	ClipStatusReady          ClipStatus = "ready"
+	ClipStatusError          ClipStatus = "error"
+	ClipStatusLiveInprogress ClipStatus = "live-inprogress"
+)
+
+func (r ClipStatus) IsKnown() bool {
+	switch r {
+	case ClipStatusPendingupload, ClipStatusDownloading, ClipStatusQueued, ClipStatusInprogress, ClipStatusReady, ClipStatusError, ClipStatusLiveInprogress:
+		return true
+	}
+	return false
+}
+
+type ClipWatermark struct {
+	// The unique identifier for the watermark profile.
+	UID  string            `json:"uid"`
+	JSON clipWatermarkJSON `json:"-"`
+}
+
+// clipWatermarkJSON contains the JSON metadata for the struct [ClipWatermark]
+type clipWatermarkJSON struct {
+	UID         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ClipWatermark) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clipWatermarkJSON) RawJSON() string {
+	return r.raw
+}
+
 type ClipNewParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The unique video identifier (UID).
 	ClippedFromVideoUID param.Field[string] `json:"clippedFromVideoUID" api:"required"`
@@ -74,28 +204,20 @@ type ClipNewParams struct {
 	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowedOrigins"`
 	// A user-defined identifier for the media creator.
 	Creator param.Field[string] `json:"creator"`
-	// A video's URL. Preferred over 'url'.
-	Input param.Field[string] `json:"input" format:"uri"`
-	// A user modifiable key-value store used to reference other systems of record for
-	// managing videos.
-	Meta param.Field[interface{}] `json:"meta"`
-	// A name for the video.
-	Name param.Field[string] `json:"name"`
+	// The maximum duration in seconds for a video upload. Can be set for a video that
+	// is not yet uploaded to limit its duration. Uploads that exceed the specified
+	// duration will fail during processing. A value of `-1` means the value is
+	// unknown.
+	MaxDurationSeconds param.Field[int64] `json:"maxDurationSeconds"`
 	// Indicates whether the video can be a accessed using the UID. When set to `true`,
 	// a signed token must be generated with a signing key to view the video.
 	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
-	// Indicates the date and time at which the video will be deleted. Omit the field
-	// to indicate no change, or include with a `null` value to remove an existing
-	// scheduled deletion. If specified, must be at least 30 days from upload time.
-	ScheduledDeletion param.Field[time.Time] `json:"scheduledDeletion" format:"date-time"`
 	// The timestamp for a thumbnail image calculated as a percentage value of the
 	// video's duration. To convert from a second-wise timestamp to a percentage,
 	// divide the desired timestamp by the total duration of the video. If this value
 	// is not set, the default thumbnail image is taken from 0s of the video.
-	ThumbnailTimestampPct param.Field[float64] `json:"thumbnailTimestampPct"`
-	// A video's URL (legacy field, use 'input' instead).
-	URL       param.Field[string]                 `json:"url" format:"uri"`
-	Watermark param.Field[ClipNewParamsWatermark] `json:"watermark"`
+	ThumbnailTimestampPct param.Field[float64]                `json:"thumbnailTimestampPct"`
+	Watermark             param.Field[ClipNewParamsWatermark] `json:"watermark"`
 }
 
 func (r ClipNewParams) MarshalJSON() (data []byte, err error) {
@@ -116,7 +238,7 @@ type ClipNewResponseEnvelope struct {
 	Messages []ClipNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success ClipNewResponseEnvelopeSuccess `json:"success" api:"required"`
-	Result  Video                          `json:"result"`
+	Result  Clip                           `json:"result"`
 	JSON    clipNewResponseEnvelopeJSON    `json:"-"`
 }
 
