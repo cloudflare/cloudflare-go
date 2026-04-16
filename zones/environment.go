@@ -40,6 +40,11 @@ func NewEnvironmentService(opts ...option.RequestOption) (r *EnvironmentService)
 func (r *EnvironmentService) New(ctx context.Context, params EnvironmentNewParams, opts ...option.RequestOption) (res *EnvironmentNewResponse, err error) {
 	var env EnvironmentNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -57,6 +62,11 @@ func (r *EnvironmentService) New(ctx context.Context, params EnvironmentNewParam
 func (r *EnvironmentService) Update(ctx context.Context, params EnvironmentUpdateParams, opts ...option.RequestOption) (res *EnvironmentUpdateResponse, err error) {
 	var env EnvironmentUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -74,6 +84,11 @@ func (r *EnvironmentService) Update(ctx context.Context, params EnvironmentUpdat
 func (r *EnvironmentService) List(ctx context.Context, query EnvironmentListParams, opts ...option.RequestOption) (res *EnvironmentListResponse, err error) {
 	var env EnvironmentListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -91,6 +106,11 @@ func (r *EnvironmentService) List(ctx context.Context, query EnvironmentListPara
 func (r *EnvironmentService) Delete(ctx context.Context, environmentID string, body EnvironmentDeleteParams, opts ...option.RequestOption) (res *EnvironmentDeleteResponse, err error) {
 	var env EnvironmentDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -112,6 +132,11 @@ func (r *EnvironmentService) Delete(ctx context.Context, environmentID string, b
 func (r *EnvironmentService) Edit(ctx context.Context, params EnvironmentEditParams, opts ...option.RequestOption) (res *EnvironmentEditResponse, err error) {
 	var env EnvironmentEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -129,6 +154,11 @@ func (r *EnvironmentService) Edit(ctx context.Context, params EnvironmentEditPar
 func (r *EnvironmentService) Rollback(ctx context.Context, environmentID string, body EnvironmentRollbackParams, opts ...option.RequestOption) (res *EnvironmentRollbackResponse, err error) {
 	var env EnvironmentRollbackResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -471,6 +501,7 @@ func (r environmentRollbackResponseEnvironmentJSON) RawJSON() string {
 }
 
 type EnvironmentNewParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID       param.Field[string]                            `path:"zone_id" api:"required"`
 	Environments param.Field[[]EnvironmentNewParamsEnvironment] `json:"environments" api:"required"`
 }
@@ -521,6 +552,7 @@ func (r environmentNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EnvironmentUpdateParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID       param.Field[string]                               `path:"zone_id" api:"required"`
 	Environments param.Field[[]EnvironmentUpdateParamsEnvironment] `json:"environments" api:"required"`
 }
@@ -571,6 +603,7 @@ func (r environmentUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EnvironmentListParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -602,6 +635,7 @@ func (r environmentListResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EnvironmentDeleteParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -633,6 +667,7 @@ func (r environmentDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EnvironmentEditParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID       param.Field[string]                             `path:"zone_id" api:"required"`
 	Environments param.Field[[]EnvironmentEditParamsEnvironment] `json:"environments" api:"required"`
 }
@@ -683,6 +718,7 @@ func (r environmentEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type EnvironmentRollbackParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
