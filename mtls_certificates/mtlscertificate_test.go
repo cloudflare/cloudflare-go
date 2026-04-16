@@ -44,7 +44,7 @@ func TestMTLSCertificateNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMTLSCertificateList(t *testing.T) {
+func TestMTLSCertificateListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -60,6 +60,7 @@ func TestMTLSCertificateList(t *testing.T) {
 	)
 	_, err := client.MTLSCertificates.List(context.TODO(), mtls_certificates.MTLSCertificateListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Type:      cloudflare.F([]mtls_certificates.MTLSCertificateListParamsType{mtls_certificates.MTLSCertificateListParamsTypeCustom}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
