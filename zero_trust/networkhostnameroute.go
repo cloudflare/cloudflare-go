@@ -43,6 +43,11 @@ func NewNetworkHostnameRouteService(opts ...option.RequestOption) (r *NetworkHos
 func (r *NetworkHostnameRouteService) New(ctx context.Context, params NetworkHostnameRouteNewParams, opts ...option.RequestOption) (res *HostnameRoute, err error) {
 	var env NetworkHostnameRouteNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,6 +66,11 @@ func (r *NetworkHostnameRouteService) List(ctx context.Context, params NetworkHo
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -87,6 +97,11 @@ func (r *NetworkHostnameRouteService) ListAutoPaging(ctx context.Context, params
 func (r *NetworkHostnameRouteService) Delete(ctx context.Context, hostnameRouteID string, body NetworkHostnameRouteDeleteParams, opts ...option.RequestOption) (res *HostnameRoute, err error) {
 	var env NetworkHostnameRouteDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -108,6 +123,11 @@ func (r *NetworkHostnameRouteService) Delete(ctx context.Context, hostnameRouteI
 func (r *NetworkHostnameRouteService) Edit(ctx context.Context, hostnameRouteID string, params NetworkHostnameRouteEditParams, opts ...option.RequestOption) (res *HostnameRoute, err error) {
 	var env NetworkHostnameRouteEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -129,6 +149,11 @@ func (r *NetworkHostnameRouteService) Edit(ctx context.Context, hostnameRouteID 
 func (r *NetworkHostnameRouteService) Get(ctx context.Context, hostnameRouteID string, query NetworkHostnameRouteGetParams, opts ...option.RequestOption) (res *HostnameRoute, err error) {
 	var env NetworkHostnameRouteGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -188,6 +213,8 @@ func (r hostnameRouteJSON) RawJSON() string {
 
 type NetworkHostnameRouteNewParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description of the hostname route.
 	Comment param.Field[string] `json:"comment"`
@@ -246,6 +273,8 @@ func (r NetworkHostnameRouteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkHostnameRouteListParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The hostname route ID.
 	ID param.Field[string] `query:"id" format:"uuid"`
@@ -279,6 +308,8 @@ func (r NetworkHostnameRouteListParams) URLQuery() (v url.Values) {
 
 type NetworkHostnameRouteDeleteParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -327,6 +358,8 @@ func (r NetworkHostnameRouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkHostnameRouteEditParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description of the hostname route.
 	Comment param.Field[string] `json:"comment"`
@@ -385,6 +418,8 @@ func (r NetworkHostnameRouteEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkHostnameRouteGetParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
