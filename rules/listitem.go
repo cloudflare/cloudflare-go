@@ -50,6 +50,11 @@ func NewListItemService(opts ...option.RequestOption) (r *ListItemService) {
 func (r *ListItemService) New(ctx context.Context, listID string, params ListItemNewParams, opts ...option.RequestOption) (res *ListItemNewResponse, err error) {
 	var env ListItemNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -78,6 +83,11 @@ func (r *ListItemService) New(ctx context.Context, listID string, params ListIte
 func (r *ListItemService) Update(ctx context.Context, listID string, params ListItemUpdateParams, opts ...option.RequestOption) (res *ListItemUpdateResponse, err error) {
 	var env ListItemUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -100,6 +110,11 @@ func (r *ListItemService) List(ctx context.Context, listID string, params ListIt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -136,6 +151,11 @@ func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, par
 func (r *ListItemService) Delete(ctx context.Context, listID string, params ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
 	var env ListItemDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -157,6 +177,11 @@ func (r *ListItemService) Delete(ctx context.Context, listID string, params List
 func (r *ListItemService) Get(ctx context.Context, listID string, itemID string, query ListItemGetParams, opts ...option.RequestOption) (res *ListItemGetResponse, err error) {
 	var env ListItemGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -753,6 +778,8 @@ func (r ListItemGetResponseListsListItemASNFull) implementsListItemGetResponse()
 
 type ListItemNewParams struct {
 	// The Account ID for this resource.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]          `path:"account_id" api:"required"`
 	Body      []ListItemNewParamsBodyUnion `json:"body" api:"required"`
 }
@@ -887,6 +914,8 @@ func (r ListItemNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemUpdateParams struct {
 	// The Account ID for this resource.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]             `path:"account_id" api:"required"`
 	Body      []ListItemUpdateParamsBodyUnion `json:"body" api:"required"`
 }
@@ -1024,6 +1053,8 @@ func (r ListItemUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemListParams struct {
 	// The Account ID for this resource.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The pagination cursor. An opaque string token indicating the position from which
 	// to continue when requesting the next/previous set of records. Cursor values are
@@ -1049,6 +1080,8 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 
 type ListItemDeleteParams struct {
 	// The Account ID for this resource.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                     `path:"account_id" api:"required"`
 	Items     param.Field[[]ListItemDeleteParamsItem] `json:"items"`
 }
@@ -1111,6 +1144,8 @@ func (r ListItemDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemGetParams struct {
 	// The Account ID for this resource.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
