@@ -30,7 +30,7 @@ func TestNamespaceNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AISearch.Namespaces.New(context.TODO(), ai_search.NamespaceNewParams{
 		AccountID:   cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
-		Name:        cloudflare.F("production"),
+		Name:        cloudflare.F("name"),
 		Description: cloudflare.F("Production environment"),
 	})
 	if err != nil {
@@ -88,11 +88,10 @@ func TestNamespaceListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.AISearch.Namespaces.List(context.TODO(), ai_search.NamespaceListParams{
-		AccountID:        cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
-		OrderBy:          cloudflare.F(ai_search.NamespaceListParamsOrderByCreatedAt),
-		OrderByDirection: cloudflare.F(ai_search.NamespaceListParamsOrderByDirectionAsc),
-		Page:             cloudflare.F(int64(1)),
-		PerPage:          cloudflare.F(int64(1)),
+		AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(20)),
+		Search:    cloudflare.F("prod"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

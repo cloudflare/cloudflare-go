@@ -40,7 +40,7 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 	return
 }
 
-// Create a new namespaces.
+// Create a new namespace.
 func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *NamespaceNewResponse, err error) {
 	var env NamespaceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -298,31 +298,7 @@ func (r namespaceListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type NamespaceDeleteResponse struct {
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	Name      string    `json:"name" api:"required"`
-	// Optional description for the namespace. Max 256 characters.
-	Description string                      `json:"description" api:"nullable"`
-	JSON        namespaceDeleteResponseJSON `json:"-"`
-}
-
-// namespaceDeleteResponseJSON contains the JSON metadata for the struct
-// [NamespaceDeleteResponse]
-type namespaceDeleteResponseJSON struct {
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
+type NamespaceDeleteResponse = interface{}
 
 type NamespaceChatCompletionsResponse struct {
 	Choices     []NamespaceChatCompletionsResponseChoice `json:"choices" api:"required"`
@@ -739,9 +715,9 @@ func (r NamespaceNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceNewResponseEnvelope struct {
-	Result  NamespaceNewResponse             `json:"result" api:"required"`
-	Success bool                             `json:"success" api:"required"`
-	JSON    namespaceNewResponseEnvelopeJSON `json:"-"`
+	Result  NamespaceNewResponse                `json:"result" api:"required"`
+	Success NamespaceNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    namespaceNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // namespaceNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -761,6 +737,20 @@ func (r namespaceNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type NamespaceNewResponseEnvelopeSuccess bool
+
+const (
+	NamespaceNewResponseEnvelopeSuccessTrue NamespaceNewResponseEnvelopeSuccess = true
+)
+
+func (r NamespaceNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type NamespaceUpdateParams struct {
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -773,9 +763,9 @@ func (r NamespaceUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceUpdateResponseEnvelope struct {
-	Result  NamespaceUpdateResponse             `json:"result" api:"required"`
-	Success bool                                `json:"success" api:"required"`
-	JSON    namespaceUpdateResponseEnvelopeJSON `json:"-"`
+	Result  NamespaceUpdateResponse                `json:"result" api:"required"`
+	Success NamespaceUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    namespaceUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // namespaceUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -795,15 +785,30 @@ func (r namespaceUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type NamespaceUpdateResponseEnvelopeSuccess bool
+
+const (
+	NamespaceUpdateResponseEnvelopeSuccessTrue NamespaceUpdateResponseEnvelopeSuccess = true
+)
+
+func (r NamespaceUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type NamespaceListParams struct {
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Order By Column Name
-	OrderBy param.Field[NamespaceListParamsOrderBy] `query:"order_by"`
-	// Order By Direction
-	OrderByDirection param.Field[NamespaceListParamsOrderByDirection] `query:"order_by_direction"`
-	Page             param.Field[int64]                               `query:"page"`
-	PerPage          param.Field[int64]                               `query:"per_page"`
+	// Page number (1-indexed).
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Filter namespaces whose name or description contains this string
+	// (case-insensitive).
+	Search param.Field[string] `query:"search"`
 }
 
 // URLQuery serializes [NamespaceListParams]'s query parameters as `url.Values`.
@@ -814,46 +819,15 @@ func (r NamespaceListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Order By Column Name
-type NamespaceListParamsOrderBy string
-
-const (
-	NamespaceListParamsOrderByCreatedAt NamespaceListParamsOrderBy = "created_at"
-)
-
-func (r NamespaceListParamsOrderBy) IsKnown() bool {
-	switch r {
-	case NamespaceListParamsOrderByCreatedAt:
-		return true
-	}
-	return false
-}
-
-// Order By Direction
-type NamespaceListParamsOrderByDirection string
-
-const (
-	NamespaceListParamsOrderByDirectionAsc  NamespaceListParamsOrderByDirection = "asc"
-	NamespaceListParamsOrderByDirectionDesc NamespaceListParamsOrderByDirection = "desc"
-)
-
-func (r NamespaceListParamsOrderByDirection) IsKnown() bool {
-	switch r {
-	case NamespaceListParamsOrderByDirectionAsc, NamespaceListParamsOrderByDirectionDesc:
-		return true
-	}
-	return false
-}
-
 type NamespaceDeleteParams struct {
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NamespaceDeleteResponseEnvelope struct {
-	Result  NamespaceDeleteResponse             `json:"result" api:"required"`
-	Success bool                                `json:"success" api:"required"`
-	JSON    namespaceDeleteResponseEnvelopeJSON `json:"-"`
+	Result  NamespaceDeleteResponse                `json:"result" api:"required"`
+	Success NamespaceDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    namespaceDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
 // namespaceDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -871,6 +845,20 @@ func (r *NamespaceDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 
 func (r namespaceDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+type NamespaceDeleteResponseEnvelopeSuccess bool
+
+const (
+	NamespaceDeleteResponseEnvelopeSuccessTrue NamespaceDeleteResponseEnvelopeSuccess = true
+)
+
+func (r NamespaceDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type NamespaceChatCompletionsParams struct {
@@ -1188,9 +1176,9 @@ type NamespaceReadParams struct {
 }
 
 type NamespaceReadResponseEnvelope struct {
-	Result  NamespaceReadResponse             `json:"result" api:"required"`
-	Success bool                              `json:"success" api:"required"`
-	JSON    namespaceReadResponseEnvelopeJSON `json:"-"`
+	Result  NamespaceReadResponse                `json:"result" api:"required"`
+	Success NamespaceReadResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    namespaceReadResponseEnvelopeJSON    `json:"-"`
 }
 
 // namespaceReadResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1208,6 +1196,20 @@ func (r *NamespaceReadResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r namespaceReadResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+type NamespaceReadResponseEnvelopeSuccess bool
+
+const (
+	NamespaceReadResponseEnvelopeSuccessTrue NamespaceReadResponseEnvelopeSuccess = true
+)
+
+func (r NamespaceReadResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceReadResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type NamespaceSearchParams struct {
