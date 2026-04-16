@@ -41,6 +41,11 @@ func NewAccessCustomPageService(opts ...option.RequestOption) (r *AccessCustomPa
 func (r *AccessCustomPageService) New(ctx context.Context, params AccessCustomPageNewParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
 	var env AccessCustomPageNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -58,6 +63,11 @@ func (r *AccessCustomPageService) New(ctx context.Context, params AccessCustomPa
 func (r *AccessCustomPageService) Update(ctx context.Context, customPageID string, params AccessCustomPageUpdateParams, opts ...option.RequestOption) (res *CustomPageWithoutHTML, err error) {
 	var env AccessCustomPageUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -80,6 +90,11 @@ func (r *AccessCustomPageService) List(ctx context.Context, params AccessCustomP
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -106,6 +121,11 @@ func (r *AccessCustomPageService) ListAutoPaging(ctx context.Context, params Acc
 func (r *AccessCustomPageService) Delete(ctx context.Context, customPageID string, body AccessCustomPageDeleteParams, opts ...option.RequestOption) (res *AccessCustomPageDeleteResponse, err error) {
 	var env AccessCustomPageDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -127,6 +147,11 @@ func (r *AccessCustomPageService) Delete(ctx context.Context, customPageID strin
 func (r *AccessCustomPageService) Get(ctx context.Context, customPageID string, query AccessCustomPageGetParams, opts ...option.RequestOption) (res *CustomPage, err error) {
 	var env AccessCustomPageGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -271,6 +296,8 @@ func (r accessCustomPageDeleteResponseJSON) RawJSON() string {
 
 type AccessCustomPageNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	CustomPage CustomPageParam     `json:"custom_page" api:"required"`
 }
@@ -420,6 +447,8 @@ func (r AccessCustomPageNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessCustomPageUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	CustomPage CustomPageParam     `json:"custom_page" api:"required"`
 }
@@ -569,6 +598,8 @@ func (r AccessCustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessCustomPageListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of results.
 	Page param.Field[int64] `query:"page"`
@@ -587,6 +618,8 @@ func (r AccessCustomPageListParams) URLQuery() (v url.Values) {
 
 type AccessCustomPageDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -731,6 +764,8 @@ func (r AccessCustomPageDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessCustomPageGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

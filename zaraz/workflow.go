@@ -38,6 +38,11 @@ func NewWorkflowService(opts ...option.RequestOption) (r *WorkflowService) {
 func (r *WorkflowService) Get(ctx context.Context, query WorkflowGetParams, opts ...option.RequestOption) (res *Workflow, err error) {
 	var env WorkflowGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -69,6 +74,8 @@ func (r Workflow) IsKnown() bool {
 
 type WorkflowGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

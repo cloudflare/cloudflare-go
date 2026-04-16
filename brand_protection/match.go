@@ -39,6 +39,11 @@ func NewMatchService(opts ...option.RequestOption) (r *MatchService) {
 // Return matches as CSV for string queries based on ID
 func (r *MatchService) Download(ctx context.Context, params MatchDownloadParams, opts ...option.RequestOption) (res *MatchDownloadResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -51,6 +56,11 @@ func (r *MatchService) Download(ctx context.Context, params MatchDownloadParams,
 // Return matches for string queries based on ID
 func (r *MatchService) Get(ctx context.Context, params MatchGetParams, opts ...option.RequestOption) (res *MatchGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -107,6 +117,7 @@ func (r matchGetResponseJSON) RawJSON() string {
 }
 
 type MatchDownloadParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID       param.Field[string] `path:"account_id" api:"required"`
 	ID              param.Field[string] `query:"id"`
 	IncludeDomainID param.Field[bool]   `query:"include_domain_id"`
@@ -123,6 +134,7 @@ func (r MatchDownloadParams) URLQuery() (v url.Values) {
 }
 
 type MatchGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID       param.Field[string] `path:"account_id" api:"required"`
 	ID              param.Field[string] `query:"id"`
 	IncludeDomainID param.Field[bool]   `query:"include_domain_id"`

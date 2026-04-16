@@ -41,6 +41,11 @@ func NewCrawlService(opts ...option.RequestOption) (r *CrawlService) {
 func (r *CrawlService) New(ctx context.Context, params CrawlNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env CrawlNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -59,6 +64,11 @@ func (r *CrawlService) New(ctx context.Context, params CrawlNewParams, opts ...o
 func (r *CrawlService) Delete(ctx context.Context, jobID string, body CrawlDeleteParams, opts ...option.RequestOption) (res *CrawlDeleteResponse, err error) {
 	var env CrawlDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -80,6 +90,11 @@ func (r *CrawlService) Delete(ctx context.Context, jobID string, body CrawlDelet
 func (r *CrawlService) Get(ctx context.Context, jobID string, params CrawlGetParams, opts ...option.RequestOption) (res *CrawlGetResponse, err error) {
 	var env CrawlGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -252,6 +267,8 @@ func (r CrawlGetResponseRecordsStatus) IsKnown() bool {
 
 type CrawlNewParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]     `path:"account_id" api:"required"`
 	Body      CrawlNewParamsBodyUnion `json:"body" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
@@ -653,11 +670,12 @@ func (r CrawlNewParamsBodyObjectJsonOptions) MarshalJSON() (data []byte, err err
 }
 
 type CrawlNewParamsBodyObjectJsonOptionsCustomAI struct {
-	// Authorization token for the AI model: `Bearer <token>`.
-	Authorization param.Field[string] `json:"authorization" api:"required"`
 	// AI model to use for the request. Must be formed as `<provider>/<model_name>`,
 	// e.g. `workers-ai/@cf/meta/llama-3.3-70b-instruct-fp8-fast`.
 	Model param.Field[string] `json:"model" api:"required"`
+	// Authorization token for the AI model: `Bearer <token>`. Not needed for
+	// workers-ai models.
+	Authorization param.Field[string] `json:"authorization"`
 }
 
 func (r CrawlNewParamsBodyObjectJsonOptionsCustomAI) MarshalJSON() (data []byte, err error) {
@@ -667,7 +685,7 @@ func (r CrawlNewParamsBodyObjectJsonOptionsCustomAI) MarshalJSON() (data []byte,
 type CrawlNewParamsBodyObjectJsonOptionsResponseFormat struct {
 	Type param.Field[string] `json:"type" api:"required"`
 	// Schema for the response format. More information here:
-	// https://developers.cloudflare.com/workers-ai/json-mode/.
+	// https://developers.cloudflare.com/workers-ai/json-mode/
 	JsonSchema param.Field[map[string]CrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion] `json:"json_schema"`
 }
 
@@ -919,6 +937,8 @@ func (r crawlNewResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type CrawlDeleteParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -975,6 +995,8 @@ func (r crawlDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 
 type CrawlGetParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`

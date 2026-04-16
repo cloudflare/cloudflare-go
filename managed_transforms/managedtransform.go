@@ -38,6 +38,11 @@ func NewManagedTransformService(opts ...option.RequestOption) (r *ManagedTransfo
 func (r *ManagedTransformService) List(ctx context.Context, query ManagedTransformListParams, opts ...option.RequestOption) (res *ManagedTransformListResponse, err error) {
 	var env ManagedTransformListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -55,6 +60,11 @@ func (r *ManagedTransformService) List(ctx context.Context, query ManagedTransfo
 func (r *ManagedTransformService) Delete(ctx context.Context, body ManagedTransformDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return err
@@ -68,6 +78,11 @@ func (r *ManagedTransformService) Delete(ctx context.Context, body ManagedTransf
 func (r *ManagedTransformService) Edit(ctx context.Context, params ManagedTransformEditParams, opts ...option.RequestOption) (res *ManagedTransformEditResponse, err error) {
 	var env ManagedTransformEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -267,6 +282,8 @@ func (r managedTransformEditResponseManagedResponseHeaderJSON) RawJSON() string 
 
 type ManagedTransformListParams struct {
 	// The unique ID of the zone.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -423,11 +440,15 @@ func (r ManagedTransformListResponseEnvelopeSuccess) IsKnown() bool {
 
 type ManagedTransformDeleteParams struct {
 	// The unique ID of the zone.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type ManagedTransformEditParams struct {
 	// The unique ID of the zone.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The list of Managed Request Transforms.
 	ManagedRequestHeaders param.Field[[]ManagedTransformEditParamsManagedRequestHeader] `json:"managed_request_headers" api:"required"`

@@ -40,6 +40,12 @@ func NewJobService(opts ...option.RequestOption) (r *JobService) {
 func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	var env JobNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -71,6 +77,12 @@ func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...optio
 func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdateParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	var env JobUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -103,6 +115,12 @@ func (r *JobService) List(ctx context.Context, query JobListParams, opts ...opti
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -143,6 +161,12 @@ func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, op
 func (r *JobService) Delete(ctx context.Context, jobID int64, body JobDeleteParams, opts ...option.RequestOption) (res *JobDeleteResponse, err error) {
 	var env JobDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -174,6 +198,12 @@ func (r *JobService) Delete(ctx context.Context, jobID int64, body JobDeletePara
 func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	var env JobGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -451,9 +481,6 @@ type OutputOptions struct {
 	// is no option to add all fields at once, so you must specify all the fields names
 	// you are interested in.
 	FieldNames []string `json:"field_names"`
-	// If set to true, subrequests will be merged into the parent request. Only
-	// supported for the `http_requests` dataset.
-	MergeSubrequests bool `json:"merge_subrequests" api:"nullable"`
 	// Specifies the output type, such as `ndjson` or `csv`. This sets default values
 	// for the rest of the settings, depending on the chosen output type. Some
 	// formatting rules, like string quoting, are different between output types.
@@ -480,21 +507,20 @@ type OutputOptions struct {
 
 // outputOptionsJSON contains the JSON metadata for the struct [OutputOptions]
 type outputOptionsJSON struct {
-	BatchPrefix      apijson.Field
-	BatchSuffix      apijson.Field
-	Cve2021_44228    apijson.Field
-	FieldDelimiter   apijson.Field
-	FieldNames       apijson.Field
-	MergeSubrequests apijson.Field
-	OutputType       apijson.Field
-	RecordDelimiter  apijson.Field
-	RecordPrefix     apijson.Field
-	RecordSuffix     apijson.Field
-	RecordTemplate   apijson.Field
-	SampleRate       apijson.Field
-	TimestampFormat  apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	BatchPrefix     apijson.Field
+	BatchSuffix     apijson.Field
+	Cve2021_44228   apijson.Field
+	FieldDelimiter  apijson.Field
+	FieldNames      apijson.Field
+	OutputType      apijson.Field
+	RecordDelimiter apijson.Field
+	RecordPrefix    apijson.Field
+	RecordSuffix    apijson.Field
+	RecordTemplate  apijson.Field
+	SampleRate      apijson.Field
+	TimestampFormat apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *OutputOptions) UnmarshalJSON(data []byte) (err error) {
@@ -559,9 +585,6 @@ type OutputOptionsParam struct {
 	// is no option to add all fields at once, so you must specify all the fields names
 	// you are interested in.
 	FieldNames param.Field[[]string] `json:"field_names"`
-	// If set to true, subrequests will be merged into the parent request. Only
-	// supported for the `http_requests` dataset.
-	MergeSubrequests param.Field[bool] `json:"merge_subrequests"`
 	// Specifies the output type, such as `ndjson` or `csv`. This sets default values
 	// for the rest of the settings, depending on the chosen output type. Some
 	// formatting rules, like string quoting, are different between output types.
@@ -617,8 +640,12 @@ type JobNewParams struct {
 	// included.
 	DestinationConf param.Field[string] `json:"destination_conf" api:"required" format:"uri"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Name of the dataset. A list of supported datasets can be found on the
 	// [Developer Docs](https://developers.cloudflare.com/logs/reference/log-fields/).
@@ -950,8 +977,12 @@ func (r JobNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type JobUpdateParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Uniquely identifies a resource (such as an s3 bucket) where data. will be
 	// pushed. Additional configuration parameters supported by the destination may be
@@ -1238,15 +1269,23 @@ func (r JobUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type JobListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type JobDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -1391,8 +1430,12 @@ func (r JobDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type JobGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 

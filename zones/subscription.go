@@ -40,6 +40,11 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponse, err error) {
 	var env SubscriptionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -57,6 +62,11 @@ func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewPar
 func (r *SubscriptionService) Update(ctx context.Context, params SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponse, err error) {
 	var env SubscriptionUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -74,6 +84,11 @@ func (r *SubscriptionService) Update(ctx context.Context, params SubscriptionUpd
 func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *SubscriptionGetResponse, err error) {
 	var env SubscriptionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -341,6 +356,8 @@ func (r SubscriptionGetResponseState) IsKnown() bool {
 
 type SubscriptionNewParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID       param.Field[string]      `path:"zone_id" api:"required"`
 	Subscription shared.SubscriptionParam `json:"subscription" api:"required"`
 }
@@ -394,6 +411,8 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionUpdateParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID       param.Field[string]      `path:"zone_id" api:"required"`
 	Subscription shared.SubscriptionParam `json:"subscription" api:"required"`
 }
@@ -447,6 +466,8 @@ func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

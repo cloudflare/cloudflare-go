@@ -39,6 +39,11 @@ func NewActivationCheckService(opts ...option.RequestOption) (r *ActivationCheck
 func (r *ActivationCheckService) Trigger(ctx context.Context, body ActivationCheckTriggerParams, opts ...option.RequestOption) (res *ActivationCheckTriggerResponse, err error) {
 	var env ActivationCheckTriggerResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -76,6 +81,8 @@ func (r activationCheckTriggerResponseJSON) RawJSON() string {
 
 type ActivationCheckTriggerParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

@@ -55,6 +55,11 @@ func NewRecordService(opts ...option.RequestOption) (r *RecordService) {
 func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ...option.RequestOption) (res *RecordResponse, err error) {
 	var env RecordNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -79,6 +84,11 @@ func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ..
 func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params RecordUpdateParams, opts ...option.RequestOption) (res *RecordResponse, err error) {
 	var env RecordUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -101,6 +111,11 @@ func (r *RecordService) List(ctx context.Context, params RecordListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -127,6 +142,11 @@ func (r *RecordService) ListAutoPaging(ctx context.Context, params RecordListPar
 func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
 	var env RecordDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -168,6 +188,11 @@ func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body Rec
 func (r *RecordService) Batch(ctx context.Context, params RecordBatchParams, opts ...option.RequestOption) (res *RecordBatchResponse, err error) {
 	var env RecordBatchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -192,6 +217,11 @@ func (r *RecordService) Batch(ctx context.Context, params RecordBatchParams, opt
 func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params RecordEditParams, opts ...option.RequestOption) (res *RecordResponse, err error) {
 	var env RecordEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -219,6 +249,11 @@ func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params Rec
 func (r *RecordService) Export(ctx context.Context, query RecordExportParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -232,6 +267,11 @@ func (r *RecordService) Export(ctx context.Context, query RecordExportParams, op
 func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query RecordGetParams, opts ...option.RequestOption) (res *RecordResponse, err error) {
 	var env RecordGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -260,6 +300,11 @@ func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query Recor
 func (r *RecordService) Import(ctx context.Context, params RecordImportParams, opts ...option.RequestOption) (res *RecordImportResponse, err error) {
 	var env RecordImportResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -285,6 +330,11 @@ func (r *RecordService) Import(ctx context.Context, params RecordImportParams, o
 func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts ...option.RequestOption) (res *RecordScanResponse, err error) {
 	var env RecordScanResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -306,6 +356,11 @@ func (r *RecordService) ScanList(ctx context.Context, query RecordScanListParams
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -337,6 +392,11 @@ func (r *RecordService) ScanListAutoPaging(ctx context.Context, query RecordScan
 func (r *RecordService) ScanReview(ctx context.Context, params RecordScanReviewParams, opts ...option.RequestOption) (res *RecordScanReviewResponse, err error) {
 	var env RecordScanReviewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -356,6 +416,11 @@ func (r *RecordService) ScanReview(ctx context.Context, params RecordScanReviewP
 // endpoints. Useful if you haven't updated your nameservers yet.
 func (r *RecordService) ScanTrigger(ctx context.Context, body RecordScanTriggerParams, opts ...option.RequestOption) (res *RecordScanTriggerResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -6246,6 +6311,8 @@ func (r RecordScanTriggerResponseSuccess) IsKnown() bool {
 
 type RecordNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]      `path:"zone_id" api:"required"`
 	Body   RecordNewParamsBodyUnion `json:"body" api:"required"`
 }
@@ -6538,6 +6605,8 @@ func (r RecordNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]         `path:"zone_id" api:"required"`
 	Body   RecordUpdateParamsBodyUnion `json:"body" api:"required"`
 }
@@ -6830,6 +6899,8 @@ func (r RecordUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID  param.Field[string]                  `path:"zone_id" api:"required"`
 	Comment param.Field[RecordListParamsComment] `query:"comment"`
 	Content param.Field[RecordListParamsContent] `query:"content"`
@@ -7064,6 +7135,8 @@ func (r RecordListParamsType) IsKnown() bool {
 
 type RecordDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -7090,6 +7163,8 @@ func (r recordDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type RecordBatchParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID  param.Field[string]                       `path:"zone_id" api:"required"`
 	Deletes param.Field[[]RecordBatchParamsDelete]    `json:"deletes"`
 	Patches param.Field[[]BatchPatchUnionParam]       `json:"patches"`
@@ -7394,6 +7469,8 @@ func (r RecordBatchResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]       `path:"zone_id" api:"required"`
 	Body   RecordEditParamsBodyUnion `json:"body" api:"required"`
 }
@@ -7686,11 +7763,15 @@ func (r RecordEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordExportParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RecordGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -7835,6 +7916,8 @@ func (r RecordGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordImportParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// BIND config to import.
 	//
@@ -8004,6 +8087,8 @@ func (r RecordImportResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordScanParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Body   interface{}         `json:"body" api:"required"`
 }
@@ -8153,11 +8238,15 @@ func (r RecordScanResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordScanListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RecordScanReviewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID  param.Field[string]                              `path:"zone_id" api:"required"`
 	Accepts param.Field[[]RecordScanReviewParamsAcceptUnion] `json:"accepts"`
 	Rejects param.Field[[]RecordScanReviewParamsReject]      `json:"rejects"`
@@ -8462,5 +8551,7 @@ func (r RecordScanReviewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RecordScanTriggerParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

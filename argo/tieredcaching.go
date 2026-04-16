@@ -50,6 +50,11 @@ func NewTieredCachingService(opts ...option.RequestOption) (r *TieredCachingServ
 func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *TieredCachingEditResponse, err error) {
 	var env TieredCachingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -77,6 +82,11 @@ func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEdi
 func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *TieredCachingGetResponse, err error) {
 	var env TieredCachingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -216,6 +226,8 @@ func (r TieredCachingGetResponseValue) IsKnown() bool {
 
 type TieredCachingEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Enables Tiered Caching.
 	Value param.Field[TieredCachingEditParamsValue] `json:"value" api:"required"`
@@ -286,6 +298,8 @@ func (r TieredCachingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type TieredCachingGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

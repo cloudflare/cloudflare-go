@@ -46,6 +46,11 @@ func (r *ZoneTagService) Update(ctx context.Context, params ZoneTagUpdateParams,
 		opts = append(opts, option.WithHeader("If-Match", fmt.Sprintf("%v", params.IfMatch)))
 	}
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -66,6 +71,11 @@ func (r *ZoneTagService) Delete(ctx context.Context, params ZoneTagDeleteParams,
 	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return err
@@ -79,6 +89,11 @@ func (r *ZoneTagService) Delete(ctx context.Context, params ZoneTagDeleteParams,
 func (r *ZoneTagService) Get(ctx context.Context, params ZoneTagGetParams, opts ...option.RequestOption) (res *ZoneTagGetResponse, err error) {
 	var env ZoneTagGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -3776,6 +3791,8 @@ func (r ZoneTagGetResponseType) IsKnown() bool {
 
 type ZoneTagUpdateParams struct {
 	// Zone ID is required only for zone-level resources
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Request body schema for setting tags on zone-level resources.
 	Body    ZoneTagUpdateParamsBodyUnion `json:"body" api:"required"`
@@ -4055,12 +4072,16 @@ func (r ZoneTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ZoneTagDeleteParams struct {
 	// Zone ID is required only for zone-level resources
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID  param.Field[string] `path:"zone_id" api:"required"`
 	IfMatch param.Field[string] `header:"If-Match"`
 }
 
 type ZoneTagGetParams struct {
 	// Zone ID is required only for zone-level resources
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The ID of the resource to retrieve tags for.
 	ResourceID param.Field[string] `query:"resource_id" api:"required"`

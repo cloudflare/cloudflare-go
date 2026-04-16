@@ -16,6 +16,7 @@ import (
 )
 
 func TestCopyNewWithOptionalParams(t *testing.T) {
+	t.Skip("HTTP 401 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -31,15 +32,17 @@ func TestCopyNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Stream.Copy.New(context.TODO(), stream.CopyNewParams{
 		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		URL:            cloudflare.F("https://example.com/myvideo.mp4"),
 		AllowedOrigins: cloudflare.F([]stream.AllowedOriginsParam{"example.com"}),
 		Creator:        cloudflare.F("creator-id_abcde12345"),
+		Input:          cloudflare.F("https://example.com/myvideo.mp4"),
 		Meta: cloudflare.F[any](map[string]interface{}{
 			"name": "video12345.mp4",
 		}),
+		Name:                  cloudflare.F("myvideo.mp4"),
 		RequireSignedURLs:     cloudflare.F(true),
 		ScheduledDeletion:     cloudflare.F(time.Now()),
 		ThumbnailTimestampPct: cloudflare.F(0.529241),
+		URL:                   cloudflare.F("https://example.com/myvideo.mp4"),
 		Watermark: cloudflare.F(stream.CopyNewParamsWatermark{
 			UID: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
 		}),

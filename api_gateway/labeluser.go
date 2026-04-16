@@ -44,6 +44,11 @@ func NewLabelUserService(opts ...option.RequestOption) (r *LabelUserService) {
 func (r *LabelUserService) Update(ctx context.Context, name string, params LabelUserUpdateParams, opts ...option.RequestOption) (res *LabelUserUpdateResponse, err error) {
 	var env LabelUserUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -65,6 +70,11 @@ func (r *LabelUserService) Update(ctx context.Context, name string, params Label
 func (r *LabelUserService) Delete(ctx context.Context, name string, body LabelUserDeleteParams, opts ...option.RequestOption) (res *LabelUserDeleteResponse, err error) {
 	var env LabelUserDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -87,6 +97,11 @@ func (r *LabelUserService) BulkNew(ctx context.Context, params LabelUserBulkNewP
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -114,6 +129,11 @@ func (r *LabelUserService) BulkDelete(ctx context.Context, body LabelUserBulkDel
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -140,6 +160,11 @@ func (r *LabelUserService) BulkDeleteAutoPaging(ctx context.Context, body LabelU
 func (r *LabelUserService) Edit(ctx context.Context, name string, params LabelUserEditParams, opts ...option.RequestOption) (res *LabelUserEditResponse, err error) {
 	var env LabelUserEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -161,6 +186,11 @@ func (r *LabelUserService) Edit(ctx context.Context, name string, params LabelUs
 func (r *LabelUserService) Get(ctx context.Context, name string, params LabelUserGetParams, opts ...option.RequestOption) (res *LabelUserGetResponse, err error) {
 	var env LabelUserGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -501,6 +531,8 @@ func (r LabelUserGetResponseSource) IsKnown() bool {
 
 type LabelUserUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The description of the label
 	Description param.Field[string] `json:"description"`
@@ -557,6 +589,8 @@ func (r LabelUserUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type LabelUserDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -605,6 +639,8 @@ func (r LabelUserDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type LabelUserBulkNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]          `path:"zone_id" api:"required"`
 	Body   []LabelUserBulkNewParamsBody `json:"body" api:"required"`
 }
@@ -628,11 +664,15 @@ func (r LabelUserBulkNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 type LabelUserBulkDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type LabelUserEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The description of the label
 	Description param.Field[string] `json:"description"`
@@ -689,6 +729,8 @@ func (r LabelUserEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type LabelUserGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Include `mapped_resources` for each label
 	WithMappedResourceCounts param.Field[bool] `query:"with_mapped_resource_counts"`

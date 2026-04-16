@@ -38,6 +38,11 @@ func NewOnRampAddressSpaceService(opts ...option.RequestOption) (r *OnRampAddres
 func (r *OnRampAddressSpaceService) Update(ctx context.Context, params OnRampAddressSpaceUpdateParams, opts ...option.RequestOption) (res *OnRampAddressSpaceUpdateResponse, err error) {
 	var env OnRampAddressSpaceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -55,6 +60,11 @@ func (r *OnRampAddressSpaceService) Update(ctx context.Context, params OnRampAdd
 func (r *OnRampAddressSpaceService) List(ctx context.Context, query OnRampAddressSpaceListParams, opts ...option.RequestOption) (res *OnRampAddressSpaceListResponse, err error) {
 	var env OnRampAddressSpaceListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -72,6 +82,11 @@ func (r *OnRampAddressSpaceService) List(ctx context.Context, query OnRampAddres
 func (r *OnRampAddressSpaceService) Edit(ctx context.Context, params OnRampAddressSpaceEditParams, opts ...option.RequestOption) (res *OnRampAddressSpaceEditResponse, err error) {
 	var env OnRampAddressSpaceEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -149,6 +164,7 @@ func (r onRampAddressSpaceEditResponseJSON) RawJSON() string {
 }
 
 type OnRampAddressSpaceUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]   `path:"account_id" api:"required"`
 	Prefixes  param.Field[[]string] `json:"prefixes" api:"required"`
 }
@@ -683,6 +699,7 @@ func (r onRampAddressSpaceUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() st
 }
 
 type OnRampAddressSpaceListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1212,6 +1229,7 @@ func (r onRampAddressSpaceListResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 }
 
 type OnRampAddressSpaceEditParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]   `path:"account_id" api:"required"`
 	Prefixes  param.Field[[]string] `json:"prefixes" api:"required"`
 }

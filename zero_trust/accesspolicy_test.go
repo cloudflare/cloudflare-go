@@ -31,10 +31,8 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.Policies.New(context.TODO(), zero_trust.AccessPolicyNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Decision:  cloudflare.F(zero_trust.DecisionAllow),
-		Include: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
-			Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
-				ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
-			}),
+		Include: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.CertificateRuleParam{
+			Certificate: cloudflare.F(zero_trust.CertificateRuleCertificateParam{}),
 		}}),
 		Name: cloudflare.F("Allow devs"),
 		ApprovalGroups: cloudflare.F([]zero_trust.ApprovalGroupParam{{
@@ -53,10 +51,8 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 				AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat{zero_trust.AccessPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText}),
 			}),
 		}),
-		Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
-			Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
-				ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
-			}),
+		Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.CertificateRuleParam{
+			Certificate: cloudflare.F(zero_trust.CertificateRuleCertificateParam{}),
 		}}),
 		IsolationRequired: cloudflare.F(false),
 		MfaConfig: cloudflare.F(zero_trust.AccessPolicyNewParamsMfaConfig{
@@ -66,10 +62,8 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 		}),
 		PurposeJustificationPrompt:   cloudflare.F("Please enter a justification for entering this protected domain."),
 		PurposeJustificationRequired: cloudflare.F(true),
-		Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
-			Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
-				ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
-			}),
+		Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.CertificateRuleParam{
+			Certificate: cloudflare.F(zero_trust.CertificateRuleCertificateParam{}),
 		}}),
 		SessionDuration: cloudflare.F("24h"),
 	})
@@ -102,10 +96,8 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.AccessPolicyUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Decision:  cloudflare.F(zero_trust.DecisionAllow),
-			Include: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
-				Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
-					ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
-				}),
+			Include: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.CertificateRuleParam{
+				Certificate: cloudflare.F(zero_trust.CertificateRuleCertificateParam{}),
 			}}),
 			Name: cloudflare.F("Allow devs"),
 			ApprovalGroups: cloudflare.F([]zero_trust.ApprovalGroupParam{{
@@ -124,10 +116,8 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 					AllowedClipboardRemoteToLocalFormats: cloudflare.F([]zero_trust.AccessPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat{zero_trust.AccessPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText}),
 				}),
 			}),
-			Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
-				Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
-					ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
-				}),
+			Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.CertificateRuleParam{
+				Certificate: cloudflare.F(zero_trust.CertificateRuleCertificateParam{}),
 			}}),
 			IsolationRequired: cloudflare.F(false),
 			MfaConfig: cloudflare.F(zero_trust.AccessPolicyUpdateParamsMfaConfig{
@@ -137,10 +127,8 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 			}),
 			PurposeJustificationPrompt:   cloudflare.F("Please enter a justification for entering this protected domain."),
 			PurposeJustificationRequired: cloudflare.F(true),
-			Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
-				Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
-					ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
-				}),
+			Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.CertificateRuleParam{
+				Certificate: cloudflare.F(zero_trust.CertificateRuleCertificateParam{}),
 			}}),
 			SessionDuration: cloudflare.F("24h"),
 		},

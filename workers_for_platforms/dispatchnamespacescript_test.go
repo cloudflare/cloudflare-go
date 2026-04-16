@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 	"github.com/cloudflare/cloudflare-go/v6/workers"
 	"github.com/cloudflare/cloudflare-go/v6/workers_for_platforms"
 )
@@ -45,7 +46,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						Redirects:        cloudflare.F("/foo /bar 301\n/news/* /blog/:splat"),
 						HTMLHandling:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
 						NotFoundHandling: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page),
-						RunWorkerFirst:   cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion](workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstArray([]string{"string"})),
+						RunWorkerFirst:   cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion](shared.UnionBool(true)),
 						ServeDirectly:    cloudflare.F(true),
 					}),
 					JWT: cloudflare.F("jwt"),
@@ -61,7 +62,8 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				KeepAssets:         cloudflare.F(false),
 				KeepBindings:       cloudflare.F([]string{"string"}),
 				Limits: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataLimits{
-					CPUMs: cloudflare.F(int64(50)),
+					CPUMs:       cloudflare.F(int64(50)),
+					Subrequests: cloudflare.F(int64(1000)),
 				}),
 				Logpush:    cloudflare.F(false),
 				MainModule: cloudflare.F("worker.js"),

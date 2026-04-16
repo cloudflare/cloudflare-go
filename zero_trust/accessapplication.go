@@ -54,6 +54,12 @@ func NewAccessApplicationService(opts ...option.RequestOption) (r *AccessApplica
 func (r *AccessApplicationService) New(ctx context.Context, params AccessApplicationNewParams, opts ...option.RequestOption) (res *AccessApplicationNewResponse, err error) {
 	var env AccessApplicationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -85,6 +91,12 @@ func (r *AccessApplicationService) New(ctx context.Context, params AccessApplica
 func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDParam, params AccessApplicationUpdateParams, opts ...option.RequestOption) (res *AccessApplicationUpdateResponse, err error) {
 	var env AccessApplicationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -121,6 +133,12 @@ func (r *AccessApplicationService) List(ctx context.Context, params AccessApplic
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -161,6 +179,12 @@ func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, params Ac
 func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDParam, body AccessApplicationDeleteParams, opts ...option.RequestOption) (res *AccessApplicationDeleteResponse, err error) {
 	var env AccessApplicationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -196,6 +220,12 @@ func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDParam,
 func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDParam, query AccessApplicationGetParams, opts ...option.RequestOption) (res *AccessApplicationGetResponse, err error) {
 	var env AccessApplicationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -231,6 +261,12 @@ func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDParam, qu
 func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AppIDParam, body AccessApplicationRevokeTokensParams, opts ...option.RequestOption) (res *AccessApplicationRevokeTokensResponse, err error) {
 	var env AccessApplicationRevokeTokensResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -8123,6 +8159,9 @@ type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
@@ -8142,6 +8181,7 @@ type accessApplicationNewResponseInfrastructureApplicationPolicyJSON struct {
 	Decision        apijson.Field
 	Exclude         apijson.Field
 	Include         apijson.Field
+	MfaConfig       apijson.Field
 	Name            apijson.Field
 	Require         apijson.Field
 	UpdatedAt       apijson.Field
@@ -8209,6 +8249,54 @@ func (r *AccessApplicationNewResponseInfrastructureApplicationPoliciesConnection
 
 func (r accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators []AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                                     `json:"session_duration"`
+	JSON            accessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig]
+type accessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseBrowserRDPApplication struct {
@@ -17433,6 +17521,9 @@ type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
@@ -17452,6 +17543,7 @@ type accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON struct {
 	Decision        apijson.Field
 	Exclude         apijson.Field
 	Include         apijson.Field
+	MfaConfig       apijson.Field
 	Name            apijson.Field
 	Require         apijson.Field
 	UpdatedAt       apijson.Field
@@ -17519,6 +17611,54 @@ func (r *AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnect
 
 func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators []AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                                        `json:"session_duration"`
+	JSON            accessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig]
+type accessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseBrowserRDPApplication struct {
@@ -26743,6 +26883,9 @@ type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
@@ -26762,6 +26905,7 @@ type accessApplicationListResponseInfrastructureApplicationPolicyJSON struct {
 	Decision        apijson.Field
 	Exclude         apijson.Field
 	Include         apijson.Field
+	MfaConfig       apijson.Field
 	Name            apijson.Field
 	Require         apijson.Field
 	UpdatedAt       apijson.Field
@@ -26829,6 +26973,54 @@ func (r *AccessApplicationListResponseInfrastructureApplicationPoliciesConnectio
 
 func (r accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators []AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                                      `json:"session_duration"`
+	JSON            accessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig]
+type accessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseBrowserRDPApplication struct {
@@ -36072,6 +36264,9 @@ type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
@@ -36091,6 +36286,7 @@ type accessApplicationGetResponseInfrastructureApplicationPolicyJSON struct {
 	Decision        apijson.Field
 	Exclude         apijson.Field
 	Include         apijson.Field
+	MfaConfig       apijson.Field
 	Name            apijson.Field
 	Require         apijson.Field
 	UpdatedAt       apijson.Field
@@ -36158,6 +36354,54 @@ func (r *AccessApplicationGetResponseInfrastructureApplicationPoliciesConnection
 
 func (r accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators []AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                                     `json:"session_duration"`
+	JSON            accessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig]
+type accessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseBrowserRDPApplication struct {
@@ -39370,8 +39614,12 @@ type AccessApplicationNewParams struct {
 	// Contains the targets secured by the application.
 	Body AccessApplicationNewParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -39560,7 +39808,8 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -40306,7 +40555,8 @@ type AccessApplicationNewParamsBodySaaSApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
 	SaaSApp  param.Field[AccessApplicationNewParamsBodySaaSApplicationSaaSAppUnion]  `json:"saas_app"`
 	// Configuration for provisioning to this application via SCIM. This is currently
@@ -40882,7 +41132,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -41702,7 +41953,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -42488,7 +42740,8 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -42764,7 +43017,8 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -42981,7 +43235,8 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -43203,7 +43458,8 @@ type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication struc
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -43412,7 +43668,8 @@ type AccessApplicationNewParamsBodyBookmarkApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion] `json:"policies"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -43672,6 +43929,9 @@ type AccessApplicationNewParamsBodyInfrastructureApplicationPolicy struct {
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig] `json:"mfa_config"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
@@ -43704,6 +43964,38 @@ type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRu
 
 func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 // Contains the targets secured by the application.
@@ -43771,7 +44063,8 @@ type AccessApplicationNewParamsBodyBrowserRDPApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -44576,7 +44869,8 @@ type AccessApplicationNewParamsBodyMcpServerApplication struct {
 	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyMcpServerApplicationPolicyUnion] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
@@ -45300,7 +45594,8 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplication struct {
 	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationNewParamsBodyMcpServerPortalApplicationPolicyUnion] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
@@ -46117,8 +46412,12 @@ type AccessApplicationUpdateParams struct {
 	// Contains the targets secured by the application.
 	Body AccessApplicationUpdateParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -46308,7 +46607,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -47054,7 +47354,8 @@ type AccessApplicationUpdateParamsBodySaaSApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
 	SaaSApp  param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppUnion]  `json:"saas_app"`
 	// Configuration for provisioning to this application via SCIM. This is currently
@@ -47630,7 +47931,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -48450,7 +48752,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -49236,7 +49539,8 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -49512,7 +49816,8 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -49729,7 +50034,8 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -49951,7 +50257,8 @@ type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication st
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -50160,7 +50467,8 @@ type AccessApplicationUpdateParamsBodyBookmarkApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion] `json:"policies"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -50420,6 +50728,9 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy struct {
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfig] `json:"mfa_config"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
@@ -50452,6 +50763,38 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectio
 
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, only `ssh_piv_key` is supported.
+	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+)
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+		return true
+	}
+	return false
 }
 
 // Contains the targets secured by the application.
@@ -50519,7 +50862,8 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplication struct {
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationPolicyUnion] `json:"policies"`
 	// Allows matching Access Service Tokens passed HTTP in a single header with this
 	// name. This works as an alternative to the (CF-Access-Client-Id,
@@ -51324,7 +51668,8 @@ type AccessApplicationUpdateParamsBodyMcpServerApplication struct {
 	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyMcpServerApplicationPolicyUnion] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
@@ -52048,7 +52393,8 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplication struct {
 	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
-	// exclusive to the application.
+	// exclusive to the application. Reusable and inline policies are mutually
+	// exclusive.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyMcpServerPortalApplicationPolicyUnion] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
@@ -52863,8 +53209,12 @@ func (r AccessApplicationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The aud of the app.
 	AUD param.Field[string] `query:"aud"`
@@ -52895,8 +53245,12 @@ func (r AccessApplicationListParams) URLQuery() (v url.Values) {
 
 type AccessApplicationDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -53041,8 +53395,12 @@ func (r AccessApplicationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -53187,8 +53545,12 @@ func (r AccessApplicationGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationRevokeTokensParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 

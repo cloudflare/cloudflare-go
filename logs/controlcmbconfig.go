@@ -38,6 +38,11 @@ func NewControlCmbConfigService(opts ...option.RequestOption) (r *ControlCmbConf
 func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConfigNewParams, opts ...option.RequestOption) (res *CmbConfig, err error) {
 	var env ControlCmbConfigNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -55,6 +60,11 @@ func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConf
 func (r *ControlCmbConfigService) Delete(ctx context.Context, body ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *ControlCmbConfigDeleteResponse, err error) {
 	var env ControlCmbConfigDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -72,6 +82,11 @@ func (r *ControlCmbConfigService) Delete(ctx context.Context, body ControlCmbCon
 func (r *ControlCmbConfigService) Get(ctx context.Context, query ControlCmbConfigGetParams, opts ...option.RequestOption) (res *CmbConfig, err error) {
 	var env ControlCmbConfigGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -124,6 +139,8 @@ type ControlCmbConfigDeleteResponse = interface{}
 
 type ControlCmbConfigNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	CmbConfig CmbConfigParam      `json:"cmb_config" api:"required"`
 }
@@ -273,6 +290,8 @@ func (r ControlCmbConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ControlCmbConfigDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -417,6 +436,8 @@ func (r ControlCmbConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ControlCmbConfigGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

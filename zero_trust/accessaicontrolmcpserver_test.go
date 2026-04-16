@@ -36,6 +36,18 @@ func TestAccessAIControlMcpServerNewWithOptionalParams(t *testing.T) {
 		Name:            cloudflare.F("My MCP Server"),
 		AuthCredentials: cloudflare.F("auth_credentials"),
 		Description:     cloudflare.F("This is one remote mcp server"),
+		UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpServerNewParamsUpdatedPrompt{{
+			Name:        cloudflare.F("name"),
+			Alias:       cloudflare.F("my-custom-alias"),
+			Description: cloudflare.F("description"),
+			Enabled:     cloudflare.F(true),
+		}}),
+		UpdatedTools: cloudflare.F([]zero_trust.AccessAIControlMcpServerNewParamsUpdatedTool{{
+			Name:        cloudflare.F("name"),
+			Alias:       cloudflare.F("my-custom-alias"),
+			Description: cloudflare.F("description"),
+			Enabled:     cloudflare.F(true),
+		}}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -68,6 +80,18 @@ func TestAccessAIControlMcpServerUpdateWithOptionalParams(t *testing.T) {
 			AuthCredentials: cloudflare.F("auth_credentials"),
 			Description:     cloudflare.F("This is one remote mcp server"),
 			Name:            cloudflare.F("My MCP Server"),
+			UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpServerUpdateParamsUpdatedPrompt{{
+				Name:        cloudflare.F("name"),
+				Alias:       cloudflare.F("my-custom-alias"),
+				Description: cloudflare.F("description"),
+				Enabled:     cloudflare.F(true),
+			}}),
+			UpdatedTools: cloudflare.F([]zero_trust.AccessAIControlMcpServerUpdateParamsUpdatedTool{{
+				Name:        cloudflare.F("name"),
+				Alias:       cloudflare.F("my-custom-alias"),
+				Description: cloudflare.F("description"),
+				Enabled:     cloudflare.F(true),
+			}}),
 		},
 	)
 	if err != nil {

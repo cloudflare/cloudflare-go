@@ -38,6 +38,11 @@ func NewSettingZoneService(opts ...option.RequestOption) (r *SettingZoneService)
 func (r *SettingZoneService) Edit(ctx context.Context, params SettingZoneEditParams, opts ...option.RequestOption) (res *SettingZoneEditResponse, err error) {
 	var env SettingZoneEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -55,6 +60,11 @@ func (r *SettingZoneService) Edit(ctx context.Context, params SettingZoneEditPar
 func (r *SettingZoneService) Get(ctx context.Context, query SettingZoneGetParams, opts ...option.RequestOption) (res *SettingZoneGetResponse, err error) {
 	var env SettingZoneGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -430,6 +440,8 @@ func (r SettingZoneGetResponseZoneMode) IsKnown() bool {
 
 type SettingZoneEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
@@ -684,6 +696,8 @@ func (r SettingZoneEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingZoneGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
