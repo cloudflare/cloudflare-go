@@ -1,5 +1,283 @@
 # Changelog
 
+## 6.9.0 (2026-04-01)
+
+Full Changelog: [v6.8.0...v6.9.0](https://github.com/cloudflare/cloudflare-go/compare/v6.8.0...v6.9.0)
+
+In this release, you'll see a number of breaking changes. This is primarily due to changes in OpenAPI definitions, which our libraries are based off of, and codegen updates that we rely on to read those OpenAPI definitions and produce our SDK libraries.
+
+## Please ensure you read through the list of changes below before moving to this version - this will help you understand any down or upstream issues it may cause to your environments.
+
+---
+
+## Breaking Changes
+
+See the [v6.9.0 Migration Guide](./docs/migration-guides/v6.9.0-migration-guide.md) for before/after code examples and actions needed for each change.
+
+### AI Gateway - AccountID, AccountTag, and InternalID Field Removal
+
+The `AccountID`, `AccountTag`, and `InternalID` fields have been removed from all AI Gateway response types:
+
+- `AIGatewayNewResponse`
+- `AIGatewayUpdateResponse`
+- `AIGatewayListResponse`
+- `AIGatewayDeleteResponse`
+- `AIGatewayGetResponse`
+- `DynamicRoutingNewResponse`
+- `DynamicRoutingDeleteResponse`
+- `DynamicRoutingNewDeploymentResponse`
+- `DynamicRoutingNewVersionResponse`
+- `DynamicRoutingGetResponse`
+- `DynamicRoutingGetVersionResponse`
+
+### AI Search - VectorizeName Field Removal
+
+The `VectorizeName` field has been removed from all AI Search instance response types:
+
+- `InstanceNewResponse.VectorizeName`
+- `InstanceUpdateResponse.VectorizeName`
+- `InstanceListResponse.VectorizeName`
+- `InstanceDeleteResponse.VectorizeName`
+- `InstanceReadResponse.VectorizeName`
+
+### AI Search - KeywordMatchMode Enum Values Changed
+
+The `KeywordMatchMode` enum values have been renamed:
+
+- `KeywordMatchModeExactMatch` → `KeywordMatchModeAnd`
+- `KeywordMatchModeFuzzyMatch` → `KeywordMatchModeOr`
+
+Affects `InstanceNewParams` and `InstanceUpdateParams`.
+
+### Billing - New PayGo Usage Endpoint
+
+**NEW**: Added `billing.Usage` service with PayGo endpoint:
+- `client.Billing.Usage.Paygo()` - Returns billable usage data for PayGo (self-serve) accounts
+
+**Note**: The PayGo endpoint parameters (`From`, `To`) are now the primary query mechanism. The previously available `LastMonthPeriodStart` and `LastYearPeriodStart` parameters were removed in the underlying API specification.
+
+### Connectivity - TCP Service Support
+
+The directory services now support TCP service configurations via discriminated union types:
+
+- `ServiceConfig` is now a discriminated union of `HttpServiceConfig` and `TcpServiceConfig`
+- New `TcpServiceConfig` type with `tcp_port` and `app_protocol` fields
+- `HttpServiceConfig` and `TcpServiceConfig` both extend `ServiceCommon` base type
+
+### Custom Hostnames - Hostname Parameter Type Change
+
+The `Hostname` parameter in `CustomHostnameListParams` has changed from a simple string to a structured object:
+
+- **Before**: `Hostname param.Field[string]`
+- **After**: `Hostname param.Field[CustomHostnameListParamsHostname]` (object with `Contain` field)
+
+### AI Search - InstanceItem Service Methods Removed
+
+The `InstanceItem` service methods have been removed. The service structure still exists at `client.AISearch.Instances.Items` but no longer provides any methods:
+
+- `List()` - List indexed items in an AI Search instance
+- `ListAutoPaging()` - Auto-paging list method
+- `Get()` - Get a specific indexed item
+- All associated response types (`InstanceItemListResponse`, `InstanceItemGetResponse`, etc.)
+
+### Workers - Filter Type Changes
+
+The observability telemetry filters have been restructured:
+
+- Filter types changed from `QueryFilter[]` to `FilterNode[]` (discriminated union)
+- Filters now support nested groups via `kind: 'group'`
+- Affects telemetry endpoints: keys, query, and values
+
+### Workers - Domain Service Return Type Changes
+
+The `workers.Domain` service methods now return specific response types instead of the generic `Domain` type:
+
+- `Update()` returns `*DomainUpdateResponse` instead of `*Domain`
+- `List()` returns `pagination.SinglePage[DomainListResponse]` instead of `pagination.SinglePage[Domain]`
+- `Delete()` now returns `(*DomainDeleteResponse, error)` instead of just `error`
+- `Get()` returns `*DomainGetResponse` instead of `*Domain`
+
+### Zero Trust - NetworkSubnet Response Type Consolidation
+
+The `NetworkSubnet` service methods now use the shared `Subnet` type instead of endpoint-specific response types:
+
+- `NetworkSubnetService.List()` returns `Subnet` instead of `NetworkSubnetListResponse`
+- `NetworkSubnetWARPService.New()` returns `Subnet` instead of `NetworkSubnetWARPNewResponse`
+- `NetworkSubnetWARPService.Edit()` returns `Subnet` instead of `NetworkSubnetWARPEditResponse`
+- `NetworkSubnetWARPService.Get()` returns `Subnet` instead of `NetworkSubnetWARPGetResponse`
+- `NetworkSubnetCloudflareSourceService.Update()` returns `Subnet` instead of `NetworkSubnetCloudflareSourceUpdateResponse`
+
+The removed types (`NetworkSubnetListResponse`, `NetworkSubnetWARPNewResponse`, etc.) have been consolidated into the shared `Subnet` type.
+
+### Zero Trust - MfaBypass Field Removal
+
+The `MfaBypass` field has been removed from MFA configuration types across multiple services:
+
+**Affected Param Types:**
+- `AccessApplicationNewParamsBodySelfHostedApplicationMfaConfig.MfaBypass`
+- `AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfig.MfaBypass`
+- `AccessApplicationPolicyNewParamsMfaConfig.MfaBypass`
+- `AccessApplicationPolicyUpdateParamsMfaConfig.MfaBypass`
+- `AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfig.MfaBypass`
+- `AccessPolicyNewParamsMfaConfig.MfaBypass`
+- `AccessPolicyUpdateParamsMfaConfig.MfaBypass`
+
+**Affected Response Types:**
+- All corresponding MfaConfig response types
+
+### Zero Trust - MfaConfigurationAllowed Field Removal
+
+The `MfaConfigurationAllowed` field has been removed from Organization types:
+
+- `OrganizationNewParams.MfaConfigurationAllowed`
+- `OrganizationUpdateParams.MfaConfigurationAllowed`
+- `OrganizationNewResponse.MfaConfigurationAllowed`
+
+---
+
+## Features
+
+### AI Search - BoostBy Field Addition
+
+The `BoostBy` field has been added to retrieval options across multiple response types:
+
+- `InstanceNewResponseRetrievalOptions.BoostBy`
+- `InstanceUpdateResponseRetrievalOptions.BoostBy`
+- `InstanceListResponseRetrievalOptions.BoostBy`
+- `InstanceDeleteResponseRetrievalOptions.BoostBy`
+- `InstanceReadResponseRetrievalOptions.BoostBy`
+
+### Browser Rendering (`client.browserRendering`)
+
+- **Crawl**: New endpoints for headless browser crawling
+    - `Create()` - Start a crawl job
+    - `List()` - List crawl jobs
+    - `Get()` - Get crawl job details
+    - `Update()` - Update crawl job
+    - `Delete()` - Delete crawl job
+    - `Screenshot()` - Take screenshots during crawl
+    - `Scrape()` - Scrape content during crawl
+
+### Brand Protection v2 (`client.brandProtection.v2`)
+
+- New v2 API endpoints:
+    - `Logo` - Logo management
+    - `LogoMatch` - Logo matching
+    - `Match` - Brand protection matching
+    - `Query` - Query brand protection data
+
+### Google Tag Gateway (`client.googleTagGateway`)
+
+- **NEW SERVICE**: Manage Google Tag configurations
+    - `Config.Create()`, `Update()`, `List()`, `Delete()`, `Get()`
+
+### Resource Tagging (`client.resourceTagging`)
+
+- **NEW SERVICE**: Resource tagging management
+    - `AccountTag` management
+    - `Key` management for resource tagging
+
+### Zero Trust Device IP Profiles (`client.zeroTrust.devices.ipProfiles`)
+
+- IP profile management for device posture
+    - `Create()`, `Update()`, `List()`, `Delete()`, `Get()`
+
+### Abuse Reports
+
+- `Mitigation` responses now include additional metadata fields
+
+### Accounts
+
+- `managed_by` field with `parent_org_id`, `parent_org_name` support
+
+### AI Gateway
+
+- `zdr` field added to all responses and params
+- Dataset, evaluation, log, and provider config endpoints updated
+
+### AI Search
+
+- Instance management expanded with new fields
+- Job management enhancements
+- Token management updates
+
+### API Gateway
+
+- Configuration and user schema updates
+- Expression template fallthrough improvements
+
+### D1
+
+- Database query and raw query parameter refinements
+- Time travel support: `GetBookmark()`, `Restore()`
+
+### DNS
+
+- `dns_records/usage` endpoints added
+- Record type improvements
+
+### Email Security
+
+- Enhanced investigation endpoints
+- New fields: `envelope_from`, `envelope_to`, `postfix_id_outbound`, `replyto`
+- New detection classification: `outbound_ndr`
+
+### Logpush
+
+- New datasets: `dex_application_tests`, `dex_device_state_events`, `ipsec_logs`, `warp_config_changes`, `warp_toggle_changes`
+
+### Magic Transit
+
+- App and connector enhancements
+- CF interconnect improvements
+- License key and provisioning support
+
+### Organizations
+
+- Organization account management improvements
+- Hierarchical organization support
+
+### R2
+
+- Super Slurper job enhancements
+- Job log improvements
+
+### Rulesets
+
+- Buffering fields: `request_body_buffering`, `response_body_buffering`
+
+### Workers
+
+- Subdomain deletion support
+- Script observability settings
+- Tags and tail consumers support
+
+### Workflows
+
+- Instance retention configuration
+- New status option: `restart`
+
+### Zero Trust
+
+- MCP portal and server configuration updates
+- Access application type enhancements
+- Gateway proxy endpoint improvements
+- Tunnel connection updates
+
+---
+
+## Deprecations
+
+None in this release.
+
+---
+
+## Bug Fixes
+
+- **AI Search**: Fixed test compatibility issues
+- **Billing**: Transport error handling improvements
+- **Client**: Retry logic error passing fixes
+
 ## 6.8.0 (2026-02-27)
 
 Full Changelog: [v6.7.0...v6.8.0](https://github.com/cloudflare/cloudflare-go/compare/v6.7.0...v6.8.0)
