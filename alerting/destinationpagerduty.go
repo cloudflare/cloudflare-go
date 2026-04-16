@@ -39,6 +39,11 @@ func NewDestinationPagerdutyService(opts ...option.RequestOption) (r *Destinatio
 func (r *DestinationPagerdutyService) New(ctx context.Context, body DestinationPagerdutyNewParams, opts ...option.RequestOption) (res *DestinationPagerdutyNewResponse, err error) {
 	var env DestinationPagerdutyNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -55,6 +60,11 @@ func (r *DestinationPagerdutyService) New(ctx context.Context, body DestinationP
 // Deletes all the PagerDuty Services connected to the account.
 func (r *DestinationPagerdutyService) Delete(ctx context.Context, body DestinationPagerdutyDeleteParams, opts ...option.RequestOption) (res *DestinationPagerdutyDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -69,6 +79,11 @@ func (r *DestinationPagerdutyService) Get(ctx context.Context, query Destination
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -95,6 +110,11 @@ func (r *DestinationPagerdutyService) GetAutoPaging(ctx context.Context, query D
 func (r *DestinationPagerdutyService) Link(ctx context.Context, tokenID string, query DestinationPagerdutyLinkParams, opts ...option.RequestOption) (res *DestinationPagerdutyLinkResponse, err error) {
 	var env DestinationPagerdutyLinkResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -269,6 +289,8 @@ func (r destinationPagerdutyLinkResponseJSON) RawJSON() string {
 
 type DestinationPagerdutyNewParams struct {
 	// The account id
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -363,16 +385,22 @@ func (r DestinationPagerdutyNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DestinationPagerdutyDeleteParams struct {
 	// The account id
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DestinationPagerdutyGetParams struct {
 	// The account id
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DestinationPagerdutyLinkParams struct {
 	// The account id
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
