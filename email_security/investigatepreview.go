@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -40,6 +42,11 @@ func NewInvestigatePreviewService(opts ...option.RequestOption) (r *InvestigateP
 func (r *InvestigatePreviewService) New(ctx context.Context, params InvestigatePreviewNewParams, opts ...option.RequestOption) (res *InvestigatePreviewNewResponse, err error) {
 	var env InvestigatePreviewNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -58,6 +65,11 @@ func (r *InvestigatePreviewService) New(ctx context.Context, params InvestigateP
 func (r *InvestigatePreviewService) Get(ctx context.Context, postfixID string, query InvestigatePreviewGetParams, opts ...option.RequestOption) (res *InvestigatePreviewGetResponse, err error) {
 	var env InvestigatePreviewGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -121,13 +133,27 @@ func (r investigatePreviewGetResponseJSON) RawJSON() string {
 
 type InvestigatePreviewNewParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The identifier of the message.
 	PostfixID param.Field[string] `json:"postfix_id" api:"required"`
+	// When true, search the submissions datastore only. When false or omitted, search
+	// the regular datastore only.
+	Submission param.Field[bool] `query:"submission"`
 }
 
 func (r InvestigatePreviewNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [InvestigatePreviewNewParams]'s query parameters as
+// `url.Values`.
+func (r InvestigatePreviewNewParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type InvestigatePreviewNewResponseEnvelope struct {
@@ -159,6 +185,8 @@ func (r investigatePreviewNewResponseEnvelopeJSON) RawJSON() string {
 
 type InvestigatePreviewGetParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

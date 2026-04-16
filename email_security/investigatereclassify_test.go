@@ -33,6 +33,7 @@ func TestInvestigateReclassifyNewWithOptionalParams(t *testing.T) {
 		email_security.InvestigateReclassifyNewParams{
 			AccountID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ExpectedDisposition:   cloudflare.F(email_security.InvestigateReclassifyNewParamsExpectedDispositionNone),
+			Submission:            cloudflare.F(true),
 			EmlContent:            cloudflare.F("eml_content"),
 			EscalatedSubmissionID: cloudflare.F("escalated_submission_id"),
 		},
