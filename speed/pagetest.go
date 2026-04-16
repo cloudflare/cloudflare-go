@@ -43,6 +43,11 @@ func NewPageTestService(opts ...option.RequestOption) (r *PageTestService) {
 func (r *PageTestService) New(ctx context.Context, url string, params PageTestNewParams, opts ...option.RequestOption) (res *Test, err error) {
 	var env PageTestNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -65,6 +70,11 @@ func (r *PageTestService) List(ctx context.Context, url string, params PageTestL
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -96,6 +106,11 @@ func (r *PageTestService) ListAutoPaging(ctx context.Context, url string, params
 func (r *PageTestService) Delete(ctx context.Context, url string, params PageTestDeleteParams, opts ...option.RequestOption) (res *PageTestDeleteResponse, err error) {
 	var env PageTestDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -117,6 +132,11 @@ func (r *PageTestService) Delete(ctx context.Context, url string, params PageTes
 func (r *PageTestService) Get(ctx context.Context, url string, testID string, query PageTestGetParams, opts ...option.RequestOption) (res *Test, err error) {
 	var env PageTestGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -216,6 +236,8 @@ func (r pageTestDeleteResponseJSON) RawJSON() string {
 
 type PageTestNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A test region.
 	Region param.Field[PageTestNewParamsRegion] `json:"region"`
@@ -290,6 +312,8 @@ func (r pageTestNewResponseEnvelopeJSON) RawJSON() string {
 
 type PageTestListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID  param.Field[string] `path:"zone_id" api:"required"`
 	Page    param.Field[int64]  `query:"page"`
 	PerPage param.Field[int64]  `query:"per_page"`
@@ -342,6 +366,8 @@ func (r PageTestListParamsRegion) IsKnown() bool {
 
 type PageTestDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A test region.
 	Region param.Field[PageTestDeleteParamsRegion] `query:"region"`
@@ -420,6 +446,8 @@ func (r pageTestDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type PageTestGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
