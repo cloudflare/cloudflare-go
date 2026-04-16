@@ -44,6 +44,11 @@ func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -70,6 +75,11 @@ func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListPar
 func (r *ScriptService) Get(ctx context.Context, scriptID string, query ScriptGetParams, opts ...option.RequestOption) (res *ScriptGetResponse, err error) {
 	var env ScriptGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -292,6 +302,8 @@ func (r scriptGetResponseVersionJSON) RawJSON() string {
 
 type ScriptListParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The direction used to sort returned scripts.
 	Direction param.Field[ScriptListParamsDirection] `query:"direction"`
@@ -400,6 +412,8 @@ func (r ScriptListParamsOrderBy) IsKnown() bool {
 
 type ScriptGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
