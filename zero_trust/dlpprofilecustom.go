@@ -181,8 +181,8 @@ type DLPProfileCustomNewParams struct {
 	Description param.Field[string]                                `json:"description"`
 	Entries     param.Field[[]DLPProfileCustomNewParamsEntryUnion] `json:"entries"`
 	OCREnabled  param.Field[bool]                                  `json:"ocr_enabled"`
-	// Sensitivity levels to associate with the profile as (group_id, level_id) tuples.
-	SensitivityLevels param.Field[[][]string] `json:"sensitivity_levels" format:"uuid"`
+	// Sensitivity levels to associate with the profile.
+	SensitivityLevels param.Field[[]DLPProfileCustomNewParamsSensitivityLevel] `json:"sensitivity_levels"`
 	// Entries from other profiles (e.g. pre-defined Cloudflare profiles, or your
 	// Microsoft Information Protection profiles).
 	SharedEntries param.Field[[]DLPProfileCustomNewParamsSharedEntry] `json:"shared_entries"`
@@ -238,6 +238,16 @@ func (r DLPProfileCustomNewParamsEntriesDLPNewWordListEntry) MarshalJSON() (data
 }
 
 func (r DLPProfileCustomNewParamsEntriesDLPNewWordListEntry) implementsDLPProfileCustomNewParamsEntryUnion() {
+}
+
+// A reference pairing a sensitivity group with a specific level within that group.
+type DLPProfileCustomNewParamsSensitivityLevel struct {
+	GroupID param.Field[string] `json:"group_id" api:"required" format:"uuid"`
+	LevelID param.Field[string] `json:"level_id" api:"required" format:"uuid"`
+}
+
+func (r DLPProfileCustomNewParamsSensitivityLevel) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type DLPProfileCustomNewParamsSharedEntry struct {
@@ -411,7 +421,7 @@ type DLPProfileCustomUpdateParams struct {
 	OCREnabled param.Field[bool]                                     `json:"ocr_enabled"`
 	// Sensitivity levels to associate with the profile. If omitted, existing
 	// associations are unchanged.
-	SensitivityLevels param.Field[[][]string] `json:"sensitivity_levels" format:"uuid"`
+	SensitivityLevels param.Field[[]DLPProfileCustomUpdateParamsSensitivityLevel] `json:"sensitivity_levels"`
 	// Other entries, e.g. predefined or integration.
 	SharedEntries param.Field[[]DLPProfileCustomUpdateParamsSharedEntry] `json:"shared_entries"`
 }
@@ -469,6 +479,16 @@ func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry) MarshalJSON() (dat
 }
 
 func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry) implementsDLPProfileCustomUpdateParamsEntryUnion() {
+}
+
+// A reference pairing a sensitivity group with a specific level within that group.
+type DLPProfileCustomUpdateParamsSensitivityLevel struct {
+	GroupID param.Field[string] `json:"group_id" api:"required" format:"uuid"`
+	LevelID param.Field[string] `json:"level_id" api:"required" format:"uuid"`
+}
+
+func (r DLPProfileCustomUpdateParamsSensitivityLevel) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type DLPProfileCustomUpdateParamsSharedEntry struct {

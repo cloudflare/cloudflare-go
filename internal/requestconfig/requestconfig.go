@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -251,7 +252,18 @@ func applyMiddleware(middleware middleware, next middlewareNext) middlewareNext 
 	}
 }
 
-func shouldRetry(req *http.Request, res *http.Response) bool {
+func shouldRetry(req *http.Request, res *http.Response, err error) bool {
+	// Retry on transport-level errors (unexpected EOF, connection drops, etc.)
+	// These errors occur during network I/O and should be retried automatically.
+	if err != nil {
+		// Don't retry on intentional cancellations or deadline exceeded
+		if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
+			return false
+		}
+		// Retry on any other error (connection errors, EOF, network issues)
+		return true
+	}
+
 	// If there is no way to recover the Body, then we shouldn't retry.
 	if req.Body != nil && req.GetBody == nil {
 		return false
@@ -459,7 +471,7 @@ func (cfg *RequestConfig) Execute() (err error) {
 		if ctx != nil && ctx.Err() != nil {
 			return ctx.Err()
 		}
-		if !shouldRetry(cfg.Request, res) || retryCount >= cfg.MaxRetries {
+		if !shouldRetry(cfg.Request, res, err) || retryCount >= cfg.MaxRetries {
 			break
 		}
 
