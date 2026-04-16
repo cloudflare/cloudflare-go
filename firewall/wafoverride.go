@@ -47,6 +47,11 @@ func NewWAFOverrideService(opts ...option.RequestOption) (r *WAFOverrideService)
 func (r *WAFOverrideService) New(ctx context.Context, params WAFOverrideNewParams, opts ...option.RequestOption) (res *Override, err error) {
 	var env WAFOverrideNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -69,6 +74,11 @@ func (r *WAFOverrideService) New(ctx context.Context, params WAFOverrideNewParam
 func (r *WAFOverrideService) Update(ctx context.Context, overridesID string, params WAFOverrideUpdateParams, opts ...option.RequestOption) (res *Override, err error) {
 	var env WAFOverrideUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -96,6 +106,11 @@ func (r *WAFOverrideService) List(ctx context.Context, params WAFOverrideListPar
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -132,6 +147,11 @@ func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, params WAFOverr
 func (r *WAFOverrideService) Delete(ctx context.Context, overridesID string, body WAFOverrideDeleteParams, opts ...option.RequestOption) (res *WAFOverrideDeleteResponse, err error) {
 	var env WAFOverrideDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -158,6 +178,11 @@ func (r *WAFOverrideService) Delete(ctx context.Context, overridesID string, bod
 func (r *WAFOverrideService) Get(ctx context.Context, overridesID string, query WAFOverrideGetParams, opts ...option.RequestOption) (res *Override, err error) {
 	var env WAFOverrideGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -430,6 +455,8 @@ func (r wafOverrideDeleteResponseJSON) RawJSON() string {
 
 type WAFOverrideNewParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
@@ -486,6 +513,8 @@ func (r WAFOverrideNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type WAFOverrideUpdateParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines an identifier.
 	ID param.Field[string] `json:"id" api:"required"`
@@ -553,6 +582,8 @@ func (r WAFOverrideUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type WAFOverrideListParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -570,6 +601,8 @@ func (r WAFOverrideListParams) URLQuery() (v url.Values) {
 
 type WAFOverrideDeleteParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -596,6 +629,8 @@ func (r wafOverrideDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type WAFOverrideGetParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
