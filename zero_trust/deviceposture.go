@@ -352,6 +352,8 @@ type DeviceInput struct {
 	ID string `json:"id"`
 	// The Number of active threats.
 	ActiveThreats float64 `json:"active_threats"`
+	// This field can have the runtime type of [[]KolideInputAuthState].
+	AuthState interface{} `json:"auth_state"`
 	// UUID of Cloudflare managed certificate.
 	CertificateID string `json:"certificate_id"`
 	// Confirm the certificate was not imported from another device. We recommend
@@ -445,6 +447,7 @@ type DeviceInput struct {
 type deviceInputJSON struct {
 	ID                      apijson.Field
 	ActiveThreats           apijson.Field
+	AuthState               apijson.Field
 	CertificateID           apijson.Field
 	CheckPrivateKey         apijson.Field
 	CheckDisks              apijson.Field
@@ -1132,7 +1135,8 @@ type DeviceInputParam struct {
 	// List ID.
 	ID param.Field[string] `json:"id"`
 	// The Number of active threats.
-	ActiveThreats param.Field[float64] `json:"active_threats"`
+	ActiveThreats param.Field[float64]     `json:"active_threats"`
+	AuthState     param.Field[interface{}] `json:"auth_state"`
 	// UUID of Cloudflare managed certificate.
 	CertificateID param.Field[string] `json:"certificate_id"`
 	// Confirm the certificate was not imported from another device. We recommend
@@ -1762,16 +1766,20 @@ func (r IntuneInputParam) implementsDeviceInputUnionParam() {}
 type KolideInput struct {
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id" api:"required"`
+	// The set of Kolide device authentication states that pass the posture check.
+	// Device must match one of the specified states.
+	AuthState []KolideInputAuthState `json:"auth_state"`
 	// Count Operator.
-	CountOperator KolideInputCountOperator `json:"countOperator" api:"required"`
+	CountOperator KolideInputCountOperator `json:"countOperator"`
 	// The Number of Issues.
-	IssueCount string          `json:"issue_count" api:"required"`
+	IssueCount string          `json:"issue_count"`
 	JSON       kolideInputJSON `json:"-"`
 }
 
 // kolideInputJSON contains the JSON metadata for the struct [KolideInput]
 type kolideInputJSON struct {
 	ConnectionID  apijson.Field
+	AuthState     apijson.Field
 	CountOperator apijson.Field
 	IssueCount    apijson.Field
 	raw           string
@@ -1787,6 +1795,23 @@ func (r kolideInputJSON) RawJSON() string {
 }
 
 func (r KolideInput) implementsDeviceInput() {}
+
+type KolideInputAuthState string
+
+const (
+	KolideInputAuthStateGood      KolideInputAuthState = "Good"
+	KolideInputAuthStateNotified  KolideInputAuthState = "Notified"
+	KolideInputAuthStateWillBlock KolideInputAuthState = "Will Block"
+	KolideInputAuthStateBlocked   KolideInputAuthState = "Blocked"
+)
+
+func (r KolideInputAuthState) IsKnown() bool {
+	switch r {
+	case KolideInputAuthStateGood, KolideInputAuthStateNotified, KolideInputAuthStateWillBlock, KolideInputAuthStateBlocked:
+		return true
+	}
+	return false
+}
 
 // Count Operator.
 type KolideInputCountOperator string
@@ -1810,10 +1835,13 @@ func (r KolideInputCountOperator) IsKnown() bool {
 type KolideInputParam struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id" api:"required"`
+	// The set of Kolide device authentication states that pass the posture check.
+	// Device must match one of the specified states.
+	AuthState param.Field[[]KolideInputAuthState] `json:"auth_state"`
 	// Count Operator.
-	CountOperator param.Field[KolideInputCountOperator] `json:"countOperator" api:"required"`
+	CountOperator param.Field[KolideInputCountOperator] `json:"countOperator"`
 	// The Number of Issues.
-	IssueCount param.Field[string] `json:"issue_count" api:"required"`
+	IssueCount param.Field[string] `json:"issue_count"`
 }
 
 func (r KolideInputParam) MarshalJSON() (data []byte, err error) {

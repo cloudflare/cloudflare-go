@@ -107,15 +107,15 @@ func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectNa
 }
 
 // Delete a deployment.
-func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *ProjectDeploymentDeleteResponse, err error) {
+func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *ProjectDeploymentDeleteResponse, err error) {
 	var env ProjectDeploymentDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return nil, err
 	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
-	if body.AccountID.Value == "" {
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -127,8 +127,8 @@ func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName strin
 		err = errors.New("missing required deployment_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", body.AccountID, projectName, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", params.AccountID, projectName, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -480,6 +480,18 @@ type ProjectDeploymentDeleteParams struct {
 	//
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Allow deletion of aliased non-production deployments when a normal delete would
+	// be rejected.
+	Force param.Field[bool] `query:"force"`
+}
+
+// URLQuery serializes [ProjectDeploymentDeleteParams]'s query parameters as
+// `url.Values`.
+func (r ProjectDeploymentDeleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type ProjectDeploymentDeleteResponseEnvelope struct {
