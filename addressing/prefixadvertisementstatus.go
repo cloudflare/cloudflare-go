@@ -44,6 +44,11 @@ func NewPrefixAdvertisementStatusService(opts ...option.RequestOption) (r *Prefi
 func (r *PrefixAdvertisementStatusService) Edit(ctx context.Context, prefixID string, params PrefixAdvertisementStatusEditParams, opts ...option.RequestOption) (res *PrefixAdvertisementStatusEditResponse, err error) {
 	var env PrefixAdvertisementStatusEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -70,6 +75,11 @@ func (r *PrefixAdvertisementStatusService) Edit(ctx context.Context, prefixID st
 func (r *PrefixAdvertisementStatusService) Get(ctx context.Context, prefixID string, query PrefixAdvertisementStatusGetParams, opts ...option.RequestOption) (res *PrefixAdvertisementStatusGetResponse, err error) {
 	var env PrefixAdvertisementStatusGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -143,6 +153,8 @@ func (r prefixAdvertisementStatusGetResponseJSON) RawJSON() string {
 
 type PrefixAdvertisementStatusEditParams struct {
 	// Identifier of a Cloudflare account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Advertisement status of the prefix. If `true`, the BGP route for the prefix is
 	// advertised to the Internet. If `false`, the BGP route is withdrawn.
@@ -296,6 +308,8 @@ func (r PrefixAdvertisementStatusEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixAdvertisementStatusGetParams struct {
 	// Identifier of a Cloudflare account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
