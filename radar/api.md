@@ -1,5 +1,15 @@
 # Radar
 
+## AgentReadiness
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AgentReadinessSummaryResponse">AgentReadinessSummaryResponse</a>
+
+Methods:
+
+- <code title="get /radar/agent_readiness/summary/{dimension}">client.Radar.AgentReadiness.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AgentReadinessService.Summary">Summary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dimension <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AgentReadinessSummaryParamsDimension">AgentReadinessSummaryParamsDimension</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AgentReadinessSummaryParams">AgentReadinessSummaryParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AgentReadinessSummaryResponse">AgentReadinessSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## AI
 
 ### ToMarkdown
@@ -89,6 +99,18 @@ Methods:
 - <code title="get /radar/ai/bots/timeseries">client.Radar.AI.TimeseriesGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AITimeseriesGroupService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AITimeseriesGroupTimeseriesParams">AITimeseriesGroupTimeseriesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AITimeseriesGroupTimeseriesResponse">AITimeseriesGroupTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/ai/bots/timeseries_groups/{dimension}">client.Radar.AI.TimeseriesGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AITimeseriesGroupService.TimeseriesGroups">TimeseriesGroups</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dimension <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AITimeseriesGroupTimeseriesGroupsParamsDimension">AITimeseriesGroupTimeseriesGroupsParamsDimension</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AITimeseriesGroupTimeseriesGroupsParams">AITimeseriesGroupTimeseriesGroupsParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AITimeseriesGroupTimeseriesGroupsResponse">AITimeseriesGroupTimeseriesGroupsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/ai/bots/timeseries_groups/user_agent">client.Radar.AI.TimeseriesGroups.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AITimeseriesGroupService.UserAgent">UserAgent</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AITimeseriesGroupUserAgentParams">AITimeseriesGroupUserAgentParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AITimeseriesGroupUserAgentResponse">AITimeseriesGroupUserAgentResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### MarkdownForAgents
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AIMarkdownForAgentSummaryResponse">AIMarkdownForAgentSummaryResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AIMarkdownForAgentTimeseriesResponse">AIMarkdownForAgentTimeseriesResponse</a>
+
+Methods:
+
+- <code title="get /radar/ai/markdown_for_agents/summary">client.Radar.AI.MarkdownForAgents.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AIMarkdownForAgentService.Summary">Summary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AIMarkdownForAgentSummaryParams">AIMarkdownForAgentSummaryParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AIMarkdownForAgentSummaryResponse">AIMarkdownForAgentSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/ai/markdown_for_agents/timeseries">client.Radar.AI.MarkdownForAgents.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AIMarkdownForAgentService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AIMarkdownForAgentTimeseriesParams">AIMarkdownForAgentTimeseriesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/radar#AIMarkdownForAgentTimeseriesResponse">AIMarkdownForAgentTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## CT
 
