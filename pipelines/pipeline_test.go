@@ -235,7 +235,7 @@ func TestPipelineDeleteV1(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Pipelines.DeleteV1(
+	_, err := client.Pipelines.DeleteV1(
 		context.TODO(),
 		"043e105f4ecef8ad9ca31a8372d0c353",
 		pipelines.PipelineDeleteV1Params{

@@ -156,7 +156,7 @@ func TestStreamDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Pipelines.Streams.Delete(
+	_, err := client.Pipelines.Streams.Delete(
 		context.TODO(),
 		"033e105f4ecef8ad9ca31a8372d0c353",
 		pipelines.StreamDeleteParams{
