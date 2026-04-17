@@ -41,6 +41,11 @@ func NewDynamicRoutingService(opts ...option.RequestOption) (r *DynamicRoutingSe
 func (r *DynamicRoutingService) New(ctx context.Context, gatewayID string, params DynamicRoutingNewParams, opts ...option.RequestOption) (res *DynamicRoutingNewResponse, err error) {
 	var env DynamicRoutingNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,6 +66,11 @@ func (r *DynamicRoutingService) New(ctx context.Context, gatewayID string, param
 // Update an AI Gateway Dynamic Route.
 func (r *DynamicRoutingService) Update(ctx context.Context, gatewayID string, id string, params DynamicRoutingUpdateParams, opts ...option.RequestOption) (res *DynamicRoutingUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -81,6 +91,11 @@ func (r *DynamicRoutingService) Update(ctx context.Context, gatewayID string, id
 // List all AI Gateway Dynamic Routes.
 func (r *DynamicRoutingService) List(ctx context.Context, gatewayID string, query DynamicRoutingListParams, opts ...option.RequestOption) (res *DynamicRoutingListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -98,6 +113,11 @@ func (r *DynamicRoutingService) List(ctx context.Context, gatewayID string, quer
 func (r *DynamicRoutingService) Delete(ctx context.Context, gatewayID string, id string, body DynamicRoutingDeleteParams, opts ...option.RequestOption) (res *DynamicRoutingDeleteResponse, err error) {
 	var env DynamicRoutingDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -123,6 +143,11 @@ func (r *DynamicRoutingService) Delete(ctx context.Context, gatewayID string, id
 func (r *DynamicRoutingService) NewDeployment(ctx context.Context, gatewayID string, id string, params DynamicRoutingNewDeploymentParams, opts ...option.RequestOption) (res *DynamicRoutingNewDeploymentResponse, err error) {
 	var env DynamicRoutingNewDeploymentResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -148,6 +173,11 @@ func (r *DynamicRoutingService) NewDeployment(ctx context.Context, gatewayID str
 func (r *DynamicRoutingService) NewVersion(ctx context.Context, gatewayID string, id string, params DynamicRoutingNewVersionParams, opts ...option.RequestOption) (res *DynamicRoutingNewVersionResponse, err error) {
 	var env DynamicRoutingNewVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -173,6 +203,11 @@ func (r *DynamicRoutingService) NewVersion(ctx context.Context, gatewayID string
 func (r *DynamicRoutingService) Get(ctx context.Context, gatewayID string, id string, query DynamicRoutingGetParams, opts ...option.RequestOption) (res *DynamicRoutingGetResponse, err error) {
 	var env DynamicRoutingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -198,6 +233,11 @@ func (r *DynamicRoutingService) Get(ctx context.Context, gatewayID string, id st
 func (r *DynamicRoutingService) GetVersion(ctx context.Context, gatewayID string, id string, versionID string, query DynamicRoutingGetVersionParams, opts ...option.RequestOption) (res *DynamicRoutingGetVersionResponse, err error) {
 	var env DynamicRoutingGetVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -226,6 +266,11 @@ func (r *DynamicRoutingService) GetVersion(ctx context.Context, gatewayID string
 // List all AI Gateway Dynamic Route Deployments.
 func (r *DynamicRoutingService) ListDeployments(ctx context.Context, gatewayID string, id string, query DynamicRoutingListDeploymentsParams, opts ...option.RequestOption) (res *DynamicRoutingListDeploymentsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -246,6 +291,11 @@ func (r *DynamicRoutingService) ListDeployments(ctx context.Context, gatewayID s
 // List all AI Gateway Dynamic Route Versions.
 func (r *DynamicRoutingService) ListVersions(ctx context.Context, gatewayID string, id string, query DynamicRoutingListVersionsParams, opts ...option.RequestOption) (res *DynamicRoutingListVersionsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -2639,6 +2689,7 @@ func (r DynamicRoutingListVersionsResponseDataVersionsActive) IsKnown() bool {
 }
 
 type DynamicRoutingNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                                `path:"account_id" api:"required"`
 	Elements  param.Field[[]DynamicRoutingNewParamsElementUnion] `json:"elements" api:"required"`
 	Name      param.Field[string]                                `json:"name" api:"required"`
@@ -2757,6 +2808,7 @@ func (r dynamicRoutingNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Name      param.Field[string] `json:"name" api:"required"`
 }
@@ -2766,10 +2818,12 @@ func (r DynamicRoutingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DynamicRoutingListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DynamicRoutingDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2797,6 +2851,7 @@ func (r dynamicRoutingDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingNewDeploymentParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	VersionID param.Field[string] `json:"version_id" api:"required"`
 }
@@ -2829,6 +2884,7 @@ func (r dynamicRoutingNewDeploymentResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingNewVersionParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                                       `path:"account_id" api:"required"`
 	Elements  param.Field[[]DynamicRoutingNewVersionParamsElementUnion] `json:"elements" api:"required"`
 }
@@ -2948,6 +3004,7 @@ func (r dynamicRoutingNewVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2975,6 +3032,7 @@ func (r dynamicRoutingGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingGetVersionParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -3002,9 +3060,11 @@ func (r dynamicRoutingGetVersionResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DynamicRoutingListDeploymentsParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DynamicRoutingListVersionsParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
