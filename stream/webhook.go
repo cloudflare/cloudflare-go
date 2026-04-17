@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -38,6 +39,11 @@ func NewWebhookService(opts ...option.RequestOption) (r *WebhookService) {
 func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams, opts ...option.RequestOption) (res *WebhookUpdateResponse, err error) {
 	var env WebhookUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -55,6 +61,11 @@ func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams,
 func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env WebhookDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -72,6 +83,11 @@ func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, o
 func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts ...option.RequestOption) (res *WebhookGetResponse, err error) {
 	var env WebhookGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -85,15 +101,77 @@ func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts .
 	return res, nil
 }
 
-type WebhookUpdateResponse = interface{}
+type WebhookUpdateResponse struct {
+	// The date and time the webhook was last modified.
+	Modified time.Time `json:"modified" format:"date-time"`
+	// The URL where webhooks will be sent.
+	NotificationURL1 string `json:"notification_url" format:"uri"`
+	// The URL where webhooks will be sent.
+	NotificationURL2 string `json:"notificationUrl" format:"uri"`
+	// The secret used to verify webhook signatures.
+	Secret string                    `json:"secret"`
+	JSON   webhookUpdateResponseJSON `json:"-"`
+}
 
-type WebhookGetResponse = interface{}
+// webhookUpdateResponseJSON contains the JSON metadata for the struct
+// [WebhookUpdateResponse]
+type webhookUpdateResponseJSON struct {
+	Modified         apijson.Field
+	NotificationURL1 apijson.Field
+	NotificationURL2 apijson.Field
+	Secret           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WebhookUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r webhookUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type WebhookGetResponse struct {
+	// The date and time the webhook was last modified.
+	Modified time.Time `json:"modified" format:"date-time"`
+	// The URL where webhooks will be sent.
+	NotificationURL1 string `json:"notification_url" format:"uri"`
+	// The URL where webhooks will be sent.
+	NotificationURL2 string `json:"notificationUrl" format:"uri"`
+	// The secret used to verify webhook signatures.
+	Secret string                 `json:"secret"`
+	JSON   webhookGetResponseJSON `json:"-"`
+}
+
+// webhookGetResponseJSON contains the JSON metadata for the struct
+// [WebhookGetResponse]
+type webhookGetResponseJSON struct {
+	Modified         apijson.Field
+	NotificationURL1 apijson.Field
+	NotificationURL2 apijson.Field
+	Secret           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WebhookGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r webhookGetResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type WebhookUpdateParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The URL where webhooks will be sent.
-	NotificationURL param.Field[string] `json:"notificationUrl" api:"required" format:"uri"`
+	BodyNotificationURL1 param.Field[string] `json:"notification_url" format:"uri"`
+	// The URL where webhooks will be sent.
+	BodyNotificationURL2 param.Field[string] `json:"notificationUrl" format:"uri"`
 }
 
 func (r WebhookUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -241,6 +319,8 @@ func (r WebhookUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type WebhookDeleteParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -385,6 +465,8 @@ func (r WebhookDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type WebhookGetParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
