@@ -39,6 +39,11 @@ func NewZoneTransferTSIGService(opts ...option.RequestOption) (r *ZoneTransferTS
 func (r *ZoneTransferTSIGService) New(ctx context.Context, params ZoneTransferTSIGNewParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	var env ZoneTransferTSIGNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -56,6 +61,11 @@ func (r *ZoneTransferTSIGService) New(ctx context.Context, params ZoneTransferTS
 func (r *ZoneTransferTSIGService) Update(ctx context.Context, tsigID string, params ZoneTransferTSIGUpdateParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	var env ZoneTransferTSIGUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -78,6 +88,11 @@ func (r *ZoneTransferTSIGService) List(ctx context.Context, query ZoneTransferTS
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -104,6 +119,11 @@ func (r *ZoneTransferTSIGService) ListAutoPaging(ctx context.Context, query Zone
 func (r *ZoneTransferTSIGService) Delete(ctx context.Context, tsigID string, body ZoneTransferTSIGDeleteParams, opts ...option.RequestOption) (res *ZoneTransferTSIGDeleteResponse, err error) {
 	var env ZoneTransferTSIGDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -125,6 +145,11 @@ func (r *ZoneTransferTSIGService) Delete(ctx context.Context, tsigID string, bod
 func (r *ZoneTransferTSIGService) Get(ctx context.Context, tsigID string, query ZoneTransferTSIGGetParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	var env ZoneTransferTSIGGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -206,6 +231,7 @@ func (r zoneTransferTSIGDeleteResponseJSON) RawJSON() string {
 }
 
 type ZoneTransferTSIGNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	TSIG      TSIGParam           `json:"tsig" api:"required"`
 }
@@ -354,6 +380,7 @@ func (r ZoneTransferTSIGNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferTSIGUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	TSIG      TSIGParam           `json:"tsig" api:"required"`
 }
@@ -502,10 +529,12 @@ func (r ZoneTransferTSIGUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferTSIGListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferTSIGDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -649,6 +678,7 @@ func (r ZoneTransferTSIGDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferTSIGGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
