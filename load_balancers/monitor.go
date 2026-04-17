@@ -44,6 +44,11 @@ func NewMonitorService(opts ...option.RequestOption) (r *MonitorService) {
 func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	var env MonitorNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,6 +66,11 @@ func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts 
 func (r *MonitorService) Update(ctx context.Context, monitorID string, params MonitorUpdateParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	var env MonitorUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -83,6 +93,11 @@ func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -109,6 +124,11 @@ func (r *MonitorService) ListAutoPaging(ctx context.Context, query MonitorListPa
 func (r *MonitorService) Delete(ctx context.Context, monitorID string, body MonitorDeleteParams, opts ...option.RequestOption) (res *MonitorDeleteResponse, err error) {
 	var env MonitorDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -130,6 +150,11 @@ func (r *MonitorService) Delete(ctx context.Context, monitorID string, body Moni
 func (r *MonitorService) Edit(ctx context.Context, monitorID string, params MonitorEditParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	var env MonitorEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -151,6 +176,11 @@ func (r *MonitorService) Edit(ctx context.Context, monitorID string, params Moni
 func (r *MonitorService) Get(ctx context.Context, monitorID string, query MonitorGetParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	var env MonitorGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -301,6 +331,8 @@ func (r monitorDeleteResponseJSON) RawJSON() string {
 
 type MonitorNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -423,6 +455,8 @@ func (r MonitorNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -545,11 +579,15 @@ func (r MonitorUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MonitorDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -598,6 +636,8 @@ func (r MonitorDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -720,6 +760,8 @@ func (r MonitorEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
