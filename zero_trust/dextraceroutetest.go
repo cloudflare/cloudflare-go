@@ -41,6 +41,11 @@ func NewDEXTracerouteTestService(opts ...option.RequestOption) (r *DEXTraceroute
 func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, params DEXTracerouteTestGetParams, opts ...option.RequestOption) (res *Traceroute, err error) {
 	var env DEXTracerouteTestGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,6 +67,11 @@ func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, param
 func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID string, params DEXTracerouteTestNetworkPathParams, opts ...option.RequestOption) (res *NetworkPathResponse, err error) {
 	var env DEXTracerouteTestNetworkPathResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -84,6 +94,11 @@ func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID strin
 func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID string, params DEXTracerouteTestPercentilesParams, opts ...option.RequestOption) (res *DEXTracerouteTestPercentilesResponse, err error) {
 	var env DEXTracerouteTestPercentilesResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -452,6 +467,7 @@ func (r dexTracerouteTestPercentilesResponseJSON) RawJSON() string {
 }
 
 type DEXTracerouteTestGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Start time for aggregate metrics in ISO ms
 	From param.Field[string] `query:"from" api:"required"`
@@ -632,6 +648,7 @@ func (r DEXTracerouteTestGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXTracerouteTestNetworkPathParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Device to filter tracroute result runs to
 	DeviceID param.Field[string] `query:"deviceId" api:"required"`
@@ -810,6 +827,7 @@ func (r DEXTracerouteTestNetworkPathResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXTracerouteTestPercentilesParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Start time for the query in ISO (RFC3339 - ISO 8601) format
 	From param.Field[string] `query:"from" api:"required"`

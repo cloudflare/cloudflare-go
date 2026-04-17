@@ -47,6 +47,11 @@ func NewDevicePolicyCustomService(opts ...option.RequestOption) (r *DevicePolicy
 func (r *DevicePolicyCustomService) New(ctx context.Context, params DevicePolicyCustomNewParams, opts ...option.RequestOption) (res *SettingsPolicy, err error) {
 	var env DevicePolicyCustomNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,6 +70,11 @@ func (r *DevicePolicyCustomService) List(ctx context.Context, query DevicePolicy
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -93,6 +103,11 @@ func (r *DevicePolicyCustomService) Delete(ctx context.Context, policyID string,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -124,6 +139,11 @@ func (r *DevicePolicyCustomService) DeleteAutoPaging(ctx context.Context, policy
 func (r *DevicePolicyCustomService) Edit(ctx context.Context, policyID string, params DevicePolicyCustomEditParams, opts ...option.RequestOption) (res *SettingsPolicy, err error) {
 	var env DevicePolicyCustomEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -145,6 +165,11 @@ func (r *DevicePolicyCustomService) Edit(ctx context.Context, policyID string, p
 func (r *DevicePolicyCustomService) Get(ctx context.Context, policyID string, query DevicePolicyCustomGetParams, opts ...option.RequestOption) (res *SettingsPolicy, err error) {
 	var env DevicePolicyCustomGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -163,6 +188,7 @@ func (r *DevicePolicyCustomService) Get(ctx context.Context, policyID string, qu
 }
 
 type DevicePolicyCustomNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The wirefilter expression to match devices. Available values: "identity.email",
 	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
@@ -283,14 +309,17 @@ func (r DevicePolicyCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePolicyCustomListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevicePolicyCustomDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevicePolicyCustomEditParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether to allow the user to switch WARP between modes.
 	AllowModeSwitch param.Field[bool] `json:"allow_mode_switch"`
@@ -411,6 +440,7 @@ func (r DevicePolicyCustomEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePolicyCustomGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
