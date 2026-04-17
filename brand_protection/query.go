@@ -41,6 +41,11 @@ func NewQueryService(opts ...option.RequestOption) (r *QueryService) {
 func (r *QueryService) New(ctx context.Context, params QueryNewParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -54,6 +59,11 @@ func (r *QueryService) New(ctx context.Context, params QueryNewParams, opts ...o
 func (r *QueryService) Delete(ctx context.Context, params QueryDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -67,6 +77,11 @@ func (r *QueryService) Delete(ctx context.Context, params QueryDeleteParams, opt
 func (r *QueryService) Bulk(ctx context.Context, params QueryBulkParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -77,6 +92,7 @@ func (r *QueryService) Bulk(ctx context.Context, params QueryBulkParams, opts ..
 }
 
 type QueryNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]      `path:"account_id" api:"required"`
 	ID            param.Field[string]      `query:"id"`
 	QueryScan     param.Field[bool]        `query:"scan"`
@@ -101,6 +117,7 @@ func (r QueryNewParams) URLQuery() (v url.Values) {
 }
 
 type QueryDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	ID        param.Field[string] `query:"id"`
 	Scan      param.Field[bool]   `query:"scan"`
@@ -116,6 +133,7 @@ func (r QueryDeleteParams) URLQuery() (v url.Values) {
 }
 
 type QueryBulkParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                   `path:"account_id" api:"required"`
 	Queries   param.Field[[]map[string]interface{}] `json:"queries"`
 }
