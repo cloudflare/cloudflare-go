@@ -15,7 +15,6 @@ import (
 )
 
 func TestRuleNewWithOptionalParams(t *testing.T) {
-	t.Skip("422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -30,16 +29,12 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.New(context.TODO(), magic_network_monitoring.RuleNewParams{
 		AccountID:              cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-		AutomaticAdvertisement: cloudflare.F(true),
-		Name:                   cloudflare.F("my_rule_1"),
-		Prefixes:               cloudflare.F([]string{"203.0.113.1/32"}),
-		Type:                   cloudflare.F(magic_network_monitoring.RuleNewParamsTypeZscore),
-		BandwidthThreshold:     cloudflare.F(1000.000000),
 		Duration:               cloudflare.F(magic_network_monitoring.RuleNewParamsDuration1m),
+		Name:                   cloudflare.F("my_rule_1"),
+		AutomaticAdvertisement: cloudflare.F(true),
+		Bandwidth:              cloudflare.F(1000.000000),
 		PacketThreshold:        cloudflare.F(10000.000000),
-		PrefixMatch:            cloudflare.F(magic_network_monitoring.RuleNewParamsPrefixMatchExact),
-		ZscoreSensitivity:      cloudflare.F(magic_network_monitoring.RuleNewParamsZscoreSensitivityHigh),
-		ZscoreTarget:           cloudflare.F(magic_network_monitoring.RuleNewParamsZscoreTargetBits),
+		Prefixes:               cloudflare.F([]string{"203.0.113.1/32"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -66,16 +61,13 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.Update(context.TODO(), magic_network_monitoring.RuleUpdateParams{
 		AccountID:              cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-		AutomaticAdvertisement: cloudflare.F(true),
-		Name:                   cloudflare.F("my_rule_1"),
-		Prefixes:               cloudflare.F([]string{"203.0.113.1/32"}),
-		Type:                   cloudflare.F(magic_network_monitoring.RuleUpdateParamsTypeZscore),
-		BandwidthThreshold:     cloudflare.F(1000.000000),
 		Duration:               cloudflare.F(magic_network_monitoring.RuleUpdateParamsDuration1m),
+		Name:                   cloudflare.F("my_rule_1"),
+		ID:                     cloudflare.F("2890e6fa406311ed9b5a23f70f6fb8cf"),
+		AutomaticAdvertisement: cloudflare.F(true),
+		Bandwidth:              cloudflare.F(1000.000000),
 		PacketThreshold:        cloudflare.F(10000.000000),
-		PrefixMatch:            cloudflare.F(magic_network_monitoring.RuleUpdateParamsPrefixMatchExact),
-		ZscoreSensitivity:      cloudflare.F(magic_network_monitoring.RuleUpdateParamsZscoreSensitivityHigh),
-		ZscoreTarget:           cloudflare.F(magic_network_monitoring.RuleUpdateParamsZscoreTargetBits),
+		Prefixes:               cloudflare.F([]string{"203.0.113.1/32"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -87,7 +79,6 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestRuleList(t *testing.T) {
-	t.Skip("422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -113,7 +104,6 @@ func TestRuleList(t *testing.T) {
 }
 
 func TestRuleDelete(t *testing.T) {
-	t.Skip("422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -143,7 +133,6 @@ func TestRuleDelete(t *testing.T) {
 }
 
 func TestRuleEditWithOptionalParams(t *testing.T) {
-	t.Skip("422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -162,15 +151,11 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 		magic_network_monitoring.RuleEditParams{
 			AccountID:              cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 			AutomaticAdvertisement: cloudflare.F(true),
-			Name:                   cloudflare.F("my_rule_1"),
-			Prefixes:               cloudflare.F([]string{"203.0.113.1/32"}),
-			Type:                   cloudflare.F(magic_network_monitoring.RuleEditParamsTypeZscore),
-			BandwidthThreshold:     cloudflare.F(1000.000000),
+			Bandwidth:              cloudflare.F(1000.000000),
 			Duration:               cloudflare.F(magic_network_monitoring.RuleEditParamsDuration1m),
+			Name:                   cloudflare.F("my_rule_1"),
 			PacketThreshold:        cloudflare.F(10000.000000),
-			PrefixMatch:            cloudflare.F(magic_network_monitoring.RuleEditParamsPrefixMatchExact),
-			ZscoreSensitivity:      cloudflare.F(magic_network_monitoring.RuleEditParamsZscoreSensitivityHigh),
-			ZscoreTarget:           cloudflare.F(magic_network_monitoring.RuleEditParamsZscoreTargetBits),
+			Prefixes:               cloudflare.F([]string{"203.0.113.1/32"}),
 		},
 	)
 	if err != nil {
@@ -183,7 +168,6 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 }
 
 func TestRuleGet(t *testing.T) {
-	t.Skip("422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
