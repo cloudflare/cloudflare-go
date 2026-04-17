@@ -39,6 +39,11 @@ func NewSecurityTXTService(opts ...option.RequestOption) (r *SecurityTXTService)
 // researchers with vulnerability reporting information.
 func (r *SecurityTXTService) Update(ctx context.Context, params SecurityTXTUpdateParams, opts ...option.RequestOption) (res *SecurityTXTUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -52,6 +57,11 @@ func (r *SecurityTXTService) Update(ctx context.Context, params SecurityTXTUpdat
 // /.well-known/security.txt endpoint will no longer be served.
 func (r *SecurityTXTService) Delete(ctx context.Context, body SecurityTXTDeleteParams, opts ...option.RequestOption) (res *SecurityTXTDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -66,6 +76,11 @@ func (r *SecurityTXTService) Delete(ctx context.Context, body SecurityTXTDeleteP
 func (r *SecurityTXTService) Get(ctx context.Context, query SecurityTXTGetParams, opts ...option.RequestOption) (res *SecurityTXTGetResponse, err error) {
 	var env SecurityTXTGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -392,6 +407,8 @@ func (r securityTXTGetResponseJSON) RawJSON() string {
 
 type SecurityTXTUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID             param.Field[string]    `path:"zone_id" api:"required"`
 	Acknowledgments    param.Field[[]string]  `json:"acknowledgments" format:"uri"`
 	Canonical          param.Field[[]string]  `json:"canonical" format:"uri"`
@@ -410,11 +427,15 @@ func (r SecurityTXTUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type SecurityTXTDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SecurityTXTGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
