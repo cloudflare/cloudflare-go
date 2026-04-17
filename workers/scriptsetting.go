@@ -40,6 +40,11 @@ func NewScriptSettingService(opts ...option.RequestOption) (r *ScriptSettingServ
 func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, params ScriptSettingEditParams, opts ...option.RequestOption) (res *ScriptSetting, err error) {
 	var env ScriptSettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,6 +68,11 @@ func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, para
 func (r *ScriptSettingService) Get(ctx context.Context, scriptName string, query ScriptSettingGetParams, opts ...option.RequestOption) (res *ScriptSetting, err error) {
 	var env ScriptSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -82,6 +92,8 @@ func (r *ScriptSettingService) Get(ctx context.Context, scriptName string, query
 
 type ScriptSettingEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string] `path:"account_id" api:"required"`
 	ScriptSetting ScriptSettingParam  `json:"script_setting" api:"required"`
 }
@@ -231,6 +243,8 @@ func (r ScriptSettingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptSettingGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

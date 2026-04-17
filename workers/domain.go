@@ -41,6 +41,11 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *DomainUpdateResponse, err error) {
 	var env DomainUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -59,6 +64,11 @@ func (r *DomainService) List(ctx context.Context, params DomainListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -85,6 +95,11 @@ func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListPar
 // longer routable using this domain.
 func (r *DomainService) Delete(ctx context.Context, domainID string, body DomainDeleteParams, opts ...option.RequestOption) (res *DomainDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -102,6 +117,11 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, body Domain
 func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponse, err error) {
 	var env DomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -390,6 +410,8 @@ func (r domainGetResponseJSON) RawJSON() string {
 
 type DomainUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
@@ -550,6 +572,8 @@ func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DomainListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Worker environment associated with the domain.
 	Environment param.Field[string] `query:"environment"`
@@ -558,6 +582,8 @@ type DomainListParams struct {
 	// Name of the Worker associated with the domain.
 	Service param.Field[string] `query:"service"`
 	// ID of the zone containing the domain hostname.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `query:"zone_id"`
 	// Name of the zone containing the domain hostname.
 	ZoneName param.Field[string] `query:"zone_name"`
@@ -573,11 +599,15 @@ func (r DomainListParams) URLQuery() (v url.Values) {
 
 type DomainDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DomainGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
