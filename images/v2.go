@@ -87,6 +87,11 @@ func NewV2Service(opts ...option.RequestOption) (r *V2Service) {
 func (r *V2Service) List(ctx context.Context, params V2ListParams, opts ...option.RequestOption) (res *V2ListResponse, err error) {
 	var env V2ListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -126,6 +131,8 @@ func (r v2ListResponseJSON) RawJSON() string {
 
 type V2ListParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Continuation token to fetch next page. Passed as a query param when requesting
 	// List V2 api endpoint.
