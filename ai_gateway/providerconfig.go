@@ -42,6 +42,11 @@ func NewProviderConfigService(opts ...option.RequestOption) (r *ProviderConfigSe
 func (r *ProviderConfigService) New(ctx context.Context, gatewayID string, params ProviderConfigNewParams, opts ...option.RequestOption) (res *ProviderConfigNewResponse, err error) {
 	var env ProviderConfigNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,6 +69,11 @@ func (r *ProviderConfigService) List(ctx context.Context, gatewayID string, para
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -171,6 +181,7 @@ func (r providerConfigListResponseJSON) RawJSON() string {
 }
 
 type ProviderConfigNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID       param.Field[string]  `path:"account_id" api:"required"`
 	Alias           param.Field[string]  `json:"alias" api:"required"`
 	DefaultConfig   param.Field[bool]    `json:"default_config" api:"required"`
@@ -209,6 +220,7 @@ func (r providerConfigNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type ProviderConfigListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Page      param.Field[int64]  `query:"page"`
 	PerPage   param.Field[int64]  `query:"per_page"`
