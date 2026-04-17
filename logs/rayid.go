@@ -41,6 +41,11 @@ func NewRayIDService(opts ...option.RequestOption) (r *RayIDService) {
 func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env apijson.UnionUnmarshaler[interface{}]
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -60,6 +65,8 @@ func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetPar
 
 type RayIDGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The `/received` route by default returns a limited set of fields, and allows
 	// customers to override the default field set by specifying individual fields. The
