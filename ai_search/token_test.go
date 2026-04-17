@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestTokenNew(t *testing.T) {
+func TestTokenNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -30,9 +30,10 @@ func TestTokenNew(t *testing.T) {
 	)
 	_, err := client.AISearch.Tokens.New(context.TODO(), ai_search.TokenNewParams{
 		AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
-		CfAPIID:   cloudflare.F("cf_api_id"),
-		CfAPIKey:  cloudflare.F("cf_api_key"),
-		Name:      cloudflare.F("name"),
+		CfAPIID:   cloudflare.F("a1b2c3d4e5f6"),
+		CfAPIKey:  cloudflare.F("abc123"),
+		Name:      cloudflare.F("my-token"),
+		Legacy:    cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -43,7 +44,7 @@ func TestTokenNew(t *testing.T) {
 	}
 }
 
-func TestTokenUpdate(t *testing.T) {
+func TestTokenUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,12 +60,13 @@ func TestTokenUpdate(t *testing.T) {
 	)
 	_, err := client.AISearch.Tokens.Update(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"62af0db3-c410-40b2-9ee3-0e93f6dd1de0",
 		ai_search.TokenUpdateParams{
 			AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
-			CfAPIID:   cloudflare.F("cf_api_id"),
-			CfAPIKey:  cloudflare.F("cf_api_key"),
-			Name:      cloudflare.F("name"),
+			CfAPIID:   cloudflare.F("a1b2c3d4e5f6"),
+			CfAPIKey:  cloudflare.F("abc123"),
+			Name:      cloudflare.F("my-token"),
+			Legacy:    cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -91,11 +93,10 @@ func TestTokenListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.AISearch.Tokens.List(context.TODO(), ai_search.TokenListParams{
-		AccountID:        cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
-		OrderBy:          cloudflare.F(ai_search.TokenListParamsOrderByCreatedAt),
-		OrderByDirection: cloudflare.F(ai_search.TokenListParamsOrderByDirectionAsc),
-		Page:             cloudflare.F(int64(1)),
-		PerPage:          cloudflare.F(int64(1)),
+		AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(20)),
+		Search:    cloudflare.F("my-token"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -122,7 +123,7 @@ func TestTokenDelete(t *testing.T) {
 	)
 	_, err := client.AISearch.Tokens.Delete(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"62af0db3-c410-40b2-9ee3-0e93f6dd1de0",
 		ai_search.TokenDeleteParams{
 			AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 		},
@@ -152,7 +153,7 @@ func TestTokenRead(t *testing.T) {
 	)
 	_, err := client.AISearch.Tokens.Read(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"62af0db3-c410-40b2-9ee3-0e93f6dd1de0",
 		ai_search.TokenReadParams{
 			AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 		},

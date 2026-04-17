@@ -38,7 +38,7 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 	return
 }
 
-// Create a new tokens.
+// Create a new token.
 func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
 	var env TokenNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +60,7 @@ func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...o
 	return res, nil
 }
 
-// Update tokens.
+// Update token.
 func (r *TokenService) Update(ctx context.Context, id string, params TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponse, err error) {
 	var env TokenUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -118,7 +118,7 @@ func (r *TokenService) ListAutoPaging(ctx context.Context, params TokenListParam
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete tokens.
+// Delete token.
 func (r *TokenService) Delete(ctx context.Context, id string, body TokenDeleteParams, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
 	var env TokenDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -144,7 +144,7 @@ func (r *TokenService) Delete(ctx context.Context, id string, body TokenDeletePa
 	return res, nil
 }
 
-// Read tokens.
+// Read token.
 func (r *TokenService) Read(ctx context.Context, id string, query TokenReadParams, opts ...option.RequestOption) (res *TokenReadResponse, err error) {
 	var env TokenReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -281,42 +281,7 @@ func (r tokenListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type TokenDeleteResponse struct {
-	ID         string                  `json:"id" api:"required" format:"uuid"`
-	CfAPIID    string                  `json:"cf_api_id" api:"required"`
-	CreatedAt  time.Time               `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt time.Time               `json:"modified_at" api:"required" format:"date-time"`
-	Name       string                  `json:"name" api:"required"`
-	CreatedBy  string                  `json:"created_by" api:"nullable"`
-	Enabled    bool                    `json:"enabled"`
-	Legacy     bool                    `json:"legacy"`
-	ModifiedBy string                  `json:"modified_by" api:"nullable"`
-	JSON       tokenDeleteResponseJSON `json:"-"`
-}
-
-// tokenDeleteResponseJSON contains the JSON metadata for the struct
-// [TokenDeleteResponse]
-type tokenDeleteResponseJSON struct {
-	ID          apijson.Field
-	CfAPIID     apijson.Field
-	CreatedAt   apijson.Field
-	ModifiedAt  apijson.Field
-	Name        apijson.Field
-	CreatedBy   apijson.Field
-	Enabled     apijson.Field
-	Legacy      apijson.Field
-	ModifiedBy  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TokenDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tokenDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
+type TokenDeleteResponse = interface{}
 
 type TokenReadResponse struct {
 	ID         string                `json:"id" api:"required" format:"uuid"`
@@ -361,6 +326,7 @@ type TokenNewParams struct {
 	CfAPIID   param.Field[string] `json:"cf_api_id" api:"required"`
 	CfAPIKey  param.Field[string] `json:"cf_api_key" api:"required"`
 	Name      param.Field[string] `json:"name" api:"required"`
+	Legacy    param.Field[bool]   `json:"legacy"`
 }
 
 func (r TokenNewParams) MarshalJSON() (data []byte, err error) {
@@ -368,9 +334,9 @@ func (r TokenNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenNewResponseEnvelope struct {
-	Result  TokenNewResponse             `json:"result" api:"required"`
-	Success bool                         `json:"success" api:"required"`
-	JSON    tokenNewResponseEnvelopeJSON `json:"-"`
+	Result  TokenNewResponse                `json:"result" api:"required"`
+	Success TokenNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    tokenNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // tokenNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -390,12 +356,27 @@ func (r tokenNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type TokenNewResponseEnvelopeSuccess bool
+
+const (
+	TokenNewResponseEnvelopeSuccessTrue TokenNewResponseEnvelopeSuccess = true
+)
+
+func (r TokenNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TokenUpdateParams struct {
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	CfAPIID   param.Field[string] `json:"cf_api_id" api:"required"`
 	CfAPIKey  param.Field[string] `json:"cf_api_key" api:"required"`
 	Name      param.Field[string] `json:"name" api:"required"`
+	Legacy    param.Field[bool]   `json:"legacy"`
 }
 
 func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -403,9 +384,9 @@ func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenUpdateResponseEnvelope struct {
-	Result  TokenUpdateResponse             `json:"result" api:"required"`
-	Success bool                            `json:"success" api:"required"`
-	JSON    tokenUpdateResponseEnvelopeJSON `json:"-"`
+	Result  TokenUpdateResponse                `json:"result" api:"required"`
+	Success TokenUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    tokenUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // tokenUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -425,15 +406,29 @@ func (r tokenUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type TokenUpdateResponseEnvelopeSuccess bool
+
+const (
+	TokenUpdateResponseEnvelopeSuccessTrue TokenUpdateResponseEnvelopeSuccess = true
+)
+
+func (r TokenUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TokenListParams struct {
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Order By Column Name
-	OrderBy param.Field[TokenListParamsOrderBy] `query:"order_by"`
-	// Order By Direction
-	OrderByDirection param.Field[TokenListParamsOrderByDirection] `query:"order_by_direction"`
-	Page             param.Field[int64]                           `query:"page"`
-	PerPage          param.Field[int64]                           `query:"per_page"`
+	// Page number (1-indexed).
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Filter tokens whose name contains this string (case-insensitive).
+	Search param.Field[string] `query:"search"`
 }
 
 // URLQuery serializes [TokenListParams]'s query parameters as `url.Values`.
@@ -444,46 +439,15 @@ func (r TokenListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Order By Column Name
-type TokenListParamsOrderBy string
-
-const (
-	TokenListParamsOrderByCreatedAt TokenListParamsOrderBy = "created_at"
-)
-
-func (r TokenListParamsOrderBy) IsKnown() bool {
-	switch r {
-	case TokenListParamsOrderByCreatedAt:
-		return true
-	}
-	return false
-}
-
-// Order By Direction
-type TokenListParamsOrderByDirection string
-
-const (
-	TokenListParamsOrderByDirectionAsc  TokenListParamsOrderByDirection = "asc"
-	TokenListParamsOrderByDirectionDesc TokenListParamsOrderByDirection = "desc"
-)
-
-func (r TokenListParamsOrderByDirection) IsKnown() bool {
-	switch r {
-	case TokenListParamsOrderByDirectionAsc, TokenListParamsOrderByDirectionDesc:
-		return true
-	}
-	return false
-}
-
 type TokenDeleteParams struct {
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TokenDeleteResponseEnvelope struct {
-	Result  TokenDeleteResponse             `json:"result" api:"required"`
-	Success bool                            `json:"success" api:"required"`
-	JSON    tokenDeleteResponseEnvelopeJSON `json:"-"`
+	Result  TokenDeleteResponse                `json:"result" api:"required"`
+	Success TokenDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    tokenDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
 // tokenDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -503,15 +467,29 @@ func (r tokenDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type TokenDeleteResponseEnvelopeSuccess bool
+
+const (
+	TokenDeleteResponseEnvelopeSuccessTrue TokenDeleteResponseEnvelopeSuccess = true
+)
+
+func (r TokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TokenReadParams struct {
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TokenReadResponseEnvelope struct {
-	Result  TokenReadResponse             `json:"result" api:"required"`
-	Success bool                          `json:"success" api:"required"`
-	JSON    tokenReadResponseEnvelopeJSON `json:"-"`
+	Result  TokenReadResponse                `json:"result" api:"required"`
+	Success TokenReadResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    tokenReadResponseEnvelopeJSON    `json:"-"`
 }
 
 // tokenReadResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -529,4 +507,18 @@ func (r *TokenReadResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r tokenReadResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+type TokenReadResponseEnvelopeSuccess bool
+
+const (
+	TokenReadResponseEnvelopeSuccessTrue TokenReadResponseEnvelopeSuccess = true
+)
+
+func (r TokenReadResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenReadResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
