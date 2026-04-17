@@ -44,6 +44,11 @@ func NewSubdomainService(opts ...option.RequestOption) (r *SubdomainService) {
 func (r *SubdomainService) New(ctx context.Context, params SubdomainNewParams, opts ...option.RequestOption) (res *SubdomainNewResponse, err error) {
 	var env SubdomainNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -62,6 +67,11 @@ func (r *SubdomainService) List(ctx context.Context, query SubdomainListParams, 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -88,6 +98,11 @@ func (r *SubdomainService) ListAutoPaging(ctx context.Context, query SubdomainLi
 // active on the subdomain, only sending is disabled.
 func (r *SubdomainService) Delete(ctx context.Context, subdomainID string, body SubdomainDeleteParams, opts ...option.RequestOption) (res *SubdomainDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -105,6 +120,11 @@ func (r *SubdomainService) Delete(ctx context.Context, subdomainID string, body 
 func (r *SubdomainService) Get(ctx context.Context, subdomainID string, query SubdomainGetParams, opts ...option.RequestOption) (res *SubdomainGetResponse, err error) {
 	var env SubdomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -124,7 +144,7 @@ func (r *SubdomainService) Get(ctx context.Context, subdomainID string, query Su
 
 type SubdomainNewResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
-	EmailSendingEnabled bool `json:"email_sending_enabled" api:"required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The subdomain domain name.
 	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
@@ -132,30 +152,26 @@ type SubdomainNewResponse struct {
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The DKIM selector used for email signing.
-	EmailSendingDKIMSelector string `json:"email_sending_dkim_selector"`
-	// The return-path domain used for bounce handling.
-	EmailSendingReturnPathDomain string `json:"email_sending_return_path_domain"`
-	// Whether Email Routing (receiving) is enabled on this subdomain. Read-only;
-	// included for informational purposes since both services share the subdomain row.
-	Enabled bool `json:"enabled"`
+	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
-	Modified time.Time                `json:"modified" format:"date-time"`
-	JSON     subdomainNewResponseJSON `json:"-"`
+	Modified time.Time `json:"modified" format:"date-time"`
+	// The return-path domain used for bounce handling.
+	ReturnPathDomain string                   `json:"return_path_domain"`
+	JSON             subdomainNewResponseJSON `json:"-"`
 }
 
 // subdomainNewResponseJSON contains the JSON metadata for the struct
 // [SubdomainNewResponse]
 type subdomainNewResponseJSON struct {
-	EmailSendingEnabled          apijson.Field
-	Name                         apijson.Field
-	Tag                          apijson.Field
-	Created                      apijson.Field
-	EmailSendingDKIMSelector     apijson.Field
-	EmailSendingReturnPathDomain apijson.Field
-	Enabled                      apijson.Field
-	Modified                     apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
+	Enabled          apijson.Field
+	Name             apijson.Field
+	Tag              apijson.Field
+	Created          apijson.Field
+	DKIMSelector     apijson.Field
+	Modified         apijson.Field
+	ReturnPathDomain apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *SubdomainNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -168,7 +184,7 @@ func (r subdomainNewResponseJSON) RawJSON() string {
 
 type SubdomainListResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
-	EmailSendingEnabled bool `json:"email_sending_enabled" api:"required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The subdomain domain name.
 	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
@@ -176,30 +192,26 @@ type SubdomainListResponse struct {
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The DKIM selector used for email signing.
-	EmailSendingDKIMSelector string `json:"email_sending_dkim_selector"`
-	// The return-path domain used for bounce handling.
-	EmailSendingReturnPathDomain string `json:"email_sending_return_path_domain"`
-	// Whether Email Routing (receiving) is enabled on this subdomain. Read-only;
-	// included for informational purposes since both services share the subdomain row.
-	Enabled bool `json:"enabled"`
+	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
-	Modified time.Time                 `json:"modified" format:"date-time"`
-	JSON     subdomainListResponseJSON `json:"-"`
+	Modified time.Time `json:"modified" format:"date-time"`
+	// The return-path domain used for bounce handling.
+	ReturnPathDomain string                    `json:"return_path_domain"`
+	JSON             subdomainListResponseJSON `json:"-"`
 }
 
 // subdomainListResponseJSON contains the JSON metadata for the struct
 // [SubdomainListResponse]
 type subdomainListResponseJSON struct {
-	EmailSendingEnabled          apijson.Field
-	Name                         apijson.Field
-	Tag                          apijson.Field
-	Created                      apijson.Field
-	EmailSendingDKIMSelector     apijson.Field
-	EmailSendingReturnPathDomain apijson.Field
-	Enabled                      apijson.Field
-	Modified                     apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
+	Enabled          apijson.Field
+	Name             apijson.Field
+	Tag              apijson.Field
+	Created          apijson.Field
+	DKIMSelector     apijson.Field
+	Modified         apijson.Field
+	ReturnPathDomain apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *SubdomainListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -349,7 +361,7 @@ func (r SubdomainDeleteResponseSuccess) IsKnown() bool {
 
 type SubdomainGetResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
-	EmailSendingEnabled bool `json:"email_sending_enabled" api:"required"`
+	Enabled bool `json:"enabled" api:"required"`
 	// The subdomain domain name.
 	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
@@ -357,30 +369,26 @@ type SubdomainGetResponse struct {
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The DKIM selector used for email signing.
-	EmailSendingDKIMSelector string `json:"email_sending_dkim_selector"`
-	// The return-path domain used for bounce handling.
-	EmailSendingReturnPathDomain string `json:"email_sending_return_path_domain"`
-	// Whether Email Routing (receiving) is enabled on this subdomain. Read-only;
-	// included for informational purposes since both services share the subdomain row.
-	Enabled bool `json:"enabled"`
+	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
-	Modified time.Time                `json:"modified" format:"date-time"`
-	JSON     subdomainGetResponseJSON `json:"-"`
+	Modified time.Time `json:"modified" format:"date-time"`
+	// The return-path domain used for bounce handling.
+	ReturnPathDomain string                   `json:"return_path_domain"`
+	JSON             subdomainGetResponseJSON `json:"-"`
 }
 
 // subdomainGetResponseJSON contains the JSON metadata for the struct
 // [SubdomainGetResponse]
 type subdomainGetResponseJSON struct {
-	EmailSendingEnabled          apijson.Field
-	Name                         apijson.Field
-	Tag                          apijson.Field
-	Created                      apijson.Field
-	EmailSendingDKIMSelector     apijson.Field
-	EmailSendingReturnPathDomain apijson.Field
-	Enabled                      apijson.Field
-	Modified                     apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
+	Enabled          apijson.Field
+	Name             apijson.Field
+	Tag              apijson.Field
+	Created          apijson.Field
+	DKIMSelector     apijson.Field
+	Modified         apijson.Field
+	ReturnPathDomain apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *SubdomainGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -393,6 +401,8 @@ func (r subdomainGetResponseJSON) RawJSON() string {
 
 type SubdomainNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The subdomain name. Must be within the zone.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -543,16 +553,22 @@ func (r SubdomainNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubdomainListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SubdomainDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type SubdomainGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
