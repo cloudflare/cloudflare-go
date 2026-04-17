@@ -39,6 +39,11 @@ func NewLabelManagedResourceOperationService(opts ...option.RequestOption) (r *L
 func (r *LabelManagedResourceOperationService) Update(ctx context.Context, name string, params LabelManagedResourceOperationUpdateParams, opts ...option.RequestOption) (res *LabelManagedResourceOperationUpdateResponse, err error) {
 	var env LabelManagedResourceOperationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -114,6 +119,8 @@ func (r LabelManagedResourceOperationUpdateResponseSource) IsKnown() bool {
 
 type LabelManagedResourceOperationUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Operation IDs selector
 	Selector param.Field[LabelManagedResourceOperationUpdateParamsSelector] `json:"selector" api:"required"`

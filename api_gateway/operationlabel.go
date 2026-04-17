@@ -40,6 +40,11 @@ func NewOperationLabelService(opts ...option.RequestOption) (r *OperationLabelSe
 func (r *OperationLabelService) New(ctx context.Context, operationID string, params OperationLabelNewParams, opts ...option.RequestOption) (res *OperationLabelNewResponse, err error) {
 	var env OperationLabelNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -61,6 +66,11 @@ func (r *OperationLabelService) New(ctx context.Context, operationID string, par
 func (r *OperationLabelService) Update(ctx context.Context, operationID string, params OperationLabelUpdateParams, opts ...option.RequestOption) (res *OperationLabelUpdateResponse, err error) {
 	var env OperationLabelUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -82,6 +92,11 @@ func (r *OperationLabelService) Update(ctx context.Context, operationID string, 
 func (r *OperationLabelService) Delete(ctx context.Context, operationID string, body OperationLabelDeleteParams, opts ...option.RequestOption) (res *OperationLabelDeleteResponse, err error) {
 	var env OperationLabelDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -104,6 +119,11 @@ func (r *OperationLabelService) BulkNew(ctx context.Context, params OperationLab
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -131,6 +151,11 @@ func (r *OperationLabelService) BulkDelete(ctx context.Context, body OperationLa
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -158,6 +183,11 @@ func (r *OperationLabelService) BulkUpdate(ctx context.Context, params Operation
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -866,6 +896,8 @@ func (r OperationLabelBulkUpdateResponseLabelsSource) IsKnown() bool {
 
 type OperationLabelNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List of managed label names.
 	Managed param.Field[[]string] `json:"managed"`
@@ -922,6 +954,8 @@ func (r OperationLabelNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OperationLabelUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List of managed label names. Omitting this property or passing an empty array
 	// will result in all managed labels being removed from the operation
@@ -980,6 +1014,8 @@ func (r OperationLabelUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type OperationLabelDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -1028,6 +1064,8 @@ func (r OperationLabelDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type OperationLabelBulkNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Operation IDs selector
 	Selector param.Field[OperationLabelBulkNewParamsSelector] `json:"selector" api:"required"`
@@ -1076,11 +1114,15 @@ func (r OperationLabelBulkNewParamsUser) MarshalJSON() (data []byte, err error) 
 
 type OperationLabelBulkDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type OperationLabelBulkUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Managed labels to replace for all affected operations
 	Managed param.Field[OperationLabelBulkUpdateParamsManaged] `json:"managed" api:"required"`
