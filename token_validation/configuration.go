@@ -47,6 +47,11 @@ func NewConfigurationService(opts ...option.RequestOption) (r *ConfigurationServ
 func (r *ConfigurationService) New(ctx context.Context, params ConfigurationNewParams, opts ...option.RequestOption) (res *TokenConfig, err error) {
 	var env ConfigurationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -65,6 +70,11 @@ func (r *ConfigurationService) List(ctx context.Context, params ConfigurationLis
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -91,6 +101,11 @@ func (r *ConfigurationService) ListAutoPaging(ctx context.Context, params Config
 func (r *ConfigurationService) Delete(ctx context.Context, configID string, body ConfigurationDeleteParams, opts ...option.RequestOption) (res *ConfigurationDeleteResponse, err error) {
 	var env ConfigurationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -112,6 +127,11 @@ func (r *ConfigurationService) Delete(ctx context.Context, configID string, body
 func (r *ConfigurationService) Edit(ctx context.Context, configID string, params ConfigurationEditParams, opts ...option.RequestOption) (res *ConfigurationEditResponse, err error) {
 	var env ConfigurationEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -133,6 +153,11 @@ func (r *ConfigurationService) Edit(ctx context.Context, configID string, params
 func (r *ConfigurationService) Get(ctx context.Context, configID string, query ConfigurationGetParams, opts ...option.RequestOption) (res *TokenConfig, err error) {
 	var env ConfigurationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -663,6 +688,8 @@ func (r configurationEditResponseJSON) RawJSON() string {
 
 type ConfigurationNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID       param.Field[string]                            `path:"zone_id" api:"required"`
 	Credentials  param.Field[ConfigurationNewParamsCredentials] `json:"credentials" api:"required"`
 	Description  param.Field[string]                            `json:"description" api:"required"`
@@ -1025,6 +1052,8 @@ func (r ConfigurationNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigurationListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[int64] `query:"page"`
@@ -1043,6 +1072,8 @@ func (r ConfigurationListParams) URLQuery() (v url.Values) {
 
 type ConfigurationDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -1091,6 +1122,8 @@ func (r ConfigurationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigurationEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID       param.Field[string]   `path:"zone_id" api:"required"`
 	Description  param.Field[string]   `json:"description"`
 	Title        param.Field[string]   `json:"title"`
@@ -1146,6 +1179,8 @@ func (r ConfigurationEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigurationGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
