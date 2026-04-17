@@ -42,6 +42,11 @@ func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOp
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -68,6 +73,11 @@ func (r *DiscoveryOperationService) ListAutoPaging(ctx context.Context, params D
 func (r *DiscoveryOperationService) BulkEdit(ctx context.Context, params DiscoveryOperationBulkEditParams, opts ...option.RequestOption) (res *DiscoveryOperationBulkEditResponse, err error) {
 	var env DiscoveryOperationBulkEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -85,6 +95,11 @@ func (r *DiscoveryOperationService) BulkEdit(ctx context.Context, params Discove
 func (r *DiscoveryOperationService) Edit(ctx context.Context, operationID string, params DiscoveryOperationEditParams, opts ...option.RequestOption) (res *DiscoveryOperationEditResponse, err error) {
 	var env DiscoveryOperationEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -198,6 +213,8 @@ func (r DiscoveryOperationEditResponseState) IsKnown() bool {
 
 type DiscoveryOperationListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When `true`, only return API Discovery results that are not saved into API
 	// Shield Endpoint Management
@@ -326,6 +343,8 @@ func (r DiscoveryOperationListParamsState) IsKnown() bool {
 
 type DiscoveryOperationBulkEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]                             `path:"zone_id" api:"required"`
 	Body   map[string]DiscoveryOperationBulkEditParamsBody `json:"body" api:"required"`
 }
@@ -411,6 +430,8 @@ func (r DiscoveryOperationBulkEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type DiscoveryOperationEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Mark state of operation in API Discovery
 	//
