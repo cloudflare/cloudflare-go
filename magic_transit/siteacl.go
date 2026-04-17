@@ -40,6 +40,11 @@ func NewSiteACLService(opts ...option.RequestOption) (r *SiteACLService) {
 func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env SiteACLNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,6 +66,11 @@ func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLN
 func (r *SiteACLService) Update(ctx context.Context, siteID string, aclID string, params SiteACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env SiteACLUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -87,6 +97,11 @@ func (r *SiteACLService) List(ctx context.Context, siteID string, query SiteACLL
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -117,6 +132,11 @@ func (r *SiteACLService) ListAutoPaging(ctx context.Context, siteID string, quer
 func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclID string, body SiteACLDeleteParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env SiteACLDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -142,6 +162,11 @@ func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclID string
 func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclID string, params SiteACLEditParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env SiteACLEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -167,6 +192,11 @@ func (r *SiteACLService) Edit(ctx context.Context, siteID string, aclID string, 
 func (r *SiteACLService) Get(ctx context.Context, siteID string, aclID string, query SiteACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
 	var env SiteACLGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -316,6 +346,8 @@ type SubnetParam = string
 
 type SiteACLNewParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                `path:"account_id" api:"required"`
 	LAN1      param.Field[ACLConfigurationParam] `json:"lan_1" api:"required"`
 	LAN2      param.Field[ACLConfigurationParam] `json:"lan_2" api:"required"`
@@ -385,6 +417,8 @@ func (r SiteACLNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteACLUpdateParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Description for the ACL.
 	Description param.Field[string] `json:"description"`
@@ -454,11 +488,15 @@ func (r SiteACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteACLListParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteACLDeleteParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -508,6 +546,8 @@ func (r SiteACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteACLEditParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Description for the ACL.
 	Description param.Field[string] `json:"description"`
@@ -577,6 +617,8 @@ func (r SiteACLEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteACLGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
