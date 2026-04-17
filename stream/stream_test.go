@@ -32,6 +32,7 @@ func TestStreamNewWithOptionalParams(t *testing.T) {
 	)
 	err := client.Stream.New(context.TODO(), stream.StreamNewParams{
 		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body:           map[string]interface{}{},
 		TusResumable:   cloudflare.F(stream.StreamNewParamsTusResumable1_0_0),
 		UploadLength:   cloudflare.F(int64(0)),
 		DirectUser:     cloudflare.F(true),
@@ -63,16 +64,10 @@ func TestStreamListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Stream.List(context.TODO(), stream.StreamListParams{
 		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ID:            cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
-		After:         cloudflare.F(time.Now()),
 		Asc:           cloudflare.F(true),
-		Before:        cloudflare.F(time.Now()),
 		Creator:       cloudflare.F("creator-id_abcde12345"),
 		End:           cloudflare.F(time.Now()),
 		IncludeCounts: cloudflare.F(true),
-		Limit:         cloudflare.F(int64(1)),
-		LiveInputID:   cloudflare.F("live_input_id"),
-		Name:          cloudflare.F("name"),
 		Search:        cloudflare.F("puppy.mp4"),
 		Start:         cloudflare.F(time.Now()),
 		Status:        cloudflare.F(stream.StreamListParamsStatusInprogress),
@@ -143,16 +138,9 @@ func TestStreamEditWithOptionalParams(t *testing.T) {
 			Meta: cloudflare.F[any](map[string]interface{}{
 				"name": "video12345.mp4",
 			}),
-			PublicDetails: cloudflare.F(stream.StreamEditParamsPublicDetails{
-				ChannelLink: cloudflare.F("channel_link"),
-				Logo:        cloudflare.F("logo"),
-				ShareLink:   cloudflare.F("share_link"),
-				Title:       cloudflare.F("title"),
-			}),
 			RequireSignedURLs:     cloudflare.F(true),
 			ScheduledDeletion:     cloudflare.F(time.Now()),
 			ThumbnailTimestampPct: cloudflare.F(0.529241),
-			UID:                   cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
 			UploadExpiry:          cloudflare.F(time.Now()),
 		},
 	)
