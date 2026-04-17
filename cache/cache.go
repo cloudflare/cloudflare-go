@@ -107,6 +107,11 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts ...option.RequestOption) (res *CachePurgeResponse, err error) {
 	var env CachePurgeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -142,6 +147,7 @@ func (r cachePurgeResponseJSON) RawJSON() string {
 }
 
 type CachePurgeParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]       `path:"zone_id" api:"required"`
 	Body   CachePurgeParamsBodyUnion `json:"body" api:"required"`
 }
