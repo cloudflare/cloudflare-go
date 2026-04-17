@@ -43,6 +43,11 @@ func NewCaptionLanguageService(opts ...option.RequestOption) (r *CaptionLanguage
 func (r *CaptionLanguageService) New(ctx context.Context, identifier string, language string, body CaptionLanguageNewParams, opts ...option.RequestOption) (res *Caption, err error) {
 	var env CaptionLanguageNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -69,6 +74,11 @@ func (r *CaptionLanguageService) New(ctx context.Context, identifier string, lan
 func (r *CaptionLanguageService) Update(ctx context.Context, identifier string, language string, params CaptionLanguageUpdateParams, opts ...option.RequestOption) (res *Caption, err error) {
 	var env CaptionLanguageUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -94,6 +104,11 @@ func (r *CaptionLanguageService) Update(ctx context.Context, identifier string, 
 func (r *CaptionLanguageService) Delete(ctx context.Context, identifier string, language string, body CaptionLanguageDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env CaptionLanguageDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -119,6 +134,11 @@ func (r *CaptionLanguageService) Delete(ctx context.Context, identifier string, 
 func (r *CaptionLanguageService) Get(ctx context.Context, identifier string, language string, query CaptionLanguageGetParams, opts ...option.RequestOption) (res *Caption, err error) {
 	var env CaptionLanguageGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -142,6 +162,8 @@ func (r *CaptionLanguageService) Get(ctx context.Context, identifier string, lan
 
 type CaptionLanguageNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -286,6 +308,8 @@ func (r CaptionLanguageNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CaptionLanguageUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The WebVTT file containing the caption or subtitle content.
 	File param.Field[string] `json:"file" api:"required"`
@@ -447,6 +471,8 @@ func (r CaptionLanguageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type CaptionLanguageDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -591,6 +617,8 @@ func (r CaptionLanguageDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CaptionLanguageGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

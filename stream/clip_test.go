@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
@@ -29,15 +30,21 @@ func TestClipNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Stream.Clip.New(context.TODO(), stream.ClipNewParams{
-		AccountID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ClippedFromVideoUID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		EndTimeSeconds:        cloudflare.F(int64(0)),
-		StartTimeSeconds:      cloudflare.F(int64(0)),
-		AllowedOrigins:        cloudflare.F([]stream.AllowedOriginsParam{"example.com"}),
-		Creator:               cloudflare.F("creator-id_abcde12345"),
-		MaxDurationSeconds:    cloudflare.F(int64(1)),
+		AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ClippedFromVideoUID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		EndTimeSeconds:      cloudflare.F(int64(0)),
+		StartTimeSeconds:    cloudflare.F(int64(0)),
+		AllowedOrigins:      cloudflare.F([]stream.AllowedOriginsParam{"example.com"}),
+		Creator:             cloudflare.F("creator-id_abcde12345"),
+		Input:               cloudflare.F("https://example.com/myvideo.mp4"),
+		Meta: cloudflare.F[any](map[string]interface{}{
+			"name": "video12345.mp4",
+		}),
+		Name:                  cloudflare.F("myvideo.mp4"),
 		RequireSignedURLs:     cloudflare.F(true),
+		ScheduledDeletion:     cloudflare.F(time.Now()),
 		ThumbnailTimestampPct: cloudflare.F(0.529241),
+		URL:                   cloudflare.F("https://example.com/myvideo.mp4"),
 		Watermark: cloudflare.F(stream.ClipNewParamsWatermark{
 			UID: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
 		}),

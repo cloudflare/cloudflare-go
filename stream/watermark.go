@@ -3,16 +3,13 @@
 package stream
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
-	"mime/multipart"
 	"net/http"
 	"slices"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v6/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -44,6 +41,11 @@ func NewWatermarkService(opts ...option.RequestOption) (r *WatermarkService) {
 func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *Watermark, err error) {
 	var env WatermarkNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,6 +64,11 @@ func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -88,6 +95,11 @@ func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkLi
 func (r *WatermarkService) Delete(ctx context.Context, identifier string, body WatermarkDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env WatermarkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -109,6 +121,11 @@ func (r *WatermarkService) Delete(ctx context.Context, identifier string, body W
 func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *Watermark, err error) {
 	var env WatermarkGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -189,9 +206,9 @@ func (r watermarkJSON) RawJSON() string {
 
 type WatermarkNewParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The image file to upload.
-	File param.Field[string] `json:"file" api:"required"`
 	// A short description of the watermark profile.
 	Name param.Field[string] `json:"name"`
 	// The translucency of the image. A value of `0.0` makes the image completely
@@ -211,21 +228,12 @@ type WatermarkNewParams struct {
 	// will adapt to horizontal and vertical videos automatically. `0.0` indicates no
 	// scaling (use the size of the image as-is), and `1.0 `fills the entire video.
 	Scale param.Field[float64] `json:"scale"`
+	// URL of the watermark image to copy.
+	URL param.Field[string] `json:"url" format:"uri"`
 }
 
-func (r WatermarkNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
-	buf := bytes.NewBuffer(nil)
-	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
-	if err != nil {
-		writer.Close()
-		return nil, "", err
-	}
-	err = writer.Close()
-	if err != nil {
-		return nil, "", err
-	}
-	return buf.Bytes(), writer.FormDataContentType(), nil
+func (r WatermarkNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type WatermarkNewResponseEnvelope struct {
@@ -369,11 +377,15 @@ func (r WatermarkNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type WatermarkListParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WatermarkDeleteParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -518,6 +530,8 @@ func (r WatermarkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type WatermarkGetParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
