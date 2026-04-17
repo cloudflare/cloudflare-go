@@ -42,6 +42,11 @@ func NewSnapshotService(opts ...option.RequestOption) (r *SnapshotService) {
 func (r *SnapshotService) New(ctx context.Context, params SnapshotNewParams, opts ...option.RequestOption) (res *SnapshotNewResponse, err error) {
 	var env SnapshotNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -82,6 +87,8 @@ func (r snapshotNewResponseJSON) RawJSON() string {
 
 type SnapshotNewParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]        `path:"account_id" api:"required"`
 	Body      SnapshotNewParamsBodyUnion `json:"body" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.

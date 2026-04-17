@@ -68,8 +68,8 @@ func TestJsonNewWithOptionalParams(t *testing.T) {
 				URL:          cloudflare.F("url"),
 			}}),
 			CustomAI: cloudflare.F([]browser_rendering.JsonNewParamsBodyObjectCustomAI{{
-				Authorization: cloudflare.F("authorization"),
 				Model:         cloudflare.F("model"),
+				Authorization: cloudflare.F("authorization"),
 			}}),
 			EmulateMediaType: cloudflare.F("emulateMediaType"),
 			GotoOptions: cloudflare.F(browser_rendering.JsonNewParamsBodyObjectGotoOptions{
