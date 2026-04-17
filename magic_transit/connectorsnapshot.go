@@ -42,6 +42,11 @@ func NewConnectorSnapshotService(opts ...option.RequestOption) (r *ConnectorSnap
 func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string, params ConnectorSnapshotListParams, opts ...option.RequestOption) (res *ConnectorSnapshotListResponse, err error) {
 	var env ConnectorSnapshotListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,6 +68,11 @@ func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string,
 func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, snapshotT float64, query ConnectorSnapshotGetParams, opts ...option.RequestOption) (res *ConnectorSnapshotGetResponse, err error) {
 	var env ConnectorSnapshotGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -882,28 +892,34 @@ type ConnectorSnapshotGetResponseMount struct {
 	Name string `json:"name" api:"required"`
 	// Available disk size (bytes)
 	AvailableBytes float64 `json:"available_bytes"`
+	// Available inodes on filesystem
+	AvailableInodes float64 `json:"available_inodes"`
 	// Determines whether the disk is read-only
 	IsReadOnly bool `json:"is_read_only"`
 	// Determines whether the disk is removable
 	IsRemovable bool `json:"is_removable"`
 	// Total disk size (bytes)
-	TotalBytes float64                               `json:"total_bytes"`
-	JSON       connectorSnapshotGetResponseMountJSON `json:"-"`
+	TotalBytes float64 `json:"total_bytes"`
+	// Total inodes on filesystem
+	TotalInodes float64                               `json:"total_inodes"`
+	JSON        connectorSnapshotGetResponseMountJSON `json:"-"`
 }
 
 // connectorSnapshotGetResponseMountJSON contains the JSON metadata for the struct
 // [ConnectorSnapshotGetResponseMount]
 type connectorSnapshotGetResponseMountJSON struct {
-	FileSystem     apijson.Field
-	Kind           apijson.Field
-	MountPoint     apijson.Field
-	Name           apijson.Field
-	AvailableBytes apijson.Field
-	IsReadOnly     apijson.Field
-	IsRemovable    apijson.Field
-	TotalBytes     apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	FileSystem      apijson.Field
+	Kind            apijson.Field
+	MountPoint      apijson.Field
+	Name            apijson.Field
+	AvailableBytes  apijson.Field
+	AvailableInodes apijson.Field
+	IsReadOnly      apijson.Field
+	IsRemovable     apijson.Field
+	TotalBytes      apijson.Field
+	TotalInodes     apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *ConnectorSnapshotGetResponseMount) UnmarshalJSON(data []byte) (err error) {
@@ -1061,6 +1077,8 @@ func (r connectorSnapshotGetResponseTunnelJSON) RawJSON() string {
 
 type ConnectorSnapshotListParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	From      param.Field[float64] `query:"from" api:"required"`
 	To        param.Field[float64] `query:"to" api:"required"`
@@ -1152,6 +1170,8 @@ func (r connectorSnapshotListResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type ConnectorSnapshotGetParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

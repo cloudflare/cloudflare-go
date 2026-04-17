@@ -48,6 +48,11 @@ func NewSiteService(opts ...option.RequestOption) (r *SiteService) {
 func (r *SiteService) New(ctx context.Context, params SiteNewParams, opts ...option.RequestOption) (res *Site, err error) {
 	var env SiteNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,6 +70,11 @@ func (r *SiteService) New(ctx context.Context, params SiteNewParams, opts ...opt
 func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpdateParams, opts ...option.RequestOption) (res *Site, err error) {
 	var env SiteUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -89,6 +99,11 @@ func (r *SiteService) List(ctx context.Context, params SiteListParams, opts ...o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -117,6 +132,11 @@ func (r *SiteService) ListAutoPaging(ctx context.Context, params SiteListParams,
 func (r *SiteService) Delete(ctx context.Context, siteID string, body SiteDeleteParams, opts ...option.RequestOption) (res *Site, err error) {
 	var env SiteDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -138,6 +158,11 @@ func (r *SiteService) Delete(ctx context.Context, siteID string, body SiteDelete
 func (r *SiteService) Edit(ctx context.Context, siteID string, params SiteEditParams, opts ...option.RequestOption) (res *Site, err error) {
 	var env SiteEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -162,6 +187,11 @@ func (r *SiteService) Get(ctx context.Context, siteID string, params SiteGetPara
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -257,6 +287,8 @@ func (r SiteLocationParam) MarshalJSON() (data []byte, err error) {
 
 type SiteNewParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the site.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -321,6 +353,8 @@ func (r SiteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteUpdateParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Magic Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
@@ -382,6 +416,8 @@ func (r SiteUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteListParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Identifier
 	Connectorid param.Field[string] `query:"connectorid"`
@@ -397,6 +433,8 @@ func (r SiteListParams) URLQuery() (v url.Values) {
 
 type SiteDeleteParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -445,6 +483,8 @@ func (r SiteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteEditParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Magic Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
@@ -506,6 +546,8 @@ func (r SiteEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
