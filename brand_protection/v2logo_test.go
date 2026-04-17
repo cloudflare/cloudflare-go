@@ -15,6 +15,7 @@ import (
 )
 
 func TestV2LogoNewWithOptionalParams(t *testing.T) {
+	t.Skip("HTTP 401 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -45,6 +46,7 @@ func TestV2LogoNewWithOptionalParams(t *testing.T) {
 }
 
 func TestV2LogoDelete(t *testing.T) {
+	t.Skip("HTTP 401 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -75,6 +77,7 @@ func TestV2LogoDelete(t *testing.T) {
 }
 
 func TestV2LogoGetWithOptionalParams(t *testing.T) {
+	t.Skip("HTTP 401 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
