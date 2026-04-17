@@ -28,7 +28,6 @@ import (
 // the [NewInstanceService] method instead.
 type InstanceService struct {
 	Options []option.RequestOption
-	Items   *InstanceItemService
 	Jobs    *InstanceJobService
 }
 
@@ -38,7 +37,6 @@ type InstanceService struct {
 func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 	r = &InstanceService{}
 	r.Options = opts
-	r.Items = NewInstanceItemService(opts...)
 	r.Jobs = NewInstanceJobService(opts...)
 	return
 }
@@ -47,6 +45,11 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,6 +67,11 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 func (r *InstanceService) Update(ctx context.Context, id string, params InstanceUpdateParams, opts ...option.RequestOption) (res *InstanceUpdateResponse, err error) {
 	var env InstanceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -86,6 +94,11 @@ func (r *InstanceService) List(ctx context.Context, params InstanceListParams, o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -112,6 +125,11 @@ func (r *InstanceService) ListAutoPaging(ctx context.Context, params InstanceLis
 func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDeleteParams, opts ...option.RequestOption) (res *InstanceDeleteResponse, err error) {
 	var env InstanceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -133,6 +151,11 @@ func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDe
 // content as context for generating responses.
 func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params InstanceChatCompletionsParams, opts ...option.RequestOption) (res *InstanceChatCompletionsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -150,6 +173,11 @@ func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params
 func (r *InstanceService) Read(ctx context.Context, id string, query InstanceReadParams, opts ...option.RequestOption) (res *InstanceReadResponse, err error) {
 	var env InstanceReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -172,6 +200,11 @@ func (r *InstanceService) Read(ctx context.Context, id string, query InstanceRea
 func (r *InstanceService) Search(ctx context.Context, id string, params InstanceSearchParams, opts ...option.RequestOption) (res *InstanceSearchResponse, err error) {
 	var env InstanceSearchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -193,6 +226,11 @@ func (r *InstanceService) Search(ctx context.Context, id string, params Instance
 func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceStatsParams, opts ...option.RequestOption) (res *InstanceStatsResponse, err error) {
 	var env InstanceStatsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -252,9 +290,12 @@ type InstanceNewResponse struct {
 	Source               string                                  `json:"source" api:"nullable"`
 	SourceParams         InstanceNewResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                  `json:"status"`
-	TokenID              string                                  `json:"token_id" format:"uuid"`
-	Type                 InstanceNewResponseType                 `json:"type" api:"nullable"`
-	JSON                 instanceNewResponseJSON                 `json:"-"`
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	SyncInterval InstanceNewResponseSyncInterval `json:"sync_interval"`
+	TokenID      string                          `json:"token_id" format:"uuid"`
+	Type         InstanceNewResponseType         `json:"type" api:"nullable"`
+	JSON         instanceNewResponseJSON         `json:"-"`
 }
 
 // instanceNewResponseJSON contains the JSON metadata for the struct
@@ -295,6 +336,7 @@ type instanceNewResponseJSON struct {
 	Source               apijson.Field
 	SourceParams         apijson.Field
 	Status               apijson.Field
+	SyncInterval         apijson.Field
 	TokenID              apijson.Field
 	Type                 apijson.Field
 	raw                  string
@@ -321,6 +363,8 @@ const (
 	InstanceNewResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceNewResponseAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceNewResponseAISearchModelCfMoonshotaiKimiK2Instruct            InstanceNewResponseAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceNewResponseAISearchModelCfGoogleGemma3_12bIt                  InstanceNewResponseAISearchModel = "@cf/google/gemma-3-12b-it"
+	InstanceNewResponseAISearchModelCfGoogleGemma4_26bA4bIt               InstanceNewResponseAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceNewResponseAISearchModelCfMoonshotaiKimiK2_5                  InstanceNewResponseAISearchModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceNewResponseAISearchModelAnthropicClaude3_7Sonnet              InstanceNewResponseAISearchModel = "anthropic/claude-3-7-sonnet"
 	InstanceNewResponseAISearchModelAnthropicClaudeSonnet4                InstanceNewResponseAISearchModel = "anthropic/claude-sonnet-4"
 	InstanceNewResponseAISearchModelAnthropicClaudeOpus4                  InstanceNewResponseAISearchModel = "anthropic/claude-opus-4"
@@ -344,7 +388,7 @@ const (
 
 func (r InstanceNewResponseAISearchModel) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceNewResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceNewResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceNewResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceNewResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceNewResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceNewResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceNewResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceNewResponseAISearchModelCfGoogleGemma3_12bIt, InstanceNewResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceNewResponseAISearchModelAnthropicClaudeSonnet4, InstanceNewResponseAISearchModelAnthropicClaudeOpus4, InstanceNewResponseAISearchModelAnthropicClaude3_5Haiku, InstanceNewResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceNewResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceNewResponseAISearchModelCerebrasLlama3_3_70b, InstanceNewResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceNewResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceNewResponseAISearchModelCerebrasGptOSs120b, InstanceNewResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceNewResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceNewResponseAISearchModelGrokGrok4, InstanceNewResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceNewResponseAISearchModelGroqLlama3_1_8bInstant, InstanceNewResponseAISearchModelOpenAIGpt5, InstanceNewResponseAISearchModelOpenAIGpt5Mini, InstanceNewResponseAISearchModelOpenAIGpt5Nano, InstanceNewResponseAISearchModelEmpty:
+	case InstanceNewResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceNewResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceNewResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceNewResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceNewResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceNewResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceNewResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceNewResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceNewResponseAISearchModelCfGoogleGemma3_12bIt, InstanceNewResponseAISearchModelCfGoogleGemma4_26bA4bIt, InstanceNewResponseAISearchModelCfMoonshotaiKimiK2_5, InstanceNewResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceNewResponseAISearchModelAnthropicClaudeSonnet4, InstanceNewResponseAISearchModelAnthropicClaudeOpus4, InstanceNewResponseAISearchModelAnthropicClaude3_5Haiku, InstanceNewResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceNewResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceNewResponseAISearchModelCerebrasLlama3_3_70b, InstanceNewResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceNewResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceNewResponseAISearchModelCerebrasGptOSs120b, InstanceNewResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceNewResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceNewResponseAISearchModelGrokGrok4, InstanceNewResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceNewResponseAISearchModelGroqLlama3_1_8bInstant, InstanceNewResponseAISearchModelOpenAIGpt5, InstanceNewResponseAISearchModelOpenAIGpt5Mini, InstanceNewResponseAISearchModelOpenAIGpt5Nano, InstanceNewResponseAISearchModelEmpty:
 		return true
 	}
 	return false
@@ -516,15 +560,17 @@ func (r InstanceNewResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceNewResponseMetadata struct {
-	CreatedFromAISearchWizard bool                            `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                          `json:"worker_domain"`
-	JSON                      instanceNewResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                       `json:"created_from_aisearch_wizard"`
+	SearchForAgents           InstanceNewResponseMetadataSearchForAgents `json:"search_for_agents"`
+	WorkerDomain              string                                     `json:"worker_domain"`
+	JSON                      instanceNewResponseMetadataJSON            `json:"-"`
 }
 
 // instanceNewResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceNewResponseMetadata]
 type instanceNewResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -535,6 +581,31 @@ func (r *InstanceNewResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r instanceNewResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceNewResponseMetadataSearchForAgents struct {
+	Hostname string                                         `json:"hostname" api:"required"`
+	ZoneID   string                                         `json:"zone_id" api:"required"`
+	ZoneName string                                         `json:"zone_name" api:"required"`
+	JSON     instanceNewResponseMetadataSearchForAgentsJSON `json:"-"`
+}
+
+// instanceNewResponseMetadataSearchForAgentsJSON contains the JSON metadata for
+// the struct [InstanceNewResponseMetadataSearchForAgents]
+type instanceNewResponseMetadataSearchForAgentsJSON struct {
+	Hostname    apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceNewResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -702,8 +773,6 @@ type InstanceNewResponseRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode InstanceNewResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceNewResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -779,8 +848,6 @@ func (r InstanceNewResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceNewResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -808,6 +875,8 @@ const (
 	InstanceNewResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceNewResponseRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceNewResponseRewriteModelCfMoonshotaiKimiK2Instruct            InstanceNewResponseRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceNewResponseRewriteModelCfGoogleGemma3_12bIt                  InstanceNewResponseRewriteModel = "@cf/google/gemma-3-12b-it"
+	InstanceNewResponseRewriteModelCfGoogleGemma4_26bA4bIt               InstanceNewResponseRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceNewResponseRewriteModelCfMoonshotaiKimiK2_5                  InstanceNewResponseRewriteModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceNewResponseRewriteModelAnthropicClaude3_7Sonnet              InstanceNewResponseRewriteModel = "anthropic/claude-3-7-sonnet"
 	InstanceNewResponseRewriteModelAnthropicClaudeSonnet4                InstanceNewResponseRewriteModel = "anthropic/claude-sonnet-4"
 	InstanceNewResponseRewriteModelAnthropicClaudeOpus4                  InstanceNewResponseRewriteModel = "anthropic/claude-opus-4"
@@ -831,7 +900,7 @@ const (
 
 func (r InstanceNewResponseRewriteModel) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceNewResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceNewResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceNewResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceNewResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceNewResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceNewResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceNewResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceNewResponseRewriteModelCfGoogleGemma3_12bIt, InstanceNewResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceNewResponseRewriteModelAnthropicClaudeSonnet4, InstanceNewResponseRewriteModelAnthropicClaudeOpus4, InstanceNewResponseRewriteModelAnthropicClaude3_5Haiku, InstanceNewResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceNewResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceNewResponseRewriteModelCerebrasLlama3_3_70b, InstanceNewResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceNewResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceNewResponseRewriteModelCerebrasGptOSs120b, InstanceNewResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceNewResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceNewResponseRewriteModelGrokGrok4, InstanceNewResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceNewResponseRewriteModelGroqLlama3_1_8bInstant, InstanceNewResponseRewriteModelOpenAIGpt5, InstanceNewResponseRewriteModelOpenAIGpt5Mini, InstanceNewResponseRewriteModelOpenAIGpt5Nano, InstanceNewResponseRewriteModelEmpty:
+	case InstanceNewResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceNewResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceNewResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceNewResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceNewResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceNewResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceNewResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceNewResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceNewResponseRewriteModelCfGoogleGemma3_12bIt, InstanceNewResponseRewriteModelCfGoogleGemma4_26bA4bIt, InstanceNewResponseRewriteModelCfMoonshotaiKimiK2_5, InstanceNewResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceNewResponseRewriteModelAnthropicClaudeSonnet4, InstanceNewResponseRewriteModelAnthropicClaudeOpus4, InstanceNewResponseRewriteModelAnthropicClaude3_5Haiku, InstanceNewResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceNewResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceNewResponseRewriteModelCerebrasLlama3_3_70b, InstanceNewResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceNewResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceNewResponseRewriteModelCerebrasGptOSs120b, InstanceNewResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceNewResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceNewResponseRewriteModelGrokGrok4, InstanceNewResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceNewResponseRewriteModelGroqLlama3_1_8bInstant, InstanceNewResponseRewriteModelOpenAIGpt5, InstanceNewResponseRewriteModelOpenAIGpt5Mini, InstanceNewResponseRewriteModelOpenAIGpt5Nano, InstanceNewResponseRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -1047,6 +1116,29 @@ func (r instanceNewResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() str
 	return r.raw
 }
 
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+type InstanceNewResponseSyncInterval float64
+
+const (
+	InstanceNewResponseSyncInterval900   InstanceNewResponseSyncInterval = 900
+	InstanceNewResponseSyncInterval1800  InstanceNewResponseSyncInterval = 1800
+	InstanceNewResponseSyncInterval3600  InstanceNewResponseSyncInterval = 3600
+	InstanceNewResponseSyncInterval7200  InstanceNewResponseSyncInterval = 7200
+	InstanceNewResponseSyncInterval14400 InstanceNewResponseSyncInterval = 14400
+	InstanceNewResponseSyncInterval21600 InstanceNewResponseSyncInterval = 21600
+	InstanceNewResponseSyncInterval43200 InstanceNewResponseSyncInterval = 43200
+	InstanceNewResponseSyncInterval86400 InstanceNewResponseSyncInterval = 86400
+)
+
+func (r InstanceNewResponseSyncInterval) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseSyncInterval900, InstanceNewResponseSyncInterval1800, InstanceNewResponseSyncInterval3600, InstanceNewResponseSyncInterval7200, InstanceNewResponseSyncInterval14400, InstanceNewResponseSyncInterval21600, InstanceNewResponseSyncInterval43200, InstanceNewResponseSyncInterval86400:
+		return true
+	}
+	return false
+}
+
 type InstanceNewResponseType string
 
 const (
@@ -1104,9 +1196,12 @@ type InstanceUpdateResponse struct {
 	Source               string                                     `json:"source" api:"nullable"`
 	SourceParams         InstanceUpdateResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                     `json:"status"`
-	TokenID              string                                     `json:"token_id" format:"uuid"`
-	Type                 InstanceUpdateResponseType                 `json:"type" api:"nullable"`
-	JSON                 instanceUpdateResponseJSON                 `json:"-"`
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	SyncInterval InstanceUpdateResponseSyncInterval `json:"sync_interval"`
+	TokenID      string                             `json:"token_id" format:"uuid"`
+	Type         InstanceUpdateResponseType         `json:"type" api:"nullable"`
+	JSON         instanceUpdateResponseJSON         `json:"-"`
 }
 
 // instanceUpdateResponseJSON contains the JSON metadata for the struct
@@ -1147,6 +1242,7 @@ type instanceUpdateResponseJSON struct {
 	Source               apijson.Field
 	SourceParams         apijson.Field
 	Status               apijson.Field
+	SyncInterval         apijson.Field
 	TokenID              apijson.Field
 	Type                 apijson.Field
 	raw                  string
@@ -1173,6 +1269,8 @@ const (
 	InstanceUpdateResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceUpdateResponseAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceUpdateResponseAISearchModelCfMoonshotaiKimiK2Instruct            InstanceUpdateResponseAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceUpdateResponseAISearchModelCfGoogleGemma3_12bIt                  InstanceUpdateResponseAISearchModel = "@cf/google/gemma-3-12b-it"
+	InstanceUpdateResponseAISearchModelCfGoogleGemma4_26bA4bIt               InstanceUpdateResponseAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceUpdateResponseAISearchModelCfMoonshotaiKimiK2_5                  InstanceUpdateResponseAISearchModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceUpdateResponseAISearchModelAnthropicClaude3_7Sonnet              InstanceUpdateResponseAISearchModel = "anthropic/claude-3-7-sonnet"
 	InstanceUpdateResponseAISearchModelAnthropicClaudeSonnet4                InstanceUpdateResponseAISearchModel = "anthropic/claude-sonnet-4"
 	InstanceUpdateResponseAISearchModelAnthropicClaudeOpus4                  InstanceUpdateResponseAISearchModel = "anthropic/claude-opus-4"
@@ -1196,7 +1294,7 @@ const (
 
 func (r InstanceUpdateResponseAISearchModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceUpdateResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceUpdateResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceUpdateResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceUpdateResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceUpdateResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceUpdateResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceUpdateResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceUpdateResponseAISearchModelCfGoogleGemma3_12bIt, InstanceUpdateResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceUpdateResponseAISearchModelAnthropicClaudeSonnet4, InstanceUpdateResponseAISearchModelAnthropicClaudeOpus4, InstanceUpdateResponseAISearchModelAnthropicClaude3_5Haiku, InstanceUpdateResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceUpdateResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceUpdateResponseAISearchModelCerebrasLlama3_3_70b, InstanceUpdateResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceUpdateResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceUpdateResponseAISearchModelCerebrasGptOSs120b, InstanceUpdateResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceUpdateResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceUpdateResponseAISearchModelGrokGrok4, InstanceUpdateResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceUpdateResponseAISearchModelGroqLlama3_1_8bInstant, InstanceUpdateResponseAISearchModelOpenAIGpt5, InstanceUpdateResponseAISearchModelOpenAIGpt5Mini, InstanceUpdateResponseAISearchModelOpenAIGpt5Nano, InstanceUpdateResponseAISearchModelEmpty:
+	case InstanceUpdateResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceUpdateResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceUpdateResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceUpdateResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceUpdateResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceUpdateResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceUpdateResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceUpdateResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceUpdateResponseAISearchModelCfGoogleGemma3_12bIt, InstanceUpdateResponseAISearchModelCfGoogleGemma4_26bA4bIt, InstanceUpdateResponseAISearchModelCfMoonshotaiKimiK2_5, InstanceUpdateResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceUpdateResponseAISearchModelAnthropicClaudeSonnet4, InstanceUpdateResponseAISearchModelAnthropicClaudeOpus4, InstanceUpdateResponseAISearchModelAnthropicClaude3_5Haiku, InstanceUpdateResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceUpdateResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceUpdateResponseAISearchModelCerebrasLlama3_3_70b, InstanceUpdateResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceUpdateResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceUpdateResponseAISearchModelCerebrasGptOSs120b, InstanceUpdateResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceUpdateResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceUpdateResponseAISearchModelGrokGrok4, InstanceUpdateResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceUpdateResponseAISearchModelGroqLlama3_1_8bInstant, InstanceUpdateResponseAISearchModelOpenAIGpt5, InstanceUpdateResponseAISearchModelOpenAIGpt5Mini, InstanceUpdateResponseAISearchModelOpenAIGpt5Nano, InstanceUpdateResponseAISearchModelEmpty:
 		return true
 	}
 	return false
@@ -1368,15 +1466,17 @@ func (r InstanceUpdateResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceUpdateResponseMetadata struct {
-	CreatedFromAISearchWizard bool                               `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                             `json:"worker_domain"`
-	JSON                      instanceUpdateResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                          `json:"created_from_aisearch_wizard"`
+	SearchForAgents           InstanceUpdateResponseMetadataSearchForAgents `json:"search_for_agents"`
+	WorkerDomain              string                                        `json:"worker_domain"`
+	JSON                      instanceUpdateResponseMetadataJSON            `json:"-"`
 }
 
 // instanceUpdateResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceUpdateResponseMetadata]
 type instanceUpdateResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -1387,6 +1487,31 @@ func (r *InstanceUpdateResponseMetadata) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r instanceUpdateResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceUpdateResponseMetadataSearchForAgents struct {
+	Hostname string                                            `json:"hostname" api:"required"`
+	ZoneID   string                                            `json:"zone_id" api:"required"`
+	ZoneName string                                            `json:"zone_name" api:"required"`
+	JSON     instanceUpdateResponseMetadataSearchForAgentsJSON `json:"-"`
+}
+
+// instanceUpdateResponseMetadataSearchForAgentsJSON contains the JSON metadata for
+// the struct [InstanceUpdateResponseMetadataSearchForAgents]
+type instanceUpdateResponseMetadataSearchForAgentsJSON struct {
+	Hostname    apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1555,8 +1680,6 @@ type InstanceUpdateResponseRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode InstanceUpdateResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceUpdateResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -1632,8 +1755,6 @@ func (r InstanceUpdateResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceUpdateResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -1661,6 +1782,8 @@ const (
 	InstanceUpdateResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceUpdateResponseRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceUpdateResponseRewriteModelCfMoonshotaiKimiK2Instruct            InstanceUpdateResponseRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceUpdateResponseRewriteModelCfGoogleGemma3_12bIt                  InstanceUpdateResponseRewriteModel = "@cf/google/gemma-3-12b-it"
+	InstanceUpdateResponseRewriteModelCfGoogleGemma4_26bA4bIt               InstanceUpdateResponseRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceUpdateResponseRewriteModelCfMoonshotaiKimiK2_5                  InstanceUpdateResponseRewriteModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceUpdateResponseRewriteModelAnthropicClaude3_7Sonnet              InstanceUpdateResponseRewriteModel = "anthropic/claude-3-7-sonnet"
 	InstanceUpdateResponseRewriteModelAnthropicClaudeSonnet4                InstanceUpdateResponseRewriteModel = "anthropic/claude-sonnet-4"
 	InstanceUpdateResponseRewriteModelAnthropicClaudeOpus4                  InstanceUpdateResponseRewriteModel = "anthropic/claude-opus-4"
@@ -1684,7 +1807,7 @@ const (
 
 func (r InstanceUpdateResponseRewriteModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceUpdateResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceUpdateResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceUpdateResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceUpdateResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceUpdateResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceUpdateResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceUpdateResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceUpdateResponseRewriteModelCfGoogleGemma3_12bIt, InstanceUpdateResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceUpdateResponseRewriteModelAnthropicClaudeSonnet4, InstanceUpdateResponseRewriteModelAnthropicClaudeOpus4, InstanceUpdateResponseRewriteModelAnthropicClaude3_5Haiku, InstanceUpdateResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceUpdateResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceUpdateResponseRewriteModelCerebrasLlama3_3_70b, InstanceUpdateResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceUpdateResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceUpdateResponseRewriteModelCerebrasGptOSs120b, InstanceUpdateResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceUpdateResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceUpdateResponseRewriteModelGrokGrok4, InstanceUpdateResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceUpdateResponseRewriteModelGroqLlama3_1_8bInstant, InstanceUpdateResponseRewriteModelOpenAIGpt5, InstanceUpdateResponseRewriteModelOpenAIGpt5Mini, InstanceUpdateResponseRewriteModelOpenAIGpt5Nano, InstanceUpdateResponseRewriteModelEmpty:
+	case InstanceUpdateResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceUpdateResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceUpdateResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceUpdateResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceUpdateResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceUpdateResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceUpdateResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceUpdateResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceUpdateResponseRewriteModelCfGoogleGemma3_12bIt, InstanceUpdateResponseRewriteModelCfGoogleGemma4_26bA4bIt, InstanceUpdateResponseRewriteModelCfMoonshotaiKimiK2_5, InstanceUpdateResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceUpdateResponseRewriteModelAnthropicClaudeSonnet4, InstanceUpdateResponseRewriteModelAnthropicClaudeOpus4, InstanceUpdateResponseRewriteModelAnthropicClaude3_5Haiku, InstanceUpdateResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceUpdateResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceUpdateResponseRewriteModelCerebrasLlama3_3_70b, InstanceUpdateResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceUpdateResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceUpdateResponseRewriteModelCerebrasGptOSs120b, InstanceUpdateResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceUpdateResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceUpdateResponseRewriteModelGrokGrok4, InstanceUpdateResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceUpdateResponseRewriteModelGroqLlama3_1_8bInstant, InstanceUpdateResponseRewriteModelOpenAIGpt5, InstanceUpdateResponseRewriteModelOpenAIGpt5Mini, InstanceUpdateResponseRewriteModelOpenAIGpt5Nano, InstanceUpdateResponseRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -1903,6 +2026,29 @@ func (r instanceUpdateResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() 
 	return r.raw
 }
 
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+type InstanceUpdateResponseSyncInterval float64
+
+const (
+	InstanceUpdateResponseSyncInterval900   InstanceUpdateResponseSyncInterval = 900
+	InstanceUpdateResponseSyncInterval1800  InstanceUpdateResponseSyncInterval = 1800
+	InstanceUpdateResponseSyncInterval3600  InstanceUpdateResponseSyncInterval = 3600
+	InstanceUpdateResponseSyncInterval7200  InstanceUpdateResponseSyncInterval = 7200
+	InstanceUpdateResponseSyncInterval14400 InstanceUpdateResponseSyncInterval = 14400
+	InstanceUpdateResponseSyncInterval21600 InstanceUpdateResponseSyncInterval = 21600
+	InstanceUpdateResponseSyncInterval43200 InstanceUpdateResponseSyncInterval = 43200
+	InstanceUpdateResponseSyncInterval86400 InstanceUpdateResponseSyncInterval = 86400
+)
+
+func (r InstanceUpdateResponseSyncInterval) IsKnown() bool {
+	switch r {
+	case InstanceUpdateResponseSyncInterval900, InstanceUpdateResponseSyncInterval1800, InstanceUpdateResponseSyncInterval3600, InstanceUpdateResponseSyncInterval7200, InstanceUpdateResponseSyncInterval14400, InstanceUpdateResponseSyncInterval21600, InstanceUpdateResponseSyncInterval43200, InstanceUpdateResponseSyncInterval86400:
+		return true
+	}
+	return false
+}
+
 type InstanceUpdateResponseType string
 
 const (
@@ -1960,9 +2106,12 @@ type InstanceListResponse struct {
 	Source               string                                   `json:"source" api:"nullable"`
 	SourceParams         InstanceListResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                   `json:"status"`
-	TokenID              string                                   `json:"token_id" format:"uuid"`
-	Type                 InstanceListResponseType                 `json:"type" api:"nullable"`
-	JSON                 instanceListResponseJSON                 `json:"-"`
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	SyncInterval InstanceListResponseSyncInterval `json:"sync_interval"`
+	TokenID      string                           `json:"token_id" format:"uuid"`
+	Type         InstanceListResponseType         `json:"type" api:"nullable"`
+	JSON         instanceListResponseJSON         `json:"-"`
 }
 
 // instanceListResponseJSON contains the JSON metadata for the struct
@@ -2003,6 +2152,7 @@ type instanceListResponseJSON struct {
 	Source               apijson.Field
 	SourceParams         apijson.Field
 	Status               apijson.Field
+	SyncInterval         apijson.Field
 	TokenID              apijson.Field
 	Type                 apijson.Field
 	raw                  string
@@ -2029,6 +2179,8 @@ const (
 	InstanceListResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceListResponseAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceListResponseAISearchModelCfMoonshotaiKimiK2Instruct            InstanceListResponseAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceListResponseAISearchModelCfGoogleGemma3_12bIt                  InstanceListResponseAISearchModel = "@cf/google/gemma-3-12b-it"
+	InstanceListResponseAISearchModelCfGoogleGemma4_26bA4bIt               InstanceListResponseAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceListResponseAISearchModelCfMoonshotaiKimiK2_5                  InstanceListResponseAISearchModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceListResponseAISearchModelAnthropicClaude3_7Sonnet              InstanceListResponseAISearchModel = "anthropic/claude-3-7-sonnet"
 	InstanceListResponseAISearchModelAnthropicClaudeSonnet4                InstanceListResponseAISearchModel = "anthropic/claude-sonnet-4"
 	InstanceListResponseAISearchModelAnthropicClaudeOpus4                  InstanceListResponseAISearchModel = "anthropic/claude-opus-4"
@@ -2052,7 +2204,7 @@ const (
 
 func (r InstanceListResponseAISearchModel) IsKnown() bool {
 	switch r {
-	case InstanceListResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceListResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceListResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceListResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceListResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceListResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceListResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceListResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceListResponseAISearchModelCfGoogleGemma3_12bIt, InstanceListResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceListResponseAISearchModelAnthropicClaudeSonnet4, InstanceListResponseAISearchModelAnthropicClaudeOpus4, InstanceListResponseAISearchModelAnthropicClaude3_5Haiku, InstanceListResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceListResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceListResponseAISearchModelCerebrasLlama3_3_70b, InstanceListResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceListResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceListResponseAISearchModelCerebrasGptOSs120b, InstanceListResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceListResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceListResponseAISearchModelGrokGrok4, InstanceListResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceListResponseAISearchModelGroqLlama3_1_8bInstant, InstanceListResponseAISearchModelOpenAIGpt5, InstanceListResponseAISearchModelOpenAIGpt5Mini, InstanceListResponseAISearchModelOpenAIGpt5Nano, InstanceListResponseAISearchModelEmpty:
+	case InstanceListResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceListResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceListResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceListResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceListResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceListResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceListResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceListResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceListResponseAISearchModelCfGoogleGemma3_12bIt, InstanceListResponseAISearchModelCfGoogleGemma4_26bA4bIt, InstanceListResponseAISearchModelCfMoonshotaiKimiK2_5, InstanceListResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceListResponseAISearchModelAnthropicClaudeSonnet4, InstanceListResponseAISearchModelAnthropicClaudeOpus4, InstanceListResponseAISearchModelAnthropicClaude3_5Haiku, InstanceListResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceListResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceListResponseAISearchModelCerebrasLlama3_3_70b, InstanceListResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceListResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceListResponseAISearchModelCerebrasGptOSs120b, InstanceListResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceListResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceListResponseAISearchModelGrokGrok4, InstanceListResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceListResponseAISearchModelGroqLlama3_1_8bInstant, InstanceListResponseAISearchModelOpenAIGpt5, InstanceListResponseAISearchModelOpenAIGpt5Mini, InstanceListResponseAISearchModelOpenAIGpt5Nano, InstanceListResponseAISearchModelEmpty:
 		return true
 	}
 	return false
@@ -2224,15 +2376,17 @@ func (r InstanceListResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceListResponseMetadata struct {
-	CreatedFromAISearchWizard bool                             `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                           `json:"worker_domain"`
-	JSON                      instanceListResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                        `json:"created_from_aisearch_wizard"`
+	SearchForAgents           InstanceListResponseMetadataSearchForAgents `json:"search_for_agents"`
+	WorkerDomain              string                                      `json:"worker_domain"`
+	JSON                      instanceListResponseMetadataJSON            `json:"-"`
 }
 
 // instanceListResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceListResponseMetadata]
 type instanceListResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -2243,6 +2397,31 @@ func (r *InstanceListResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r instanceListResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceListResponseMetadataSearchForAgents struct {
+	Hostname string                                          `json:"hostname" api:"required"`
+	ZoneID   string                                          `json:"zone_id" api:"required"`
+	ZoneName string                                          `json:"zone_name" api:"required"`
+	JSON     instanceListResponseMetadataSearchForAgentsJSON `json:"-"`
+}
+
+// instanceListResponseMetadataSearchForAgentsJSON contains the JSON metadata for
+// the struct [InstanceListResponseMetadataSearchForAgents]
+type instanceListResponseMetadataSearchForAgentsJSON struct {
+	Hostname    apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceListResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2410,8 +2589,6 @@ type InstanceListResponseRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode InstanceListResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceListResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -2487,8 +2664,6 @@ func (r InstanceListResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceListResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -2516,6 +2691,8 @@ const (
 	InstanceListResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceListResponseRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceListResponseRewriteModelCfMoonshotaiKimiK2Instruct            InstanceListResponseRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceListResponseRewriteModelCfGoogleGemma3_12bIt                  InstanceListResponseRewriteModel = "@cf/google/gemma-3-12b-it"
+	InstanceListResponseRewriteModelCfGoogleGemma4_26bA4bIt               InstanceListResponseRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceListResponseRewriteModelCfMoonshotaiKimiK2_5                  InstanceListResponseRewriteModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceListResponseRewriteModelAnthropicClaude3_7Sonnet              InstanceListResponseRewriteModel = "anthropic/claude-3-7-sonnet"
 	InstanceListResponseRewriteModelAnthropicClaudeSonnet4                InstanceListResponseRewriteModel = "anthropic/claude-sonnet-4"
 	InstanceListResponseRewriteModelAnthropicClaudeOpus4                  InstanceListResponseRewriteModel = "anthropic/claude-opus-4"
@@ -2539,7 +2716,7 @@ const (
 
 func (r InstanceListResponseRewriteModel) IsKnown() bool {
 	switch r {
-	case InstanceListResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceListResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceListResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceListResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceListResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceListResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceListResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceListResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceListResponseRewriteModelCfGoogleGemma3_12bIt, InstanceListResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceListResponseRewriteModelAnthropicClaudeSonnet4, InstanceListResponseRewriteModelAnthropicClaudeOpus4, InstanceListResponseRewriteModelAnthropicClaude3_5Haiku, InstanceListResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceListResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceListResponseRewriteModelCerebrasLlama3_3_70b, InstanceListResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceListResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceListResponseRewriteModelCerebrasGptOSs120b, InstanceListResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceListResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceListResponseRewriteModelGrokGrok4, InstanceListResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceListResponseRewriteModelGroqLlama3_1_8bInstant, InstanceListResponseRewriteModelOpenAIGpt5, InstanceListResponseRewriteModelOpenAIGpt5Mini, InstanceListResponseRewriteModelOpenAIGpt5Nano, InstanceListResponseRewriteModelEmpty:
+	case InstanceListResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceListResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceListResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceListResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceListResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceListResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceListResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceListResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceListResponseRewriteModelCfGoogleGemma3_12bIt, InstanceListResponseRewriteModelCfGoogleGemma4_26bA4bIt, InstanceListResponseRewriteModelCfMoonshotaiKimiK2_5, InstanceListResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceListResponseRewriteModelAnthropicClaudeSonnet4, InstanceListResponseRewriteModelAnthropicClaudeOpus4, InstanceListResponseRewriteModelAnthropicClaude3_5Haiku, InstanceListResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceListResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceListResponseRewriteModelCerebrasLlama3_3_70b, InstanceListResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceListResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceListResponseRewriteModelCerebrasGptOSs120b, InstanceListResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceListResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceListResponseRewriteModelGrokGrok4, InstanceListResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceListResponseRewriteModelGroqLlama3_1_8bInstant, InstanceListResponseRewriteModelOpenAIGpt5, InstanceListResponseRewriteModelOpenAIGpt5Mini, InstanceListResponseRewriteModelOpenAIGpt5Nano, InstanceListResponseRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -2755,6 +2932,29 @@ func (r instanceListResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() st
 	return r.raw
 }
 
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+type InstanceListResponseSyncInterval float64
+
+const (
+	InstanceListResponseSyncInterval900   InstanceListResponseSyncInterval = 900
+	InstanceListResponseSyncInterval1800  InstanceListResponseSyncInterval = 1800
+	InstanceListResponseSyncInterval3600  InstanceListResponseSyncInterval = 3600
+	InstanceListResponseSyncInterval7200  InstanceListResponseSyncInterval = 7200
+	InstanceListResponseSyncInterval14400 InstanceListResponseSyncInterval = 14400
+	InstanceListResponseSyncInterval21600 InstanceListResponseSyncInterval = 21600
+	InstanceListResponseSyncInterval43200 InstanceListResponseSyncInterval = 43200
+	InstanceListResponseSyncInterval86400 InstanceListResponseSyncInterval = 86400
+)
+
+func (r InstanceListResponseSyncInterval) IsKnown() bool {
+	switch r {
+	case InstanceListResponseSyncInterval900, InstanceListResponseSyncInterval1800, InstanceListResponseSyncInterval3600, InstanceListResponseSyncInterval7200, InstanceListResponseSyncInterval14400, InstanceListResponseSyncInterval21600, InstanceListResponseSyncInterval43200, InstanceListResponseSyncInterval86400:
+		return true
+	}
+	return false
+}
+
 type InstanceListResponseType string
 
 const (
@@ -2812,9 +3012,12 @@ type InstanceDeleteResponse struct {
 	Source               string                                     `json:"source" api:"nullable"`
 	SourceParams         InstanceDeleteResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                     `json:"status"`
-	TokenID              string                                     `json:"token_id" format:"uuid"`
-	Type                 InstanceDeleteResponseType                 `json:"type" api:"nullable"`
-	JSON                 instanceDeleteResponseJSON                 `json:"-"`
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	SyncInterval InstanceDeleteResponseSyncInterval `json:"sync_interval"`
+	TokenID      string                             `json:"token_id" format:"uuid"`
+	Type         InstanceDeleteResponseType         `json:"type" api:"nullable"`
+	JSON         instanceDeleteResponseJSON         `json:"-"`
 }
 
 // instanceDeleteResponseJSON contains the JSON metadata for the struct
@@ -2855,6 +3058,7 @@ type instanceDeleteResponseJSON struct {
 	Source               apijson.Field
 	SourceParams         apijson.Field
 	Status               apijson.Field
+	SyncInterval         apijson.Field
 	TokenID              apijson.Field
 	Type                 apijson.Field
 	raw                  string
@@ -2881,6 +3085,8 @@ const (
 	InstanceDeleteResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceDeleteResponseAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceDeleteResponseAISearchModelCfMoonshotaiKimiK2Instruct            InstanceDeleteResponseAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceDeleteResponseAISearchModelCfGoogleGemma3_12bIt                  InstanceDeleteResponseAISearchModel = "@cf/google/gemma-3-12b-it"
+	InstanceDeleteResponseAISearchModelCfGoogleGemma4_26bA4bIt               InstanceDeleteResponseAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceDeleteResponseAISearchModelCfMoonshotaiKimiK2_5                  InstanceDeleteResponseAISearchModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceDeleteResponseAISearchModelAnthropicClaude3_7Sonnet              InstanceDeleteResponseAISearchModel = "anthropic/claude-3-7-sonnet"
 	InstanceDeleteResponseAISearchModelAnthropicClaudeSonnet4                InstanceDeleteResponseAISearchModel = "anthropic/claude-sonnet-4"
 	InstanceDeleteResponseAISearchModelAnthropicClaudeOpus4                  InstanceDeleteResponseAISearchModel = "anthropic/claude-opus-4"
@@ -2904,7 +3110,7 @@ const (
 
 func (r InstanceDeleteResponseAISearchModel) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceDeleteResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceDeleteResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceDeleteResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceDeleteResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceDeleteResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceDeleteResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceDeleteResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceDeleteResponseAISearchModelCfGoogleGemma3_12bIt, InstanceDeleteResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceDeleteResponseAISearchModelAnthropicClaudeSonnet4, InstanceDeleteResponseAISearchModelAnthropicClaudeOpus4, InstanceDeleteResponseAISearchModelAnthropicClaude3_5Haiku, InstanceDeleteResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceDeleteResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceDeleteResponseAISearchModelCerebrasLlama3_3_70b, InstanceDeleteResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceDeleteResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceDeleteResponseAISearchModelCerebrasGptOSs120b, InstanceDeleteResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceDeleteResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceDeleteResponseAISearchModelGrokGrok4, InstanceDeleteResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceDeleteResponseAISearchModelGroqLlama3_1_8bInstant, InstanceDeleteResponseAISearchModelOpenAIGpt5, InstanceDeleteResponseAISearchModelOpenAIGpt5Mini, InstanceDeleteResponseAISearchModelOpenAIGpt5Nano, InstanceDeleteResponseAISearchModelEmpty:
+	case InstanceDeleteResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceDeleteResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceDeleteResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceDeleteResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceDeleteResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceDeleteResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceDeleteResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceDeleteResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceDeleteResponseAISearchModelCfGoogleGemma3_12bIt, InstanceDeleteResponseAISearchModelCfGoogleGemma4_26bA4bIt, InstanceDeleteResponseAISearchModelCfMoonshotaiKimiK2_5, InstanceDeleteResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceDeleteResponseAISearchModelAnthropicClaudeSonnet4, InstanceDeleteResponseAISearchModelAnthropicClaudeOpus4, InstanceDeleteResponseAISearchModelAnthropicClaude3_5Haiku, InstanceDeleteResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceDeleteResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceDeleteResponseAISearchModelCerebrasLlama3_3_70b, InstanceDeleteResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceDeleteResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceDeleteResponseAISearchModelCerebrasGptOSs120b, InstanceDeleteResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceDeleteResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceDeleteResponseAISearchModelGrokGrok4, InstanceDeleteResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceDeleteResponseAISearchModelGroqLlama3_1_8bInstant, InstanceDeleteResponseAISearchModelOpenAIGpt5, InstanceDeleteResponseAISearchModelOpenAIGpt5Mini, InstanceDeleteResponseAISearchModelOpenAIGpt5Nano, InstanceDeleteResponseAISearchModelEmpty:
 		return true
 	}
 	return false
@@ -3076,15 +3282,17 @@ func (r InstanceDeleteResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceDeleteResponseMetadata struct {
-	CreatedFromAISearchWizard bool                               `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                             `json:"worker_domain"`
-	JSON                      instanceDeleteResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                          `json:"created_from_aisearch_wizard"`
+	SearchForAgents           InstanceDeleteResponseMetadataSearchForAgents `json:"search_for_agents"`
+	WorkerDomain              string                                        `json:"worker_domain"`
+	JSON                      instanceDeleteResponseMetadataJSON            `json:"-"`
 }
 
 // instanceDeleteResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceDeleteResponseMetadata]
 type instanceDeleteResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -3095,6 +3303,31 @@ func (r *InstanceDeleteResponseMetadata) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r instanceDeleteResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceDeleteResponseMetadataSearchForAgents struct {
+	Hostname string                                            `json:"hostname" api:"required"`
+	ZoneID   string                                            `json:"zone_id" api:"required"`
+	ZoneName string                                            `json:"zone_name" api:"required"`
+	JSON     instanceDeleteResponseMetadataSearchForAgentsJSON `json:"-"`
+}
+
+// instanceDeleteResponseMetadataSearchForAgentsJSON contains the JSON metadata for
+// the struct [InstanceDeleteResponseMetadataSearchForAgents]
+type instanceDeleteResponseMetadataSearchForAgentsJSON struct {
+	Hostname    apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3263,8 +3496,6 @@ type InstanceDeleteResponseRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode InstanceDeleteResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceDeleteResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -3340,8 +3571,6 @@ func (r InstanceDeleteResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceDeleteResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -3369,6 +3598,8 @@ const (
 	InstanceDeleteResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceDeleteResponseRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceDeleteResponseRewriteModelCfMoonshotaiKimiK2Instruct            InstanceDeleteResponseRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceDeleteResponseRewriteModelCfGoogleGemma3_12bIt                  InstanceDeleteResponseRewriteModel = "@cf/google/gemma-3-12b-it"
+	InstanceDeleteResponseRewriteModelCfGoogleGemma4_26bA4bIt               InstanceDeleteResponseRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceDeleteResponseRewriteModelCfMoonshotaiKimiK2_5                  InstanceDeleteResponseRewriteModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceDeleteResponseRewriteModelAnthropicClaude3_7Sonnet              InstanceDeleteResponseRewriteModel = "anthropic/claude-3-7-sonnet"
 	InstanceDeleteResponseRewriteModelAnthropicClaudeSonnet4                InstanceDeleteResponseRewriteModel = "anthropic/claude-sonnet-4"
 	InstanceDeleteResponseRewriteModelAnthropicClaudeOpus4                  InstanceDeleteResponseRewriteModel = "anthropic/claude-opus-4"
@@ -3392,7 +3623,7 @@ const (
 
 func (r InstanceDeleteResponseRewriteModel) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceDeleteResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceDeleteResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceDeleteResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceDeleteResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceDeleteResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceDeleteResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceDeleteResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceDeleteResponseRewriteModelCfGoogleGemma3_12bIt, InstanceDeleteResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceDeleteResponseRewriteModelAnthropicClaudeSonnet4, InstanceDeleteResponseRewriteModelAnthropicClaudeOpus4, InstanceDeleteResponseRewriteModelAnthropicClaude3_5Haiku, InstanceDeleteResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceDeleteResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceDeleteResponseRewriteModelCerebrasLlama3_3_70b, InstanceDeleteResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceDeleteResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceDeleteResponseRewriteModelCerebrasGptOSs120b, InstanceDeleteResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceDeleteResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceDeleteResponseRewriteModelGrokGrok4, InstanceDeleteResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceDeleteResponseRewriteModelGroqLlama3_1_8bInstant, InstanceDeleteResponseRewriteModelOpenAIGpt5, InstanceDeleteResponseRewriteModelOpenAIGpt5Mini, InstanceDeleteResponseRewriteModelOpenAIGpt5Nano, InstanceDeleteResponseRewriteModelEmpty:
+	case InstanceDeleteResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceDeleteResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceDeleteResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceDeleteResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceDeleteResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceDeleteResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceDeleteResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceDeleteResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceDeleteResponseRewriteModelCfGoogleGemma3_12bIt, InstanceDeleteResponseRewriteModelCfGoogleGemma4_26bA4bIt, InstanceDeleteResponseRewriteModelCfMoonshotaiKimiK2_5, InstanceDeleteResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceDeleteResponseRewriteModelAnthropicClaudeSonnet4, InstanceDeleteResponseRewriteModelAnthropicClaudeOpus4, InstanceDeleteResponseRewriteModelAnthropicClaude3_5Haiku, InstanceDeleteResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceDeleteResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceDeleteResponseRewriteModelCerebrasLlama3_3_70b, InstanceDeleteResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceDeleteResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceDeleteResponseRewriteModelCerebrasGptOSs120b, InstanceDeleteResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceDeleteResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceDeleteResponseRewriteModelGrokGrok4, InstanceDeleteResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceDeleteResponseRewriteModelGroqLlama3_1_8bInstant, InstanceDeleteResponseRewriteModelOpenAIGpt5, InstanceDeleteResponseRewriteModelOpenAIGpt5Mini, InstanceDeleteResponseRewriteModelOpenAIGpt5Nano, InstanceDeleteResponseRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -3609,6 +3840,29 @@ func (r *InstanceDeleteResponseSourceParamsWebCrawlerStoreOptions) UnmarshalJSON
 
 func (r instanceDeleteResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+type InstanceDeleteResponseSyncInterval float64
+
+const (
+	InstanceDeleteResponseSyncInterval900   InstanceDeleteResponseSyncInterval = 900
+	InstanceDeleteResponseSyncInterval1800  InstanceDeleteResponseSyncInterval = 1800
+	InstanceDeleteResponseSyncInterval3600  InstanceDeleteResponseSyncInterval = 3600
+	InstanceDeleteResponseSyncInterval7200  InstanceDeleteResponseSyncInterval = 7200
+	InstanceDeleteResponseSyncInterval14400 InstanceDeleteResponseSyncInterval = 14400
+	InstanceDeleteResponseSyncInterval21600 InstanceDeleteResponseSyncInterval = 21600
+	InstanceDeleteResponseSyncInterval43200 InstanceDeleteResponseSyncInterval = 43200
+	InstanceDeleteResponseSyncInterval86400 InstanceDeleteResponseSyncInterval = 86400
+)
+
+func (r InstanceDeleteResponseSyncInterval) IsKnown() bool {
+	switch r {
+	case InstanceDeleteResponseSyncInterval900, InstanceDeleteResponseSyncInterval1800, InstanceDeleteResponseSyncInterval3600, InstanceDeleteResponseSyncInterval7200, InstanceDeleteResponseSyncInterval14400, InstanceDeleteResponseSyncInterval21600, InstanceDeleteResponseSyncInterval43200, InstanceDeleteResponseSyncInterval86400:
+		return true
+	}
+	return false
 }
 
 type InstanceDeleteResponseType string
@@ -3865,9 +4119,12 @@ type InstanceReadResponse struct {
 	Source               string                                   `json:"source" api:"nullable"`
 	SourceParams         InstanceReadResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                   `json:"status"`
-	TokenID              string                                   `json:"token_id" format:"uuid"`
-	Type                 InstanceReadResponseType                 `json:"type" api:"nullable"`
-	JSON                 instanceReadResponseJSON                 `json:"-"`
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	SyncInterval InstanceReadResponseSyncInterval `json:"sync_interval"`
+	TokenID      string                           `json:"token_id" format:"uuid"`
+	Type         InstanceReadResponseType         `json:"type" api:"nullable"`
+	JSON         instanceReadResponseJSON         `json:"-"`
 }
 
 // instanceReadResponseJSON contains the JSON metadata for the struct
@@ -3908,6 +4165,7 @@ type instanceReadResponseJSON struct {
 	Source               apijson.Field
 	SourceParams         apijson.Field
 	Status               apijson.Field
+	SyncInterval         apijson.Field
 	TokenID              apijson.Field
 	Type                 apijson.Field
 	raw                  string
@@ -3934,6 +4192,8 @@ const (
 	InstanceReadResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceReadResponseAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceReadResponseAISearchModelCfMoonshotaiKimiK2Instruct            InstanceReadResponseAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceReadResponseAISearchModelCfGoogleGemma3_12bIt                  InstanceReadResponseAISearchModel = "@cf/google/gemma-3-12b-it"
+	InstanceReadResponseAISearchModelCfGoogleGemma4_26bA4bIt               InstanceReadResponseAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceReadResponseAISearchModelCfMoonshotaiKimiK2_5                  InstanceReadResponseAISearchModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceReadResponseAISearchModelAnthropicClaude3_7Sonnet              InstanceReadResponseAISearchModel = "anthropic/claude-3-7-sonnet"
 	InstanceReadResponseAISearchModelAnthropicClaudeSonnet4                InstanceReadResponseAISearchModel = "anthropic/claude-sonnet-4"
 	InstanceReadResponseAISearchModelAnthropicClaudeOpus4                  InstanceReadResponseAISearchModel = "anthropic/claude-opus-4"
@@ -3957,7 +4217,7 @@ const (
 
 func (r InstanceReadResponseAISearchModel) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceReadResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceReadResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceReadResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceReadResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceReadResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceReadResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceReadResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceReadResponseAISearchModelCfGoogleGemma3_12bIt, InstanceReadResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceReadResponseAISearchModelAnthropicClaudeSonnet4, InstanceReadResponseAISearchModelAnthropicClaudeOpus4, InstanceReadResponseAISearchModelAnthropicClaude3_5Haiku, InstanceReadResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceReadResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceReadResponseAISearchModelCerebrasLlama3_3_70b, InstanceReadResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceReadResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceReadResponseAISearchModelCerebrasGptOSs120b, InstanceReadResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceReadResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceReadResponseAISearchModelGrokGrok4, InstanceReadResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceReadResponseAISearchModelGroqLlama3_1_8bInstant, InstanceReadResponseAISearchModelOpenAIGpt5, InstanceReadResponseAISearchModelOpenAIGpt5Mini, InstanceReadResponseAISearchModelOpenAIGpt5Nano, InstanceReadResponseAISearchModelEmpty:
+	case InstanceReadResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceReadResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceReadResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceReadResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceReadResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceReadResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceReadResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceReadResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceReadResponseAISearchModelCfGoogleGemma3_12bIt, InstanceReadResponseAISearchModelCfGoogleGemma4_26bA4bIt, InstanceReadResponseAISearchModelCfMoonshotaiKimiK2_5, InstanceReadResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceReadResponseAISearchModelAnthropicClaudeSonnet4, InstanceReadResponseAISearchModelAnthropicClaudeOpus4, InstanceReadResponseAISearchModelAnthropicClaude3_5Haiku, InstanceReadResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceReadResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceReadResponseAISearchModelCerebrasLlama3_3_70b, InstanceReadResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceReadResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceReadResponseAISearchModelCerebrasGptOSs120b, InstanceReadResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceReadResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceReadResponseAISearchModelGrokGrok4, InstanceReadResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceReadResponseAISearchModelGroqLlama3_1_8bInstant, InstanceReadResponseAISearchModelOpenAIGpt5, InstanceReadResponseAISearchModelOpenAIGpt5Mini, InstanceReadResponseAISearchModelOpenAIGpt5Nano, InstanceReadResponseAISearchModelEmpty:
 		return true
 	}
 	return false
@@ -4129,15 +4389,17 @@ func (r InstanceReadResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceReadResponseMetadata struct {
-	CreatedFromAISearchWizard bool                             `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                           `json:"worker_domain"`
-	JSON                      instanceReadResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                        `json:"created_from_aisearch_wizard"`
+	SearchForAgents           InstanceReadResponseMetadataSearchForAgents `json:"search_for_agents"`
+	WorkerDomain              string                                      `json:"worker_domain"`
+	JSON                      instanceReadResponseMetadataJSON            `json:"-"`
 }
 
 // instanceReadResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceReadResponseMetadata]
 type instanceReadResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -4148,6 +4410,31 @@ func (r *InstanceReadResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r instanceReadResponseMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceReadResponseMetadataSearchForAgents struct {
+	Hostname string                                          `json:"hostname" api:"required"`
+	ZoneID   string                                          `json:"zone_id" api:"required"`
+	ZoneName string                                          `json:"zone_name" api:"required"`
+	JSON     instanceReadResponseMetadataSearchForAgentsJSON `json:"-"`
+}
+
+// instanceReadResponseMetadataSearchForAgentsJSON contains the JSON metadata for
+// the struct [InstanceReadResponseMetadataSearchForAgents]
+type instanceReadResponseMetadataSearchForAgentsJSON struct {
+	Hostname    apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceReadResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -4315,8 +4602,6 @@ type InstanceReadResponseRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode InstanceReadResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceReadResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -4392,8 +4677,6 @@ func (r InstanceReadResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceReadResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -4421,6 +4704,8 @@ const (
 	InstanceReadResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceReadResponseRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceReadResponseRewriteModelCfMoonshotaiKimiK2Instruct            InstanceReadResponseRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceReadResponseRewriteModelCfGoogleGemma3_12bIt                  InstanceReadResponseRewriteModel = "@cf/google/gemma-3-12b-it"
+	InstanceReadResponseRewriteModelCfGoogleGemma4_26bA4bIt               InstanceReadResponseRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceReadResponseRewriteModelCfMoonshotaiKimiK2_5                  InstanceReadResponseRewriteModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceReadResponseRewriteModelAnthropicClaude3_7Sonnet              InstanceReadResponseRewriteModel = "anthropic/claude-3-7-sonnet"
 	InstanceReadResponseRewriteModelAnthropicClaudeSonnet4                InstanceReadResponseRewriteModel = "anthropic/claude-sonnet-4"
 	InstanceReadResponseRewriteModelAnthropicClaudeOpus4                  InstanceReadResponseRewriteModel = "anthropic/claude-opus-4"
@@ -4444,7 +4729,7 @@ const (
 
 func (r InstanceReadResponseRewriteModel) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceReadResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceReadResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceReadResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceReadResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceReadResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceReadResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceReadResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceReadResponseRewriteModelCfGoogleGemma3_12bIt, InstanceReadResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceReadResponseRewriteModelAnthropicClaudeSonnet4, InstanceReadResponseRewriteModelAnthropicClaudeOpus4, InstanceReadResponseRewriteModelAnthropicClaude3_5Haiku, InstanceReadResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceReadResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceReadResponseRewriteModelCerebrasLlama3_3_70b, InstanceReadResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceReadResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceReadResponseRewriteModelCerebrasGptOSs120b, InstanceReadResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceReadResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceReadResponseRewriteModelGrokGrok4, InstanceReadResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceReadResponseRewriteModelGroqLlama3_1_8bInstant, InstanceReadResponseRewriteModelOpenAIGpt5, InstanceReadResponseRewriteModelOpenAIGpt5Mini, InstanceReadResponseRewriteModelOpenAIGpt5Nano, InstanceReadResponseRewriteModelEmpty:
+	case InstanceReadResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceReadResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceReadResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceReadResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceReadResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceReadResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceReadResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceReadResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceReadResponseRewriteModelCfGoogleGemma3_12bIt, InstanceReadResponseRewriteModelCfGoogleGemma4_26bA4bIt, InstanceReadResponseRewriteModelCfMoonshotaiKimiK2_5, InstanceReadResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceReadResponseRewriteModelAnthropicClaudeSonnet4, InstanceReadResponseRewriteModelAnthropicClaudeOpus4, InstanceReadResponseRewriteModelAnthropicClaude3_5Haiku, InstanceReadResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceReadResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceReadResponseRewriteModelCerebrasLlama3_3_70b, InstanceReadResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceReadResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceReadResponseRewriteModelCerebrasGptOSs120b, InstanceReadResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceReadResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceReadResponseRewriteModelGrokGrok4, InstanceReadResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceReadResponseRewriteModelGroqLlama3_1_8bInstant, InstanceReadResponseRewriteModelOpenAIGpt5, InstanceReadResponseRewriteModelOpenAIGpt5Mini, InstanceReadResponseRewriteModelOpenAIGpt5Nano, InstanceReadResponseRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -4660,6 +4945,29 @@ func (r instanceReadResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() st
 	return r.raw
 }
 
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+type InstanceReadResponseSyncInterval float64
+
+const (
+	InstanceReadResponseSyncInterval900   InstanceReadResponseSyncInterval = 900
+	InstanceReadResponseSyncInterval1800  InstanceReadResponseSyncInterval = 1800
+	InstanceReadResponseSyncInterval3600  InstanceReadResponseSyncInterval = 3600
+	InstanceReadResponseSyncInterval7200  InstanceReadResponseSyncInterval = 7200
+	InstanceReadResponseSyncInterval14400 InstanceReadResponseSyncInterval = 14400
+	InstanceReadResponseSyncInterval21600 InstanceReadResponseSyncInterval = 21600
+	InstanceReadResponseSyncInterval43200 InstanceReadResponseSyncInterval = 43200
+	InstanceReadResponseSyncInterval86400 InstanceReadResponseSyncInterval = 86400
+)
+
+func (r InstanceReadResponseSyncInterval) IsKnown() bool {
+	switch r {
+	case InstanceReadResponseSyncInterval900, InstanceReadResponseSyncInterval1800, InstanceReadResponseSyncInterval3600, InstanceReadResponseSyncInterval7200, InstanceReadResponseSyncInterval14400, InstanceReadResponseSyncInterval21600, InstanceReadResponseSyncInterval43200, InstanceReadResponseSyncInterval86400:
+		return true
+	}
+	return false
+}
+
 type InstanceReadResponseType string
 
 const (
@@ -4801,22 +5109,25 @@ func (r InstanceSearchResponseChunksScoringDetailsFusionMethod) IsKnown() bool {
 }
 
 type InstanceStatsResponse struct {
-	Completed         int64                     `json:"completed"`
-	Error             int64                     `json:"error"`
-	FileEmbedErrors   map[string]interface{}    `json:"file_embed_errors"`
-	IndexSourceErrors map[string]interface{}    `json:"index_source_errors"`
-	LastActivity      time.Time                 `json:"last_activity" format:"date-time"`
-	Outdated          int64                     `json:"outdated"`
-	Queued            int64                     `json:"queued"`
-	Running           int64                     `json:"running"`
-	Skipped           int64                     `json:"skipped"`
-	JSON              instanceStatsResponseJSON `json:"-"`
+	Completed int64 `json:"completed"`
+	// Engine-specific metadata. Present only for managed (v3) instances.
+	Engine            InstanceStatsResponseEngine `json:"engine"`
+	Error             int64                       `json:"error"`
+	FileEmbedErrors   map[string]interface{}      `json:"file_embed_errors"`
+	IndexSourceErrors map[string]interface{}      `json:"index_source_errors"`
+	LastActivity      time.Time                   `json:"last_activity" format:"date-time"`
+	Outdated          int64                       `json:"outdated"`
+	Queued            int64                       `json:"queued"`
+	Running           int64                       `json:"running"`
+	Skipped           int64                       `json:"skipped"`
+	JSON              instanceStatsResponseJSON   `json:"-"`
 }
 
 // instanceStatsResponseJSON contains the JSON metadata for the struct
 // [InstanceStatsResponse]
 type instanceStatsResponseJSON struct {
 	Completed         apijson.Field
+	Engine            apijson.Field
 	Error             apijson.Field
 	FileEmbedErrors   apijson.Field
 	IndexSourceErrors apijson.Field
@@ -4837,7 +5148,84 @@ func (r instanceStatsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Engine-specific metadata. Present only for managed (v3) instances.
+type InstanceStatsResponseEngine struct {
+	// R2 bucket storage usage in bytes.
+	R2 InstanceStatsResponseEngineR2 `json:"r2"`
+	// Vectorize index metadata (dimensions, vector count).
+	Vectorize InstanceStatsResponseEngineVectorize `json:"vectorize"`
+	JSON      instanceStatsResponseEngineJSON      `json:"-"`
+}
+
+// instanceStatsResponseEngineJSON contains the JSON metadata for the struct
+// [InstanceStatsResponseEngine]
+type instanceStatsResponseEngineJSON struct {
+	R2          apijson.Field
+	Vectorize   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceStatsResponseEngine) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceStatsResponseEngineJSON) RawJSON() string {
+	return r.raw
+}
+
+// R2 bucket storage usage in bytes.
+type InstanceStatsResponseEngineR2 struct {
+	MetadataSizeBytes int64                             `json:"metadataSizeBytes" api:"required"`
+	ObjectCount       int64                             `json:"objectCount" api:"required"`
+	PayloadSizeBytes  int64                             `json:"payloadSizeBytes" api:"required"`
+	JSON              instanceStatsResponseEngineR2JSON `json:"-"`
+}
+
+// instanceStatsResponseEngineR2JSON contains the JSON metadata for the struct
+// [InstanceStatsResponseEngineR2]
+type instanceStatsResponseEngineR2JSON struct {
+	MetadataSizeBytes apijson.Field
+	ObjectCount       apijson.Field
+	PayloadSizeBytes  apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *InstanceStatsResponseEngineR2) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceStatsResponseEngineR2JSON) RawJSON() string {
+	return r.raw
+}
+
+// Vectorize index metadata (dimensions, vector count).
+type InstanceStatsResponseEngineVectorize struct {
+	Dimensions   int64                                    `json:"dimensions" api:"required"`
+	VectorsCount int64                                    `json:"vectorsCount" api:"required"`
+	JSON         instanceStatsResponseEngineVectorizeJSON `json:"-"`
+}
+
+// instanceStatsResponseEngineVectorizeJSON contains the JSON metadata for the
+// struct [InstanceStatsResponseEngineVectorize]
+type instanceStatsResponseEngineVectorizeJSON struct {
+	Dimensions   apijson.Field
+	VectorsCount apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *InstanceStatsResponseEngineVectorize) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceStatsResponseEngineVectorizeJSON) RawJSON() string {
+	return r.raw
+}
+
 type InstanceNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
 	ID             param.Field[string]                            `json:"id" api:"required"`
@@ -4851,6 +5239,8 @@ type InstanceNewParams struct {
 	CustomMetadata param.Field[[]InstanceNewParamsCustomMetadata] `json:"custom_metadata"`
 	EmbeddingModel param.Field[InstanceNewParamsEmbeddingModel]   `json:"embedding_model"`
 	FusionMethod   param.Field[InstanceNewParamsFusionMethod]     `json:"fusion_method"`
+	// Deprecated — use index_method instead.
+	HybridSearchEnabled param.Field[bool] `json:"hybrid_search_enabled"`
 	// Controls which storage backends are used during indexing. Defaults to
 	// vector-only.
 	IndexMethod          param.Field[InstanceNewParamsIndexMethod]          `json:"index_method"`
@@ -4866,8 +5256,11 @@ type InstanceNewParams struct {
 	ScoreThreshold       param.Field[float64]                               `json:"score_threshold"`
 	Source               param.Field[string]                                `json:"source"`
 	SourceParams         param.Field[InstanceNewParamsSourceParams]         `json:"source_params"`
-	TokenID              param.Field[string]                                `json:"token_id" format:"uuid"`
-	Type                 param.Field[InstanceNewParamsType]                 `json:"type"`
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	SyncInterval param.Field[InstanceNewParamsSyncInterval] `json:"sync_interval"`
+	TokenID      param.Field[string]                        `json:"token_id" format:"uuid"`
+	Type         param.Field[InstanceNewParamsType]         `json:"type"`
 }
 
 func (r InstanceNewParams) MarshalJSON() (data []byte, err error) {
@@ -4886,6 +5279,8 @@ const (
 	InstanceNewParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceNewParamsAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceNewParamsAISearchModelCfMoonshotaiKimiK2Instruct            InstanceNewParamsAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceNewParamsAISearchModelCfGoogleGemma3_12bIt                  InstanceNewParamsAISearchModel = "@cf/google/gemma-3-12b-it"
+	InstanceNewParamsAISearchModelCfGoogleGemma4_26bA4bIt               InstanceNewParamsAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceNewParamsAISearchModelCfMoonshotaiKimiK2_5                  InstanceNewParamsAISearchModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceNewParamsAISearchModelAnthropicClaude3_7Sonnet              InstanceNewParamsAISearchModel = "anthropic/claude-3-7-sonnet"
 	InstanceNewParamsAISearchModelAnthropicClaudeSonnet4                InstanceNewParamsAISearchModel = "anthropic/claude-sonnet-4"
 	InstanceNewParamsAISearchModelAnthropicClaudeOpus4                  InstanceNewParamsAISearchModel = "anthropic/claude-opus-4"
@@ -4909,7 +5304,7 @@ const (
 
 func (r InstanceNewParamsAISearchModel) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceNewParamsAISearchModelCfZaiOrgGlm4_7Flash, InstanceNewParamsAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceNewParamsAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceNewParamsAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceNewParamsAISearchModelCfQwenQwen3_30bA3bFp8, InstanceNewParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceNewParamsAISearchModelCfMoonshotaiKimiK2Instruct, InstanceNewParamsAISearchModelCfGoogleGemma3_12bIt, InstanceNewParamsAISearchModelAnthropicClaude3_7Sonnet, InstanceNewParamsAISearchModelAnthropicClaudeSonnet4, InstanceNewParamsAISearchModelAnthropicClaudeOpus4, InstanceNewParamsAISearchModelAnthropicClaude3_5Haiku, InstanceNewParamsAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceNewParamsAISearchModelCerebrasQwen3_235bA22bThinking, InstanceNewParamsAISearchModelCerebrasLlama3_3_70b, InstanceNewParamsAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceNewParamsAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceNewParamsAISearchModelCerebrasGptOSs120b, InstanceNewParamsAISearchModelGoogleAIStudioGemini2_5Flash, InstanceNewParamsAISearchModelGoogleAIStudioGemini2_5Pro, InstanceNewParamsAISearchModelGrokGrok4, InstanceNewParamsAISearchModelGroqLlama3_3_70bVersatile, InstanceNewParamsAISearchModelGroqLlama3_1_8bInstant, InstanceNewParamsAISearchModelOpenAIGpt5, InstanceNewParamsAISearchModelOpenAIGpt5Mini, InstanceNewParamsAISearchModelOpenAIGpt5Nano, InstanceNewParamsAISearchModelEmpty:
+	case InstanceNewParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceNewParamsAISearchModelCfZaiOrgGlm4_7Flash, InstanceNewParamsAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceNewParamsAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceNewParamsAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceNewParamsAISearchModelCfQwenQwen3_30bA3bFp8, InstanceNewParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceNewParamsAISearchModelCfMoonshotaiKimiK2Instruct, InstanceNewParamsAISearchModelCfGoogleGemma3_12bIt, InstanceNewParamsAISearchModelCfGoogleGemma4_26bA4bIt, InstanceNewParamsAISearchModelCfMoonshotaiKimiK2_5, InstanceNewParamsAISearchModelAnthropicClaude3_7Sonnet, InstanceNewParamsAISearchModelAnthropicClaudeSonnet4, InstanceNewParamsAISearchModelAnthropicClaudeOpus4, InstanceNewParamsAISearchModelAnthropicClaude3_5Haiku, InstanceNewParamsAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceNewParamsAISearchModelCerebrasQwen3_235bA22bThinking, InstanceNewParamsAISearchModelCerebrasLlama3_3_70b, InstanceNewParamsAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceNewParamsAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceNewParamsAISearchModelCerebrasGptOSs120b, InstanceNewParamsAISearchModelGoogleAIStudioGemini2_5Flash, InstanceNewParamsAISearchModelGoogleAIStudioGemini2_5Pro, InstanceNewParamsAISearchModelGrokGrok4, InstanceNewParamsAISearchModelGroqLlama3_3_70bVersatile, InstanceNewParamsAISearchModelGroqLlama3_1_8bInstant, InstanceNewParamsAISearchModelOpenAIGpt5, InstanceNewParamsAISearchModelOpenAIGpt5Mini, InstanceNewParamsAISearchModelOpenAIGpt5Nano, InstanceNewParamsAISearchModelEmpty:
 		return true
 	}
 	return false
@@ -5040,11 +5435,22 @@ func (r InstanceNewParamsIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceNewParamsMetadata struct {
-	CreatedFromAISearchWizard param.Field[bool]   `json:"created_from_aisearch_wizard"`
-	WorkerDomain              param.Field[string] `json:"worker_domain"`
+	CreatedFromAISearchWizard param.Field[bool]                                     `json:"created_from_aisearch_wizard"`
+	SearchForAgents           param.Field[InstanceNewParamsMetadataSearchForAgents] `json:"search_for_agents"`
+	WorkerDomain              param.Field[string]                                   `json:"worker_domain"`
 }
 
 func (r InstanceNewParamsMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsMetadataSearchForAgents struct {
+	Hostname param.Field[string] `json:"hostname" api:"required"`
+	ZoneID   param.Field[string] `json:"zone_id" api:"required"`
+	ZoneName param.Field[string] `json:"zone_name" api:"required"`
+}
+
+func (r InstanceNewParamsMetadataSearchForAgents) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -5138,8 +5544,6 @@ type InstanceNewParamsRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceNewParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -5187,8 +5591,6 @@ func (r InstanceNewParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceNewParamsRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -5216,6 +5618,8 @@ const (
 	InstanceNewParamsRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceNewParamsRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceNewParamsRewriteModelCfMoonshotaiKimiK2Instruct            InstanceNewParamsRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceNewParamsRewriteModelCfGoogleGemma3_12bIt                  InstanceNewParamsRewriteModel = "@cf/google/gemma-3-12b-it"
+	InstanceNewParamsRewriteModelCfGoogleGemma4_26bA4bIt               InstanceNewParamsRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceNewParamsRewriteModelCfMoonshotaiKimiK2_5                  InstanceNewParamsRewriteModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceNewParamsRewriteModelAnthropicClaude3_7Sonnet              InstanceNewParamsRewriteModel = "anthropic/claude-3-7-sonnet"
 	InstanceNewParamsRewriteModelAnthropicClaudeSonnet4                InstanceNewParamsRewriteModel = "anthropic/claude-sonnet-4"
 	InstanceNewParamsRewriteModelAnthropicClaudeOpus4                  InstanceNewParamsRewriteModel = "anthropic/claude-opus-4"
@@ -5239,7 +5643,7 @@ const (
 
 func (r InstanceNewParamsRewriteModel) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceNewParamsRewriteModelCfZaiOrgGlm4_7Flash, InstanceNewParamsRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceNewParamsRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceNewParamsRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceNewParamsRewriteModelCfQwenQwen3_30bA3bFp8, InstanceNewParamsRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceNewParamsRewriteModelCfMoonshotaiKimiK2Instruct, InstanceNewParamsRewriteModelCfGoogleGemma3_12bIt, InstanceNewParamsRewriteModelAnthropicClaude3_7Sonnet, InstanceNewParamsRewriteModelAnthropicClaudeSonnet4, InstanceNewParamsRewriteModelAnthropicClaudeOpus4, InstanceNewParamsRewriteModelAnthropicClaude3_5Haiku, InstanceNewParamsRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceNewParamsRewriteModelCerebrasQwen3_235bA22bThinking, InstanceNewParamsRewriteModelCerebrasLlama3_3_70b, InstanceNewParamsRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceNewParamsRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceNewParamsRewriteModelCerebrasGptOSs120b, InstanceNewParamsRewriteModelGoogleAIStudioGemini2_5Flash, InstanceNewParamsRewriteModelGoogleAIStudioGemini2_5Pro, InstanceNewParamsRewriteModelGrokGrok4, InstanceNewParamsRewriteModelGroqLlama3_3_70bVersatile, InstanceNewParamsRewriteModelGroqLlama3_1_8bInstant, InstanceNewParamsRewriteModelOpenAIGpt5, InstanceNewParamsRewriteModelOpenAIGpt5Mini, InstanceNewParamsRewriteModelOpenAIGpt5Nano, InstanceNewParamsRewriteModelEmpty:
+	case InstanceNewParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceNewParamsRewriteModelCfZaiOrgGlm4_7Flash, InstanceNewParamsRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceNewParamsRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceNewParamsRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceNewParamsRewriteModelCfQwenQwen3_30bA3bFp8, InstanceNewParamsRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceNewParamsRewriteModelCfMoonshotaiKimiK2Instruct, InstanceNewParamsRewriteModelCfGoogleGemma3_12bIt, InstanceNewParamsRewriteModelCfGoogleGemma4_26bA4bIt, InstanceNewParamsRewriteModelCfMoonshotaiKimiK2_5, InstanceNewParamsRewriteModelAnthropicClaude3_7Sonnet, InstanceNewParamsRewriteModelAnthropicClaudeSonnet4, InstanceNewParamsRewriteModelAnthropicClaudeOpus4, InstanceNewParamsRewriteModelAnthropicClaude3_5Haiku, InstanceNewParamsRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceNewParamsRewriteModelCerebrasQwen3_235bA22bThinking, InstanceNewParamsRewriteModelCerebrasLlama3_3_70b, InstanceNewParamsRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceNewParamsRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceNewParamsRewriteModelCerebrasGptOSs120b, InstanceNewParamsRewriteModelGoogleAIStudioGemini2_5Flash, InstanceNewParamsRewriteModelGoogleAIStudioGemini2_5Pro, InstanceNewParamsRewriteModelGrokGrok4, InstanceNewParamsRewriteModelGroqLlama3_3_70bVersatile, InstanceNewParamsRewriteModelGroqLlama3_1_8bInstant, InstanceNewParamsRewriteModelOpenAIGpt5, InstanceNewParamsRewriteModelOpenAIGpt5Mini, InstanceNewParamsRewriteModelOpenAIGpt5Nano, InstanceNewParamsRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -5358,6 +5762,29 @@ func (r InstanceNewParamsSourceParamsWebCrawlerStoreOptions) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+type InstanceNewParamsSyncInterval float64
+
+const (
+	InstanceNewParamsSyncInterval900   InstanceNewParamsSyncInterval = 900
+	InstanceNewParamsSyncInterval1800  InstanceNewParamsSyncInterval = 1800
+	InstanceNewParamsSyncInterval3600  InstanceNewParamsSyncInterval = 3600
+	InstanceNewParamsSyncInterval7200  InstanceNewParamsSyncInterval = 7200
+	InstanceNewParamsSyncInterval14400 InstanceNewParamsSyncInterval = 14400
+	InstanceNewParamsSyncInterval21600 InstanceNewParamsSyncInterval = 21600
+	InstanceNewParamsSyncInterval43200 InstanceNewParamsSyncInterval = 43200
+	InstanceNewParamsSyncInterval86400 InstanceNewParamsSyncInterval = 86400
+)
+
+func (r InstanceNewParamsSyncInterval) IsKnown() bool {
+	switch r {
+	case InstanceNewParamsSyncInterval900, InstanceNewParamsSyncInterval1800, InstanceNewParamsSyncInterval3600, InstanceNewParamsSyncInterval7200, InstanceNewParamsSyncInterval14400, InstanceNewParamsSyncInterval21600, InstanceNewParamsSyncInterval43200, InstanceNewParamsSyncInterval86400:
+		return true
+	}
+	return false
+}
+
 type InstanceNewParamsType string
 
 const (
@@ -5397,6 +5824,7 @@ func (r instanceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID      param.Field[string]                               `path:"account_id" api:"required"`
 	AIGatewayID    param.Field[string]                               `json:"ai_gateway_id"`
 	AISearchModel  param.Field[InstanceUpdateParamsAISearchModel]    `json:"ai_search_model"`
@@ -5410,25 +5838,28 @@ type InstanceUpdateParams struct {
 	FusionMethod   param.Field[InstanceUpdateParamsFusionMethod]     `json:"fusion_method"`
 	// Controls which storage backends are used during indexing. Defaults to
 	// vector-only.
-	IndexMethod                    param.Field[InstanceUpdateParamsIndexMethod]          `json:"index_method"`
-	IndexingOptions                param.Field[InstanceUpdateParamsIndexingOptions]      `json:"indexing_options"`
-	MaxNumResults                  param.Field[int64]                                    `json:"max_num_results"`
-	Metadata                       param.Field[InstanceUpdateParamsMetadata]             `json:"metadata"`
-	Paused                         param.Field[bool]                                     `json:"paused"`
-	PublicEndpointParams           param.Field[InstanceUpdateParamsPublicEndpointParams] `json:"public_endpoint_params"`
-	Reranking                      param.Field[bool]                                     `json:"reranking"`
-	RerankingModel                 param.Field[InstanceUpdateParamsRerankingModel]       `json:"reranking_model"`
-	RetrievalOptions               param.Field[InstanceUpdateParamsRetrievalOptions]     `json:"retrieval_options"`
-	RewriteModel                   param.Field[InstanceUpdateParamsRewriteModel]         `json:"rewrite_model"`
-	RewriteQuery                   param.Field[bool]                                     `json:"rewrite_query"`
-	ScoreThreshold                 param.Field[float64]                                  `json:"score_threshold"`
-	SourceParams                   param.Field[InstanceUpdateParamsSourceParams]         `json:"source_params"`
-	Summarization                  param.Field[bool]                                     `json:"summarization"`
-	SummarizationModel             param.Field[InstanceUpdateParamsSummarizationModel]   `json:"summarization_model"`
-	SystemPromptAISearch           param.Field[string]                                   `json:"system_prompt_ai_search"`
-	SystemPromptIndexSummarization param.Field[string]                                   `json:"system_prompt_index_summarization"`
-	SystemPromptRewriteQuery       param.Field[string]                                   `json:"system_prompt_rewrite_query"`
-	TokenID                        param.Field[string]                                   `json:"token_id" format:"uuid"`
+	IndexMethod          param.Field[InstanceUpdateParamsIndexMethod]          `json:"index_method"`
+	IndexingOptions      param.Field[InstanceUpdateParamsIndexingOptions]      `json:"indexing_options"`
+	MaxNumResults        param.Field[int64]                                    `json:"max_num_results"`
+	Metadata             param.Field[InstanceUpdateParamsMetadata]             `json:"metadata"`
+	Paused               param.Field[bool]                                     `json:"paused"`
+	PublicEndpointParams param.Field[InstanceUpdateParamsPublicEndpointParams] `json:"public_endpoint_params"`
+	Reranking            param.Field[bool]                                     `json:"reranking"`
+	RerankingModel       param.Field[InstanceUpdateParamsRerankingModel]       `json:"reranking_model"`
+	RetrievalOptions     param.Field[InstanceUpdateParamsRetrievalOptions]     `json:"retrieval_options"`
+	RewriteModel         param.Field[InstanceUpdateParamsRewriteModel]         `json:"rewrite_model"`
+	RewriteQuery         param.Field[bool]                                     `json:"rewrite_query"`
+	ScoreThreshold       param.Field[float64]                                  `json:"score_threshold"`
+	SourceParams         param.Field[InstanceUpdateParamsSourceParams]         `json:"source_params"`
+	Summarization        param.Field[bool]                                     `json:"summarization"`
+	SummarizationModel   param.Field[InstanceUpdateParamsSummarizationModel]   `json:"summarization_model"`
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	SyncInterval                   param.Field[InstanceUpdateParamsSyncInterval] `json:"sync_interval"`
+	SystemPromptAISearch           param.Field[string]                           `json:"system_prompt_ai_search"`
+	SystemPromptIndexSummarization param.Field[string]                           `json:"system_prompt_index_summarization"`
+	SystemPromptRewriteQuery       param.Field[string]                           `json:"system_prompt_rewrite_query"`
+	TokenID                        param.Field[string]                           `json:"token_id" format:"uuid"`
 }
 
 func (r InstanceUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -5447,6 +5878,8 @@ const (
 	InstanceUpdateParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceUpdateParamsAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceUpdateParamsAISearchModelCfMoonshotaiKimiK2Instruct            InstanceUpdateParamsAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceUpdateParamsAISearchModelCfGoogleGemma3_12bIt                  InstanceUpdateParamsAISearchModel = "@cf/google/gemma-3-12b-it"
+	InstanceUpdateParamsAISearchModelCfGoogleGemma4_26bA4bIt               InstanceUpdateParamsAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceUpdateParamsAISearchModelCfMoonshotaiKimiK2_5                  InstanceUpdateParamsAISearchModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceUpdateParamsAISearchModelAnthropicClaude3_7Sonnet              InstanceUpdateParamsAISearchModel = "anthropic/claude-3-7-sonnet"
 	InstanceUpdateParamsAISearchModelAnthropicClaudeSonnet4                InstanceUpdateParamsAISearchModel = "anthropic/claude-sonnet-4"
 	InstanceUpdateParamsAISearchModelAnthropicClaudeOpus4                  InstanceUpdateParamsAISearchModel = "anthropic/claude-opus-4"
@@ -5470,7 +5903,7 @@ const (
 
 func (r InstanceUpdateParamsAISearchModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceUpdateParamsAISearchModelCfZaiOrgGlm4_7Flash, InstanceUpdateParamsAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceUpdateParamsAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceUpdateParamsAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceUpdateParamsAISearchModelCfQwenQwen3_30bA3bFp8, InstanceUpdateParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceUpdateParamsAISearchModelCfMoonshotaiKimiK2Instruct, InstanceUpdateParamsAISearchModelCfGoogleGemma3_12bIt, InstanceUpdateParamsAISearchModelAnthropicClaude3_7Sonnet, InstanceUpdateParamsAISearchModelAnthropicClaudeSonnet4, InstanceUpdateParamsAISearchModelAnthropicClaudeOpus4, InstanceUpdateParamsAISearchModelAnthropicClaude3_5Haiku, InstanceUpdateParamsAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceUpdateParamsAISearchModelCerebrasQwen3_235bA22bThinking, InstanceUpdateParamsAISearchModelCerebrasLlama3_3_70b, InstanceUpdateParamsAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceUpdateParamsAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceUpdateParamsAISearchModelCerebrasGptOSs120b, InstanceUpdateParamsAISearchModelGoogleAIStudioGemini2_5Flash, InstanceUpdateParamsAISearchModelGoogleAIStudioGemini2_5Pro, InstanceUpdateParamsAISearchModelGrokGrok4, InstanceUpdateParamsAISearchModelGroqLlama3_3_70bVersatile, InstanceUpdateParamsAISearchModelGroqLlama3_1_8bInstant, InstanceUpdateParamsAISearchModelOpenAIGpt5, InstanceUpdateParamsAISearchModelOpenAIGpt5Mini, InstanceUpdateParamsAISearchModelOpenAIGpt5Nano, InstanceUpdateParamsAISearchModelEmpty:
+	case InstanceUpdateParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceUpdateParamsAISearchModelCfZaiOrgGlm4_7Flash, InstanceUpdateParamsAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceUpdateParamsAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceUpdateParamsAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceUpdateParamsAISearchModelCfQwenQwen3_30bA3bFp8, InstanceUpdateParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceUpdateParamsAISearchModelCfMoonshotaiKimiK2Instruct, InstanceUpdateParamsAISearchModelCfGoogleGemma3_12bIt, InstanceUpdateParamsAISearchModelCfGoogleGemma4_26bA4bIt, InstanceUpdateParamsAISearchModelCfMoonshotaiKimiK2_5, InstanceUpdateParamsAISearchModelAnthropicClaude3_7Sonnet, InstanceUpdateParamsAISearchModelAnthropicClaudeSonnet4, InstanceUpdateParamsAISearchModelAnthropicClaudeOpus4, InstanceUpdateParamsAISearchModelAnthropicClaude3_5Haiku, InstanceUpdateParamsAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceUpdateParamsAISearchModelCerebrasQwen3_235bA22bThinking, InstanceUpdateParamsAISearchModelCerebrasLlama3_3_70b, InstanceUpdateParamsAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceUpdateParamsAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceUpdateParamsAISearchModelCerebrasGptOSs120b, InstanceUpdateParamsAISearchModelGoogleAIStudioGemini2_5Flash, InstanceUpdateParamsAISearchModelGoogleAIStudioGemini2_5Pro, InstanceUpdateParamsAISearchModelGrokGrok4, InstanceUpdateParamsAISearchModelGroqLlama3_3_70bVersatile, InstanceUpdateParamsAISearchModelGroqLlama3_1_8bInstant, InstanceUpdateParamsAISearchModelOpenAIGpt5, InstanceUpdateParamsAISearchModelOpenAIGpt5Mini, InstanceUpdateParamsAISearchModelOpenAIGpt5Nano, InstanceUpdateParamsAISearchModelEmpty:
 		return true
 	}
 	return false
@@ -5601,11 +6034,22 @@ func (r InstanceUpdateParamsIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceUpdateParamsMetadata struct {
-	CreatedFromAISearchWizard param.Field[bool]   `json:"created_from_aisearch_wizard"`
-	WorkerDomain              param.Field[string] `json:"worker_domain"`
+	CreatedFromAISearchWizard param.Field[bool]                                        `json:"created_from_aisearch_wizard"`
+	SearchForAgents           param.Field[InstanceUpdateParamsMetadataSearchForAgents] `json:"search_for_agents"`
+	WorkerDomain              param.Field[string]                                      `json:"worker_domain"`
 }
 
 func (r InstanceUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsMetadataSearchForAgents struct {
+	Hostname param.Field[string] `json:"hostname" api:"required"`
+	ZoneID   param.Field[string] `json:"zone_id" api:"required"`
+	ZoneName param.Field[string] `json:"zone_name" api:"required"`
+}
+
+func (r InstanceUpdateParamsMetadataSearchForAgents) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -5699,8 +6143,6 @@ type InstanceUpdateParamsRetrievalOptions struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceUpdateParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -5748,8 +6190,6 @@ func (r InstanceUpdateParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceUpdateParamsRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -5777,6 +6217,8 @@ const (
 	InstanceUpdateParamsRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceUpdateParamsRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceUpdateParamsRewriteModelCfMoonshotaiKimiK2Instruct            InstanceUpdateParamsRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceUpdateParamsRewriteModelCfGoogleGemma3_12bIt                  InstanceUpdateParamsRewriteModel = "@cf/google/gemma-3-12b-it"
+	InstanceUpdateParamsRewriteModelCfGoogleGemma4_26bA4bIt               InstanceUpdateParamsRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceUpdateParamsRewriteModelCfMoonshotaiKimiK2_5                  InstanceUpdateParamsRewriteModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceUpdateParamsRewriteModelAnthropicClaude3_7Sonnet              InstanceUpdateParamsRewriteModel = "anthropic/claude-3-7-sonnet"
 	InstanceUpdateParamsRewriteModelAnthropicClaudeSonnet4                InstanceUpdateParamsRewriteModel = "anthropic/claude-sonnet-4"
 	InstanceUpdateParamsRewriteModelAnthropicClaudeOpus4                  InstanceUpdateParamsRewriteModel = "anthropic/claude-opus-4"
@@ -5800,7 +6242,7 @@ const (
 
 func (r InstanceUpdateParamsRewriteModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceUpdateParamsRewriteModelCfZaiOrgGlm4_7Flash, InstanceUpdateParamsRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceUpdateParamsRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceUpdateParamsRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceUpdateParamsRewriteModelCfQwenQwen3_30bA3bFp8, InstanceUpdateParamsRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceUpdateParamsRewriteModelCfMoonshotaiKimiK2Instruct, InstanceUpdateParamsRewriteModelCfGoogleGemma3_12bIt, InstanceUpdateParamsRewriteModelAnthropicClaude3_7Sonnet, InstanceUpdateParamsRewriteModelAnthropicClaudeSonnet4, InstanceUpdateParamsRewriteModelAnthropicClaudeOpus4, InstanceUpdateParamsRewriteModelAnthropicClaude3_5Haiku, InstanceUpdateParamsRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceUpdateParamsRewriteModelCerebrasQwen3_235bA22bThinking, InstanceUpdateParamsRewriteModelCerebrasLlama3_3_70b, InstanceUpdateParamsRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceUpdateParamsRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceUpdateParamsRewriteModelCerebrasGptOSs120b, InstanceUpdateParamsRewriteModelGoogleAIStudioGemini2_5Flash, InstanceUpdateParamsRewriteModelGoogleAIStudioGemini2_5Pro, InstanceUpdateParamsRewriteModelGrokGrok4, InstanceUpdateParamsRewriteModelGroqLlama3_3_70bVersatile, InstanceUpdateParamsRewriteModelGroqLlama3_1_8bInstant, InstanceUpdateParamsRewriteModelOpenAIGpt5, InstanceUpdateParamsRewriteModelOpenAIGpt5Mini, InstanceUpdateParamsRewriteModelOpenAIGpt5Nano, InstanceUpdateParamsRewriteModelEmpty:
+	case InstanceUpdateParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceUpdateParamsRewriteModelCfZaiOrgGlm4_7Flash, InstanceUpdateParamsRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceUpdateParamsRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceUpdateParamsRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceUpdateParamsRewriteModelCfQwenQwen3_30bA3bFp8, InstanceUpdateParamsRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceUpdateParamsRewriteModelCfMoonshotaiKimiK2Instruct, InstanceUpdateParamsRewriteModelCfGoogleGemma3_12bIt, InstanceUpdateParamsRewriteModelCfGoogleGemma4_26bA4bIt, InstanceUpdateParamsRewriteModelCfMoonshotaiKimiK2_5, InstanceUpdateParamsRewriteModelAnthropicClaude3_7Sonnet, InstanceUpdateParamsRewriteModelAnthropicClaudeSonnet4, InstanceUpdateParamsRewriteModelAnthropicClaudeOpus4, InstanceUpdateParamsRewriteModelAnthropicClaude3_5Haiku, InstanceUpdateParamsRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceUpdateParamsRewriteModelCerebrasQwen3_235bA22bThinking, InstanceUpdateParamsRewriteModelCerebrasLlama3_3_70b, InstanceUpdateParamsRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceUpdateParamsRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceUpdateParamsRewriteModelCerebrasGptOSs120b, InstanceUpdateParamsRewriteModelGoogleAIStudioGemini2_5Flash, InstanceUpdateParamsRewriteModelGoogleAIStudioGemini2_5Pro, InstanceUpdateParamsRewriteModelGrokGrok4, InstanceUpdateParamsRewriteModelGroqLlama3_3_70bVersatile, InstanceUpdateParamsRewriteModelGroqLlama3_1_8bInstant, InstanceUpdateParamsRewriteModelOpenAIGpt5, InstanceUpdateParamsRewriteModelOpenAIGpt5Mini, InstanceUpdateParamsRewriteModelOpenAIGpt5Nano, InstanceUpdateParamsRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -5931,6 +6373,8 @@ const (
 	InstanceUpdateParamsSummarizationModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceUpdateParamsSummarizationModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceUpdateParamsSummarizationModelCfMoonshotaiKimiK2Instruct            InstanceUpdateParamsSummarizationModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceUpdateParamsSummarizationModelCfGoogleGemma3_12bIt                  InstanceUpdateParamsSummarizationModel = "@cf/google/gemma-3-12b-it"
+	InstanceUpdateParamsSummarizationModelCfGoogleGemma4_26bA4bIt               InstanceUpdateParamsSummarizationModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceUpdateParamsSummarizationModelCfMoonshotaiKimiK2_5                  InstanceUpdateParamsSummarizationModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceUpdateParamsSummarizationModelAnthropicClaude3_7Sonnet              InstanceUpdateParamsSummarizationModel = "anthropic/claude-3-7-sonnet"
 	InstanceUpdateParamsSummarizationModelAnthropicClaudeSonnet4                InstanceUpdateParamsSummarizationModel = "anthropic/claude-sonnet-4"
 	InstanceUpdateParamsSummarizationModelAnthropicClaudeOpus4                  InstanceUpdateParamsSummarizationModel = "anthropic/claude-opus-4"
@@ -5954,7 +6398,30 @@ const (
 
 func (r InstanceUpdateParamsSummarizationModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsSummarizationModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceUpdateParamsSummarizationModelCfZaiOrgGlm4_7Flash, InstanceUpdateParamsSummarizationModelCfMetaLlama3_1_8bInstructFast, InstanceUpdateParamsSummarizationModelCfMetaLlama3_1_8bInstructFp8, InstanceUpdateParamsSummarizationModelCfMetaLlama4Scout17b16eInstruct, InstanceUpdateParamsSummarizationModelCfQwenQwen3_30bA3bFp8, InstanceUpdateParamsSummarizationModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceUpdateParamsSummarizationModelCfMoonshotaiKimiK2Instruct, InstanceUpdateParamsSummarizationModelCfGoogleGemma3_12bIt, InstanceUpdateParamsSummarizationModelAnthropicClaude3_7Sonnet, InstanceUpdateParamsSummarizationModelAnthropicClaudeSonnet4, InstanceUpdateParamsSummarizationModelAnthropicClaudeOpus4, InstanceUpdateParamsSummarizationModelAnthropicClaude3_5Haiku, InstanceUpdateParamsSummarizationModelCerebrasQwen3_235bA22bInstruct, InstanceUpdateParamsSummarizationModelCerebrasQwen3_235bA22bThinking, InstanceUpdateParamsSummarizationModelCerebrasLlama3_3_70b, InstanceUpdateParamsSummarizationModelCerebrasLlama4Maverick17b128eInstruct, InstanceUpdateParamsSummarizationModelCerebrasLlama4Scout17b16eInstruct, InstanceUpdateParamsSummarizationModelCerebrasGptOSs120b, InstanceUpdateParamsSummarizationModelGoogleAIStudioGemini2_5Flash, InstanceUpdateParamsSummarizationModelGoogleAIStudioGemini2_5Pro, InstanceUpdateParamsSummarizationModelGrokGrok4, InstanceUpdateParamsSummarizationModelGroqLlama3_3_70bVersatile, InstanceUpdateParamsSummarizationModelGroqLlama3_1_8bInstant, InstanceUpdateParamsSummarizationModelOpenAIGpt5, InstanceUpdateParamsSummarizationModelOpenAIGpt5Mini, InstanceUpdateParamsSummarizationModelOpenAIGpt5Nano, InstanceUpdateParamsSummarizationModelEmpty:
+	case InstanceUpdateParamsSummarizationModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceUpdateParamsSummarizationModelCfZaiOrgGlm4_7Flash, InstanceUpdateParamsSummarizationModelCfMetaLlama3_1_8bInstructFast, InstanceUpdateParamsSummarizationModelCfMetaLlama3_1_8bInstructFp8, InstanceUpdateParamsSummarizationModelCfMetaLlama4Scout17b16eInstruct, InstanceUpdateParamsSummarizationModelCfQwenQwen3_30bA3bFp8, InstanceUpdateParamsSummarizationModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceUpdateParamsSummarizationModelCfMoonshotaiKimiK2Instruct, InstanceUpdateParamsSummarizationModelCfGoogleGemma3_12bIt, InstanceUpdateParamsSummarizationModelCfGoogleGemma4_26bA4bIt, InstanceUpdateParamsSummarizationModelCfMoonshotaiKimiK2_5, InstanceUpdateParamsSummarizationModelAnthropicClaude3_7Sonnet, InstanceUpdateParamsSummarizationModelAnthropicClaudeSonnet4, InstanceUpdateParamsSummarizationModelAnthropicClaudeOpus4, InstanceUpdateParamsSummarizationModelAnthropicClaude3_5Haiku, InstanceUpdateParamsSummarizationModelCerebrasQwen3_235bA22bInstruct, InstanceUpdateParamsSummarizationModelCerebrasQwen3_235bA22bThinking, InstanceUpdateParamsSummarizationModelCerebrasLlama3_3_70b, InstanceUpdateParamsSummarizationModelCerebrasLlama4Maverick17b128eInstruct, InstanceUpdateParamsSummarizationModelCerebrasLlama4Scout17b16eInstruct, InstanceUpdateParamsSummarizationModelCerebrasGptOSs120b, InstanceUpdateParamsSummarizationModelGoogleAIStudioGemini2_5Flash, InstanceUpdateParamsSummarizationModelGoogleAIStudioGemini2_5Pro, InstanceUpdateParamsSummarizationModelGrokGrok4, InstanceUpdateParamsSummarizationModelGroqLlama3_3_70bVersatile, InstanceUpdateParamsSummarizationModelGroqLlama3_1_8bInstant, InstanceUpdateParamsSummarizationModelOpenAIGpt5, InstanceUpdateParamsSummarizationModelOpenAIGpt5Mini, InstanceUpdateParamsSummarizationModelOpenAIGpt5Nano, InstanceUpdateParamsSummarizationModelEmpty:
+		return true
+	}
+	return false
+}
+
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+type InstanceUpdateParamsSyncInterval float64
+
+const (
+	InstanceUpdateParamsSyncInterval900   InstanceUpdateParamsSyncInterval = 900
+	InstanceUpdateParamsSyncInterval1800  InstanceUpdateParamsSyncInterval = 1800
+	InstanceUpdateParamsSyncInterval3600  InstanceUpdateParamsSyncInterval = 3600
+	InstanceUpdateParamsSyncInterval7200  InstanceUpdateParamsSyncInterval = 7200
+	InstanceUpdateParamsSyncInterval14400 InstanceUpdateParamsSyncInterval = 14400
+	InstanceUpdateParamsSyncInterval21600 InstanceUpdateParamsSyncInterval = 21600
+	InstanceUpdateParamsSyncInterval43200 InstanceUpdateParamsSyncInterval = 43200
+	InstanceUpdateParamsSyncInterval86400 InstanceUpdateParamsSyncInterval = 86400
+)
+
+func (r InstanceUpdateParamsSyncInterval) IsKnown() bool {
+	switch r {
+	case InstanceUpdateParamsSyncInterval900, InstanceUpdateParamsSyncInterval1800, InstanceUpdateParamsSyncInterval3600, InstanceUpdateParamsSyncInterval7200, InstanceUpdateParamsSyncInterval14400, InstanceUpdateParamsSyncInterval21600, InstanceUpdateParamsSyncInterval43200, InstanceUpdateParamsSyncInterval86400:
 		return true
 	}
 	return false
@@ -5984,6 +6451,7 @@ func (r instanceUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Namespace param.Field[string] `query:"namespace"`
 	// Order By Column Name
@@ -6036,6 +6504,7 @@ func (r InstanceListParamsOrderByDirection) IsKnown() bool {
 }
 
 type InstanceDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -6063,6 +6532,7 @@ func (r instanceDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID       param.Field[string]                                       `path:"account_id" api:"required"`
 	Messages        param.Field[[]InstanceChatCompletionsParamsMessage]       `json:"messages" api:"required"`
 	AISearchOptions param.Field[InstanceChatCompletionsParamsAISearchOptions] `json:"ai_search_options"`
@@ -6161,6 +6631,8 @@ const (
 	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct            InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt                  InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-3-12b-it"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt               InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5                  InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet              InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-7-sonnet"
 	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4                InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-sonnet-4"
 	InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4                  InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-opus-4"
@@ -6184,7 +6656,7 @@ const (
 
 func (r InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel) IsKnown() bool {
 	switch r {
-	case InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGrokGrok4, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelEmpty:
+	case InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGrokGrok4, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano, InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -6227,8 +6699,6 @@ type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                               `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                                 `json:"max_num_results"`
@@ -6295,8 +6765,6 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod) IsKno
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
@@ -6340,6 +6808,8 @@ const (
 	InstanceChatCompletionsParamsModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceChatCompletionsParamsModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceChatCompletionsParamsModelCfMoonshotaiKimiK2Instruct            InstanceChatCompletionsParamsModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceChatCompletionsParamsModelCfGoogleGemma3_12bIt                  InstanceChatCompletionsParamsModel = "@cf/google/gemma-3-12b-it"
+	InstanceChatCompletionsParamsModelCfGoogleGemma4_26bA4bIt               InstanceChatCompletionsParamsModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceChatCompletionsParamsModelCfMoonshotaiKimiK2_5                  InstanceChatCompletionsParamsModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceChatCompletionsParamsModelAnthropicClaude3_7Sonnet              InstanceChatCompletionsParamsModel = "anthropic/claude-3-7-sonnet"
 	InstanceChatCompletionsParamsModelAnthropicClaudeSonnet4                InstanceChatCompletionsParamsModel = "anthropic/claude-sonnet-4"
 	InstanceChatCompletionsParamsModelAnthropicClaudeOpus4                  InstanceChatCompletionsParamsModel = "anthropic/claude-opus-4"
@@ -6363,13 +6833,14 @@ const (
 
 func (r InstanceChatCompletionsParamsModel) IsKnown() bool {
 	switch r {
-	case InstanceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceChatCompletionsParamsModelCfZaiOrgGlm4_7Flash, InstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFast, InstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFp8, InstanceChatCompletionsParamsModelCfMetaLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsModelCfQwenQwen3_30bA3bFp8, InstanceChatCompletionsParamsModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceChatCompletionsParamsModelCfMoonshotaiKimiK2Instruct, InstanceChatCompletionsParamsModelCfGoogleGemma3_12bIt, InstanceChatCompletionsParamsModelAnthropicClaude3_7Sonnet, InstanceChatCompletionsParamsModelAnthropicClaudeSonnet4, InstanceChatCompletionsParamsModelAnthropicClaudeOpus4, InstanceChatCompletionsParamsModelAnthropicClaude3_5Haiku, InstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bInstruct, InstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bThinking, InstanceChatCompletionsParamsModelCerebrasLlama3_3_70b, InstanceChatCompletionsParamsModelCerebrasLlama4Maverick17b128eInstruct, InstanceChatCompletionsParamsModelCerebrasLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsModelCerebrasGptOSs120b, InstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Flash, InstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Pro, InstanceChatCompletionsParamsModelGrokGrok4, InstanceChatCompletionsParamsModelGroqLlama3_3_70bVersatile, InstanceChatCompletionsParamsModelGroqLlama3_1_8bInstant, InstanceChatCompletionsParamsModelOpenAIGpt5, InstanceChatCompletionsParamsModelOpenAIGpt5Mini, InstanceChatCompletionsParamsModelOpenAIGpt5Nano, InstanceChatCompletionsParamsModelEmpty:
+	case InstanceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceChatCompletionsParamsModelCfZaiOrgGlm4_7Flash, InstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFast, InstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFp8, InstanceChatCompletionsParamsModelCfMetaLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsModelCfQwenQwen3_30bA3bFp8, InstanceChatCompletionsParamsModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceChatCompletionsParamsModelCfMoonshotaiKimiK2Instruct, InstanceChatCompletionsParamsModelCfGoogleGemma3_12bIt, InstanceChatCompletionsParamsModelCfGoogleGemma4_26bA4bIt, InstanceChatCompletionsParamsModelCfMoonshotaiKimiK2_5, InstanceChatCompletionsParamsModelAnthropicClaude3_7Sonnet, InstanceChatCompletionsParamsModelAnthropicClaudeSonnet4, InstanceChatCompletionsParamsModelAnthropicClaudeOpus4, InstanceChatCompletionsParamsModelAnthropicClaude3_5Haiku, InstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bInstruct, InstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bThinking, InstanceChatCompletionsParamsModelCerebrasLlama3_3_70b, InstanceChatCompletionsParamsModelCerebrasLlama4Maverick17b128eInstruct, InstanceChatCompletionsParamsModelCerebrasLlama4Scout17b16eInstruct, InstanceChatCompletionsParamsModelCerebrasGptOSs120b, InstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Flash, InstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Pro, InstanceChatCompletionsParamsModelGrokGrok4, InstanceChatCompletionsParamsModelGroqLlama3_3_70bVersatile, InstanceChatCompletionsParamsModelGroqLlama3_1_8bInstant, InstanceChatCompletionsParamsModelOpenAIGpt5, InstanceChatCompletionsParamsModelOpenAIGpt5Mini, InstanceChatCompletionsParamsModelOpenAIGpt5Nano, InstanceChatCompletionsParamsModelEmpty:
 		return true
 	}
 	return false
 }
 
 type InstanceReadParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -6397,41 +6868,17 @@ func (r instanceReadResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceSearchParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID       param.Field[string]                              `path:"account_id" api:"required"`
-	Messages        param.Field[[]InstanceSearchParamsMessage]       `json:"messages" api:"required"`
 	AISearchOptions param.Field[InstanceSearchParamsAISearchOptions] `json:"ai_search_options"`
+	Messages        param.Field[[]InstanceSearchParamsMessage]       `json:"messages"`
+	// A simple text query string. Alternative to 'messages' — provide either this or
+	// 'messages', not both.
+	Query param.Field[string] `json:"query"`
 }
 
 func (r InstanceSearchParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type InstanceSearchParamsMessage struct {
-	Content     param.Field[string]                           `json:"content" api:"required"`
-	Role        param.Field[InstanceSearchParamsMessagesRole] `json:"role" api:"required"`
-	ExtraFields map[string]interface{}                        `json:"-,extras"`
-}
-
-func (r InstanceSearchParamsMessage) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type InstanceSearchParamsMessagesRole string
-
-const (
-	InstanceSearchParamsMessagesRoleSystem    InstanceSearchParamsMessagesRole = "system"
-	InstanceSearchParamsMessagesRoleDeveloper InstanceSearchParamsMessagesRole = "developer"
-	InstanceSearchParamsMessagesRoleUser      InstanceSearchParamsMessagesRole = "user"
-	InstanceSearchParamsMessagesRoleAssistant InstanceSearchParamsMessagesRole = "assistant"
-	InstanceSearchParamsMessagesRoleTool      InstanceSearchParamsMessagesRole = "tool"
-)
-
-func (r InstanceSearchParamsMessagesRole) IsKnown() bool {
-	switch r {
-	case InstanceSearchParamsMessagesRoleSystem, InstanceSearchParamsMessagesRoleDeveloper, InstanceSearchParamsMessagesRoleUser, InstanceSearchParamsMessagesRoleAssistant, InstanceSearchParamsMessagesRoleTool:
-		return true
-	}
-	return false
 }
 
 type InstanceSearchParamsAISearchOptions struct {
@@ -6493,6 +6940,8 @@ const (
 	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
 	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct            InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
 	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt                  InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-3-12b-it"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt               InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
+	InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5                  InstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2.5"
 	InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet              InstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-7-sonnet"
 	InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4                InstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-sonnet-4"
 	InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4                  InstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-opus-4"
@@ -6516,7 +6965,7 @@ const (
 
 func (r InstanceSearchParamsAISearchOptionsQueryRewriteModel) IsKnown() bool {
 	switch r {
-	case InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b, InstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash, InstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro, InstanceSearchParamsAISearchOptionsQueryRewriteModelGrokGrok4, InstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile, InstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant, InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5, InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini, InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano, InstanceSearchParamsAISearchOptionsQueryRewriteModelEmpty:
+	case InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt, InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4, InstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b, InstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash, InstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro, InstanceSearchParamsAISearchOptionsQueryRewriteModelGrokGrok4, InstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile, InstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant, InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5, InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini, InstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano, InstanceSearchParamsAISearchOptionsQueryRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -6559,8 +7008,6 @@ type InstanceSearchParamsAISearchOptionsRetrieval struct {
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
 	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-	// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-	// 'or' respectively.
 	KeywordMatchMode param.Field[InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                      `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                        `json:"max_num_results"`
@@ -6627,8 +7074,6 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalFusionMethod) IsKnown() bool
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
 // containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
-// Legacy values 'exact_match' and 'fuzzy_match' are accepted and map to 'and' and
-// 'or' respectively.
 type InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
@@ -6660,6 +7105,34 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalRetrievalType) IsKnown() boo
 	return false
 }
 
+type InstanceSearchParamsMessage struct {
+	Content     param.Field[string]                           `json:"content" api:"required"`
+	Role        param.Field[InstanceSearchParamsMessagesRole] `json:"role" api:"required"`
+	ExtraFields map[string]interface{}                        `json:"-,extras"`
+}
+
+func (r InstanceSearchParamsMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceSearchParamsMessagesRole string
+
+const (
+	InstanceSearchParamsMessagesRoleSystem    InstanceSearchParamsMessagesRole = "system"
+	InstanceSearchParamsMessagesRoleDeveloper InstanceSearchParamsMessagesRole = "developer"
+	InstanceSearchParamsMessagesRoleUser      InstanceSearchParamsMessagesRole = "user"
+	InstanceSearchParamsMessagesRoleAssistant InstanceSearchParamsMessagesRole = "assistant"
+	InstanceSearchParamsMessagesRoleTool      InstanceSearchParamsMessagesRole = "tool"
+)
+
+func (r InstanceSearchParamsMessagesRole) IsKnown() bool {
+	switch r {
+	case InstanceSearchParamsMessagesRoleSystem, InstanceSearchParamsMessagesRoleDeveloper, InstanceSearchParamsMessagesRoleUser, InstanceSearchParamsMessagesRoleAssistant, InstanceSearchParamsMessagesRoleTool:
+		return true
+	}
+	return false
+}
+
 type InstanceSearchResponseEnvelope struct {
 	Result  InstanceSearchResponse             `json:"result" api:"required"`
 	Success bool                               `json:"success" api:"required"`
@@ -6684,6 +7157,7 @@ func (r instanceSearchResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceStatsParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
