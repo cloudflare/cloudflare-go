@@ -42,6 +42,11 @@ func NewSettingAccountViewService(opts ...option.RequestOption) (r *SettingAccou
 func (r *SettingAccountViewService) New(ctx context.Context, params SettingAccountViewNewParams, opts ...option.RequestOption) (res *SettingAccountViewNewResponse, err error) {
 	var env SettingAccountViewNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,6 +65,11 @@ func (r *SettingAccountViewService) List(ctx context.Context, params SettingAcco
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -86,6 +96,11 @@ func (r *SettingAccountViewService) ListAutoPaging(ctx context.Context, params S
 func (r *SettingAccountViewService) Delete(ctx context.Context, viewID string, body SettingAccountViewDeleteParams, opts ...option.RequestOption) (res *SettingAccountViewDeleteResponse, err error) {
 	var env SettingAccountViewDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -107,6 +122,11 @@ func (r *SettingAccountViewService) Delete(ctx context.Context, viewID string, b
 func (r *SettingAccountViewService) Edit(ctx context.Context, viewID string, params SettingAccountViewEditParams, opts ...option.RequestOption) (res *SettingAccountViewEditResponse, err error) {
 	var env SettingAccountViewEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -128,6 +148,11 @@ func (r *SettingAccountViewService) Edit(ctx context.Context, viewID string, par
 func (r *SettingAccountViewService) Get(ctx context.Context, viewID string, query SettingAccountViewGetParams, opts ...option.RequestOption) (res *SettingAccountViewGetResponse, err error) {
 	var env SettingAccountViewGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -305,6 +330,8 @@ func (r settingAccountViewGetResponseJSON) RawJSON() string {
 
 type SettingAccountViewNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the view.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -457,6 +484,8 @@ func (r SettingAccountViewNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingAccountViewListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to order DNS views in.
 	Direction param.Field[SettingAccountViewListParamsDirection] `query:"direction"`
@@ -472,6 +501,8 @@ type SettingAccountViewListParams struct {
 	// Number of DNS views per page.
 	PerPage param.Field[float64] `query:"per_page"`
 	// A zone ID that exists in the zones list for the view.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `query:"zone_id"`
 	// A zone name that exists in the zones list for the view.
 	ZoneName param.Field[string] `query:"zone_name"`
@@ -559,6 +590,8 @@ func (r SettingAccountViewListParamsOrder) IsKnown() bool {
 
 type SettingAccountViewDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -585,6 +618,8 @@ func (r settingAccountViewDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SettingAccountViewEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the view.
 	Name param.Field[string] `json:"name"`
@@ -737,6 +772,8 @@ func (r SettingAccountViewEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingAccountViewGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
