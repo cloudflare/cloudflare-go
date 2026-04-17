@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestInvestigateTraceGet(t *testing.T) {
+func TestInvestigateTraceGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -31,7 +31,8 @@ func TestInvestigateTraceGet(t *testing.T) {
 		context.TODO(),
 		"4Njp3P0STMz2c02Q",
 		email_security.InvestigateTraceGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Submission: cloudflare.F(true),
 		},
 	)
 	if err != nil {
