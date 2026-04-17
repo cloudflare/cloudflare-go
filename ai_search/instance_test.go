@@ -128,7 +128,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 				}),
 			}),
 		}),
-		SyncInterval: cloudflare.F(ai_search.InstanceNewParamsSyncInterval3600),
+		SyncInterval: cloudflare.F(ai_search.InstanceNewParamsSyncInterval900),
 		TokenID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		Type:         cloudflare.F(ai_search.InstanceNewParamsTypeR2),
 	})
@@ -257,7 +257,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			}),
 			Summarization:                  cloudflare.F(true),
 			SummarizationModel:             cloudflare.F(ai_search.InstanceUpdateParamsSummarizationModelCfMetaLlama3_3_70bInstructFp8Fast),
-			SyncInterval:                   cloudflare.F(ai_search.InstanceUpdateParamsSyncInterval3600),
+			SyncInterval:                   cloudflare.F(ai_search.InstanceUpdateParamsSyncInterval900),
 			SystemPromptAISearch:           cloudflare.F("system_prompt_ai_search"),
 			SystemPromptIndexSummarization: cloudflare.F("system_prompt_index_summarization"),
 			SystemPromptRewriteQuery:       cloudflare.F("system_prompt_rewrite_query"),

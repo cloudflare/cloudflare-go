@@ -324,8 +324,8 @@ type NamespaceInstanceNewResponse struct {
 	Source               string                                           `json:"source" api:"nullable"`
 	SourceParams         NamespaceInstanceNewResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                           `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval NamespaceInstanceNewResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                   `json:"token_id" format:"uuid"`
 	Type         NamespaceInstanceNewResponseType         `json:"type" api:"nullable"`
@@ -1155,11 +1155,13 @@ func (r namespaceInstanceNewResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJ
 	return r.raw
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type NamespaceInstanceNewResponseSyncInterval float64
 
 const (
+	NamespaceInstanceNewResponseSyncInterval900   NamespaceInstanceNewResponseSyncInterval = 900
+	NamespaceInstanceNewResponseSyncInterval1800  NamespaceInstanceNewResponseSyncInterval = 1800
 	NamespaceInstanceNewResponseSyncInterval3600  NamespaceInstanceNewResponseSyncInterval = 3600
 	NamespaceInstanceNewResponseSyncInterval7200  NamespaceInstanceNewResponseSyncInterval = 7200
 	NamespaceInstanceNewResponseSyncInterval14400 NamespaceInstanceNewResponseSyncInterval = 14400
@@ -1170,7 +1172,7 @@ const (
 
 func (r NamespaceInstanceNewResponseSyncInterval) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceNewResponseSyncInterval3600, NamespaceInstanceNewResponseSyncInterval7200, NamespaceInstanceNewResponseSyncInterval14400, NamespaceInstanceNewResponseSyncInterval21600, NamespaceInstanceNewResponseSyncInterval43200, NamespaceInstanceNewResponseSyncInterval86400:
+	case NamespaceInstanceNewResponseSyncInterval900, NamespaceInstanceNewResponseSyncInterval1800, NamespaceInstanceNewResponseSyncInterval3600, NamespaceInstanceNewResponseSyncInterval7200, NamespaceInstanceNewResponseSyncInterval14400, NamespaceInstanceNewResponseSyncInterval21600, NamespaceInstanceNewResponseSyncInterval43200, NamespaceInstanceNewResponseSyncInterval86400:
 		return true
 	}
 	return false
@@ -1233,8 +1235,8 @@ type NamespaceInstanceUpdateResponse struct {
 	Source               string                                              `json:"source" api:"nullable"`
 	SourceParams         NamespaceInstanceUpdateResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                              `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval NamespaceInstanceUpdateResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                      `json:"token_id" format:"uuid"`
 	Type         NamespaceInstanceUpdateResponseType         `json:"type" api:"nullable"`
@@ -2064,11 +2066,13 @@ func (r namespaceInstanceUpdateResponseSourceParamsWebCrawlerStoreOptionsJSON) R
 	return r.raw
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type NamespaceInstanceUpdateResponseSyncInterval float64
 
 const (
+	NamespaceInstanceUpdateResponseSyncInterval900   NamespaceInstanceUpdateResponseSyncInterval = 900
+	NamespaceInstanceUpdateResponseSyncInterval1800  NamespaceInstanceUpdateResponseSyncInterval = 1800
 	NamespaceInstanceUpdateResponseSyncInterval3600  NamespaceInstanceUpdateResponseSyncInterval = 3600
 	NamespaceInstanceUpdateResponseSyncInterval7200  NamespaceInstanceUpdateResponseSyncInterval = 7200
 	NamespaceInstanceUpdateResponseSyncInterval14400 NamespaceInstanceUpdateResponseSyncInterval = 14400
@@ -2079,7 +2083,7 @@ const (
 
 func (r NamespaceInstanceUpdateResponseSyncInterval) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceUpdateResponseSyncInterval3600, NamespaceInstanceUpdateResponseSyncInterval7200, NamespaceInstanceUpdateResponseSyncInterval14400, NamespaceInstanceUpdateResponseSyncInterval21600, NamespaceInstanceUpdateResponseSyncInterval43200, NamespaceInstanceUpdateResponseSyncInterval86400:
+	case NamespaceInstanceUpdateResponseSyncInterval900, NamespaceInstanceUpdateResponseSyncInterval1800, NamespaceInstanceUpdateResponseSyncInterval3600, NamespaceInstanceUpdateResponseSyncInterval7200, NamespaceInstanceUpdateResponseSyncInterval14400, NamespaceInstanceUpdateResponseSyncInterval21600, NamespaceInstanceUpdateResponseSyncInterval43200, NamespaceInstanceUpdateResponseSyncInterval86400:
 		return true
 	}
 	return false
@@ -2142,8 +2146,8 @@ type NamespaceInstanceListResponse struct {
 	Source               string                                            `json:"source" api:"nullable"`
 	SourceParams         NamespaceInstanceListResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                            `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval NamespaceInstanceListResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                    `json:"token_id" format:"uuid"`
 	Type         NamespaceInstanceListResponseType         `json:"type" api:"nullable"`
@@ -2973,11 +2977,13 @@ func (r namespaceInstanceListResponseSourceParamsWebCrawlerStoreOptionsJSON) Raw
 	return r.raw
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type NamespaceInstanceListResponseSyncInterval float64
 
 const (
+	NamespaceInstanceListResponseSyncInterval900   NamespaceInstanceListResponseSyncInterval = 900
+	NamespaceInstanceListResponseSyncInterval1800  NamespaceInstanceListResponseSyncInterval = 1800
 	NamespaceInstanceListResponseSyncInterval3600  NamespaceInstanceListResponseSyncInterval = 3600
 	NamespaceInstanceListResponseSyncInterval7200  NamespaceInstanceListResponseSyncInterval = 7200
 	NamespaceInstanceListResponseSyncInterval14400 NamespaceInstanceListResponseSyncInterval = 14400
@@ -2988,7 +2994,7 @@ const (
 
 func (r NamespaceInstanceListResponseSyncInterval) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceListResponseSyncInterval3600, NamespaceInstanceListResponseSyncInterval7200, NamespaceInstanceListResponseSyncInterval14400, NamespaceInstanceListResponseSyncInterval21600, NamespaceInstanceListResponseSyncInterval43200, NamespaceInstanceListResponseSyncInterval86400:
+	case NamespaceInstanceListResponseSyncInterval900, NamespaceInstanceListResponseSyncInterval1800, NamespaceInstanceListResponseSyncInterval3600, NamespaceInstanceListResponseSyncInterval7200, NamespaceInstanceListResponseSyncInterval14400, NamespaceInstanceListResponseSyncInterval21600, NamespaceInstanceListResponseSyncInterval43200, NamespaceInstanceListResponseSyncInterval86400:
 		return true
 	}
 	return false
@@ -3051,8 +3057,8 @@ type NamespaceInstanceDeleteResponse struct {
 	Source               string                                              `json:"source" api:"nullable"`
 	SourceParams         NamespaceInstanceDeleteResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                              `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval NamespaceInstanceDeleteResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                      `json:"token_id" format:"uuid"`
 	Type         NamespaceInstanceDeleteResponseType         `json:"type" api:"nullable"`
@@ -3882,11 +3888,13 @@ func (r namespaceInstanceDeleteResponseSourceParamsWebCrawlerStoreOptionsJSON) R
 	return r.raw
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type NamespaceInstanceDeleteResponseSyncInterval float64
 
 const (
+	NamespaceInstanceDeleteResponseSyncInterval900   NamespaceInstanceDeleteResponseSyncInterval = 900
+	NamespaceInstanceDeleteResponseSyncInterval1800  NamespaceInstanceDeleteResponseSyncInterval = 1800
 	NamespaceInstanceDeleteResponseSyncInterval3600  NamespaceInstanceDeleteResponseSyncInterval = 3600
 	NamespaceInstanceDeleteResponseSyncInterval7200  NamespaceInstanceDeleteResponseSyncInterval = 7200
 	NamespaceInstanceDeleteResponseSyncInterval14400 NamespaceInstanceDeleteResponseSyncInterval = 14400
@@ -3897,7 +3905,7 @@ const (
 
 func (r NamespaceInstanceDeleteResponseSyncInterval) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceDeleteResponseSyncInterval3600, NamespaceInstanceDeleteResponseSyncInterval7200, NamespaceInstanceDeleteResponseSyncInterval14400, NamespaceInstanceDeleteResponseSyncInterval21600, NamespaceInstanceDeleteResponseSyncInterval43200, NamespaceInstanceDeleteResponseSyncInterval86400:
+	case NamespaceInstanceDeleteResponseSyncInterval900, NamespaceInstanceDeleteResponseSyncInterval1800, NamespaceInstanceDeleteResponseSyncInterval3600, NamespaceInstanceDeleteResponseSyncInterval7200, NamespaceInstanceDeleteResponseSyncInterval14400, NamespaceInstanceDeleteResponseSyncInterval21600, NamespaceInstanceDeleteResponseSyncInterval43200, NamespaceInstanceDeleteResponseSyncInterval86400:
 		return true
 	}
 	return false
@@ -4158,8 +4166,8 @@ type NamespaceInstanceReadResponse struct {
 	Source               string                                            `json:"source" api:"nullable"`
 	SourceParams         NamespaceInstanceReadResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                            `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval NamespaceInstanceReadResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                    `json:"token_id" format:"uuid"`
 	Type         NamespaceInstanceReadResponseType         `json:"type" api:"nullable"`
@@ -4989,11 +4997,13 @@ func (r namespaceInstanceReadResponseSourceParamsWebCrawlerStoreOptionsJSON) Raw
 	return r.raw
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type NamespaceInstanceReadResponseSyncInterval float64
 
 const (
+	NamespaceInstanceReadResponseSyncInterval900   NamespaceInstanceReadResponseSyncInterval = 900
+	NamespaceInstanceReadResponseSyncInterval1800  NamespaceInstanceReadResponseSyncInterval = 1800
 	NamespaceInstanceReadResponseSyncInterval3600  NamespaceInstanceReadResponseSyncInterval = 3600
 	NamespaceInstanceReadResponseSyncInterval7200  NamespaceInstanceReadResponseSyncInterval = 7200
 	NamespaceInstanceReadResponseSyncInterval14400 NamespaceInstanceReadResponseSyncInterval = 14400
@@ -5004,7 +5014,7 @@ const (
 
 func (r NamespaceInstanceReadResponseSyncInterval) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceReadResponseSyncInterval3600, NamespaceInstanceReadResponseSyncInterval7200, NamespaceInstanceReadResponseSyncInterval14400, NamespaceInstanceReadResponseSyncInterval21600, NamespaceInstanceReadResponseSyncInterval43200, NamespaceInstanceReadResponseSyncInterval86400:
+	case NamespaceInstanceReadResponseSyncInterval900, NamespaceInstanceReadResponseSyncInterval1800, NamespaceInstanceReadResponseSyncInterval3600, NamespaceInstanceReadResponseSyncInterval7200, NamespaceInstanceReadResponseSyncInterval14400, NamespaceInstanceReadResponseSyncInterval21600, NamespaceInstanceReadResponseSyncInterval43200, NamespaceInstanceReadResponseSyncInterval86400:
 		return true
 	}
 	return false
@@ -5298,8 +5308,8 @@ type NamespaceInstanceNewParams struct {
 	ScoreThreshold       param.Field[float64]                                        `json:"score_threshold"`
 	Source               param.Field[string]                                         `json:"source"`
 	SourceParams         param.Field[NamespaceInstanceNewParamsSourceParams]         `json:"source_params"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval param.Field[NamespaceInstanceNewParamsSyncInterval] `json:"sync_interval"`
 	TokenID      param.Field[string]                                 `json:"token_id" format:"uuid"`
 	Type         param.Field[NamespaceInstanceNewParamsType]         `json:"type"`
@@ -5804,11 +5814,13 @@ func (r NamespaceInstanceNewParamsSourceParamsWebCrawlerStoreOptions) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type NamespaceInstanceNewParamsSyncInterval float64
 
 const (
+	NamespaceInstanceNewParamsSyncInterval900   NamespaceInstanceNewParamsSyncInterval = 900
+	NamespaceInstanceNewParamsSyncInterval1800  NamespaceInstanceNewParamsSyncInterval = 1800
 	NamespaceInstanceNewParamsSyncInterval3600  NamespaceInstanceNewParamsSyncInterval = 3600
 	NamespaceInstanceNewParamsSyncInterval7200  NamespaceInstanceNewParamsSyncInterval = 7200
 	NamespaceInstanceNewParamsSyncInterval14400 NamespaceInstanceNewParamsSyncInterval = 14400
@@ -5819,7 +5831,7 @@ const (
 
 func (r NamespaceInstanceNewParamsSyncInterval) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceNewParamsSyncInterval3600, NamespaceInstanceNewParamsSyncInterval7200, NamespaceInstanceNewParamsSyncInterval14400, NamespaceInstanceNewParamsSyncInterval21600, NamespaceInstanceNewParamsSyncInterval43200, NamespaceInstanceNewParamsSyncInterval86400:
+	case NamespaceInstanceNewParamsSyncInterval900, NamespaceInstanceNewParamsSyncInterval1800, NamespaceInstanceNewParamsSyncInterval3600, NamespaceInstanceNewParamsSyncInterval7200, NamespaceInstanceNewParamsSyncInterval14400, NamespaceInstanceNewParamsSyncInterval21600, NamespaceInstanceNewParamsSyncInterval43200, NamespaceInstanceNewParamsSyncInterval86400:
 		return true
 	}
 	return false
@@ -5893,8 +5905,8 @@ type NamespaceInstanceUpdateParams struct {
 	SourceParams         param.Field[NamespaceInstanceUpdateParamsSourceParams]         `json:"source_params"`
 	Summarization        param.Field[bool]                                              `json:"summarization"`
 	SummarizationModel   param.Field[NamespaceInstanceUpdateParamsSummarizationModel]   `json:"summarization_model"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval                   param.Field[NamespaceInstanceUpdateParamsSyncInterval] `json:"sync_interval"`
 	SystemPromptAISearch           param.Field[string]                                    `json:"system_prompt_ai_search"`
 	SystemPromptIndexSummarization param.Field[string]                                    `json:"system_prompt_index_summarization"`
@@ -6444,11 +6456,13 @@ func (r NamespaceInstanceUpdateParamsSummarizationModel) IsKnown() bool {
 	return false
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type NamespaceInstanceUpdateParamsSyncInterval float64
 
 const (
+	NamespaceInstanceUpdateParamsSyncInterval900   NamespaceInstanceUpdateParamsSyncInterval = 900
+	NamespaceInstanceUpdateParamsSyncInterval1800  NamespaceInstanceUpdateParamsSyncInterval = 1800
 	NamespaceInstanceUpdateParamsSyncInterval3600  NamespaceInstanceUpdateParamsSyncInterval = 3600
 	NamespaceInstanceUpdateParamsSyncInterval7200  NamespaceInstanceUpdateParamsSyncInterval = 7200
 	NamespaceInstanceUpdateParamsSyncInterval14400 NamespaceInstanceUpdateParamsSyncInterval = 14400
@@ -6459,7 +6473,7 @@ const (
 
 func (r NamespaceInstanceUpdateParamsSyncInterval) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceUpdateParamsSyncInterval3600, NamespaceInstanceUpdateParamsSyncInterval7200, NamespaceInstanceUpdateParamsSyncInterval14400, NamespaceInstanceUpdateParamsSyncInterval21600, NamespaceInstanceUpdateParamsSyncInterval43200, NamespaceInstanceUpdateParamsSyncInterval86400:
+	case NamespaceInstanceUpdateParamsSyncInterval900, NamespaceInstanceUpdateParamsSyncInterval1800, NamespaceInstanceUpdateParamsSyncInterval3600, NamespaceInstanceUpdateParamsSyncInterval7200, NamespaceInstanceUpdateParamsSyncInterval14400, NamespaceInstanceUpdateParamsSyncInterval21600, NamespaceInstanceUpdateParamsSyncInterval43200, NamespaceInstanceUpdateParamsSyncInterval86400:
 		return true
 	}
 	return false

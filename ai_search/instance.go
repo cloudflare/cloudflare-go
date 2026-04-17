@@ -290,8 +290,8 @@ type InstanceNewResponse struct {
 	Source               string                                  `json:"source" api:"nullable"`
 	SourceParams         InstanceNewResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                  `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceNewResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                          `json:"token_id" format:"uuid"`
 	Type         InstanceNewResponseType         `json:"type" api:"nullable"`
@@ -1116,11 +1116,13 @@ func (r instanceNewResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() str
 	return r.raw
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type InstanceNewResponseSyncInterval float64
 
 const (
+	InstanceNewResponseSyncInterval900   InstanceNewResponseSyncInterval = 900
+	InstanceNewResponseSyncInterval1800  InstanceNewResponseSyncInterval = 1800
 	InstanceNewResponseSyncInterval3600  InstanceNewResponseSyncInterval = 3600
 	InstanceNewResponseSyncInterval7200  InstanceNewResponseSyncInterval = 7200
 	InstanceNewResponseSyncInterval14400 InstanceNewResponseSyncInterval = 14400
@@ -1131,7 +1133,7 @@ const (
 
 func (r InstanceNewResponseSyncInterval) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseSyncInterval3600, InstanceNewResponseSyncInterval7200, InstanceNewResponseSyncInterval14400, InstanceNewResponseSyncInterval21600, InstanceNewResponseSyncInterval43200, InstanceNewResponseSyncInterval86400:
+	case InstanceNewResponseSyncInterval900, InstanceNewResponseSyncInterval1800, InstanceNewResponseSyncInterval3600, InstanceNewResponseSyncInterval7200, InstanceNewResponseSyncInterval14400, InstanceNewResponseSyncInterval21600, InstanceNewResponseSyncInterval43200, InstanceNewResponseSyncInterval86400:
 		return true
 	}
 	return false
@@ -1194,8 +1196,8 @@ type InstanceUpdateResponse struct {
 	Source               string                                     `json:"source" api:"nullable"`
 	SourceParams         InstanceUpdateResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                     `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceUpdateResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                             `json:"token_id" format:"uuid"`
 	Type         InstanceUpdateResponseType         `json:"type" api:"nullable"`
@@ -2024,11 +2026,13 @@ func (r instanceUpdateResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() 
 	return r.raw
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type InstanceUpdateResponseSyncInterval float64
 
 const (
+	InstanceUpdateResponseSyncInterval900   InstanceUpdateResponseSyncInterval = 900
+	InstanceUpdateResponseSyncInterval1800  InstanceUpdateResponseSyncInterval = 1800
 	InstanceUpdateResponseSyncInterval3600  InstanceUpdateResponseSyncInterval = 3600
 	InstanceUpdateResponseSyncInterval7200  InstanceUpdateResponseSyncInterval = 7200
 	InstanceUpdateResponseSyncInterval14400 InstanceUpdateResponseSyncInterval = 14400
@@ -2039,7 +2043,7 @@ const (
 
 func (r InstanceUpdateResponseSyncInterval) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseSyncInterval3600, InstanceUpdateResponseSyncInterval7200, InstanceUpdateResponseSyncInterval14400, InstanceUpdateResponseSyncInterval21600, InstanceUpdateResponseSyncInterval43200, InstanceUpdateResponseSyncInterval86400:
+	case InstanceUpdateResponseSyncInterval900, InstanceUpdateResponseSyncInterval1800, InstanceUpdateResponseSyncInterval3600, InstanceUpdateResponseSyncInterval7200, InstanceUpdateResponseSyncInterval14400, InstanceUpdateResponseSyncInterval21600, InstanceUpdateResponseSyncInterval43200, InstanceUpdateResponseSyncInterval86400:
 		return true
 	}
 	return false
@@ -2102,8 +2106,8 @@ type InstanceListResponse struct {
 	Source               string                                   `json:"source" api:"nullable"`
 	SourceParams         InstanceListResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                   `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceListResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                           `json:"token_id" format:"uuid"`
 	Type         InstanceListResponseType         `json:"type" api:"nullable"`
@@ -2928,11 +2932,13 @@ func (r instanceListResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() st
 	return r.raw
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type InstanceListResponseSyncInterval float64
 
 const (
+	InstanceListResponseSyncInterval900   InstanceListResponseSyncInterval = 900
+	InstanceListResponseSyncInterval1800  InstanceListResponseSyncInterval = 1800
 	InstanceListResponseSyncInterval3600  InstanceListResponseSyncInterval = 3600
 	InstanceListResponseSyncInterval7200  InstanceListResponseSyncInterval = 7200
 	InstanceListResponseSyncInterval14400 InstanceListResponseSyncInterval = 14400
@@ -2943,7 +2949,7 @@ const (
 
 func (r InstanceListResponseSyncInterval) IsKnown() bool {
 	switch r {
-	case InstanceListResponseSyncInterval3600, InstanceListResponseSyncInterval7200, InstanceListResponseSyncInterval14400, InstanceListResponseSyncInterval21600, InstanceListResponseSyncInterval43200, InstanceListResponseSyncInterval86400:
+	case InstanceListResponseSyncInterval900, InstanceListResponseSyncInterval1800, InstanceListResponseSyncInterval3600, InstanceListResponseSyncInterval7200, InstanceListResponseSyncInterval14400, InstanceListResponseSyncInterval21600, InstanceListResponseSyncInterval43200, InstanceListResponseSyncInterval86400:
 		return true
 	}
 	return false
@@ -3006,8 +3012,8 @@ type InstanceDeleteResponse struct {
 	Source               string                                     `json:"source" api:"nullable"`
 	SourceParams         InstanceDeleteResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                     `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceDeleteResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                             `json:"token_id" format:"uuid"`
 	Type         InstanceDeleteResponseType         `json:"type" api:"nullable"`
@@ -3836,11 +3842,13 @@ func (r instanceDeleteResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() 
 	return r.raw
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type InstanceDeleteResponseSyncInterval float64
 
 const (
+	InstanceDeleteResponseSyncInterval900   InstanceDeleteResponseSyncInterval = 900
+	InstanceDeleteResponseSyncInterval1800  InstanceDeleteResponseSyncInterval = 1800
 	InstanceDeleteResponseSyncInterval3600  InstanceDeleteResponseSyncInterval = 3600
 	InstanceDeleteResponseSyncInterval7200  InstanceDeleteResponseSyncInterval = 7200
 	InstanceDeleteResponseSyncInterval14400 InstanceDeleteResponseSyncInterval = 14400
@@ -3851,7 +3859,7 @@ const (
 
 func (r InstanceDeleteResponseSyncInterval) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseSyncInterval3600, InstanceDeleteResponseSyncInterval7200, InstanceDeleteResponseSyncInterval14400, InstanceDeleteResponseSyncInterval21600, InstanceDeleteResponseSyncInterval43200, InstanceDeleteResponseSyncInterval86400:
+	case InstanceDeleteResponseSyncInterval900, InstanceDeleteResponseSyncInterval1800, InstanceDeleteResponseSyncInterval3600, InstanceDeleteResponseSyncInterval7200, InstanceDeleteResponseSyncInterval14400, InstanceDeleteResponseSyncInterval21600, InstanceDeleteResponseSyncInterval43200, InstanceDeleteResponseSyncInterval86400:
 		return true
 	}
 	return false
@@ -4111,8 +4119,8 @@ type InstanceReadResponse struct {
 	Source               string                                   `json:"source" api:"nullable"`
 	SourceParams         InstanceReadResponseSourceParams         `json:"source_params" api:"nullable"`
 	Status               string                                   `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceReadResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                           `json:"token_id" format:"uuid"`
 	Type         InstanceReadResponseType         `json:"type" api:"nullable"`
@@ -4937,11 +4945,13 @@ func (r instanceReadResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() st
 	return r.raw
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type InstanceReadResponseSyncInterval float64
 
 const (
+	InstanceReadResponseSyncInterval900   InstanceReadResponseSyncInterval = 900
+	InstanceReadResponseSyncInterval1800  InstanceReadResponseSyncInterval = 1800
 	InstanceReadResponseSyncInterval3600  InstanceReadResponseSyncInterval = 3600
 	InstanceReadResponseSyncInterval7200  InstanceReadResponseSyncInterval = 7200
 	InstanceReadResponseSyncInterval14400 InstanceReadResponseSyncInterval = 14400
@@ -4952,7 +4962,7 @@ const (
 
 func (r InstanceReadResponseSyncInterval) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseSyncInterval3600, InstanceReadResponseSyncInterval7200, InstanceReadResponseSyncInterval14400, InstanceReadResponseSyncInterval21600, InstanceReadResponseSyncInterval43200, InstanceReadResponseSyncInterval86400:
+	case InstanceReadResponseSyncInterval900, InstanceReadResponseSyncInterval1800, InstanceReadResponseSyncInterval3600, InstanceReadResponseSyncInterval7200, InstanceReadResponseSyncInterval14400, InstanceReadResponseSyncInterval21600, InstanceReadResponseSyncInterval43200, InstanceReadResponseSyncInterval86400:
 		return true
 	}
 	return false
@@ -5246,8 +5256,8 @@ type InstanceNewParams struct {
 	ScoreThreshold       param.Field[float64]                               `json:"score_threshold"`
 	Source               param.Field[string]                                `json:"source"`
 	SourceParams         param.Field[InstanceNewParamsSourceParams]         `json:"source_params"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval param.Field[InstanceNewParamsSyncInterval] `json:"sync_interval"`
 	TokenID      param.Field[string]                        `json:"token_id" format:"uuid"`
 	Type         param.Field[InstanceNewParamsType]         `json:"type"`
@@ -5752,11 +5762,13 @@ func (r InstanceNewParamsSourceParamsWebCrawlerStoreOptions) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type InstanceNewParamsSyncInterval float64
 
 const (
+	InstanceNewParamsSyncInterval900   InstanceNewParamsSyncInterval = 900
+	InstanceNewParamsSyncInterval1800  InstanceNewParamsSyncInterval = 1800
 	InstanceNewParamsSyncInterval3600  InstanceNewParamsSyncInterval = 3600
 	InstanceNewParamsSyncInterval7200  InstanceNewParamsSyncInterval = 7200
 	InstanceNewParamsSyncInterval14400 InstanceNewParamsSyncInterval = 14400
@@ -5767,7 +5779,7 @@ const (
 
 func (r InstanceNewParamsSyncInterval) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsSyncInterval3600, InstanceNewParamsSyncInterval7200, InstanceNewParamsSyncInterval14400, InstanceNewParamsSyncInterval21600, InstanceNewParamsSyncInterval43200, InstanceNewParamsSyncInterval86400:
+	case InstanceNewParamsSyncInterval900, InstanceNewParamsSyncInterval1800, InstanceNewParamsSyncInterval3600, InstanceNewParamsSyncInterval7200, InstanceNewParamsSyncInterval14400, InstanceNewParamsSyncInterval21600, InstanceNewParamsSyncInterval43200, InstanceNewParamsSyncInterval86400:
 		return true
 	}
 	return false
@@ -5841,8 +5853,8 @@ type InstanceUpdateParams struct {
 	SourceParams         param.Field[InstanceUpdateParamsSourceParams]         `json:"source_params"`
 	Summarization        param.Field[bool]                                     `json:"summarization"`
 	SummarizationModel   param.Field[InstanceUpdateParamsSummarizationModel]   `json:"summarization_model"`
-	// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-	// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval                   param.Field[InstanceUpdateParamsSyncInterval] `json:"sync_interval"`
 	SystemPromptAISearch           param.Field[string]                           `json:"system_prompt_ai_search"`
 	SystemPromptIndexSummarization param.Field[string]                           `json:"system_prompt_index_summarization"`
@@ -6392,11 +6404,13 @@ func (r InstanceUpdateParamsSummarizationModel) IsKnown() bool {
 	return false
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 3600 (1h), 7200
-// (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
+// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type InstanceUpdateParamsSyncInterval float64
 
 const (
+	InstanceUpdateParamsSyncInterval900   InstanceUpdateParamsSyncInterval = 900
+	InstanceUpdateParamsSyncInterval1800  InstanceUpdateParamsSyncInterval = 1800
 	InstanceUpdateParamsSyncInterval3600  InstanceUpdateParamsSyncInterval = 3600
 	InstanceUpdateParamsSyncInterval7200  InstanceUpdateParamsSyncInterval = 7200
 	InstanceUpdateParamsSyncInterval14400 InstanceUpdateParamsSyncInterval = 14400
@@ -6407,7 +6421,7 @@ const (
 
 func (r InstanceUpdateParamsSyncInterval) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsSyncInterval3600, InstanceUpdateParamsSyncInterval7200, InstanceUpdateParamsSyncInterval14400, InstanceUpdateParamsSyncInterval21600, InstanceUpdateParamsSyncInterval43200, InstanceUpdateParamsSyncInterval86400:
+	case InstanceUpdateParamsSyncInterval900, InstanceUpdateParamsSyncInterval1800, InstanceUpdateParamsSyncInterval3600, InstanceUpdateParamsSyncInterval7200, InstanceUpdateParamsSyncInterval14400, InstanceUpdateParamsSyncInterval21600, InstanceUpdateParamsSyncInterval43200, InstanceUpdateParamsSyncInterval86400:
 		return true
 	}
 	return false
