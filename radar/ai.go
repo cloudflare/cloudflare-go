@@ -13,11 +13,12 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAIService] method instead.
 type AIService struct {
-	Options          []option.RequestOption
-	ToMarkdown       *AIToMarkdownService
-	Inference        *AIInferenceService
-	Bots             *AIBotService
-	TimeseriesGroups *AITimeseriesGroupService
+	Options           []option.RequestOption
+	ToMarkdown        *AIToMarkdownService
+	Inference         *AIInferenceService
+	Bots              *AIBotService
+	TimeseriesGroups  *AITimeseriesGroupService
+	MarkdownForAgents *AIMarkdownForAgentService
 }
 
 // NewAIService generates a new service that applies the given options to each
@@ -30,5 +31,6 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r.Inference = NewAIInferenceService(opts...)
 	r.Bots = NewAIBotService(opts...)
 	r.TimeseriesGroups = NewAITimeseriesGroupService(opts...)
+	r.MarkdownForAgents = NewAIMarkdownForAgentService(opts...)
 	return
 }

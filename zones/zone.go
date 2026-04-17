@@ -98,6 +98,11 @@ func (r *ZoneService) ListAutoPaging(ctx context.Context, query ZoneListParams, 
 func (r *ZoneService) Delete(ctx context.Context, body ZoneDeleteParams, opts ...option.RequestOption) (res *ZoneDeleteResponse, err error) {
 	var env ZoneDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -115,6 +120,11 @@ func (r *ZoneService) Delete(ctx context.Context, body ZoneDeleteParams, opts ..
 func (r *ZoneService) Edit(ctx context.Context, params ZoneEditParams, opts ...option.RequestOption) (res *Zone, err error) {
 	var env ZoneEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -132,6 +142,11 @@ func (r *ZoneService) Edit(ctx context.Context, params ZoneEditParams, opts ...o
 func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...option.RequestOption) (res *Zone, err error) {
 	var env ZoneGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -688,6 +703,8 @@ func (r ZoneListParamsStatus) IsKnown() bool {
 
 type ZoneDeleteParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -721,6 +738,8 @@ func (r zoneDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type ZoneEditParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Indicates whether the zone is only using Cloudflare DNS services. A true value
 	// means the zone will not receive security or performance benefits.
@@ -790,6 +809,8 @@ func (r zoneEditResponseEnvelopeJSON) RawJSON() string {
 
 type ZoneGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

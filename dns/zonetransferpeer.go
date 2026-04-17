@@ -39,6 +39,11 @@ func NewZoneTransferPeerService(opts ...option.RequestOption) (r *ZoneTransferPe
 func (r *ZoneTransferPeerService) New(ctx context.Context, params ZoneTransferPeerNewParams, opts ...option.RequestOption) (res *Peer, err error) {
 	var env ZoneTransferPeerNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -56,6 +61,11 @@ func (r *ZoneTransferPeerService) New(ctx context.Context, params ZoneTransferPe
 func (r *ZoneTransferPeerService) Update(ctx context.Context, peerID string, params ZoneTransferPeerUpdateParams, opts ...option.RequestOption) (res *Peer, err error) {
 	var env ZoneTransferPeerUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -78,6 +88,11 @@ func (r *ZoneTransferPeerService) List(ctx context.Context, query ZoneTransferPe
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -104,6 +119,11 @@ func (r *ZoneTransferPeerService) ListAutoPaging(ctx context.Context, query Zone
 func (r *ZoneTransferPeerService) Delete(ctx context.Context, peerID string, body ZoneTransferPeerDeleteParams, opts ...option.RequestOption) (res *ZoneTransferPeerDeleteResponse, err error) {
 	var env ZoneTransferPeerDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -125,6 +145,11 @@ func (r *ZoneTransferPeerService) Delete(ctx context.Context, peerID string, bod
 func (r *ZoneTransferPeerService) Get(ctx context.Context, peerID string, query ZoneTransferPeerGetParams, opts ...option.RequestOption) (res *Peer, err error) {
 	var env ZoneTransferPeerGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -228,6 +253,7 @@ func (r zoneTransferPeerDeleteResponseJSON) RawJSON() string {
 }
 
 type ZoneTransferPeerNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the peer.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -377,6 +403,7 @@ func (r ZoneTransferPeerNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferPeerUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Peer      PeerParam           `json:"peer" api:"required"`
 }
@@ -525,10 +552,12 @@ func (r ZoneTransferPeerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferPeerListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ZoneTransferPeerDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -672,6 +701,7 @@ func (r ZoneTransferPeerDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ZoneTransferPeerGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

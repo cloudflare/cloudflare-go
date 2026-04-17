@@ -37,6 +37,11 @@ func NewAddressMapAccountService(opts ...option.RequestOption) (r *AddressMapAcc
 // Add an account as a member of a particular address map.
 func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, params AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressMapAccountUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -53,6 +58,11 @@ func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID stri
 // Remove an account as a member of a particular address map.
 func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, body AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressMapAccountDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -213,7 +223,9 @@ type AddressMapAccountUpdateResponseResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64                                       `json:"total_count"`
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                                       `json:"total_pages"`
 	JSON       addressMapAccountUpdateResponseResultInfoJSON `json:"-"`
 }
 
@@ -224,6 +236,7 @@ type addressMapAccountUpdateResponseResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -383,7 +396,9 @@ type AddressMapAccountDeleteResponseResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64                                       `json:"total_count"`
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                                       `json:"total_pages"`
 	JSON       addressMapAccountDeleteResponseResultInfoJSON `json:"-"`
 }
 
@@ -394,6 +409,7 @@ type addressMapAccountDeleteResponseResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -408,6 +424,8 @@ func (r addressMapAccountDeleteResponseResultInfoJSON) RawJSON() string {
 
 type AddressMapAccountUpdateParams struct {
 	// Identifier of a Cloudflare account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Body      interface{}         `json:"body" api:"required"`
 }
@@ -418,5 +436,7 @@ func (r AddressMapAccountUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type AddressMapAccountDeleteParams struct {
 	// Identifier of a Cloudflare account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

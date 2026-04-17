@@ -38,6 +38,11 @@ func NewV1BlobService(opts ...option.RequestOption) (r *V1BlobService) {
 func (r *V1BlobService) Get(ctx context.Context, imageID string, query V1BlobGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -53,5 +58,7 @@ func (r *V1BlobService) Get(ctx context.Context, imageID string, query V1BlobGet
 
 type V1BlobGetParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

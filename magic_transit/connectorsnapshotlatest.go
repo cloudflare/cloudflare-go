@@ -38,6 +38,11 @@ func NewConnectorSnapshotLatestService(opts ...option.RequestOption) (r *Connect
 func (r *ConnectorSnapshotLatestService) List(ctx context.Context, connectorID string, query ConnectorSnapshotLatestListParams, opts ...option.RequestOption) (res *ConnectorSnapshotLatestListResponse, err error) {
 	var env ConnectorSnapshotLatestListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -831,28 +836,34 @@ type ConnectorSnapshotLatestListResponseItemsMount struct {
 	Name string `json:"name" api:"required"`
 	// Available disk size (bytes)
 	AvailableBytes float64 `json:"available_bytes"`
+	// Available inodes on filesystem
+	AvailableInodes float64 `json:"available_inodes"`
 	// Determines whether the disk is read-only
 	IsReadOnly bool `json:"is_read_only"`
 	// Determines whether the disk is removable
 	IsRemovable bool `json:"is_removable"`
 	// Total disk size (bytes)
-	TotalBytes float64                                           `json:"total_bytes"`
-	JSON       connectorSnapshotLatestListResponseItemsMountJSON `json:"-"`
+	TotalBytes float64 `json:"total_bytes"`
+	// Total inodes on filesystem
+	TotalInodes float64                                           `json:"total_inodes"`
+	JSON        connectorSnapshotLatestListResponseItemsMountJSON `json:"-"`
 }
 
 // connectorSnapshotLatestListResponseItemsMountJSON contains the JSON metadata for
 // the struct [ConnectorSnapshotLatestListResponseItemsMount]
 type connectorSnapshotLatestListResponseItemsMountJSON struct {
-	FileSystem     apijson.Field
-	Kind           apijson.Field
-	MountPoint     apijson.Field
-	Name           apijson.Field
-	AvailableBytes apijson.Field
-	IsReadOnly     apijson.Field
-	IsRemovable    apijson.Field
-	TotalBytes     apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	FileSystem      apijson.Field
+	Kind            apijson.Field
+	MountPoint      apijson.Field
+	Name            apijson.Field
+	AvailableBytes  apijson.Field
+	AvailableInodes apijson.Field
+	IsReadOnly      apijson.Field
+	IsRemovable     apijson.Field
+	TotalBytes      apijson.Field
+	TotalInodes     apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *ConnectorSnapshotLatestListResponseItemsMount) UnmarshalJSON(data []byte) (err error) {
@@ -1010,6 +1021,8 @@ func (r connectorSnapshotLatestListResponseItemsTunnelJSON) RawJSON() string {
 
 type ConnectorSnapshotLatestListParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

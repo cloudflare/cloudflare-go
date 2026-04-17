@@ -39,6 +39,11 @@ func NewV2LogoMatchService(opts ...option.RequestOption) (r *V2LogoMatchService)
 // Get paginated list of logo matches for a specific brand protection logo query
 func (r *V2LogoMatchService) Get(ctx context.Context, params V2LogoMatchGetParams, opts ...option.RequestOption) (res *V2LogoMatchGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -73,12 +78,13 @@ func (r v2LogoMatchGetResponseJSON) RawJSON() string {
 
 type V2LogoMatchGetResponseMatch struct {
 	ID              int64                           `json:"id" api:"required"`
+	Domain          string                          `json:"domain" api:"required,nullable"`
 	MatchedAt       string                          `json:"matched_at" api:"required,nullable"`
 	QueryID         int64                           `json:"query_id" api:"required"`
+	Registrar       string                          `json:"registrar" api:"required,nullable"`
 	SimilarityScore float64                         `json:"similarity_score" api:"required"`
 	URLScanID       string                          `json:"url_scan_id" api:"required,nullable"`
 	ContentType     string                          `json:"content_type"`
-	Domain          string                          `json:"domain" api:"nullable"`
 	ImageData       string                          `json:"image_data"`
 	JSON            v2LogoMatchGetResponseMatchJSON `json:"-"`
 }
@@ -87,12 +93,13 @@ type V2LogoMatchGetResponseMatch struct {
 // [V2LogoMatchGetResponseMatch]
 type v2LogoMatchGetResponseMatchJSON struct {
 	ID              apijson.Field
+	Domain          apijson.Field
 	MatchedAt       apijson.Field
 	QueryID         apijson.Field
+	Registrar       apijson.Field
 	SimilarityScore apijson.Field
 	URLScanID       apijson.Field
 	ContentType     apijson.Field
-	Domain          apijson.Field
 	ImageData       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
@@ -107,6 +114,7 @@ func (r v2LogoMatchGetResponseMatchJSON) RawJSON() string {
 }
 
 type V2LogoMatchGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	QueryID   param.Field[string] `query:"query_id" api:"required"`
 	Download  param.Field[string] `query:"download"`
@@ -114,7 +122,8 @@ type V2LogoMatchGetParams struct {
 	Offset    param.Field[string] `query:"offset"`
 	// Sort order. Options: 'asc' (ascending) or 'desc' (descending)
 	Order param.Field[V2LogoMatchGetParamsOrder] `query:"order"`
-	// Column to sort by. Options: 'matchedAt', 'domain', or 'similarityScore'
+	// Column to sort by. Options: 'matchedAt', 'domain', 'similarityScore', or
+	// 'registrar'
 	OrderBy param.Field[V2LogoMatchGetParamsOrderBy] `query:"orderBy"`
 }
 
@@ -142,18 +151,20 @@ func (r V2LogoMatchGetParamsOrder) IsKnown() bool {
 	return false
 }
 
-// Column to sort by. Options: 'matchedAt', 'domain', or 'similarityScore'
+// Column to sort by. Options: 'matchedAt', 'domain', 'similarityScore', or
+// 'registrar'
 type V2LogoMatchGetParamsOrderBy string
 
 const (
 	V2LogoMatchGetParamsOrderByMatchedAt       V2LogoMatchGetParamsOrderBy = "matchedAt"
 	V2LogoMatchGetParamsOrderByDomain          V2LogoMatchGetParamsOrderBy = "domain"
 	V2LogoMatchGetParamsOrderBySimilarityScore V2LogoMatchGetParamsOrderBy = "similarityScore"
+	V2LogoMatchGetParamsOrderByRegistrar       V2LogoMatchGetParamsOrderBy = "registrar"
 )
 
 func (r V2LogoMatchGetParamsOrderBy) IsKnown() bool {
 	switch r {
-	case V2LogoMatchGetParamsOrderByMatchedAt, V2LogoMatchGetParamsOrderByDomain, V2LogoMatchGetParamsOrderBySimilarityScore:
+	case V2LogoMatchGetParamsOrderByMatchedAt, V2LogoMatchGetParamsOrderByDomain, V2LogoMatchGetParamsOrderBySimilarityScore, V2LogoMatchGetParamsOrderByRegistrar:
 		return true
 	}
 	return false

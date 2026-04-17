@@ -38,6 +38,11 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *RuleUpdateResponse, err error) {
 	var env RuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -55,6 +60,11 @@ func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts 
 func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *RuleListResponse, err error) {
 	var env RuleListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -72,6 +82,11 @@ func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...op
 func (r *RuleService) Delete(ctx context.Context, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
 	var env RuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -93,6 +108,8 @@ type RuleDeleteResponse = interface{}
 
 type RuleUpdateParams struct {
 	// Use this field to specify the unique ID of the zone.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Lists snippet rules.
 	Rules param.Field[[]RuleUpdateParamsRule] `json:"rules" api:"required"`
@@ -219,6 +236,8 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleListParams struct {
 	// Use this field to specify the unique ID of the zone.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -323,6 +342,8 @@ func (r RuleListResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleDeleteParams struct {
 	// Use this field to specify the unique ID of the zone.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

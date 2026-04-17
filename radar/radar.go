@@ -14,6 +14,7 @@ import (
 // the [NewRadarService] method instead.
 type RadarService struct {
 	Options           []option.RequestOption
+	AgentReadiness    *AgentReadinessService
 	AI                *AIService
 	CT                *CTService
 	Annotations       *AnnotationService
@@ -45,6 +46,7 @@ type RadarService struct {
 func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r = &RadarService{}
 	r.Options = opts
+	r.AgentReadiness = NewAgentReadinessService(opts...)
 	r.AI = NewAIService(opts...)
 	r.CT = NewCTService(opts...)
 	r.Annotations = NewAnnotationService(opts...)

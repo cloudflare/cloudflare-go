@@ -38,6 +38,11 @@ func NewWebhookService(opts ...option.RequestOption) (r *WebhookService) {
 // Adds a new webhook to an App.
 func (r *WebhookService) NewWebhook(ctx context.Context, appID string, params WebhookNewWebhookParams, opts ...option.RequestOption) (res *WebhookNewWebhookResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -54,6 +59,11 @@ func (r *WebhookService) NewWebhook(ctx context.Context, appID string, params We
 // Removes a webhook for the given webhook ID.
 func (r *WebhookService) DeleteWebhook(ctx context.Context, appID string, webhookID string, body WebhookDeleteWebhookParams, opts ...option.RequestOption) (res *WebhookDeleteWebhookResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -74,6 +84,11 @@ func (r *WebhookService) DeleteWebhook(ctx context.Context, appID string, webhoo
 // Edits the webhook details for the given webhook ID.
 func (r *WebhookService) EditWebhook(ctx context.Context, appID string, webhookID string, params WebhookEditWebhookParams, opts ...option.RequestOption) (res *WebhookEditWebhookResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -94,6 +109,11 @@ func (r *WebhookService) EditWebhook(ctx context.Context, appID string, webhookI
 // Returns webhook details for the given webhook ID.
 func (r *WebhookService) GetWebhookByID(ctx context.Context, appID string, webhookID string, query WebhookGetWebhookByIDParams, opts ...option.RequestOption) (res *WebhookGetWebhookByIDResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -114,6 +134,11 @@ func (r *WebhookService) GetWebhookByID(ctx context.Context, appID string, webho
 // Returns details of all webhooks for an App.
 func (r *WebhookService) GetWebhooks(ctx context.Context, appID string, query WebhookGetWebhooksParams, opts ...option.RequestOption) (res *WebhookGetWebhooksResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -130,6 +155,11 @@ func (r *WebhookService) GetWebhooks(ctx context.Context, appID string, query We
 // Replace all details for the given webhook ID.
 func (r *WebhookService) ReplaceWebhook(ctx context.Context, appID string, webhookID string, params WebhookReplaceWebhookParams, opts ...option.RequestOption) (res *WebhookReplaceWebhookResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -659,6 +689,8 @@ func (r WebhookReplaceWebhookResponseDataEvent) IsKnown() bool {
 
 type WebhookNewWebhookParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Events that this webhook will get triggered by
 	Events param.Field[[]WebhookNewWebhookParamsEvent] `json:"events" api:"required"`
@@ -698,11 +730,15 @@ func (r WebhookNewWebhookParamsEvent) IsKnown() bool {
 
 type WebhookDeleteWebhookParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WebhookEditWebhookParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Enabled   param.Field[bool]   `json:"enabled"`
 	// Events that the webhook will get triggered by
@@ -741,16 +777,22 @@ func (r WebhookEditWebhookParamsEvent) IsKnown() bool {
 
 type WebhookGetWebhookByIDParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WebhookGetWebhooksParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WebhookReplaceWebhookParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Events that this webhook will get triggered by
 	Events param.Field[[]WebhookReplaceWebhookParamsEvent] `json:"events" api:"required"`

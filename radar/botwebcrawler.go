@@ -636,6 +636,12 @@ type BotWebCrawlerSummaryParams struct {
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by HTTP response status code (e.g. 200, 403, 404). Only
+	// [IANA-registered codes](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml)
+	// are accepted.
+	ResponseStatus param.Field[[]string] `query:"responseStatus"`
+	// Filters results by HTTP response status code category.
+	ResponseStatusCategory param.Field[[]BotWebCrawlerSummaryParamsResponseStatusCategory] `query:"responseStatusCategory"`
 	// Filters results by vertical.
 	Vertical param.Field[[]string] `query:"vertical"`
 }
@@ -653,17 +659,19 @@ func (r BotWebCrawlerSummaryParams) URLQuery() (v url.Values) {
 type BotWebCrawlerSummaryParamsDimension string
 
 const (
-	BotWebCrawlerSummaryParamsDimensionClientType      BotWebCrawlerSummaryParamsDimension = "CLIENT_TYPE"
-	BotWebCrawlerSummaryParamsDimensionUserAgent       BotWebCrawlerSummaryParamsDimension = "USER_AGENT"
-	BotWebCrawlerSummaryParamsDimensionReferer         BotWebCrawlerSummaryParamsDimension = "REFERER"
-	BotWebCrawlerSummaryParamsDimensionCrawlReferRatio BotWebCrawlerSummaryParamsDimension = "CRAWL_REFER_RATIO"
-	BotWebCrawlerSummaryParamsDimensionVertical        BotWebCrawlerSummaryParamsDimension = "VERTICAL"
-	BotWebCrawlerSummaryParamsDimensionIndustry        BotWebCrawlerSummaryParamsDimension = "INDUSTRY"
+	BotWebCrawlerSummaryParamsDimensionClientType             BotWebCrawlerSummaryParamsDimension = "CLIENT_TYPE"
+	BotWebCrawlerSummaryParamsDimensionUserAgent              BotWebCrawlerSummaryParamsDimension = "USER_AGENT"
+	BotWebCrawlerSummaryParamsDimensionReferer                BotWebCrawlerSummaryParamsDimension = "REFERER"
+	BotWebCrawlerSummaryParamsDimensionCrawlReferRatio        BotWebCrawlerSummaryParamsDimension = "CRAWL_REFER_RATIO"
+	BotWebCrawlerSummaryParamsDimensionVertical               BotWebCrawlerSummaryParamsDimension = "VERTICAL"
+	BotWebCrawlerSummaryParamsDimensionIndustry               BotWebCrawlerSummaryParamsDimension = "INDUSTRY"
+	BotWebCrawlerSummaryParamsDimensionResponseStatus         BotWebCrawlerSummaryParamsDimension = "RESPONSE_STATUS"
+	BotWebCrawlerSummaryParamsDimensionResponseStatusCategory BotWebCrawlerSummaryParamsDimension = "RESPONSE_STATUS_CATEGORY"
 )
 
 func (r BotWebCrawlerSummaryParamsDimension) IsKnown() bool {
 	switch r {
-	case BotWebCrawlerSummaryParamsDimensionClientType, BotWebCrawlerSummaryParamsDimensionUserAgent, BotWebCrawlerSummaryParamsDimensionReferer, BotWebCrawlerSummaryParamsDimensionCrawlReferRatio, BotWebCrawlerSummaryParamsDimensionVertical, BotWebCrawlerSummaryParamsDimensionIndustry:
+	case BotWebCrawlerSummaryParamsDimensionClientType, BotWebCrawlerSummaryParamsDimensionUserAgent, BotWebCrawlerSummaryParamsDimensionReferer, BotWebCrawlerSummaryParamsDimensionCrawlReferRatio, BotWebCrawlerSummaryParamsDimensionVertical, BotWebCrawlerSummaryParamsDimensionIndustry, BotWebCrawlerSummaryParamsDimensionResponseStatus, BotWebCrawlerSummaryParamsDimensionResponseStatusCategory:
 		return true
 	}
 	return false
@@ -698,6 +706,24 @@ const (
 func (r BotWebCrawlerSummaryParamsFormat) IsKnown() bool {
 	switch r {
 	case BotWebCrawlerSummaryParamsFormatJson, BotWebCrawlerSummaryParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type BotWebCrawlerSummaryParamsResponseStatusCategory string
+
+const (
+	BotWebCrawlerSummaryParamsResponseStatusCategoryInformational BotWebCrawlerSummaryParamsResponseStatusCategory = "INFORMATIONAL"
+	BotWebCrawlerSummaryParamsResponseStatusCategorySuccess       BotWebCrawlerSummaryParamsResponseStatusCategory = "SUCCESS"
+	BotWebCrawlerSummaryParamsResponseStatusCategoryRedirection   BotWebCrawlerSummaryParamsResponseStatusCategory = "REDIRECTION"
+	BotWebCrawlerSummaryParamsResponseStatusCategoryClientError   BotWebCrawlerSummaryParamsResponseStatusCategory = "CLIENT_ERROR"
+	BotWebCrawlerSummaryParamsResponseStatusCategoryServerError   BotWebCrawlerSummaryParamsResponseStatusCategory = "SERVER_ERROR"
+)
+
+func (r BotWebCrawlerSummaryParamsResponseStatusCategory) IsKnown() bool {
+	switch r {
+	case BotWebCrawlerSummaryParamsResponseStatusCategoryInformational, BotWebCrawlerSummaryParamsResponseStatusCategorySuccess, BotWebCrawlerSummaryParamsResponseStatusCategoryRedirection, BotWebCrawlerSummaryParamsResponseStatusCategoryClientError, BotWebCrawlerSummaryParamsResponseStatusCategoryServerError:
 		return true
 	}
 	return false
@@ -753,6 +779,12 @@ type BotWebCrawlerTimeseriesGroupsParams struct {
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by HTTP response status code (e.g. 200, 403, 404). Only
+	// [IANA-registered codes](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml)
+	// are accepted.
+	ResponseStatus param.Field[[]string] `query:"responseStatus"`
+	// Filters results by HTTP response status code category.
+	ResponseStatusCategory param.Field[[]BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategory] `query:"responseStatusCategory"`
 	// Filters results by vertical.
 	Vertical param.Field[[]string] `query:"vertical"`
 }
@@ -770,17 +802,19 @@ func (r BotWebCrawlerTimeseriesGroupsParams) URLQuery() (v url.Values) {
 type BotWebCrawlerTimeseriesGroupsParamsDimension string
 
 const (
-	BotWebCrawlerTimeseriesGroupsParamsDimensionClientType      BotWebCrawlerTimeseriesGroupsParamsDimension = "CLIENT_TYPE"
-	BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent       BotWebCrawlerTimeseriesGroupsParamsDimension = "USER_AGENT"
-	BotWebCrawlerTimeseriesGroupsParamsDimensionReferer         BotWebCrawlerTimeseriesGroupsParamsDimension = "REFERER"
-	BotWebCrawlerTimeseriesGroupsParamsDimensionCrawlReferRatio BotWebCrawlerTimeseriesGroupsParamsDimension = "CRAWL_REFER_RATIO"
-	BotWebCrawlerTimeseriesGroupsParamsDimensionVertical        BotWebCrawlerTimeseriesGroupsParamsDimension = "VERTICAL"
-	BotWebCrawlerTimeseriesGroupsParamsDimensionIndustry        BotWebCrawlerTimeseriesGroupsParamsDimension = "INDUSTRY"
+	BotWebCrawlerTimeseriesGroupsParamsDimensionClientType             BotWebCrawlerTimeseriesGroupsParamsDimension = "CLIENT_TYPE"
+	BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent              BotWebCrawlerTimeseriesGroupsParamsDimension = "USER_AGENT"
+	BotWebCrawlerTimeseriesGroupsParamsDimensionReferer                BotWebCrawlerTimeseriesGroupsParamsDimension = "REFERER"
+	BotWebCrawlerTimeseriesGroupsParamsDimensionCrawlReferRatio        BotWebCrawlerTimeseriesGroupsParamsDimension = "CRAWL_REFER_RATIO"
+	BotWebCrawlerTimeseriesGroupsParamsDimensionVertical               BotWebCrawlerTimeseriesGroupsParamsDimension = "VERTICAL"
+	BotWebCrawlerTimeseriesGroupsParamsDimensionIndustry               BotWebCrawlerTimeseriesGroupsParamsDimension = "INDUSTRY"
+	BotWebCrawlerTimeseriesGroupsParamsDimensionResponseStatus         BotWebCrawlerTimeseriesGroupsParamsDimension = "RESPONSE_STATUS"
+	BotWebCrawlerTimeseriesGroupsParamsDimensionResponseStatusCategory BotWebCrawlerTimeseriesGroupsParamsDimension = "RESPONSE_STATUS_CATEGORY"
 )
 
 func (r BotWebCrawlerTimeseriesGroupsParamsDimension) IsKnown() bool {
 	switch r {
-	case BotWebCrawlerTimeseriesGroupsParamsDimensionClientType, BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent, BotWebCrawlerTimeseriesGroupsParamsDimensionReferer, BotWebCrawlerTimeseriesGroupsParamsDimensionCrawlReferRatio, BotWebCrawlerTimeseriesGroupsParamsDimensionVertical, BotWebCrawlerTimeseriesGroupsParamsDimensionIndustry:
+	case BotWebCrawlerTimeseriesGroupsParamsDimensionClientType, BotWebCrawlerTimeseriesGroupsParamsDimensionUserAgent, BotWebCrawlerTimeseriesGroupsParamsDimensionReferer, BotWebCrawlerTimeseriesGroupsParamsDimensionCrawlReferRatio, BotWebCrawlerTimeseriesGroupsParamsDimensionVertical, BotWebCrawlerTimeseriesGroupsParamsDimensionIndustry, BotWebCrawlerTimeseriesGroupsParamsDimensionResponseStatus, BotWebCrawlerTimeseriesGroupsParamsDimensionResponseStatusCategory:
 		return true
 	}
 	return false
@@ -835,6 +869,24 @@ const (
 func (r BotWebCrawlerTimeseriesGroupsParamsFormat) IsKnown() bool {
 	switch r {
 	case BotWebCrawlerTimeseriesGroupsParamsFormatJson, BotWebCrawlerTimeseriesGroupsParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategory string
+
+const (
+	BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategoryInformational BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategory = "INFORMATIONAL"
+	BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategorySuccess       BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategory = "SUCCESS"
+	BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategoryRedirection   BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategory = "REDIRECTION"
+	BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategoryClientError   BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategory = "CLIENT_ERROR"
+	BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategoryServerError   BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategory = "SERVER_ERROR"
+)
+
+func (r BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategory) IsKnown() bool {
+	switch r {
+	case BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategoryInformational, BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategorySuccess, BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategoryRedirection, BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategoryClientError, BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategoryServerError:
 		return true
 	}
 	return false

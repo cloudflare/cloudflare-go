@@ -41,6 +41,11 @@ func NewDLPPatternService(opts ...option.RequestOption) (r *DLPPatternService) {
 func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *DLPPatternValidateResponse, err error) {
 	var env DLPPatternValidateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -76,6 +81,7 @@ func (r dlpPatternValidateResponseJSON) RawJSON() string {
 }
 
 type DLPPatternValidateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Regex     param.Field[string] `json:"regex" api:"required"`
 	// Maximum number of bytes that the regular expression can match.

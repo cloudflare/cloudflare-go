@@ -33,10 +33,11 @@ func TestScanNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.URLScanner.Scans.New(context.TODO(), url_scanner.ScanNewParams{
-		AccountID:   cloudflare.F("account_id"),
-		URL:         cloudflare.F("https://www.example.com"),
-		Country:     cloudflare.F(url_scanner.ScanNewParamsCountryAf),
-		Customagent: cloudflare.F("customagent"),
+		AccountID:      cloudflare.F("account_id"),
+		URL:            cloudflare.F("https://www.example.com"),
+		AgentReadiness: cloudflare.F(true),
+		Country:        cloudflare.F(url_scanner.ScanNewParamsCountryAf),
+		Customagent:    cloudflare.F("customagent"),
 		CustomHeaders: cloudflare.F(map[string]string{
 			"foo": "string",
 		}),
@@ -98,8 +99,9 @@ func TestScanBulkNewWithOptionalParams(t *testing.T) {
 	_, err := client.URLScanner.Scans.BulkNew(context.TODO(), url_scanner.ScanBulkNewParams{
 		AccountID: cloudflare.F("account_id"),
 		Body: []url_scanner.ScanBulkNewParamsBody{{
-			URL:         cloudflare.F("https://www.example.com"),
-			Customagent: cloudflare.F("customagent"),
+			URL:            cloudflare.F("https://www.example.com"),
+			AgentReadiness: cloudflare.F(true),
+			Customagent:    cloudflare.F("customagent"),
 			CustomHeaders: cloudflare.F(map[string]string{
 				"foo": "string",
 			}),

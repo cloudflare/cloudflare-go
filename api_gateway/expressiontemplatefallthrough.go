@@ -39,6 +39,11 @@ func NewExpressionTemplateFallthroughService(opts ...option.RequestOption) (r *E
 func (r *ExpressionTemplateFallthroughService) New(ctx context.Context, params ExpressionTemplateFallthroughNewParams, opts ...option.RequestOption) (res *ExpressionTemplateFallthroughNewResponse, err error) {
 	var env ExpressionTemplateFallthroughNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -79,6 +84,8 @@ func (r expressionTemplateFallthroughNewResponseJSON) RawJSON() string {
 
 type ExpressionTemplateFallthroughNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List of hosts to be targeted in the expression
 	Hosts param.Field[[]string] `json:"hosts" api:"required"`

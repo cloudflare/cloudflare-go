@@ -42,6 +42,11 @@ func NewUARuleService(opts ...option.RequestOption) (r *UARuleService) {
 func (r *UARuleService) New(ctx context.Context, params UARuleNewParams, opts ...option.RequestOption) (res *UARuleNewResponse, err error) {
 	var env UARuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -59,6 +64,11 @@ func (r *UARuleService) New(ctx context.Context, params UARuleNewParams, opts ..
 func (r *UARuleService) Update(ctx context.Context, uaRuleID string, params UARuleUpdateParams, opts ...option.RequestOption) (res *UARuleUpdateResponse, err error) {
 	var env UARuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -82,6 +92,11 @@ func (r *UARuleService) List(ctx context.Context, params UARuleListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -109,6 +124,11 @@ func (r *UARuleService) ListAutoPaging(ctx context.Context, params UARuleListPar
 func (r *UARuleService) Delete(ctx context.Context, uaRuleID string, body UARuleDeleteParams, opts ...option.RequestOption) (res *UARuleDeleteResponse, err error) {
 	var env UARuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -130,6 +150,11 @@ func (r *UARuleService) Delete(ctx context.Context, uaRuleID string, body UARule
 func (r *UARuleService) Get(ctx context.Context, uaRuleID string, query UARuleGetParams, opts ...option.RequestOption) (res *UARuleGetResponse, err error) {
 	var env UARuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -549,6 +574,8 @@ func (r UARuleGetResponseMode) IsKnown() bool {
 
 type UARuleNewParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID        param.Field[string]                       `path:"zone_id" api:"required"`
 	Configuration param.Field[UARuleNewParamsConfiguration] `json:"configuration" api:"required"`
 	// The action to apply to a matched request.
@@ -656,6 +683,8 @@ func (r UARuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type UARuleUpdateParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The rule configuration.
 	Configuration param.Field[UARuleUpdateParamsConfigurationUnion] `json:"configuration" api:"required"`
@@ -782,6 +811,8 @@ func (r UARuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type UARuleListParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A string to search for in the description of existing rules.
 	Description param.Field[string] `query:"description"`
@@ -806,6 +837,8 @@ func (r UARuleListParams) URLQuery() (v url.Values) {
 
 type UARuleDeleteParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -854,6 +887,8 @@ func (r UARuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type UARuleGetParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

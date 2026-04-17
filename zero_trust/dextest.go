@@ -44,6 +44,11 @@ func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -708,6 +713,7 @@ func (r testsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON) RawJSON
 }
 
 type DEXTestListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
@@ -721,6 +727,9 @@ type DEXTestListParams struct {
 	Page param.Field[float64] `query:"page"`
 	// Number of items per page
 	PerPage param.Field[float64] `query:"per_page"`
+	// Optionally filter results to a specific device registration. Must be used in
+	// combination with a single deviceId.
+	RegistrationID param.Field[string] `query:"registration_id"`
 	// Optionally filter results by test name
 	TestName param.Field[string] `query:"testName"`
 }

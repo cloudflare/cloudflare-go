@@ -42,6 +42,11 @@ func NewPrefixBGPPrefixService(opts ...option.RequestOption) (r *PrefixBGPPrefix
 func (r *PrefixBGPPrefixService) New(ctx context.Context, prefixID string, params PrefixBGPPrefixNewParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
 	var env PrefixBGPPrefixNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -67,6 +72,11 @@ func (r *PrefixBGPPrefixService) List(ctx context.Context, prefixID string, quer
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -101,6 +111,11 @@ func (r *PrefixBGPPrefixService) ListAutoPaging(ctx context.Context, prefixID st
 func (r *PrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpPrefixID string, params PrefixBGPPrefixEditParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
 	var env PrefixBGPPrefixEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -126,6 +141,11 @@ func (r *PrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpP
 func (r *PrefixBGPPrefixService) Get(ctx context.Context, prefixID string, bgpPrefixID string, query PrefixBGPPrefixGetParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
 	var env PrefixBGPPrefixGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -255,6 +275,8 @@ func (r bgpPrefixOnDemandJSON) RawJSON() string {
 
 type PrefixBGPPrefixNewParams struct {
 	// Identifier of a Cloudflare account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	CIDR param.Field[string] `json:"cidr" api:"required"`
@@ -405,11 +427,15 @@ func (r PrefixBGPPrefixNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixBGPPrefixListParams struct {
 	// Identifier of a Cloudflare account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixBGPPrefixEditParams struct {
 	// Identifier of a Cloudflare account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Number of times to prepend the Cloudflare ASN to the BGP AS-Path attribute
 	ASNPrependCount param.Field[int64] `json:"asn_prepend_count"`
@@ -574,6 +600,8 @@ func (r PrefixBGPPrefixEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixBGPPrefixGetParams struct {
 	// Identifier of a Cloudflare account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

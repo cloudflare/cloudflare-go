@@ -30,7 +30,7 @@ func TestDomainUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Registrar.Domains.Update(
 		context.TODO(),
-		"cloudflare.com",
+		"example.com",
 		registrar.DomainUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AutoRenew: cloudflare.F(true),
@@ -89,7 +89,7 @@ func TestDomainGet(t *testing.T) {
 	)
 	_, err := client.Registrar.Domains.Get(
 		context.TODO(),
-		"cloudflare.com",
+		"example.com",
 		registrar.DomainGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

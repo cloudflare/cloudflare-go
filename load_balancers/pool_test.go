@@ -32,8 +32,9 @@ func TestPoolNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("primary-dc-1"),
 		Origins: cloudflare.F([]load_balancers.OriginParam{{
-			Address: cloudflare.F("0.0.0.0"),
-			Enabled: cloudflare.F(true),
+			Address:      cloudflare.F("0.0.0.0"),
+			Enabled:      cloudflare.F(true),
+			FlattenCNAME: cloudflare.F(true),
 			Header: cloudflare.F(load_balancers.HeaderParam{
 				Host: cloudflare.F([]load_balancers.HostParam{"example.com"}),
 			}),
@@ -100,8 +101,9 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("primary-dc-1"),
 			Origins: cloudflare.F([]load_balancers.OriginParam{{
-				Address: cloudflare.F("0.0.0.0"),
-				Enabled: cloudflare.F(true),
+				Address:      cloudflare.F("0.0.0.0"),
+				Enabled:      cloudflare.F(true),
+				FlattenCNAME: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
 					Host: cloudflare.F([]load_balancers.HostParam{"example.com"}),
 				}),
@@ -283,8 +285,9 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 				Policy: cloudflare.F(load_balancers.OriginSteeringPolicyRandom),
 			}),
 			Origins: cloudflare.F([]load_balancers.OriginParam{{
-				Address: cloudflare.F("0.0.0.0"),
-				Enabled: cloudflare.F(true),
+				Address:      cloudflare.F("0.0.0.0"),
+				Enabled:      cloudflare.F(true),
+				FlattenCNAME: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
 					Host: cloudflare.F([]load_balancers.HostParam{"example.com"}),
 				}),

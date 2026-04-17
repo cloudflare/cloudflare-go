@@ -43,6 +43,11 @@ func NewResourceService(opts ...option.RequestOption) (r *ResourceService) {
 func (r *ResourceService) New(ctx context.Context, shareID string, params ResourceNewParams, opts ...option.RequestOption) (res *ResourceNewResponse, err error) {
 	var env ResourceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,6 +70,11 @@ func (r *ResourceService) New(ctx context.Context, shareID string, params Resour
 func (r *ResourceService) Update(ctx context.Context, shareID string, resourceID string, params ResourceUpdateParams, opts ...option.RequestOption) (res *ResourceUpdateResponse, err error) {
 	var env ResourceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -91,6 +101,11 @@ func (r *ResourceService) List(ctx context.Context, shareID string, params Resou
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -122,6 +137,11 @@ func (r *ResourceService) ListAutoPaging(ctx context.Context, shareID string, pa
 func (r *ResourceService) Delete(ctx context.Context, shareID string, resourceID string, body ResourceDeleteParams, opts ...option.RequestOption) (res *ResourceDeleteResponse, err error) {
 	var env ResourceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -147,6 +167,11 @@ func (r *ResourceService) Delete(ctx context.Context, shareID string, resourceID
 func (r *ResourceService) Get(ctx context.Context, shareID string, resourceID string, query ResourceGetParams, opts ...option.RequestOption) (res *ResourceGetResponse, err error) {
 	var env ResourceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -580,6 +605,8 @@ func (r ResourceGetResponseStatus) IsKnown() bool {
 
 type ResourceNewParams struct {
 	// Account identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Resource Metadata.
 	Meta param.Field[interface{}] `json:"meta" api:"required"`
@@ -642,6 +669,8 @@ func (r resourceNewResponseEnvelopeJSON) RawJSON() string {
 
 type ResourceUpdateParams struct {
 	// Account identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Resource Metadata.
 	Meta param.Field[interface{}] `json:"meta" api:"required"`
@@ -679,6 +708,8 @@ func (r resourceUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type ResourceListParams struct {
 	// Account identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number.
 	Page param.Field[int64] `query:"page"`
@@ -736,6 +767,8 @@ func (r ResourceListParamsStatus) IsKnown() bool {
 
 type ResourceDeleteParams struct {
 	// Account identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -767,6 +800,8 @@ func (r resourceDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type ResourceGetParams struct {
 	// Account identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -43,6 +43,11 @@ func NewAnalyticsEventBytimeService(opts ...option.RequestOption) (r *AnalyticsE
 func (r *AnalyticsEventBytimeService) Get(ctx context.Context, params AnalyticsEventBytimeGetParams, opts ...option.RequestOption) (res *AnalyticsEventBytimeGetResponse, err error) {
 	var env AnalyticsEventBytimeGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -244,6 +249,8 @@ func (r AnalyticsEventBytimeGetResponseQueryMetric) IsKnown() bool {
 
 type AnalyticsEventBytimeGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Used to select time series resolution.
 	TimeDelta param.Field[AnalyticsEventBytimeGetParamsTimeDelta] `query:"time_delta" api:"required"`

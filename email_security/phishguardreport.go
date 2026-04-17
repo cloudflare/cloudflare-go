@@ -44,6 +44,11 @@ func (r *PhishguardReportService) List(ctx context.Context, params PhishguardRep
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -181,6 +186,8 @@ func (r phishguardReportListResponseTagJSON) RawJSON() string {
 
 type PhishguardReportListParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The end of the search date range (RFC3339 format).
 	End      param.Field[time.Time] `query:"end" format:"date-time"`

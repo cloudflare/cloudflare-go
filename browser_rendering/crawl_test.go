@@ -79,8 +79,8 @@ func TestCrawlNewWithOptionalParams(t *testing.T) {
 			}),
 			JsonOptions: cloudflare.F(browser_rendering.CrawlNewParamsBodyObjectJsonOptions{
 				CustomAI: cloudflare.F([]browser_rendering.CrawlNewParamsBodyObjectJsonOptionsCustomAI{{
-					Authorization: cloudflare.F("authorization"),
 					Model:         cloudflare.F("model"),
+					Authorization: cloudflare.F("authorization"),
 				}}),
 				Prompt: cloudflare.F("prompt"),
 				ResponseFormat: cloudflare.F(browser_rendering.CrawlNewParamsBodyObjectJsonOptionsResponseFormat{

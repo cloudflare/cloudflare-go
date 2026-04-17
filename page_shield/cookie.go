@@ -44,6 +44,11 @@ func (r *CookieService) List(ctx context.Context, params CookieListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -70,6 +75,11 @@ func (r *CookieService) ListAutoPaging(ctx context.Context, params CookieListPar
 func (r *CookieService) Get(ctx context.Context, cookieID string, query CookieGetParams, opts ...option.RequestOption) (res *CookieGetResponse, err error) {
 	var env CookieGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -247,6 +257,8 @@ func (r CookieGetResponseSameSiteAttribute) IsKnown() bool {
 
 type CookieListParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The direction used to sort returned cookies.'
 	Direction param.Field[CookieListParamsDirection] `query:"direction"`
@@ -384,6 +396,8 @@ func (r CookieListParamsType) IsKnown() bool {
 
 type CookieGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
