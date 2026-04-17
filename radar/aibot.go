@@ -936,6 +936,12 @@ type AIBotSummaryV2Params struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by HTTP response status code (e.g. 200, 403, 404). Only
+	// [IANA-registered codes](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml)
+	// are accepted.
+	ResponseStatus param.Field[[]string] `query:"responseStatus"`
+	// Filters results by HTTP response status code category.
+	ResponseStatusCategory param.Field[[]AIBotSummaryV2ParamsResponseStatusCategory] `query:"responseStatusCategory"`
 	// Filters results by user agent.
 	UserAgent param.Field[[]string] `query:"userAgent"`
 	// Filters results by vertical.
@@ -954,16 +960,18 @@ func (r AIBotSummaryV2Params) URLQuery() (v url.Values) {
 type AIBotSummaryV2ParamsDimension string
 
 const (
-	AIBotSummaryV2ParamsDimensionUserAgent    AIBotSummaryV2ParamsDimension = "USER_AGENT"
-	AIBotSummaryV2ParamsDimensionCrawlPurpose AIBotSummaryV2ParamsDimension = "CRAWL_PURPOSE"
-	AIBotSummaryV2ParamsDimensionIndustry     AIBotSummaryV2ParamsDimension = "INDUSTRY"
-	AIBotSummaryV2ParamsDimensionVertical     AIBotSummaryV2ParamsDimension = "VERTICAL"
-	AIBotSummaryV2ParamsDimensionContentType  AIBotSummaryV2ParamsDimension = "CONTENT_TYPE"
+	AIBotSummaryV2ParamsDimensionUserAgent              AIBotSummaryV2ParamsDimension = "USER_AGENT"
+	AIBotSummaryV2ParamsDimensionCrawlPurpose           AIBotSummaryV2ParamsDimension = "CRAWL_PURPOSE"
+	AIBotSummaryV2ParamsDimensionIndustry               AIBotSummaryV2ParamsDimension = "INDUSTRY"
+	AIBotSummaryV2ParamsDimensionVertical               AIBotSummaryV2ParamsDimension = "VERTICAL"
+	AIBotSummaryV2ParamsDimensionContentType            AIBotSummaryV2ParamsDimension = "CONTENT_TYPE"
+	AIBotSummaryV2ParamsDimensionResponseStatus         AIBotSummaryV2ParamsDimension = "RESPONSE_STATUS"
+	AIBotSummaryV2ParamsDimensionResponseStatusCategory AIBotSummaryV2ParamsDimension = "RESPONSE_STATUS_CATEGORY"
 )
 
 func (r AIBotSummaryV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case AIBotSummaryV2ParamsDimensionUserAgent, AIBotSummaryV2ParamsDimensionCrawlPurpose, AIBotSummaryV2ParamsDimensionIndustry, AIBotSummaryV2ParamsDimensionVertical, AIBotSummaryV2ParamsDimensionContentType:
+	case AIBotSummaryV2ParamsDimensionUserAgent, AIBotSummaryV2ParamsDimensionCrawlPurpose, AIBotSummaryV2ParamsDimensionIndustry, AIBotSummaryV2ParamsDimensionVertical, AIBotSummaryV2ParamsDimensionContentType, AIBotSummaryV2ParamsDimensionResponseStatus, AIBotSummaryV2ParamsDimensionResponseStatusCategory:
 		return true
 	}
 	return false
@@ -1009,6 +1017,24 @@ const (
 func (r AIBotSummaryV2ParamsFormat) IsKnown() bool {
 	switch r {
 	case AIBotSummaryV2ParamsFormatJson, AIBotSummaryV2ParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AIBotSummaryV2ParamsResponseStatusCategory string
+
+const (
+	AIBotSummaryV2ParamsResponseStatusCategoryInformational AIBotSummaryV2ParamsResponseStatusCategory = "INFORMATIONAL"
+	AIBotSummaryV2ParamsResponseStatusCategorySuccess       AIBotSummaryV2ParamsResponseStatusCategory = "SUCCESS"
+	AIBotSummaryV2ParamsResponseStatusCategoryRedirection   AIBotSummaryV2ParamsResponseStatusCategory = "REDIRECTION"
+	AIBotSummaryV2ParamsResponseStatusCategoryClientError   AIBotSummaryV2ParamsResponseStatusCategory = "CLIENT_ERROR"
+	AIBotSummaryV2ParamsResponseStatusCategoryServerError   AIBotSummaryV2ParamsResponseStatusCategory = "SERVER_ERROR"
+)
+
+func (r AIBotSummaryV2ParamsResponseStatusCategory) IsKnown() bool {
+	switch r {
+	case AIBotSummaryV2ParamsResponseStatusCategoryInformational, AIBotSummaryV2ParamsResponseStatusCategorySuccess, AIBotSummaryV2ParamsResponseStatusCategoryRedirection, AIBotSummaryV2ParamsResponseStatusCategoryClientError, AIBotSummaryV2ParamsResponseStatusCategoryServerError:
 		return true
 	}
 	return false
@@ -1077,6 +1103,12 @@ type AIBotTimeseriesParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Filters results by HTTP response status code (e.g. 200, 403, 404). Only
+	// [IANA-registered codes](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml)
+	// are accepted.
+	ResponseStatus param.Field[[]string] `query:"responseStatus"`
+	// Filters results by HTTP response status code category.
+	ResponseStatusCategory param.Field[[]AIBotTimeseriesParamsResponseStatusCategory] `query:"responseStatusCategory"`
 	// Filters results by user agent.
 	UserAgent param.Field[[]string] `query:"userAgent"`
 	// Filters results by vertical.
@@ -1156,6 +1188,24 @@ func (r AIBotTimeseriesParamsFormat) IsKnown() bool {
 	return false
 }
 
+type AIBotTimeseriesParamsResponseStatusCategory string
+
+const (
+	AIBotTimeseriesParamsResponseStatusCategoryInformational AIBotTimeseriesParamsResponseStatusCategory = "INFORMATIONAL"
+	AIBotTimeseriesParamsResponseStatusCategorySuccess       AIBotTimeseriesParamsResponseStatusCategory = "SUCCESS"
+	AIBotTimeseriesParamsResponseStatusCategoryRedirection   AIBotTimeseriesParamsResponseStatusCategory = "REDIRECTION"
+	AIBotTimeseriesParamsResponseStatusCategoryClientError   AIBotTimeseriesParamsResponseStatusCategory = "CLIENT_ERROR"
+	AIBotTimeseriesParamsResponseStatusCategoryServerError   AIBotTimeseriesParamsResponseStatusCategory = "SERVER_ERROR"
+)
+
+func (r AIBotTimeseriesParamsResponseStatusCategory) IsKnown() bool {
+	switch r {
+	case AIBotTimeseriesParamsResponseStatusCategoryInformational, AIBotTimeseriesParamsResponseStatusCategorySuccess, AIBotTimeseriesParamsResponseStatusCategoryRedirection, AIBotTimeseriesParamsResponseStatusCategoryClientError, AIBotTimeseriesParamsResponseStatusCategoryServerError:
+		return true
+	}
+	return false
+}
+
 type AIBotTimeseriesResponseEnvelope struct {
 	Result  AIBotTimeseriesResponse             `json:"result" api:"required"`
 	Success bool                                `json:"success" api:"required"`
@@ -1222,6 +1272,12 @@ type AIBotTimeseriesGroupsParams struct {
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 	Normalization param.Field[AIBotTimeseriesGroupsParamsNormalization] `query:"normalization"`
+	// Filters results by HTTP response status code (e.g. 200, 403, 404). Only
+	// [IANA-registered codes](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml)
+	// are accepted.
+	ResponseStatus param.Field[[]string] `query:"responseStatus"`
+	// Filters results by HTTP response status code category.
+	ResponseStatusCategory param.Field[[]AIBotTimeseriesGroupsParamsResponseStatusCategory] `query:"responseStatusCategory"`
 	// Filters results by user agent.
 	UserAgent param.Field[[]string] `query:"userAgent"`
 	// Filters results by vertical.
@@ -1241,16 +1297,18 @@ func (r AIBotTimeseriesGroupsParams) URLQuery() (v url.Values) {
 type AIBotTimeseriesGroupsParamsDimension string
 
 const (
-	AIBotTimeseriesGroupsParamsDimensionUserAgent    AIBotTimeseriesGroupsParamsDimension = "USER_AGENT"
-	AIBotTimeseriesGroupsParamsDimensionCrawlPurpose AIBotTimeseriesGroupsParamsDimension = "CRAWL_PURPOSE"
-	AIBotTimeseriesGroupsParamsDimensionIndustry     AIBotTimeseriesGroupsParamsDimension = "INDUSTRY"
-	AIBotTimeseriesGroupsParamsDimensionVertical     AIBotTimeseriesGroupsParamsDimension = "VERTICAL"
-	AIBotTimeseriesGroupsParamsDimensionContentType  AIBotTimeseriesGroupsParamsDimension = "CONTENT_TYPE"
+	AIBotTimeseriesGroupsParamsDimensionUserAgent              AIBotTimeseriesGroupsParamsDimension = "USER_AGENT"
+	AIBotTimeseriesGroupsParamsDimensionCrawlPurpose           AIBotTimeseriesGroupsParamsDimension = "CRAWL_PURPOSE"
+	AIBotTimeseriesGroupsParamsDimensionIndustry               AIBotTimeseriesGroupsParamsDimension = "INDUSTRY"
+	AIBotTimeseriesGroupsParamsDimensionVertical               AIBotTimeseriesGroupsParamsDimension = "VERTICAL"
+	AIBotTimeseriesGroupsParamsDimensionContentType            AIBotTimeseriesGroupsParamsDimension = "CONTENT_TYPE"
+	AIBotTimeseriesGroupsParamsDimensionResponseStatus         AIBotTimeseriesGroupsParamsDimension = "RESPONSE_STATUS"
+	AIBotTimeseriesGroupsParamsDimensionResponseStatusCategory AIBotTimeseriesGroupsParamsDimension = "RESPONSE_STATUS_CATEGORY"
 )
 
 func (r AIBotTimeseriesGroupsParamsDimension) IsKnown() bool {
 	switch r {
-	case AIBotTimeseriesGroupsParamsDimensionUserAgent, AIBotTimeseriesGroupsParamsDimensionCrawlPurpose, AIBotTimeseriesGroupsParamsDimensionIndustry, AIBotTimeseriesGroupsParamsDimensionVertical, AIBotTimeseriesGroupsParamsDimensionContentType:
+	case AIBotTimeseriesGroupsParamsDimensionUserAgent, AIBotTimeseriesGroupsParamsDimensionCrawlPurpose, AIBotTimeseriesGroupsParamsDimensionIndustry, AIBotTimeseriesGroupsParamsDimensionVertical, AIBotTimeseriesGroupsParamsDimensionContentType, AIBotTimeseriesGroupsParamsDimensionResponseStatus, AIBotTimeseriesGroupsParamsDimensionResponseStatusCategory:
 		return true
 	}
 	return false
@@ -1333,6 +1391,24 @@ const (
 func (r AIBotTimeseriesGroupsParamsNormalization) IsKnown() bool {
 	switch r {
 	case AIBotTimeseriesGroupsParamsNormalizationPercentage, AIBotTimeseriesGroupsParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
+
+type AIBotTimeseriesGroupsParamsResponseStatusCategory string
+
+const (
+	AIBotTimeseriesGroupsParamsResponseStatusCategoryInformational AIBotTimeseriesGroupsParamsResponseStatusCategory = "INFORMATIONAL"
+	AIBotTimeseriesGroupsParamsResponseStatusCategorySuccess       AIBotTimeseriesGroupsParamsResponseStatusCategory = "SUCCESS"
+	AIBotTimeseriesGroupsParamsResponseStatusCategoryRedirection   AIBotTimeseriesGroupsParamsResponseStatusCategory = "REDIRECTION"
+	AIBotTimeseriesGroupsParamsResponseStatusCategoryClientError   AIBotTimeseriesGroupsParamsResponseStatusCategory = "CLIENT_ERROR"
+	AIBotTimeseriesGroupsParamsResponseStatusCategoryServerError   AIBotTimeseriesGroupsParamsResponseStatusCategory = "SERVER_ERROR"
+)
+
+func (r AIBotTimeseriesGroupsParamsResponseStatusCategory) IsKnown() bool {
+	switch r {
+	case AIBotTimeseriesGroupsParamsResponseStatusCategoryInformational, AIBotTimeseriesGroupsParamsResponseStatusCategorySuccess, AIBotTimeseriesGroupsParamsResponseStatusCategoryRedirection, AIBotTimeseriesGroupsParamsResponseStatusCategoryClientError, AIBotTimeseriesGroupsParamsResponseStatusCategoryServerError:
 		return true
 	}
 	return false
