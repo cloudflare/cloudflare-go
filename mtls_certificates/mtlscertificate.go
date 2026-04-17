@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -45,6 +47,11 @@ func NewMTLSCertificateService(opts ...option.RequestOption) (r *MTLSCertificate
 func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateNewResponse, err error) {
 	var env MTLSCertificateNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,16 +69,21 @@ func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificate
 // (BYO-CA) for mTLS. To list certificates issued by the Cloudflare managed CA, use
 // the
 // [List Client Certificates endpoint](/api/resources/client_certificates/methods/list/).
-func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MTLSCertificate], err error) {
+func (r *MTLSCertificateService) List(ctx context.Context, params MTLSCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MTLSCertificate], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/mtls_certificates", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/mtls_certificates", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,8 +99,8 @@ func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificate
 // (BYO-CA) for mTLS. To list certificates issued by the Cloudflare managed CA, use
 // the
 // [List Client Certificates endpoint](/api/resources/client_certificates/methods/list/).
-func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MTLSCertificate] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, params MTLSCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MTLSCertificate] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes the mTLS certificate unless the certificate is in use by one or more
@@ -96,6 +108,11 @@ func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, query MTLSC
 func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	var env MTLSCertificateDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -119,6 +136,11 @@ func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID s
 func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateGetParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	var env MTLSCertificateGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -153,6 +175,8 @@ type MTLSCertificate struct {
 	SerialNumber string `json:"serial_number"`
 	// The type of hash used for the certificate.
 	Signature string `json:"signature"`
+	// The type of the certificate, indicating how it was created and who manages it.
+	Type MTLSCertificateType `json:"type"`
 	// This is the time the certificate was uploaded.
 	UploadedOn time.Time           `json:"uploaded_on" format:"date-time"`
 	JSON       mtlsCertificateJSON `json:"-"`
@@ -168,6 +192,7 @@ type mtlsCertificateJSON struct {
 	Name         apijson.Field
 	SerialNumber apijson.Field
 	Signature    apijson.Field
+	Type         apijson.Field
 	UploadedOn   apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -179,6 +204,23 @@ func (r *MTLSCertificate) UnmarshalJSON(data []byte) (err error) {
 
 func (r mtlsCertificateJSON) RawJSON() string {
 	return r.raw
+}
+
+// The type of the certificate, indicating how it was created and who manages it.
+type MTLSCertificateType string
+
+const (
+	MTLSCertificateTypeCustom         MTLSCertificateType = "custom"
+	MTLSCertificateTypeGatewayManaged MTLSCertificateType = "gateway_managed"
+	MTLSCertificateTypeAccessManaged  MTLSCertificateType = "access_managed"
+)
+
+func (r MTLSCertificateType) IsKnown() bool {
+	switch r {
+	case MTLSCertificateTypeCustom, MTLSCertificateTypeGatewayManaged, MTLSCertificateTypeAccessManaged:
+		return true
+	}
+	return false
 }
 
 type MTLSCertificateNewResponse struct {
@@ -198,6 +240,8 @@ type MTLSCertificateNewResponse struct {
 	SerialNumber string `json:"serial_number"`
 	// The type of hash used for the certificate.
 	Signature string `json:"signature"`
+	// The type of the certificate, indicating how it was created and who manages it.
+	Type MTLSCertificateNewResponseType `json:"type"`
 	// This is the time the certificate was updated.
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This is the time the certificate was uploaded.
@@ -216,6 +260,7 @@ type mtlsCertificateNewResponseJSON struct {
 	Name         apijson.Field
 	SerialNumber apijson.Field
 	Signature    apijson.Field
+	Type         apijson.Field
 	UpdatedAt    apijson.Field
 	UploadedOn   apijson.Field
 	raw          string
@@ -230,8 +275,27 @@ func (r mtlsCertificateNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// The type of the certificate, indicating how it was created and who manages it.
+type MTLSCertificateNewResponseType string
+
+const (
+	MTLSCertificateNewResponseTypeCustom         MTLSCertificateNewResponseType = "custom"
+	MTLSCertificateNewResponseTypeGatewayManaged MTLSCertificateNewResponseType = "gateway_managed"
+	MTLSCertificateNewResponseTypeAccessManaged  MTLSCertificateNewResponseType = "access_managed"
+)
+
+func (r MTLSCertificateNewResponseType) IsKnown() bool {
+	switch r {
+	case MTLSCertificateNewResponseTypeCustom, MTLSCertificateNewResponseTypeGatewayManaged, MTLSCertificateNewResponseTypeAccessManaged:
+		return true
+	}
+	return false
+}
+
 type MTLSCertificateNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Indicates whether the certificate is a CA or leaf certificate.
 	CA param.Field[bool] `json:"ca" api:"required"`
@@ -389,11 +453,42 @@ func (r MTLSCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MTLSCertificateListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filters results by certificate type. Multiple types can be comma-separated.
+	Type param.Field[[]MTLSCertificateListParamsType] `query:"type"`
+}
+
+// URLQuery serializes [MTLSCertificateListParams]'s query parameters as
+// `url.Values`.
+func (r MTLSCertificateListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type MTLSCertificateListParamsType string
+
+const (
+	MTLSCertificateListParamsTypeCustom         MTLSCertificateListParamsType = "custom"
+	MTLSCertificateListParamsTypeGatewayManaged MTLSCertificateListParamsType = "gateway_managed"
+	MTLSCertificateListParamsTypeAccessManaged  MTLSCertificateListParamsType = "access_managed"
+)
+
+func (r MTLSCertificateListParamsType) IsKnown() bool {
+	switch r {
+	case MTLSCertificateListParamsTypeCustom, MTLSCertificateListParamsTypeGatewayManaged, MTLSCertificateListParamsTypeAccessManaged:
+		return true
+	}
+	return false
 }
 
 type MTLSCertificateDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -538,6 +633,8 @@ func (r MTLSCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type MTLSCertificateGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
