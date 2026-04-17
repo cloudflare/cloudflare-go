@@ -44,6 +44,11 @@ func NewScriptDeploymentService(opts ...option.RequestOption) (r *ScriptDeployme
 func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, params ScriptDeploymentNewParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ScriptDeploymentNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,6 +71,11 @@ func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, pa
 func (r *ScriptDeploymentService) List(ctx context.Context, scriptName string, query ScriptDeploymentListParams, opts ...option.RequestOption) (res *ScriptDeploymentListResponse, err error) {
 	var env ScriptDeploymentListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -87,6 +97,11 @@ func (r *ScriptDeploymentService) List(ctx context.Context, scriptName string, q
 // traffic, cannot be deleted. All other deployments can be deleted.
 func (r *ScriptDeploymentService) Delete(ctx context.Context, scriptName string, deploymentID string, body ScriptDeploymentDeleteParams, opts ...option.RequestOption) (res *ScriptDeploymentDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -108,6 +123,11 @@ func (r *ScriptDeploymentService) Delete(ctx context.Context, scriptName string,
 func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, deploymentID string, query ScriptDeploymentGetParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ScriptDeploymentGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -199,7 +219,7 @@ func (r deploymentVersionJSON) RawJSON() string {
 }
 
 type DeploymentAnnotations struct {
-	// Human-readable message about the deployment. Truncated to 100 bytes.
+	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
 	WorkersMessage string `json:"workers/message"`
 	// Operation that triggered the creation of the deployment.
 	WorkersTriggeredBy string                    `json:"workers/triggered_by"`
@@ -243,7 +263,7 @@ func (r DeploymentVersionParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DeploymentAnnotationsParam struct {
-	// Human-readable message about the deployment. Truncated to 100 bytes.
+	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
 	WorkersMessage param.Field[string] `json:"workers/message"`
 }
 
@@ -411,6 +431,8 @@ func (r ScriptDeploymentDeleteResponseSuccess) IsKnown() bool {
 
 type ScriptDeploymentNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	Deployment DeploymentParam     `json:"deployment" api:"required"`
 	// If set to true, the deployment will be created even if normally blocked by
@@ -572,6 +594,8 @@ func (r ScriptDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptDeploymentListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -716,11 +740,15 @@ func (r ScriptDeploymentListResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptDeploymentDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptDeploymentGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
