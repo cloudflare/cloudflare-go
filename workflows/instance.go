@@ -49,6 +49,11 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 func (r *InstanceService) New(ctx context.Context, workflowName string, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,6 +76,11 @@ func (r *InstanceService) List(ctx context.Context, workflowName string, params 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -102,6 +112,11 @@ func (r *InstanceService) Bulk(ctx context.Context, workflowName string, params 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -132,6 +147,11 @@ func (r *InstanceService) BulkAutoPaging(ctx context.Context, workflowName strin
 func (r *InstanceService) Get(ctx context.Context, workflowName string, instanceID string, params InstanceGetParams, opts ...option.RequestOption) (res *InstanceGetResponse, err error) {
 	var env InstanceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -772,6 +792,7 @@ func (r InstanceGetResponseTriggerSource) IsKnown() bool {
 }
 
 type InstanceNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string]                             `path:"account_id" api:"required"`
 	InstanceID        param.Field[string]                             `json:"instance_id"`
 	InstanceRetention param.Field[InstanceNewParamsInstanceRetention] `json:"instance_retention"`
@@ -902,6 +923,7 @@ type InstanceNewResponseEnvelopeResultInfo struct {
 	TotalCount float64                                   `json:"total_count" api:"required"`
 	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
+	TotalPages float64                                   `json:"total_pages"`
 	JSON       instanceNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -913,6 +935,7 @@ type instanceNewResponseEnvelopeResultInfoJSON struct {
 	TotalCount  apijson.Field
 	Cursor      apijson.Field
 	Page        apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -926,17 +949,17 @@ func (r instanceNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type InstanceListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// `page` and `cursor` are mutually exclusive, use one or the other.
+	// Opaque token for cursor-based pagination. Mutually exclusive with `page`.
 	Cursor param.Field[string] `query:"cursor"`
 	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	DateEnd param.Field[time.Time] `query:"date_end" format:"date-time"`
 	// Accepts ISO 8601 with no timezone offsets and in UTC.
 	DateStart param.Field[time.Time] `query:"date_start" format:"date-time"`
-	// should only be used when `cursor` is used, defines a new direction for the
-	// cursor
+	// Defines the direction for cursor-based pagination.
 	Direction param.Field[InstanceListParamsDirection] `query:"direction"`
-	// `page` and `cursor` are mutually exclusive, use one or the other.
+	// Deprecated: use `cursor` for pagination instead.
 	Page    param.Field[float64]                  `query:"page"`
 	PerPage param.Field[float64]                  `query:"per_page"`
 	Status  param.Field[InstanceListParamsStatus] `query:"status"`
@@ -950,8 +973,7 @@ func (r InstanceListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// should only be used when `cursor` is used, defines a new direction for the
-// cursor
+// Defines the direction for cursor-based pagination.
 type InstanceListParamsDirection string
 
 const (
@@ -989,6 +1011,7 @@ func (r InstanceListParamsStatus) IsKnown() bool {
 }
 
 type InstanceBulkParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]      `path:"account_id" api:"required"`
 	Body      []InstanceBulkParamsBody `json:"body"`
 }
@@ -1033,6 +1056,7 @@ type InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion interface {
 }
 
 type InstanceGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Step ordering: "asc" (default, oldest first) or "desc" (newest first).
 	Order param.Field[InstanceGetParamsOrder] `query:"order"`
@@ -1175,6 +1199,7 @@ type InstanceGetResponseEnvelopeResultInfo struct {
 	TotalCount float64                                   `json:"total_count" api:"required"`
 	Cursor     string                                    `json:"cursor"`
 	Page       float64                                   `json:"page"`
+	TotalPages float64                                   `json:"total_pages"`
 	JSON       instanceGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -1186,6 +1211,7 @@ type instanceGetResponseEnvelopeResultInfoJSON struct {
 	TotalCount  apijson.Field
 	Cursor      apijson.Field
 	Page        apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
