@@ -42,6 +42,11 @@ func NewAccessInfrastructureTargetService(opts ...option.RequestOption) (r *Acce
 func (r *AccessInfrastructureTargetService) New(ctx context.Context, params AccessInfrastructureTargetNewParams, opts ...option.RequestOption) (res *AccessInfrastructureTargetNewResponse, err error) {
 	var env AccessInfrastructureTargetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -59,6 +64,11 @@ func (r *AccessInfrastructureTargetService) New(ctx context.Context, params Acce
 func (r *AccessInfrastructureTargetService) Update(ctx context.Context, targetID string, params AccessInfrastructureTargetUpdateParams, opts ...option.RequestOption) (res *AccessInfrastructureTargetUpdateResponse, err error) {
 	var env AccessInfrastructureTargetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -82,6 +92,11 @@ func (r *AccessInfrastructureTargetService) List(ctx context.Context, params Acc
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -109,6 +124,11 @@ func (r *AccessInfrastructureTargetService) ListAutoPaging(ctx context.Context, 
 func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID string, body AccessInfrastructureTargetDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -128,6 +148,11 @@ func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID
 func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body AccessInfrastructureTargetBulkDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -141,6 +166,11 @@ func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body
 func (r *AccessInfrastructureTargetService) BulkDeleteV2(ctx context.Context, params AccessInfrastructureTargetBulkDeleteV2Params, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -155,6 +185,11 @@ func (r *AccessInfrastructureTargetService) BulkUpdate(ctx context.Context, para
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -181,6 +216,11 @@ func (r *AccessInfrastructureTargetService) BulkUpdateAutoPaging(ctx context.Con
 func (r *AccessInfrastructureTargetService) Get(ctx context.Context, targetID string, query AccessInfrastructureTargetGetParams, opts ...option.RequestOption) (res *AccessInfrastructureTargetGetResponse, err error) {
 	var env AccessInfrastructureTargetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -770,6 +810,8 @@ func (r accessInfrastructureTargetGetResponseIpipv6JSON) RawJSON() string {
 
 type AccessInfrastructureTargetNewParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A non-unique field that refers to a target. Case insensitive, maximum length of
 	// 255 characters, supports the use of special characters dash and period, does not
@@ -964,6 +1006,8 @@ func (r AccessInfrastructureTargetNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessInfrastructureTargetUpdateParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A non-unique field that refers to a target. Case insensitive, maximum length of
 	// 255 characters, supports the use of special characters dash and period, does not
@@ -1159,6 +1203,8 @@ func (r AccessInfrastructureTargetUpdateResponseEnvelopeSuccess) IsKnown() bool 
 
 type AccessInfrastructureTargetListParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Date and time at which the target was created after (inclusive)
 	CreatedAfter param.Field[time.Time] `query:"created_after" format:"date-time"`
@@ -1252,16 +1298,22 @@ func (r AccessInfrastructureTargetListParamsOrder) IsKnown() bool {
 
 type AccessInfrastructureTargetDeleteParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessInfrastructureTargetBulkDeleteParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessInfrastructureTargetBulkDeleteV2Params struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// List of target IDs to bulk delete
 	TargetIDs param.Field[[]string] `json:"target_ids" api:"required" format:"uuid"`
@@ -1273,6 +1325,8 @@ func (r AccessInfrastructureTargetBulkDeleteV2Params) MarshalJSON() (data []byte
 
 type AccessInfrastructureTargetBulkUpdateParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                              `path:"account_id" api:"required"`
 	Body      []AccessInfrastructureTargetBulkUpdateParamsBody `json:"body" api:"required"`
 }
@@ -1334,6 +1388,8 @@ func (r AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV6) MarshalJSON() (dat
 
 type AccessInfrastructureTargetGetParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

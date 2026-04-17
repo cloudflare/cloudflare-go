@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/shared"
 	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
@@ -105,12 +106,9 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 					SessionDuration:     cloudflare.F("24h"),
 				}),
 			}),
-			OptionsPreflightBypass: cloudflare.F(true),
-			PathCookieAttribute:    cloudflare.F(true),
-			Policies: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
-				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				Precedence: cloudflare.F(int64(0)),
-			}}),
+			OptionsPreflightBypass:      cloudflare.F(true),
+			PathCookieAttribute:         cloudflare.F(true),
+			Policies:                    cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion{shared.UnionString("f174e90a-fafe-4643-bbbc-4a0ed4fc8415")}),
 			ReadServiceTokensFromHeader: cloudflare.F("Authorization"),
 			SameSiteCookieAttribute:     cloudflare.F("strict"),
 			SCIMConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig{
@@ -248,12 +246,9 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 						SessionDuration:     cloudflare.F("24h"),
 					}),
 				}),
-				OptionsPreflightBypass: cloudflare.F(true),
-				PathCookieAttribute:    cloudflare.F(true),
-				Policies: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
-					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					Precedence: cloudflare.F(int64(0)),
-				}}),
+				OptionsPreflightBypass:      cloudflare.F(true),
+				PathCookieAttribute:         cloudflare.F(true),
+				Policies:                    cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion{shared.UnionString("f174e90a-fafe-4643-bbbc-4a0ed4fc8415")}),
 				ReadServiceTokensFromHeader: cloudflare.F("Authorization"),
 				SameSiteCookieAttribute:     cloudflare.F("strict"),
 				SCIMConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig{

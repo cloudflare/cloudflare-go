@@ -47,6 +47,11 @@ func NewDevicePolicyDefaultService(opts ...option.RequestOption) (r *DevicePolic
 func (r *DevicePolicyDefaultService) Edit(ctx context.Context, params DevicePolicyDefaultEditParams, opts ...option.RequestOption) (res *DevicePolicyDefaultEditResponse, err error) {
 	var env DevicePolicyDefaultEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,6 +69,11 @@ func (r *DevicePolicyDefaultService) Edit(ctx context.Context, params DevicePoli
 func (r *DevicePolicyDefaultService) Get(ctx context.Context, query DevicePolicyDefaultGetParams, opts ...option.RequestOption) (res *DevicePolicyDefaultGetResponse, err error) {
 	var env DevicePolicyDefaultGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -104,7 +114,8 @@ type DevicePolicyDefaultEditResponse struct {
 	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
 	GatewayUniqueID  string           `json:"gateway_unique_id"`
 	// List of routes included in the WARP client's tunnel.
-	Include []SplitTunnelInclude `json:"include"`
+	Include  []SplitTunnelInclude `json:"include"`
+	PolicyID string               `json:"policy_id"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool `json:"register_interface_ip_with_dns"`
@@ -137,6 +148,7 @@ type devicePolicyDefaultEditResponseJSON struct {
 	FallbackDomains            apijson.Field
 	GatewayUniqueID            apijson.Field
 	Include                    apijson.Field
+	PolicyID                   apijson.Field
 	RegisterInterfaceIPWithDNS apijson.Field
 	SccmVpnBoundarySupport     apijson.Field
 	ServiceModeV2              apijson.Field
@@ -207,7 +219,8 @@ type DevicePolicyDefaultGetResponse struct {
 	FallbackDomains  []FallbackDomain `json:"fallback_domains"`
 	GatewayUniqueID  string           `json:"gateway_unique_id"`
 	// List of routes included in the WARP client's tunnel.
-	Include []SplitTunnelInclude `json:"include"`
+	Include  []SplitTunnelInclude `json:"include"`
+	PolicyID string               `json:"policy_id"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool `json:"register_interface_ip_with_dns"`
@@ -240,6 +253,7 @@ type devicePolicyDefaultGetResponseJSON struct {
 	FallbackDomains            apijson.Field
 	GatewayUniqueID            apijson.Field
 	Include                    apijson.Field
+	PolicyID                   apijson.Field
 	RegisterInterfaceIPWithDNS apijson.Field
 	SccmVpnBoundarySupport     apijson.Field
 	ServiceModeV2              apijson.Field
@@ -284,6 +298,7 @@ func (r devicePolicyDefaultGetResponseServiceModeV2JSON) RawJSON() string {
 }
 
 type DevicePolicyDefaultEditParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether to allow the user to switch WARP between modes.
 	AllowModeSwitch param.Field[bool] `json:"allow_mode_switch"`
@@ -390,6 +405,7 @@ func (r DevicePolicyDefaultEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePolicyDefaultGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

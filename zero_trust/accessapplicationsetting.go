@@ -38,6 +38,12 @@ func NewAccessApplicationSettingService(opts ...option.RequestOption) (r *Access
 func (r *AccessApplicationSettingService) Update(ctx context.Context, appID AppIDParam, params AccessApplicationSettingUpdateParams, opts ...option.RequestOption) (res *AccessApplicationSettingUpdateResponse, err error) {
 	var env AccessApplicationSettingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -73,6 +79,12 @@ func (r *AccessApplicationSettingService) Update(ctx context.Context, appID AppI
 func (r *AccessApplicationSettingService) Edit(ctx context.Context, appID AppIDParam, params AccessApplicationSettingEditParams, opts ...option.RequestOption) (res *AccessApplicationSettingEditResponse, err error) {
 	var env AccessApplicationSettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -156,8 +168,12 @@ func (r accessApplicationSettingEditResponseJSON) RawJSON() string {
 
 type AccessApplicationSettingUpdateParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Enables loading application content in an iFrame.
 	AllowIframe param.Field[bool] `json:"allow_iframe"`
@@ -312,8 +328,12 @@ func (r AccessApplicationSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationSettingEditParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Enables loading application content in an iFrame.
 	AllowIframe param.Field[bool] `json:"allow_iframe"`

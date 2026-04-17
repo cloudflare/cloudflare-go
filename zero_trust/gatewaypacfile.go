@@ -41,6 +41,11 @@ func NewGatewayPacfileService(opts ...option.RequestOption) (r *GatewayPacfileSe
 func (r *GatewayPacfileService) New(ctx context.Context, params GatewayPacfileNewParams, opts ...option.RequestOption) (res *GatewayPacfileNewResponse, err error) {
 	var env GatewayPacfileNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -58,6 +63,11 @@ func (r *GatewayPacfileService) New(ctx context.Context, params GatewayPacfileNe
 func (r *GatewayPacfileService) Update(ctx context.Context, pacfileID string, params GatewayPacfileUpdateParams, opts ...option.RequestOption) (res *GatewayPacfileUpdateResponse, err error) {
 	var env GatewayPacfileUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -80,6 +90,11 @@ func (r *GatewayPacfileService) List(ctx context.Context, query GatewayPacfileLi
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -106,6 +121,11 @@ func (r *GatewayPacfileService) ListAutoPaging(ctx context.Context, query Gatewa
 func (r *GatewayPacfileService) Delete(ctx context.Context, pacfileID string, body GatewayPacfileDeleteParams, opts ...option.RequestOption) (res *GatewayPacfileDeleteResponse, err error) {
 	var env GatewayPacfileDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -127,6 +147,11 @@ func (r *GatewayPacfileService) Delete(ctx context.Context, pacfileID string, bo
 func (r *GatewayPacfileService) Get(ctx context.Context, pacfileID string, query GatewayPacfileGetParams, opts ...option.RequestOption) (res *GatewayPacfileGetResponse, err error) {
 	var env GatewayPacfileGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -304,6 +329,7 @@ func (r gatewayPacfileGetResponseJSON) RawJSON() string {
 }
 
 type GatewayPacfileNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Actual contents of the PAC file
 	Contents param.Field[string] `json:"contents" api:"required"`
@@ -364,6 +390,7 @@ func (r GatewayPacfileNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayPacfileUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Actual contents of the PAC file
 	Contents param.Field[string] `json:"contents" api:"required"`
@@ -421,10 +448,12 @@ func (r GatewayPacfileUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayPacfileListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayPacfileDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -472,6 +501,7 @@ func (r GatewayPacfileDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayPacfileGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

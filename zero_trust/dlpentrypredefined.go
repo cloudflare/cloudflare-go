@@ -43,6 +43,11 @@ func NewDLPEntryPredefinedService(opts ...option.RequestOption) (r *DLPEntryPred
 func (r *DLPEntryPredefinedService) New(ctx context.Context, params DLPEntryPredefinedNewParams, opts ...option.RequestOption) (res *DLPEntryPredefinedNewResponse, err error) {
 	var env DLPEntryPredefinedNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,6 +65,11 @@ func (r *DLPEntryPredefinedService) New(ctx context.Context, params DLPEntryPred
 func (r *DLPEntryPredefinedService) Update(ctx context.Context, entryID string, params DLPEntryPredefinedUpdateParams, opts ...option.RequestOption) (res *DLPEntryPredefinedUpdateResponse, err error) {
 	var env DLPEntryPredefinedUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -82,6 +92,11 @@ func (r *DLPEntryPredefinedService) List(ctx context.Context, query DLPEntryPred
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -109,6 +124,11 @@ func (r *DLPEntryPredefinedService) ListAutoPaging(ctx context.Context, query DL
 func (r *DLPEntryPredefinedService) Delete(ctx context.Context, entryID string, body DLPEntryPredefinedDeleteParams, opts ...option.RequestOption) (res *DLPEntryPredefinedDeleteResponse, err error) {
 	var env DLPEntryPredefinedDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -130,6 +150,11 @@ func (r *DLPEntryPredefinedService) Delete(ctx context.Context, entryID string, 
 func (r *DLPEntryPredefinedService) Get(ctx context.Context, entryID string, query DLPEntryPredefinedGetParams, opts ...option.RequestOption) (res *DLPEntryPredefinedGetResponse, err error) {
 	var env DLPEntryPredefinedGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -860,6 +885,7 @@ func (r DLPEntryPredefinedGetResponseUploadStatus) IsKnown() bool {
 }
 
 type DLPEntryPredefinedNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Enabled   param.Field[bool]   `json:"enabled" api:"required"`
 	EntryID   param.Field[string] `json:"entry_id" api:"required" format:"uuid"`
@@ -1012,6 +1038,7 @@ func (r DLPEntryPredefinedNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEntryPredefinedUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Enabled   param.Field[bool]   `json:"enabled" api:"required"`
 }
@@ -1160,10 +1187,12 @@ func (r DLPEntryPredefinedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEntryPredefinedListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DLPEntryPredefinedDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1307,6 +1336,7 @@ func (r DLPEntryPredefinedDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPEntryPredefinedGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
