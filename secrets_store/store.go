@@ -41,30 +41,25 @@ func NewStoreService(opts ...option.RequestOption) (r *StoreService) {
 }
 
 // Creates a store in the account
-func (r *StoreService) New(ctx context.Context, params StoreNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[StoreNewResponse], err error) {
-	var raw *http.Response
+func (r *StoreService) New(ctx context.Context, params StoreNewParams, opts ...option.RequestOption) (res *StoreNewResponse, err error) {
+	var env StoreNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secrets_store/stores", params.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
+	res = &env.Result
 	return res, nil
-}
-
-// Creates a store in the account
-func (r *StoreService) NewAutoPaging(ctx context.Context, params StoreNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StoreNewResponse] {
-	return pagination.NewSinglePageAutoPager(r.New(ctx, params, opts...))
 }
 
 // Lists all the stores in an account
@@ -72,6 +67,11 @@ func (r *StoreService) List(ctx context.Context, params StoreListParams, opts ..
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -98,6 +98,11 @@ func (r *StoreService) ListAutoPaging(ctx context.Context, params StoreListParam
 func (r *StoreService) Delete(ctx context.Context, storeID string, body StoreDeleteParams, opts ...option.RequestOption) (res *StoreDeleteResponse, err error) {
 	var env StoreDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -123,8 +128,10 @@ type StoreNewResponse struct {
 	// When the secret was modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the store
-	Name string               `json:"name" api:"required"`
-	JSON storeNewResponseJSON `json:"-"`
+	Name string `json:"name" api:"required"`
+	// Account Identifier
+	AccountID string               `json:"account_id"`
+	JSON      storeNewResponseJSON `json:"-"`
 }
 
 // storeNewResponseJSON contains the JSON metadata for the struct
@@ -134,6 +141,7 @@ type storeNewResponseJSON struct {
 	Created     apijson.Field
 	Modified    apijson.Field
 	Name        apijson.Field
+	AccountID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -154,8 +162,10 @@ type StoreListResponse struct {
 	// When the secret was modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the store
-	Name string                `json:"name" api:"required"`
-	JSON storeListResponseJSON `json:"-"`
+	Name string `json:"name" api:"required"`
+	// Account Identifier
+	AccountID string                `json:"account_id"`
+	JSON      storeListResponseJSON `json:"-"`
 }
 
 // storeListResponseJSON contains the JSON metadata for the struct
@@ -165,6 +175,7 @@ type storeListResponseJSON struct {
 	Created     apijson.Field
 	Modified    apijson.Field
 	Name        apijson.Field
+	AccountID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -177,58 +188,200 @@ func (r storeListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type StoreDeleteResponse struct {
-	// Store Identifier
-	ID string `json:"id" api:"required"`
-	// Whenthe secret was created.
-	Created time.Time `json:"created" api:"required" format:"date-time"`
-	// When the secret was modified.
-	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// The name of the store
-	Name string                  `json:"name" api:"required"`
-	JSON storeDeleteResponseJSON `json:"-"`
-}
-
-// storeDeleteResponseJSON contains the JSON metadata for the struct
-// [StoreDeleteResponse]
-type storeDeleteResponseJSON struct {
-	ID          apijson.Field
-	Created     apijson.Field
-	Modified    apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StoreDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
+type StoreDeleteResponse = interface{}
 
 type StoreNewParams struct {
 	// Account Identifier
-	AccountID param.Field[string]  `path:"account_id" api:"required"`
-	Body      []StoreNewParamsBody `json:"body" api:"required"`
-}
-
-func (r StoreNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type StoreNewParamsBody struct {
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the store
 	Name param.Field[string] `json:"name" api:"required"`
 }
 
-func (r StoreNewParamsBody) MarshalJSON() (data []byte, err error) {
+func (r StoreNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type StoreNewResponseEnvelope struct {
+	Errors   []StoreNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []StoreNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success    StoreNewResponseEnvelopeSuccess    `json:"success" api:"required"`
+	Result     StoreNewResponse                   `json:"result"`
+	ResultInfo StoreNewResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       storeNewResponseEnvelopeJSON       `json:"-"`
+}
+
+// storeNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StoreNewResponseEnvelope]
+type storeNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreNewResponseEnvelopeErrors struct {
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
+	DocumentationURL string                               `json:"documentation_url"`
+	Source           StoreNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             storeNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// storeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [StoreNewResponseEnvelopeErrors]
+type storeNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StoreNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                   `json:"pointer"`
+	JSON    storeNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// storeNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [StoreNewResponseEnvelopeErrorsSource]
+type storeNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreNewResponseEnvelopeMessages struct {
+	Code             int64                                  `json:"code" api:"required"`
+	Message          string                                 `json:"message" api:"required"`
+	DocumentationURL string                                 `json:"documentation_url"`
+	Source           StoreNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             storeNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// storeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [StoreNewResponseEnvelopeMessages]
+type storeNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StoreNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                     `json:"pointer"`
+	JSON    storeNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// storeNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [StoreNewResponseEnvelopeMessagesSource]
+type storeNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type StoreNewResponseEnvelopeSuccess bool
+
+const (
+	StoreNewResponseEnvelopeSuccessTrue StoreNewResponseEnvelopeSuccess = true
+)
+
+func (r StoreNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case StoreNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type StoreNewResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service.
+	Count float64 `json:"count"`
+	// Current page within paginated list of results.
+	Page float64 `json:"page"`
+	// Number of results per page of results.
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters.
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                                `json:"total_pages"`
+	JSON       storeNewResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// storeNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
+// [StoreNewResponseEnvelopeResultInfo]
+type storeNewResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	TotalPages  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeNewResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type StoreListParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to sort objects
 	Direction param.Field[StoreListParamsDirection] `query:"direction"`
@@ -285,6 +438,8 @@ func (r StoreListParamsOrder) IsKnown() bool {
 
 type StoreDeleteParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -292,10 +447,10 @@ type StoreDeleteResponseEnvelope struct {
 	Errors   []StoreDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []StoreDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    StoreDeleteResponseEnvelopeSuccess    `json:"success" api:"required"`
-	Result     StoreDeleteResponse                   `json:"result"`
-	ResultInfo StoreDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       storeDeleteResponseEnvelopeJSON       `json:"-"`
+	Success StoreDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	// Result is null for delete operations.
+	Result StoreDeleteResponse             `json:"result" api:"nullable"`
+	JSON   storeDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // storeDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -305,7 +460,6 @@ type storeDeleteResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -427,35 +581,4 @@ func (r StoreDeleteResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type StoreDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64                                   `json:"total_count"`
-	JSON       storeDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// storeDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [StoreDeleteResponseEnvelopeResultInfo]
-type storeDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StoreDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
