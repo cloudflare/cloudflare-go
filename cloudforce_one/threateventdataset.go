@@ -39,6 +39,11 @@ func NewThreatEventDatasetService(opts ...option.RequestOption) (r *ThreatEventD
 // Creates a dataset
 func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventDatasetNewParams, opts ...option.RequestOption) (res *ThreatEventDatasetNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -51,6 +56,11 @@ func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventD
 // Lists all datasets in an account
 func (r *ThreatEventDatasetService) List(ctx context.Context, query ThreatEventDatasetListParams, opts ...option.RequestOption) (res *[]ThreatEventDatasetListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,6 +73,11 @@ func (r *ThreatEventDatasetService) List(ctx context.Context, query ThreatEventD
 // Updates an existing dataset
 func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, params ThreatEventDatasetEditParams, opts ...option.RequestOption) (res *ThreatEventDatasetEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -79,6 +94,11 @@ func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, 
 // Reads a dataset
 func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, query ThreatEventDatasetGetParams, opts ...option.RequestOption) (res *ThreatEventDatasetGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -96,6 +116,11 @@ func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, q
 // the dataset.
 func (r *ThreatEventDatasetService) Raw(ctx context.Context, datasetID string, eventID string, query ThreatEventDatasetRawParams, opts ...option.RequestOption) (res *ThreatEventDatasetRawResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -246,6 +271,8 @@ func (r threatEventDatasetRawResponseJSON) RawJSON() string {
 
 type ThreatEventDatasetNewParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If true, then anyone can search the dataset. If false, then its limited to the
 	// account.
@@ -260,11 +287,15 @@ func (r ThreatEventDatasetNewParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventDatasetListParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ThreatEventDatasetEditParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If true, then anyone can search the dataset. If false, then its limited to the
 	// account.
@@ -279,10 +310,14 @@ func (r ThreatEventDatasetEditParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventDatasetGetParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ThreatEventDatasetRawParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

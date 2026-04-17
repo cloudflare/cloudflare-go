@@ -38,6 +38,11 @@ func NewThreatEventEventTagService(opts ...option.RequestOption) (r *ThreatEvent
 func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, params ThreatEventEventTagNewParams, opts ...option.RequestOption) (res *ThreatEventEventTagNewResponse, err error) {
 	var env ThreatEventEventTagNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -59,6 +64,11 @@ func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, pa
 func (r *ThreatEventEventTagService) Delete(ctx context.Context, eventID string, body ThreatEventEventTagDeleteParams, opts ...option.RequestOption) (res *ThreatEventEventTagDeleteResponse, err error) {
 	var env ThreatEventEventTagDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -120,6 +130,8 @@ func (r threatEventEventTagDeleteResponseJSON) RawJSON() string {
 
 type ThreatEventEventTagNewParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]   `path:"account_id" api:"required"`
 	Tags      param.Field[[]string] `json:"tags" api:"required"`
 }
@@ -153,6 +165,8 @@ func (r threatEventEventTagNewResponseEnvelopeJSON) RawJSON() string {
 
 type ThreatEventEventTagDeleteParams struct {
 	// Account ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
