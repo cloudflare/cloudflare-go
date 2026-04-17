@@ -39,6 +39,11 @@ func NewEdgeService(opts ...option.RequestOption) (r *EdgeService) {
 func (r *EdgeService) New(ctx context.Context, params EdgeNewParams, opts ...option.RequestOption) (res *InstantLogpushJob, err error) {
 	var env EdgeNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -57,6 +62,11 @@ func (r *EdgeService) Get(ctx context.Context, query EdgeGetParams, opts ...opti
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -116,6 +126,8 @@ func (r instantLogpushJobJSON) RawJSON() string {
 
 type EdgeNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Comma-separated list of fields.
 	Fields param.Field[string] `json:"fields"`
@@ -271,5 +283,7 @@ func (r EdgeNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type EdgeGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
