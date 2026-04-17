@@ -39,6 +39,11 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env PreviewNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -56,6 +61,11 @@ func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts 
 func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, body PreviewDeleteParams, opts ...option.RequestOption) (res *PreviewDeleteResponse, err error) {
 	var env PreviewDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -77,6 +87,11 @@ func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, body 
 func (r *PreviewService) Get(ctx context.Context, healthcheckID string, query PreviewGetParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env PreviewGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -118,6 +133,8 @@ func (r previewDeleteResponseJSON) RawJSON() string {
 
 type PreviewNewParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID           param.Field[string]   `path:"zone_id" api:"required"`
 	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck" api:"required"`
 }
@@ -171,6 +188,8 @@ func (r PreviewNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PreviewDeleteParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -219,6 +238,8 @@ func (r PreviewDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type PreviewGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
