@@ -43,6 +43,11 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 func (r *DNSService) New(ctx context.Context, params DNSNewParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env DNSNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -62,6 +67,11 @@ func (r *DNSService) Delete(ctx context.Context, body DNSDeleteParams, opts ...o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -89,6 +99,11 @@ func (r *DNSService) DeleteAutoPaging(ctx context.Context, body DNSDeleteParams,
 func (r *DNSService) Edit(ctx context.Context, params DNSEditParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env DNSEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -105,6 +120,11 @@ func (r *DNSService) Edit(ctx context.Context, params DNSEditParams, opts ...opt
 // Show the DNS records needed to configure your Email Routing zone.
 func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...option.RequestOption) (res *DNSGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -701,6 +721,8 @@ func (r DNSGetResponseSuccess) IsKnown() bool {
 
 type DNSNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Domain of your zone.
 	Name param.Field[string] `json:"name"`
@@ -851,11 +873,15 @@ func (r DNSNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type DNSEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Domain of your zone.
 	Name param.Field[string] `json:"name"`
@@ -1006,6 +1032,8 @@ func (r DNSEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Domain of your zone.
 	Subdomain param.Field[string] `query:"subdomain"`
