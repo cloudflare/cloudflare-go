@@ -177,6 +177,8 @@
 
 # [URLScanner](url_scanner/api.md)
 
+# [VulnerabilityScanner](vulnerability_scanner/api.md)
+
 # [Radar](radar/api.md)
 
 # [BotManagement](bot_management/api.md)
