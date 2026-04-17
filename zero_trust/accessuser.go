@@ -48,6 +48,11 @@ func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 func (r *AccessUserService) New(ctx context.Context, params AccessUserNewParams, opts ...option.RequestOption) (res *AccessUserNewResponse, err error) {
 	var env AccessUserNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,6 +71,11 @@ func (r *AccessUserService) New(ctx context.Context, params AccessUserNewParams,
 func (r *AccessUserService) Update(ctx context.Context, userID string, params AccessUserUpdateParams, opts ...option.RequestOption) (res *AccessUserUpdateResponse, err error) {
 	var env AccessUserUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -88,6 +98,11 @@ func (r *AccessUserService) List(ctx context.Context, params AccessUserListParam
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -115,6 +130,11 @@ func (r *AccessUserService) ListAutoPaging(ctx context.Context, params AccessUse
 func (r *AccessUserService) Delete(ctx context.Context, userID string, body AccessUserDeleteParams, opts ...option.RequestOption) (res *AccessUserDeleteResponse, err error) {
 	var env AccessUserDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -136,6 +156,11 @@ func (r *AccessUserService) Delete(ctx context.Context, userID string, body Acce
 func (r *AccessUserService) Get(ctx context.Context, userID string, query AccessUserGetParams, opts ...option.RequestOption) (res *AccessUserGetResponse, err error) {
 	var env AccessUserGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -448,6 +473,8 @@ func (r accessUserGetResponseJSON) RawJSON() string {
 
 type AccessUserNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The email of the user.
 	Email param.Field[string] `json:"email" api:"required" format:"email"`
@@ -600,6 +627,8 @@ func (r AccessUserNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessUserUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The email of the user.
 	Email param.Field[string] `json:"email" api:"required" format:"email"`
@@ -752,6 +781,8 @@ func (r AccessUserUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessUserListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The email of the user.
 	Email param.Field[string] `query:"email"`
@@ -775,6 +806,8 @@ func (r AccessUserListParams) URLQuery() (v url.Values) {
 
 type AccessUserDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -919,6 +952,8 @@ func (r AccessUserDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessUserGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

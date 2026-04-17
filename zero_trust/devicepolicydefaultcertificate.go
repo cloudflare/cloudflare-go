@@ -41,6 +41,11 @@ func NewDevicePolicyDefaultCertificateService(opts ...option.RequestOption) (r *
 func (r *DevicePolicyDefaultCertificateService) Edit(ctx context.Context, params DevicePolicyDefaultCertificateEditParams, opts ...option.RequestOption) (res *DevicePolicyCertificates, err error) {
 	var env DevicePolicyDefaultCertificateEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -58,6 +63,11 @@ func (r *DevicePolicyDefaultCertificateService) Edit(ctx context.Context, params
 func (r *DevicePolicyDefaultCertificateService) Get(ctx context.Context, query DevicePolicyDefaultCertificateGetParams, opts ...option.RequestOption) (res *DevicePolicyCertificates, err error) {
 	var env DevicePolicyDefaultCertificateGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -72,6 +82,7 @@ func (r *DevicePolicyDefaultCertificateService) Get(ctx context.Context, query D
 }
 
 type DevicePolicyDefaultCertificateEditParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID                   param.Field[string]           `path:"zone_id" api:"required"`
 	DevicePolicyCertificates DevicePolicyCertificatesParam `json:"device_policy_certificates" api:"required"`
 }
@@ -124,6 +135,7 @@ func (r DevicePolicyDefaultCertificateEditResponseEnvelopeSuccess) IsKnown() boo
 }
 
 type DevicePolicyDefaultCertificateGetParams struct {
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

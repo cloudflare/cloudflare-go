@@ -42,6 +42,11 @@ func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetS
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -110,9 +115,12 @@ type DEXFleetStatusDeviceListResponse struct {
 	RamAvailableKB  int64                                               `json:"ramAvailableKb" api:"nullable"`
 	RamUsedPct      float64                                             `json:"ramUsedPct" api:"nullable"`
 	RamUsedPctByApp [][]DEXFleetStatusDeviceListResponseRamUsedPctByApp `json:"ramUsedPctByApp" api:"nullable"`
-	SwitchLocked    bool                                                `json:"switchLocked" api:"nullable"`
-	WifiStrengthDbm int64                                               `json:"wifiStrengthDbm" api:"nullable"`
-	JSON            dexFleetStatusDeviceListResponseJSON                `json:"-"`
+	// Device registration identifier (UUID v4). On multi-user devices, this uniquely
+	// identifies a user's registration on the device.
+	RegistrationID  string                               `json:"registrationId" api:"nullable"`
+	SwitchLocked    bool                                 `json:"switchLocked" api:"nullable"`
+	WifiStrengthDbm int64                                `json:"wifiStrengthDbm" api:"nullable"`
+	JSON            dexFleetStatusDeviceListResponseJSON `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseJSON contains the JSON metadata for the struct
@@ -154,6 +162,7 @@ type dexFleetStatusDeviceListResponseJSON struct {
 	RamAvailableKB     apijson.Field
 	RamUsedPct         apijson.Field
 	RamUsedPctByApp    apijson.Field
+	RegistrationID     apijson.Field
 	SwitchLocked       apijson.Field
 	WifiStrengthDbm    apijson.Field
 	raw                string
@@ -563,6 +572,7 @@ func (r dexFleetStatusDeviceListResponseRamUsedPctByAppJSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Time range beginning in ISO format
 	From param.Field[string] `query:"from" api:"required"`
@@ -584,9 +594,11 @@ type DEXFleetStatusDeviceListParams struct {
 	SortBy param.Field[DEXFleetStatusDeviceListParamsSortBy] `query:"sort_by"`
 	// Source:
 	//
-	// - `hourly` - device details aggregated hourly, up to 7 days prior
-	// - `last_seen` - device details, up to 60 minutes prior
-	// - `raw` - device details, up to 7 days prior
+	//   - `hourly` - device details aggregated hourly, up to 7 days prior
+	//   - `last_seen` - device details, up to 60 minutes prior. Time windows exceeding
+	//     60 minutes will be rejected from June 1st, 2026. Please use 'hourly' or 'raw'
+	//     instead for longer time ranges.
+	//   - `raw` - device details, up to 7 days prior
 	Source param.Field[DEXFleetStatusDeviceListParamsSource] `query:"source"`
 	// Network status
 	Status param.Field[string] `query:"status"`
@@ -626,9 +638,11 @@ func (r DEXFleetStatusDeviceListParamsSortBy) IsKnown() bool {
 
 // Source:
 //
-// - `hourly` - device details aggregated hourly, up to 7 days prior
-// - `last_seen` - device details, up to 60 minutes prior
-// - `raw` - device details, up to 7 days prior
+//   - `hourly` - device details aggregated hourly, up to 7 days prior
+//   - `last_seen` - device details, up to 60 minutes prior. Time windows exceeding
+//     60 minutes will be rejected from June 1st, 2026. Please use 'hourly' or 'raw'
+//     instead for longer time ranges.
+//   - `raw` - device details, up to 7 days prior
 type DEXFleetStatusDeviceListParamsSource string
 
 const (

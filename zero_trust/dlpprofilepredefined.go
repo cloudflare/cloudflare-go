@@ -43,6 +43,11 @@ func NewDLPProfilePredefinedService(opts ...option.RequestOption) (r *DLPProfile
 func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, params DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *PredefinedProfile, err error) {
 	var env DLPProfilePredefinedUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,6 +70,11 @@ func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID stri
 func (r *DLPProfilePredefinedService) Delete(ctx context.Context, profileID string, body DLPProfilePredefinedDeleteParams, opts ...option.RequestOption) (res *DLPProfilePredefinedDeleteResponse, err error) {
 	var env DLPProfilePredefinedDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -87,6 +97,11 @@ func (r *DLPProfilePredefinedService) Delete(ctx context.Context, profileID stri
 func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string, query DLPProfilePredefinedGetParams, opts ...option.RequestOption) (res *PredefinedProfile, err error) {
 	var env DLPProfilePredefinedGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -672,6 +687,7 @@ func (r PredefinedProfileEntriesType) IsKnown() bool {
 type DLPProfilePredefinedDeleteResponse = interface{}
 
 type DLPProfilePredefinedUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID           param.Field[string]                                  `path:"account_id" api:"required"`
 	AIContextEnabled    param.Field[bool]                                    `json:"ai_context_enabled"`
 	AllowedMatchCount   param.Field[int64]                                   `json:"allowed_match_count"`
@@ -835,6 +851,7 @@ func (r DLPProfilePredefinedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfilePredefinedDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -979,6 +996,7 @@ func (r DLPProfilePredefinedDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfilePredefinedGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
