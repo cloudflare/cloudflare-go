@@ -41,6 +41,11 @@ func NewDispatchNamespaceScriptAssetUploadService(opts ...option.RequestOption) 
 func (r *DispatchNamespaceScriptAssetUploadService) New(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptAssetUploadNewParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptAssetUploadNewResponse, err error) {
 	var env DispatchNamespaceScriptAssetUploadNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -89,6 +94,8 @@ func (r dispatchNamespaceScriptAssetUploadNewResponseJSON) RawJSON() string {
 
 type DispatchNamespaceScriptAssetUploadNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A manifest ([path]: {hash, size}) map of files to upload. As an example,
 	// `/blog/hello-world.html` would be a valid path key.
