@@ -42,6 +42,12 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewParams, opts ...option.RequestOption) (res *RuleNewResponse, err error) {
 	var env RuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -77,6 +83,12 @@ func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewP
 func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
 	var env RuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -116,6 +128,12 @@ func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID strin
 func (r *RuleService) Edit(ctx context.Context, rulesetID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *RuleEditResponse, err error) {
 	var env RuleEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -18577,8 +18595,12 @@ func (r RuleEditResponseRulesAction) IsKnown() bool {
 type RuleNewParams struct {
 	Body RuleNewParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -22423,8 +22445,12 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -22582,8 +22608,12 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type RuleEditParams struct {
 	Body RuleEditParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
