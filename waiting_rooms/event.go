@@ -49,6 +49,11 @@ func NewEventService(opts ...option.RequestOption) (r *EventService) {
 func (r *EventService) New(ctx context.Context, waitingRoomID string, params EventNewParams, opts ...option.RequestOption) (res *Event, err error) {
 	var env EventNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -70,6 +75,11 @@ func (r *EventService) New(ctx context.Context, waitingRoomID string, params Eve
 func (r *EventService) Update(ctx context.Context, waitingRoomID string, eventID string, params EventUpdateParams, opts ...option.RequestOption) (res *Event, err error) {
 	var env EventUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -96,6 +106,11 @@ func (r *EventService) List(ctx context.Context, waitingRoomID string, params Ev
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -126,6 +141,11 @@ func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string,
 func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID string, body EventDeleteParams, opts ...option.RequestOption) (res *EventDeleteResponse, err error) {
 	var env EventDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -151,6 +171,11 @@ func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID
 func (r *EventService) Edit(ctx context.Context, waitingRoomID string, eventID string, params EventEditParams, opts ...option.RequestOption) (res *Event, err error) {
 	var env EventEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -176,6 +201,11 @@ func (r *EventService) Edit(ctx context.Context, waitingRoomID string, eventID s
 func (r *EventService) Get(ctx context.Context, waitingRoomID string, eventID string, query EventGetParams, opts ...option.RequestOption) (res *Event, err error) {
 	var env EventGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -346,6 +376,8 @@ func (r eventDeleteResponseJSON) RawJSON() string {
 
 type EventNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID     param.Field[string] `path:"zone_id" api:"required"`
 	EventQuery EventQueryParam     `json:"event_query" api:"required"`
 }
@@ -377,6 +409,8 @@ func (r eventNewResponseEnvelopeJSON) RawJSON() string {
 
 type EventUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID     param.Field[string] `path:"zone_id" api:"required"`
 	EventQuery EventQueryParam     `json:"event_query" api:"required"`
 }
@@ -408,6 +442,8 @@ func (r eventUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type EventListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -425,6 +461,8 @@ func (r EventListParams) URLQuery() (v url.Values) {
 
 type EventDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -451,6 +489,8 @@ func (r eventDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type EventEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID     param.Field[string] `path:"zone_id" api:"required"`
 	EventQuery EventQueryParam     `json:"event_query" api:"required"`
 }
@@ -482,6 +522,8 @@ func (r eventEditResponseEnvelopeJSON) RawJSON() string {
 
 type EventGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
