@@ -43,11 +43,6 @@ func (r *StoreSecretService) New(ctx context.Context, storeID string, params Sto
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -79,11 +74,6 @@ func (r *StoreSecretService) List(ctx context.Context, storeID string, params St
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -114,11 +104,6 @@ func (r *StoreSecretService) ListAutoPaging(ctx context.Context, storeID string,
 func (r *StoreSecretService) Delete(ctx context.Context, storeID string, secretID string, body StoreSecretDeleteParams, opts ...option.RequestOption) (res *StoreSecretDeleteResponse, err error) {
 	var env StoreSecretDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -141,14 +126,10 @@ func (r *StoreSecretService) Delete(ctx context.Context, storeID string, secretI
 }
 
 // Deletes one or more secrets
-func (r *StoreSecretService) BulkDelete(ctx context.Context, storeID string, body StoreSecretBulkDeleteParams, opts ...option.RequestOption) (res *StoreSecretBulkDeleteResponse, err error) {
-	var env StoreSecretBulkDeleteResponseEnvelope
+func (r *StoreSecretService) BulkDelete(ctx context.Context, storeID string, body StoreSecretBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[StoreSecretBulkDeleteResponse], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -158,23 +139,27 @@ func (r *StoreSecretService) BulkDelete(ctx context.Context, storeID string, bod
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s/secrets", body.AccountID, storeID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
-	res = &env.Result
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
 	return res, nil
+}
+
+// Deletes one or more secrets
+func (r *StoreSecretService) BulkDeleteAutoPaging(ctx context.Context, storeID string, body StoreSecretBulkDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StoreSecretBulkDeleteResponse] {
+	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, storeID, body, opts...))
 }
 
 // Duplicates the secret, keeping the value
 func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secretID string, params StoreSecretDuplicateParams, opts ...option.RequestOption) (res *StoreSecretDuplicateResponse, err error) {
 	var env StoreSecretDuplicateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -200,11 +185,6 @@ func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secr
 func (r *StoreSecretService) Edit(ctx context.Context, storeID string, secretID string, params StoreSecretEditParams, opts ...option.RequestOption) (res *StoreSecretEditResponse, err error) {
 	var env StoreSecretEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -230,11 +210,6 @@ func (r *StoreSecretService) Edit(ctx context.Context, storeID string, secretID 
 func (r *StoreSecretService) Get(ctx context.Context, storeID string, secretID string, query StoreSecretGetParams, opts ...option.RequestOption) (res *StoreSecretGetResponse, err error) {
 	var env StoreSecretGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -269,10 +244,8 @@ type StoreSecretNewResponse struct {
 	// Store Identifier
 	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
-	Comment string `json:"comment"`
-	// The list of services that can use this secret.
-	Scopes []string                   `json:"scopes"`
-	JSON   storeSecretNewResponseJSON `json:"-"`
+	Comment string                     `json:"comment"`
+	JSON    storeSecretNewResponseJSON `json:"-"`
 }
 
 // storeSecretNewResponseJSON contains the JSON metadata for the struct
@@ -285,7 +258,6 @@ type storeSecretNewResponseJSON struct {
 	Status      apijson.Field
 	StoreID     apijson.Field
 	Comment     apijson.Field
-	Scopes      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -327,10 +299,8 @@ type StoreSecretListResponse struct {
 	// Store Identifier
 	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
-	Comment string `json:"comment"`
-	// The list of services that can use this secret.
-	Scopes []string                    `json:"scopes"`
-	JSON   storeSecretListResponseJSON `json:"-"`
+	Comment string                      `json:"comment"`
+	JSON    storeSecretListResponseJSON `json:"-"`
 }
 
 // storeSecretListResponseJSON contains the JSON metadata for the struct
@@ -343,7 +313,6 @@ type storeSecretListResponseJSON struct {
 	Status      apijson.Field
 	StoreID     apijson.Field
 	Comment     apijson.Field
-	Scopes      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -372,9 +341,115 @@ func (r StoreSecretListResponseStatus) IsKnown() bool {
 	return false
 }
 
-type StoreSecretDeleteResponse = interface{}
+type StoreSecretDeleteResponse struct {
+	// Secret identifier tag.
+	ID string `json:"id" api:"required"`
+	// Whenthe secret was created.
+	Created time.Time `json:"created" api:"required" format:"date-time"`
+	// When the secret was modified.
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
+	// The name of the secret
+	Name   string                          `json:"name" api:"required"`
+	Status StoreSecretDeleteResponseStatus `json:"status" api:"required"`
+	// Store Identifier
+	StoreID string `json:"store_id" api:"required"`
+	// Freeform text describing the secret
+	Comment string                        `json:"comment"`
+	JSON    storeSecretDeleteResponseJSON `json:"-"`
+}
 
-type StoreSecretBulkDeleteResponse = interface{}
+// storeSecretDeleteResponseJSON contains the JSON metadata for the struct
+// [StoreSecretDeleteResponse]
+type storeSecretDeleteResponseJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Modified    apijson.Field
+	Name        apijson.Field
+	Status      apijson.Field
+	StoreID     apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreSecretDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeSecretDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreSecretDeleteResponseStatus string
+
+const (
+	StoreSecretDeleteResponseStatusPending StoreSecretDeleteResponseStatus = "pending"
+	StoreSecretDeleteResponseStatusActive  StoreSecretDeleteResponseStatus = "active"
+	StoreSecretDeleteResponseStatusDeleted StoreSecretDeleteResponseStatus = "deleted"
+)
+
+func (r StoreSecretDeleteResponseStatus) IsKnown() bool {
+	switch r {
+	case StoreSecretDeleteResponseStatusPending, StoreSecretDeleteResponseStatusActive, StoreSecretDeleteResponseStatusDeleted:
+		return true
+	}
+	return false
+}
+
+type StoreSecretBulkDeleteResponse struct {
+	// Secret identifier tag.
+	ID string `json:"id" api:"required"`
+	// Whenthe secret was created.
+	Created time.Time `json:"created" api:"required" format:"date-time"`
+	// When the secret was modified.
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
+	// The name of the secret
+	Name   string                              `json:"name" api:"required"`
+	Status StoreSecretBulkDeleteResponseStatus `json:"status" api:"required"`
+	// Store Identifier
+	StoreID string `json:"store_id" api:"required"`
+	// Freeform text describing the secret
+	Comment string                            `json:"comment"`
+	JSON    storeSecretBulkDeleteResponseJSON `json:"-"`
+}
+
+// storeSecretBulkDeleteResponseJSON contains the JSON metadata for the struct
+// [StoreSecretBulkDeleteResponse]
+type storeSecretBulkDeleteResponseJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Modified    apijson.Field
+	Name        apijson.Field
+	Status      apijson.Field
+	StoreID     apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreSecretBulkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeSecretBulkDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type StoreSecretBulkDeleteResponseStatus string
+
+const (
+	StoreSecretBulkDeleteResponseStatusPending StoreSecretBulkDeleteResponseStatus = "pending"
+	StoreSecretBulkDeleteResponseStatusActive  StoreSecretBulkDeleteResponseStatus = "active"
+	StoreSecretBulkDeleteResponseStatusDeleted StoreSecretBulkDeleteResponseStatus = "deleted"
+)
+
+func (r StoreSecretBulkDeleteResponseStatus) IsKnown() bool {
+	switch r {
+	case StoreSecretBulkDeleteResponseStatusPending, StoreSecretBulkDeleteResponseStatusActive, StoreSecretBulkDeleteResponseStatusDeleted:
+		return true
+	}
+	return false
+}
 
 type StoreSecretDuplicateResponse struct {
 	// Secret identifier tag.
@@ -389,10 +464,8 @@ type StoreSecretDuplicateResponse struct {
 	// Store Identifier
 	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
-	Comment string `json:"comment"`
-	// The list of services that can use this secret.
-	Scopes []string                         `json:"scopes"`
-	JSON   storeSecretDuplicateResponseJSON `json:"-"`
+	Comment string                           `json:"comment"`
+	JSON    storeSecretDuplicateResponseJSON `json:"-"`
 }
 
 // storeSecretDuplicateResponseJSON contains the JSON metadata for the struct
@@ -405,7 +478,6 @@ type storeSecretDuplicateResponseJSON struct {
 	Status      apijson.Field
 	StoreID     apijson.Field
 	Comment     apijson.Field
-	Scopes      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -447,10 +519,8 @@ type StoreSecretEditResponse struct {
 	// Store Identifier
 	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
-	Comment string `json:"comment"`
-	// The list of services that can use this secret.
-	Scopes []string                    `json:"scopes"`
-	JSON   storeSecretEditResponseJSON `json:"-"`
+	Comment string                      `json:"comment"`
+	JSON    storeSecretEditResponseJSON `json:"-"`
 }
 
 // storeSecretEditResponseJSON contains the JSON metadata for the struct
@@ -463,7 +533,6 @@ type storeSecretEditResponseJSON struct {
 	Status      apijson.Field
 	StoreID     apijson.Field
 	Comment     apijson.Field
-	Scopes      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -505,10 +574,8 @@ type StoreSecretGetResponse struct {
 	// Store Identifier
 	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret
-	Comment string `json:"comment"`
-	// The list of services that can use this secret.
-	Scopes []string                   `json:"scopes"`
-	JSON   storeSecretGetResponseJSON `json:"-"`
+	Comment string                     `json:"comment"`
+	JSON    storeSecretGetResponseJSON `json:"-"`
 }
 
 // storeSecretGetResponseJSON contains the JSON metadata for the struct
@@ -521,7 +588,6 @@ type storeSecretGetResponseJSON struct {
 	Status      apijson.Field
 	StoreID     apijson.Field
 	Comment     apijson.Field
-	Scopes      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -552,8 +618,6 @@ func (r StoreSecretGetResponseStatus) IsKnown() bool {
 
 type StoreSecretNewParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]        `path:"account_id" api:"required"`
 	Body      []StoreSecretNewParamsBody `json:"body" api:"required"`
 }
@@ -580,8 +644,6 @@ func (r StoreSecretNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 type StoreSecretListParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to sort objects
 	Direction param.Field[StoreSecretListParamsDirection] `query:"direction"`
@@ -642,8 +704,6 @@ func (r StoreSecretListParamsOrder) IsKnown() bool {
 
 type StoreSecretDeleteParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -651,10 +711,10 @@ type StoreSecretDeleteResponseEnvelope struct {
 	Errors   []StoreSecretDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []StoreSecretDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success StoreSecretDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
-	// Result is null for delete operations.
-	Result StoreSecretDeleteResponse             `json:"result" api:"nullable"`
-	JSON   storeSecretDeleteResponseEnvelopeJSON `json:"-"`
+	Success    StoreSecretDeleteResponseEnvelopeSuccess    `json:"success" api:"required"`
+	Result     StoreSecretDeleteResponse                   `json:"result"`
+	ResultInfo StoreSecretDeleteResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       storeSecretDeleteResponseEnvelopeJSON       `json:"-"`
 }
 
 // storeSecretDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -664,6 +724,7 @@ type storeSecretDeleteResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -787,157 +848,44 @@ func (r StoreSecretDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type StoreSecretDeleteResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service.
+	Count float64 `json:"count"`
+	// Current page within paginated list of results.
+	Page float64 `json:"page"`
+	// Number of results per page of results.
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters.
+	TotalCount float64                                         `json:"total_count"`
+	JSON       storeSecretDeleteResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// storeSecretDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [StoreSecretDeleteResponseEnvelopeResultInfo]
+type storeSecretDeleteResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StoreSecretDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storeSecretDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type StoreSecretBulkDeleteParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-}
-
-type StoreSecretBulkDeleteResponseEnvelope struct {
-	Errors   []StoreSecretBulkDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []StoreSecretBulkDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
-	// Whether the API call was successful.
-	Success StoreSecretBulkDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
-	// Result is null for delete operations.
-	Result StoreSecretBulkDeleteResponse             `json:"result" api:"nullable"`
-	JSON   storeSecretBulkDeleteResponseEnvelopeJSON `json:"-"`
-}
-
-// storeSecretBulkDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [StoreSecretBulkDeleteResponseEnvelope]
-type storeSecretBulkDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StoreSecretBulkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeSecretBulkDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type StoreSecretBulkDeleteResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code" api:"required"`
-	Message          string                                            `json:"message" api:"required"`
-	DocumentationURL string                                            `json:"documentation_url"`
-	Source           StoreSecretBulkDeleteResponseEnvelopeErrorsSource `json:"source"`
-	JSON             storeSecretBulkDeleteResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// storeSecretBulkDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [StoreSecretBulkDeleteResponseEnvelopeErrors]
-type storeSecretBulkDeleteResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *StoreSecretBulkDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeSecretBulkDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type StoreSecretBulkDeleteResponseEnvelopeErrorsSource struct {
-	Pointer string                                                `json:"pointer"`
-	JSON    storeSecretBulkDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// storeSecretBulkDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata
-// for the struct [StoreSecretBulkDeleteResponseEnvelopeErrorsSource]
-type storeSecretBulkDeleteResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StoreSecretBulkDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeSecretBulkDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type StoreSecretBulkDeleteResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code" api:"required"`
-	Message          string                                              `json:"message" api:"required"`
-	DocumentationURL string                                              `json:"documentation_url"`
-	Source           StoreSecretBulkDeleteResponseEnvelopeMessagesSource `json:"source"`
-	JSON             storeSecretBulkDeleteResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// storeSecretBulkDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [StoreSecretBulkDeleteResponseEnvelopeMessages]
-type storeSecretBulkDeleteResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *StoreSecretBulkDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeSecretBulkDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type StoreSecretBulkDeleteResponseEnvelopeMessagesSource struct {
-	Pointer string                                                  `json:"pointer"`
-	JSON    storeSecretBulkDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// storeSecretBulkDeleteResponseEnvelopeMessagesSourceJSON contains the JSON
-// metadata for the struct [StoreSecretBulkDeleteResponseEnvelopeMessagesSource]
-type storeSecretBulkDeleteResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StoreSecretBulkDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeSecretBulkDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type StoreSecretBulkDeleteResponseEnvelopeSuccess bool
-
-const (
-	StoreSecretBulkDeleteResponseEnvelopeSuccessTrue StoreSecretBulkDeleteResponseEnvelopeSuccess = true
-)
-
-func (r StoreSecretBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case StoreSecretBulkDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type StoreSecretDuplicateParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the secret
 	Name param.Field[string] `json:"name" api:"required"`
@@ -1100,9 +1048,7 @@ type StoreSecretDuplicateResponseEnvelopeResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64 `json:"total_count"`
-	// The number of total pages in the entire result set.
-	TotalPages float64                                            `json:"total_pages"`
+	TotalCount float64                                            `json:"total_count"`
 	JSON       storeSecretDuplicateResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -1113,7 +1059,6 @@ type storeSecretDuplicateResponseEnvelopeResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1128,16 +1073,11 @@ func (r storeSecretDuplicateResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type StoreSecretEditParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Freeform text describing the secret
 	Comment param.Field[string] `json:"comment"`
 	// The list of services that can use this secret.
 	Scopes param.Field[[]string] `json:"scopes"`
-	// The value of the secret. Note that this is 'write only' - no API reponse will
-	// provide this value, it is only used to create/modify secrets.
-	Value param.Field[string] `json:"value"`
 }
 
 func (r StoreSecretEditParams) MarshalJSON() (data []byte, err error) {
@@ -1293,9 +1233,7 @@ type StoreSecretEditResponseEnvelopeResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64 `json:"total_count"`
-	// The number of total pages in the entire result set.
-	TotalPages float64                                       `json:"total_pages"`
+	TotalCount float64                                       `json:"total_count"`
 	JSON       storeSecretEditResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -1306,7 +1244,6 @@ type storeSecretEditResponseEnvelopeResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1321,8 +1258,6 @@ func (r storeSecretEditResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type StoreSecretGetParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1475,9 +1410,7 @@ type StoreSecretGetResponseEnvelopeResultInfo struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters.
-	TotalCount float64 `json:"total_count"`
-	// The number of total pages in the entire result set.
-	TotalPages float64                                      `json:"total_pages"`
+	TotalCount float64                                      `json:"total_count"`
 	JSON       storeSecretGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -1488,7 +1421,6 @@ type storeSecretGetResponseEnvelopeResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
-	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

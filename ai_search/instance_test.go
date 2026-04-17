@@ -43,9 +43,8 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 			DataType:  cloudflare.F(ai_search.InstanceNewParamsCustomMetadataDataTypeText),
 			FieldName: cloudflare.F("x"),
 		}}),
-		EmbeddingModel:      cloudflare.F(ai_search.InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
-		FusionMethod:        cloudflare.F(ai_search.InstanceNewParamsFusionMethodMax),
-		HybridSearchEnabled: cloudflare.F(true),
+		EmbeddingModel: cloudflare.F(ai_search.InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
+		FusionMethod:   cloudflare.F(ai_search.InstanceNewParamsFusionMethodMax),
 		IndexMethod: cloudflare.F(ai_search.InstanceNewParamsIndexMethod{
 			Keyword: cloudflare.F(true),
 			Vector:  cloudflare.F(true),
@@ -56,12 +55,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		MaxNumResults: cloudflare.F(int64(1)),
 		Metadata: cloudflare.F(ai_search.InstanceNewParamsMetadata{
 			CreatedFromAISearchWizard: cloudflare.F(true),
-			SearchForAgents: cloudflare.F(ai_search.InstanceNewParamsMetadataSearchForAgents{
-				Hostname: cloudflare.F("hostname"),
-				ZoneID:   cloudflare.F("zone_id"),
-				ZoneName: cloudflare.F("zone_name"),
-			}),
-			WorkerDomain: cloudflare.F("worker_domain"),
+			WorkerDomain:              cloudflare.F("worker_domain"),
 		}),
 		PublicEndpointParams: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParams{
 			AuthorizedHosts: cloudflare.F([]string{"string"}),
@@ -128,9 +122,8 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 				}),
 			}),
 		}),
-		SyncInterval: cloudflare.F(ai_search.InstanceNewParamsSyncInterval900),
-		TokenID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-		Type:         cloudflare.F(ai_search.InstanceNewParamsTypeR2),
+		TokenID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+		Type:    cloudflare.F(ai_search.InstanceNewParamsTypeR2),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -183,12 +176,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.InstanceUpdateParamsMetadata{
 				CreatedFromAISearchWizard: cloudflare.F(true),
-				SearchForAgents: cloudflare.F(ai_search.InstanceUpdateParamsMetadataSearchForAgents{
-					Hostname: cloudflare.F("hostname"),
-					ZoneID:   cloudflare.F("zone_id"),
-					ZoneName: cloudflare.F("zone_name"),
-				}),
-				WorkerDomain: cloudflare.F("worker_domain"),
+				WorkerDomain:              cloudflare.F("worker_domain"),
 			}),
 			Paused: cloudflare.F(true),
 			PublicEndpointParams: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParams{
@@ -257,7 +245,6 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			}),
 			Summarization:                  cloudflare.F(true),
 			SummarizationModel:             cloudflare.F(ai_search.InstanceUpdateParamsSummarizationModelCfMetaLlama3_3_70bInstructFp8Fast),
-			SyncInterval:                   cloudflare.F(ai_search.InstanceUpdateParamsSyncInterval900),
 			SystemPromptAISearch:           cloudflare.F("system_prompt_ai_search"),
 			SystemPromptIndexSummarization: cloudflare.F("system_prompt_index_summarization"),
 			SystemPromptRewriteQuery:       cloudflare.F("system_prompt_rewrite_query"),
@@ -452,6 +439,10 @@ func TestInstanceSearchWithOptionalParams(t *testing.T) {
 		"my-ai-search",
 		ai_search.InstanceSearchParams{
 			AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+			Messages: cloudflare.F([]ai_search.InstanceSearchParamsMessage{{
+				Content: cloudflare.F("content"),
+				Role:    cloudflare.F(ai_search.InstanceSearchParamsMessagesRoleSystem),
+			}}),
 			AISearchOptions: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptions{
 				Cache: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsCache{
 					CacheThreshold: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch),
@@ -484,11 +475,6 @@ func TestInstanceSearchWithOptionalParams(t *testing.T) {
 					ReturnOnFailure:  cloudflare.F(true),
 				}),
 			}),
-			Messages: cloudflare.F([]ai_search.InstanceSearchParamsMessage{{
-				Content: cloudflare.F("content"),
-				Role:    cloudflare.F(ai_search.InstanceSearchParamsMessagesRoleSystem),
-			}}),
-			Query: cloudflare.F("x"),
 		},
 	)
 	if err != nil {

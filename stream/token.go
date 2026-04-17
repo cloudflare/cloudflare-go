@@ -39,11 +39,6 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 func (r *TokenService) New(ctx context.Context, identifier string, params TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
 	var env TokenNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -85,8 +80,6 @@ func (r tokenNewResponseJSON) RawJSON() string {
 
 type TokenNewParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The optional ID of a Stream signing key. If present, the `pem` field is also
 	// required.
@@ -103,8 +96,6 @@ type TokenNewParams struct {
 	// accepted. The maximum time specification is 24 hours from issuing time. If this
 	// field is not set, the default is one hour after issuing.
 	Exp param.Field[int64] `json:"exp"`
-	// Optional flags for the signed token.
-	Flags param.Field[TokenNewParamsFlags] `json:"flags"`
 	// The optional unix epoch timestamp that specifies the time before a the token is
 	// not accepted. If this field is not set, the default is one hour before issuing.
 	Nbf param.Field[int64] `json:"nbf"`
@@ -174,16 +165,6 @@ func (r TokenNewParamsAccessRulesType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Optional flags for the signed token.
-type TokenNewParamsFlags struct {
-	// Whether to return the original video without transformations.
-	Original param.Field[bool] `json:"original"`
-}
-
-func (r TokenNewParamsFlags) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type TokenNewResponseEnvelope struct {
