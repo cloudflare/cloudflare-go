@@ -40,6 +40,11 @@ func NewMeetingService(opts ...option.RequestOption) (r *MeetingService) {
 // Create a meeting for the given App ID.
 func (r *MeetingService) New(ctx context.Context, appID string, params MeetingNewParams, opts ...option.RequestOption) (res *MeetingNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -56,6 +61,11 @@ func (r *MeetingService) New(ctx context.Context, appID string, params MeetingNe
 // Adds a participant to the given meeting ID.
 func (r *MeetingService) AddParticipant(ctx context.Context, appID string, meetingID string, params MeetingAddParticipantParams, opts ...option.RequestOption) (res *MeetingAddParticipantResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -76,6 +86,11 @@ func (r *MeetingService) AddParticipant(ctx context.Context, appID string, meeti
 // Deletes a participant for the given meeting and participant ID.
 func (r *MeetingService) DeleteMeetingParticipant(ctx context.Context, appID string, meetingID string, participantID string, body MeetingDeleteMeetingParticipantParams, opts ...option.RequestOption) (res *MeetingDeleteMeetingParticipantResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -100,6 +115,11 @@ func (r *MeetingService) DeleteMeetingParticipant(ctx context.Context, appID str
 // Updates a participant's details for the given meeting and participant ID.
 func (r *MeetingService) EditParticipant(ctx context.Context, appID string, meetingID string, participantID string, params MeetingEditParticipantParams, opts ...option.RequestOption) (res *MeetingEditParticipantResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -124,6 +144,11 @@ func (r *MeetingService) EditParticipant(ctx context.Context, appID string, meet
 // Returns all meetings for the given App ID.
 func (r *MeetingService) Get(ctx context.Context, appID string, params MeetingGetParams, opts ...option.RequestOption) (res *MeetingGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -140,6 +165,11 @@ func (r *MeetingService) Get(ctx context.Context, appID string, params MeetingGe
 // Returns a meeting details in an App for the given meeting ID.
 func (r *MeetingService) GetMeetingByID(ctx context.Context, appID string, meetingID string, params MeetingGetMeetingByIDParams, opts ...option.RequestOption) (res *MeetingGetMeetingByIDResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -160,6 +190,11 @@ func (r *MeetingService) GetMeetingByID(ctx context.Context, appID string, meeti
 // Returns a participant details for the given meeting and participant ID.
 func (r *MeetingService) GetMeetingParticipant(ctx context.Context, appID string, meetingID string, participantID string, query MeetingGetMeetingParticipantParams, opts ...option.RequestOption) (res *MeetingGetMeetingParticipantResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -184,6 +219,11 @@ func (r *MeetingService) GetMeetingParticipant(ctx context.Context, appID string
 // Returns all participants detail for the given meeting ID.
 func (r *MeetingService) GetMeetingParticipants(ctx context.Context, appID string, meetingID string, params MeetingGetMeetingParticipantsParams, opts ...option.RequestOption) (res *MeetingGetMeetingParticipantsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -205,6 +245,11 @@ func (r *MeetingService) GetMeetingParticipants(ctx context.Context, appID strin
 // participant ID.
 func (r *MeetingService) RefreshParticipantToken(ctx context.Context, appID string, meetingID string, participantID string, body MeetingRefreshParticipantTokenParams, opts ...option.RequestOption) (res *MeetingRefreshParticipantTokenResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -229,6 +274,11 @@ func (r *MeetingService) RefreshParticipantToken(ctx context.Context, appID stri
 // Replaces all the details for the given meeting ID.
 func (r *MeetingService) ReplaceMeetingByID(ctx context.Context, appID string, meetingID string, params MeetingReplaceMeetingByIDParams, opts ...option.RequestOption) (res *MeetingReplaceMeetingByIDResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -249,6 +299,11 @@ func (r *MeetingService) ReplaceMeetingByID(ctx context.Context, appID string, m
 // Updates a meeting in an App for the given meeting ID.
 func (r *MeetingService) UpdateMeetingByID(ctx context.Context, appID string, meetingID string, params MeetingUpdateMeetingByIDParams, opts ...option.RequestOption) (res *MeetingUpdateMeetingByIDResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -3291,6 +3346,8 @@ func (r MeetingUpdateMeetingByIDResponseDataStatus) IsKnown() bool {
 
 type MeetingNewParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The AI Config allows you to customize the behavior of meeting transcriptions and
 	// summaries
@@ -3668,6 +3725,8 @@ func (r MeetingNewParamsRecordingConfigVideoConfigWatermarkSize) MarshalJSON() (
 
 type MeetingAddParticipantParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A unique participant ID. You must specify a unique ID for the participant, for
 	// example, UUID, email address, and so on.
@@ -3686,11 +3745,15 @@ func (r MeetingAddParticipantParams) MarshalJSON() (data []byte, err error) {
 
 type MeetingDeleteMeetingParticipantParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MeetingEditParticipantParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// (Optional) Name of the participant.
 	Name param.Field[string] `json:"name"`
@@ -3706,6 +3769,8 @@ func (r MeetingEditParticipantParams) MarshalJSON() (data []byte, err error) {
 
 type MeetingGetParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The end time range for which you want to retrieve the meetings. The time must be
 	// specified in ISO format.
@@ -3731,6 +3796,8 @@ func (r MeetingGetParams) URLQuery() (v url.Values) {
 
 type MeetingGetMeetingByIDParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Name      param.Field[string] `query:"name"`
 }
@@ -3746,11 +3813,15 @@ func (r MeetingGetMeetingByIDParams) URLQuery() (v url.Values) {
 
 type MeetingGetMeetingParticipantParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MeetingGetMeetingParticipantsParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The page number from which you want your page search results to be displayed.
 	PageNo param.Field[float64] `query:"page_no"`
@@ -3769,11 +3840,15 @@ func (r MeetingGetMeetingParticipantsParams) URLQuery() (v url.Values) {
 
 type MeetingRefreshParticipantTokenParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MeetingReplaceMeetingByIDParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The AI Config allows you to customize the behavior of meeting transcriptions and
 	// summaries
@@ -4151,6 +4226,8 @@ func (r MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigWatermarkSize) 
 
 type MeetingUpdateMeetingByIDParams struct {
 	// The account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The AI Config allows you to customize the behavior of meeting transcriptions and
 	// summaries
