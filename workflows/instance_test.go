@@ -37,8 +37,8 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 			AccountID:  cloudflare.F("account_id"),
 			InstanceID: cloudflare.F("instance_id"),
 			InstanceRetention: cloudflare.F(workflows.InstanceNewParamsInstanceRetention{
-				ErrorRetention:   cloudflare.F[workflows.InstanceNewParamsInstanceRetentionErrorRetentionUnion](shared.UnionInt(int64(0))),
-				SuccessRetention: cloudflare.F[workflows.InstanceNewParamsInstanceRetentionSuccessRetentionUnion](shared.UnionInt(int64(0))),
+				ErrorRetention:   cloudflare.F[workflows.InstanceNewParamsInstanceRetentionErrorRetentionUnion](shared.UnionString("5 minutes")),
+				SuccessRetention: cloudflare.F[workflows.InstanceNewParamsInstanceRetentionSuccessRetentionUnion](shared.UnionString("5 minutes")),
 			}),
 			Params: cloudflare.F[any](map[string]interface{}{}),
 		},
@@ -111,8 +111,8 @@ func TestInstanceBulkWithOptionalParams(t *testing.T) {
 			Body: []workflows.InstanceBulkParamsBody{{
 				InstanceID: cloudflare.F("instance_id"),
 				InstanceRetention: cloudflare.F(workflows.InstanceBulkParamsBodyInstanceRetention{
-					ErrorRetention:   cloudflare.F[workflows.InstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion](shared.UnionInt(int64(0))),
-					SuccessRetention: cloudflare.F[workflows.InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion](shared.UnionInt(int64(0))),
+					ErrorRetention:   cloudflare.F[workflows.InstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion](shared.UnionString("5 minutes")),
+					SuccessRetention: cloudflare.F[workflows.InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion](shared.UnionString("5 minutes")),
 				}),
 				Params: cloudflare.F[any](map[string]interface{}{}),
 			}},

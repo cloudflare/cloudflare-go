@@ -43,6 +43,11 @@ func (r *VersionService) List(ctx context.Context, workflowName string, params V
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -73,6 +78,11 @@ func (r *VersionService) ListAutoPaging(ctx context.Context, workflowName string
 func (r *VersionService) Get(ctx context.Context, workflowName string, versionID string, query VersionGetParams, opts ...option.RequestOption) (res *VersionGetResponse, err error) {
 	var env VersionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -95,14 +105,16 @@ func (r *VersionService) Get(ctx context.Context, workflowName string, versionID
 }
 
 type VersionListResponse struct {
-	ID         string                    `json:"id" api:"required" format:"uuid"`
-	ClassName  string                    `json:"class_name" api:"required"`
-	CreatedOn  time.Time                 `json:"created_on" api:"required" format:"date-time"`
-	HasDag     bool                      `json:"has_dag" api:"required"`
-	ModifiedOn time.Time                 `json:"modified_on" api:"required" format:"date-time"`
-	WorkflowID string                    `json:"workflow_id" api:"required" format:"uuid"`
-	Limits     VersionListResponseLimits `json:"limits"`
-	JSON       versionListResponseJSON   `json:"-"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	ClassName string    `json:"class_name" api:"required"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
+	HasDag    bool      `json:"has_dag" api:"required"`
+	// The programming language of the workflow implementation
+	Language   VersionListResponseLanguage `json:"language" api:"required"`
+	ModifiedOn time.Time                   `json:"modified_on" api:"required" format:"date-time"`
+	WorkflowID string                      `json:"workflow_id" api:"required" format:"uuid"`
+	Limits     VersionListResponseLimits   `json:"limits"`
+	JSON       versionListResponseJSON     `json:"-"`
 }
 
 // versionListResponseJSON contains the JSON metadata for the struct
@@ -112,6 +124,7 @@ type versionListResponseJSON struct {
 	ClassName   apijson.Field
 	CreatedOn   apijson.Field
 	HasDag      apijson.Field
+	Language    apijson.Field
 	ModifiedOn  apijson.Field
 	WorkflowID  apijson.Field
 	Limits      apijson.Field
@@ -125,6 +138,22 @@ func (r *VersionListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r versionListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// The programming language of the workflow implementation
+type VersionListResponseLanguage string
+
+const (
+	VersionListResponseLanguageJavascript VersionListResponseLanguage = "javascript"
+	VersionListResponseLanguagePython     VersionListResponseLanguage = "python"
+)
+
+func (r VersionListResponseLanguage) IsKnown() bool {
+	switch r {
+	case VersionListResponseLanguageJavascript, VersionListResponseLanguagePython:
+		return true
+	}
+	return false
 }
 
 type VersionListResponseLimits struct {
@@ -149,14 +178,16 @@ func (r versionListResponseLimitsJSON) RawJSON() string {
 }
 
 type VersionGetResponse struct {
-	ID         string                   `json:"id" api:"required" format:"uuid"`
-	ClassName  string                   `json:"class_name" api:"required"`
-	CreatedOn  time.Time                `json:"created_on" api:"required" format:"date-time"`
-	HasDag     bool                     `json:"has_dag" api:"required"`
-	ModifiedOn time.Time                `json:"modified_on" api:"required" format:"date-time"`
-	WorkflowID string                   `json:"workflow_id" api:"required" format:"uuid"`
-	Limits     VersionGetResponseLimits `json:"limits"`
-	JSON       versionGetResponseJSON   `json:"-"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	ClassName string    `json:"class_name" api:"required"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
+	HasDag    bool      `json:"has_dag" api:"required"`
+	// The programming language of the workflow implementation
+	Language   VersionGetResponseLanguage `json:"language" api:"required"`
+	ModifiedOn time.Time                  `json:"modified_on" api:"required" format:"date-time"`
+	WorkflowID string                     `json:"workflow_id" api:"required" format:"uuid"`
+	Limits     VersionGetResponseLimits   `json:"limits"`
+	JSON       versionGetResponseJSON     `json:"-"`
 }
 
 // versionGetResponseJSON contains the JSON metadata for the struct
@@ -166,6 +197,7 @@ type versionGetResponseJSON struct {
 	ClassName   apijson.Field
 	CreatedOn   apijson.Field
 	HasDag      apijson.Field
+	Language    apijson.Field
 	ModifiedOn  apijson.Field
 	WorkflowID  apijson.Field
 	Limits      apijson.Field
@@ -179,6 +211,22 @@ func (r *VersionGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r versionGetResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// The programming language of the workflow implementation
+type VersionGetResponseLanguage string
+
+const (
+	VersionGetResponseLanguageJavascript VersionGetResponseLanguage = "javascript"
+	VersionGetResponseLanguagePython     VersionGetResponseLanguage = "python"
+)
+
+func (r VersionGetResponseLanguage) IsKnown() bool {
+	switch r {
+	case VersionGetResponseLanguageJavascript, VersionGetResponseLanguagePython:
+		return true
+	}
+	return false
 }
 
 type VersionGetResponseLimits struct {
@@ -203,6 +251,7 @@ func (r versionGetResponseLimitsJSON) RawJSON() string {
 }
 
 type VersionListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	Page      param.Field[float64] `query:"page"`
 	PerPage   param.Field[float64] `query:"per_page"`
@@ -217,6 +266,7 @@ func (r VersionListParams) URLQuery() (v url.Values) {
 }
 
 type VersionGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -315,6 +365,7 @@ type VersionGetResponseEnvelopeResultInfo struct {
 	TotalCount float64                                  `json:"total_count" api:"required"`
 	Cursor     string                                   `json:"cursor"`
 	Page       float64                                  `json:"page"`
+	TotalPages float64                                  `json:"total_pages"`
 	JSON       versionGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -326,6 +377,7 @@ type versionGetResponseEnvelopeResultInfoJSON struct {
 	TotalCount  apijson.Field
 	Cursor      apijson.Field
 	Page        apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
