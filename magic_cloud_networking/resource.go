@@ -44,6 +44,11 @@ func (r *ResourceService) List(ctx context.Context, params ResourceListParams, o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -70,6 +75,11 @@ func (r *ResourceService) ListAutoPaging(ctx context.Context, params ResourceLis
 func (r *ResourceService) Export(ctx context.Context, params ResourceExportParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -83,6 +93,11 @@ func (r *ResourceService) Export(ctx context.Context, params ResourceExportParam
 func (r *ResourceService) Get(ctx context.Context, resourceID string, params ResourceGetParams, opts ...option.RequestOption) (res *ResourceGetResponse, err error) {
 	var env ResourceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -104,6 +119,11 @@ func (r *ResourceService) Get(ctx context.Context, resourceID string, params Res
 func (r *ResourceService) PolicyPreview(ctx context.Context, params ResourcePolicyPreviewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env ResourcePolicyPreviewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -3208,6 +3228,7 @@ func (r ResourceGetResponseManagedByClientType) IsKnown() bool {
 }
 
 type ResourceListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	Cloudflare param.Field[bool]   `query:"cloudflare"`
 	Desc       param.Field[bool]   `query:"desc"`
@@ -3304,6 +3325,7 @@ func (r ResourceListParamsResourceType) IsKnown() bool {
 }
 
 type ResourceExportParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Desc      param.Field[bool]   `query:"desc"`
 	// One of ["id", "resource_type", "region"].
@@ -3396,6 +3418,7 @@ func (r ResourceExportParamsResourceType) IsKnown() bool {
 }
 
 type ResourceGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	V2        param.Field[bool]   `query:"v2"`
 }
@@ -3934,6 +3957,7 @@ func (r resourceGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type ResourcePolicyPreviewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Policy    param.Field[string] `json:"policy" api:"required"`
 }
