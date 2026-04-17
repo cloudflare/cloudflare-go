@@ -851,6 +851,8 @@ func (r NamespaceInstanceItemUploadResponseStatus) IsKnown() bool {
 type NamespaceInstanceItemListParams struct {
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filter items by their unique ID. Returns at most one item.
+	ItemID param.Field[string] `query:"item_id"`
 	// JSON-encoded metadata filter using Vectorize filter syntax. Examples:
 	// {"folder":"reports/"},
 	// {"timestamp":{"$gte":1700000000000}}, {"folder":{"$in":["docs/","reports/"]}}
