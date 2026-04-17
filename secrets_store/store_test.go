@@ -15,6 +15,7 @@ import (
 )
 
 func TestStoreNew(t *testing.T) {
+	t.Skip("SKIP: prism error for 422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,9 +30,7 @@ func TestStoreNew(t *testing.T) {
 	)
 	_, err := client.SecretsStore.Stores.New(context.TODO(), secrets_store.StoreNewParams{
 		AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
-		Body: []secrets_store.StoreNewParamsBody{{
-			Name: cloudflare.F("service_x_keys"),
-		}},
+		Name:      cloudflare.F("service_x_keys"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -43,6 +42,7 @@ func TestStoreNew(t *testing.T) {
 }
 
 func TestStoreListWithOptionalParams(t *testing.T) {
+	t.Skip("SKIP: prism error for 422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -72,6 +72,7 @@ func TestStoreListWithOptionalParams(t *testing.T) {
 }
 
 func TestStoreDelete(t *testing.T) {
+	t.Skip("SKIP: prism error for 422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

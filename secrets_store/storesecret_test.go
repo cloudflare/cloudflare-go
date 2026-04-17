@@ -200,6 +200,7 @@ func TestStoreSecretEditWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
 			Comment:   cloudflare.F("info about my secret"),
 			Scopes:    cloudflare.F([]string{"workers", "ai_gateway", "dex", "access"}),
+			Value:     cloudflare.F("api-token-secret-123"),
 		},
 	)
 	if err != nil {
