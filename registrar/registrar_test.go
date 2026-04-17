@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/registrar"
 )
 
-func TestDomainUpdateWithOptionalParams(t *testing.T) {
+func TestRegistrarCheck(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,41 +28,9 @@ func TestDomainUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Registrar.Domains.Update(
-		context.TODO(),
-		"example.com",
-		registrar.DomainUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AutoRenew: cloudflare.F(true),
-			Locked:    cloudflare.F(false),
-			Privacy:   cloudflare.F(true),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestDomainList(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Registrar.Domains.List(context.TODO(), registrar.DomainListParams{
+	_, err := client.Registrar.Check(context.TODO(), registrar.RegistrarCheckParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Domains:   cloudflare.F([]string{"myawesomebrand.com", "myawesomebrand.net", "myawesomebrand.org", "myawesomebrand.app", "myawesomebrand.dev"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -73,7 +41,7 @@ func TestDomainList(t *testing.T) {
 	}
 }
 
-func TestDomainGet(t *testing.T) {
+func TestRegistrarSearchWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -87,13 +55,12 @@ func TestDomainGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Registrar.Domains.Get(
-		context.TODO(),
-		"example.com",
-		registrar.DomainGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		},
-	)
+	_, err := client.Registrar.Search(context.TODO(), registrar.RegistrarSearchParams{
+		AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Q:          cloudflare.F("x"),
+		Extensions: cloudflare.F([]string{"string"}),
+		Limit:      cloudflare.F(int64(1)),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

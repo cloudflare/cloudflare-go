@@ -38,9 +38,17 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 }
 
 // Update individual domain.
+//
+// Deprecated: This operation is deprecated and will be removed in a future
+// release. A replacement Registrar API will be announced separately.
 func (r *DomainService) Update(ctx context.Context, domainName string, params DomainUpdateParams, opts ...option.RequestOption) (res *DomainUpdateResponse, err error) {
 	var env DomainUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -59,10 +67,18 @@ func (r *DomainService) Update(ctx context.Context, domainName string, params Do
 }
 
 // List domains handled by Registrar.
+//
+// Deprecated: This operation is deprecated and will be removed in a future
+// release. A replacement Registrar API will be announced separately.
 func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Domain], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -81,14 +97,25 @@ func (r *DomainService) List(ctx context.Context, query DomainListParams, opts .
 }
 
 // List domains handled by Registrar.
+//
+// Deprecated: This operation is deprecated and will be removed in a future
+// release. A replacement Registrar API will be announced separately.
 func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Domain] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Show individual domain.
+//
+// Deprecated: This operation is deprecated and will be removed in a future
+// release. A replacement Registrar API will be announced separately.
 func (r *DomainService) Get(ctx context.Context, domainName string, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponse, err error) {
 	var env DomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -358,6 +385,8 @@ type DomainGetResponse = interface{}
 
 type DomainUpdateParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Auto-renew controls whether subscription is automatically renewed upon domain
 	// expiration.
@@ -417,11 +446,15 @@ func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DomainListParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DomainGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
