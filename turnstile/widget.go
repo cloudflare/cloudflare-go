@@ -43,6 +43,11 @@ func NewWidgetService(opts ...option.RequestOption) (r *WidgetService) {
 func (r *WidgetService) New(ctx context.Context, params WidgetNewParams, opts ...option.RequestOption) (res *Widget, err error) {
 	var env WidgetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,6 +65,11 @@ func (r *WidgetService) New(ctx context.Context, params WidgetNewParams, opts ..
 func (r *WidgetService) Update(ctx context.Context, sitekey string, params WidgetUpdateParams, opts ...option.RequestOption) (res *Widget, err error) {
 	var env WidgetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -82,6 +92,11 @@ func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -108,6 +123,11 @@ func (r *WidgetService) ListAutoPaging(ctx context.Context, params WidgetListPar
 func (r *WidgetService) Delete(ctx context.Context, sitekey string, body WidgetDeleteParams, opts ...option.RequestOption) (res *Widget, err error) {
 	var env WidgetDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -129,6 +149,11 @@ func (r *WidgetService) Delete(ctx context.Context, sitekey string, body WidgetD
 func (r *WidgetService) Get(ctx context.Context, sitekey string, query WidgetGetParams, opts ...option.RequestOption) (res *Widget, err error) {
 	var env WidgetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -153,6 +178,11 @@ func (r *WidgetService) Get(ctx context.Context, sitekey string, query WidgetGet
 func (r *WidgetService) RotateSecret(ctx context.Context, sitekey string, params WidgetRotateSecretParams, opts ...option.RequestOption) (res *Widget, err error) {
 	var env WidgetRotateSecretResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -394,6 +424,8 @@ func (r WidgetListResponseRegion) IsKnown() bool {
 
 type WidgetNewParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]              `path:"account_id" api:"required"`
 	Domains   param.Field[[]WidgetDomainParam] `json:"domains" api:"required"`
 	// Widget Mode
@@ -598,6 +630,8 @@ func (r widgetNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type WidgetUpdateParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]              `path:"account_id" api:"required"`
 	Domains   param.Field[[]WidgetDomainParam] `json:"domains" api:"required"`
 	// Widget Mode
@@ -707,6 +741,8 @@ func (r widgetUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type WidgetListParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to order widgets.
 	Direction param.Field[WidgetListParamsDirection] `query:"direction"`
@@ -774,6 +810,8 @@ func (r WidgetListParamsOrder) IsKnown() bool {
 
 type WidgetDeleteParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -808,6 +846,8 @@ func (r widgetDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type WidgetGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -842,6 +882,8 @@ func (r widgetGetResponseEnvelopeJSON) RawJSON() string {
 
 type WidgetRotateSecretParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If `invalidate_immediately` is set to `false`, the previous secret will remain
 	// valid for two hours. Otherwise, the secret is immediately invalidated, and
