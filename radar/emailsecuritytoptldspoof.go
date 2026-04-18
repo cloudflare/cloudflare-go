@@ -17,28 +17,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-// EmailSecurityTopTLDSpoofService contains methods and other services that help
+// EmailSecurityTopTldSpoofService contains methods and other services that help
 // with interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewEmailSecurityTopTLDSpoofService] method instead.
-type EmailSecurityTopTLDSpoofService struct {
+// the [NewEmailSecurityTopTldSpoofService] method instead.
+type EmailSecurityTopTldSpoofService struct {
 	Options []option.RequestOption
 }
 
-// NewEmailSecurityTopTLDSpoofService generates a new service that applies the
+// NewEmailSecurityTopTldSpoofService generates a new service that applies the
 // given options to each request. These options are applied after the parent
 // client's options (if there is one), and before any request-specific options.
-func NewEmailSecurityTopTLDSpoofService(opts ...option.RequestOption) (r *EmailSecurityTopTLDSpoofService) {
-	r = &EmailSecurityTopTLDSpoofService{}
+func NewEmailSecurityTopTldSpoofService(opts ...option.RequestOption) (r *EmailSecurityTopTldSpoofService) {
+	r = &EmailSecurityTopTldSpoofService{}
 	r.Options = opts
 	return
 }
 
 // Retrieves the top TLDs by emails classified as spoof or not.
-func (r *EmailSecurityTopTLDSpoofService) Get(ctx context.Context, spoof EmailSecurityTopTLDSpoofGetParamsSpoof, query EmailSecurityTopTLDSpoofGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTLDSpoofGetResponse, err error) {
-	var env EmailSecurityTopTLDSpoofGetResponseEnvelope
+func (r *EmailSecurityTopTldSpoofService) Get(ctx context.Context, spoof EmailSecurityTopTldSpoofGetParamsSpoof, query EmailSecurityTopTldSpoofGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTldSpoofGetResponse, err error) {
+	var env EmailSecurityTopTldSpoofGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/email/security/top/tlds/spoof/%v", spoof)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
@@ -49,47 +49,47 @@ func (r *EmailSecurityTopTLDSpoofService) Get(ctx context.Context, spoof EmailSe
 	return res, nil
 }
 
-type EmailSecurityTopTLDSpoofGetResponse struct {
+type EmailSecurityTopTldSpoofGetResponse struct {
 	// Metadata for the results.
-	Meta EmailSecurityTopTLDSpoofGetResponseMeta   `json:"meta" api:"required"`
-	Top0 []EmailSecurityTopTLDSpoofGetResponseTop0 `json:"top_0" api:"required"`
-	JSON emailSecurityTopTLDSpoofGetResponseJSON   `json:"-"`
+	Meta EmailSecurityTopTldSpoofGetResponseMeta   `json:"meta" api:"required"`
+	Top0 []EmailSecurityTopTldSpoofGetResponseTop0 `json:"top_0" api:"required"`
+	JSON emailSecurityTopTldSpoofGetResponseJSON   `json:"-"`
 }
 
-// emailSecurityTopTLDSpoofGetResponseJSON contains the JSON metadata for the
-// struct [EmailSecurityTopTLDSpoofGetResponse]
-type emailSecurityTopTLDSpoofGetResponseJSON struct {
+// emailSecurityTopTldSpoofGetResponseJSON contains the JSON metadata for the
+// struct [EmailSecurityTopTldSpoofGetResponse]
+type emailSecurityTopTldSpoofGetResponseJSON struct {
 	Meta        apijson.Field
 	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDSpoofGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldSpoofGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDSpoofGetResponseJSON) RawJSON() string {
+func (r emailSecurityTopTldSpoofGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Metadata for the results.
-type EmailSecurityTopTLDSpoofGetResponseMeta struct {
-	ConfidenceInfo EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
-	DateRange      []EmailSecurityTopTLDSpoofGetResponseMetaDateRange    `json:"dateRange" api:"required"`
+type EmailSecurityTopTldSpoofGetResponseMeta struct {
+	ConfidenceInfo EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []EmailSecurityTopTldSpoofGetResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization EmailSecurityTopTLDSpoofGetResponseMetaNormalization `json:"normalization" api:"required"`
+	Normalization EmailSecurityTopTldSpoofGetResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []EmailSecurityTopTLDSpoofGetResponseMetaUnit `json:"units" api:"required"`
-	JSON  emailSecurityTopTLDSpoofGetResponseMetaJSON   `json:"-"`
+	Units []EmailSecurityTopTldSpoofGetResponseMetaUnit `json:"units" api:"required"`
+	JSON  emailSecurityTopTldSpoofGetResponseMetaJSON   `json:"-"`
 }
 
-// emailSecurityTopTLDSpoofGetResponseMetaJSON contains the JSON metadata for the
-// struct [EmailSecurityTopTLDSpoofGetResponseMeta]
-type emailSecurityTopTLDSpoofGetResponseMetaJSON struct {
+// emailSecurityTopTldSpoofGetResponseMetaJSON contains the JSON metadata for the
+// struct [EmailSecurityTopTldSpoofGetResponseMeta]
+type emailSecurityTopTldSpoofGetResponseMetaJSON struct {
 	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
@@ -99,57 +99,57 @@ type emailSecurityTopTLDSpoofGetResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDSpoofGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldSpoofGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDSpoofGetResponseMetaJSON) RawJSON() string {
+func (r emailSecurityTopTldSpoofGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfo struct {
-	Annotations []EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
+type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
 	Level int64                                                     `json:"level" api:"required"`
-	JSON  emailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoJSON `json:"-"`
+	JSON  emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
-// emailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct [EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfo]
-type emailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoJSON struct {
+// emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfo]
+type emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+func (r emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 	return r.raw
 }
 
 // Annotation associated with the result (e.g. outage or other type of event).
-type EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotation struct {
+type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	DataSource  EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
 	Description string                                                                     `json:"description" api:"required"`
 	EndDate     time.Time                                                                  `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
+	EventType EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                              `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                           `json:"startDate" api:"required" format:"date-time"`
-	JSON            emailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+	JSON            emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// emailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationJSON contains the
+// emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON contains the
 // JSON metadata for the struct
-// [EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotation]
-type emailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationJSON struct {
+// [EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EndDate         apijson.Field
@@ -161,171 +161,171 @@ type emailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationJSON struct 
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
 // Data source for annotations.
-type EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource string
+type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource string
 
 const (
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceCT                 EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceCt                 EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
 )
 
-func (r EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceCT, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+	case EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceCt, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
 		return true
 	}
 	return false
 }
 
 // Event type for annotations.
-type EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventType string
+type EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType string
 
 const (
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
-	EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
 )
 
-func (r EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, EmailSecurityTopTLDSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+	case EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDSpoofGetResponseMetaDateRange struct {
+type EmailSecurityTopTldSpoofGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
 	StartTime time.Time                                            `json:"startTime" api:"required" format:"date-time"`
-	JSON      emailSecurityTopTLDSpoofGetResponseMetaDateRangeJSON `json:"-"`
+	JSON      emailSecurityTopTldSpoofGetResponseMetaDateRangeJSON `json:"-"`
 }
 
-// emailSecurityTopTLDSpoofGetResponseMetaDateRangeJSON contains the JSON metadata
-// for the struct [EmailSecurityTopTLDSpoofGetResponseMetaDateRange]
-type emailSecurityTopTLDSpoofGetResponseMetaDateRangeJSON struct {
+// emailSecurityTopTldSpoofGetResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [EmailSecurityTopTldSpoofGetResponseMetaDateRange]
+type emailSecurityTopTldSpoofGetResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDSpoofGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldSpoofGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDSpoofGetResponseMetaDateRangeJSON) RawJSON() string {
+func (r emailSecurityTopTldSpoofGetResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Normalization method applied to the results. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-type EmailSecurityTopTLDSpoofGetResponseMetaNormalization string
+type EmailSecurityTopTldSpoofGetResponseMetaNormalization string
 
 const (
-	EmailSecurityTopTLDSpoofGetResponseMetaNormalizationPercentage           EmailSecurityTopTLDSpoofGetResponseMetaNormalization = "PERCENTAGE"
-	EmailSecurityTopTLDSpoofGetResponseMetaNormalizationMin0Max              EmailSecurityTopTLDSpoofGetResponseMetaNormalization = "MIN0_MAX"
-	EmailSecurityTopTLDSpoofGetResponseMetaNormalizationMinMax               EmailSecurityTopTLDSpoofGetResponseMetaNormalization = "MIN_MAX"
-	EmailSecurityTopTLDSpoofGetResponseMetaNormalizationRawValues            EmailSecurityTopTLDSpoofGetResponseMetaNormalization = "RAW_VALUES"
-	EmailSecurityTopTLDSpoofGetResponseMetaNormalizationPercentageChange     EmailSecurityTopTLDSpoofGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
-	EmailSecurityTopTLDSpoofGetResponseMetaNormalizationRollingAverage       EmailSecurityTopTLDSpoofGetResponseMetaNormalization = "ROLLING_AVERAGE"
-	EmailSecurityTopTLDSpoofGetResponseMetaNormalizationOverlappedPercentage EmailSecurityTopTLDSpoofGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
-	EmailSecurityTopTLDSpoofGetResponseMetaNormalizationRatio                EmailSecurityTopTLDSpoofGetResponseMetaNormalization = "RATIO"
+	EmailSecurityTopTldSpoofGetResponseMetaNormalizationPercentage           EmailSecurityTopTldSpoofGetResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTopTldSpoofGetResponseMetaNormalizationMin0Max              EmailSecurityTopTldSpoofGetResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTopTldSpoofGetResponseMetaNormalizationMinMax               EmailSecurityTopTldSpoofGetResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTopTldSpoofGetResponseMetaNormalizationRawValues            EmailSecurityTopTldSpoofGetResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTopTldSpoofGetResponseMetaNormalizationPercentageChange     EmailSecurityTopTldSpoofGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTopTldSpoofGetResponseMetaNormalizationRollingAverage       EmailSecurityTopTldSpoofGetResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTopTldSpoofGetResponseMetaNormalizationOverlappedPercentage EmailSecurityTopTldSpoofGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	EmailSecurityTopTldSpoofGetResponseMetaNormalizationRatio                EmailSecurityTopTldSpoofGetResponseMetaNormalization = "RATIO"
 )
 
-func (r EmailSecurityTopTLDSpoofGetResponseMetaNormalization) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetResponseMetaNormalizationPercentage, EmailSecurityTopTLDSpoofGetResponseMetaNormalizationMin0Max, EmailSecurityTopTLDSpoofGetResponseMetaNormalizationMinMax, EmailSecurityTopTLDSpoofGetResponseMetaNormalizationRawValues, EmailSecurityTopTLDSpoofGetResponseMetaNormalizationPercentageChange, EmailSecurityTopTLDSpoofGetResponseMetaNormalizationRollingAverage, EmailSecurityTopTLDSpoofGetResponseMetaNormalizationOverlappedPercentage, EmailSecurityTopTLDSpoofGetResponseMetaNormalizationRatio:
+	case EmailSecurityTopTldSpoofGetResponseMetaNormalizationPercentage, EmailSecurityTopTldSpoofGetResponseMetaNormalizationMin0Max, EmailSecurityTopTldSpoofGetResponseMetaNormalizationMinMax, EmailSecurityTopTldSpoofGetResponseMetaNormalizationRawValues, EmailSecurityTopTldSpoofGetResponseMetaNormalizationPercentageChange, EmailSecurityTopTldSpoofGetResponseMetaNormalizationRollingAverage, EmailSecurityTopTldSpoofGetResponseMetaNormalizationOverlappedPercentage, EmailSecurityTopTldSpoofGetResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDSpoofGetResponseMetaUnit struct {
+type EmailSecurityTopTldSpoofGetResponseMetaUnit struct {
 	Name  string                                          `json:"name" api:"required"`
 	Value string                                          `json:"value" api:"required"`
-	JSON  emailSecurityTopTLDSpoofGetResponseMetaUnitJSON `json:"-"`
+	JSON  emailSecurityTopTldSpoofGetResponseMetaUnitJSON `json:"-"`
 }
 
-// emailSecurityTopTLDSpoofGetResponseMetaUnitJSON contains the JSON metadata for
-// the struct [EmailSecurityTopTLDSpoofGetResponseMetaUnit]
-type emailSecurityTopTLDSpoofGetResponseMetaUnitJSON struct {
+// emailSecurityTopTldSpoofGetResponseMetaUnitJSON contains the JSON metadata for
+// the struct [EmailSecurityTopTldSpoofGetResponseMetaUnit]
+type emailSecurityTopTldSpoofGetResponseMetaUnitJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDSpoofGetResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldSpoofGetResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDSpoofGetResponseMetaUnitJSON) RawJSON() string {
+func (r emailSecurityTopTldSpoofGetResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailSecurityTopTLDSpoofGetResponseTop0 struct {
+type EmailSecurityTopTldSpoofGetResponseTop0 struct {
 	Name string `json:"name" api:"required"`
 	// A numeric string.
 	Value string                                      `json:"value" api:"required"`
-	JSON  emailSecurityTopTLDSpoofGetResponseTop0JSON `json:"-"`
+	JSON  emailSecurityTopTldSpoofGetResponseTop0JSON `json:"-"`
 }
 
-// emailSecurityTopTLDSpoofGetResponseTop0JSON contains the JSON metadata for the
-// struct [EmailSecurityTopTLDSpoofGetResponseTop0]
-type emailSecurityTopTLDSpoofGetResponseTop0JSON struct {
+// emailSecurityTopTldSpoofGetResponseTop0JSON contains the JSON metadata for the
+// struct [EmailSecurityTopTldSpoofGetResponseTop0]
+type emailSecurityTopTldSpoofGetResponseTop0JSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDSpoofGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldSpoofGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDSpoofGetResponseTop0JSON) RawJSON() string {
+func (r emailSecurityTopTldSpoofGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailSecurityTopTLDSpoofGetParams struct {
+type EmailSecurityTopTldSpoofGetParams struct {
 	// Filters results by ARC (Authenticated Received Chain) validation.
-	ARC param.Field[[]EmailSecurityTopTLDSpoofGetParamsARC] `query:"arc"`
+	ARC param.Field[[]EmailSecurityTopTldSpoofGetParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
@@ -335,27 +335,27 @@ type EmailSecurityTopTLDSpoofGetParams struct {
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
-	DKIM param.Field[[]EmailSecurityTopTLDSpoofGetParamsDKIM] `query:"dkim"`
+	DKIM param.Field[[]EmailSecurityTopTldSpoofGetParamsDKIM] `query:"dkim"`
 	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
 	// Conformance) validation status.
-	DMARC param.Field[[]EmailSecurityTopTLDSpoofGetParamsDMARC] `query:"dmarc"`
+	DMARC param.Field[[]EmailSecurityTopTldSpoofGetParamsDMARC] `query:"dmarc"`
 	// Format in which results will be returned.
-	Format param.Field[EmailSecurityTopTLDSpoofGetParamsFormat] `query:"format"`
+	Format param.Field[EmailSecurityTopTldSpoofGetParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by SPF (Sender Policy Framework) validation status.
-	SPF param.Field[[]EmailSecurityTopTLDSpoofGetParamsSPF] `query:"spf"`
+	SPF param.Field[[]EmailSecurityTopTldSpoofGetParamsSPF] `query:"spf"`
 	// Filters results by TLD category.
-	TLDCategory param.Field[EmailSecurityTopTLDSpoofGetParamsTLDCategory] `query:"tldCategory"`
+	TldCategory param.Field[EmailSecurityTopTldSpoofGetParamsTldCategory] `query:"tldCategory"`
 	// Filters results by TLS version.
-	TLSVersion param.Field[[]EmailSecurityTopTLDSpoofGetParamsTLSVersion] `query:"tlsVersion"`
+	TLSVersion param.Field[[]EmailSecurityTopTldSpoofGetParamsTLSVersion] `query:"tlsVersion"`
 }
 
-// URLQuery serializes [EmailSecurityTopTLDSpoofGetParams]'s query parameters as
+// URLQuery serializes [EmailSecurityTopTldSpoofGetParams]'s query parameters as
 // `url.Values`.
-func (r EmailSecurityTopTLDSpoofGetParams) URLQuery() (v url.Values) {
+func (r EmailSecurityTopTldSpoofGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -363,153 +363,153 @@ func (r EmailSecurityTopTLDSpoofGetParams) URLQuery() (v url.Values) {
 }
 
 // Spoof classification.
-type EmailSecurityTopTLDSpoofGetParamsSpoof string
+type EmailSecurityTopTldSpoofGetParamsSpoof string
 
 const (
-	EmailSecurityTopTLDSpoofGetParamsSpoofSpoof    EmailSecurityTopTLDSpoofGetParamsSpoof = "SPOOF"
-	EmailSecurityTopTLDSpoofGetParamsSpoofNotSpoof EmailSecurityTopTLDSpoofGetParamsSpoof = "NOT_SPOOF"
+	EmailSecurityTopTldSpoofGetParamsSpoofSpoof    EmailSecurityTopTldSpoofGetParamsSpoof = "SPOOF"
+	EmailSecurityTopTldSpoofGetParamsSpoofNotSpoof EmailSecurityTopTldSpoofGetParamsSpoof = "NOT_SPOOF"
 )
 
-func (r EmailSecurityTopTLDSpoofGetParamsSpoof) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetParamsSpoof) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetParamsSpoofSpoof, EmailSecurityTopTLDSpoofGetParamsSpoofNotSpoof:
+	case EmailSecurityTopTldSpoofGetParamsSpoofSpoof, EmailSecurityTopTldSpoofGetParamsSpoofNotSpoof:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDSpoofGetParamsARC string
+type EmailSecurityTopTldSpoofGetParamsARC string
 
 const (
-	EmailSecurityTopTLDSpoofGetParamsARCPass EmailSecurityTopTLDSpoofGetParamsARC = "PASS"
-	EmailSecurityTopTLDSpoofGetParamsARCNone EmailSecurityTopTLDSpoofGetParamsARC = "NONE"
-	EmailSecurityTopTLDSpoofGetParamsARCFail EmailSecurityTopTLDSpoofGetParamsARC = "FAIL"
+	EmailSecurityTopTldSpoofGetParamsARCPass EmailSecurityTopTldSpoofGetParamsARC = "PASS"
+	EmailSecurityTopTldSpoofGetParamsARCNone EmailSecurityTopTldSpoofGetParamsARC = "NONE"
+	EmailSecurityTopTldSpoofGetParamsARCFail EmailSecurityTopTldSpoofGetParamsARC = "FAIL"
 )
 
-func (r EmailSecurityTopTLDSpoofGetParamsARC) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetParamsARC) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetParamsARCPass, EmailSecurityTopTLDSpoofGetParamsARCNone, EmailSecurityTopTLDSpoofGetParamsARCFail:
+	case EmailSecurityTopTldSpoofGetParamsARCPass, EmailSecurityTopTldSpoofGetParamsARCNone, EmailSecurityTopTldSpoofGetParamsARCFail:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDSpoofGetParamsDKIM string
+type EmailSecurityTopTldSpoofGetParamsDKIM string
 
 const (
-	EmailSecurityTopTLDSpoofGetParamsDKIMPass EmailSecurityTopTLDSpoofGetParamsDKIM = "PASS"
-	EmailSecurityTopTLDSpoofGetParamsDKIMNone EmailSecurityTopTLDSpoofGetParamsDKIM = "NONE"
-	EmailSecurityTopTLDSpoofGetParamsDKIMFail EmailSecurityTopTLDSpoofGetParamsDKIM = "FAIL"
+	EmailSecurityTopTldSpoofGetParamsDKIMPass EmailSecurityTopTldSpoofGetParamsDKIM = "PASS"
+	EmailSecurityTopTldSpoofGetParamsDKIMNone EmailSecurityTopTldSpoofGetParamsDKIM = "NONE"
+	EmailSecurityTopTldSpoofGetParamsDKIMFail EmailSecurityTopTldSpoofGetParamsDKIM = "FAIL"
 )
 
-func (r EmailSecurityTopTLDSpoofGetParamsDKIM) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetParamsDKIM) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetParamsDKIMPass, EmailSecurityTopTLDSpoofGetParamsDKIMNone, EmailSecurityTopTLDSpoofGetParamsDKIMFail:
+	case EmailSecurityTopTldSpoofGetParamsDKIMPass, EmailSecurityTopTldSpoofGetParamsDKIMNone, EmailSecurityTopTldSpoofGetParamsDKIMFail:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDSpoofGetParamsDMARC string
+type EmailSecurityTopTldSpoofGetParamsDMARC string
 
 const (
-	EmailSecurityTopTLDSpoofGetParamsDMARCPass EmailSecurityTopTLDSpoofGetParamsDMARC = "PASS"
-	EmailSecurityTopTLDSpoofGetParamsDMARCNone EmailSecurityTopTLDSpoofGetParamsDMARC = "NONE"
-	EmailSecurityTopTLDSpoofGetParamsDMARCFail EmailSecurityTopTLDSpoofGetParamsDMARC = "FAIL"
+	EmailSecurityTopTldSpoofGetParamsDMARCPass EmailSecurityTopTldSpoofGetParamsDMARC = "PASS"
+	EmailSecurityTopTldSpoofGetParamsDMARCNone EmailSecurityTopTldSpoofGetParamsDMARC = "NONE"
+	EmailSecurityTopTldSpoofGetParamsDMARCFail EmailSecurityTopTldSpoofGetParamsDMARC = "FAIL"
 )
 
-func (r EmailSecurityTopTLDSpoofGetParamsDMARC) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetParamsDMARC) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetParamsDMARCPass, EmailSecurityTopTLDSpoofGetParamsDMARCNone, EmailSecurityTopTLDSpoofGetParamsDMARCFail:
+	case EmailSecurityTopTldSpoofGetParamsDMARCPass, EmailSecurityTopTldSpoofGetParamsDMARCNone, EmailSecurityTopTldSpoofGetParamsDMARCFail:
 		return true
 	}
 	return false
 }
 
 // Format in which results will be returned.
-type EmailSecurityTopTLDSpoofGetParamsFormat string
+type EmailSecurityTopTldSpoofGetParamsFormat string
 
 const (
-	EmailSecurityTopTLDSpoofGetParamsFormatJson EmailSecurityTopTLDSpoofGetParamsFormat = "JSON"
-	EmailSecurityTopTLDSpoofGetParamsFormatCsv  EmailSecurityTopTLDSpoofGetParamsFormat = "CSV"
+	EmailSecurityTopTldSpoofGetParamsFormatJson EmailSecurityTopTldSpoofGetParamsFormat = "JSON"
+	EmailSecurityTopTldSpoofGetParamsFormatCsv  EmailSecurityTopTldSpoofGetParamsFormat = "CSV"
 )
 
-func (r EmailSecurityTopTLDSpoofGetParamsFormat) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetParamsFormatJson, EmailSecurityTopTLDSpoofGetParamsFormatCsv:
+	case EmailSecurityTopTldSpoofGetParamsFormatJson, EmailSecurityTopTldSpoofGetParamsFormatCsv:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDSpoofGetParamsSPF string
+type EmailSecurityTopTldSpoofGetParamsSPF string
 
 const (
-	EmailSecurityTopTLDSpoofGetParamsSPFPass EmailSecurityTopTLDSpoofGetParamsSPF = "PASS"
-	EmailSecurityTopTLDSpoofGetParamsSPFNone EmailSecurityTopTLDSpoofGetParamsSPF = "NONE"
-	EmailSecurityTopTLDSpoofGetParamsSPFFail EmailSecurityTopTLDSpoofGetParamsSPF = "FAIL"
+	EmailSecurityTopTldSpoofGetParamsSPFPass EmailSecurityTopTldSpoofGetParamsSPF = "PASS"
+	EmailSecurityTopTldSpoofGetParamsSPFNone EmailSecurityTopTldSpoofGetParamsSPF = "NONE"
+	EmailSecurityTopTldSpoofGetParamsSPFFail EmailSecurityTopTldSpoofGetParamsSPF = "FAIL"
 )
 
-func (r EmailSecurityTopTLDSpoofGetParamsSPF) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetParamsSPF) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetParamsSPFPass, EmailSecurityTopTLDSpoofGetParamsSPFNone, EmailSecurityTopTLDSpoofGetParamsSPFFail:
+	case EmailSecurityTopTldSpoofGetParamsSPFPass, EmailSecurityTopTldSpoofGetParamsSPFNone, EmailSecurityTopTldSpoofGetParamsSPFFail:
 		return true
 	}
 	return false
 }
 
 // Filters results by TLD category.
-type EmailSecurityTopTLDSpoofGetParamsTLDCategory string
+type EmailSecurityTopTldSpoofGetParamsTldCategory string
 
 const (
-	EmailSecurityTopTLDSpoofGetParamsTLDCategoryClassic EmailSecurityTopTLDSpoofGetParamsTLDCategory = "CLASSIC"
-	EmailSecurityTopTLDSpoofGetParamsTLDCategoryCountry EmailSecurityTopTLDSpoofGetParamsTLDCategory = "COUNTRY"
+	EmailSecurityTopTldSpoofGetParamsTldCategoryClassic EmailSecurityTopTldSpoofGetParamsTldCategory = "CLASSIC"
+	EmailSecurityTopTldSpoofGetParamsTldCategoryCountry EmailSecurityTopTldSpoofGetParamsTldCategory = "COUNTRY"
 )
 
-func (r EmailSecurityTopTLDSpoofGetParamsTLDCategory) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetParamsTldCategory) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetParamsTLDCategoryClassic, EmailSecurityTopTLDSpoofGetParamsTLDCategoryCountry:
+	case EmailSecurityTopTldSpoofGetParamsTldCategoryClassic, EmailSecurityTopTldSpoofGetParamsTldCategoryCountry:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDSpoofGetParamsTLSVersion string
+type EmailSecurityTopTldSpoofGetParamsTLSVersion string
 
 const (
-	EmailSecurityTopTLDSpoofGetParamsTLSVersionTlSv1_0 EmailSecurityTopTLDSpoofGetParamsTLSVersion = "TLSv1_0"
-	EmailSecurityTopTLDSpoofGetParamsTLSVersionTlSv1_1 EmailSecurityTopTLDSpoofGetParamsTLSVersion = "TLSv1_1"
-	EmailSecurityTopTLDSpoofGetParamsTLSVersionTlSv1_2 EmailSecurityTopTLDSpoofGetParamsTLSVersion = "TLSv1_2"
-	EmailSecurityTopTLDSpoofGetParamsTLSVersionTlSv1_3 EmailSecurityTopTLDSpoofGetParamsTLSVersion = "TLSv1_3"
+	EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_0 EmailSecurityTopTldSpoofGetParamsTLSVersion = "TLSv1_0"
+	EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_1 EmailSecurityTopTldSpoofGetParamsTLSVersion = "TLSv1_1"
+	EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_2 EmailSecurityTopTldSpoofGetParamsTLSVersion = "TLSv1_2"
+	EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_3 EmailSecurityTopTldSpoofGetParamsTLSVersion = "TLSv1_3"
 )
 
-func (r EmailSecurityTopTLDSpoofGetParamsTLSVersion) IsKnown() bool {
+func (r EmailSecurityTopTldSpoofGetParamsTLSVersion) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDSpoofGetParamsTLSVersionTlSv1_0, EmailSecurityTopTLDSpoofGetParamsTLSVersionTlSv1_1, EmailSecurityTopTLDSpoofGetParamsTLSVersionTlSv1_2, EmailSecurityTopTLDSpoofGetParamsTLSVersionTlSv1_3:
+	case EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_0, EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_1, EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_2, EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_3:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDSpoofGetResponseEnvelope struct {
-	Result  EmailSecurityTopTLDSpoofGetResponse             `json:"result" api:"required"`
+type EmailSecurityTopTldSpoofGetResponseEnvelope struct {
+	Result  EmailSecurityTopTldSpoofGetResponse             `json:"result" api:"required"`
 	Success bool                                            `json:"success" api:"required"`
-	JSON    emailSecurityTopTLDSpoofGetResponseEnvelopeJSON `json:"-"`
+	JSON    emailSecurityTopTldSpoofGetResponseEnvelopeJSON `json:"-"`
 }
 
-// emailSecurityTopTLDSpoofGetResponseEnvelopeJSON contains the JSON metadata for
-// the struct [EmailSecurityTopTLDSpoofGetResponseEnvelope]
-type emailSecurityTopTLDSpoofGetResponseEnvelopeJSON struct {
+// emailSecurityTopTldSpoofGetResponseEnvelopeJSON contains the JSON metadata for
+// the struct [EmailSecurityTopTldSpoofGetResponseEnvelope]
+type emailSecurityTopTldSpoofGetResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDSpoofGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldSpoofGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDSpoofGetResponseEnvelopeJSON) RawJSON() string {
+func (r emailSecurityTopTldSpoofGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

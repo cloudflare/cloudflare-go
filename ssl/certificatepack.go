@@ -44,11 +44,6 @@ func NewCertificatePackService(opts ...option.RequestOption) (r *CertificatePack
 func (r *CertificatePackService) New(ctx context.Context, params CertificatePackNewParams, opts ...option.RequestOption) (res *CertificatePackNewResponse, err error) {
 	var env CertificatePackNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -67,11 +62,6 @@ func (r *CertificatePackService) List(ctx context.Context, params CertificatePac
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -98,11 +88,6 @@ func (r *CertificatePackService) ListAutoPaging(ctx context.Context, params Cert
 func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, body CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
 	var env CertificatePackDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -126,11 +111,6 @@ func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID s
 func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID string, params CertificatePackEditParams, opts ...option.RequestOption) (res *CertificatePackEditResponse, err error) {
 	var env CertificatePackEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -152,11 +132,6 @@ func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID str
 func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *CertificatePackGetResponse, err error) {
 	var env CertificatePackGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -1683,8 +1658,6 @@ func (r CertificatePackGetResponseValidityDays) IsKnown() bool {
 
 type CertificatePackNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
@@ -1919,8 +1892,6 @@ func (r CertificatePackNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CertificatePackListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Specify the deployment environment for the certificate packs.
 	Deploy param.Field[CertificatePackListParamsDeploy] `query:"deploy"`
@@ -1974,8 +1945,6 @@ func (r CertificatePackListParamsStatus) IsKnown() bool {
 
 type CertificatePackDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -2120,8 +2089,6 @@ func (r CertificatePackDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CertificatePackEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
@@ -2274,8 +2241,6 @@ func (r CertificatePackEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type CertificatePackGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

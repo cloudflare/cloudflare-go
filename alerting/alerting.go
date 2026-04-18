@@ -18,7 +18,6 @@ type AlertingService struct {
 	Destinations    *DestinationService
 	History         *HistoryService
 	Policies        *PolicyService
-	Silences        *SilenceService
 }
 
 // NewAlertingService generates a new service that applies the given options to
@@ -31,6 +30,5 @@ func NewAlertingService(opts ...option.RequestOption) (r *AlertingService) {
 	r.Destinations = NewDestinationService(opts...)
 	r.History = NewHistoryService(opts...)
 	r.Policies = NewPolicyService(opts...)
-	r.Silences = NewSilenceService(opts...)
 	return
 }

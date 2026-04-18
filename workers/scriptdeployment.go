@@ -41,14 +41,9 @@ func NewScriptDeploymentService(opts ...option.RequestOption) (r *ScriptDeployme
 // [Worker Versions](https://developers.cloudflare.com/api/operations/worker-versions-list-versions)
 // are deployed to traffic. A deployment can consist of one or two versions of a
 // Worker.
-func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, params ScriptDeploymentNewParams, opts ...option.RequestOption) (res *Deployment, err error) {
+func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, params ScriptDeploymentNewParams, opts ...option.RequestOption) (res *ScriptDeploymentNewResponse, err error) {
 	var env ScriptDeploymentNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,11 +66,6 @@ func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, pa
 func (r *ScriptDeploymentService) List(ctx context.Context, scriptName string, query ScriptDeploymentListParams, opts ...option.RequestOption) (res *ScriptDeploymentListResponse, err error) {
 	var env ScriptDeploymentListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -97,11 +87,6 @@ func (r *ScriptDeploymentService) List(ctx context.Context, scriptName string, q
 // traffic, cannot be deleted. All other deployments can be deleted.
 func (r *ScriptDeploymentService) Delete(ctx context.Context, scriptName string, deploymentID string, body ScriptDeploymentDeleteParams, opts ...option.RequestOption) (res *ScriptDeploymentDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -120,14 +105,9 @@ func (r *ScriptDeploymentService) Delete(ctx context.Context, scriptName string,
 }
 
 // Get information about a Worker Deployment.
-func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, deploymentID string, query ScriptDeploymentGetParams, opts ...option.RequestOption) (res *Deployment, err error) {
+func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, deploymentID string, query ScriptDeploymentGetParams, opts ...option.RequestOption) (res *ScriptDeploymentGetResponse, err error) {
 	var env ScriptDeploymentGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -149,19 +129,20 @@ func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, de
 	return res, nil
 }
 
-type Deployment struct {
-	ID          string                `json:"id" api:"required" format:"uuid"`
-	CreatedOn   time.Time             `json:"created_on" api:"required" format:"date-time"`
-	Source      string                `json:"source" api:"required"`
-	Strategy    DeploymentStrategy    `json:"strategy" api:"required"`
-	Versions    []DeploymentVersion   `json:"versions" api:"required"`
-	Annotations DeploymentAnnotations `json:"annotations"`
-	AuthorEmail string                `json:"author_email" format:"email"`
-	JSON        deploymentJSON        `json:"-"`
+type ScriptDeploymentNewResponse struct {
+	ID          string                                 `json:"id" api:"required" format:"uuid"`
+	CreatedOn   time.Time                              `json:"created_on" api:"required" format:"date-time"`
+	Source      string                                 `json:"source" api:"required"`
+	Strategy    ScriptDeploymentNewResponseStrategy    `json:"strategy" api:"required"`
+	Versions    []ScriptDeploymentNewResponseVersion   `json:"versions" api:"required"`
+	Annotations ScriptDeploymentNewResponseAnnotations `json:"annotations"`
+	AuthorEmail string                                 `json:"author_email" format:"email"`
+	JSON        scriptDeploymentNewResponseJSON        `json:"-"`
 }
 
-// deploymentJSON contains the JSON metadata for the struct [Deployment]
-type deploymentJSON struct {
+// scriptDeploymentNewResponseJSON contains the JSON metadata for the struct
+// [ScriptDeploymentNewResponse]
+type scriptDeploymentNewResponseJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Source      apijson.Field
@@ -173,107 +154,79 @@ type deploymentJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Deployment) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptDeploymentNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r deploymentJSON) RawJSON() string {
+func (r scriptDeploymentNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type DeploymentStrategy string
+type ScriptDeploymentNewResponseStrategy string
 
 const (
-	DeploymentStrategyPercentage DeploymentStrategy = "percentage"
+	ScriptDeploymentNewResponseStrategyPercentage ScriptDeploymentNewResponseStrategy = "percentage"
 )
 
-func (r DeploymentStrategy) IsKnown() bool {
+func (r ScriptDeploymentNewResponseStrategy) IsKnown() bool {
 	switch r {
-	case DeploymentStrategyPercentage:
+	case ScriptDeploymentNewResponseStrategyPercentage:
 		return true
 	}
 	return false
 }
 
-type DeploymentVersion struct {
-	Percentage float64               `json:"percentage" api:"required"`
-	VersionID  string                `json:"version_id" api:"required" format:"uuid"`
-	JSON       deploymentVersionJSON `json:"-"`
+type ScriptDeploymentNewResponseVersion struct {
+	Percentage float64                                `json:"percentage" api:"required"`
+	VersionID  string                                 `json:"version_id" api:"required" format:"uuid"`
+	JSON       scriptDeploymentNewResponseVersionJSON `json:"-"`
 }
 
-// deploymentVersionJSON contains the JSON metadata for the struct
-// [DeploymentVersion]
-type deploymentVersionJSON struct {
+// scriptDeploymentNewResponseVersionJSON contains the JSON metadata for the struct
+// [ScriptDeploymentNewResponseVersion]
+type scriptDeploymentNewResponseVersionJSON struct {
 	Percentage  apijson.Field
 	VersionID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeploymentVersion) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptDeploymentNewResponseVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r deploymentVersionJSON) RawJSON() string {
+func (r scriptDeploymentNewResponseVersionJSON) RawJSON() string {
 	return r.raw
 }
 
-type DeploymentAnnotations struct {
+type ScriptDeploymentNewResponseAnnotations struct {
 	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
 	WorkersMessage string `json:"workers/message"`
 	// Operation that triggered the creation of the deployment.
-	WorkersTriggeredBy string                    `json:"workers/triggered_by"`
-	JSON               deploymentAnnotationsJSON `json:"-"`
+	WorkersTriggeredBy string                                     `json:"workers/triggered_by"`
+	JSON               scriptDeploymentNewResponseAnnotationsJSON `json:"-"`
 }
 
-// deploymentAnnotationsJSON contains the JSON metadata for the struct
-// [DeploymentAnnotations]
-type deploymentAnnotationsJSON struct {
+// scriptDeploymentNewResponseAnnotationsJSON contains the JSON metadata for the
+// struct [ScriptDeploymentNewResponseAnnotations]
+type scriptDeploymentNewResponseAnnotationsJSON struct {
 	WorkersMessage     apijson.Field
 	WorkersTriggeredBy apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DeploymentAnnotations) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptDeploymentNewResponseAnnotations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r deploymentAnnotationsJSON) RawJSON() string {
+func (r scriptDeploymentNewResponseAnnotationsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DeploymentParam struct {
-	Strategy    param.Field[DeploymentStrategy]         `json:"strategy" api:"required"`
-	Versions    param.Field[[]DeploymentVersionParam]   `json:"versions" api:"required"`
-	Annotations param.Field[DeploymentAnnotationsParam] `json:"annotations"`
-}
-
-func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DeploymentVersionParam struct {
-	Percentage param.Field[float64] `json:"percentage" api:"required"`
-	VersionID  param.Field[string]  `json:"version_id" api:"required" format:"uuid"`
-}
-
-func (r DeploymentVersionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DeploymentAnnotationsParam struct {
-	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
-	WorkersMessage param.Field[string] `json:"workers/message"`
-}
-
-func (r DeploymentAnnotationsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ScriptDeploymentListResponse struct {
-	Deployments []Deployment                     `json:"deployments" api:"required"`
-	JSON        scriptDeploymentListResponseJSON `json:"-"`
+	Deployments []ScriptDeploymentListResponseDeployment `json:"deployments" api:"required"`
+	JSON        scriptDeploymentListResponseJSON         `json:"-"`
 }
 
 // scriptDeploymentListResponseJSON contains the JSON metadata for the struct
@@ -289,6 +242,101 @@ func (r *ScriptDeploymentListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptDeploymentListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponseDeployment struct {
+	ID          string                                             `json:"id" api:"required" format:"uuid"`
+	CreatedOn   time.Time                                          `json:"created_on" api:"required" format:"date-time"`
+	Source      string                                             `json:"source" api:"required"`
+	Strategy    ScriptDeploymentListResponseDeploymentsStrategy    `json:"strategy" api:"required"`
+	Versions    []ScriptDeploymentListResponseDeploymentsVersion   `json:"versions" api:"required"`
+	Annotations ScriptDeploymentListResponseDeploymentsAnnotations `json:"annotations"`
+	AuthorEmail string                                             `json:"author_email" format:"email"`
+	JSON        scriptDeploymentListResponseDeploymentJSON         `json:"-"`
+}
+
+// scriptDeploymentListResponseDeploymentJSON contains the JSON metadata for the
+// struct [ScriptDeploymentListResponseDeployment]
+type scriptDeploymentListResponseDeploymentJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Source      apijson.Field
+	Strategy    apijson.Field
+	Versions    apijson.Field
+	Annotations apijson.Field
+	AuthorEmail apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseDeployment) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseDeploymentJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponseDeploymentsStrategy string
+
+const (
+	ScriptDeploymentListResponseDeploymentsStrategyPercentage ScriptDeploymentListResponseDeploymentsStrategy = "percentage"
+)
+
+func (r ScriptDeploymentListResponseDeploymentsStrategy) IsKnown() bool {
+	switch r {
+	case ScriptDeploymentListResponseDeploymentsStrategyPercentage:
+		return true
+	}
+	return false
+}
+
+type ScriptDeploymentListResponseDeploymentsVersion struct {
+	Percentage float64                                            `json:"percentage" api:"required"`
+	VersionID  string                                             `json:"version_id" api:"required" format:"uuid"`
+	JSON       scriptDeploymentListResponseDeploymentsVersionJSON `json:"-"`
+}
+
+// scriptDeploymentListResponseDeploymentsVersionJSON contains the JSON metadata
+// for the struct [ScriptDeploymentListResponseDeploymentsVersion]
+type scriptDeploymentListResponseDeploymentsVersionJSON struct {
+	Percentage  apijson.Field
+	VersionID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseDeploymentsVersion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseDeploymentsVersionJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentListResponseDeploymentsAnnotations struct {
+	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
+	WorkersMessage string `json:"workers/message"`
+	// Operation that triggered the creation of the deployment.
+	WorkersTriggeredBy string                                                 `json:"workers/triggered_by"`
+	JSON               scriptDeploymentListResponseDeploymentsAnnotationsJSON `json:"-"`
+}
+
+// scriptDeploymentListResponseDeploymentsAnnotationsJSON contains the JSON
+// metadata for the struct [ScriptDeploymentListResponseDeploymentsAnnotations]
+type scriptDeploymentListResponseDeploymentsAnnotationsJSON struct {
+	WorkersMessage     apijson.Field
+	WorkersTriggeredBy apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentListResponseDeploymentsAnnotations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentListResponseDeploymentsAnnotationsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -429,19 +477,114 @@ func (r ScriptDeploymentDeleteResponseSuccess) IsKnown() bool {
 	return false
 }
 
+type ScriptDeploymentGetResponse struct {
+	ID          string                                 `json:"id" api:"required" format:"uuid"`
+	CreatedOn   time.Time                              `json:"created_on" api:"required" format:"date-time"`
+	Source      string                                 `json:"source" api:"required"`
+	Strategy    ScriptDeploymentGetResponseStrategy    `json:"strategy" api:"required"`
+	Versions    []ScriptDeploymentGetResponseVersion   `json:"versions" api:"required"`
+	Annotations ScriptDeploymentGetResponseAnnotations `json:"annotations"`
+	AuthorEmail string                                 `json:"author_email" format:"email"`
+	JSON        scriptDeploymentGetResponseJSON        `json:"-"`
+}
+
+// scriptDeploymentGetResponseJSON contains the JSON metadata for the struct
+// [ScriptDeploymentGetResponse]
+type scriptDeploymentGetResponseJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Source      apijson.Field
+	Strategy    apijson.Field
+	Versions    apijson.Field
+	Annotations apijson.Field
+	AuthorEmail apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentGetResponseStrategy string
+
+const (
+	ScriptDeploymentGetResponseStrategyPercentage ScriptDeploymentGetResponseStrategy = "percentage"
+)
+
+func (r ScriptDeploymentGetResponseStrategy) IsKnown() bool {
+	switch r {
+	case ScriptDeploymentGetResponseStrategyPercentage:
+		return true
+	}
+	return false
+}
+
+type ScriptDeploymentGetResponseVersion struct {
+	Percentage float64                                `json:"percentage" api:"required"`
+	VersionID  string                                 `json:"version_id" api:"required" format:"uuid"`
+	JSON       scriptDeploymentGetResponseVersionJSON `json:"-"`
+}
+
+// scriptDeploymentGetResponseVersionJSON contains the JSON metadata for the struct
+// [ScriptDeploymentGetResponseVersion]
+type scriptDeploymentGetResponseVersionJSON struct {
+	Percentage  apijson.Field
+	VersionID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentGetResponseVersion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentGetResponseVersionJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentGetResponseAnnotations struct {
+	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
+	WorkersMessage string `json:"workers/message"`
+	// Operation that triggered the creation of the deployment.
+	WorkersTriggeredBy string                                     `json:"workers/triggered_by"`
+	JSON               scriptDeploymentGetResponseAnnotationsJSON `json:"-"`
+}
+
+// scriptDeploymentGetResponseAnnotationsJSON contains the JSON metadata for the
+// struct [ScriptDeploymentGetResponseAnnotations]
+type scriptDeploymentGetResponseAnnotationsJSON struct {
+	WorkersMessage     apijson.Field
+	WorkersTriggeredBy apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentGetResponseAnnotations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentGetResponseAnnotationsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScriptDeploymentNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
-	AccountID  param.Field[string] `path:"account_id" api:"required"`
-	Deployment DeploymentParam     `json:"deployment" api:"required"`
+	AccountID param.Field[string]                             `path:"account_id" api:"required"`
+	Strategy  param.Field[ScriptDeploymentNewParamsStrategy]  `json:"strategy" api:"required"`
+	Versions  param.Field[[]ScriptDeploymentNewParamsVersion] `json:"versions" api:"required"`
 	// If set to true, the deployment will be created even if normally blocked by
 	// something such rolling back to an older version when a secret has changed.
-	Force param.Field[bool] `query:"force"`
+	Force       param.Field[bool]                                 `query:"force"`
+	Annotations param.Field[ScriptDeploymentNewParamsAnnotations] `json:"annotations"`
 }
 
 func (r ScriptDeploymentNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Deployment)
+	return apijson.MarshalRoot(r)
 }
 
 // URLQuery serializes [ScriptDeploymentNewParams]'s query parameters as
@@ -453,10 +596,42 @@ func (r ScriptDeploymentNewParams) URLQuery() (v url.Values) {
 	})
 }
 
+type ScriptDeploymentNewParamsStrategy string
+
+const (
+	ScriptDeploymentNewParamsStrategyPercentage ScriptDeploymentNewParamsStrategy = "percentage"
+)
+
+func (r ScriptDeploymentNewParamsStrategy) IsKnown() bool {
+	switch r {
+	case ScriptDeploymentNewParamsStrategyPercentage:
+		return true
+	}
+	return false
+}
+
+type ScriptDeploymentNewParamsVersion struct {
+	Percentage param.Field[float64] `json:"percentage" api:"required"`
+	VersionID  param.Field[string]  `json:"version_id" api:"required" format:"uuid"`
+}
+
+func (r ScriptDeploymentNewParamsVersion) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ScriptDeploymentNewParamsAnnotations struct {
+	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
+	WorkersMessage param.Field[string] `json:"workers/message"`
+}
+
+func (r ScriptDeploymentNewParamsAnnotations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ScriptDeploymentNewResponseEnvelope struct {
 	Errors   []ScriptDeploymentNewResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []ScriptDeploymentNewResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   Deployment                                    `json:"result" api:"required"`
+	Result   ScriptDeploymentNewResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
 	Success ScriptDeploymentNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptDeploymentNewResponseEnvelopeJSON    `json:"-"`
@@ -594,8 +769,6 @@ func (r ScriptDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptDeploymentListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -740,22 +913,18 @@ func (r ScriptDeploymentListResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptDeploymentDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptDeploymentGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptDeploymentGetResponseEnvelope struct {
 	Errors   []ScriptDeploymentGetResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []ScriptDeploymentGetResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   Deployment                                    `json:"result" api:"required"`
+	Result   ScriptDeploymentGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful.
 	Success ScriptDeploymentGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    scriptDeploymentGetResponseEnvelopeJSON    `json:"-"`

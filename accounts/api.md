@@ -17,31 +17,6 @@ Methods:
 - <code title="delete /accounts/{account_id}">client.Accounts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountDeleteParams">AccountDeleteParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountDeleteResponse">AccountDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}">client.Accounts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountGetParams">AccountGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#Account">Account</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## AccountOrganizations
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountOrganizationNewResponse">AccountOrganizationNewResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{account_id}/move">client.Accounts.AccountOrganizations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountOrganizationService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountOrganizationNewParams">AccountOrganizationNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountOrganizationNewResponse">AccountOrganizationNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-## AccountProfile
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountProfileParam">AccountProfileParam</a>
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountProfile">AccountProfile</a>
-
-Methods:
-
-- <code title="put /accounts/{account_id}/profile">client.Accounts.AccountProfile.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountProfileService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountProfileUpdateParams">AccountProfileUpdateParams</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
-- <code title="get /accounts/{account_id}/profile">client.Accounts.AccountProfile.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountProfileService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountProfileGetParams">AccountProfileGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#AccountProfile">AccountProfile</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Members
 
 Response Types:
@@ -122,4 +97,4 @@ Response Types:
 
 Methods:
 
-- <code title="get /accounts/{account_id}/logs/audit">client.Accounts.Logs.Audit.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#LogAuditService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#LogAuditListParams">LogAuditListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#CursorPaginationAfter">CursorPaginationAfter</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#LogAuditListResponse">LogAuditListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/logs/audit">client.Accounts.Logs.Audit.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#LogAuditService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#LogAuditListParams">LogAuditListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/packages/pagination#CursorLimitPagination">CursorLimitPagination</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/accounts#LogAuditListResponse">LogAuditListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>

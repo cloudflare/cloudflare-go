@@ -37,11 +37,6 @@ func NewExportService(opts ...option.RequestOption) (r *ExportService) {
 // included.
 func (r *ExportService) Get(ctx context.Context, query ExportGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -53,7 +48,5 @@ func (r *ExportService) Get(ctx context.Context, query ExportGetParams, opts ...
 
 type ExportGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

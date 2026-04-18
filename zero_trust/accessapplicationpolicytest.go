@@ -40,11 +40,6 @@ func NewAccessApplicationPolicyTestService(opts ...option.RequestOption) (r *Acc
 func (r *AccessApplicationPolicyTestService) New(ctx context.Context, params AccessApplicationPolicyTestNewParams, opts ...option.RequestOption) (res *AccessApplicationPolicyTestNewResponse, err error) {
 	var env AccessApplicationPolicyTestNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,11 +57,6 @@ func (r *AccessApplicationPolicyTestService) New(ctx context.Context, params Acc
 func (r *AccessApplicationPolicyTestService) Get(ctx context.Context, policyTestID string, query AccessApplicationPolicyTestGetParams, opts ...option.RequestOption) (res *AccessApplicationPolicyTestGetResponse, err error) {
 	var env AccessApplicationPolicyTestGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -193,8 +183,6 @@ func (r AccessApplicationPolicyTestGetResponseStatus) IsKnown() bool {
 
 type AccessApplicationPolicyTestNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                                            `path:"account_id" api:"required"`
 	Policies  param.Field[[]AccessApplicationPolicyTestNewParamsPolicyUnion] `json:"policies"`
 }
@@ -261,7 +249,7 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObject) ImplementsAccessAppl
 // application.
 type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
-	RDP param.Field[AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDP] `json:"rdp"`
+	Rdp param.Field[AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdp] `json:"rdp"`
 }
 
 func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
@@ -269,42 +257,42 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules) Marsh
 }
 
 // The RDP-specific rules that define clipboard behavior for RDP connections.
-type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDP struct {
+type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdp struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
-	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
+	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
 	// Clipboard formats allowed when copying from remote RDP session to local machine.
-	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
+	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
 }
 
-func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDP) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdp) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Clipboard format for RDP connections.
-type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
+type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat string
 
 const (
-	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
+	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat = "text"
 )
 
-func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
+	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
 // Clipboard format for RDP connections.
-type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
+type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat string
 
 const (
-	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
+	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat = "text"
 )
 
-func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
+	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRdpAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
@@ -485,8 +473,6 @@ func (r AccessApplicationPolicyTestNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessApplicationPolicyTestGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

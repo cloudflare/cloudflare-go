@@ -41,11 +41,6 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -65,11 +60,6 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -2250,8 +2240,6 @@ func (r configurationConsentPurposesWithTranslationJSON) RawJSON() string {
 
 type ConfigUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Data layer compatibility mode enabled.
 	DataLayer param.Field[bool] `json:"dataLayer" api:"required"`
@@ -3532,8 +3520,6 @@ func (r configUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 
 type ConfigGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

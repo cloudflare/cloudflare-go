@@ -38,11 +38,6 @@ func NewScriptSubdomainService(opts ...option.RequestOption) (r *ScriptSubdomain
 func (r *ScriptSubdomainService) New(ctx context.Context, scriptName string, params ScriptSubdomainNewParams, opts ...option.RequestOption) (res *ScriptSubdomainNewResponse, err error) {
 	var env ScriptSubdomainNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,11 +59,6 @@ func (r *ScriptSubdomainService) New(ctx context.Context, scriptName string, par
 func (r *ScriptSubdomainService) Delete(ctx context.Context, scriptName string, body ScriptSubdomainDeleteParams, opts ...option.RequestOption) (res *ScriptSubdomainDeleteResponse, err error) {
 	var env ScriptSubdomainDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -90,11 +80,6 @@ func (r *ScriptSubdomainService) Delete(ctx context.Context, scriptName string, 
 func (r *ScriptSubdomainService) Get(ctx context.Context, scriptName string, query ScriptSubdomainGetParams, opts ...option.RequestOption) (res *ScriptSubdomainGetResponse, err error) {
 	var env ScriptSubdomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -189,8 +174,6 @@ func (r scriptSubdomainGetResponseJSON) RawJSON() string {
 
 type ScriptSubdomainNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether the Worker should be available on the workers.dev subdomain.
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
@@ -344,8 +327,6 @@ func (r ScriptSubdomainNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptSubdomainDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -490,8 +471,6 @@ func (r ScriptSubdomainDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptSubdomainGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

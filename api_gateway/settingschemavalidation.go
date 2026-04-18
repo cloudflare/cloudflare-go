@@ -39,13 +39,8 @@ func NewSettingSchemaValidationService(opts ...option.RequestOption) (r *Setting
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *SettingSchemaValidationService) Update(ctx context.Context, params SettingSchemaValidationUpdateParams, opts ...option.RequestOption) (res *Settings, err error) {
+func (r *SettingSchemaValidationService) Update(ctx context.Context, params SettingSchemaValidationUpdateParams, opts ...option.RequestOption) (res *SettingSchemaValidationUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -60,13 +55,8 @@ func (r *SettingSchemaValidationService) Update(ctx context.Context, params Sett
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *SettingSchemaValidationService) Edit(ctx context.Context, params SettingSchemaValidationEditParams, opts ...option.RequestOption) (res *Settings, err error) {
+func (r *SettingSchemaValidationService) Edit(ctx context.Context, params SettingSchemaValidationEditParams, opts ...option.RequestOption) (res *SettingSchemaValidationEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -81,13 +71,8 @@ func (r *SettingSchemaValidationService) Edit(ctx context.Context, params Settin
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *SettingSchemaValidationService) Get(ctx context.Context, query SettingSchemaValidationGetParams, opts ...option.RequestOption) (res *Settings, err error) {
+func (r *SettingSchemaValidationService) Get(ctx context.Context, query SettingSchemaValidationGetParams, opts ...option.RequestOption) (res *SettingSchemaValidationGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -97,10 +82,251 @@ func (r *SettingSchemaValidationService) Get(ctx context.Context, query SettingS
 	return res, err
 }
 
+type SettingSchemaValidationUpdateResponse struct {
+	// The default mitigation action used when there is no mitigation action defined on
+	// the operation
+	//
+	// Mitigation actions are as follows:
+	//
+	// - `log` - log request when request does not conform to schema
+	// - `block` - deny access to the site when request does not conform to schema
+	//
+	// A special value of of `none` will skip running schema validation entirely for
+	// the request when there is no mitigation action defined on the operation
+	ValidationDefaultMitigationAction SettingSchemaValidationUpdateResponseValidationDefaultMitigationAction `json:"validation_default_mitigation_action"`
+	// When set, this overrides both zone level and operation level mitigation actions.
+	//
+	// - `none` will skip running schema validation entirely for the request
+	// - `null` indicates that no override is in place
+	ValidationOverrideMitigationAction SettingSchemaValidationUpdateResponseValidationOverrideMitigationAction `json:"validation_override_mitigation_action" api:"nullable"`
+	JSON                               settingSchemaValidationUpdateResponseJSON                               `json:"-"`
+}
+
+// settingSchemaValidationUpdateResponseJSON contains the JSON metadata for the
+// struct [SettingSchemaValidationUpdateResponse]
+type settingSchemaValidationUpdateResponseJSON struct {
+	ValidationDefaultMitigationAction  apijson.Field
+	ValidationOverrideMitigationAction apijson.Field
+	raw                                string
+	ExtraFields                        map[string]apijson.Field
+}
+
+func (r *SettingSchemaValidationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingSchemaValidationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The default mitigation action used when there is no mitigation action defined on
+// the operation
+//
+// Mitigation actions are as follows:
+//
+// - `log` - log request when request does not conform to schema
+// - `block` - deny access to the site when request does not conform to schema
+//
+// A special value of of `none` will skip running schema validation entirely for
+// the request when there is no mitigation action defined on the operation
+type SettingSchemaValidationUpdateResponseValidationDefaultMitigationAction string
+
+const (
+	SettingSchemaValidationUpdateResponseValidationDefaultMitigationActionNone  SettingSchemaValidationUpdateResponseValidationDefaultMitigationAction = "none"
+	SettingSchemaValidationUpdateResponseValidationDefaultMitigationActionLog   SettingSchemaValidationUpdateResponseValidationDefaultMitigationAction = "log"
+	SettingSchemaValidationUpdateResponseValidationDefaultMitigationActionBlock SettingSchemaValidationUpdateResponseValidationDefaultMitigationAction = "block"
+)
+
+func (r SettingSchemaValidationUpdateResponseValidationDefaultMitigationAction) IsKnown() bool {
+	switch r {
+	case SettingSchemaValidationUpdateResponseValidationDefaultMitigationActionNone, SettingSchemaValidationUpdateResponseValidationDefaultMitigationActionLog, SettingSchemaValidationUpdateResponseValidationDefaultMitigationActionBlock:
+		return true
+	}
+	return false
+}
+
+// When set, this overrides both zone level and operation level mitigation actions.
+//
+// - `none` will skip running schema validation entirely for the request
+// - `null` indicates that no override is in place
+type SettingSchemaValidationUpdateResponseValidationOverrideMitigationAction string
+
+const (
+	SettingSchemaValidationUpdateResponseValidationOverrideMitigationActionNone SettingSchemaValidationUpdateResponseValidationOverrideMitigationAction = "none"
+)
+
+func (r SettingSchemaValidationUpdateResponseValidationOverrideMitigationAction) IsKnown() bool {
+	switch r {
+	case SettingSchemaValidationUpdateResponseValidationOverrideMitigationActionNone:
+		return true
+	}
+	return false
+}
+
+type SettingSchemaValidationEditResponse struct {
+	// The default mitigation action used when there is no mitigation action defined on
+	// the operation
+	//
+	// Mitigation actions are as follows:
+	//
+	// - `log` - log request when request does not conform to schema
+	// - `block` - deny access to the site when request does not conform to schema
+	//
+	// A special value of of `none` will skip running schema validation entirely for
+	// the request when there is no mitigation action defined on the operation
+	ValidationDefaultMitigationAction SettingSchemaValidationEditResponseValidationDefaultMitigationAction `json:"validation_default_mitigation_action"`
+	// When set, this overrides both zone level and operation level mitigation actions.
+	//
+	// - `none` will skip running schema validation entirely for the request
+	// - `null` indicates that no override is in place
+	ValidationOverrideMitigationAction SettingSchemaValidationEditResponseValidationOverrideMitigationAction `json:"validation_override_mitigation_action" api:"nullable"`
+	JSON                               settingSchemaValidationEditResponseJSON                               `json:"-"`
+}
+
+// settingSchemaValidationEditResponseJSON contains the JSON metadata for the
+// struct [SettingSchemaValidationEditResponse]
+type settingSchemaValidationEditResponseJSON struct {
+	ValidationDefaultMitigationAction  apijson.Field
+	ValidationOverrideMitigationAction apijson.Field
+	raw                                string
+	ExtraFields                        map[string]apijson.Field
+}
+
+func (r *SettingSchemaValidationEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingSchemaValidationEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The default mitigation action used when there is no mitigation action defined on
+// the operation
+//
+// Mitigation actions are as follows:
+//
+// - `log` - log request when request does not conform to schema
+// - `block` - deny access to the site when request does not conform to schema
+//
+// A special value of of `none` will skip running schema validation entirely for
+// the request when there is no mitigation action defined on the operation
+type SettingSchemaValidationEditResponseValidationDefaultMitigationAction string
+
+const (
+	SettingSchemaValidationEditResponseValidationDefaultMitigationActionNone  SettingSchemaValidationEditResponseValidationDefaultMitigationAction = "none"
+	SettingSchemaValidationEditResponseValidationDefaultMitigationActionLog   SettingSchemaValidationEditResponseValidationDefaultMitigationAction = "log"
+	SettingSchemaValidationEditResponseValidationDefaultMitigationActionBlock SettingSchemaValidationEditResponseValidationDefaultMitigationAction = "block"
+)
+
+func (r SettingSchemaValidationEditResponseValidationDefaultMitigationAction) IsKnown() bool {
+	switch r {
+	case SettingSchemaValidationEditResponseValidationDefaultMitigationActionNone, SettingSchemaValidationEditResponseValidationDefaultMitigationActionLog, SettingSchemaValidationEditResponseValidationDefaultMitigationActionBlock:
+		return true
+	}
+	return false
+}
+
+// When set, this overrides both zone level and operation level mitigation actions.
+//
+// - `none` will skip running schema validation entirely for the request
+// - `null` indicates that no override is in place
+type SettingSchemaValidationEditResponseValidationOverrideMitigationAction string
+
+const (
+	SettingSchemaValidationEditResponseValidationOverrideMitigationActionNone SettingSchemaValidationEditResponseValidationOverrideMitigationAction = "none"
+)
+
+func (r SettingSchemaValidationEditResponseValidationOverrideMitigationAction) IsKnown() bool {
+	switch r {
+	case SettingSchemaValidationEditResponseValidationOverrideMitigationActionNone:
+		return true
+	}
+	return false
+}
+
+type SettingSchemaValidationGetResponse struct {
+	// The default mitigation action used when there is no mitigation action defined on
+	// the operation
+	//
+	// Mitigation actions are as follows:
+	//
+	// - `log` - log request when request does not conform to schema
+	// - `block` - deny access to the site when request does not conform to schema
+	//
+	// A special value of of `none` will skip running schema validation entirely for
+	// the request when there is no mitigation action defined on the operation
+	ValidationDefaultMitigationAction SettingSchemaValidationGetResponseValidationDefaultMitigationAction `json:"validation_default_mitigation_action"`
+	// When set, this overrides both zone level and operation level mitigation actions.
+	//
+	// - `none` will skip running schema validation entirely for the request
+	// - `null` indicates that no override is in place
+	ValidationOverrideMitigationAction SettingSchemaValidationGetResponseValidationOverrideMitigationAction `json:"validation_override_mitigation_action" api:"nullable"`
+	JSON                               settingSchemaValidationGetResponseJSON                               `json:"-"`
+}
+
+// settingSchemaValidationGetResponseJSON contains the JSON metadata for the struct
+// [SettingSchemaValidationGetResponse]
+type settingSchemaValidationGetResponseJSON struct {
+	ValidationDefaultMitigationAction  apijson.Field
+	ValidationOverrideMitigationAction apijson.Field
+	raw                                string
+	ExtraFields                        map[string]apijson.Field
+}
+
+func (r *SettingSchemaValidationGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingSchemaValidationGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The default mitigation action used when there is no mitigation action defined on
+// the operation
+//
+// Mitigation actions are as follows:
+//
+// - `log` - log request when request does not conform to schema
+// - `block` - deny access to the site when request does not conform to schema
+//
+// A special value of of `none` will skip running schema validation entirely for
+// the request when there is no mitigation action defined on the operation
+type SettingSchemaValidationGetResponseValidationDefaultMitigationAction string
+
+const (
+	SettingSchemaValidationGetResponseValidationDefaultMitigationActionNone  SettingSchemaValidationGetResponseValidationDefaultMitigationAction = "none"
+	SettingSchemaValidationGetResponseValidationDefaultMitigationActionLog   SettingSchemaValidationGetResponseValidationDefaultMitigationAction = "log"
+	SettingSchemaValidationGetResponseValidationDefaultMitigationActionBlock SettingSchemaValidationGetResponseValidationDefaultMitigationAction = "block"
+)
+
+func (r SettingSchemaValidationGetResponseValidationDefaultMitigationAction) IsKnown() bool {
+	switch r {
+	case SettingSchemaValidationGetResponseValidationDefaultMitigationActionNone, SettingSchemaValidationGetResponseValidationDefaultMitigationActionLog, SettingSchemaValidationGetResponseValidationDefaultMitigationActionBlock:
+		return true
+	}
+	return false
+}
+
+// When set, this overrides both zone level and operation level mitigation actions.
+//
+// - `none` will skip running schema validation entirely for the request
+// - `null` indicates that no override is in place
+type SettingSchemaValidationGetResponseValidationOverrideMitigationAction string
+
+const (
+	SettingSchemaValidationGetResponseValidationOverrideMitigationActionNone SettingSchemaValidationGetResponseValidationOverrideMitigationAction = "none"
+)
+
+func (r SettingSchemaValidationGetResponseValidationOverrideMitigationAction) IsKnown() bool {
+	switch r {
+	case SettingSchemaValidationGetResponseValidationOverrideMitigationActionNone:
+		return true
+	}
+	return false
+}
+
 type SettingSchemaValidationUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The default mitigation action used when there is no mitigation action defined on
 	// the operation
@@ -175,8 +401,6 @@ func (r SettingSchemaValidationUpdateParamsValidationOverrideMitigationAction) I
 
 type SettingSchemaValidationEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The default mitigation action used when there is no mitigation action defined on
 	// the operation Mitigation actions are as follows:
@@ -253,7 +477,5 @@ func (r SettingSchemaValidationEditParamsValidationOverrideMitigationAction) IsK
 
 type SettingSchemaValidationGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

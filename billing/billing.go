@@ -15,7 +15,6 @@ import (
 type BillingService struct {
 	Options  []option.RequestOption
 	Profiles *ProfileService
-	Usage    *UsageService
 }
 
 // NewBillingService generates a new service that applies the given options to each
@@ -25,6 +24,5 @@ func NewBillingService(opts ...option.RequestOption) (r *BillingService) {
 	r = &BillingService{}
 	r.Options = opts
 	r.Profiles = NewProfileService(opts...)
-	r.Usage = NewUsageService(opts...)
 	return
 }

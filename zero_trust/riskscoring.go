@@ -46,11 +46,6 @@ func NewRiskScoringService(opts ...option.RequestOption) (r *RiskScoringService)
 func (r *RiskScoringService) Get(ctx context.Context, userID string, query RiskScoringGetParams, opts ...option.RequestOption) (res *RiskScoringGetResponse, err error) {
 	var env RiskScoringGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -72,11 +67,6 @@ func (r *RiskScoringService) Get(ctx context.Context, userID string, query RiskS
 func (r *RiskScoringService) Reset(ctx context.Context, userID string, body RiskScoringResetParams, opts ...option.RequestOption) (res *RiskScoringResetResponse, err error) {
 	var env RiskScoringResetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -187,7 +177,6 @@ func (r RiskScoringGetResponseRiskLevel) IsKnown() bool {
 type RiskScoringResetResponse = interface{}
 
 type RiskScoringGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -367,7 +356,6 @@ func (r riskScoringGetResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type RiskScoringResetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

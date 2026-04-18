@@ -97,7 +97,7 @@ func TestDNSTopLocationsWithOptionalParams(t *testing.T) {
 		QueryType:      cloudflare.F([]radar.DNSTopLocationsParamsQueryType{radar.DNSTopLocationsParamsQueryTypeA}),
 		ResponseCode:   cloudflare.F([]radar.DNSTopLocationsParamsResponseCode{radar.DNSTopLocationsParamsResponseCodeNoerror}),
 		ResponseTTL:    cloudflare.F([]radar.DNSTopLocationsParamsResponseTTL{radar.DNSTopLocationsParamsResponseTTLLte1M}),
-		TLD:            cloudflare.F([]string{"com"}),
+		Tld:            cloudflare.F([]string{"com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

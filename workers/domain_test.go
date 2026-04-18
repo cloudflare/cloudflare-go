@@ -15,7 +15,6 @@ import (
 )
 
 func TestDomainUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("Prism: 422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

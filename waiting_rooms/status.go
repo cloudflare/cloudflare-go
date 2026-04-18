@@ -56,11 +56,6 @@ func NewStatusService(opts ...option.RequestOption) (r *StatusService) {
 func (r *StatusService) Get(ctx context.Context, waitingRoomID string, query StatusGetParams, opts ...option.RequestOption) (res *StatusGetResponse, err error) {
 	var env StatusGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -126,8 +121,6 @@ func (r StatusGetResponseStatus) IsKnown() bool {
 
 type StatusGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

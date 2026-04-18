@@ -37,11 +37,6 @@ func NewMiscategorizationService(opts ...option.RequestOption) (r *Miscategoriza
 // Allows you to submit requests to change a domain’s category.
 func (r *MiscategorizationService) New(ctx context.Context, params MiscategorizationNewParams, opts ...option.RequestOption) (res *MiscategorizationNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -190,8 +185,6 @@ func (r MiscategorizationNewResponseSuccess) IsKnown() bool {
 
 type MiscategorizationNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Content category IDs to add.
 	ContentAdds param.Field[[]int64] `json:"content_adds"`

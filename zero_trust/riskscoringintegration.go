@@ -43,11 +43,6 @@ func NewRiskScoringIntegrationService(opts ...option.RequestOption) (r *RiskScor
 func (r *RiskScoringIntegrationService) New(ctx context.Context, params RiskScoringIntegrationNewParams, opts ...option.RequestOption) (res *RiskScoringIntegrationNewResponse, err error) {
 	var env RiskScoringIntegrationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *RiskScoringIntegrationService) New(ctx context.Context, params RiskScor
 func (r *RiskScoringIntegrationService) Update(ctx context.Context, integrationID string, params RiskScoringIntegrationUpdateParams, opts ...option.RequestOption) (res *RiskScoringIntegrationUpdateResponse, err error) {
 	var env RiskScoringIntegrationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -93,11 +83,6 @@ func (r *RiskScoringIntegrationService) List(ctx context.Context, query RiskScor
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -125,11 +110,6 @@ func (r *RiskScoringIntegrationService) ListAutoPaging(ctx context.Context, quer
 func (r *RiskScoringIntegrationService) Delete(ctx context.Context, integrationID string, body RiskScoringIntegrationDeleteParams, opts ...option.RequestOption) (res *RiskScoringIntegrationDeleteResponse, err error) {
 	var env RiskScoringIntegrationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -151,11 +131,6 @@ func (r *RiskScoringIntegrationService) Delete(ctx context.Context, integrationI
 func (r *RiskScoringIntegrationService) Get(ctx context.Context, integrationID string, query RiskScoringIntegrationGetParams, opts ...option.RequestOption) (res *RiskScoringIntegrationGetResponse, err error) {
 	var env RiskScoringIntegrationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -416,7 +391,6 @@ func (r RiskScoringIntegrationGetResponseIntegrationType) IsKnown() bool {
 }
 
 type RiskScoringIntegrationNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID       param.Field[string]                                         `path:"account_id" api:"required"`
 	IntegrationType param.Field[RiskScoringIntegrationNewParamsIntegrationType] `json:"integration_type" api:"required"`
 	// The base url of the tenant, e.g. "https://tenant.okta.com".
@@ -586,7 +560,6 @@ func (r RiskScoringIntegrationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RiskScoringIntegrationUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether this integration is enabled. If disabled, no risk changes will be
 	// exported to the third-party.
@@ -745,12 +718,10 @@ func (r RiskScoringIntegrationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RiskScoringIntegrationListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RiskScoringIntegrationDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -896,7 +867,6 @@ func (r RiskScoringIntegrationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RiskScoringIntegrationGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

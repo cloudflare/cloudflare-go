@@ -44,11 +44,6 @@ func (r *DEXColoService) List(ctx context.Context, params DEXColoListParams, opt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -102,7 +97,6 @@ func (r dexColoListResponseJSON) RawJSON() string {
 }
 
 type DEXColoListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Start time for connection period in ISO (RFC3339 - ISO 8601) format
 	From param.Field[string] `query:"from" api:"required"`

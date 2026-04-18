@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -36,14 +37,9 @@ func NewNetworkSubnetCloudflareSourceService(opts ...option.RequestOption) (r *N
 }
 
 // Updates the Cloudflare Source subnet of the given address family
-func (r *NetworkSubnetCloudflareSourceService) Update(ctx context.Context, addressFamily NetworkSubnetCloudflareSourceUpdateParamsAddressFamily, params NetworkSubnetCloudflareSourceUpdateParams, opts ...option.RequestOption) (res *Subnet, err error) {
+func (r *NetworkSubnetCloudflareSourceService) Update(ctx context.Context, addressFamily NetworkSubnetCloudflareSourceUpdateParamsAddressFamily, params NetworkSubnetCloudflareSourceUpdateParams, opts ...option.RequestOption) (res *NetworkSubnetCloudflareSourceUpdateResponse, err error) {
 	var env NetworkSubnetCloudflareSourceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -57,10 +53,69 @@ func (r *NetworkSubnetCloudflareSourceService) Update(ctx context.Context, addre
 	return res, nil
 }
 
+type NetworkSubnetCloudflareSourceUpdateResponse struct {
+	// The UUID of the subnet.
+	ID string `json:"id" format:"uuid"`
+	// An optional description of the subnet.
+	Comment string `json:"comment"`
+	// Timestamp of when the resource was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the resource was deleted. If `null`, the resource has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
+	// If `true`, this is the default subnet for the account. There can only be one
+	// default subnet per account.
+	IsDefaultNetwork bool `json:"is_default_network"`
+	// A user-friendly name for the subnet.
+	Name string `json:"name"`
+	// The private IPv4 or IPv6 range defining the subnet, in CIDR notation.
+	Network string `json:"network"`
+	// The type of subnet.
+	SubnetType NetworkSubnetCloudflareSourceUpdateResponseSubnetType `json:"subnet_type"`
+	JSON       networkSubnetCloudflareSourceUpdateResponseJSON       `json:"-"`
+}
+
+// networkSubnetCloudflareSourceUpdateResponseJSON contains the JSON metadata for
+// the struct [NetworkSubnetCloudflareSourceUpdateResponse]
+type networkSubnetCloudflareSourceUpdateResponseJSON struct {
+	ID               apijson.Field
+	Comment          apijson.Field
+	CreatedAt        apijson.Field
+	DeletedAt        apijson.Field
+	IsDefaultNetwork apijson.Field
+	Name             apijson.Field
+	Network          apijson.Field
+	SubnetType       apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *NetworkSubnetCloudflareSourceUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetCloudflareSourceUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of subnet.
+type NetworkSubnetCloudflareSourceUpdateResponseSubnetType string
+
+const (
+	NetworkSubnetCloudflareSourceUpdateResponseSubnetTypeCloudflareSource NetworkSubnetCloudflareSourceUpdateResponseSubnetType = "cloudflare_source"
+	NetworkSubnetCloudflareSourceUpdateResponseSubnetTypeWARP             NetworkSubnetCloudflareSourceUpdateResponseSubnetType = "warp"
+)
+
+func (r NetworkSubnetCloudflareSourceUpdateResponseSubnetType) IsKnown() bool {
+	switch r {
+	case NetworkSubnetCloudflareSourceUpdateResponseSubnetTypeCloudflareSource, NetworkSubnetCloudflareSourceUpdateResponseSubnetTypeWARP:
+		return true
+	}
+	return false
+}
+
 type NetworkSubnetCloudflareSourceUpdateParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description of the subnet.
 	Comment param.Field[string] `json:"comment"`
@@ -91,9 +146,9 @@ func (r NetworkSubnetCloudflareSourceUpdateParamsAddressFamily) IsKnown() bool {
 }
 
 type NetworkSubnetCloudflareSourceUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Subnet                `json:"result" api:"required"`
+	Errors   []shared.ResponseInfo                       `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo                       `json:"messages" api:"required"`
+	Result   NetworkSubnetCloudflareSourceUpdateResponse `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkSubnetCloudflareSourceUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetCloudflareSourceUpdateResponseEnvelopeJSON    `json:"-"`

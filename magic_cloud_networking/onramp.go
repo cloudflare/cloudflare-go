@@ -48,11 +48,6 @@ func (r *OnRampService) New(ctx context.Context, params OnRampNewParams, opts ..
 		opts = append(opts, option.WithHeader("forwarded", fmt.Sprintf("%v", params.Forwarded)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -70,11 +65,6 @@ func (r *OnRampService) New(ctx context.Context, params OnRampNewParams, opts ..
 func (r *OnRampService) Update(ctx context.Context, onrampID string, params OnRampUpdateParams, opts ...option.RequestOption) (res *OnRampUpdateResponse, err error) {
 	var env OnRampUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -97,11 +87,6 @@ func (r *OnRampService) List(ctx context.Context, params OnRampListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -128,11 +113,6 @@ func (r *OnRampService) ListAutoPaging(ctx context.Context, params OnRampListPar
 func (r *OnRampService) Delete(ctx context.Context, onrampID string, params OnRampDeleteParams, opts ...option.RequestOption) (res *OnRampDeleteResponse, err error) {
 	var env OnRampDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -153,11 +133,6 @@ func (r *OnRampService) Delete(ctx context.Context, onrampID string, params OnRa
 // Apply an On-ramp (Closed Beta).
 func (r *OnRampService) Apply(ctx context.Context, onrampID string, body OnRampApplyParams, opts ...option.RequestOption) (res *OnRampApplyResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -175,11 +150,6 @@ func (r *OnRampService) Apply(ctx context.Context, onrampID string, body OnRampA
 func (r *OnRampService) Edit(ctx context.Context, onrampID string, params OnRampEditParams, opts ...option.RequestOption) (res *OnRampEditResponse, err error) {
 	var env OnRampEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -201,11 +171,6 @@ func (r *OnRampService) Edit(ctx context.Context, onrampID string, params OnRamp
 func (r *OnRampService) Export(ctx context.Context, onrampID string, body OnRampExportParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/zip")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -223,11 +188,6 @@ func (r *OnRampService) Export(ctx context.Context, onrampID string, body OnRamp
 func (r *OnRampService) Get(ctx context.Context, onrampID string, params OnRampGetParams, opts ...option.RequestOption) (res *OnRampGetResponse, err error) {
 	var env OnRampGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -248,11 +208,6 @@ func (r *OnRampService) Get(ctx context.Context, onrampID string, params OnRampG
 // Plan an On-ramp (Closed Beta).
 func (r *OnRampService) Plan(ctx context.Context, onrampID string, body OnRampPlanParams, opts ...option.RequestOption) (res *OnRampPlanResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -20521,7 +20476,6 @@ func (r onRampPlanResponseMessagesSourceJSON) RawJSON() string {
 }
 
 type OnRampNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                   `path:"account_id" api:"required"`
 	CloudType param.Field[OnRampNewParamsCloudType] `json:"cloud_type" api:"required"`
 	// Enables BGP routing. When enabling this feature, set both
@@ -21106,7 +21060,6 @@ func (r onRampNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type OnRampUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID                 param.Field[string]   `path:"account_id" api:"required"`
 	AttachedHubs              param.Field[[]string] `json:"attached_hubs" format:"uuid"`
 	AttachedVPCs              param.Field[[]string] `json:"attached_vpcs" format:"uuid"`
@@ -21649,7 +21602,6 @@ func (r onRampUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type OnRampListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Desc      param.Field[bool]   `query:"desc"`
 	// One of ["updated_at", "id", "cloud_type", "name"].
@@ -21667,7 +21619,6 @@ func (r OnRampListParams) URLQuery() (v url.Values) {
 }
 
 type OnRampDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Destroy   param.Field[bool]   `query:"destroy"`
 	Force     param.Field[bool]   `query:"force"`
@@ -22207,12 +22158,10 @@ func (r onRampDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type OnRampApplyParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type OnRampEditParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID                 param.Field[string]   `path:"account_id" api:"required"`
 	AttachedHubs              param.Field[[]string] `json:"attached_hubs" format:"uuid"`
 	AttachedVPCs              param.Field[[]string] `json:"attached_vpcs" format:"uuid"`
@@ -22755,12 +22704,10 @@ func (r onRampEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type OnRampExportParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type OnRampGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID          param.Field[string] `path:"account_id" api:"required"`
 	PlannedResources   param.Field[bool]   `query:"planned_resources"`
 	PostApplyResources param.Field[bool]   `query:"post_apply_resources"`
@@ -23302,6 +23249,5 @@ func (r onRampGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 }
 
 type OnRampPlanParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

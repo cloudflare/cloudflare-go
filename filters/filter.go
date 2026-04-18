@@ -53,11 +53,6 @@ func (r *FilterService) New(ctx context.Context, params FilterNewParams, opts ..
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -94,11 +89,6 @@ func (r *FilterService) NewAutoPaging(ctx context.Context, params FilterNewParam
 func (r *FilterService) Update(ctx context.Context, filterID string, params FilterUpdateParams, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	var env FilterUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -127,11 +117,6 @@ func (r *FilterService) List(ctx context.Context, params FilterListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -169,11 +154,6 @@ func (r *FilterService) ListAutoPaging(ctx context.Context, params FilterListPar
 func (r *FilterService) Delete(ctx context.Context, filterID string, body FilterDeleteParams, opts ...option.RequestOption) (res *FilterDeleteResponse, err error) {
 	var env FilterDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -200,11 +180,6 @@ func (r *FilterService) Delete(ctx context.Context, filterID string, body Filter
 func (r *FilterService) BulkDelete(ctx context.Context, params FilterBulkDeleteParams, opts ...option.RequestOption) (res *[]FilterBulkDeleteResponse, err error) {
 	var env FilterBulkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -228,11 +203,6 @@ func (r *FilterService) BulkUpdate(ctx context.Context, params FilterBulkUpdateP
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -269,11 +239,6 @@ func (r *FilterService) BulkUpdateAutoPaging(ctx context.Context, params FilterB
 func (r *FilterService) Get(ctx context.Context, filterID string, query FilterGetParams, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	var env FilterGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -389,8 +354,6 @@ func (r filterBulkDeleteResponseJSON) RawJSON() string {
 
 type FilterNewParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]   `path:"zone_id" api:"required"`
 	Body   []FirewallFilterParam `json:"body" api:"required"`
 }
@@ -401,8 +364,6 @@ func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
 
 type FilterUpdateParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID         param.Field[string] `path:"zone_id" api:"required"`
 	FirewallFilter FirewallFilterParam `json:"firewall_filter" api:"required"`
 }
@@ -456,8 +417,6 @@ func (r FilterUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type FilterListParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The unique identifier of the filter.
 	ID param.Field[string] `query:"id"`
@@ -485,8 +444,6 @@ func (r FilterListParams) URLQuery() (v url.Values) {
 
 type FilterDeleteParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -535,8 +492,6 @@ func (r FilterDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type FilterBulkDeleteParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]   `path:"zone_id" api:"required"`
 	ID     param.Field[[]string] `query:"id" api:"required"`
 }
@@ -627,8 +582,6 @@ func (r filterBulkDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type FilterBulkUpdateParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]          `path:"zone_id" api:"required"`
 	Body   []FilterBulkUpdateParamsBody `json:"body" api:"required"`
 }
@@ -655,8 +608,6 @@ func (r FilterBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 
 type FilterGetParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

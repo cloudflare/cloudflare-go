@@ -40,11 +40,6 @@ func NewAnalyzeService(opts ...option.RequestOption) (r *AnalyzeService) {
 func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts ...option.RequestOption) (res *AnalyzeNewResponse, err error) {
 	var env AnalyzeNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -62,8 +57,6 @@ type AnalyzeNewResponse = interface{}
 
 type AnalyzeNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses

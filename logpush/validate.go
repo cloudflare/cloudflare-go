@@ -38,12 +38,6 @@ func NewValidateService(opts ...option.RequestOption) (r *ValidateService) {
 func (r *ValidateService) Destination(ctx context.Context, params ValidateDestinationParams, opts ...option.RequestOption) (res *ValidateDestinationResponse, err error) {
 	var env ValidateDestinationResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -75,12 +69,6 @@ func (r *ValidateService) Destination(ctx context.Context, params ValidateDestin
 func (r *ValidateService) DestinationExists(ctx context.Context, params ValidateDestinationExistsParams, opts ...option.RequestOption) (res *ValidateDestinationExistsResponse, err error) {
 	var env ValidateDestinationExistsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -112,12 +100,6 @@ func (r *ValidateService) DestinationExists(ctx context.Context, params Validate
 func (r *ValidateService) Origin(ctx context.Context, params ValidateOriginParams, opts ...option.RequestOption) (res *ValidateOriginResponse, err error) {
 	var env ValidateOriginResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -218,12 +200,8 @@ type ValidateDestinationParams struct {
 	// included.
 	DestinationConf param.Field[string] `json:"destination_conf" api:"required" format:"uri"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -376,12 +354,8 @@ type ValidateDestinationExistsParams struct {
 	// included.
 	DestinationConf param.Field[string] `json:"destination_conf" api:"required" format:"uri"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -537,12 +511,8 @@ type ValidateOriginParams struct {
 	// times appropriately.
 	LogpullOptions param.Field[string] `json:"logpull_options" api:"required" format:"uri-reference"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 

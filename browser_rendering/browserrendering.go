@@ -22,8 +22,6 @@ type BrowserRenderingService struct {
 	Json       *JsonService
 	Links      *LinkService
 	Markdown   *MarkdownService
-	Crawl      *CrawlService
-	Devtools   *DevtoolService
 }
 
 // NewBrowserRenderingService generates a new service that applies the given
@@ -40,7 +38,5 @@ func NewBrowserRenderingService(opts ...option.RequestOption) (r *BrowserRenderi
 	r.Json = NewJsonService(opts...)
 	r.Links = NewLinkService(opts...)
 	r.Markdown = NewMarkdownService(opts...)
-	r.Crawl = NewCrawlService(opts...)
-	r.Devtools = NewDevtoolService(opts...)
 	return
 }

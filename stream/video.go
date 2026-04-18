@@ -40,11 +40,6 @@ func NewVideoService(opts ...option.RequestOption) (r *VideoService) {
 func (r *VideoService) StorageUsage(ctx context.Context, params VideoStorageUsageParams, opts ...option.RequestOption) (res *VideoStorageUsageResponse, err error) {
 	var env VideoStorageUsageResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -92,8 +87,6 @@ func (r videoStorageUsageResponseJSON) RawJSON() string {
 
 type VideoStorageUsageParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-defined identifier for the media creator.
 	Creator param.Field[string] `query:"creator"`

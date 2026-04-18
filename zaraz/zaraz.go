@@ -50,11 +50,6 @@ func NewZarazService(opts ...option.RequestOption) (r *ZarazService) {
 func (r *ZarazService) Update(ctx context.Context, params ZarazUpdateParams, opts ...option.RequestOption) (res *Workflow, err error) {
 	var env ZarazUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -156,8 +151,6 @@ func (r NeoEventParam) MarshalJSON() (data []byte, err error) {
 
 type ZarazUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Zaraz workflow.
 	Workflow Workflow `json:"workflow" api:"required"`

@@ -40,12 +40,6 @@ func (r *AccessCertificateSettingService) Update(ctx context.Context, params Acc
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -87,12 +81,6 @@ func (r *AccessCertificateSettingService) Get(ctx context.Context, query AccessC
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -179,12 +167,8 @@ func (r CertificateSettingsParam) MarshalJSON() (data []byte, err error) {
 type AccessCertificateSettingUpdateParams struct {
 	Settings param.Field[[]CertificateSettingsParam] `json:"settings" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -194,11 +178,7 @@ func (r AccessCertificateSettingUpdateParams) MarshalJSON() (data []byte, err er
 
 type AccessCertificateSettingGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }

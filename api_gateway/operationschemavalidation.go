@@ -21,10 +21,6 @@ import (
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewOperationSchemaValidationService] method instead.
-//
-// Deprecated: Use the
-// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SettingOperationService]
-// service instead
 type OperationSchemaValidationService struct {
 	Options []option.RequestOption
 }
@@ -45,11 +41,6 @@ func NewOperationSchemaValidationService(opts ...option.RequestOption) (r *Opera
 // instead.
 func (r *OperationSchemaValidationService) Update(ctx context.Context, operationID string, params OperationSchemaValidationUpdateParams, opts ...option.RequestOption) (res *OperationSchemaValidationUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -68,14 +59,9 @@ func (r *OperationSchemaValidationService) Update(ctx context.Context, operation
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *OperationSchemaValidationService) Edit(ctx context.Context, params OperationSchemaValidationEditParams, opts ...option.RequestOption) (res *SettingsMultipleRequest, err error) {
+func (r *OperationSchemaValidationService) Edit(ctx context.Context, params OperationSchemaValidationEditParams, opts ...option.RequestOption) (res *OperationSchemaValidationEditResponse, err error) {
 	var env OperationSchemaValidationEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -96,11 +82,6 @@ func (r *OperationSchemaValidationService) Edit(ctx context.Context, params Oper
 // instead.
 func (r *OperationSchemaValidationService) Get(ctx context.Context, operationID string, query OperationSchemaValidationGetParams, opts ...option.RequestOption) (res *OperationSchemaValidationGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -112,81 +93,6 @@ func (r *OperationSchemaValidationService) Get(ctx context.Context, operationID 
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/%s/schema_validation", query.ZoneID, operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
-}
-
-type SettingsMultipleRequest map[string]SettingsMultipleRequestItem
-
-// Operation ID to mitigation action mappings
-type SettingsMultipleRequestItem struct {
-	// When set, this applies a mitigation action to this operation
-	//
-	//   - `log` log request when request does not conform to schema for this operation
-	//   - `block` deny access to the site when request does not conform to schema for
-	//     this operation
-	//   - `none` will skip mitigation for this operation
-	//   - `null` indicates that no operation level mitigation is in place, see Zone
-	//     Level Schema Validation Settings for mitigation action that will be applied
-	MitigationAction SettingsMultipleRequestItemMitigationAction `json:"mitigation_action" api:"nullable"`
-	JSON             settingsMultipleRequestItemJSON             `json:"-"`
-}
-
-// settingsMultipleRequestItemJSON contains the JSON metadata for the struct
-// [SettingsMultipleRequestItem]
-type settingsMultipleRequestItemJSON struct {
-	MitigationAction apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *SettingsMultipleRequestItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingsMultipleRequestItemJSON) RawJSON() string {
-	return r.raw
-}
-
-// When set, this applies a mitigation action to this operation
-//
-//   - `log` log request when request does not conform to schema for this operation
-//   - `block` deny access to the site when request does not conform to schema for
-//     this operation
-//   - `none` will skip mitigation for this operation
-//   - `null` indicates that no operation level mitigation is in place, see Zone
-//     Level Schema Validation Settings for mitigation action that will be applied
-type SettingsMultipleRequestItemMitigationAction string
-
-const (
-	SettingsMultipleRequestItemMitigationActionLog   SettingsMultipleRequestItemMitigationAction = "log"
-	SettingsMultipleRequestItemMitigationActionBlock SettingsMultipleRequestItemMitigationAction = "block"
-	SettingsMultipleRequestItemMitigationActionNone  SettingsMultipleRequestItemMitigationAction = "none"
-)
-
-func (r SettingsMultipleRequestItemMitigationAction) IsKnown() bool {
-	switch r {
-	case SettingsMultipleRequestItemMitigationActionLog, SettingsMultipleRequestItemMitigationActionBlock, SettingsMultipleRequestItemMitigationActionNone:
-		return true
-	}
-	return false
-}
-
-type SettingsMultipleRequestParam map[string]SettingsMultipleRequestItemParam
-
-// Operation ID to mitigation action mappings
-type SettingsMultipleRequestItemParam struct {
-	// When set, this applies a mitigation action to this operation
-	//
-	//   - `log` log request when request does not conform to schema for this operation
-	//   - `block` deny access to the site when request does not conform to schema for
-	//     this operation
-	//   - `none` will skip mitigation for this operation
-	//   - `null` indicates that no operation level mitigation is in place, see Zone
-	//     Level Schema Validation Settings for mitigation action that will be applied
-	MitigationAction param.Field[SettingsMultipleRequestItemMitigationAction] `json:"mitigation_action"`
-}
-
-func (r SettingsMultipleRequestItemParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type OperationSchemaValidationUpdateResponse struct {
@@ -240,6 +146,62 @@ const (
 func (r OperationSchemaValidationUpdateResponseMitigationAction) IsKnown() bool {
 	switch r {
 	case OperationSchemaValidationUpdateResponseMitigationActionLog, OperationSchemaValidationUpdateResponseMitigationActionBlock, OperationSchemaValidationUpdateResponseMitigationActionNone:
+		return true
+	}
+	return false
+}
+
+type OperationSchemaValidationEditResponse map[string]OperationSchemaValidationEditResponseItem
+
+// Operation ID to mitigation action mappings
+type OperationSchemaValidationEditResponseItem struct {
+	// When set, this applies a mitigation action to this operation
+	//
+	//   - `log` log request when request does not conform to schema for this operation
+	//   - `block` deny access to the site when request does not conform to schema for
+	//     this operation
+	//   - `none` will skip mitigation for this operation
+	//   - `null` indicates that no operation level mitigation is in place, see Zone
+	//     Level Schema Validation Settings for mitigation action that will be applied
+	MitigationAction OperationSchemaValidationEditResponseItemMitigationAction `json:"mitigation_action" api:"nullable"`
+	JSON             operationSchemaValidationEditResponseItemJSON             `json:"-"`
+}
+
+// operationSchemaValidationEditResponseItemJSON contains the JSON metadata for the
+// struct [OperationSchemaValidationEditResponseItem]
+type operationSchemaValidationEditResponseItemJSON struct {
+	MitigationAction apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *OperationSchemaValidationEditResponseItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r operationSchemaValidationEditResponseItemJSON) RawJSON() string {
+	return r.raw
+}
+
+// When set, this applies a mitigation action to this operation
+//
+//   - `log` log request when request does not conform to schema for this operation
+//   - `block` deny access to the site when request does not conform to schema for
+//     this operation
+//   - `none` will skip mitigation for this operation
+//   - `null` indicates that no operation level mitigation is in place, see Zone
+//     Level Schema Validation Settings for mitigation action that will be applied
+type OperationSchemaValidationEditResponseItemMitigationAction string
+
+const (
+	OperationSchemaValidationEditResponseItemMitigationActionLog   OperationSchemaValidationEditResponseItemMitigationAction = "log"
+	OperationSchemaValidationEditResponseItemMitigationActionBlock OperationSchemaValidationEditResponseItemMitigationAction = "block"
+	OperationSchemaValidationEditResponseItemMitigationActionNone  OperationSchemaValidationEditResponseItemMitigationAction = "none"
+)
+
+func (r OperationSchemaValidationEditResponseItemMitigationAction) IsKnown() bool {
+	switch r {
+	case OperationSchemaValidationEditResponseItemMitigationActionLog, OperationSchemaValidationEditResponseItemMitigationActionBlock, OperationSchemaValidationEditResponseItemMitigationActionNone:
 		return true
 	}
 	return false
@@ -303,8 +265,6 @@ func (r OperationSchemaValidationGetResponseMitigationAction) IsKnown() bool {
 
 type OperationSchemaValidationUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When set, this applies a mitigation action to this operation
 	//
@@ -347,20 +307,59 @@ func (r OperationSchemaValidationUpdateParamsMitigationAction) IsKnown() bool {
 
 type OperationSchemaValidationEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
-	ZoneID                  param.Field[string]          `path:"zone_id" api:"required"`
-	SettingsMultipleRequest SettingsMultipleRequestParam `json:"settings_multiple_request" api:"required"`
+	ZoneID param.Field[string]                                `path:"zone_id" api:"required"`
+	Body   map[string]OperationSchemaValidationEditParamsBody `json:"body" api:"required"`
 }
 
 func (r OperationSchemaValidationEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.SettingsMultipleRequest)
+	return apijson.MarshalRoot(r.Body)
+}
+
+// Operation ID to mitigation action mappings
+type OperationSchemaValidationEditParamsBody struct {
+	// When set, this applies a mitigation action to this operation
+	//
+	//   - `log` log request when request does not conform to schema for this operation
+	//   - `block` deny access to the site when request does not conform to schema for
+	//     this operation
+	//   - `none` will skip mitigation for this operation
+	//   - `null` indicates that no operation level mitigation is in place, see Zone
+	//     Level Schema Validation Settings for mitigation action that will be applied
+	MitigationAction param.Field[OperationSchemaValidationEditParamsBodyMitigationAction] `json:"mitigation_action"`
+}
+
+func (r OperationSchemaValidationEditParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// When set, this applies a mitigation action to this operation
+//
+//   - `log` log request when request does not conform to schema for this operation
+//   - `block` deny access to the site when request does not conform to schema for
+//     this operation
+//   - `none` will skip mitigation for this operation
+//   - `null` indicates that no operation level mitigation is in place, see Zone
+//     Level Schema Validation Settings for mitigation action that will be applied
+type OperationSchemaValidationEditParamsBodyMitigationAction string
+
+const (
+	OperationSchemaValidationEditParamsBodyMitigationActionLog   OperationSchemaValidationEditParamsBodyMitigationAction = "log"
+	OperationSchemaValidationEditParamsBodyMitigationActionBlock OperationSchemaValidationEditParamsBodyMitigationAction = "block"
+	OperationSchemaValidationEditParamsBodyMitigationActionNone  OperationSchemaValidationEditParamsBodyMitigationAction = "none"
+)
+
+func (r OperationSchemaValidationEditParamsBodyMitigationAction) IsKnown() bool {
+	switch r {
+	case OperationSchemaValidationEditParamsBodyMitigationActionLog, OperationSchemaValidationEditParamsBodyMitigationActionBlock, OperationSchemaValidationEditParamsBodyMitigationActionNone:
+		return true
+	}
+	return false
 }
 
 type OperationSchemaValidationEditResponseEnvelope struct {
-	Errors   Message                 `json:"errors" api:"required"`
-	Messages Message                 `json:"messages" api:"required"`
-	Result   SettingsMultipleRequest `json:"result" api:"required"`
+	Errors   Message                               `json:"errors" api:"required"`
+	Messages Message                               `json:"messages" api:"required"`
+	Result   OperationSchemaValidationEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
 	Success OperationSchemaValidationEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    operationSchemaValidationEditResponseEnvelopeJSON    `json:"-"`
@@ -402,7 +401,5 @@ func (r OperationSchemaValidationEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type OperationSchemaValidationGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

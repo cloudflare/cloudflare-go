@@ -29,10 +29,6 @@ import (
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewUserSchemaService] method instead.
-//
-// Deprecated: Use the
-// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SchemaService] service
-// instead
 type UserSchemaService struct {
 	Options    []option.RequestOption
 	Operations *UserSchemaOperationService
@@ -58,11 +54,6 @@ func NewUserSchemaService(opts ...option.RequestOption) (r *UserSchemaService) {
 func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams, opts ...option.RequestOption) (res *UserSchemaNewResponse, err error) {
 	var env UserSchemaNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -82,15 +73,10 @@ func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams,
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[OldPublicSchema], err error) {
+func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UserSchemaListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -114,7 +100,7 @@ func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParam
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[OldPublicSchema] {
+func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[UserSchemaListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -126,11 +112,6 @@ func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchem
 // instead.
 func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body UserSchemaDeleteParams, opts ...option.RequestOption) (res *UserSchemaDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -150,14 +131,9 @@ func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body Us
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params UserSchemaEditParams, opts ...option.RequestOption) (res *OldPublicSchema, err error) {
+func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params UserSchemaEditParams, opts ...option.RequestOption) (res *UserSchemaEditResponse, err error) {
 	var env UserSchemaEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -181,14 +157,9 @@ func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params Us
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
 // instead.
-func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params UserSchemaGetParams, opts ...option.RequestOption) (res *OldPublicSchema, err error) {
+func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params UserSchemaGetParams, opts ...option.RequestOption) (res *UserSchemaGetResponse, err error) {
 	var env UserSchemaGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -255,23 +226,24 @@ func (r messageItemSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-type OldPublicSchema struct {
+// A schema used in schema validation
+type PublicSchema struct {
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// Kind of schema
-	Kind OldPublicSchemaKind `json:"kind" api:"required"`
-	// Name of the schema
+	// The kind of the schema
+	Kind PublicSchemaKind `json:"kind" api:"required"`
+	// A human-readable name for the schema
 	Name string `json:"name" api:"required"`
-	// UUID.
-	SchemaID string `json:"schema_id" api:"required"`
-	// Source of the schema
-	Source string `json:"source"`
-	// Flag whether schema is enabled for validation.
-	ValidationEnabled bool                `json:"validation_enabled"`
-	JSON              oldPublicSchemaJSON `json:"-"`
+	// A unique identifier of this schema
+	SchemaID string `json:"schema_id" api:"required" format:"uuid"`
+	// The raw schema, e.g., the OpenAPI schema, either as JSON or YAML
+	Source string `json:"source" api:"required"`
+	// An indicator if this schema is enabled
+	ValidationEnabled bool             `json:"validation_enabled"`
+	JSON              publicSchemaJSON `json:"-"`
 }
 
-// oldPublicSchemaJSON contains the JSON metadata for the struct [OldPublicSchema]
-type oldPublicSchemaJSON struct {
+// publicSchemaJSON contains the JSON metadata for the struct [PublicSchema]
+type publicSchemaJSON struct {
 	CreatedAt         apijson.Field
 	Kind              apijson.Field
 	Name              apijson.Field
@@ -282,31 +254,31 @@ type oldPublicSchemaJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *OldPublicSchema) UnmarshalJSON(data []byte) (err error) {
+func (r *PublicSchema) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r oldPublicSchemaJSON) RawJSON() string {
+func (r publicSchemaJSON) RawJSON() string {
 	return r.raw
 }
 
-// Kind of schema
-type OldPublicSchemaKind string
+// The kind of the schema
+type PublicSchemaKind string
 
 const (
-	OldPublicSchemaKindOpenAPIV3 OldPublicSchemaKind = "openapi_v3"
+	PublicSchemaKindOpenAPIV3 PublicSchemaKind = "openapi_v3"
 )
 
-func (r OldPublicSchemaKind) IsKnown() bool {
+func (r PublicSchemaKind) IsKnown() bool {
 	switch r {
-	case OldPublicSchemaKindOpenAPIV3:
+	case PublicSchemaKindOpenAPIV3:
 		return true
 	}
 	return false
 }
 
 type UserSchemaNewResponse struct {
-	Schema        OldPublicSchema                    `json:"schema" api:"required"`
+	Schema        UserSchemaNewResponseSchema        `json:"schema" api:"required"`
 	UploadDetails UserSchemaNewResponseUploadDetails `json:"upload_details"`
 	JSON          userSchemaNewResponseJSON          `json:"-"`
 }
@@ -326,6 +298,57 @@ func (r *UserSchemaNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r userSchemaNewResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type UserSchemaNewResponseSchema struct {
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Kind of schema
+	Kind UserSchemaNewResponseSchemaKind `json:"kind" api:"required"`
+	// Name of the schema
+	Name string `json:"name" api:"required"`
+	// UUID.
+	SchemaID string `json:"schema_id" api:"required"`
+	// Source of the schema
+	Source string `json:"source"`
+	// Flag whether schema is enabled for validation.
+	ValidationEnabled bool                            `json:"validation_enabled"`
+	JSON              userSchemaNewResponseSchemaJSON `json:"-"`
+}
+
+// userSchemaNewResponseSchemaJSON contains the JSON metadata for the struct
+// [UserSchemaNewResponseSchema]
+type userSchemaNewResponseSchemaJSON struct {
+	CreatedAt         apijson.Field
+	Kind              apijson.Field
+	Name              apijson.Field
+	SchemaID          apijson.Field
+	Source            apijson.Field
+	ValidationEnabled apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *UserSchemaNewResponseSchema) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userSchemaNewResponseSchemaJSON) RawJSON() string {
+	return r.raw
+}
+
+// Kind of schema
+type UserSchemaNewResponseSchemaKind string
+
+const (
+	UserSchemaNewResponseSchemaKindOpenAPIV3 UserSchemaNewResponseSchemaKind = "openapi_v3"
+)
+
+func (r UserSchemaNewResponseSchemaKind) IsKnown() bool {
+	switch r {
+	case UserSchemaNewResponseSchemaKindOpenAPIV3:
+		return true
+	}
+	return false
 }
 
 type UserSchemaNewResponseUploadDetails struct {
@@ -381,6 +404,57 @@ func (r userSchemaNewResponseUploadDetailsWarningJSON) RawJSON() string {
 	return r.raw
 }
 
+type UserSchemaListResponse struct {
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Kind of schema
+	Kind UserSchemaListResponseKind `json:"kind" api:"required"`
+	// Name of the schema
+	Name string `json:"name" api:"required"`
+	// UUID.
+	SchemaID string `json:"schema_id" api:"required"`
+	// Source of the schema
+	Source string `json:"source"`
+	// Flag whether schema is enabled for validation.
+	ValidationEnabled bool                       `json:"validation_enabled"`
+	JSON              userSchemaListResponseJSON `json:"-"`
+}
+
+// userSchemaListResponseJSON contains the JSON metadata for the struct
+// [UserSchemaListResponse]
+type userSchemaListResponseJSON struct {
+	CreatedAt         apijson.Field
+	Kind              apijson.Field
+	Name              apijson.Field
+	SchemaID          apijson.Field
+	Source            apijson.Field
+	ValidationEnabled apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *UserSchemaListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userSchemaListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Kind of schema
+type UserSchemaListResponseKind string
+
+const (
+	UserSchemaListResponseKindOpenAPIV3 UserSchemaListResponseKind = "openapi_v3"
+)
+
+func (r UserSchemaListResponseKind) IsKnown() bool {
+	switch r {
+	case UserSchemaListResponseKindOpenAPIV3:
+		return true
+	}
+	return false
+}
+
 type UserSchemaDeleteResponse struct {
 	Errors   Message `json:"errors" api:"required"`
 	Messages Message `json:"messages" api:"required"`
@@ -422,10 +496,110 @@ func (r UserSchemaDeleteResponseSuccess) IsKnown() bool {
 	return false
 }
 
+type UserSchemaEditResponse struct {
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Kind of schema
+	Kind UserSchemaEditResponseKind `json:"kind" api:"required"`
+	// Name of the schema
+	Name string `json:"name" api:"required"`
+	// UUID.
+	SchemaID string `json:"schema_id" api:"required"`
+	// Source of the schema
+	Source string `json:"source"`
+	// Flag whether schema is enabled for validation.
+	ValidationEnabled bool                       `json:"validation_enabled"`
+	JSON              userSchemaEditResponseJSON `json:"-"`
+}
+
+// userSchemaEditResponseJSON contains the JSON metadata for the struct
+// [UserSchemaEditResponse]
+type userSchemaEditResponseJSON struct {
+	CreatedAt         apijson.Field
+	Kind              apijson.Field
+	Name              apijson.Field
+	SchemaID          apijson.Field
+	Source            apijson.Field
+	ValidationEnabled apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *UserSchemaEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userSchemaEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Kind of schema
+type UserSchemaEditResponseKind string
+
+const (
+	UserSchemaEditResponseKindOpenAPIV3 UserSchemaEditResponseKind = "openapi_v3"
+)
+
+func (r UserSchemaEditResponseKind) IsKnown() bool {
+	switch r {
+	case UserSchemaEditResponseKindOpenAPIV3:
+		return true
+	}
+	return false
+}
+
+type UserSchemaGetResponse struct {
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Kind of schema
+	Kind UserSchemaGetResponseKind `json:"kind" api:"required"`
+	// Name of the schema
+	Name string `json:"name" api:"required"`
+	// UUID.
+	SchemaID string `json:"schema_id" api:"required"`
+	// Source of the schema
+	Source string `json:"source"`
+	// Flag whether schema is enabled for validation.
+	ValidationEnabled bool                      `json:"validation_enabled"`
+	JSON              userSchemaGetResponseJSON `json:"-"`
+}
+
+// userSchemaGetResponseJSON contains the JSON metadata for the struct
+// [UserSchemaGetResponse]
+type userSchemaGetResponseJSON struct {
+	CreatedAt         apijson.Field
+	Kind              apijson.Field
+	Name              apijson.Field
+	SchemaID          apijson.Field
+	Source            apijson.Field
+	ValidationEnabled apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *UserSchemaGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userSchemaGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Kind of schema
+type UserSchemaGetResponseKind string
+
+const (
+	UserSchemaGetResponseKindOpenAPIV3 UserSchemaGetResponseKind = "openapi_v3"
+)
+
+func (r UserSchemaGetResponseKind) IsKnown() bool {
+	switch r {
+	case UserSchemaGetResponseKindOpenAPIV3:
+		return true
+	}
+	return false
+}
+
 type UserSchemaNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Schema file bytes
 	File param.Field[io.Reader] `json:"file" api:"required" format:"binary"`
@@ -528,8 +702,6 @@ func (r UserSchemaNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type UserSchemaListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`
@@ -551,15 +723,11 @@ func (r UserSchemaListParams) URLQuery() (v url.Values) {
 
 type UserSchemaDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type UserSchemaEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Flag whether schema is enabled for validation.
 	ValidationEnabled param.Field[UserSchemaEditParamsValidationEnabled] `json:"validation_enabled"`
@@ -585,9 +753,9 @@ func (r UserSchemaEditParamsValidationEnabled) IsKnown() bool {
 }
 
 type UserSchemaEditResponseEnvelope struct {
-	Errors   Message         `json:"errors" api:"required"`
-	Messages Message         `json:"messages" api:"required"`
-	Result   OldPublicSchema `json:"result" api:"required"`
+	Errors   Message                `json:"errors" api:"required"`
+	Messages Message                `json:"messages" api:"required"`
+	Result   UserSchemaEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
 	Success UserSchemaEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    userSchemaEditResponseEnvelopeJSON    `json:"-"`
@@ -629,8 +797,6 @@ func (r UserSchemaEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type UserSchemaGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`
@@ -645,9 +811,9 @@ func (r UserSchemaGetParams) URLQuery() (v url.Values) {
 }
 
 type UserSchemaGetResponseEnvelope struct {
-	Errors   Message         `json:"errors" api:"required"`
-	Messages Message         `json:"messages" api:"required"`
-	Result   OldPublicSchema `json:"result" api:"required"`
+	Errors   Message               `json:"errors" api:"required"`
+	Messages Message               `json:"messages" api:"required"`
+	Result   UserSchemaGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
 	Success UserSchemaGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    userSchemaGetResponseEnvelopeJSON    `json:"-"`

@@ -70,11 +70,6 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *ScriptUpdateResponse, err error) {
 	var env ScriptUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -97,11 +92,6 @@ func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -128,11 +118,6 @@ func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListPar
 func (r *ScriptService) Delete(ctx context.Context, scriptName string, params ScriptDeleteParams, opts ...option.RequestOption) (res *ScriptDeleteResponse, err error) {
 	var env ScriptDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -155,11 +140,6 @@ func (r *ScriptService) Delete(ctx context.Context, scriptName string, params Sc
 func (r *ScriptService) Get(ctx context.Context, scriptName string, query ScriptGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/javascript")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -171,28 +151,6 @@ func (r *ScriptService) Get(ctx context.Context, scriptName string, query Script
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
-}
-
-// Search for Workers in an account.
-func (r *ScriptService) Search(ctx context.Context, params ScriptSearchParams, opts ...option.RequestOption) (res *[]ScriptSearchResponse, err error) {
-	var env ScriptSearchResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/workers/scripts-search", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
 }
 
 type Script struct {
@@ -1791,50 +1749,8 @@ func (r ScriptListResponseUsageModel) IsKnown() bool {
 
 type ScriptDeleteResponse = interface{}
 
-type ScriptSearchResponse struct {
-	// Identifier.
-	ID string `json:"id" api:"required"`
-	// When the script was created.
-	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// When the script was last modified.
-	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
-	// Name of the script, used in URLs and route configuration.
-	ScriptName string `json:"script_name" api:"required"`
-	// Whether the environment is the default environment.
-	EnvironmentIsDefault bool `json:"environment_is_default"`
-	// Name of the environment.
-	EnvironmentName string `json:"environment_name"`
-	// Name of the service.
-	ServiceName string                   `json:"service_name"`
-	JSON        scriptSearchResponseJSON `json:"-"`
-}
-
-// scriptSearchResponseJSON contains the JSON metadata for the struct
-// [ScriptSearchResponse]
-type scriptSearchResponseJSON struct {
-	ID                   apijson.Field
-	CreatedOn            apijson.Field
-	ModifiedOn           apijson.Field
-	ScriptName           apijson.Field
-	EnvironmentIsDefault apijson.Field
-	EnvironmentName      apijson.Field
-	ServiceName          apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *ScriptSearchResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSearchResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScriptUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata" api:"required"`
@@ -3926,8 +3842,6 @@ func (r ScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter scripts by tags. Format: comma-separated list of tag:allowed pairs where
 	// allowed is 'yes' or 'no'.
@@ -3944,8 +3858,6 @@ func (r ScriptListParams) URLQuery() (v url.Values) {
 
 type ScriptDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If set to true, delete will not be stopped by associated service binding,
 	// durable object, or other binding. Any of these associated bindings/durable
@@ -4102,224 +4014,5 @@ func (r ScriptDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-}
-
-type ScriptSearchParams struct {
-	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Worker ID (also called tag) to search for. Only exact matches are returned.
-	ID param.Field[string] `query:"id"`
-	// Worker name to search for. Both exact and partial matches are returned.
-	Name param.Field[string] `query:"name"`
-	// Property to sort results by. Results are sorted in ascending order.
-	OrderBy param.Field[ScriptSearchParamsOrderBy] `query:"order_by"`
-	// Current page.
-	Page param.Field[int64] `query:"page"`
-	// Items per page.
-	PerPage param.Field[int64] `query:"per_page"`
-}
-
-// URLQuery serializes [ScriptSearchParams]'s query parameters as `url.Values`.
-func (r ScriptSearchParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-// Property to sort results by. Results are sorted in ascending order.
-type ScriptSearchParamsOrderBy string
-
-const (
-	ScriptSearchParamsOrderByCreatedOn  ScriptSearchParamsOrderBy = "created_on"
-	ScriptSearchParamsOrderByModifiedOn ScriptSearchParamsOrderBy = "modified_on"
-	ScriptSearchParamsOrderByName       ScriptSearchParamsOrderBy = "name"
-)
-
-func (r ScriptSearchParamsOrderBy) IsKnown() bool {
-	switch r {
-	case ScriptSearchParamsOrderByCreatedOn, ScriptSearchParamsOrderByModifiedOn, ScriptSearchParamsOrderByName:
-		return true
-	}
-	return false
-}
-
-type ScriptSearchResponseEnvelope struct {
-	Errors   []ScriptSearchResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []ScriptSearchResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   []ScriptSearchResponse                 `json:"result" api:"required"`
-	// Whether the API call was successful.
-	Success    ScriptSearchResponseEnvelopeSuccess    `json:"success" api:"required"`
-	ResultInfo ScriptSearchResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       scriptSearchResponseEnvelopeJSON       `json:"-"`
-}
-
-// scriptSearchResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ScriptSearchResponseEnvelope]
-type scriptSearchResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptSearchResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSearchResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSearchResponseEnvelopeErrors struct {
-	Code             int64                                    `json:"code" api:"required"`
-	Message          string                                   `json:"message" api:"required"`
-	DocumentationURL string                                   `json:"documentation_url"`
-	Source           ScriptSearchResponseEnvelopeErrorsSource `json:"source"`
-	JSON             scriptSearchResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// scriptSearchResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ScriptSearchResponseEnvelopeErrors]
-type scriptSearchResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptSearchResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSearchResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSearchResponseEnvelopeErrorsSource struct {
-	Pointer string                                       `json:"pointer"`
-	JSON    scriptSearchResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// scriptSearchResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [ScriptSearchResponseEnvelopeErrorsSource]
-type scriptSearchResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptSearchResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSearchResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSearchResponseEnvelopeMessages struct {
-	Code             int64                                      `json:"code" api:"required"`
-	Message          string                                     `json:"message" api:"required"`
-	DocumentationURL string                                     `json:"documentation_url"`
-	Source           ScriptSearchResponseEnvelopeMessagesSource `json:"source"`
-	JSON             scriptSearchResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// scriptSearchResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ScriptSearchResponseEnvelopeMessages]
-type scriptSearchResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptSearchResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSearchResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptSearchResponseEnvelopeMessagesSource struct {
-	Pointer string                                         `json:"pointer"`
-	JSON    scriptSearchResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// scriptSearchResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
-// the struct [ScriptSearchResponseEnvelopeMessagesSource]
-type scriptSearchResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptSearchResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSearchResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type ScriptSearchResponseEnvelopeSuccess bool
-
-const (
-	ScriptSearchResponseEnvelopeSuccessTrue ScriptSearchResponseEnvelopeSuccess = true
-)
-
-func (r ScriptSearchResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ScriptSearchResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ScriptSearchResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64 `json:"total_count"`
-	// The number of total pages in the entire result set.
-	TotalPages float64                                    `json:"total_pages"`
-	JSON       scriptSearchResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// scriptSearchResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [ScriptSearchResponseEnvelopeResultInfo]
-type scriptSearchResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptSearchResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptSearchResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

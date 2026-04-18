@@ -48,11 +48,6 @@ func NewResourceSharingService(opts ...option.RequestOption) (r *ResourceSharing
 func (r *ResourceSharingService) New(ctx context.Context, params ResourceSharingNewParams, opts ...option.RequestOption) (res *ResourceSharingNewResponse, err error) {
 	var env ResourceSharingNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,11 +66,6 @@ func (r *ResourceSharingService) New(ctx context.Context, params ResourceSharing
 func (r *ResourceSharingService) Update(ctx context.Context, shareID string, params ResourceSharingUpdateParams, opts ...option.RequestOption) (res *ResourceSharingUpdateResponse, err error) {
 	var env ResourceSharingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -98,11 +88,6 @@ func (r *ResourceSharingService) List(ctx context.Context, params ResourceSharin
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -130,11 +115,6 @@ func (r *ResourceSharingService) ListAutoPaging(ctx context.Context, params Reso
 func (r *ResourceSharingService) Delete(ctx context.Context, shareID string, body ResourceSharingDeleteParams, opts ...option.RequestOption) (res *ResourceSharingDeleteResponse, err error) {
 	var env ResourceSharingDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -156,11 +136,6 @@ func (r *ResourceSharingService) Delete(ctx context.Context, shareID string, bod
 func (r *ResourceSharingService) Get(ctx context.Context, shareID string, params ResourceSharingGetParams, opts ...option.RequestOption) (res *ResourceSharingGetResponse, err error) {
 	var env ResourceSharingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -1150,8 +1125,6 @@ func (r ResourceSharingGetResponseResourcesStatus) IsKnown() bool {
 
 type ResourceSharingNewParams struct {
 	// Account identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the share.
 	Name       param.Field[string]                              `json:"name" api:"required"`
@@ -1237,8 +1210,6 @@ func (r resourceSharingNewResponseEnvelopeJSON) RawJSON() string {
 
 type ResourceSharingUpdateParams struct {
 	// Account identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the share.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -1276,8 +1247,6 @@ func (r resourceSharingUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type ResourceSharingListParams struct {
 	// Account identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to sort objects.
 	Direction param.Field[ResourceSharingListParamsDirection] `query:"direction"`
@@ -1412,8 +1381,6 @@ func (r ResourceSharingListParamsTargetType) IsKnown() bool {
 
 type ResourceSharingDeleteParams struct {
 	// Account identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1445,8 +1412,6 @@ func (r resourceSharingDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type ResourceSharingGetParams struct {
 	// Account identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Include recipient counts in the response.
 	IncludeRecipientCounts param.Field[bool] `query:"include_recipient_counts"`

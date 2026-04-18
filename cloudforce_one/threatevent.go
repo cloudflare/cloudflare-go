@@ -67,11 +67,6 @@ func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService)
 // default dataset named `Cloudforce One Threat Events`.
 func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParams, opts ...option.RequestOption) (res *ThreatEventNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.PathAccountID, precfg.AccountID)
 	if params.PathAccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -88,11 +83,6 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 // endpoint). Also, must provide query parameters.
 func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListParams, opts ...option.RequestOption) (res *[]ThreatEventListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -108,11 +98,6 @@ func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListPar
 // endpoint.
 func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulkNewParams, opts ...option.RequestOption) (res *ThreatEventBulkNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -125,11 +110,6 @@ func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulk
 // Updates an event
 func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params ThreatEventEditParams, opts ...option.RequestOption) (res *ThreatEventEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -149,11 +129,6 @@ func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params Th
 // Deprecated: deprecated
 func (r *ThreatEventService) Get(ctx context.Context, eventID string, query ThreatEventGetParams, opts ...option.RequestOption) (res *ThreatEventGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -556,8 +531,6 @@ func (r threatEventGetResponseJSON) RawJSON() string {
 
 type ThreatEventNewParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	PathAccountID   param.Field[string]                  `path:"account_id" api:"required"`
 	Category        param.Field[string]                  `json:"category" api:"required"`
 	Date            param.Field[time.Time]               `json:"date" api:"required" format:"date-time"`
@@ -606,8 +579,6 @@ func (r ThreatEventNewParamsIndicator) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventListParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Cursor for pagination. When provided, filters are embedded in the cursor so you
 	// only need to pass cursor and pageSize. Returned in the previous response's
@@ -734,8 +705,6 @@ type ThreatEventListParamsSearchValueArrayItemUnion interface {
 
 type ThreatEventBulkNewParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                         `path:"account_id" api:"required"`
 	Data      param.Field[[]ThreatEventBulkNewParamsData] `json:"data" api:"required"`
 	DatasetID param.Field[string]                         `json:"datasetId" api:"required"`
@@ -796,8 +765,6 @@ func (r ThreatEventBulkNewParamsDataIndicator) MarshalJSON() (data []byte, err e
 
 type ThreatEventEditParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Dataset ID containing the event to update.
 	DatasetID       param.Field[string]                   `json:"datasetId" api:"required"`
@@ -832,7 +799,5 @@ func (r ThreatEventEditParamsRaw) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventGetParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

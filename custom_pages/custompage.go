@@ -25,7 +25,6 @@ import (
 // the [NewCustomPageService] method instead.
 type CustomPageService struct {
 	Options []option.RequestOption
-	Assets  *AssetService
 }
 
 // NewCustomPageService generates a new service that applies the given options to
@@ -34,7 +33,6 @@ type CustomPageService struct {
 func NewCustomPageService(opts ...option.RequestOption) (r *CustomPageService) {
 	r = &CustomPageService{}
 	r.Options = opts
-	r.Assets = NewAssetService(opts...)
 	return
 }
 
@@ -42,12 +40,6 @@ func NewCustomPageService(opts ...option.RequestOption) (r *CustomPageService) {
 func (r *CustomPageService) Update(ctx context.Context, identifier CustomPageUpdateParamsIdentifier, params CustomPageUpdateParams, opts ...option.RequestOption) (res *CustomPageUpdateResponse, err error) {
 	var env CustomPageUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -80,12 +72,6 @@ func (r *CustomPageService) List(ctx context.Context, query CustomPageListParams
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -126,12 +112,6 @@ func (r *CustomPageService) ListAutoPaging(ctx context.Context, query CustomPage
 func (r *CustomPageService) Get(ctx context.Context, identifier CustomPageGetParamsIdentifier, query CustomPageGetParams, opts ...option.RequestOption) (res *CustomPageGetResponse, err error) {
 	var env CustomPageGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -324,12 +304,8 @@ type CustomPageUpdateParams struct {
 	// The URL associated with the custom page.
 	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -518,23 +494,15 @@ func (r CustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomPageListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type CustomPageGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 

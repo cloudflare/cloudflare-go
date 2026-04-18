@@ -38,11 +38,6 @@ func NewThreatEventRelateService(opts ...option.RequestOption) (r *ThreatEventRe
 func (r *ThreatEventRelateService) Delete(ctx context.Context, eventID string, body ThreatEventRelateDeleteParams, opts ...option.RequestOption) (res *ThreatEventRelateDeleteResponse, err error) {
 	var env ThreatEventRelateDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -83,8 +78,6 @@ func (r threatEventRelateDeleteResponseJSON) RawJSON() string {
 
 type ThreatEventRelateDeleteParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

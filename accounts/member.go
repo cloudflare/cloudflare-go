@@ -42,11 +42,6 @@ func NewMemberService(opts ...option.RequestOption) (r *MemberService) {
 func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ...option.RequestOption) (res *shared.Member, err error) {
 	var env MemberNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,11 +59,6 @@ func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ..
 func (r *MemberService) Update(ctx context.Context, memberID string, params MemberUpdateParams, opts ...option.RequestOption) (res *shared.Member, err error) {
 	var env MemberUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -91,11 +81,6 @@ func (r *MemberService) List(ctx context.Context, params MemberListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -122,11 +107,6 @@ func (r *MemberService) ListAutoPaging(ctx context.Context, params MemberListPar
 func (r *MemberService) Delete(ctx context.Context, memberID string, body MemberDeleteParams, opts ...option.RequestOption) (res *MemberDeleteResponse, err error) {
 	var env MemberDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -148,11 +128,6 @@ func (r *MemberService) Delete(ctx context.Context, memberID string, body Member
 func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGetParams, opts ...option.RequestOption) (res *shared.Member, err error) {
 	var env MemberGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -210,8 +185,6 @@ func (r memberDeleteResponseJSON) RawJSON() string {
 
 type MemberNewParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]      `path:"account_id" api:"required"`
 	Body      MemberNewParamsBodyUnion `json:"body" api:"required"`
 }
@@ -522,8 +495,6 @@ func (r MemberNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MemberUpdateParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]         `path:"account_id" api:"required"`
 	Body      MemberUpdateParamsBodyUnion `json:"body" api:"required"`
 }
@@ -811,8 +782,6 @@ func (r MemberUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type MemberListParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to order results.
 	Direction param.Field[MemberListParamsDirection] `query:"direction"`
@@ -887,8 +856,6 @@ func (r MemberListParamsStatus) IsKnown() bool {
 
 type MemberDeleteParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1033,8 +1000,6 @@ func (r MemberDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type MemberGetParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

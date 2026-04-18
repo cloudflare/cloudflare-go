@@ -46,11 +46,6 @@ func NewDNSFirewallService(opts ...option.RequestOption) (r *DNSFirewallService)
 func (r *DNSFirewallService) New(ctx context.Context, params DNSFirewallNewParams, opts ...option.RequestOption) (res *DNSFirewallNewResponse, err error) {
 	var env DNSFirewallNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -69,11 +64,6 @@ func (r *DNSFirewallService) List(ctx context.Context, params DNSFirewallListPar
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -100,11 +90,6 @@ func (r *DNSFirewallService) ListAutoPaging(ctx context.Context, params DNSFirew
 func (r *DNSFirewallService) Delete(ctx context.Context, dnsFirewallID string, body DNSFirewallDeleteParams, opts ...option.RequestOption) (res *DNSFirewallDeleteResponse, err error) {
 	var env DNSFirewallDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -126,11 +111,6 @@ func (r *DNSFirewallService) Delete(ctx context.Context, dnsFirewallID string, b
 func (r *DNSFirewallService) Edit(ctx context.Context, dnsFirewallID string, params DNSFirewallEditParams, opts ...option.RequestOption) (res *DNSFirewallEditResponse, err error) {
 	var env DNSFirewallEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -152,11 +132,6 @@ func (r *DNSFirewallService) Edit(ctx context.Context, dnsFirewallID string, par
 func (r *DNSFirewallService) Get(ctx context.Context, dnsFirewallID string, query DNSFirewallGetParams, opts ...option.RequestOption) (res *DNSFirewallGetResponse, err error) {
 	var env DNSFirewallGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -568,8 +543,6 @@ func (r dnsFirewallGetResponseJSON) RawJSON() string {
 
 type DNSFirewallNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// DNS Firewall cluster name
 	Name        param.Field[string]             `json:"name" api:"required"`
@@ -762,8 +735,6 @@ func (r DNSFirewallNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSFirewallListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of paginated results
 	Page param.Field[float64] `query:"page"`
@@ -781,8 +752,6 @@ func (r DNSFirewallListParams) URLQuery() (v url.Values) {
 
 type DNSFirewallDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -927,8 +896,6 @@ func (r DNSFirewallDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSFirewallEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Attack mitigation settings
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
@@ -1121,8 +1088,6 @@ func (r DNSFirewallEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type DNSFirewallGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

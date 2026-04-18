@@ -297,25 +297,3 @@ func WithUserServiceKey(value string) RequestOption {
 		return r.Apply(WithHeader("X-Auth-User-Service-Key", r.UserServiceKey))
 	})
 }
-
-// WithAccountID returns a RequestOption that sets the client setting "account_id".
-func WithAccountID(value string) RequestOption {
-	return requestconfig.PreRequestOptionFunc(func(r *requestconfig.RequestConfig) error {
-		if value == "" {
-			return fmt.Errorf("default param cannot be empty string")
-		}
-		r.AccountID = &value
-		return nil
-	})
-}
-
-// WithZoneID returns a RequestOption that sets the client setting "zone_id".
-func WithZoneID(value string) RequestOption {
-	return requestconfig.PreRequestOptionFunc(func(r *requestconfig.RequestConfig) error {
-		if value == "" {
-			return fmt.Errorf("default param cannot be empty string")
-		}
-		r.ZoneID = &value
-		return nil
-	})
-}

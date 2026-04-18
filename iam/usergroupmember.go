@@ -41,11 +41,6 @@ func NewUserGroupMemberService(opts ...option.RequestOption) (r *UserGroupMember
 func (r *UserGroupMemberService) New(ctx context.Context, userGroupID string, params UserGroupMemberNewParams, opts ...option.RequestOption) (res *UserGroupMemberNewResponse, err error) {
 	var env UserGroupMemberNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -68,11 +63,6 @@ func (r *UserGroupMemberService) Update(ctx context.Context, userGroupID string,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -104,11 +94,6 @@ func (r *UserGroupMemberService) List(ctx context.Context, userGroupID string, p
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -139,11 +124,6 @@ func (r *UserGroupMemberService) ListAutoPaging(ctx context.Context, userGroupID
 func (r *UserGroupMemberService) Delete(ctx context.Context, userGroupID string, memberID string, body UserGroupMemberDeleteParams, opts ...option.RequestOption) (res *UserGroupMemberDeleteResponse, err error) {
 	var env UserGroupMemberDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -347,8 +327,6 @@ func (r UserGroupMemberDeleteResponseStatus) IsKnown() bool {
 
 type UserGroupMemberNewParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]            `path:"account_id" api:"required"`
 	Body      []UserGroupMemberNewParamsBody `json:"body" api:"required"`
 }
@@ -508,8 +486,6 @@ func (r UserGroupMemberNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type UserGroupMemberUpdateParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Set/Replace members to a user group.
 	Body []UserGroupMemberUpdateParamsBody `json:"body" api:"required"`
@@ -530,8 +506,6 @@ func (r UserGroupMemberUpdateParamsBody) MarshalJSON() (data []byte, err error) 
 
 type UserGroupMemberListParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -550,8 +524,6 @@ func (r UserGroupMemberListParams) URLQuery() (v url.Values) {
 
 type UserGroupMemberDeleteParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

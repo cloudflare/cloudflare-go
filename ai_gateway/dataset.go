@@ -45,11 +45,6 @@ func NewDatasetService(opts ...option.RequestOption) (r *DatasetService) {
 func (r *DatasetService) New(ctx context.Context, gatewayID string, params DatasetNewParams, opts ...option.RequestOption) (res *DatasetNewResponse, err error) {
 	var env DatasetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,11 +66,6 @@ func (r *DatasetService) New(ctx context.Context, gatewayID string, params Datas
 func (r *DatasetService) Update(ctx context.Context, gatewayID string, id string, params DatasetUpdateParams, opts ...option.RequestOption) (res *DatasetUpdateResponse, err error) {
 	var env DatasetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -102,11 +92,6 @@ func (r *DatasetService) List(ctx context.Context, gatewayID string, params Data
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -137,11 +122,6 @@ func (r *DatasetService) ListAutoPaging(ctx context.Context, gatewayID string, p
 func (r *DatasetService) Delete(ctx context.Context, gatewayID string, id string, body DatasetDeleteParams, opts ...option.RequestOption) (res *DatasetDeleteResponse, err error) {
 	var env DatasetDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -167,11 +147,6 @@ func (r *DatasetService) Delete(ctx context.Context, gatewayID string, id string
 func (r *DatasetService) Get(ctx context.Context, gatewayID string, id string, query DatasetGetParams, opts ...option.RequestOption) (res *DatasetGetResponse, err error) {
 	var env DatasetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -849,7 +824,6 @@ func init() {
 }
 
 type DatasetNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                   `path:"account_id" api:"required"`
 	Enable    param.Field[bool]                     `json:"enable" api:"required"`
 	Filters   param.Field[[]DatasetNewParamsFilter] `json:"filters" api:"required"`
@@ -942,7 +916,6 @@ func (r datasetNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DatasetUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                      `path:"account_id" api:"required"`
 	Enable    param.Field[bool]                        `json:"enable" api:"required"`
 	Filters   param.Field[[]DatasetUpdateParamsFilter] `json:"filters" api:"required"`
@@ -1035,7 +1008,6 @@ func (r datasetUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DatasetListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Enable    param.Field[bool]   `query:"enable"`
 	Name      param.Field[string] `query:"name"`
@@ -1054,7 +1026,6 @@ func (r DatasetListParams) URLQuery() (v url.Values) {
 }
 
 type DatasetDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1082,7 +1053,6 @@ func (r datasetDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type DatasetGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

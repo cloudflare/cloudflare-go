@@ -209,7 +209,6 @@ func TestPoolDelete(t *testing.T) {
 }
 
 func TestPoolBulkEditWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: Investigate 422 Unprocessable Entity in prism test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

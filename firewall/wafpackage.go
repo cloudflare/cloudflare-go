@@ -54,11 +54,6 @@ func (r *WAFPackageService) List(ctx context.Context, params WAFPackageListParam
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -94,11 +89,6 @@ func (r *WAFPackageService) ListAutoPaging(ctx context.Context, params WAFPackag
 // Deprecated: deprecated
 func (r *WAFPackageService) Get(ctx context.Context, packageID string, query WAFPackageGetParams, opts ...option.RequestOption) (res *WAFPackageGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -266,8 +256,6 @@ func (r WAFPackageGetResponseSuccess) IsKnown() bool {
 
 type WAFPackageListParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The direction used to sort returned packages.
 	Direction param.Field[WAFPackageListParamsDirection] `query:"direction"`
@@ -342,7 +330,5 @@ func (r WAFPackageListParamsOrder) IsKnown() bool {
 
 type WAFPackageGetParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

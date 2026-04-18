@@ -43,11 +43,6 @@ func NewSettingImpersonationRegistryService(opts ...option.RequestOption) (r *Se
 func (r *SettingImpersonationRegistryService) New(ctx context.Context, params SettingImpersonationRegistryNewParams, opts ...option.RequestOption) (res *SettingImpersonationRegistryNewResponse, err error) {
 	var env SettingImpersonationRegistryNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *SettingImpersonationRegistryService) List(ctx context.Context, params S
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -97,11 +87,6 @@ func (r *SettingImpersonationRegistryService) ListAutoPaging(ctx context.Context
 func (r *SettingImpersonationRegistryService) Delete(ctx context.Context, displayNameID int64, body SettingImpersonationRegistryDeleteParams, opts ...option.RequestOption) (res *SettingImpersonationRegistryDeleteResponse, err error) {
 	var env SettingImpersonationRegistryDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -119,11 +104,6 @@ func (r *SettingImpersonationRegistryService) Delete(ctx context.Context, displa
 func (r *SettingImpersonationRegistryService) Edit(ctx context.Context, displayNameID int64, params SettingImpersonationRegistryEditParams, opts ...option.RequestOption) (res *SettingImpersonationRegistryEditResponse, err error) {
 	var env SettingImpersonationRegistryEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -141,11 +121,6 @@ func (r *SettingImpersonationRegistryService) Edit(ctx context.Context, displayN
 func (r *SettingImpersonationRegistryService) Get(ctx context.Context, displayNameID int64, query SettingImpersonationRegistryGetParams, opts ...option.RequestOption) (res *SettingImpersonationRegistryGetResponse, err error) {
 	var env SettingImpersonationRegistryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -350,8 +325,6 @@ func (r settingImpersonationRegistryGetResponseJSON) RawJSON() string {
 
 type SettingImpersonationRegistryNewParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID    param.Field[string] `path:"account_id" api:"required"`
 	Email        param.Field[string] `json:"email" api:"required"`
 	IsEmailRegex param.Field[bool]   `json:"is_email_regex" api:"required"`
@@ -391,8 +364,6 @@ func (r settingImpersonationRegistryNewResponseEnvelopeJSON) RawJSON() string {
 
 type SettingImpersonationRegistryListParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The sorting direction.
 	Direction param.Field[SettingImpersonationRegistryListParamsDirection] `query:"direction"`
@@ -470,8 +441,6 @@ func (r SettingImpersonationRegistryListParamsProvenance) IsKnown() bool {
 
 type SettingImpersonationRegistryDeleteParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -504,8 +473,6 @@ func (r settingImpersonationRegistryDeleteResponseEnvelopeJSON) RawJSON() string
 
 type SettingImpersonationRegistryEditParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID    param.Field[string] `path:"account_id" api:"required"`
 	Email        param.Field[string] `json:"email"`
 	IsEmailRegex param.Field[bool]   `json:"is_email_regex"`
@@ -545,8 +512,6 @@ func (r settingImpersonationRegistryEditResponseEnvelopeJSON) RawJSON() string {
 
 type SettingImpersonationRegistryGetParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

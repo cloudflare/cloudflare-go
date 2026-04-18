@@ -44,11 +44,6 @@ func NewListService(opts ...option.RequestOption) (r *ListService) {
 func (r *ListService) New(ctx context.Context, params ListNewParams, opts ...option.RequestOption) (res *ListNewResponse, err error) {
 	var env ListNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *ListService) New(ctx context.Context, params ListNewParams, opts ...opt
 func (r *ListService) Update(ctx context.Context, listID string, params ListUpdateParams, opts ...option.RequestOption) (res *ListUpdateResponse, err error) {
 	var env ListUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -93,11 +83,6 @@ func (r *ListService) List(ctx context.Context, query ListListParams, opts ...op
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -124,11 +109,6 @@ func (r *ListService) ListAutoPaging(ctx context.Context, query ListListParams, 
 func (r *ListService) Delete(ctx context.Context, listID string, body ListDeleteParams, opts ...option.RequestOption) (res *ListDeleteResponse, err error) {
 	var env ListDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -150,11 +130,6 @@ func (r *ListService) Delete(ctx context.Context, listID string, body ListDelete
 func (r *ListService) Get(ctx context.Context, listID string, query ListGetParams, opts ...option.RequestOption) (res *ListGetResponse, err error) {
 	var env ListGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -170,33 +145,6 @@ func (r *ListService) Get(ctx context.Context, listID string, query ListGetParam
 	}
 	res = &env.Result
 	return res, nil
-}
-
-// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-// 0 to 9, wildcards (\*), and the hyphen (-).
-type Hostname struct {
-	URLHostname string `json:"url_hostname" api:"required"`
-	// Only applies to wildcard hostnames (e.g., \*.example.com). When true (default),
-	// only subdomains are blocked. When false, both the root domain and subdomains are
-	// blocked.
-	ExcludeExactHostname bool         `json:"exclude_exact_hostname"`
-	JSON                 hostnameJSON `json:"-"`
-}
-
-// hostnameJSON contains the JSON metadata for the struct [Hostname]
-type hostnameJSON struct {
-	URLHostname          apijson.Field
-	ExcludeExactHostname apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *Hostname) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameJSON) RawJSON() string {
-	return r.raw
 }
 
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
@@ -276,36 +224,18 @@ func (r ListsListKind) IsKnown() bool {
 }
 
 // The definition of the redirect.
-type Redirect struct {
-	SourceURL           string             `json:"source_url" api:"required"`
-	TargetURL           string             `json:"target_url" api:"required"`
-	IncludeSubdomains   bool               `json:"include_subdomains"`
-	PreservePathSuffix  bool               `json:"preserve_path_suffix"`
-	PreserveQueryString bool               `json:"preserve_query_string"`
-	StatusCode          RedirectStatusCode `json:"status_code"`
-	SubpathMatching     bool               `json:"subpath_matching"`
-	JSON                redirectJSON       `json:"-"`
+type RedirectParam struct {
+	SourceURL           param.Field[string]             `json:"source_url" api:"required"`
+	TargetURL           param.Field[string]             `json:"target_url" api:"required"`
+	IncludeSubdomains   param.Field[bool]               `json:"include_subdomains"`
+	PreservePathSuffix  param.Field[bool]               `json:"preserve_path_suffix"`
+	PreserveQueryString param.Field[bool]               `json:"preserve_query_string"`
+	StatusCode          param.Field[RedirectStatusCode] `json:"status_code"`
+	SubpathMatching     param.Field[bool]               `json:"subpath_matching"`
 }
 
-// redirectJSON contains the JSON metadata for the struct [Redirect]
-type redirectJSON struct {
-	SourceURL           apijson.Field
-	TargetURL           apijson.Field
-	IncludeSubdomains   apijson.Field
-	PreservePathSuffix  apijson.Field
-	PreserveQueryString apijson.Field
-	StatusCode          apijson.Field
-	SubpathMatching     apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *Redirect) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r redirectJSON) RawJSON() string {
-	return r.raw
+func (r RedirectParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type RedirectStatusCode int64
@@ -323,21 +253,6 @@ func (r RedirectStatusCode) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// The definition of the redirect.
-type RedirectParam struct {
-	SourceURL           param.Field[string]             `json:"source_url" api:"required"`
-	TargetURL           param.Field[string]             `json:"target_url" api:"required"`
-	IncludeSubdomains   param.Field[bool]               `json:"include_subdomains"`
-	PreservePathSuffix  param.Field[bool]               `json:"preserve_path_suffix"`
-	PreserveQueryString param.Field[bool]               `json:"preserve_query_string"`
-	StatusCode          param.Field[RedirectStatusCode] `json:"status_code"`
-	SubpathMatching     param.Field[bool]               `json:"subpath_matching"`
-}
-
-func (r RedirectParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type ListNewResponse struct {
@@ -551,8 +466,6 @@ func (r ListGetResponseKind) IsKnown() bool {
 
 type ListNewParams struct {
 	// The Account ID for this resource.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
@@ -631,8 +544,6 @@ func (r ListNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListUpdateParams struct {
 	// The Account ID for this resource.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An informative summary of the list.
 	Description param.Field[string] `json:"description"`
@@ -687,15 +598,11 @@ func (r ListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListListParams struct {
 	// The Account ID for this resource.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ListDeleteParams struct {
 	// The Account ID for this resource.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -744,8 +651,6 @@ func (r ListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListGetParams struct {
 	// The Account ID for this resource.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

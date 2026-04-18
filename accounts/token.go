@@ -47,11 +47,6 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
 	var env TokenNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -69,11 +64,6 @@ func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...o
 func (r *TokenService) Update(ctx context.Context, tokenID string, params TokenUpdateParams, opts ...option.RequestOption) (res *shared.Token, err error) {
 	var env TokenUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -96,11 +86,6 @@ func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ..
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -127,11 +112,6 @@ func (r *TokenService) ListAutoPaging(ctx context.Context, params TokenListParam
 func (r *TokenService) Delete(ctx context.Context, tokenID string, body TokenDeleteParams, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
 	var env TokenDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -153,11 +133,6 @@ func (r *TokenService) Delete(ctx context.Context, tokenID string, body TokenDel
 func (r *TokenService) Get(ctx context.Context, tokenID string, query TokenGetParams, opts ...option.RequestOption) (res *shared.Token, err error) {
 	var env TokenGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -179,11 +154,6 @@ func (r *TokenService) Get(ctx context.Context, tokenID string, query TokenGetPa
 func (r *TokenService) Verify(ctx context.Context, query TokenVerifyParams, opts ...option.RequestOption) (res *TokenVerifyResponse, err error) {
 	var env TokenVerifyResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -387,8 +357,6 @@ func (r TokenVerifyResponseStatus) IsKnown() bool {
 
 type TokenNewParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Token name.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -568,8 +536,6 @@ func (r TokenNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type TokenUpdateParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Token     shared.TokenParam   `json:"token" api:"required"`
 }
@@ -719,8 +685,6 @@ func (r TokenUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type TokenListParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to order results.
 	Direction param.Field[TokenListParamsDirection] `query:"direction"`
@@ -756,8 +720,6 @@ func (r TokenListParamsDirection) IsKnown() bool {
 
 type TokenDeleteParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -902,8 +864,6 @@ func (r TokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type TokenGetParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1048,8 +1008,6 @@ func (r TokenGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type TokenVerifyParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

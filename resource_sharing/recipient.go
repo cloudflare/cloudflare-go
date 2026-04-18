@@ -44,11 +44,6 @@ func NewRecipientService(opts ...option.RequestOption) (r *RecipientService) {
 func (r *RecipientService) New(ctx context.Context, shareID string, params RecipientNewParams, opts ...option.RequestOption) (res *RecipientNewResponse, err error) {
 	var env RecipientNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.PathAccountID, precfg.AccountID)
 	if params.PathAccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,11 +66,6 @@ func (r *RecipientService) List(ctx context.Context, shareID string, params Reci
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -107,11 +97,6 @@ func (r *RecipientService) ListAutoPaging(ctx context.Context, shareID string, p
 func (r *RecipientService) Delete(ctx context.Context, shareID string, recipientID string, body RecipientDeleteParams, opts ...option.RequestOption) (res *RecipientDeleteResponse, err error) {
 	var env RecipientDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -137,11 +122,6 @@ func (r *RecipientService) Delete(ctx context.Context, shareID string, recipient
 func (r *RecipientService) Get(ctx context.Context, shareID string, recipientID string, params RecipientGetParams, opts ...option.RequestOption) (res *RecipientGetResponse, err error) {
 	var env RecipientGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -505,8 +485,6 @@ func (r recipientGetResponseResourceJSON) RawJSON() string {
 
 type RecipientNewParams struct {
 	// Account identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	PathAccountID param.Field[string] `path:"account_id" api:"required"`
 	// Account identifier.
 	BodyAccountID param.Field[string] `json:"account_id"`
@@ -546,8 +524,6 @@ func (r recipientNewResponseEnvelopeJSON) RawJSON() string {
 
 type RecipientListParams struct {
 	// Account identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Include resources in the response.
 	IncludeResources param.Field[bool] `query:"include_resources"`
@@ -567,8 +543,6 @@ func (r RecipientListParams) URLQuery() (v url.Values) {
 
 type RecipientDeleteParams struct {
 	// Account identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -600,8 +574,6 @@ func (r recipientDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type RecipientGetParams struct {
 	// Account identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Include resources in the response.
 	IncludeResources param.Field[bool] `query:"include_resources"`

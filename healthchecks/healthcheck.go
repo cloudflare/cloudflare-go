@@ -45,11 +45,6 @@ func NewHealthcheckService(opts ...option.RequestOption) (r *HealthcheckService)
 func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env HealthcheckNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -67,11 +62,6 @@ func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParam
 func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, params HealthcheckUpdateParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env HealthcheckUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -94,11 +84,6 @@ func (r *HealthcheckService) List(ctx context.Context, params HealthcheckListPar
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -125,11 +110,6 @@ func (r *HealthcheckService) ListAutoPaging(ctx context.Context, params Healthch
 func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, body HealthcheckDeleteParams, opts ...option.RequestOption) (res *HealthcheckDeleteResponse, err error) {
 	var env HealthcheckDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -151,11 +131,6 @@ func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, b
 func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, params HealthcheckEditParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env HealthcheckEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -177,11 +152,6 @@ func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, par
 func (r *HealthcheckService) Get(ctx context.Context, healthcheckID string, query HealthcheckGetParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	var env HealthcheckGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -537,8 +507,6 @@ func (r healthcheckDeleteResponseJSON) RawJSON() string {
 
 type HealthcheckNewParams struct {
 	// Identifier
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID           param.Field[string]   `path:"zone_id" api:"required"`
 	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck" api:"required"`
 }
@@ -592,8 +560,6 @@ func (r HealthcheckNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type HealthcheckUpdateParams struct {
 	// Identifier
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID           param.Field[string]   `path:"zone_id" api:"required"`
 	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck" api:"required"`
 }
@@ -647,8 +613,6 @@ func (r HealthcheckUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type HealthcheckListParams struct {
 	// Identifier
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -666,8 +630,6 @@ func (r HealthcheckListParams) URLQuery() (v url.Values) {
 
 type HealthcheckDeleteParams struct {
 	// Identifier
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -716,8 +678,6 @@ func (r HealthcheckDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type HealthcheckEditParams struct {
 	// Identifier
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID           param.Field[string]   `path:"zone_id" api:"required"`
 	QueryHealthcheck QueryHealthcheckParam `json:"query_healthcheck" api:"required"`
 }
@@ -771,8 +731,6 @@ func (r HealthcheckEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type HealthcheckGetParams struct {
 	// Identifier
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

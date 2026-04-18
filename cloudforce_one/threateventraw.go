@@ -37,11 +37,6 @@ func NewThreatEventRawService(opts ...option.RequestOption) (r *ThreatEventRawSe
 // Updates a raw event
 func (r *ThreatEventRawService) Edit(ctx context.Context, eventID string, rawID string, params ThreatEventRawEditParams, opts ...option.RequestOption) (res *ThreatEventRawEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,11 +57,6 @@ func (r *ThreatEventRawService) Edit(ctx context.Context, eventID string, rawID 
 // Reads data for a raw event
 func (r *ThreatEventRawService) Get(ctx context.Context, eventID string, rawID string, query ThreatEventRawGetParams, opts ...option.RequestOption) (res *ThreatEventRawGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -140,8 +130,6 @@ func (r threatEventRawGetResponseJSON) RawJSON() string {
 
 type ThreatEventRawEditParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]      `path:"account_id" api:"required"`
 	Data      param.Field[interface{}] `json:"data"`
 	Source    param.Field[string]      `json:"source"`
@@ -154,7 +142,5 @@ func (r ThreatEventRawEditParams) MarshalJSON() (data []byte, err error) {
 
 type ThreatEventRawGetParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

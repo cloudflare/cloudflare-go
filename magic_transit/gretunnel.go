@@ -46,11 +46,6 @@ func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, o
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -72,11 +67,6 @@ func (r *GRETunnelService) Update(ctx context.Context, greTunnelID string, param
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -101,11 +91,6 @@ func (r *GRETunnelService) List(ctx context.Context, params GRETunnelListParams,
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -127,11 +112,6 @@ func (r *GRETunnelService) Delete(ctx context.Context, greTunnelID string, param
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -157,11 +137,6 @@ func (r *GRETunnelService) BulkUpdate(ctx context.Context, params GRETunnelBulkU
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -182,11 +157,6 @@ func (r *GRETunnelService) Get(ctx context.Context, greTunnelID string, params G
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -2087,8 +2057,6 @@ func (r GRETunnelGetResponseGRETunnelHealthCheckTargetMagicHealthCheckTarget) Im
 
 type GRETunnelNewParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
 	CloudflareGREEndpoint param.Field[string] `json:"cloudflare_gre_endpoint" api:"required"`
@@ -2279,8 +2247,6 @@ func (r GRETunnelNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelUpdateParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
 	CloudflareGREEndpoint param.Field[string] `json:"cloudflare_gre_endpoint" api:"required"`
@@ -2439,8 +2405,6 @@ func (r GRETunnelUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelListParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
@@ -2490,8 +2454,6 @@ func (r GRETunnelListResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelDeleteParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
@@ -2541,8 +2503,6 @@ func (r GRETunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelBulkUpdateParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	Body              interface{}         `json:"body" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
@@ -2597,8 +2557,6 @@ func (r GRETunnelBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelGetParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }

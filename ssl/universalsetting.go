@@ -38,11 +38,6 @@ func NewUniversalSettingService(opts ...option.RequestOption) (r *UniversalSetti
 func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSettingEditParams, opts ...option.RequestOption) (res *UniversalSSLSettings, err error) {
 	var env UniversalSettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -60,11 +55,6 @@ func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSett
 func (r *UniversalSettingService) Get(ctx context.Context, query UniversalSettingGetParams, opts ...option.RequestOption) (res *UniversalSSLSettings, err error) {
 	var env UniversalSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -159,8 +149,6 @@ func (r UniversalSSLSettingsParam) MarshalJSON() (data []byte, err error) {
 
 type UniversalSettingEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID               param.Field[string]       `path:"zone_id" api:"required"`
 	UniversalSSLSettings UniversalSSLSettingsParam `json:"universal_ssl_settings" api:"required"`
 }
@@ -310,8 +298,6 @@ func (r UniversalSettingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type UniversalSettingGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

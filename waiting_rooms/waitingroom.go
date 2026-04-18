@@ -52,11 +52,6 @@ func NewWaitingRoomService(opts ...option.RequestOption) (r *WaitingRoomService)
 func (r *WaitingRoomService) New(ctx context.Context, params WaitingRoomNewParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	var env WaitingRoomNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -74,11 +69,6 @@ func (r *WaitingRoomService) New(ctx context.Context, params WaitingRoomNewParam
 func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, params WaitingRoomUpdateParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	var env WaitingRoomUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -101,12 +91,6 @@ func (r *WaitingRoomService) List(ctx context.Context, params WaitingRoomListPar
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -147,11 +131,6 @@ func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, params WaitingR
 func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, body WaitingRoomDeleteParams, opts ...option.RequestOption) (res *WaitingRoomDeleteResponse, err error) {
 	var env WaitingRoomDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -173,11 +152,6 @@ func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, b
 func (r *WaitingRoomService) Edit(ctx context.Context, waitingRoomID string, params WaitingRoomEditParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	var env WaitingRoomEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -199,11 +173,6 @@ func (r *WaitingRoomService) Edit(ctx context.Context, waitingRoomID string, par
 func (r *WaitingRoomService) Get(ctx context.Context, waitingRoomID string, query WaitingRoomGetParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	var env WaitingRoomGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -1331,8 +1300,6 @@ func (r waitingRoomDeleteResponseJSON) RawJSON() string {
 
 type WaitingRoomNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Query  QueryParam          `json:"query" api:"required"`
 }
@@ -1364,8 +1331,6 @@ func (r waitingRoomNewResponseEnvelopeJSON) RawJSON() string {
 
 type WaitingRoomUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Query  QueryParam          `json:"query" api:"required"`
 }
@@ -1397,12 +1362,8 @@ func (r waitingRoomUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type WaitingRoomListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -1420,8 +1381,6 @@ func (r WaitingRoomListParams) URLQuery() (v url.Values) {
 
 type WaitingRoomDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -1448,8 +1407,6 @@ func (r waitingRoomDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type WaitingRoomEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Query  QueryParam          `json:"query" api:"required"`
 }
@@ -1481,8 +1438,6 @@ func (r waitingRoomEditResponseEnvelopeJSON) RawJSON() string {
 
 type WaitingRoomGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

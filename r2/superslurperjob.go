@@ -47,11 +47,6 @@ func NewSuperSlurperJobService(opts ...option.RequestOption) (r *SuperSlurperJob
 func (r *SuperSlurperJobService) New(ctx context.Context, params SuperSlurperJobNewParams, opts ...option.RequestOption) (res *SuperSlurperJobNewResponse, err error) {
 	var env SuperSlurperJobNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -70,11 +65,6 @@ func (r *SuperSlurperJobService) List(ctx context.Context, params SuperSlurperJo
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -102,11 +92,6 @@ func (r *SuperSlurperJobService) ListAutoPaging(ctx context.Context, params Supe
 func (r *SuperSlurperJobService) Abort(ctx context.Context, jobID string, body SuperSlurperJobAbortParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobAbortResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -130,11 +115,6 @@ func (r *SuperSlurperJobService) Abort(ctx context.Context, jobID string, body S
 func (r *SuperSlurperJobService) AbortAll(ctx context.Context, body SuperSlurperJobAbortAllParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobAbortAllResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -153,11 +133,6 @@ func (r *SuperSlurperJobService) AbortAll(ctx context.Context, body SuperSlurper
 func (r *SuperSlurperJobService) Get(ctx context.Context, jobID string, query SuperSlurperJobGetParams, opts ...option.RequestOption) (res *SuperSlurperJobGetResponse, err error) {
 	var env SuperSlurperJobGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -180,11 +155,6 @@ func (r *SuperSlurperJobService) Get(ctx context.Context, jobID string, query Su
 func (r *SuperSlurperJobService) Pause(ctx context.Context, jobID string, body SuperSlurperJobPauseParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobPauseResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -206,11 +176,6 @@ func (r *SuperSlurperJobService) Pause(ctx context.Context, jobID string, body S
 func (r *SuperSlurperJobService) Progress(ctx context.Context, jobID string, query SuperSlurperJobProgressParams, opts ...option.RequestOption) (res *SuperSlurperJobProgressResponse, err error) {
 	var env SuperSlurperJobProgressResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -233,11 +198,6 @@ func (r *SuperSlurperJobService) Progress(ctx context.Context, jobID string, que
 func (r *SuperSlurperJobService) Resume(ctx context.Context, jobID string, body SuperSlurperJobResumeParams, opts ...option.RequestOption) (res *string, err error) {
 	var env SuperSlurperJobResumeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -1003,7 +963,6 @@ func (r SuperSlurperJobProgressResponseStatus) IsKnown() bool {
 }
 
 type SuperSlurperJobNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                              `path:"account_id" api:"required"`
 	Overwrite param.Field[bool]                                `json:"overwrite"`
 	Source    param.Field[SuperSlurperJobNewParamsSourceUnion] `json:"source"`
@@ -1270,7 +1229,6 @@ func (r SuperSlurperJobNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Limit     param.Field[int64]  `query:"limit"`
 	Offset    param.Field[int64]  `query:"offset"`
@@ -1286,7 +1244,6 @@ func (r SuperSlurperJobListParams) URLQuery() (v url.Values) {
 }
 
 type SuperSlurperJobAbortParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1334,7 +1291,6 @@ func (r SuperSlurperJobAbortResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobAbortAllParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1382,7 +1338,6 @@ func (r SuperSlurperJobAbortAllResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1430,7 +1385,6 @@ func (r SuperSlurperJobGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobPauseParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1478,7 +1432,6 @@ func (r SuperSlurperJobPauseResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobProgressParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1526,7 +1479,6 @@ func (r SuperSlurperJobProgressResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SuperSlurperJobResumeParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

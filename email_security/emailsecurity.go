@@ -15,7 +15,6 @@ import (
 type EmailSecurityService struct {
 	Options     []option.RequestOption
 	Investigate *InvestigateService
-	Phishguard  *PhishguardService
 	Settings    *SettingService
 	Submissions *SubmissionService
 }
@@ -27,7 +26,6 @@ func NewEmailSecurityService(opts ...option.RequestOption) (r *EmailSecurityServ
 	r = &EmailSecurityService{}
 	r.Options = opts
 	r.Investigate = NewInvestigateService(opts...)
-	r.Phishguard = NewPhishguardService(opts...)
 	r.Settings = NewSettingService(opts...)
 	r.Submissions = NewSubmissionService(opts...)
 	return

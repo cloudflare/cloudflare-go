@@ -16,7 +16,6 @@ import (
 // the [NewWorkerService] method instead.
 type WorkerService struct {
 	Options         []option.RequestOption
-	Beta            *BetaService
 	Routes          *RouteService
 	Assets          *AssetService
 	Scripts         *ScriptService
@@ -32,7 +31,6 @@ type WorkerService struct {
 func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 	r = &WorkerService{}
 	r.Options = opts
-	r.Beta = NewBetaService(opts...)
 	r.Routes = NewRouteService(opts...)
 	r.Assets = NewAssetService(opts...)
 	r.Scripts = NewScriptService(opts...)
@@ -156,8 +154,6 @@ func (r singleStepMigrationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SingleStepMigration) implementsVersionMigrations() {}
-
 func (r SingleStepMigration) implementsScriptScriptAndVersionSettingEditResponseMigrations() {}
 
 func (r SingleStepMigration) implementsScriptScriptAndVersionSettingGetResponseMigrations() {}
@@ -227,8 +223,6 @@ type SingleStepMigrationParam struct {
 func (r SingleStepMigrationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r SingleStepMigrationParam) implementsVersionMigrationsUnionParam() {}
 
 func (r SingleStepMigrationParam) implementsScriptUpdateParamsMetadataMigrationsUnion() {}
 

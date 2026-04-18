@@ -53,11 +53,6 @@ func NewTunnelCloudflaredService(opts ...option.RequestOption) (r *TunnelCloudfl
 func (r *TunnelCloudflaredService) New(ctx context.Context, params TunnelCloudflaredNewParams, opts ...option.RequestOption) (res *shared.CloudflareTunnel, err error) {
 	var env TunnelCloudflaredNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -76,11 +71,6 @@ func (r *TunnelCloudflaredService) List(ctx context.Context, params TunnelCloudf
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -107,11 +97,6 @@ func (r *TunnelCloudflaredService) ListAutoPaging(ctx context.Context, params Tu
 func (r *TunnelCloudflaredService) Delete(ctx context.Context, tunnelID string, body TunnelCloudflaredDeleteParams, opts ...option.RequestOption) (res *shared.CloudflareTunnel, err error) {
 	var env TunnelCloudflaredDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -133,11 +118,6 @@ func (r *TunnelCloudflaredService) Delete(ctx context.Context, tunnelID string, 
 func (r *TunnelCloudflaredService) Edit(ctx context.Context, tunnelID string, params TunnelCloudflaredEditParams, opts ...option.RequestOption) (res *shared.CloudflareTunnel, err error) {
 	var env TunnelCloudflaredEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -159,11 +139,6 @@ func (r *TunnelCloudflaredService) Edit(ctx context.Context, tunnelID string, pa
 func (r *TunnelCloudflaredService) Get(ctx context.Context, tunnelID string, query TunnelCloudflaredGetParams, opts ...option.RequestOption) (res *shared.CloudflareTunnel, err error) {
 	var env TunnelCloudflaredGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -183,8 +158,6 @@ func (r *TunnelCloudflaredService) Get(ctx context.Context, tunnelID string, que
 
 type TunnelCloudflaredNewParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for a tunnel.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -265,8 +238,6 @@ func (r TunnelCloudflaredNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelCloudflaredListParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string] `path:"account_id" api:"required"`
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
 	// If provided, include only resources that were created (and not deleted) before
@@ -325,8 +296,6 @@ func (r TunnelCloudflaredListParamsStatus) IsKnown() bool {
 
 type TunnelCloudflaredDeleteParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -376,8 +345,6 @@ func (r TunnelCloudflaredDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelCloudflaredEditParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for a tunnel.
 	Name param.Field[string] `json:"name"`
@@ -436,8 +403,6 @@ func (r TunnelCloudflaredEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelCloudflaredGetParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

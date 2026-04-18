@@ -40,11 +40,6 @@ func NewRequestMessageService(opts ...option.RequestOption) (r *RequestMessageSe
 func (r *RequestMessageService) New(ctx context.Context, requestID string, params RequestMessageNewParams, opts ...option.RequestOption) (res *Message, err error) {
 	var env RequestMessageNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *RequestMessageService) New(ctx context.Context, requestID string, param
 func (r *RequestMessageService) Update(ctx context.Context, requestID string, messageID int64, params RequestMessageUpdateParams, opts ...option.RequestOption) (res *Message, err error) {
 	var env RequestMessageUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -91,11 +81,6 @@ func (r *RequestMessageService) Update(ctx context.Context, requestID string, me
 // Removes a message from a Cloudforce One intelligence request thread.
 func (r *RequestMessageService) Delete(ctx context.Context, requestID string, messageID int64, body RequestMessageDeleteParams, opts ...option.RequestOption) (res *RequestMessageDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -114,11 +99,6 @@ func (r *RequestMessageService) Get(ctx context.Context, requestID string, param
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -320,8 +300,6 @@ func (r RequestMessageDeleteResponseSuccess) IsKnown() bool {
 
 type RequestMessageNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Content of message.
 	Content param.Field[string] `json:"content"`
@@ -472,8 +450,6 @@ func (r RequestMessageNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestMessageUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Content of message.
 	Content param.Field[string] `json:"content"`
@@ -624,15 +600,11 @@ func (r RequestMessageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestMessageDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestMessageGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of results.
 	Page param.Field[int64] `json:"page" api:"required"`

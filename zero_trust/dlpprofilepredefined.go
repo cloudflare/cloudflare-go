@@ -7,15 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"slices"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/tidwall/gjson"
 )
 
 // DLPProfilePredefinedService contains methods and other services that help with
@@ -37,17 +34,27 @@ func NewDLPProfilePredefinedService(opts ...option.RequestOption) (r *DLPProfile
 	return
 }
 
-// This is similar to `update_predefined` but only returns entries that are
-// enabled. This is needed for our terraform API Updates a DLP predefined profile.
-// Only supports enabling/disabling entries.
-func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, params DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *PredefinedProfile, err error) {
-	var env DLPProfilePredefinedUpdateResponseEnvelope
+// Creates a DLP predefined profile. Only supports enabling/disabling entries.
+func (r *DLPProfilePredefinedService) New(ctx context.Context, params DLPProfilePredefinedNewParams, opts ...option.RequestOption) (res *Profile, err error) {
+	var env DLPProfilePredefinedNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	res = &env.Result
+	return res, nil
+}
+
+// Updates a DLP predefined profile. Only supports enabling/disabling entries.
+func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, params DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *Profile, err error) {
+	var env DLPProfilePredefinedUpdateResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -56,7 +63,7 @@ func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID stri
 		err = errors.New("missing required profile_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s/config", params.AccountID, profileID)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", params.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -70,11 +77,6 @@ func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID stri
 func (r *DLPProfilePredefinedService) Delete(ctx context.Context, profileID string, body DLPProfilePredefinedDeleteParams, opts ...option.RequestOption) (res *DLPProfilePredefinedDeleteResponse, err error) {
 	var env DLPProfilePredefinedDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -92,16 +94,10 @@ func (r *DLPProfilePredefinedService) Delete(ctx context.Context, profileID stri
 	return res, nil
 }
 
-// This is similar to `get_predefined` but only returns entries that are enabled.
-// This is needed for our terraform API Fetches a predefined DLP profile by id.
-func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string, query DLPProfilePredefinedGetParams, opts ...option.RequestOption) (res *PredefinedProfile, err error) {
+// Fetches a predefined DLP profile by id.
+func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string, query DLPProfilePredefinedGetParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfilePredefinedGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -110,7 +106,7 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 		err = errors.New("missing required profile_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s/config", query.AccountID, profileID)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", query.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -119,582 +115,183 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 	return res, nil
 }
 
-type PredefinedProfile struct {
-	// The id of the predefined profile (uuid).
-	ID                  string `json:"id" api:"required" format:"uuid"`
-	AllowedMatchCount   int64  `json:"allowed_match_count" api:"required"`
-	ConfidenceThreshold string `json:"confidence_threshold" api:"required,nullable"`
-	// Entries to enable for this predefined profile. Any entries not provided will be
-	// disabled.
-	EnabledEntries []string `json:"enabled_entries" api:"required" format:"uuid"`
-	// This field has been deprecated for `enabled_entries`.
-	//
-	// Deprecated: deprecated
-	Entries []PredefinedProfileEntry `json:"entries" api:"required"`
-	// The name of the predefined profile.
-	Name             string `json:"name" api:"required"`
-	AIContextEnabled bool   `json:"ai_context_enabled"`
-	OCREnabled       bool   `json:"ocr_enabled"`
-	// Whether this profile can be accessed by anyone.
-	OpenAccess bool                  `json:"open_access"`
-	JSON       predefinedProfileJSON `json:"-"`
-}
-
-// predefinedProfileJSON contains the JSON metadata for the struct
-// [PredefinedProfile]
-type predefinedProfileJSON struct {
-	ID                  apijson.Field
-	AllowedMatchCount   apijson.Field
-	ConfidenceThreshold apijson.Field
-	EnabledEntries      apijson.Field
-	Entries             apijson.Field
-	Name                apijson.Field
-	AIContextEnabled    apijson.Field
-	OCREnabled          apijson.Field
-	OpenAccess          apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *PredefinedProfile) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r predefinedProfileJSON) RawJSON() string {
-	return r.raw
-}
-
-type PredefinedProfileEntry struct {
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Deprecated: deprecated
-	Enabled bool                         `json:"enabled" api:"required"`
-	Name    string                       `json:"name" api:"required"`
-	Type    PredefinedProfileEntriesType `json:"type" api:"required"`
-	// Only applies to custom word lists. Determines if the words should be matched in
-	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool `json:"case_sensitive"`
-	// This field can have the runtime type of
-	// [PredefinedProfileEntriesPredefinedEntryConfidence].
-	Confidence  interface{} `json:"confidence"`
-	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description" api:"nullable"`
-	Pattern     Pattern     `json:"pattern"`
-	// Deprecated: deprecated
-	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
-	Secret    bool      `json:"secret"`
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of
-	// [PredefinedProfileEntriesPredefinedEntryVariant].
-	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [interface{}].
-	WordList interface{}                `json:"word_list"`
-	JSON     predefinedProfileEntryJSON `json:"-"`
-	union    PredefinedProfileEntriesUnion
-}
-
-// predefinedProfileEntryJSON contains the JSON metadata for the struct
-// [PredefinedProfileEntry]
-type predefinedProfileEntryJSON struct {
-	ID            apijson.Field
-	Enabled       apijson.Field
-	Name          apijson.Field
-	Type          apijson.Field
-	CaseSensitive apijson.Field
-	Confidence    apijson.Field
-	CreatedAt     apijson.Field
-	Description   apijson.Field
-	Pattern       apijson.Field
-	ProfileID     apijson.Field
-	Secret        apijson.Field
-	UpdatedAt     apijson.Field
-	Variant       apijson.Field
-	WordList      apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r predefinedProfileEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *PredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
-	*r = PredefinedProfileEntry{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [PredefinedProfileEntriesUnion] interface which you can cast
-// to the specific types for more type safety.
-//
-// Possible runtime types of the union are [PredefinedProfileEntriesCustomEntry],
-// [PredefinedProfileEntriesPredefinedEntry],
-// [PredefinedProfileEntriesIntegrationEntry],
-// [PredefinedProfileEntriesExactDataEntry],
-// [PredefinedProfileEntriesDocumentFingerprintEntry],
-// [PredefinedProfileEntriesWordListEntry].
-func (r PredefinedProfileEntry) AsUnion() PredefinedProfileEntriesUnion {
-	return r.union
-}
-
-// Union satisfied by [PredefinedProfileEntriesCustomEntry],
-// [PredefinedProfileEntriesPredefinedEntry],
-// [PredefinedProfileEntriesIntegrationEntry],
-// [PredefinedProfileEntriesExactDataEntry],
-// [PredefinedProfileEntriesDocumentFingerprintEntry] or
-// [PredefinedProfileEntriesWordListEntry].
-type PredefinedProfileEntriesUnion interface {
-	implementsPredefinedProfileEntry()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PredefinedProfileEntriesUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PredefinedProfileEntriesCustomEntry{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PredefinedProfileEntriesPredefinedEntry{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PredefinedProfileEntriesIntegrationEntry{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PredefinedProfileEntriesExactDataEntry{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PredefinedProfileEntriesDocumentFingerprintEntry{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PredefinedProfileEntriesWordListEntry{}),
-		},
-	)
-}
-
-type PredefinedProfileEntriesCustomEntry struct {
-	ID        string    `json:"id" api:"required" format:"uuid"`
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// Deprecated: deprecated
-	Enabled     bool                                    `json:"enabled" api:"required"`
-	Name        string                                  `json:"name" api:"required"`
-	Pattern     Pattern                                 `json:"pattern" api:"required"`
-	Type        PredefinedProfileEntriesCustomEntryType `json:"type" api:"required"`
-	UpdatedAt   time.Time                               `json:"updated_at" api:"required" format:"date-time"`
-	Description string                                  `json:"description" api:"nullable"`
-	// Deprecated: deprecated
-	ProfileID string                                  `json:"profile_id" api:"nullable" format:"uuid"`
-	JSON      predefinedProfileEntriesCustomEntryJSON `json:"-"`
-}
-
-// predefinedProfileEntriesCustomEntryJSON contains the JSON metadata for the
-// struct [PredefinedProfileEntriesCustomEntry]
-type predefinedProfileEntriesCustomEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	Description apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PredefinedProfileEntriesCustomEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r predefinedProfileEntriesCustomEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PredefinedProfileEntriesCustomEntry) implementsPredefinedProfileEntry() {}
-
-type PredefinedProfileEntriesCustomEntryType string
-
-const (
-	PredefinedProfileEntriesCustomEntryTypeCustom PredefinedProfileEntriesCustomEntryType = "custom"
-)
-
-func (r PredefinedProfileEntriesCustomEntryType) IsKnown() bool {
-	switch r {
-	case PredefinedProfileEntriesCustomEntryTypeCustom:
-		return true
-	}
-	return false
-}
-
-type PredefinedProfileEntriesPredefinedEntry struct {
-	ID         string                                            `json:"id" api:"required" format:"uuid"`
-	Confidence PredefinedProfileEntriesPredefinedEntryConfidence `json:"confidence" api:"required"`
-	Enabled    bool                                              `json:"enabled" api:"required"`
-	Name       string                                            `json:"name" api:"required"`
-	Type       PredefinedProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
-	// Deprecated: deprecated
-	ProfileID string                                         `json:"profile_id" api:"nullable" format:"uuid"`
-	Variant   PredefinedProfileEntriesPredefinedEntryVariant `json:"variant"`
-	JSON      predefinedProfileEntriesPredefinedEntryJSON    `json:"-"`
-}
-
-// predefinedProfileEntriesPredefinedEntryJSON contains the JSON metadata for the
-// struct [PredefinedProfileEntriesPredefinedEntry]
-type predefinedProfileEntriesPredefinedEntryJSON struct {
-	ID          apijson.Field
-	Confidence  apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ProfileID   apijson.Field
-	Variant     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PredefinedProfileEntriesPredefinedEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r predefinedProfileEntriesPredefinedEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PredefinedProfileEntriesPredefinedEntry) implementsPredefinedProfileEntry() {}
-
-type PredefinedProfileEntriesPredefinedEntryConfidence struct {
-	// Indicates whether this entry has AI remote service validation.
-	AIContextAvailable bool `json:"ai_context_available" api:"required"`
-	// Indicates whether this entry has any form of validation that is not an AI remote
-	// service.
-	Available bool                                                  `json:"available" api:"required"`
-	JSON      predefinedProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
-}
-
-// predefinedProfileEntriesPredefinedEntryConfidenceJSON contains the JSON metadata
-// for the struct [PredefinedProfileEntriesPredefinedEntryConfidence]
-type predefinedProfileEntriesPredefinedEntryConfidenceJSON struct {
-	AIContextAvailable apijson.Field
-	Available          apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *PredefinedProfileEntriesPredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r predefinedProfileEntriesPredefinedEntryConfidenceJSON) RawJSON() string {
-	return r.raw
-}
-
-type PredefinedProfileEntriesPredefinedEntryType string
-
-const (
-	PredefinedProfileEntriesPredefinedEntryTypePredefined PredefinedProfileEntriesPredefinedEntryType = "predefined"
-)
-
-func (r PredefinedProfileEntriesPredefinedEntryType) IsKnown() bool {
-	switch r {
-	case PredefinedProfileEntriesPredefinedEntryTypePredefined:
-		return true
-	}
-	return false
-}
-
-type PredefinedProfileEntriesPredefinedEntryVariant struct {
-	TopicType   PredefinedProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
-	Type        PredefinedProfileEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
-	Description string                                                  `json:"description" api:"nullable"`
-	JSON        predefinedProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
-}
-
-// predefinedProfileEntriesPredefinedEntryVariantJSON contains the JSON metadata
-// for the struct [PredefinedProfileEntriesPredefinedEntryVariant]
-type predefinedProfileEntriesPredefinedEntryVariantJSON struct {
-	TopicType   apijson.Field
-	Type        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PredefinedProfileEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r predefinedProfileEntriesPredefinedEntryVariantJSON) RawJSON() string {
-	return r.raw
-}
-
-type PredefinedProfileEntriesPredefinedEntryVariantTopicType string
-
-const (
-	PredefinedProfileEntriesPredefinedEntryVariantTopicTypeIntent  PredefinedProfileEntriesPredefinedEntryVariantTopicType = "Intent"
-	PredefinedProfileEntriesPredefinedEntryVariantTopicTypeContent PredefinedProfileEntriesPredefinedEntryVariantTopicType = "Content"
-)
-
-func (r PredefinedProfileEntriesPredefinedEntryVariantTopicType) IsKnown() bool {
-	switch r {
-	case PredefinedProfileEntriesPredefinedEntryVariantTopicTypeIntent, PredefinedProfileEntriesPredefinedEntryVariantTopicTypeContent:
-		return true
-	}
-	return false
-}
-
-type PredefinedProfileEntriesPredefinedEntryVariantType string
-
-const (
-	PredefinedProfileEntriesPredefinedEntryVariantTypePromptTopic PredefinedProfileEntriesPredefinedEntryVariantType = "PromptTopic"
-)
-
-func (r PredefinedProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
-	switch r {
-	case PredefinedProfileEntriesPredefinedEntryVariantTypePromptTopic:
-		return true
-	}
-	return false
-}
-
-type PredefinedProfileEntriesIntegrationEntry struct {
-	ID        string                                       `json:"id" api:"required" format:"uuid"`
-	CreatedAt time.Time                                    `json:"created_at" api:"required" format:"date-time"`
-	Enabled   bool                                         `json:"enabled" api:"required"`
-	Name      string                                       `json:"name" api:"required"`
-	Type      PredefinedProfileEntriesIntegrationEntryType `json:"type" api:"required"`
-	UpdatedAt time.Time                                    `json:"updated_at" api:"required" format:"date-time"`
-	ProfileID string                                       `json:"profile_id" api:"nullable" format:"uuid"`
-	JSON      predefinedProfileEntriesIntegrationEntryJSON `json:"-"`
-}
-
-// predefinedProfileEntriesIntegrationEntryJSON contains the JSON metadata for the
-// struct [PredefinedProfileEntriesIntegrationEntry]
-type predefinedProfileEntriesIntegrationEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PredefinedProfileEntriesIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r predefinedProfileEntriesIntegrationEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PredefinedProfileEntriesIntegrationEntry) implementsPredefinedProfileEntry() {}
-
-type PredefinedProfileEntriesIntegrationEntryType string
-
-const (
-	PredefinedProfileEntriesIntegrationEntryTypeIntegration PredefinedProfileEntriesIntegrationEntryType = "integration"
-)
-
-func (r PredefinedProfileEntriesIntegrationEntryType) IsKnown() bool {
-	switch r {
-	case PredefinedProfileEntriesIntegrationEntryTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type PredefinedProfileEntriesExactDataEntry struct {
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Only applies to custom word lists. Determines if the words should be matched in
-	// a case-sensitive manner Cannot be set to false if secret is true
-	CaseSensitive bool                                       `json:"case_sensitive" api:"required"`
-	CreatedAt     time.Time                                  `json:"created_at" api:"required" format:"date-time"`
-	Enabled       bool                                       `json:"enabled" api:"required"`
-	Name          string                                     `json:"name" api:"required"`
-	Secret        bool                                       `json:"secret" api:"required"`
-	Type          PredefinedProfileEntriesExactDataEntryType `json:"type" api:"required"`
-	UpdatedAt     time.Time                                  `json:"updated_at" api:"required" format:"date-time"`
-	JSON          predefinedProfileEntriesExactDataEntryJSON `json:"-"`
-}
-
-// predefinedProfileEntriesExactDataEntryJSON contains the JSON metadata for the
-// struct [PredefinedProfileEntriesExactDataEntry]
-type predefinedProfileEntriesExactDataEntryJSON struct {
-	ID            apijson.Field
-	CaseSensitive apijson.Field
-	CreatedAt     apijson.Field
-	Enabled       apijson.Field
-	Name          apijson.Field
-	Secret        apijson.Field
-	Type          apijson.Field
-	UpdatedAt     apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *PredefinedProfileEntriesExactDataEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r predefinedProfileEntriesExactDataEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PredefinedProfileEntriesExactDataEntry) implementsPredefinedProfileEntry() {}
-
-type PredefinedProfileEntriesExactDataEntryType string
-
-const (
-	PredefinedProfileEntriesExactDataEntryTypeExactData PredefinedProfileEntriesExactDataEntryType = "exact_data"
-)
-
-func (r PredefinedProfileEntriesExactDataEntryType) IsKnown() bool {
-	switch r {
-	case PredefinedProfileEntriesExactDataEntryTypeExactData:
-		return true
-	}
-	return false
-}
-
-type PredefinedProfileEntriesDocumentFingerprintEntry struct {
-	ID        string                                               `json:"id" api:"required" format:"uuid"`
-	CreatedAt time.Time                                            `json:"created_at" api:"required" format:"date-time"`
-	Enabled   bool                                                 `json:"enabled" api:"required"`
-	Name      string                                               `json:"name" api:"required"`
-	Type      PredefinedProfileEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
-	UpdatedAt time.Time                                            `json:"updated_at" api:"required" format:"date-time"`
-	JSON      predefinedProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
-}
-
-// predefinedProfileEntriesDocumentFingerprintEntryJSON contains the JSON metadata
-// for the struct [PredefinedProfileEntriesDocumentFingerprintEntry]
-type predefinedProfileEntriesDocumentFingerprintEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PredefinedProfileEntriesDocumentFingerprintEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r predefinedProfileEntriesDocumentFingerprintEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PredefinedProfileEntriesDocumentFingerprintEntry) implementsPredefinedProfileEntry() {}
-
-type PredefinedProfileEntriesDocumentFingerprintEntryType string
-
-const (
-	PredefinedProfileEntriesDocumentFingerprintEntryTypeDocumentFingerprint PredefinedProfileEntriesDocumentFingerprintEntryType = "document_fingerprint"
-)
-
-func (r PredefinedProfileEntriesDocumentFingerprintEntryType) IsKnown() bool {
-	switch r {
-	case PredefinedProfileEntriesDocumentFingerprintEntryTypeDocumentFingerprint:
-		return true
-	}
-	return false
-}
-
-type PredefinedProfileEntriesWordListEntry struct {
-	ID        string                                    `json:"id" api:"required" format:"uuid"`
-	CreatedAt time.Time                                 `json:"created_at" api:"required" format:"date-time"`
-	Enabled   bool                                      `json:"enabled" api:"required"`
-	Name      string                                    `json:"name" api:"required"`
-	Type      PredefinedProfileEntriesWordListEntryType `json:"type" api:"required"`
-	UpdatedAt time.Time                                 `json:"updated_at" api:"required" format:"date-time"`
-	WordList  interface{}                               `json:"word_list" api:"required"`
-	ProfileID string                                    `json:"profile_id" api:"nullable" format:"uuid"`
-	JSON      predefinedProfileEntriesWordListEntryJSON `json:"-"`
-}
-
-// predefinedProfileEntriesWordListEntryJSON contains the JSON metadata for the
-// struct [PredefinedProfileEntriesWordListEntry]
-type predefinedProfileEntriesWordListEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PredefinedProfileEntriesWordListEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r predefinedProfileEntriesWordListEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PredefinedProfileEntriesWordListEntry) implementsPredefinedProfileEntry() {}
-
-type PredefinedProfileEntriesWordListEntryType string
-
-const (
-	PredefinedProfileEntriesWordListEntryTypeWordList PredefinedProfileEntriesWordListEntryType = "word_list"
-)
-
-func (r PredefinedProfileEntriesWordListEntryType) IsKnown() bool {
-	switch r {
-	case PredefinedProfileEntriesWordListEntryTypeWordList:
-		return true
-	}
-	return false
-}
-
-type PredefinedProfileEntriesType string
-
-const (
-	PredefinedProfileEntriesTypeCustom              PredefinedProfileEntriesType = "custom"
-	PredefinedProfileEntriesTypePredefined          PredefinedProfileEntriesType = "predefined"
-	PredefinedProfileEntriesTypeIntegration         PredefinedProfileEntriesType = "integration"
-	PredefinedProfileEntriesTypeExactData           PredefinedProfileEntriesType = "exact_data"
-	PredefinedProfileEntriesTypeDocumentFingerprint PredefinedProfileEntriesType = "document_fingerprint"
-	PredefinedProfileEntriesTypeWordList            PredefinedProfileEntriesType = "word_list"
-)
-
-func (r PredefinedProfileEntriesType) IsKnown() bool {
-	switch r {
-	case PredefinedProfileEntriesTypeCustom, PredefinedProfileEntriesTypePredefined, PredefinedProfileEntriesTypeIntegration, PredefinedProfileEntriesTypeExactData, PredefinedProfileEntriesTypeDocumentFingerprint, PredefinedProfileEntriesTypeWordList:
-		return true
-	}
-	return false
-}
-
 type DLPProfilePredefinedDeleteResponse = interface{}
 
+type DLPProfilePredefinedNewParams struct {
+	AccountID           param.Field[string] `path:"account_id" api:"required"`
+	ProfileID           param.Field[string] `json:"profile_id" api:"required" format:"uuid"`
+	AIContextEnabled    param.Field[bool]   `json:"ai_context_enabled"`
+	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
+	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness param.Field[ContextAwarenessParam]                `json:"context_awareness"`
+	Entries          param.Field[[]DLPProfilePredefinedNewParamsEntry] `json:"entries"`
+	OCREnabled       param.Field[bool]                                 `json:"ocr_enabled"`
+}
+
+func (r DLPProfilePredefinedNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DLPProfilePredefinedNewParamsEntry struct {
+	ID      param.Field[string] `json:"id" api:"required" format:"uuid"`
+	Enabled param.Field[bool]   `json:"enabled" api:"required"`
+}
+
+func (r DLPProfilePredefinedNewParamsEntry) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DLPProfilePredefinedNewResponseEnvelope struct {
+	Errors   []DLPProfilePredefinedNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DLPProfilePredefinedNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success DLPProfilePredefinedNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  Profile                                        `json:"result"`
+	JSON    dlpProfilePredefinedNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// dlpProfilePredefinedNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DLPProfilePredefinedNewResponseEnvelope]
+type dlpProfilePredefinedNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedNewResponseEnvelopeErrors struct {
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           DLPProfilePredefinedNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dlpProfilePredefinedNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dlpProfilePredefinedNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DLPProfilePredefinedNewResponseEnvelopeErrors]
+type dlpProfilePredefinedNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    dlpProfilePredefinedNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dlpProfilePredefinedNewResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [DLPProfilePredefinedNewResponseEnvelopeErrorsSource]
+type dlpProfilePredefinedNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedNewResponseEnvelopeMessages struct {
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           DLPProfilePredefinedNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dlpProfilePredefinedNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dlpProfilePredefinedNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DLPProfilePredefinedNewResponseEnvelopeMessages]
+type dlpProfilePredefinedNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DLPProfilePredefinedNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    dlpProfilePredefinedNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dlpProfilePredefinedNewResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [DLPProfilePredefinedNewResponseEnvelopeMessagesSource]
+type dlpProfilePredefinedNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfilePredefinedNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dlpProfilePredefinedNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DLPProfilePredefinedNewResponseEnvelopeSuccess bool
+
+const (
+	DLPProfilePredefinedNewResponseEnvelopeSuccessTrue DLPProfilePredefinedNewResponseEnvelopeSuccess = true
+)
+
+func (r DLPProfilePredefinedNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfilePredefinedNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DLPProfilePredefinedUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
-	AccountID           param.Field[string]                                  `path:"account_id" api:"required"`
-	AIContextEnabled    param.Field[bool]                                    `json:"ai_context_enabled"`
-	AllowedMatchCount   param.Field[int64]                                   `json:"allowed_match_count"`
-	ConfidenceThreshold param.Field[string]                                  `json:"confidence_threshold"`
-	EnabledEntries      param.Field[[]string]                                `json:"enabled_entries" format:"uuid"`
-	Entries             param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries"`
-	OCREnabled          param.Field[bool]                                    `json:"ocr_enabled"`
+	AccountID           param.Field[string] `path:"account_id" api:"required"`
+	AIContextEnabled    param.Field[bool]   `json:"ai_context_enabled"`
+	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
+	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness param.Field[ContextAwarenessParam]                   `json:"context_awareness"`
+	Entries          param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries"`
+	OCREnabled       param.Field[bool]                                    `json:"ocr_enabled"`
 }
 
 func (r DLPProfilePredefinedUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -715,7 +312,7 @@ type DLPProfilePredefinedUpdateResponseEnvelope struct {
 	Messages []DLPProfilePredefinedUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success DLPProfilePredefinedUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
-	Result  PredefinedProfile                                 `json:"result"`
+	Result  Profile                                           `json:"result"`
 	JSON    dlpProfilePredefinedUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -851,7 +448,6 @@ func (r DLPProfilePredefinedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfilePredefinedDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -996,7 +592,6 @@ func (r DLPProfilePredefinedDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfilePredefinedGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1005,7 +600,7 @@ type DLPProfilePredefinedGetResponseEnvelope struct {
 	Messages []DLPProfilePredefinedGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success DLPProfilePredefinedGetResponseEnvelopeSuccess `json:"success" api:"required"`
-	Result  PredefinedProfile                              `json:"result"`
+	Result  Profile                                        `json:"result"`
 	JSON    dlpProfilePredefinedGetResponseEnvelopeJSON    `json:"-"`
 }
 

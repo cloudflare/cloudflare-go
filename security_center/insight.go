@@ -51,12 +51,6 @@ func (r *InsightService) List(ctx context.Context, params InsightListParams, opt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -98,12 +92,6 @@ func (r *InsightService) ListAutoPaging(ctx context.Context, params InsightListP
 // active insights list while preserving historical data.
 func (r *InsightService) Dismiss(ctx context.Context, issueID string, params InsightDismissParams, opts ...option.RequestOption) (res *InsightDismissResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -426,12 +414,8 @@ func (r InsightDismissResponseSuccess) IsKnown() bool {
 
 type InsightListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID        param.Field[string]            `path:"zone_id"`
 	Dismissed     param.Field[bool]              `query:"dismissed"`
 	IssueClass    param.Field[[]string]          `query:"issue_class"`
@@ -460,12 +444,8 @@ func (r InsightListParams) URLQuery() (v url.Values) {
 
 type InsightDismissParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID  param.Field[string] `path:"zone_id"`
 	Dismiss param.Field[bool]   `json:"dismiss"`
 }

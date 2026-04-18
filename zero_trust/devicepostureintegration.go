@@ -40,11 +40,6 @@ func NewDevicePostureIntegrationService(opts ...option.RequestOption) (r *Device
 func (r *DevicePostureIntegrationService) New(ctx context.Context, params DevicePostureIntegrationNewParams, opts ...option.RequestOption) (res *Integration, err error) {
 	var env DevicePostureIntegrationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,11 +58,6 @@ func (r *DevicePostureIntegrationService) List(ctx context.Context, query Device
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -94,11 +84,6 @@ func (r *DevicePostureIntegrationService) ListAutoPaging(ctx context.Context, qu
 func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, body DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env DevicePostureIntegrationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -120,11 +105,6 @@ func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integratio
 func (r *DevicePostureIntegrationService) Edit(ctx context.Context, integrationID string, params DevicePostureIntegrationEditParams, opts ...option.RequestOption) (res *Integration, err error) {
 	var env DevicePostureIntegrationEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -146,11 +126,6 @@ func (r *DevicePostureIntegrationService) Edit(ctx context.Context, integrationI
 func (r *DevicePostureIntegrationService) Get(ctx context.Context, integrationID string, query DevicePostureIntegrationGetParams, opts ...option.RequestOption) (res *Integration, err error) {
 	var env DevicePostureIntegrationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -254,7 +229,6 @@ func (r IntegrationType) IsKnown() bool {
 }
 
 type DevicePostureIntegrationNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The configuration object containing third-party integration information.
 	Config param.Field[DevicePostureIntegrationNewParamsConfigUnion] `json:"config" api:"required"`
@@ -518,12 +492,10 @@ func (r DevicePostureIntegrationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureIntegrationListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevicePostureIntegrationDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -571,7 +543,6 @@ func (r DevicePostureIntegrationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureIntegrationEditParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The configuration object containing third-party integration information.
 	Config param.Field[DevicePostureIntegrationEditParamsConfigUnion] `json:"config"`
@@ -835,7 +806,6 @@ func (r DevicePostureIntegrationEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureIntegrationGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

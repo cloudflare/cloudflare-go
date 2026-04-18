@@ -15,7 +15,6 @@ import (
 )
 
 func TestStoreNew(t *testing.T) {
-	t.Skip("SKIP: prism error for 422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -42,7 +41,6 @@ func TestStoreNew(t *testing.T) {
 }
 
 func TestStoreListWithOptionalParams(t *testing.T) {
-	t.Skip("SKIP: prism error for 422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -72,7 +70,6 @@ func TestStoreListWithOptionalParams(t *testing.T) {
 }
 
 func TestStoreDelete(t *testing.T) {
-	t.Skip("SKIP: prism error for 422 Unprocessable Entity")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

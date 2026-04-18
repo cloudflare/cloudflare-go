@@ -17,28 +17,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-// EmailSecurityTopTLDMaliciousService contains methods and other services that
+// EmailSecurityTopTldMaliciousService contains methods and other services that
 // help with interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewEmailSecurityTopTLDMaliciousService] method instead.
-type EmailSecurityTopTLDMaliciousService struct {
+// the [NewEmailSecurityTopTldMaliciousService] method instead.
+type EmailSecurityTopTldMaliciousService struct {
 	Options []option.RequestOption
 }
 
-// NewEmailSecurityTopTLDMaliciousService generates a new service that applies the
+// NewEmailSecurityTopTldMaliciousService generates a new service that applies the
 // given options to each request. These options are applied after the parent
 // client's options (if there is one), and before any request-specific options.
-func NewEmailSecurityTopTLDMaliciousService(opts ...option.RequestOption) (r *EmailSecurityTopTLDMaliciousService) {
-	r = &EmailSecurityTopTLDMaliciousService{}
+func NewEmailSecurityTopTldMaliciousService(opts ...option.RequestOption) (r *EmailSecurityTopTldMaliciousService) {
+	r = &EmailSecurityTopTldMaliciousService{}
 	r.Options = opts
 	return
 }
 
 // Retrieves the top TLDs by emails classified as malicious or not.
-func (r *EmailSecurityTopTLDMaliciousService) Get(ctx context.Context, malicious EmailSecurityTopTLDMaliciousGetParamsMalicious, query EmailSecurityTopTLDMaliciousGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTLDMaliciousGetResponse, err error) {
-	var env EmailSecurityTopTLDMaliciousGetResponseEnvelope
+func (r *EmailSecurityTopTldMaliciousService) Get(ctx context.Context, malicious EmailSecurityTopTldMaliciousGetParamsMalicious, query EmailSecurityTopTldMaliciousGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTldMaliciousGetResponse, err error) {
+	var env EmailSecurityTopTldMaliciousGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	path := fmt.Sprintf("radar/email/security/top/tlds/malicious/%v", malicious)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
@@ -49,47 +49,47 @@ func (r *EmailSecurityTopTLDMaliciousService) Get(ctx context.Context, malicious
 	return res, nil
 }
 
-type EmailSecurityTopTLDMaliciousGetResponse struct {
+type EmailSecurityTopTldMaliciousGetResponse struct {
 	// Metadata for the results.
-	Meta EmailSecurityTopTLDMaliciousGetResponseMeta   `json:"meta" api:"required"`
-	Top0 []EmailSecurityTopTLDMaliciousGetResponseTop0 `json:"top_0" api:"required"`
-	JSON emailSecurityTopTLDMaliciousGetResponseJSON   `json:"-"`
+	Meta EmailSecurityTopTldMaliciousGetResponseMeta   `json:"meta" api:"required"`
+	Top0 []EmailSecurityTopTldMaliciousGetResponseTop0 `json:"top_0" api:"required"`
+	JSON emailSecurityTopTldMaliciousGetResponseJSON   `json:"-"`
 }
 
-// emailSecurityTopTLDMaliciousGetResponseJSON contains the JSON metadata for the
-// struct [EmailSecurityTopTLDMaliciousGetResponse]
-type emailSecurityTopTLDMaliciousGetResponseJSON struct {
+// emailSecurityTopTldMaliciousGetResponseJSON contains the JSON metadata for the
+// struct [EmailSecurityTopTldMaliciousGetResponse]
+type emailSecurityTopTldMaliciousGetResponseJSON struct {
 	Meta        apijson.Field
 	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDMaliciousGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldMaliciousGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDMaliciousGetResponseJSON) RawJSON() string {
+func (r emailSecurityTopTldMaliciousGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Metadata for the results.
-type EmailSecurityTopTLDMaliciousGetResponseMeta struct {
-	ConfidenceInfo EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
-	DateRange      []EmailSecurityTopTLDMaliciousGetResponseMetaDateRange    `json:"dateRange" api:"required"`
+type EmailSecurityTopTldMaliciousGetResponseMeta struct {
+	ConfidenceInfo EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfo `json:"confidenceInfo" api:"required,nullable"`
+	DateRange      []EmailSecurityTopTldMaliciousGetResponseMetaDateRange    `json:"dateRange" api:"required"`
 	// Timestamp of the last dataset update.
 	LastUpdated time.Time `json:"lastUpdated" api:"required" format:"date-time"`
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-	Normalization EmailSecurityTopTLDMaliciousGetResponseMetaNormalization `json:"normalization" api:"required"`
+	Normalization EmailSecurityTopTldMaliciousGetResponseMetaNormalization `json:"normalization" api:"required"`
 	// Measurement units for the results.
-	Units []EmailSecurityTopTLDMaliciousGetResponseMetaUnit `json:"units" api:"required"`
-	JSON  emailSecurityTopTLDMaliciousGetResponseMetaJSON   `json:"-"`
+	Units []EmailSecurityTopTldMaliciousGetResponseMetaUnit `json:"units" api:"required"`
+	JSON  emailSecurityTopTldMaliciousGetResponseMetaJSON   `json:"-"`
 }
 
-// emailSecurityTopTLDMaliciousGetResponseMetaJSON contains the JSON metadata for
-// the struct [EmailSecurityTopTLDMaliciousGetResponseMeta]
-type emailSecurityTopTLDMaliciousGetResponseMetaJSON struct {
+// emailSecurityTopTldMaliciousGetResponseMetaJSON contains the JSON metadata for
+// the struct [EmailSecurityTopTldMaliciousGetResponseMeta]
+type emailSecurityTopTldMaliciousGetResponseMetaJSON struct {
 	ConfidenceInfo apijson.Field
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
@@ -99,58 +99,58 @@ type emailSecurityTopTLDMaliciousGetResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDMaliciousGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldMaliciousGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDMaliciousGetResponseMetaJSON) RawJSON() string {
+func (r emailSecurityTopTldMaliciousGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfo struct {
-	Annotations []EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
+type EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfo struct {
+	Annotations []EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotation `json:"annotations" api:"required"`
 	// Provides an indication of how much confidence Cloudflare has in the data.
 	Level int64                                                         `json:"level" api:"required"`
-	JSON  emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoJSON `json:"-"`
+	JSON  emailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
-// emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoJSON contains the JSON
+// emailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoJSON contains the JSON
 // metadata for the struct
-// [EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfo]
-type emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoJSON struct {
+// [EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfo]
+type emailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+func (r emailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoJSON) RawJSON() string {
 	return r.raw
 }
 
 // Annotation associated with the result (e.g. outage or other type of event).
-type EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotation struct {
+type EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotation struct {
 	// Data source for annotations.
-	DataSource  EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
+	DataSource  EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource `json:"dataSource" api:"required"`
 	Description string                                                                         `json:"description" api:"required"`
 	EndDate     time.Time                                                                      `json:"endDate" api:"required" format:"date-time"`
 	// Event type for annotations.
-	EventType EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
+	EventType EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType `json:"eventType" api:"required"`
 	// Whether event is a single point in time or a time range.
 	IsInstantaneous bool                                                                    `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                  `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                               `json:"startDate" api:"required" format:"date-time"`
-	JSON            emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+	JSON            emailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationJSON contains
+// emailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationJSON contains
 // the JSON metadata for the struct
-// [EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotation]
-type emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationJSON struct {
+// [EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotation]
+type emailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EndDate         apijson.Field
@@ -162,171 +162,171 @@ type emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationJSON str
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+func (r emailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
 // Data source for annotations.
-type EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource string
+type EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource string
 
 const (
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceCT                 EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAll                EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "ALL"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots             EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_BOTS"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway          EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "AI_GATEWAY"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP                EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "BGP"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceBots               EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "BOTS"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly  EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "CONNECTION_ANOMALY"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceCt                 EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "CT"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS                EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude       EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_MAGNITUDE"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112           EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "DNS_AS112"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDos                EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "DOS"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting       EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_ROUTING"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity      EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "EMAIL_SECURITY"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceFw                 EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg               EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "FW_PG"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP               EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl        EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CONTROL"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_CRAWLER_REFERER"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins        EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "HTTP_ORIGINS"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI                EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "IQI"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials  EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "LEAKED_CREDENTIALS"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceNet                EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "NET"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT          EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "ROBOTS_TXT"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed              EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "SPEED"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI          EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource = "WORKERS_AI"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceCT, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
+	case EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAll, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAIBots, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceAIGateway, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceBGP, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceBots, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceConnectionAnomaly, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceCt, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNS, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSMagnitude, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDNSAS112, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceDos, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailRouting, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceEmailSecurity, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceFw, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceFwPg, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTP, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPControl, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPCrawlerReferer, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceHTTPOrigins, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceIQI, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceLeakedCredentials, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceNet, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceRobotsTXT, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceSpeed, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsDataSourceWorkersAI:
 		return true
 	}
 	return false
 }
 
 // Event type for annotations.
-type EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType string
+type EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType string
 
 const (
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
-	EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline          EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "PIPELINE"
+	EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly    EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType = "TRAFFIC_ANOMALY"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, EmailSecurityTopTLDMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+	case EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, EmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDMaliciousGetResponseMetaDateRange struct {
+type EmailSecurityTopTldMaliciousGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime" api:"required" format:"date-time"`
 	// Adjusted start of date range.
 	StartTime time.Time                                                `json:"startTime" api:"required" format:"date-time"`
-	JSON      emailSecurityTopTLDMaliciousGetResponseMetaDateRangeJSON `json:"-"`
+	JSON      emailSecurityTopTldMaliciousGetResponseMetaDateRangeJSON `json:"-"`
 }
 
-// emailSecurityTopTLDMaliciousGetResponseMetaDateRangeJSON contains the JSON
-// metadata for the struct [EmailSecurityTopTLDMaliciousGetResponseMetaDateRange]
-type emailSecurityTopTLDMaliciousGetResponseMetaDateRangeJSON struct {
+// emailSecurityTopTldMaliciousGetResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [EmailSecurityTopTldMaliciousGetResponseMetaDateRange]
+type emailSecurityTopTldMaliciousGetResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDMaliciousGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldMaliciousGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDMaliciousGetResponseMetaDateRangeJSON) RawJSON() string {
+func (r emailSecurityTopTldMaliciousGetResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Normalization method applied to the results. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
-type EmailSecurityTopTLDMaliciousGetResponseMetaNormalization string
+type EmailSecurityTopTldMaliciousGetResponseMetaNormalization string
 
 const (
-	EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationPercentage           EmailSecurityTopTLDMaliciousGetResponseMetaNormalization = "PERCENTAGE"
-	EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationMin0Max              EmailSecurityTopTLDMaliciousGetResponseMetaNormalization = "MIN0_MAX"
-	EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationMinMax               EmailSecurityTopTLDMaliciousGetResponseMetaNormalization = "MIN_MAX"
-	EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationRawValues            EmailSecurityTopTLDMaliciousGetResponseMetaNormalization = "RAW_VALUES"
-	EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationPercentageChange     EmailSecurityTopTLDMaliciousGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
-	EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationRollingAverage       EmailSecurityTopTLDMaliciousGetResponseMetaNormalization = "ROLLING_AVERAGE"
-	EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationOverlappedPercentage EmailSecurityTopTLDMaliciousGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
-	EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationRatio                EmailSecurityTopTLDMaliciousGetResponseMetaNormalization = "RATIO"
+	EmailSecurityTopTldMaliciousGetResponseMetaNormalizationPercentage           EmailSecurityTopTldMaliciousGetResponseMetaNormalization = "PERCENTAGE"
+	EmailSecurityTopTldMaliciousGetResponseMetaNormalizationMin0Max              EmailSecurityTopTldMaliciousGetResponseMetaNormalization = "MIN0_MAX"
+	EmailSecurityTopTldMaliciousGetResponseMetaNormalizationMinMax               EmailSecurityTopTldMaliciousGetResponseMetaNormalization = "MIN_MAX"
+	EmailSecurityTopTldMaliciousGetResponseMetaNormalizationRawValues            EmailSecurityTopTldMaliciousGetResponseMetaNormalization = "RAW_VALUES"
+	EmailSecurityTopTldMaliciousGetResponseMetaNormalizationPercentageChange     EmailSecurityTopTldMaliciousGetResponseMetaNormalization = "PERCENTAGE_CHANGE"
+	EmailSecurityTopTldMaliciousGetResponseMetaNormalizationRollingAverage       EmailSecurityTopTldMaliciousGetResponseMetaNormalization = "ROLLING_AVERAGE"
+	EmailSecurityTopTldMaliciousGetResponseMetaNormalizationOverlappedPercentage EmailSecurityTopTldMaliciousGetResponseMetaNormalization = "OVERLAPPED_PERCENTAGE"
+	EmailSecurityTopTldMaliciousGetResponseMetaNormalizationRatio                EmailSecurityTopTldMaliciousGetResponseMetaNormalization = "RATIO"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetResponseMetaNormalization) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetResponseMetaNormalization) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationPercentage, EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationMin0Max, EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationMinMax, EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationRawValues, EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationPercentageChange, EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationRollingAverage, EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationOverlappedPercentage, EmailSecurityTopTLDMaliciousGetResponseMetaNormalizationRatio:
+	case EmailSecurityTopTldMaliciousGetResponseMetaNormalizationPercentage, EmailSecurityTopTldMaliciousGetResponseMetaNormalizationMin0Max, EmailSecurityTopTldMaliciousGetResponseMetaNormalizationMinMax, EmailSecurityTopTldMaliciousGetResponseMetaNormalizationRawValues, EmailSecurityTopTldMaliciousGetResponseMetaNormalizationPercentageChange, EmailSecurityTopTldMaliciousGetResponseMetaNormalizationRollingAverage, EmailSecurityTopTldMaliciousGetResponseMetaNormalizationOverlappedPercentage, EmailSecurityTopTldMaliciousGetResponseMetaNormalizationRatio:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDMaliciousGetResponseMetaUnit struct {
+type EmailSecurityTopTldMaliciousGetResponseMetaUnit struct {
 	Name  string                                              `json:"name" api:"required"`
 	Value string                                              `json:"value" api:"required"`
-	JSON  emailSecurityTopTLDMaliciousGetResponseMetaUnitJSON `json:"-"`
+	JSON  emailSecurityTopTldMaliciousGetResponseMetaUnitJSON `json:"-"`
 }
 
-// emailSecurityTopTLDMaliciousGetResponseMetaUnitJSON contains the JSON metadata
-// for the struct [EmailSecurityTopTLDMaliciousGetResponseMetaUnit]
-type emailSecurityTopTLDMaliciousGetResponseMetaUnitJSON struct {
+// emailSecurityTopTldMaliciousGetResponseMetaUnitJSON contains the JSON metadata
+// for the struct [EmailSecurityTopTldMaliciousGetResponseMetaUnit]
+type emailSecurityTopTldMaliciousGetResponseMetaUnitJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDMaliciousGetResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldMaliciousGetResponseMetaUnit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDMaliciousGetResponseMetaUnitJSON) RawJSON() string {
+func (r emailSecurityTopTldMaliciousGetResponseMetaUnitJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailSecurityTopTLDMaliciousGetResponseTop0 struct {
+type EmailSecurityTopTldMaliciousGetResponseTop0 struct {
 	Name string `json:"name" api:"required"`
 	// A numeric string.
 	Value string                                          `json:"value" api:"required"`
-	JSON  emailSecurityTopTLDMaliciousGetResponseTop0JSON `json:"-"`
+	JSON  emailSecurityTopTldMaliciousGetResponseTop0JSON `json:"-"`
 }
 
-// emailSecurityTopTLDMaliciousGetResponseTop0JSON contains the JSON metadata for
-// the struct [EmailSecurityTopTLDMaliciousGetResponseTop0]
-type emailSecurityTopTLDMaliciousGetResponseTop0JSON struct {
+// emailSecurityTopTldMaliciousGetResponseTop0JSON contains the JSON metadata for
+// the struct [EmailSecurityTopTldMaliciousGetResponseTop0]
+type emailSecurityTopTldMaliciousGetResponseTop0JSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDMaliciousGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldMaliciousGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDMaliciousGetResponseTop0JSON) RawJSON() string {
+func (r emailSecurityTopTldMaliciousGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailSecurityTopTLDMaliciousGetParams struct {
+type EmailSecurityTopTldMaliciousGetParams struct {
 	// Filters results by ARC (Authenticated Received Chain) validation.
-	ARC param.Field[[]EmailSecurityTopTLDMaliciousGetParamsARC] `query:"arc"`
+	ARC param.Field[[]EmailSecurityTopTldMaliciousGetParamsARC] `query:"arc"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
@@ -336,27 +336,27 @@ type EmailSecurityTopTLDMaliciousGetParams struct {
 	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
-	DKIM param.Field[[]EmailSecurityTopTLDMaliciousGetParamsDKIM] `query:"dkim"`
+	DKIM param.Field[[]EmailSecurityTopTldMaliciousGetParamsDKIM] `query:"dkim"`
 	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
 	// Conformance) validation status.
-	DMARC param.Field[[]EmailSecurityTopTLDMaliciousGetParamsDMARC] `query:"dmarc"`
+	DMARC param.Field[[]EmailSecurityTopTldMaliciousGetParamsDMARC] `query:"dmarc"`
 	// Format in which results will be returned.
-	Format param.Field[EmailSecurityTopTLDMaliciousGetParamsFormat] `query:"format"`
+	Format param.Field[EmailSecurityTopTldMaliciousGetParamsFormat] `query:"format"`
 	// Limits the number of objects returned in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
 	// Filters results by SPF (Sender Policy Framework) validation status.
-	SPF param.Field[[]EmailSecurityTopTLDMaliciousGetParamsSPF] `query:"spf"`
+	SPF param.Field[[]EmailSecurityTopTldMaliciousGetParamsSPF] `query:"spf"`
 	// Filters results by TLD category.
-	TLDCategory param.Field[EmailSecurityTopTLDMaliciousGetParamsTLDCategory] `query:"tldCategory"`
+	TldCategory param.Field[EmailSecurityTopTldMaliciousGetParamsTldCategory] `query:"tldCategory"`
 	// Filters results by TLS version.
-	TLSVersion param.Field[[]EmailSecurityTopTLDMaliciousGetParamsTLSVersion] `query:"tlsVersion"`
+	TLSVersion param.Field[[]EmailSecurityTopTldMaliciousGetParamsTLSVersion] `query:"tlsVersion"`
 }
 
-// URLQuery serializes [EmailSecurityTopTLDMaliciousGetParams]'s query parameters
+// URLQuery serializes [EmailSecurityTopTldMaliciousGetParams]'s query parameters
 // as `url.Values`.
-func (r EmailSecurityTopTLDMaliciousGetParams) URLQuery() (v url.Values) {
+func (r EmailSecurityTopTldMaliciousGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -364,153 +364,153 @@ func (r EmailSecurityTopTLDMaliciousGetParams) URLQuery() (v url.Values) {
 }
 
 // Malicious classification.
-type EmailSecurityTopTLDMaliciousGetParamsMalicious string
+type EmailSecurityTopTldMaliciousGetParamsMalicious string
 
 const (
-	EmailSecurityTopTLDMaliciousGetParamsMaliciousMalicious    EmailSecurityTopTLDMaliciousGetParamsMalicious = "MALICIOUS"
-	EmailSecurityTopTLDMaliciousGetParamsMaliciousNotMalicious EmailSecurityTopTLDMaliciousGetParamsMalicious = "NOT_MALICIOUS"
+	EmailSecurityTopTldMaliciousGetParamsMaliciousMalicious    EmailSecurityTopTldMaliciousGetParamsMalicious = "MALICIOUS"
+	EmailSecurityTopTldMaliciousGetParamsMaliciousNotMalicious EmailSecurityTopTldMaliciousGetParamsMalicious = "NOT_MALICIOUS"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetParamsMalicious) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetParamsMalicious) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetParamsMaliciousMalicious, EmailSecurityTopTLDMaliciousGetParamsMaliciousNotMalicious:
+	case EmailSecurityTopTldMaliciousGetParamsMaliciousMalicious, EmailSecurityTopTldMaliciousGetParamsMaliciousNotMalicious:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDMaliciousGetParamsARC string
+type EmailSecurityTopTldMaliciousGetParamsARC string
 
 const (
-	EmailSecurityTopTLDMaliciousGetParamsARCPass EmailSecurityTopTLDMaliciousGetParamsARC = "PASS"
-	EmailSecurityTopTLDMaliciousGetParamsARCNone EmailSecurityTopTLDMaliciousGetParamsARC = "NONE"
-	EmailSecurityTopTLDMaliciousGetParamsARCFail EmailSecurityTopTLDMaliciousGetParamsARC = "FAIL"
+	EmailSecurityTopTldMaliciousGetParamsARCPass EmailSecurityTopTldMaliciousGetParamsARC = "PASS"
+	EmailSecurityTopTldMaliciousGetParamsARCNone EmailSecurityTopTldMaliciousGetParamsARC = "NONE"
+	EmailSecurityTopTldMaliciousGetParamsARCFail EmailSecurityTopTldMaliciousGetParamsARC = "FAIL"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetParamsARC) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetParamsARC) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetParamsARCPass, EmailSecurityTopTLDMaliciousGetParamsARCNone, EmailSecurityTopTLDMaliciousGetParamsARCFail:
+	case EmailSecurityTopTldMaliciousGetParamsARCPass, EmailSecurityTopTldMaliciousGetParamsARCNone, EmailSecurityTopTldMaliciousGetParamsARCFail:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDMaliciousGetParamsDKIM string
+type EmailSecurityTopTldMaliciousGetParamsDKIM string
 
 const (
-	EmailSecurityTopTLDMaliciousGetParamsDKIMPass EmailSecurityTopTLDMaliciousGetParamsDKIM = "PASS"
-	EmailSecurityTopTLDMaliciousGetParamsDKIMNone EmailSecurityTopTLDMaliciousGetParamsDKIM = "NONE"
-	EmailSecurityTopTLDMaliciousGetParamsDKIMFail EmailSecurityTopTLDMaliciousGetParamsDKIM = "FAIL"
+	EmailSecurityTopTldMaliciousGetParamsDKIMPass EmailSecurityTopTldMaliciousGetParamsDKIM = "PASS"
+	EmailSecurityTopTldMaliciousGetParamsDKIMNone EmailSecurityTopTldMaliciousGetParamsDKIM = "NONE"
+	EmailSecurityTopTldMaliciousGetParamsDKIMFail EmailSecurityTopTldMaliciousGetParamsDKIM = "FAIL"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetParamsDKIM) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetParamsDKIM) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetParamsDKIMPass, EmailSecurityTopTLDMaliciousGetParamsDKIMNone, EmailSecurityTopTLDMaliciousGetParamsDKIMFail:
+	case EmailSecurityTopTldMaliciousGetParamsDKIMPass, EmailSecurityTopTldMaliciousGetParamsDKIMNone, EmailSecurityTopTldMaliciousGetParamsDKIMFail:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDMaliciousGetParamsDMARC string
+type EmailSecurityTopTldMaliciousGetParamsDMARC string
 
 const (
-	EmailSecurityTopTLDMaliciousGetParamsDMARCPass EmailSecurityTopTLDMaliciousGetParamsDMARC = "PASS"
-	EmailSecurityTopTLDMaliciousGetParamsDMARCNone EmailSecurityTopTLDMaliciousGetParamsDMARC = "NONE"
-	EmailSecurityTopTLDMaliciousGetParamsDMARCFail EmailSecurityTopTLDMaliciousGetParamsDMARC = "FAIL"
+	EmailSecurityTopTldMaliciousGetParamsDMARCPass EmailSecurityTopTldMaliciousGetParamsDMARC = "PASS"
+	EmailSecurityTopTldMaliciousGetParamsDMARCNone EmailSecurityTopTldMaliciousGetParamsDMARC = "NONE"
+	EmailSecurityTopTldMaliciousGetParamsDMARCFail EmailSecurityTopTldMaliciousGetParamsDMARC = "FAIL"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetParamsDMARC) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetParamsDMARC) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetParamsDMARCPass, EmailSecurityTopTLDMaliciousGetParamsDMARCNone, EmailSecurityTopTLDMaliciousGetParamsDMARCFail:
+	case EmailSecurityTopTldMaliciousGetParamsDMARCPass, EmailSecurityTopTldMaliciousGetParamsDMARCNone, EmailSecurityTopTldMaliciousGetParamsDMARCFail:
 		return true
 	}
 	return false
 }
 
 // Format in which results will be returned.
-type EmailSecurityTopTLDMaliciousGetParamsFormat string
+type EmailSecurityTopTldMaliciousGetParamsFormat string
 
 const (
-	EmailSecurityTopTLDMaliciousGetParamsFormatJson EmailSecurityTopTLDMaliciousGetParamsFormat = "JSON"
-	EmailSecurityTopTLDMaliciousGetParamsFormatCsv  EmailSecurityTopTLDMaliciousGetParamsFormat = "CSV"
+	EmailSecurityTopTldMaliciousGetParamsFormatJson EmailSecurityTopTldMaliciousGetParamsFormat = "JSON"
+	EmailSecurityTopTldMaliciousGetParamsFormatCsv  EmailSecurityTopTldMaliciousGetParamsFormat = "CSV"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetParamsFormat) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetParamsFormatJson, EmailSecurityTopTLDMaliciousGetParamsFormatCsv:
+	case EmailSecurityTopTldMaliciousGetParamsFormatJson, EmailSecurityTopTldMaliciousGetParamsFormatCsv:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDMaliciousGetParamsSPF string
+type EmailSecurityTopTldMaliciousGetParamsSPF string
 
 const (
-	EmailSecurityTopTLDMaliciousGetParamsSPFPass EmailSecurityTopTLDMaliciousGetParamsSPF = "PASS"
-	EmailSecurityTopTLDMaliciousGetParamsSPFNone EmailSecurityTopTLDMaliciousGetParamsSPF = "NONE"
-	EmailSecurityTopTLDMaliciousGetParamsSPFFail EmailSecurityTopTLDMaliciousGetParamsSPF = "FAIL"
+	EmailSecurityTopTldMaliciousGetParamsSPFPass EmailSecurityTopTldMaliciousGetParamsSPF = "PASS"
+	EmailSecurityTopTldMaliciousGetParamsSPFNone EmailSecurityTopTldMaliciousGetParamsSPF = "NONE"
+	EmailSecurityTopTldMaliciousGetParamsSPFFail EmailSecurityTopTldMaliciousGetParamsSPF = "FAIL"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetParamsSPF) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetParamsSPF) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetParamsSPFPass, EmailSecurityTopTLDMaliciousGetParamsSPFNone, EmailSecurityTopTLDMaliciousGetParamsSPFFail:
+	case EmailSecurityTopTldMaliciousGetParamsSPFPass, EmailSecurityTopTldMaliciousGetParamsSPFNone, EmailSecurityTopTldMaliciousGetParamsSPFFail:
 		return true
 	}
 	return false
 }
 
 // Filters results by TLD category.
-type EmailSecurityTopTLDMaliciousGetParamsTLDCategory string
+type EmailSecurityTopTldMaliciousGetParamsTldCategory string
 
 const (
-	EmailSecurityTopTLDMaliciousGetParamsTLDCategoryClassic EmailSecurityTopTLDMaliciousGetParamsTLDCategory = "CLASSIC"
-	EmailSecurityTopTLDMaliciousGetParamsTLDCategoryCountry EmailSecurityTopTLDMaliciousGetParamsTLDCategory = "COUNTRY"
+	EmailSecurityTopTldMaliciousGetParamsTldCategoryClassic EmailSecurityTopTldMaliciousGetParamsTldCategory = "CLASSIC"
+	EmailSecurityTopTldMaliciousGetParamsTldCategoryCountry EmailSecurityTopTldMaliciousGetParamsTldCategory = "COUNTRY"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetParamsTLDCategory) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetParamsTldCategory) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetParamsTLDCategoryClassic, EmailSecurityTopTLDMaliciousGetParamsTLDCategoryCountry:
+	case EmailSecurityTopTldMaliciousGetParamsTldCategoryClassic, EmailSecurityTopTldMaliciousGetParamsTldCategoryCountry:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDMaliciousGetParamsTLSVersion string
+type EmailSecurityTopTldMaliciousGetParamsTLSVersion string
 
 const (
-	EmailSecurityTopTLDMaliciousGetParamsTLSVersionTlSv1_0 EmailSecurityTopTLDMaliciousGetParamsTLSVersion = "TLSv1_0"
-	EmailSecurityTopTLDMaliciousGetParamsTLSVersionTlSv1_1 EmailSecurityTopTLDMaliciousGetParamsTLSVersion = "TLSv1_1"
-	EmailSecurityTopTLDMaliciousGetParamsTLSVersionTlSv1_2 EmailSecurityTopTLDMaliciousGetParamsTLSVersion = "TLSv1_2"
-	EmailSecurityTopTLDMaliciousGetParamsTLSVersionTlSv1_3 EmailSecurityTopTLDMaliciousGetParamsTLSVersion = "TLSv1_3"
+	EmailSecurityTopTldMaliciousGetParamsTLSVersionTlSv1_0 EmailSecurityTopTldMaliciousGetParamsTLSVersion = "TLSv1_0"
+	EmailSecurityTopTldMaliciousGetParamsTLSVersionTlSv1_1 EmailSecurityTopTldMaliciousGetParamsTLSVersion = "TLSv1_1"
+	EmailSecurityTopTldMaliciousGetParamsTLSVersionTlSv1_2 EmailSecurityTopTldMaliciousGetParamsTLSVersion = "TLSv1_2"
+	EmailSecurityTopTldMaliciousGetParamsTLSVersionTlSv1_3 EmailSecurityTopTldMaliciousGetParamsTLSVersion = "TLSv1_3"
 )
 
-func (r EmailSecurityTopTLDMaliciousGetParamsTLSVersion) IsKnown() bool {
+func (r EmailSecurityTopTldMaliciousGetParamsTLSVersion) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTLDMaliciousGetParamsTLSVersionTlSv1_0, EmailSecurityTopTLDMaliciousGetParamsTLSVersionTlSv1_1, EmailSecurityTopTLDMaliciousGetParamsTLSVersionTlSv1_2, EmailSecurityTopTLDMaliciousGetParamsTLSVersionTlSv1_3:
+	case EmailSecurityTopTldMaliciousGetParamsTLSVersionTlSv1_0, EmailSecurityTopTldMaliciousGetParamsTLSVersionTlSv1_1, EmailSecurityTopTldMaliciousGetParamsTLSVersionTlSv1_2, EmailSecurityTopTldMaliciousGetParamsTLSVersionTlSv1_3:
 		return true
 	}
 	return false
 }
 
-type EmailSecurityTopTLDMaliciousGetResponseEnvelope struct {
-	Result  EmailSecurityTopTLDMaliciousGetResponse             `json:"result" api:"required"`
+type EmailSecurityTopTldMaliciousGetResponseEnvelope struct {
+	Result  EmailSecurityTopTldMaliciousGetResponse             `json:"result" api:"required"`
 	Success bool                                                `json:"success" api:"required"`
-	JSON    emailSecurityTopTLDMaliciousGetResponseEnvelopeJSON `json:"-"`
+	JSON    emailSecurityTopTldMaliciousGetResponseEnvelopeJSON `json:"-"`
 }
 
-// emailSecurityTopTLDMaliciousGetResponseEnvelopeJSON contains the JSON metadata
-// for the struct [EmailSecurityTopTLDMaliciousGetResponseEnvelope]
-type emailSecurityTopTLDMaliciousGetResponseEnvelopeJSON struct {
+// emailSecurityTopTldMaliciousGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [EmailSecurityTopTldMaliciousGetResponseEnvelope]
+type emailSecurityTopTldMaliciousGetResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailSecurityTopTLDMaliciousGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailSecurityTopTldMaliciousGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailSecurityTopTLDMaliciousGetResponseEnvelopeJSON) RawJSON() string {
+func (r emailSecurityTopTldMaliciousGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

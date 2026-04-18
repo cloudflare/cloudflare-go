@@ -45,11 +45,6 @@ func NewLockdownService(opts ...option.RequestOption) (r *LockdownService) {
 func (r *LockdownService) New(ctx context.Context, params LockdownNewParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -67,11 +62,6 @@ func (r *LockdownService) New(ctx context.Context, params LockdownNewParams, opt
 func (r *LockdownService) Update(ctx context.Context, lockDownsID string, params LockdownUpdateParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -95,11 +85,6 @@ func (r *LockdownService) List(ctx context.Context, params LockdownListParams, o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -127,11 +112,6 @@ func (r *LockdownService) ListAutoPaging(ctx context.Context, params LockdownLis
 func (r *LockdownService) Delete(ctx context.Context, lockDownsID string, body LockdownDeleteParams, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
 	var env LockdownDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -153,11 +133,6 @@ func (r *LockdownService) Delete(ctx context.Context, lockDownsID string, body L
 func (r *LockdownService) Get(ctx context.Context, lockDownsID string, query LockdownGetParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -466,8 +441,6 @@ func (r lockdownDeleteResponseJSON) RawJSON() string {
 
 type LockdownNewParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 	// specified in the Zone Lockdown rule. You can include any number of `ip` or
@@ -537,8 +510,6 @@ func (r LockdownNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type LockdownUpdateParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 	// specified in the Zone Lockdown rule. You can include any number of `ip` or
@@ -599,8 +570,6 @@ func (r LockdownUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type LockdownListParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The timestamp of when the rule was created.
 	CreatedOn param.Field[time.Time] `query:"created_on" format:"date-time"`
@@ -639,8 +608,6 @@ func (r LockdownListParams) URLQuery() (v url.Values) {
 
 type LockdownDeleteParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -667,8 +634,6 @@ func (r lockdownDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type LockdownGetParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

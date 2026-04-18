@@ -40,11 +40,6 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewParams, opts ...option.RequestOption) (res *RUMRule, err error) {
 	var env RuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewP
 func (r *RuleService) Update(ctx context.Context, rulesetID string, ruleID string, params RuleUpdateParams, opts ...option.RequestOption) (res *RUMRule, err error) {
 	var env RuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -96,11 +86,6 @@ func (r *RuleService) Update(ctx context.Context, rulesetID string, ruleID strin
 func (r *RuleService) List(ctx context.Context, rulesetID string, query RuleListParams, opts ...option.RequestOption) (res *RuleListResponse, err error) {
 	var env RuleListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -122,11 +107,6 @@ func (r *RuleService) List(ctx context.Context, rulesetID string, query RuleList
 func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
 	var env RuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -152,11 +132,6 @@ func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID strin
 func (r *RuleService) BulkNew(ctx context.Context, rulesetID string, params RuleBulkNewParams, opts ...option.RequestOption) (res *RuleBulkNewResponse, err error) {
 	var env RuleBulkNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -343,8 +318,6 @@ func (r ruleBulkNewResponseRulesetJSON) RawJSON() string {
 
 type RuleNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Host      param.Field[string] `json:"host"`
 	// Whether the rule includes or excludes traffic from being measured.
@@ -388,8 +361,6 @@ func (r ruleNewResponseEnvelopeJSON) RawJSON() string {
 
 type RuleUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Host      param.Field[string] `json:"host"`
 	// Whether the rule includes or excludes traffic from being measured.
@@ -433,8 +404,6 @@ func (r ruleUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type RuleListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -468,8 +437,6 @@ func (r ruleListResponseEnvelopeJSON) RawJSON() string {
 
 type RuleDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -503,8 +470,6 @@ func (r ruleDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type RuleBulkNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A list of rule identifiers to delete.
 	DeleteRules param.Field[[]string] `json:"delete_rules"`
