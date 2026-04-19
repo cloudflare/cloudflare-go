@@ -41,6 +41,11 @@ func NewGatewayRuleService(opts ...option.RequestOption) (r *GatewayRuleService)
 func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	var env GatewayRuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -58,6 +63,11 @@ func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParam
 func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params GatewayRuleUpdateParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	var env GatewayRuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -80,6 +90,11 @@ func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListPara
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -106,6 +121,11 @@ func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRu
 func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponse, err error) {
 	var env GatewayRuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -127,6 +147,11 @@ func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body Gat
 func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query GatewayRuleGetParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	var env GatewayRuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -144,12 +169,51 @@ func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query Gatew
 	return res, nil
 }
 
+// List Zero Trust Gateway rules for the parent account of an account in the MSP
+// configuration.
+func (r *GatewayRuleService) ListTenant(ctx context.Context, query GatewayRuleListTenantParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayRule], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/gateway/rules/tenant", query.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List Zero Trust Gateway rules for the parent account of an account in the MSP
+// configuration.
+func (r *GatewayRuleService) ListTenantAutoPaging(ctx context.Context, query GatewayRuleListTenantParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayRule] {
+	return pagination.NewSinglePageAutoPager(r.ListTenant(ctx, query, opts...))
+}
+
 // Resets the expiration of a Zero Trust Gateway Rule if its duration elapsed and
 // it has a default duration. The Zero Trust Gateway Rule must have values for both
 // `expiration.expires_at` and `expiration.duration`.
 func (r *GatewayRuleService) ResetExpiration(ctx context.Context, ruleID string, body GatewayRuleResetExpirationParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
 	var env GatewayRuleResetExpirationResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -1644,6 +1708,7 @@ func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
 type GatewayRuleDeleteResponse = interface{}
 
 type GatewayRuleNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the action to perform when the associated traffic, identity, and device
 	// posture expressions either absent or evaluate to `true`.
@@ -1790,6 +1855,7 @@ func (r GatewayRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the action to perform when the associated traffic, identity, and device
 	// posture expressions either absent or evaluate to `true`.
@@ -1936,10 +2002,12 @@ func (r GatewayRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleListParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayRuleDeleteParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1987,6 +2055,7 @@ func (r GatewayRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2033,7 +2102,13 @@ func (r GatewayRuleGetResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type GatewayRuleListTenantParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
 type GatewayRuleResetExpirationParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

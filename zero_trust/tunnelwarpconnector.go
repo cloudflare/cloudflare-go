@@ -27,8 +27,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewTunnelWARPConnectorService] method instead.
 type TunnelWARPConnectorService struct {
-	Options []option.RequestOption
-	Token   *TunnelWARPConnectorTokenService
+	Options     []option.RequestOption
+	Token       *TunnelWARPConnectorTokenService
+	Connections *TunnelWARPConnectorConnectionService
+	Connectors  *TunnelWARPConnectorConnectorService
+	Failover    *TunnelWARPConnectorFailoverService
 }
 
 // NewTunnelWARPConnectorService generates a new service that applies the given
@@ -38,6 +41,9 @@ func NewTunnelWARPConnectorService(opts ...option.RequestOption) (r *TunnelWARPC
 	r = &TunnelWARPConnectorService{}
 	r.Options = opts
 	r.Token = NewTunnelWARPConnectorTokenService(opts...)
+	r.Connections = NewTunnelWARPConnectorConnectionService(opts...)
+	r.Connectors = NewTunnelWARPConnectorConnectorService(opts...)
+	r.Failover = NewTunnelWARPConnectorFailoverService(opts...)
 	return
 }
 
@@ -45,6 +51,11 @@ func NewTunnelWARPConnectorService(opts ...option.RequestOption) (r *TunnelWARPC
 func (r *TunnelWARPConnectorService) New(ctx context.Context, params TunnelWARPConnectorNewParams, opts ...option.RequestOption) (res *TunnelWARPConnectorNewResponse, err error) {
 	var env TunnelWARPConnectorNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,6 +74,11 @@ func (r *TunnelWARPConnectorService) List(ctx context.Context, params TunnelWARP
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -89,6 +105,11 @@ func (r *TunnelWARPConnectorService) ListAutoPaging(ctx context.Context, params 
 func (r *TunnelWARPConnectorService) Delete(ctx context.Context, tunnelID string, body TunnelWARPConnectorDeleteParams, opts ...option.RequestOption) (res *TunnelWARPConnectorDeleteResponse, err error) {
 	var env TunnelWARPConnectorDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -110,6 +131,11 @@ func (r *TunnelWARPConnectorService) Delete(ctx context.Context, tunnelID string
 func (r *TunnelWARPConnectorService) Edit(ctx context.Context, tunnelID string, params TunnelWARPConnectorEditParams, opts ...option.RequestOption) (res *TunnelWARPConnectorEditResponse, err error) {
 	var env TunnelWARPConnectorEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -131,6 +157,11 @@ func (r *TunnelWARPConnectorService) Edit(ctx context.Context, tunnelID string, 
 func (r *TunnelWARPConnectorService) Get(ctx context.Context, tunnelID string, query TunnelWARPConnectorGetParams, opts ...option.RequestOption) (res *TunnelWARPConnectorGetResponse, err error) {
 	var env TunnelWARPConnectorGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -905,6 +936,8 @@ func (r TunnelWARPConnectorGetResponseTunType) IsKnown() bool {
 
 type TunnelWARPConnectorNewParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for a tunnel.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -963,6 +996,8 @@ func (r TunnelWARPConnectorNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelWARPConnectorListParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string] `path:"account_id" api:"required"`
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
 	// If provided, include only resources that were created (and not deleted) before
@@ -1021,6 +1056,8 @@ func (r TunnelWARPConnectorListParamsStatus) IsKnown() bool {
 
 type TunnelWARPConnectorDeleteParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1070,6 +1107,8 @@ func (r TunnelWARPConnectorDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelWARPConnectorEditParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for a tunnel.
 	Name param.Field[string] `json:"name"`
@@ -1128,6 +1167,8 @@ func (r TunnelWARPConnectorEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type TunnelWARPConnectorGetParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -44,6 +44,11 @@ func NewStoreService(opts ...option.RequestOption) (r *StoreService) {
 func (r *StoreService) New(ctx context.Context, params StoreNewParams, opts ...option.RequestOption) (res *StoreNewResponse, err error) {
 	var env StoreNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,6 +67,11 @@ func (r *StoreService) List(ctx context.Context, params StoreListParams, opts ..
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -88,6 +98,11 @@ func (r *StoreService) ListAutoPaging(ctx context.Context, params StoreListParam
 func (r *StoreService) Delete(ctx context.Context, storeID string, body StoreDeleteParams, opts ...option.RequestOption) (res *StoreDeleteResponse, err error) {
 	var env StoreDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -177,6 +192,8 @@ type StoreDeleteResponse = interface{}
 
 type StoreNewParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the store
 	Name param.Field[string] `json:"name" api:"required"`
@@ -363,6 +380,8 @@ func (r storeNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type StoreListParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to sort objects
 	Direction param.Field[StoreListParamsDirection] `query:"direction"`
@@ -419,6 +438,8 @@ func (r StoreListParamsOrder) IsKnown() bool {
 
 type StoreDeleteParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

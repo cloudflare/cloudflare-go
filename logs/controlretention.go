@@ -38,6 +38,11 @@ func NewControlRetentionService(opts ...option.RequestOption) (r *ControlRetenti
 func (r *ControlRetentionService) New(ctx context.Context, params ControlRetentionNewParams, opts ...option.RequestOption) (res *ControlRetentionNewResponse, err error) {
 	var env ControlRetentionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -55,6 +60,11 @@ func (r *ControlRetentionService) New(ctx context.Context, params ControlRetenti
 func (r *ControlRetentionService) Get(ctx context.Context, query ControlRetentionGetParams, opts ...option.RequestOption) (res *ControlRetentionGetResponse, err error) {
 	var env ControlRetentionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -114,6 +124,8 @@ func (r controlRetentionGetResponseJSON) RawJSON() string {
 
 type ControlRetentionNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The log retention flag for Logpull API.
 	Flag param.Field[bool] `json:"flag"`
@@ -264,6 +276,8 @@ func (r ControlRetentionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ControlRetentionGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

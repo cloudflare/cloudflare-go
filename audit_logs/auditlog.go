@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -44,6 +43,11 @@ func (r *AuditLogService) List(ctx context.Context, params AuditLogListParams, o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -69,6 +73,8 @@ func (r *AuditLogService) ListAutoPaging(ctx context.Context, params AuditLogLis
 
 type AuditLogListParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Finds a specific log by its ID.
 	ID     param.Field[string]                   `query:"id"`
@@ -76,7 +82,7 @@ type AuditLogListParams struct {
 	Actor  param.Field[AuditLogListParamsActor]  `query:"actor"`
 	// Limits the returned results to logs older than the specified date. A `full-date`
 	// that conforms to RFC3339.
-	Before param.Field[time.Time] `query:"before" format:"date-time"`
+	Before param.Field[AuditLogListParamsBeforeUnion] `query:"before" format:"date"`
 	// Changes the direction of the chronological sorting.
 	Direction param.Field[AuditLogListParamsDirection] `query:"direction"`
 	// Indicates that this request is an export of logs in CSV format.
@@ -89,8 +95,8 @@ type AuditLogListParams struct {
 	PerPage param.Field[float64] `query:"per_page"`
 	// Limits the returned results to logs newer than the specified date. A `full-date`
 	// that conforms to RFC3339.
-	Since param.Field[time.Time]              `query:"since" format:"date-time"`
-	Zone  param.Field[AuditLogListParamsZone] `query:"zone"`
+	Since param.Field[AuditLogListParamsSinceUnion] `query:"since" format:"date"`
+	Zone  param.Field[AuditLogListParamsZone]       `query:"zone"`
 }
 
 // URLQuery serializes [AuditLogListParams]'s query parameters as `url.Values`.
@@ -132,6 +138,14 @@ func (r AuditLogListParamsActor) URLQuery() (v url.Values) {
 	})
 }
 
+// Limits the returned results to logs older than the specified date. A `full-date`
+// that conforms to RFC3339.
+//
+// Satisfied by [shared.UnionTime], [shared.UnionTime].
+type AuditLogListParamsBeforeUnion interface {
+	ImplementsAuditLogListParamsBeforeUnion()
+}
+
 // Changes the direction of the chronological sorting.
 type AuditLogListParamsDirection string
 
@@ -146,6 +160,14 @@ func (r AuditLogListParamsDirection) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Limits the returned results to logs newer than the specified date. A `full-date`
+// that conforms to RFC3339.
+//
+// Satisfied by [shared.UnionTime], [shared.UnionTime].
+type AuditLogListParamsSinceUnion interface {
+	ImplementsAuditLogListParamsSinceUnion()
 }
 
 type AuditLogListParamsZone struct {

@@ -35,6 +35,8 @@
 
 # [Accounts](accounts/api.md)
 
+# [Organizations](organizations/api.md)
+
 # [OriginCACertificates](origin_ca_certificates/api.md)
 
 # [IPs](ips/api.md)
@@ -72,6 +74,8 @@
 # [EmailSecurity](email_security/api.md)
 
 # [EmailRouting](email_routing/api.md)
+
+# [EmailSending](email_sending/api.md)
 
 # [Filters](filters/api.md)
 
@@ -117,8 +121,6 @@
 
 # [Addressing](addressing/api.md)
 
-# [DLS](dls/api.md)
-
 # [AuditLogs](audit_logs/api.md)
 
 # [Billing](billing/api.md)
@@ -157,11 +159,15 @@
 
 # [R2](r2/api.md)
 
+# [R2DataCatalog](r2_data_catalog/api.md)
+
 # [WorkersForPlatforms](workers_for_platforms/api.md)
 
 # [ZeroTrust](zero_trust/api.md)
 
 # [Turnstile](turnstile/api.md)
+
+# [Connectivity](connectivity/api.md)
 
 # [Hyperdrive](hyperdrive/api.md)
 
@@ -171,11 +177,17 @@
 
 # [URLScanner](url_scanner/api.md)
 
+# [VulnerabilityScanner](vulnerability_scanner/api.md)
+
 # [Radar](radar/api.md)
 
 # [BotManagement](bot_management/api.md)
 
+# [Fraud](fraud/api.md)
+
 # [OriginPostQuantumEncryption](origin_post_quantum_encryption/api.md)
+
+# [GoogleTagGateway](google_tag_gateway/api.md)
 
 # [Zaraz](zaraz/api.md)
 
@@ -186,6 +198,8 @@
 # [Hostnames](hostnames/api.md)
 
 # [Snippets](snippets/api.md)
+
+# [RealtimeKit](realtime_kit/api.md)
 
 # [Calls](calls/api.md)
 
@@ -205,6 +219,8 @@
 
 # [ResourceSharing](resource_sharing/api.md)
 
+# [ResourceTagging](resource_tagging/api.md)
+
 # [LeakedCredentialChecks](leaked_credential_checks/api.md)
 
 # [ContentScanning](content_scanning/api.md)
@@ -212,6 +228,8 @@
 # [AbuseReports](abuse_reports/api.md)
 
 # [AI](ai/api.md)
+
+# [AISearch](ai_search/api.md)
 
 # [SecurityCenter](security_center/api.md)
 
@@ -224,3 +242,5 @@
 # [Pipelines](pipelines/api.md)
 
 # [SchemaValidation](schema_validation/api.md)
+
+# [TokenValidation](token_validation/api.md)

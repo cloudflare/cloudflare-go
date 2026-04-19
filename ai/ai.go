@@ -25,11 +25,12 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAIService] method instead.
 type AIService struct {
-	Options   []option.RequestOption
-	Finetunes *FinetuneService
-	Authors   *AuthorService
-	Tasks     *TaskService
-	Models    *ModelService
+	Options    []option.RequestOption
+	Finetunes  *FinetuneService
+	Authors    *AuthorService
+	Tasks      *TaskService
+	Models     *ModelService
+	ToMarkdown *ToMarkdownService
 }
 
 // NewAIService generates a new service that applies the given options to each
@@ -42,6 +43,7 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r.Authors = NewAuthorService(opts...)
 	r.Tasks = NewTaskService(opts...)
 	r.Models = NewModelService(opts...)
+	r.ToMarkdown = NewToMarkdownService(opts...)
 	return
 }
 
@@ -57,6 +59,11 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParams, opts ...option.RequestOption) (res *AIRunResponseUnion, err error) {
 	var env AIRunResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -589,6 +596,7 @@ func (r aiRunResponseMultimodalEmbeddingsJSON) RawJSON() string {
 func (r AIRunResponseMultimodalEmbeddings) ImplementsAIRunResponseUnion() {}
 
 type AIRunParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	Body      AIRunParamsBodyUnion `json:"body"`
 }

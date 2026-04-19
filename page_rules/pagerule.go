@@ -45,6 +45,11 @@ func NewPageRuleService(opts ...option.RequestOption) (r *PageRuleService) {
 func (r *PageRuleService) New(ctx context.Context, params PageRuleNewParams, opts ...option.RequestOption) (res *PageRule, err error) {
 	var env PageRuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -63,6 +68,11 @@ func (r *PageRuleService) New(ctx context.Context, params PageRuleNewParams, opt
 func (r *PageRuleService) Update(ctx context.Context, pageruleID string, params PageRuleUpdateParams, opts ...option.RequestOption) (res *PageRule, err error) {
 	var env PageRuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -84,6 +94,11 @@ func (r *PageRuleService) Update(ctx context.Context, pageruleID string, params 
 func (r *PageRuleService) List(ctx context.Context, params PageRuleListParams, opts ...option.RequestOption) (res *[]PageRule, err error) {
 	var env PageRuleListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -101,6 +116,11 @@ func (r *PageRuleService) List(ctx context.Context, params PageRuleListParams, o
 func (r *PageRuleService) Delete(ctx context.Context, pageruleID string, body PageRuleDeleteParams, opts ...option.RequestOption) (res *PageRuleDeleteResponse, err error) {
 	var env PageRuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -122,6 +142,11 @@ func (r *PageRuleService) Delete(ctx context.Context, pageruleID string, body Pa
 func (r *PageRuleService) Edit(ctx context.Context, pageruleID string, params PageRuleEditParams, opts ...option.RequestOption) (res *PageRule, err error) {
 	var env PageRuleEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -143,6 +168,11 @@ func (r *PageRuleService) Edit(ctx context.Context, pageruleID string, params Pa
 func (r *PageRuleService) Get(ctx context.Context, pageruleID string, query PageRuleGetParams, opts ...option.RequestOption) (res *PageRule, err error) {
 	var env PageRuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -1809,6 +1839,8 @@ func (r pageRuleDeleteResponseJSON) RawJSON() string {
 
 type PageRuleNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
@@ -2854,6 +2886,8 @@ func (r PageRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageRuleUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
@@ -3901,6 +3935,8 @@ func (r PageRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageRuleListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The direction used to sort returned Page Rules.
 	Direction param.Field[PageRuleListParamsDirection] `query:"direction"`
@@ -4127,6 +4163,8 @@ func (r PageRuleListResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageRuleDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -4271,6 +4309,8 @@ func (r PageRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageRuleEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
@@ -5316,6 +5356,8 @@ func (r PageRuleEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageRuleGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

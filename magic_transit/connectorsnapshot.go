@@ -42,6 +42,11 @@ func NewConnectorSnapshotService(opts ...option.RequestOption) (r *ConnectorSnap
 func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string, params ConnectorSnapshotListParams, opts ...option.RequestOption) (res *ConnectorSnapshotListResponse, err error) {
 	var env ConnectorSnapshotListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,6 +68,11 @@ func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string,
 func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, snapshotT float64, query ConnectorSnapshotGetParams, opts ...option.RequestOption) (res *ConnectorSnapshotGetResponse, err error) {
 	var env ConnectorSnapshotGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -1067,6 +1077,8 @@ func (r connectorSnapshotGetResponseTunnelJSON) RawJSON() string {
 
 type ConnectorSnapshotListParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	From      param.Field[float64] `query:"from" api:"required"`
 	To        param.Field[float64] `query:"to" api:"required"`
@@ -1158,6 +1170,8 @@ func (r connectorSnapshotListResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type ConnectorSnapshotGetParams struct {
 	// Account identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

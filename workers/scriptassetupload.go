@@ -40,6 +40,11 @@ func NewScriptAssetUploadService(opts ...option.RequestOption) (r *ScriptAssetUp
 func (r *ScriptAssetUploadService) New(ctx context.Context, scriptName string, params ScriptAssetUploadNewParams, opts ...option.RequestOption) (res *ScriptAssetUploadNewResponse, err error) {
 	var env ScriptAssetUploadNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -84,6 +89,8 @@ func (r scriptAssetUploadNewResponseJSON) RawJSON() string {
 
 type ScriptAssetUploadNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A manifest ([path]: {hash, size}) map of files to upload. As an example,
 	// `/blog/hello-world.html` would be a valid path key.

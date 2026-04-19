@@ -39,6 +39,11 @@ func NewMessageService(opts ...option.RequestOption) (r *MessageService) {
 func (r *MessageService) Ack(ctx context.Context, queueID string, params MessageAckParams, opts ...option.RequestOption) (res *MessageAckResponse, err error) {
 	var env MessageAckResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,6 +65,11 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 func (r *MessageService) BulkPush(ctx context.Context, queueID string, params MessageBulkPushParams, opts ...option.RequestOption) (res *MessageBulkPushResponse, err error) {
 	var env MessageBulkPushResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -81,6 +91,11 @@ func (r *MessageService) BulkPush(ctx context.Context, queueID string, params Me
 func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *MessagePullResponse, err error) {
 	var env MessagePullResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -102,6 +117,11 @@ func (r *MessageService) Pull(ctx context.Context, queueID string, params Messag
 func (r *MessageService) Push(ctx context.Context, queueID string, params MessagePushParams, opts ...option.RequestOption) (res *MessagePushResponse, err error) {
 	var env MessagePushResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -412,6 +432,8 @@ func (r messagePushResponseMetadataMetricsJSON) RawJSON() string {
 
 type MessageAckParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                  `path:"account_id" api:"required"`
 	Acks      param.Field[[]MessageAckParamsAck]   `json:"acks"`
 	Retries   param.Field[[]MessageAckParamsRetry] `json:"retries"`
@@ -489,6 +511,8 @@ func (r MessageAckResponseEnvelopeSuccess) IsKnown() bool {
 
 type MessageBulkPushParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The number of seconds to wait for attempting to deliver this batch to consumers
 	DelaySeconds param.Field[float64]                             `json:"delay_seconds"`
@@ -638,6 +662,8 @@ func (r MessageBulkPushResponseEnvelopeSuccess) IsKnown() bool {
 
 type MessagePullParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The maximum number of messages to include in a batch.
 	BatchSize param.Field[float64] `json:"batch_size"`
@@ -695,6 +721,8 @@ func (r MessagePullResponseEnvelopeSuccess) IsKnown() bool {
 
 type MessagePushParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]        `path:"account_id" api:"required"`
 	Body      MessagePushParamsBodyUnion `json:"body"`
 }

@@ -44,6 +44,11 @@ func NewSettingBlockSenderService(opts ...option.RequestOption) (r *SettingBlock
 func (r *SettingBlockSenderService) New(ctx context.Context, params SettingBlockSenderNewParams, opts ...option.RequestOption) (res *SettingBlockSenderNewResponse, err error) {
 	var env SettingBlockSenderNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,6 +67,11 @@ func (r *SettingBlockSenderService) List(ctx context.Context, params SettingBloc
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -89,6 +99,11 @@ func (r *SettingBlockSenderService) ListAutoPaging(ctx context.Context, params S
 func (r *SettingBlockSenderService) Delete(ctx context.Context, patternID int64, body SettingBlockSenderDeleteParams, opts ...option.RequestOption) (res *SettingBlockSenderDeleteResponse, err error) {
 	var env SettingBlockSenderDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -106,6 +121,11 @@ func (r *SettingBlockSenderService) Delete(ctx context.Context, patternID int64,
 func (r *SettingBlockSenderService) Edit(ctx context.Context, patternID int64, params SettingBlockSenderEditParams, opts ...option.RequestOption) (res *SettingBlockSenderEditResponse, err error) {
 	var env SettingBlockSenderEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -124,6 +144,11 @@ func (r *SettingBlockSenderService) Edit(ctx context.Context, patternID int64, p
 func (r *SettingBlockSenderService) Get(ctx context.Context, patternID int64, query SettingBlockSenderGetParams, opts ...option.RequestOption) (res *SettingBlockSenderGetResponse, err error) {
 	var env SettingBlockSenderGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -365,6 +390,8 @@ func (r SettingBlockSenderGetResponsePatternType) IsKnown() bool {
 
 type SettingBlockSenderNewParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string]                                 `path:"account_id" api:"required"`
 	IsRegex     param.Field[bool]                                   `json:"is_regex" api:"required"`
 	Pattern     param.Field[string]                                 `json:"pattern" api:"required"`
@@ -422,6 +449,8 @@ func (r settingBlockSenderNewResponseEnvelopeJSON) RawJSON() string {
 
 type SettingBlockSenderListParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The sorting direction.
 	Direction param.Field[SettingBlockSenderListParamsDirection] `query:"direction"`
@@ -499,6 +528,8 @@ func (r SettingBlockSenderListParamsPatternType) IsKnown() bool {
 
 type SettingBlockSenderDeleteParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -531,6 +562,8 @@ func (r settingBlockSenderDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SettingBlockSenderEditParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string]                                  `path:"account_id" api:"required"`
 	Comments    param.Field[string]                                  `json:"comments"`
 	IsRegex     param.Field[bool]                                    `json:"is_regex"`
@@ -588,6 +621,8 @@ func (r settingBlockSenderEditResponseEnvelopeJSON) RawJSON() string {
 
 type SettingBlockSenderGetParams struct {
 	// Account Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -16,6 +16,7 @@ Methods:
 
 - <code title="post /accounts/{account_id}/brand-protection/queries">client.BrandProtection.Queries.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#QueryService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#QueryNewParams">QueryNewParams</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
 - <code title="delete /accounts/{account_id}/brand-protection/queries">client.BrandProtection.Queries.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#QueryService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#QueryDeleteParams">QueryDeleteParams</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
+- <code title="post /accounts/{account_id}/brand-protection/queries/bulk">client.BrandProtection.Queries.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#QueryService.Bulk">Bulk</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#QueryBulkParams">QueryBulkParams</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
 
 ## Matches
 
@@ -51,3 +52,49 @@ Methods:
 
 - <code title="get /accounts/{account_id}/brand-protection/logo-matches/download">client.BrandProtection.LogoMatches.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchService.Download">Download</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchDownloadParams">LogoMatchDownloadParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchDownloadResponse">LogoMatchDownloadResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/brand-protection/logo-matches">client.BrandProtection.LogoMatches.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchGetParams">LogoMatchGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#LogoMatchGetResponse">LogoMatchGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## V2
+
+### Queries
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2QueryGetResponse">V2QueryGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/cloudforce-one/v2/brand-protection/domain/queries">client.BrandProtection.V2.Queries.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2QueryService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2QueryGetParams">V2QueryGetParams</a>) (\*[]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2QueryGetResponse">V2QueryGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### Matches
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2MatchGetResponse">V2MatchGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/cloudforce-one/v2/brand-protection/domain/matches">client.BrandProtection.V2.Matches.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2MatchService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2MatchGetParams">V2MatchGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2MatchGetResponse">V2MatchGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### Logos
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoNewResponse">V2LogoNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoDeleteResponse">V2LogoDeleteResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoGetResponse">V2LogoGetResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/cloudforce-one/v2/brand-protection/logo/queries">client.BrandProtection.V2.Logos.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoNewParams">V2LogoNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoNewResponse">V2LogoNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /accounts/{account_id}/cloudforce-one/v2/brand-protection/logo/queries/{query_id}">client.BrandProtection.V2.Logos.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, queryID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoDeleteParams">V2LogoDeleteParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoDeleteResponse">V2LogoDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/cloudforce-one/v2/brand-protection/logo/queries">client.BrandProtection.V2.Logos.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoGetParams">V2LogoGetParams</a>) (\*[]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoGetResponse">V2LogoGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### LogoMatches
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoMatchGetResponse">V2LogoMatchGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/cloudforce-one/v2/brand-protection/logo/matches">client.BrandProtection.V2.LogoMatches.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoMatchService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoMatchGetParams">V2LogoMatchGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection">brand_protection</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/brand_protection#V2LogoMatchGetResponse">V2LogoMatchGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>

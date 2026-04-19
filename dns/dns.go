@@ -16,6 +16,7 @@ type DNSService struct {
 	Options       []option.RequestOption
 	DNSSEC        *DNSSECService
 	Records       *RecordService
+	Usage         *UsageService
 	Settings      *SettingService
 	Analytics     *AnalyticsService
 	ZoneTransfers *ZoneTransferService
@@ -29,6 +30,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	r.Options = opts
 	r.DNSSEC = NewDNSSECService(opts...)
 	r.Records = NewRecordService(opts...)
+	r.Usage = NewUsageService(opts...)
 	r.Settings = NewSettingService(opts...)
 	r.Analytics = NewAnalyticsService(opts...)
 	r.ZoneTransfers = NewZoneTransferService(opts...)

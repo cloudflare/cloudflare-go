@@ -42,6 +42,11 @@ func NewClientCertificateService(opts ...option.RequestOption) (r *ClientCertifi
 func (r *ClientCertificateService) New(ctx context.Context, params ClientCertificateNewParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	var env ClientCertificateNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -61,6 +66,11 @@ func (r *ClientCertificateService) List(ctx context.Context, params ClientCertif
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -89,6 +99,11 @@ func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, params Cl
 func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificateID string, body ClientCertificateDeleteParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	var env ClientCertificateDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -111,6 +126,11 @@ func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificate
 func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID string, params ClientCertificateEditParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	var env ClientCertificateEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -132,6 +152,11 @@ func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID
 func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID string, query ClientCertificateGetParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	var env ClientCertificateGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -249,6 +274,8 @@ func (r clientCertificateCertificateAuthorityJSON) RawJSON() string {
 
 type ClientCertificateNewParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The Certificate Signing Request (CSR). Must be newline-encoded.
 	Csr param.Field[string] `json:"csr" api:"required"`
@@ -401,6 +428,8 @@ func (r ClientCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ClientCertificateListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Limit to the number of records returned.
 	Limit param.Field[int64] `query:"limit"`
@@ -444,6 +473,8 @@ func (r ClientCertificateListParamsStatus) IsKnown() bool {
 
 type ClientCertificateDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -588,6 +619,8 @@ func (r ClientCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ClientCertificateEditParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID     param.Field[string] `path:"zone_id" api:"required"`
 	Reactivate param.Field[bool]   `json:"reactivate"`
 }
@@ -737,6 +770,8 @@ func (r ClientCertificateEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ClientCertificateGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

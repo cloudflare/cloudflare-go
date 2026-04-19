@@ -356,6 +356,8 @@ func (r OriginCACertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCACertificateListParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `query:"zone_id" api:"required"`
 	// Limit to the number of records returned.
 	Limit param.Field[int64] `query:"limit"`

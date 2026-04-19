@@ -14,19 +14,23 @@ import (
 // the [NewRadarService] method instead.
 type RadarService struct {
 	Options           []option.RequestOption
+	AgentReadiness    *AgentReadinessService
 	AI                *AIService
+	CT                *CTService
 	Annotations       *AnnotationService
 	BGP               *BGPService
 	Bots              *BotService
 	Datasets          *DatasetService
 	DNS               *DNSService
-	Netflows          *NetflowService
+	NetFlows          *NetFlowsService
+	PostQuantum       *PostQuantumService
 	Search            *SearchService
 	VerifiedBots      *VerifiedBotService
 	AS112             *AS112Service
 	Email             *EmailService
 	Attacks           *AttackService
 	Entities          *EntityService
+	Geolocations      *GeolocationService
 	HTTP              *HTTPService
 	Quality           *QualityService
 	Ranking           *RankingService
@@ -42,19 +46,23 @@ type RadarService struct {
 func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r = &RadarService{}
 	r.Options = opts
+	r.AgentReadiness = NewAgentReadinessService(opts...)
 	r.AI = NewAIService(opts...)
+	r.CT = NewCTService(opts...)
 	r.Annotations = NewAnnotationService(opts...)
 	r.BGP = NewBGPService(opts...)
 	r.Bots = NewBotService(opts...)
 	r.Datasets = NewDatasetService(opts...)
 	r.DNS = NewDNSService(opts...)
-	r.Netflows = NewNetflowService(opts...)
+	r.NetFlows = NewNetFlowsService(opts...)
+	r.PostQuantum = NewPostQuantumService(opts...)
 	r.Search = NewSearchService(opts...)
 	r.VerifiedBots = NewVerifiedBotService(opts...)
 	r.AS112 = NewAS112Service(opts...)
 	r.Email = NewEmailService(opts...)
 	r.Attacks = NewAttackService(opts...)
 	r.Entities = NewEntityService(opts...)
+	r.Geolocations = NewGeolocationService(opts...)
 	r.HTTP = NewHTTPService(opts...)
 	r.Quality = NewQualityService(opts...)
 	r.Ranking = NewRankingService(opts...)

@@ -15,6 +15,7 @@ import (
 )
 
 func TestConsumerNewWithOptionalParams(t *testing.T) {
+	t.Skip("422 status codes in prism tests")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -57,6 +58,7 @@ func TestConsumerNewWithOptionalParams(t *testing.T) {
 }
 
 func TestConsumerUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("422 status codes in prism tests")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

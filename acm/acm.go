@@ -13,8 +13,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewACMService] method instead.
 type ACMService struct {
-	Options  []option.RequestOption
-	TotalTLS *TotalTLSService
+	Options          []option.RequestOption
+	TotalTLS         *TotalTLSService
+	CustomTrustStore *CustomTrustStoreService
 }
 
 // NewACMService generates a new service that applies the given options to each
@@ -24,5 +25,6 @@ func NewACMService(opts ...option.RequestOption) (r *ACMService) {
 	r = &ACMService{}
 	r.Options = opts
 	r.TotalTLS = NewTotalTLSService(opts...)
+	r.CustomTrustStore = NewCustomTrustStoreService(opts...)
 	return
 }

@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -27,6 +28,8 @@ import (
 // the [NewPipelineService] method instead.
 type PipelineService struct {
 	Options []option.RequestOption
+	Sinks   *SinkService
+	Streams *StreamService
 }
 
 // NewPipelineService generates a new service that applies the given options to
@@ -35,16 +38,23 @@ type PipelineService struct {
 func NewPipelineService(opts ...option.RequestOption) (r *PipelineService) {
 	r = &PipelineService{}
 	r.Options = opts
+	r.Sinks = NewSinkService(opts...)
+	r.Streams = NewStreamService(opts...)
 	return
 }
 
 // [DEPRECATED] Create a new pipeline. Use the new /pipelines/v1/pipelines endpoint
 // instead.
 //
-// Deprecated: deprecated
+// Deprecated: Use create_v1 instead. This endpoint will be removed in the future.
 func (r *PipelineService) New(ctx context.Context, params PipelineNewParams, opts ...option.RequestOption) (res *PipelineNewResponse, err error) {
 	var env PipelineNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,10 +71,16 @@ func (r *PipelineService) New(ctx context.Context, params PipelineNewParams, opt
 // [DEPRECATED] Update an existing pipeline. Use the new /pipelines/v1/pipelines
 // endpoint instead.
 //
-// Deprecated: deprecated
+// Deprecated: The v1 API does not support updates. This endpoint will be removed
+// in the future.
 func (r *PipelineService) Update(ctx context.Context, pipelineName string, params PipelineUpdateParams, opts ...option.RequestOption) (res *PipelineUpdateResponse, err error) {
 	var env PipelineUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -85,9 +101,14 @@ func (r *PipelineService) Update(ctx context.Context, pipelineName string, param
 // [DEPRECATED] List, filter, and paginate pipelines in an account. Use the new
 // /pipelines/v1/pipelines endpoint instead.
 //
-// Deprecated: deprecated
+// Deprecated: Use list_v1 instead. This endpoint will be removed in the future.
 func (r *PipelineService) List(ctx context.Context, params PipelineListParams, opts ...option.RequestOption) (res *PipelineListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -100,10 +121,15 @@ func (r *PipelineService) List(ctx context.Context, params PipelineListParams, o
 // [DEPRECATED] Delete a pipeline. Use the new /pipelines/v1/pipelines endpoint
 // instead.
 //
-// Deprecated: deprecated
+// Deprecated: Use delete_v1 instead. This endpoint will be removed in the future.
 func (r *PipelineService) Delete(ctx context.Context, pipelineName string, body PipelineDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -117,13 +143,66 @@ func (r *PipelineService) Delete(ctx context.Context, pipelineName string, body 
 	return err
 }
 
+// Create a new Pipeline.
+func (r *PipelineService) NewV1(ctx context.Context, params PipelineNewV1Params, opts ...option.RequestOption) (res *PipelineNewV1Response, err error) {
+	var env PipelineNewV1ResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/pipelines/v1/pipelines", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// Delete Pipeline in Account.
+func (r *PipelineService) DeleteV1(ctx context.Context, pipelineID string, body PipelineDeleteV1Params, opts ...option.RequestOption) (res *PipelineDeleteV1Response, err error) {
+	var env PipelineDeleteV1ResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if pipelineID == "" {
+		err = errors.New("missing required pipeline_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/pipelines/v1/pipelines/%s", body.AccountID, pipelineID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 // [DEPRECATED] Get configuration of a pipeline. Use the new
 // /pipelines/v1/pipelines endpoint instead.
 //
-// Deprecated: deprecated
+// Deprecated: Use get_v1 instead. This endpoint will be removed in the future.
 func (r *PipelineService) Get(ctx context.Context, pipelineName string, query PipelineGetParams, opts ...option.RequestOption) (res *PipelineGetResponse, err error) {
 	var env PipelineGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -134,6 +213,86 @@ func (r *PipelineService) Get(ctx context.Context, pipelineName string, query Pi
 	}
 	path := fmt.Sprintf("accounts/%s/pipelines/%s", query.AccountID, pipelineName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// Get Pipelines Details.
+func (r *PipelineService) GetV1(ctx context.Context, pipelineID string, query PipelineGetV1Params, opts ...option.RequestOption) (res *PipelineGetV1Response, err error) {
+	var env PipelineGetV1ResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if pipelineID == "" {
+		err = errors.New("missing required pipeline_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/pipelines/v1/pipelines/%s", query.AccountID, pipelineID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// List/Filter Pipelines in Account.
+func (r *PipelineService) ListV1(ctx context.Context, params PipelineListV1Params, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PipelineListV1Response], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/pipelines/v1/pipelines", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List/Filter Pipelines in Account.
+func (r *PipelineService) ListV1AutoPaging(ctx context.Context, params PipelineListV1Params, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PipelineListV1Response] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.ListV1(ctx, params, opts...))
+}
+
+// Validate Arroyo SQL.
+func (r *PipelineService) ValidateSql(ctx context.Context, params PipelineValidateSqlParams, opts ...option.RequestOption) (res *PipelineValidateSqlResponse, err error) {
+	var env PipelineValidateSqlResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/pipelines/v1/validate_sql", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1417,6 +1576,43 @@ func (r PipelineListResponseResultsSourceFormat) IsKnown() bool {
 	return false
 }
 
+type PipelineNewV1Response struct {
+	// Indicates a unique identifier for this pipeline.
+	ID         string `json:"id" api:"required"`
+	CreatedAt  string `json:"created_at" api:"required"`
+	ModifiedAt string `json:"modified_at" api:"required"`
+	// Indicates the name of the Pipeline.
+	Name string `json:"name" api:"required"`
+	// Specifies SQL for the Pipeline processing flow.
+	Sql string `json:"sql" api:"required"`
+	// Indicates the current status of the Pipeline.
+	Status string                    `json:"status" api:"required"`
+	JSON   pipelineNewV1ResponseJSON `json:"-"`
+}
+
+// pipelineNewV1ResponseJSON contains the JSON metadata for the struct
+// [PipelineNewV1Response]
+type pipelineNewV1ResponseJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	ModifiedAt  apijson.Field
+	Name        apijson.Field
+	Sql         apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineNewV1Response) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineNewV1ResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type PipelineDeleteV1Response = interface{}
+
 // [DEPRECATED] Describes the configuration of a pipeline. Use the new
 // streams/sinks/pipelines API instead.
 //
@@ -1823,8 +2019,266 @@ func (r PipelineGetResponseSourceFormat) IsKnown() bool {
 	return false
 }
 
+type PipelineGetV1Response struct {
+	// Indicates a unique identifier for this pipeline.
+	ID         string `json:"id" api:"required"`
+	CreatedAt  string `json:"created_at" api:"required"`
+	ModifiedAt string `json:"modified_at" api:"required"`
+	// Indicates the name of the Pipeline.
+	Name string `json:"name" api:"required"`
+	// Specifies SQL for the Pipeline processing flow.
+	Sql string `json:"sql" api:"required"`
+	// Indicates the current status of the Pipeline.
+	Status string `json:"status" api:"required"`
+	// List of streams and sinks used by this pipeline.
+	Tables []PipelineGetV1ResponseTable `json:"tables" api:"required"`
+	// Indicates the reason for the failure of the Pipeline.
+	FailureReason string                    `json:"failure_reason"`
+	JSON          pipelineGetV1ResponseJSON `json:"-"`
+}
+
+// pipelineGetV1ResponseJSON contains the JSON metadata for the struct
+// [PipelineGetV1Response]
+type pipelineGetV1ResponseJSON struct {
+	ID            apijson.Field
+	CreatedAt     apijson.Field
+	ModifiedAt    apijson.Field
+	Name          apijson.Field
+	Sql           apijson.Field
+	Status        apijson.Field
+	Tables        apijson.Field
+	FailureReason apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *PipelineGetV1Response) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineGetV1ResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type PipelineGetV1ResponseTable struct {
+	// Unique identifier for the connection (stream or sink).
+	ID string `json:"id" api:"required"`
+	// Latest available version of the connection.
+	Latest int64 `json:"latest" api:"required"`
+	// Name of the connection.
+	Name string `json:"name" api:"required"`
+	// Type of the connection.
+	Type PipelineGetV1ResponseTablesType `json:"type" api:"required"`
+	// Current version of the connection used by this pipeline.
+	Version int64                          `json:"version" api:"required"`
+	JSON    pipelineGetV1ResponseTableJSON `json:"-"`
+}
+
+// pipelineGetV1ResponseTableJSON contains the JSON metadata for the struct
+// [PipelineGetV1ResponseTable]
+type pipelineGetV1ResponseTableJSON struct {
+	ID          apijson.Field
+	Latest      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineGetV1ResponseTable) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineGetV1ResponseTableJSON) RawJSON() string {
+	return r.raw
+}
+
+// Type of the connection.
+type PipelineGetV1ResponseTablesType string
+
+const (
+	PipelineGetV1ResponseTablesTypeStream PipelineGetV1ResponseTablesType = "stream"
+	PipelineGetV1ResponseTablesTypeSink   PipelineGetV1ResponseTablesType = "sink"
+)
+
+func (r PipelineGetV1ResponseTablesType) IsKnown() bool {
+	switch r {
+	case PipelineGetV1ResponseTablesTypeStream, PipelineGetV1ResponseTablesTypeSink:
+		return true
+	}
+	return false
+}
+
+type PipelineListV1Response struct {
+	// Indicates a unique identifier for this pipeline.
+	ID         string `json:"id" api:"required"`
+	CreatedAt  string `json:"created_at" api:"required"`
+	ModifiedAt string `json:"modified_at" api:"required"`
+	// Indicates the name of the Pipeline.
+	Name string `json:"name" api:"required"`
+	// Specifies SQL for the Pipeline processing flow.
+	Sql string `json:"sql" api:"required"`
+	// Indicates the current status of the Pipeline.
+	Status string                     `json:"status" api:"required"`
+	JSON   pipelineListV1ResponseJSON `json:"-"`
+}
+
+// pipelineListV1ResponseJSON contains the JSON metadata for the struct
+// [PipelineListV1Response]
+type pipelineListV1ResponseJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	ModifiedAt  apijson.Field
+	Name        apijson.Field
+	Sql         apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineListV1Response) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineListV1ResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type PipelineValidateSqlResponse struct {
+	// Indicates tables involved in the processing.
+	Tables map[string]PipelineValidateSqlResponseTable `json:"tables" api:"required"`
+	Graph  PipelineValidateSqlResponseGraph            `json:"graph"`
+	JSON   pipelineValidateSqlResponseJSON             `json:"-"`
+}
+
+// pipelineValidateSqlResponseJSON contains the JSON metadata for the struct
+// [PipelineValidateSqlResponse]
+type pipelineValidateSqlResponseJSON struct {
+	Tables      apijson.Field
+	Graph       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineValidateSqlResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineValidateSqlResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type PipelineValidateSqlResponseTable struct {
+	ID      string                               `json:"id" api:"required"`
+	Name    string                               `json:"name" api:"required"`
+	Type    string                               `json:"type" api:"required"`
+	Version float64                              `json:"version" api:"required"`
+	JSON    pipelineValidateSqlResponseTableJSON `json:"-"`
+}
+
+// pipelineValidateSqlResponseTableJSON contains the JSON metadata for the struct
+// [PipelineValidateSqlResponseTable]
+type pipelineValidateSqlResponseTableJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineValidateSqlResponseTable) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineValidateSqlResponseTableJSON) RawJSON() string {
+	return r.raw
+}
+
+type PipelineValidateSqlResponseGraph struct {
+	Edges []PipelineValidateSqlResponseGraphEdge `json:"edges" api:"required"`
+	Nodes []PipelineValidateSqlResponseGraphNode `json:"nodes" api:"required"`
+	JSON  pipelineValidateSqlResponseGraphJSON   `json:"-"`
+}
+
+// pipelineValidateSqlResponseGraphJSON contains the JSON metadata for the struct
+// [PipelineValidateSqlResponseGraph]
+type pipelineValidateSqlResponseGraphJSON struct {
+	Edges       apijson.Field
+	Nodes       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineValidateSqlResponseGraph) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineValidateSqlResponseGraphJSON) RawJSON() string {
+	return r.raw
+}
+
+type PipelineValidateSqlResponseGraphEdge struct {
+	DestID    int64                                    `json:"dest_id" api:"required"`
+	EdgeType  string                                   `json:"edge_type" api:"required"`
+	KeyType   string                                   `json:"key_type" api:"required"`
+	SrcID     int64                                    `json:"src_id" api:"required"`
+	ValueType string                                   `json:"value_type" api:"required"`
+	JSON      pipelineValidateSqlResponseGraphEdgeJSON `json:"-"`
+}
+
+// pipelineValidateSqlResponseGraphEdgeJSON contains the JSON metadata for the
+// struct [PipelineValidateSqlResponseGraphEdge]
+type pipelineValidateSqlResponseGraphEdgeJSON struct {
+	DestID      apijson.Field
+	EdgeType    apijson.Field
+	KeyType     apijson.Field
+	SrcID       apijson.Field
+	ValueType   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineValidateSqlResponseGraphEdge) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineValidateSqlResponseGraphEdgeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PipelineValidateSqlResponseGraphNode struct {
+	Description string                                   `json:"description" api:"required"`
+	NodeID      int64                                    `json:"node_id" api:"required"`
+	Operator    string                                   `json:"operator" api:"required"`
+	Parallelism int64                                    `json:"parallelism" api:"required"`
+	JSON        pipelineValidateSqlResponseGraphNodeJSON `json:"-"`
+}
+
+// pipelineValidateSqlResponseGraphNodeJSON contains the JSON metadata for the
+// struct [PipelineValidateSqlResponseGraphNode]
+type pipelineValidateSqlResponseGraphNodeJSON struct {
+	Description apijson.Field
+	NodeID      apijson.Field
+	Operator    apijson.Field
+	Parallelism apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineValidateSqlResponseGraphNode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineValidateSqlResponseGraphNodeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PipelineNewParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string]                       `path:"account_id" api:"required"`
 	Destination param.Field[PipelineNewParamsDestination] `json:"destination" api:"required"`
 	// Defines the name of the pipeline.
@@ -2094,6 +2548,8 @@ func (r pipelineNewResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineUpdateParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string]                          `path:"account_id" api:"required"`
 	Destination param.Field[PipelineUpdateParamsDestination] `json:"destination" api:"required"`
 	// Defines the name of the pipeline.
@@ -2363,6 +2819,8 @@ func (r pipelineUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineListParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies which page to retrieve.
 	Page param.Field[string] `query:"page"`
@@ -2382,11 +2840,85 @@ func (r PipelineListParams) URLQuery() (v url.Values) {
 
 type PipelineDeleteParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type PipelineNewV1Params struct {
+	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Specifies the name of the Pipeline.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Specifies SQL for the Pipeline processing flow.
+	Sql param.Field[string] `json:"sql" api:"required"`
+}
+
+func (r PipelineNewV1Params) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PipelineNewV1ResponseEnvelope struct {
+	Result PipelineNewV1Response `json:"result" api:"required"`
+	// Indicates whether the API call was successful.
+	Success bool                              `json:"success" api:"required"`
+	JSON    pipelineNewV1ResponseEnvelopeJSON `json:"-"`
+}
+
+// pipelineNewV1ResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PipelineNewV1ResponseEnvelope]
+type pipelineNewV1ResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineNewV1ResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineNewV1ResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PipelineDeleteV1Params struct {
+	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type PipelineDeleteV1ResponseEnvelope struct {
+	Result PipelineDeleteV1Response `json:"result" api:"required"`
+	// Indicates whether the API call was successful.
+	Success bool                                 `json:"success" api:"required"`
+	JSON    pipelineDeleteV1ResponseEnvelopeJSON `json:"-"`
+}
+
+// pipelineDeleteV1ResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PipelineDeleteV1ResponseEnvelope]
+type pipelineDeleteV1ResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineDeleteV1ResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineDeleteV1ResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type PipelineGetParams struct {
 	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2415,5 +2947,90 @@ func (r *PipelineGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r pipelineGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PipelineGetV1Params struct {
+	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type PipelineGetV1ResponseEnvelope struct {
+	Result PipelineGetV1Response `json:"result" api:"required"`
+	// Indicates whether the API call was successful.
+	Success bool                              `json:"success" api:"required"`
+	JSON    pipelineGetV1ResponseEnvelopeJSON `json:"-"`
+}
+
+// pipelineGetV1ResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PipelineGetV1ResponseEnvelope]
+type pipelineGetV1ResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineGetV1ResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineGetV1ResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PipelineListV1Params struct {
+	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
+	AccountID param.Field[string]  `path:"account_id" api:"required"`
+	Page      param.Field[float64] `query:"page"`
+	PerPage   param.Field[float64] `query:"per_page"`
+}
+
+// URLQuery serializes [PipelineListV1Params]'s query parameters as `url.Values`.
+func (r PipelineListV1Params) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type PipelineValidateSqlParams struct {
+	// Specifies the public ID of the account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Specifies SQL to validate.
+	Sql param.Field[string] `json:"sql" api:"required"`
+}
+
+func (r PipelineValidateSqlParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PipelineValidateSqlResponseEnvelope struct {
+	Result PipelineValidateSqlResponse `json:"result" api:"required"`
+	// Indicates whether the API call was successful.
+	Success bool                                    `json:"success" api:"required"`
+	JSON    pipelineValidateSqlResponseEnvelopeJSON `json:"-"`
+}
+
+// pipelineValidateSqlResponseEnvelopeJSON contains the JSON metadata for the
+// struct [PipelineValidateSqlResponseEnvelope]
+type pipelineValidateSqlResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PipelineValidateSqlResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pipelineValidateSqlResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

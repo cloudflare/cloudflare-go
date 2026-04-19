@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
@@ -17,6 +18,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v6/shared"
+	"github.com/tidwall/gjson"
 )
 
 // ListItemService contains methods and other services that help with interacting
@@ -48,6 +50,11 @@ func NewListItemService(opts ...option.RequestOption) (r *ListItemService) {
 func (r *ListItemService) New(ctx context.Context, listID string, params ListItemNewParams, opts ...option.RequestOption) (res *ListItemNewResponse, err error) {
 	var env ListItemNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -76,6 +83,11 @@ func (r *ListItemService) New(ctx context.Context, listID string, params ListIte
 func (r *ListItemService) Update(ctx context.Context, listID string, params ListItemUpdateParams, opts ...option.RequestOption) (res *ListItemUpdateResponse, err error) {
 	var env ListItemUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -94,10 +106,15 @@ func (r *ListItemService) Update(ctx context.Context, listID string, params List
 }
 
 // Fetches all the items in the list.
-func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[ListItemListResponse], err error) {
+func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *pagination.CursorPaginationAfter[ListItemListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -120,8 +137,8 @@ func (r *ListItemService) List(ctx context.Context, listID string, params ListIt
 }
 
 // Fetches all the items in the list.
-func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[ListItemListResponse] {
-	return pagination.NewCursorPaginationAutoPager(r.List(ctx, listID, params, opts...))
+func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) *pagination.CursorPaginationAfterAutoPager[ListItemListResponse] {
+	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, listID, params, opts...))
 }
 
 // Removes one or more items from a list.
@@ -134,6 +151,11 @@ func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, par
 func (r *ListItemService) Delete(ctx context.Context, listID string, params ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
 	var env ListItemDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -155,6 +177,11 @@ func (r *ListItemService) Delete(ctx context.Context, listID string, params List
 func (r *ListItemService) Get(ctx context.Context, listID string, itemID string, query ListItemGetParams, opts ...option.RequestOption) (res *ListItemGetResponse, err error) {
 	var env ListItemGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -196,6 +223,15 @@ func (r *ListCursor) UnmarshalJSON(data []byte) (err error) {
 
 func (r listCursorJSON) RawJSON() string {
 	return r.raw
+}
+
+type ListCursorParam struct {
+	After  param.Field[string] `json:"after"`
+	Before param.Field[string] `json:"before"`
+}
+
+func (r ListCursorParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ListItemNewResponse struct {
@@ -242,7 +278,243 @@ func (r listItemUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListItemListResponse = interface{}
+type ListItemListResponse struct {
+	// Defines the unique ID of the item in the List.
+	ID string `json:"id" api:"required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on" api:"required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on" api:"required"`
+	// Defines a non-negative 32 bit integer.
+	ASN int64 `json:"asn"`
+	// Defines an informative summary of the list item.
+	Comment string `json:"comment"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
+	IP string `json:"ip"`
+	// The definition of the redirect.
+	Redirect Redirect                 `json:"redirect"`
+	JSON     listItemListResponseJSON `json:"-"`
+	union    ListItemListResponseUnion
+}
+
+// listItemListResponseJSON contains the JSON metadata for the struct
+// [ListItemListResponse]
+type listItemListResponseJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r listItemListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ListItemListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = ListItemListResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ListItemListResponseUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ListItemListResponseListsListItemIPFull],
+// [ListItemListResponseListsListItemHostnameFull],
+// [ListItemListResponseListsListItemRedirectFull],
+// [ListItemListResponseListsListItemASNFull].
+func (r ListItemListResponse) AsUnion() ListItemListResponseUnion {
+	return r.union
+}
+
+// Union satisfied by [ListItemListResponseListsListItemIPFull],
+// [ListItemListResponseListsListItemHostnameFull],
+// [ListItemListResponseListsListItemRedirectFull] or
+// [ListItemListResponseListsListItemASNFull].
+type ListItemListResponseUnion interface {
+	implementsListItemListResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ListItemListResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemListResponseListsListItemIPFull{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemListResponseListsListItemHostnameFull{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemListResponseListsListItemRedirectFull{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemListResponseListsListItemASNFull{}),
+		},
+	)
+}
+
+type ListItemListResponseListsListItemIPFull struct {
+	// Defines the unique ID of the item in the List.
+	ID string `json:"id" api:"required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on" api:"required"`
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
+	IP string `json:"ip" api:"required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on" api:"required"`
+	// Defines an informative summary of the list item.
+	Comment string                                      `json:"comment"`
+	JSON    listItemListResponseListsListItemIPFullJSON `json:"-"`
+}
+
+// listItemListResponseListsListItemIPFullJSON contains the JSON metadata for the
+// struct [ListItemListResponseListsListItemIPFull]
+type listItemListResponseListsListItemIPFullJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemListResponseListsListItemIPFull) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemListResponseListsListItemIPFullJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemListResponseListsListItemIPFull) implementsListItemListResponse() {}
+
+type ListItemListResponseListsListItemHostnameFull struct {
+	// Defines the unique ID of the item in the List.
+	ID string `json:"id" api:"required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on" api:"required"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname" api:"required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on" api:"required"`
+	// Defines an informative summary of the list item.
+	Comment string                                            `json:"comment"`
+	JSON    listItemListResponseListsListItemHostnameFullJSON `json:"-"`
+}
+
+// listItemListResponseListsListItemHostnameFullJSON contains the JSON metadata for
+// the struct [ListItemListResponseListsListItemHostnameFull]
+type listItemListResponseListsListItemHostnameFullJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	ModifiedOn  apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemListResponseListsListItemHostnameFull) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemListResponseListsListItemHostnameFullJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemListResponseListsListItemHostnameFull) implementsListItemListResponse() {}
+
+type ListItemListResponseListsListItemRedirectFull struct {
+	// Defines the unique ID of the item in the List.
+	ID string `json:"id" api:"required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on" api:"required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on" api:"required"`
+	// The definition of the redirect.
+	Redirect Redirect `json:"redirect" api:"required"`
+	// Defines an informative summary of the list item.
+	Comment string                                            `json:"comment"`
+	JSON    listItemListResponseListsListItemRedirectFullJSON `json:"-"`
+}
+
+// listItemListResponseListsListItemRedirectFullJSON contains the JSON metadata for
+// the struct [ListItemListResponseListsListItemRedirectFull]
+type listItemListResponseListsListItemRedirectFullJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemListResponseListsListItemRedirectFull) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemListResponseListsListItemRedirectFullJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemListResponseListsListItemRedirectFull) implementsListItemListResponse() {}
+
+type ListItemListResponseListsListItemASNFull struct {
+	// Defines the unique ID of the item in the List.
+	ID string `json:"id" api:"required"`
+	// Defines a non-negative 32 bit integer.
+	ASN int64 `json:"asn" api:"required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on" api:"required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on" api:"required"`
+	// Defines an informative summary of the list item.
+	Comment string                                       `json:"comment"`
+	JSON    listItemListResponseListsListItemASNFullJSON `json:"-"`
+}
+
+// listItemListResponseListsListItemASNFullJSON contains the JSON metadata for the
+// struct [ListItemListResponseListsListItemASNFull]
+type listItemListResponseListsListItemASNFullJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemListResponseListsListItemASNFull) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemListResponseListsListItemASNFullJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemListResponseListsListItemASNFull) implementsListItemListResponse() {}
 
 type ListItemDeleteResponse struct {
 	// The unique operation ID of the asynchronous action.
@@ -266,10 +538,248 @@ func (r listItemDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListItemGetResponse = interface{}
+type ListItemGetResponse struct {
+	// Defines the unique ID of the item in the List.
+	ID string `json:"id" api:"required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on" api:"required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on" api:"required"`
+	// Defines a non-negative 32 bit integer.
+	ASN int64 `json:"asn"`
+	// Defines an informative summary of the list item.
+	Comment string `json:"comment"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
+	IP string `json:"ip"`
+	// The definition of the redirect.
+	Redirect Redirect                `json:"redirect"`
+	JSON     listItemGetResponseJSON `json:"-"`
+	union    ListItemGetResponseUnion
+}
+
+// listItemGetResponseJSON contains the JSON metadata for the struct
+// [ListItemGetResponse]
+type listItemGetResponseJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r listItemGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ListItemGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = ListItemGetResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ListItemGetResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ListItemGetResponseListsListItemIPFull],
+// [ListItemGetResponseListsListItemHostnameFull],
+// [ListItemGetResponseListsListItemRedirectFull],
+// [ListItemGetResponseListsListItemASNFull].
+func (r ListItemGetResponse) AsUnion() ListItemGetResponseUnion {
+	return r.union
+}
+
+// Union satisfied by [ListItemGetResponseListsListItemIPFull],
+// [ListItemGetResponseListsListItemHostnameFull],
+// [ListItemGetResponseListsListItemRedirectFull] or
+// [ListItemGetResponseListsListItemASNFull].
+type ListItemGetResponseUnion interface {
+	implementsListItemGetResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ListItemGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemGetResponseListsListItemIPFull{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemGetResponseListsListItemHostnameFull{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemGetResponseListsListItemRedirectFull{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemGetResponseListsListItemASNFull{}),
+		},
+	)
+}
+
+type ListItemGetResponseListsListItemIPFull struct {
+	// Defines the unique ID of the item in the List.
+	ID string `json:"id" api:"required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on" api:"required"`
+	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
+	IP string `json:"ip" api:"required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on" api:"required"`
+	// Defines an informative summary of the list item.
+	Comment string                                     `json:"comment"`
+	JSON    listItemGetResponseListsListItemIPFullJSON `json:"-"`
+}
+
+// listItemGetResponseListsListItemIPFullJSON contains the JSON metadata for the
+// struct [ListItemGetResponseListsListItemIPFull]
+type listItemGetResponseListsListItemIPFullJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemGetResponseListsListItemIPFull) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemGetResponseListsListItemIPFullJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemGetResponseListsListItemIPFull) implementsListItemGetResponse() {}
+
+type ListItemGetResponseListsListItemHostnameFull struct {
+	// Defines the unique ID of the item in the List.
+	ID string `json:"id" api:"required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on" api:"required"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname" api:"required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on" api:"required"`
+	// Defines an informative summary of the list item.
+	Comment string                                           `json:"comment"`
+	JSON    listItemGetResponseListsListItemHostnameFullJSON `json:"-"`
+}
+
+// listItemGetResponseListsListItemHostnameFullJSON contains the JSON metadata for
+// the struct [ListItemGetResponseListsListItemHostnameFull]
+type listItemGetResponseListsListItemHostnameFullJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	ModifiedOn  apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemGetResponseListsListItemHostnameFull) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemGetResponseListsListItemHostnameFullJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemGetResponseListsListItemHostnameFull) implementsListItemGetResponse() {}
+
+type ListItemGetResponseListsListItemRedirectFull struct {
+	// Defines the unique ID of the item in the List.
+	ID string `json:"id" api:"required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on" api:"required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on" api:"required"`
+	// The definition of the redirect.
+	Redirect Redirect `json:"redirect" api:"required"`
+	// Defines an informative summary of the list item.
+	Comment string                                           `json:"comment"`
+	JSON    listItemGetResponseListsListItemRedirectFullJSON `json:"-"`
+}
+
+// listItemGetResponseListsListItemRedirectFullJSON contains the JSON metadata for
+// the struct [ListItemGetResponseListsListItemRedirectFull]
+type listItemGetResponseListsListItemRedirectFullJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemGetResponseListsListItemRedirectFull) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemGetResponseListsListItemRedirectFullJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemGetResponseListsListItemRedirectFull) implementsListItemGetResponse() {}
+
+type ListItemGetResponseListsListItemASNFull struct {
+	// Defines the unique ID of the item in the List.
+	ID string `json:"id" api:"required"`
+	// Defines a non-negative 32 bit integer.
+	ASN int64 `json:"asn" api:"required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on" api:"required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on" api:"required"`
+	// Defines an informative summary of the list item.
+	Comment string                                      `json:"comment"`
+	JSON    listItemGetResponseListsListItemASNFullJSON `json:"-"`
+}
+
+// listItemGetResponseListsListItemASNFullJSON contains the JSON metadata for the
+// struct [ListItemGetResponseListsListItemASNFull]
+type listItemGetResponseListsListItemASNFullJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	Comment     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemGetResponseListsListItemASNFull) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemGetResponseListsListItemASNFullJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemGetResponseListsListItemASNFull) implementsListItemGetResponse() {}
 
 type ListItemNewParams struct {
 	// The Account ID for this resource.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]          `path:"account_id" api:"required"`
 	Body      []ListItemNewParamsBodyUnion `json:"body" api:"required"`
 }
@@ -404,6 +914,8 @@ func (r ListItemNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemUpdateParams struct {
 	// The Account ID for this resource.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]             `path:"account_id" api:"required"`
 	Body      []ListItemUpdateParamsBodyUnion `json:"body" api:"required"`
 }
@@ -541,6 +1053,8 @@ func (r ListItemUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemListParams struct {
 	// The Account ID for this resource.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The pagination cursor. An opaque string token indicating the position from which
 	// to continue when requesting the next/previous set of records. Cursor values are
@@ -566,6 +1080,8 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 
 type ListItemDeleteParams struct {
 	// The Account ID for this resource.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                     `path:"account_id" api:"required"`
 	Items     param.Field[[]ListItemDeleteParamsItem] `json:"items"`
 }
@@ -628,6 +1144,8 @@ func (r ListItemDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ListItemGetParams struct {
 	// The Account ID for this resource.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

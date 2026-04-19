@@ -40,6 +40,11 @@ func NewDetectionService(opts ...option.RequestOption) (r *DetectionService) {
 func (r *DetectionService) New(ctx context.Context, params DetectionNewParams, opts ...option.RequestOption) (res *DetectionNewResponse, err error) {
 	var env DetectionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -57,6 +62,11 @@ func (r *DetectionService) New(ctx context.Context, params DetectionNewParams, o
 func (r *DetectionService) Update(ctx context.Context, detectionID string, params DetectionUpdateParams, opts ...option.RequestOption) (res *DetectionUpdateResponse, err error) {
 	var env DetectionUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -79,6 +89,11 @@ func (r *DetectionService) List(ctx context.Context, query DetectionListParams, 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -105,6 +120,11 @@ func (r *DetectionService) ListAutoPaging(ctx context.Context, query DetectionLi
 func (r *DetectionService) Delete(ctx context.Context, detectionID string, body DetectionDeleteParams, opts ...option.RequestOption) (res *DetectionDeleteResponse, err error) {
 	var env DetectionDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -115,6 +135,32 @@ func (r *DetectionService) Delete(ctx context.Context, detectionID string, body 
 	}
 	path := fmt.Sprintf("zones/%s/leaked-credential-checks/detections/%s", body.ZoneID, detectionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// Get user-defined detection pattern for Leaked Credential Checks.
+func (r *DetectionService) Get(ctx context.Context, detectionID string, query DetectionGetParams, opts ...option.RequestOption) (res *DetectionGetResponse, err error) {
+	var env DetectionGetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return nil, err
+	}
+	if detectionID == "" {
+		err = errors.New("missing required detection_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/leaked-credential-checks/detections/%s", query.ZoneID, detectionID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -214,8 +260,40 @@ func (r detectionListResponseJSON) RawJSON() string {
 
 type DetectionDeleteResponse = interface{}
 
+// Defines a custom set of username/password expressions to match Leaked Credential
+// Checks on.
+type DetectionGetResponse struct {
+	// Defines the unique ID for this custom detection.
+	ID string `json:"id"`
+	// Defines ehe ruleset expression to use in matching the password in a request.
+	Password string `json:"password"`
+	// Defines the ruleset expression to use in matching the username in a request.
+	Username string                   `json:"username"`
+	JSON     detectionGetResponseJSON `json:"-"`
+}
+
+// detectionGetResponseJSON contains the JSON metadata for the struct
+// [DetectionGetResponse]
+type detectionGetResponseJSON struct {
+	ID          apijson.Field
+	Password    apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DetectionGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r detectionGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type DetectionNewParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines ehe ruleset expression to use in matching the password in a request.
 	Password param.Field[string] `json:"password"`
@@ -274,6 +352,8 @@ func (r DetectionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DetectionUpdateParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines ehe ruleset expression to use in matching the password in a request.
 	Password param.Field[string] `json:"password"`
@@ -332,11 +412,15 @@ func (r DetectionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DetectionListParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type DetectionDeleteParams struct {
 	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -378,6 +462,58 @@ const (
 func (r DetectionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case DetectionDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DetectionGetParams struct {
+	// Defines an identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+}
+
+type DetectionGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	// Defines a custom set of username/password expressions to match Leaked Credential
+	// Checks on.
+	Result DetectionGetResponse `json:"result" api:"required"`
+	// Defines whether the API call was successful.
+	Success DetectionGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    detectionGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// detectionGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DetectionGetResponseEnvelope]
+type detectionGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DetectionGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r detectionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Defines whether the API call was successful.
+type DetectionGetResponseEnvelopeSuccess bool
+
+const (
+	DetectionGetResponseEnvelopeSuccessTrue DetectionGetResponseEnvelopeSuccess = true
+)
+
+func (r DetectionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DetectionGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

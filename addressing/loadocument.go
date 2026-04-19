@@ -42,6 +42,11 @@ func NewLOADocumentService(opts ...option.RequestOption) (r *LOADocumentService)
 func (r *LOADocumentService) New(ctx context.Context, params LOADocumentNewParams, opts ...option.RequestOption) (res *LOADocumentNewResponse, err error) {
 	var env LOADocumentNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -59,6 +64,11 @@ func (r *LOADocumentService) New(ctx context.Context, params LOADocumentNewParam
 func (r *LOADocumentService) Get(ctx context.Context, loaDocumentID string, query LOADocumentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/pdf")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -116,6 +126,8 @@ func (r loaDocumentNewResponseJSON) RawJSON() string {
 
 type LOADocumentNewParams struct {
 	// Identifier of a Cloudflare account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// LOA document to upload.
 	LOADocument param.Field[string] `json:"loa_document" api:"required"`
@@ -277,5 +289,7 @@ func (r LOADocumentNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type LOADocumentGetParams struct {
 	// Identifier of a Cloudflare account.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

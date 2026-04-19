@@ -49,6 +49,11 @@ func NewIndexService(opts ...option.RequestOption) (r *IndexService) {
 func (r *IndexService) New(ctx context.Context, params IndexNewParams, opts ...option.RequestOption) (res *CreateIndex, err error) {
 	var env IndexNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -67,6 +72,11 @@ func (r *IndexService) List(ctx context.Context, query IndexListParams, opts ...
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -93,6 +103,11 @@ func (r *IndexService) ListAutoPaging(ctx context.Context, query IndexListParams
 func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env IndexDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -114,6 +129,11 @@ func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexD
 func (r *IndexService) DeleteByIDs(ctx context.Context, indexName string, params IndexDeleteByIDsParams, opts ...option.RequestOption) (res *IndexDeleteByIDsResponse, err error) {
 	var env IndexDeleteByIDsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -135,6 +155,11 @@ func (r *IndexService) DeleteByIDs(ctx context.Context, indexName string, params
 func (r *IndexService) Get(ctx context.Context, indexName string, query IndexGetParams, opts ...option.RequestOption) (res *CreateIndex, err error) {
 	var env IndexGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -156,6 +181,11 @@ func (r *IndexService) Get(ctx context.Context, indexName string, query IndexGet
 func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params IndexGetByIDsParams, opts ...option.RequestOption) (res *IndexGetByIDsResponse, err error) {
 	var env IndexGetByIDsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -177,6 +207,11 @@ func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params In
 func (r *IndexService) Info(ctx context.Context, indexName string, query IndexInfoParams, opts ...option.RequestOption) (res *IndexInfoResponse, err error) {
 	var env IndexInfoResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -199,6 +234,11 @@ func (r *IndexService) Info(ctx context.Context, indexName string, query IndexIn
 func (r *IndexService) Insert(ctx context.Context, indexName string, params IndexInsertParams, opts ...option.RequestOption) (res *IndexInsertResponse, err error) {
 	var env IndexInsertResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -216,10 +256,41 @@ func (r *IndexService) Insert(ctx context.Context, indexName string, params Inde
 	return res, nil
 }
 
+// Returns a paginated list of vector identifiers from the specified index.
+func (r *IndexService) ListVectors(ctx context.Context, indexName string, params IndexListVectorsParams, opts ...option.RequestOption) (res *IndexListVectorsResponse, err error) {
+	var env IndexListVectorsResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/list", params.AccountID, indexName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 // Finds vectors closest to a given vector in an index.
 func (r *IndexService) Query(ctx context.Context, indexName string, params IndexQueryParams, opts ...option.RequestOption) (res *IndexQueryResponse, err error) {
 	var env IndexQueryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -242,6 +313,11 @@ func (r *IndexService) Query(ctx context.Context, indexName string, params Index
 func (r *IndexService) Upsert(ctx context.Context, indexName string, params IndexUpsertParams, opts ...option.RequestOption) (res *IndexUpsertResponse, err error) {
 	var env IndexUpsertResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -423,6 +499,65 @@ func (r indexInsertResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type IndexListVectorsResponse struct {
+	// Number of vectors returned in this response
+	Count int64 `json:"count" api:"required"`
+	// Whether there are more vectors available beyond this response
+	IsTruncated bool `json:"isTruncated" api:"required"`
+	// Total number of vectors in the index
+	TotalCount int64 `json:"totalCount" api:"required"`
+	// Array of vector items
+	Vectors []IndexListVectorsResponseVector `json:"vectors" api:"required"`
+	// When the cursor expires as an ISO8601 string
+	CursorExpirationTimestamp time.Time `json:"cursorExpirationTimestamp" api:"nullable" format:"date-time"`
+	// Cursor for the next page of results
+	NextCursor string                       `json:"nextCursor" api:"nullable"`
+	JSON       indexListVectorsResponseJSON `json:"-"`
+}
+
+// indexListVectorsResponseJSON contains the JSON metadata for the struct
+// [IndexListVectorsResponse]
+type indexListVectorsResponseJSON struct {
+	Count                     apijson.Field
+	IsTruncated               apijson.Field
+	TotalCount                apijson.Field
+	Vectors                   apijson.Field
+	CursorExpirationTimestamp apijson.Field
+	NextCursor                apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
+}
+
+func (r *IndexListVectorsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexListVectorsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type IndexListVectorsResponseVector struct {
+	// Identifier for a Vector
+	ID   string                             `json:"id" api:"required"`
+	JSON indexListVectorsResponseVectorJSON `json:"-"`
+}
+
+// indexListVectorsResponseVectorJSON contains the JSON metadata for the struct
+// [IndexListVectorsResponseVector]
+type indexListVectorsResponseVectorJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IndexListVectorsResponseVector) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexListVectorsResponseVectorJSON) RawJSON() string {
+	return r.raw
+}
+
 type IndexQueryResponse struct {
 	// Specifies the count of vectors returned by the search
 	Count int64 `json:"count"`
@@ -503,6 +638,8 @@ func (r indexUpsertResponseJSON) RawJSON() string {
 
 type IndexNewParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the type of configuration to use for the index.
 	Config param.Field[IndexNewParamsConfigUnion] `json:"config" api:"required"`
@@ -652,11 +789,15 @@ func (r IndexNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexListParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type IndexDeleteParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -705,6 +846,8 @@ func (r IndexDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexDeleteByIDsParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A list of vector identifiers to delete from the index indicated by the path.
 	IDs param.Field[[]string] `json:"ids"`
@@ -759,6 +902,8 @@ func (r IndexDeleteByIDsResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexGetParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -807,6 +952,8 @@ func (r IndexGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexGetByIDsParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A list of vector identifiers to retrieve from the index indicated by the path.
 	IDs param.Field[[]string] `json:"ids"`
@@ -862,6 +1009,8 @@ func (r IndexGetByIDsResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexInfoParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -910,6 +1059,8 @@ func (r IndexInfoResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexInsertParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ndjson file containing vectors to insert.
 	Body io.Reader `json:"body" api:"required" format:"binary"`
@@ -999,8 +1150,72 @@ func (r IndexInsertResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type IndexListVectorsParams struct {
+	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Maximum number of vectors to return
+	Count param.Field[int64] `query:"count"`
+	// Cursor for pagination to get the next page of results
+	Cursor param.Field[string] `query:"cursor"`
+}
+
+// URLQuery serializes [IndexListVectorsParams]'s query parameters as `url.Values`.
+func (r IndexListVectorsParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type IndexListVectorsResponseEnvelope struct {
+	Errors   []shared.ResponseInfo    `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo    `json:"messages" api:"required"`
+	Result   IndexListVectorsResponse `json:"result" api:"required,nullable"`
+	// Whether the API call was successful
+	Success IndexListVectorsResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    indexListVectorsResponseEnvelopeJSON    `json:"-"`
+}
+
+// indexListVectorsResponseEnvelopeJSON contains the JSON metadata for the struct
+// [IndexListVectorsResponseEnvelope]
+type indexListVectorsResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IndexListVectorsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexListVectorsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type IndexListVectorsResponseEnvelopeSuccess bool
+
+const (
+	IndexListVectorsResponseEnvelopeSuccessTrue IndexListVectorsResponseEnvelopeSuccess = true
+)
+
+func (r IndexListVectorsResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexListVectorsResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IndexQueryParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The search vector that will be used to find the nearest neighbors.
 	Vector param.Field[[]float64] `json:"vector" api:"required"`
@@ -1082,6 +1297,8 @@ func (r IndexQueryResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexUpsertParams struct {
 	// Identifier
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ndjson file containing vectors to upsert.
 	Body io.Reader `json:"body" api:"required" format:"binary"`

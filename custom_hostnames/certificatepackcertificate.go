@@ -43,6 +43,11 @@ func NewCertificatePackCertificateService(opts ...option.RequestOption) (r *Cert
 func (r *CertificatePackCertificateService) Update(ctx context.Context, customHostnameID string, certificatePackID string, certificateID string, params CertificatePackCertificateUpdateParams, opts ...option.RequestOption) (res *CertificatePackCertificateUpdateResponse, err error) {
 	var env CertificatePackCertificateUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -74,6 +79,11 @@ func (r *CertificatePackCertificateService) Update(ctx context.Context, customHo
 // At least one certificate must remain in the pack.
 func (r *CertificatePackCertificateService) Delete(ctx context.Context, customHostnameID string, certificatePackID string, certificateID string, body CertificatePackCertificateDeleteParams, opts ...option.RequestOption) (res *CertificatePackCertificateDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -618,6 +628,8 @@ func (r certificatePackCertificateDeleteResponseJSON) RawJSON() string {
 
 type CertificatePackCertificateUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate" api:"required"`
@@ -773,5 +785,7 @@ func (r CertificatePackCertificateUpdateResponseEnvelopeSuccess) IsKnown() bool 
 
 type CertificatePackCertificateDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

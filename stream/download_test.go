@@ -15,6 +15,7 @@ import (
 )
 
 func TestDownloadNew(t *testing.T) {
+	t.Skip("SKIP: prism 415 Unsupported Media Type")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -45,6 +46,7 @@ func TestDownloadNew(t *testing.T) {
 }
 
 func TestDownloadDelete(t *testing.T) {
+	t.Skip("SKIP: prism 415 Unsupported Media Type")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -75,6 +77,7 @@ func TestDownloadDelete(t *testing.T) {
 }
 
 func TestDownloadGet(t *testing.T) {
+	t.Skip("SKIP: prism 415 Unsupported Media Type")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

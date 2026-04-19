@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"reflect"
 	"slices"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
@@ -27,10 +26,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewQueueService] method instead.
 type QueueService struct {
-	Options   []option.RequestOption
-	Consumers *ConsumerService
-	Messages  *MessageService
-	Purge     *PurgeService
+	Options       []option.RequestOption
+	Messages      *MessageService
+	Purge         *PurgeService
+	Consumers     *ConsumerService
+	Subscriptions *SubscriptionService
 }
 
 // NewQueueService generates a new service that applies the given options to each
@@ -39,9 +39,10 @@ type QueueService struct {
 func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 	r = &QueueService{}
 	r.Options = opts
-	r.Consumers = NewConsumerService(opts...)
 	r.Messages = NewMessageService(opts...)
 	r.Purge = NewPurgeService(opts...)
+	r.Consumers = NewConsumerService(opts...)
+	r.Subscriptions = NewSubscriptionService(opts...)
 	return
 }
 
@@ -49,6 +50,11 @@ func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -68,6 +74,11 @@ func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...o
 func (r *QueueService) Update(ctx context.Context, queueID string, params QueueUpdateParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -90,6 +101,11 @@ func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -115,6 +131,11 @@ func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams
 // Deletes a queue
 func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -132,6 +153,11 @@ func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDel
 func (r *QueueService) Edit(ctx context.Context, queueID string, params QueueEditParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -153,6 +179,11 @@ func (r *QueueService) Edit(ctx context.Context, queueID string, params QueueEdi
 func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -171,7 +202,7 @@ func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetPa
 }
 
 type Queue struct {
-	Consumers           []QueueConsumer `json:"consumers"`
+	Consumers           []Consumer      `json:"consumers"`
 	ConsumersTotalCount float64         `json:"consumers_total_count"`
 	CreatedOn           string          `json:"created_on"`
 	ModifiedOn          string          `json:"modified_on"`
@@ -204,272 +235,6 @@ func (r *Queue) UnmarshalJSON(data []byte) (err error) {
 
 func (r queueJSON) RawJSON() string {
 	return r.raw
-}
-
-// Response body representing a consumer
-type QueueConsumer struct {
-	// A Resource identifier.
-	ConsumerID string    `json:"consumer_id"`
-	CreatedOn  time.Time `json:"created_on" format:"date-time"`
-	// Name of the dead letter queue, or empty string if not configured
-	DeadLetterQueue string `json:"dead_letter_queue"`
-	QueueName       string `json:"queue_name"`
-	// Name of a Worker
-	ScriptName string `json:"script_name"`
-	// This field can have the runtime type of
-	// [QueueConsumersMqWorkerConsumerResponseSettings],
-	// [QueueConsumersMqHTTPConsumerResponseSettings].
-	Settings interface{}        `json:"settings"`
-	Type     QueueConsumersType `json:"type"`
-	JSON     queueConsumerJSON  `json:"-"`
-	union    QueueConsumersUnion
-}
-
-// queueConsumerJSON contains the JSON metadata for the struct [QueueConsumer]
-type queueConsumerJSON struct {
-	ConsumerID      apijson.Field
-	CreatedOn       apijson.Field
-	DeadLetterQueue apijson.Field
-	QueueName       apijson.Field
-	ScriptName      apijson.Field
-	Settings        apijson.Field
-	Type            apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r queueConsumerJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *QueueConsumer) UnmarshalJSON(data []byte) (err error) {
-	*r = QueueConsumer{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [QueueConsumersUnion] interface which you can cast to the
-// specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [QueueConsumersMqWorkerConsumerResponse],
-// [QueueConsumersMqHTTPConsumerResponse].
-func (r QueueConsumer) AsUnion() QueueConsumersUnion {
-	return r.union
-}
-
-// Response body representing a consumer
-//
-// Union satisfied by [QueueConsumersMqWorkerConsumerResponse] or
-// [QueueConsumersMqHTTPConsumerResponse].
-type QueueConsumersUnion interface {
-	implementsQueueConsumer()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*QueueConsumersUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(QueueConsumersMqWorkerConsumerResponse{}),
-			DiscriminatorValue: "worker",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(QueueConsumersMqHTTPConsumerResponse{}),
-			DiscriminatorValue: "http_pull",
-		},
-	)
-}
-
-type QueueConsumersMqWorkerConsumerResponse struct {
-	// A Resource identifier.
-	ConsumerID string    `json:"consumer_id"`
-	CreatedOn  time.Time `json:"created_on" format:"date-time"`
-	// Name of the dead letter queue, or empty string if not configured
-	DeadLetterQueue string `json:"dead_letter_queue"`
-	QueueName       string `json:"queue_name"`
-	// Name of a Worker
-	ScriptName string                                         `json:"script_name"`
-	Settings   QueueConsumersMqWorkerConsumerResponseSettings `json:"settings"`
-	Type       QueueConsumersMqWorkerConsumerResponseType     `json:"type"`
-	JSON       queueConsumersMqWorkerConsumerResponseJSON     `json:"-"`
-}
-
-// queueConsumersMqWorkerConsumerResponseJSON contains the JSON metadata for the
-// struct [QueueConsumersMqWorkerConsumerResponse]
-type queueConsumersMqWorkerConsumerResponseJSON struct {
-	ConsumerID      apijson.Field
-	CreatedOn       apijson.Field
-	DeadLetterQueue apijson.Field
-	QueueName       apijson.Field
-	ScriptName      apijson.Field
-	Settings        apijson.Field
-	Type            apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *QueueConsumersMqWorkerConsumerResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueConsumersMqWorkerConsumerResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r QueueConsumersMqWorkerConsumerResponse) implementsQueueConsumer() {}
-
-type QueueConsumersMqWorkerConsumerResponseSettings struct {
-	// The maximum number of messages to include in a batch.
-	BatchSize float64 `json:"batch_size"`
-	// Maximum number of concurrent consumers that may consume from this Queue. Set to
-	// `null` to automatically opt in to the platform's maximum (recommended).
-	MaxConcurrency float64 `json:"max_concurrency"`
-	// The maximum number of retries
-	MaxRetries float64 `json:"max_retries"`
-	// The number of milliseconds to wait for a batch to fill up before attempting to
-	// deliver it
-	MaxWaitTimeMs float64 `json:"max_wait_time_ms"`
-	// The number of seconds to delay before making the message available for another
-	// attempt.
-	RetryDelay float64                                            `json:"retry_delay"`
-	JSON       queueConsumersMqWorkerConsumerResponseSettingsJSON `json:"-"`
-}
-
-// queueConsumersMqWorkerConsumerResponseSettingsJSON contains the JSON metadata
-// for the struct [QueueConsumersMqWorkerConsumerResponseSettings]
-type queueConsumersMqWorkerConsumerResponseSettingsJSON struct {
-	BatchSize      apijson.Field
-	MaxConcurrency apijson.Field
-	MaxRetries     apijson.Field
-	MaxWaitTimeMs  apijson.Field
-	RetryDelay     apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *QueueConsumersMqWorkerConsumerResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueConsumersMqWorkerConsumerResponseSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueConsumersMqWorkerConsumerResponseType string
-
-const (
-	QueueConsumersMqWorkerConsumerResponseTypeWorker QueueConsumersMqWorkerConsumerResponseType = "worker"
-)
-
-func (r QueueConsumersMqWorkerConsumerResponseType) IsKnown() bool {
-	switch r {
-	case QueueConsumersMqWorkerConsumerResponseTypeWorker:
-		return true
-	}
-	return false
-}
-
-type QueueConsumersMqHTTPConsumerResponse struct {
-	// A Resource identifier.
-	ConsumerID string    `json:"consumer_id"`
-	CreatedOn  time.Time `json:"created_on" format:"date-time"`
-	// Name of the dead letter queue, or empty string if not configured
-	DeadLetterQueue string                                       `json:"dead_letter_queue"`
-	QueueName       string                                       `json:"queue_name"`
-	Settings        QueueConsumersMqHTTPConsumerResponseSettings `json:"settings"`
-	Type            QueueConsumersMqHTTPConsumerResponseType     `json:"type"`
-	JSON            queueConsumersMqHTTPConsumerResponseJSON     `json:"-"`
-}
-
-// queueConsumersMqHTTPConsumerResponseJSON contains the JSON metadata for the
-// struct [QueueConsumersMqHTTPConsumerResponse]
-type queueConsumersMqHTTPConsumerResponseJSON struct {
-	ConsumerID      apijson.Field
-	CreatedOn       apijson.Field
-	DeadLetterQueue apijson.Field
-	QueueName       apijson.Field
-	Settings        apijson.Field
-	Type            apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *QueueConsumersMqHTTPConsumerResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueConsumersMqHTTPConsumerResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r QueueConsumersMqHTTPConsumerResponse) implementsQueueConsumer() {}
-
-type QueueConsumersMqHTTPConsumerResponseSettings struct {
-	// The maximum number of messages to include in a batch.
-	BatchSize float64 `json:"batch_size"`
-	// The maximum number of retries
-	MaxRetries float64 `json:"max_retries"`
-	// The number of seconds to delay before making the message available for another
-	// attempt.
-	RetryDelay float64 `json:"retry_delay"`
-	// The number of milliseconds that a message is exclusively leased. After the
-	// timeout, the message becomes available for another attempt.
-	VisibilityTimeoutMs float64                                          `json:"visibility_timeout_ms"`
-	JSON                queueConsumersMqHTTPConsumerResponseSettingsJSON `json:"-"`
-}
-
-// queueConsumersMqHTTPConsumerResponseSettingsJSON contains the JSON metadata for
-// the struct [QueueConsumersMqHTTPConsumerResponseSettings]
-type queueConsumersMqHTTPConsumerResponseSettingsJSON struct {
-	BatchSize           apijson.Field
-	MaxRetries          apijson.Field
-	RetryDelay          apijson.Field
-	VisibilityTimeoutMs apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *QueueConsumersMqHTTPConsumerResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueConsumersMqHTTPConsumerResponseSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueConsumersMqHTTPConsumerResponseType string
-
-const (
-	QueueConsumersMqHTTPConsumerResponseTypeHTTPPull QueueConsumersMqHTTPConsumerResponseType = "http_pull"
-)
-
-func (r QueueConsumersMqHTTPConsumerResponseType) IsKnown() bool {
-	switch r {
-	case QueueConsumersMqHTTPConsumerResponseTypeHTTPPull:
-		return true
-	}
-	return false
-}
-
-type QueueConsumersType string
-
-const (
-	QueueConsumersTypeWorker   QueueConsumersType = "worker"
-	QueueConsumersTypeHTTPPull QueueConsumersType = "http_pull"
-)
-
-func (r QueueConsumersType) IsKnown() bool {
-	switch r {
-	case QueueConsumersTypeWorker, QueueConsumersTypeHTTPPull:
-		return true
-	}
-	return false
 }
 
 type QueueProducer struct {
@@ -661,98 +426,6 @@ func (r QueueParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Response body representing a consumer
-type QueueConsumerParam struct {
-	// Name of the dead letter queue, or empty string if not configured
-	DeadLetterQueue param.Field[string] `json:"dead_letter_queue"`
-	QueueName       param.Field[string] `json:"queue_name"`
-	// Name of a Worker
-	ScriptName param.Field[string]             `json:"script_name"`
-	Settings   param.Field[interface{}]        `json:"settings"`
-	Type       param.Field[QueueConsumersType] `json:"type"`
-}
-
-func (r QueueConsumerParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r QueueConsumerParam) implementsQueueConsumersUnionParam() {}
-
-// Response body representing a consumer
-//
-// Satisfied by [queues.QueueConsumersMqWorkerConsumerResponseParam],
-// [queues.QueueConsumersMqHTTPConsumerResponseParam], [QueueConsumerParam].
-type QueueConsumersUnionParam interface {
-	implementsQueueConsumersUnionParam()
-}
-
-type QueueConsumersMqWorkerConsumerResponseParam struct {
-	// Name of the dead letter queue, or empty string if not configured
-	DeadLetterQueue param.Field[string] `json:"dead_letter_queue"`
-	QueueName       param.Field[string] `json:"queue_name"`
-	// Name of a Worker
-	ScriptName param.Field[string]                                              `json:"script_name"`
-	Settings   param.Field[QueueConsumersMqWorkerConsumerResponseSettingsParam] `json:"settings"`
-	Type       param.Field[QueueConsumersMqWorkerConsumerResponseType]          `json:"type"`
-}
-
-func (r QueueConsumersMqWorkerConsumerResponseParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r QueueConsumersMqWorkerConsumerResponseParam) implementsQueueConsumersUnionParam() {}
-
-type QueueConsumersMqWorkerConsumerResponseSettingsParam struct {
-	// The maximum number of messages to include in a batch.
-	BatchSize param.Field[float64] `json:"batch_size"`
-	// Maximum number of concurrent consumers that may consume from this Queue. Set to
-	// `null` to automatically opt in to the platform's maximum (recommended).
-	MaxConcurrency param.Field[float64] `json:"max_concurrency"`
-	// The maximum number of retries
-	MaxRetries param.Field[float64] `json:"max_retries"`
-	// The number of milliseconds to wait for a batch to fill up before attempting to
-	// deliver it
-	MaxWaitTimeMs param.Field[float64] `json:"max_wait_time_ms"`
-	// The number of seconds to delay before making the message available for another
-	// attempt.
-	RetryDelay param.Field[float64] `json:"retry_delay"`
-}
-
-func (r QueueConsumersMqWorkerConsumerResponseSettingsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type QueueConsumersMqHTTPConsumerResponseParam struct {
-	// Name of the dead letter queue, or empty string if not configured
-	DeadLetterQueue param.Field[string]                                            `json:"dead_letter_queue"`
-	QueueName       param.Field[string]                                            `json:"queue_name"`
-	Settings        param.Field[QueueConsumersMqHTTPConsumerResponseSettingsParam] `json:"settings"`
-	Type            param.Field[QueueConsumersMqHTTPConsumerResponseType]          `json:"type"`
-}
-
-func (r QueueConsumersMqHTTPConsumerResponseParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r QueueConsumersMqHTTPConsumerResponseParam) implementsQueueConsumersUnionParam() {}
-
-type QueueConsumersMqHTTPConsumerResponseSettingsParam struct {
-	// The maximum number of messages to include in a batch.
-	BatchSize param.Field[float64] `json:"batch_size"`
-	// The maximum number of retries
-	MaxRetries param.Field[float64] `json:"max_retries"`
-	// The number of seconds to delay before making the message available for another
-	// attempt.
-	RetryDelay param.Field[float64] `json:"retry_delay"`
-	// The number of milliseconds that a message is exclusively leased. After the
-	// timeout, the message becomes available for another attempt.
-	VisibilityTimeoutMs param.Field[float64] `json:"visibility_timeout_ms"`
-}
-
-func (r QueueConsumersMqHTTPConsumerResponseSettingsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type QueueProducerParam struct {
 	BucketName param.Field[string]             `json:"bucket_name"`
 	Script     param.Field[string]             `json:"script"`
@@ -849,6 +522,8 @@ func (r QueueDeleteResponseSuccess) IsKnown() bool {
 
 type QueueNewParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	QueueName param.Field[string] `json:"queue_name" api:"required"`
 }
@@ -902,6 +577,8 @@ func (r QueueNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type QueueUpdateParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Queue     QueueParam          `json:"queue"`
 }
@@ -955,16 +632,22 @@ func (r QueueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type QueueListParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type QueueDeleteParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type QueueEditParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Queue     QueueParam          `json:"queue"`
 }
@@ -1018,6 +701,8 @@ func (r QueueEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type QueueGetParams struct {
 	// A Resource identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

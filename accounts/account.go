@@ -26,12 +26,14 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAccountService] method instead.
 type AccountService struct {
-	Options       []option.RequestOption
-	Members       *MemberService
-	Roles         *RoleService
-	Subscriptions *SubscriptionService
-	Tokens        *TokenService
-	Logs          *LogService
+	Options              []option.RequestOption
+	AccountOrganizations *AccountOrganizationService
+	AccountProfile       *AccountProfileService
+	Members              *MemberService
+	Roles                *RoleService
+	Subscriptions        *SubscriptionService
+	Tokens               *TokenService
+	Logs                 *LogService
 }
 
 // NewAccountService generates a new service that applies the given options to each
@@ -40,6 +42,8 @@ type AccountService struct {
 func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r = &AccountService{}
 	r.Options = opts
+	r.AccountOrganizations = NewAccountOrganizationService(opts...)
+	r.AccountProfile = NewAccountProfileService(opts...)
 	r.Members = NewMemberService(opts...)
 	r.Roles = NewRoleService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
@@ -65,6 +69,11 @@ func (r *AccountService) New(ctx context.Context, body AccountNewParams, opts ..
 func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *Account, err error) {
 	var env AccountUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -107,6 +116,11 @@ func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListPa
 func (r *AccountService) Delete(ctx context.Context, body AccountDeleteParams, opts ...option.RequestOption) (res *AccountDeleteResponse, err error) {
 	var env AccountDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -124,6 +138,11 @@ func (r *AccountService) Delete(ctx context.Context, body AccountDeleteParams, o
 func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *Account, err error) {
 	var env AccountGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -480,6 +499,8 @@ func (r AccountNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccountUpdateParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Account   AccountParam        `json:"account" api:"required"`
 }
@@ -664,6 +685,8 @@ func (r AccountListParamsDirection) IsKnown() bool {
 
 type AccountDeleteParams struct {
 	// The account ID of the account to be deleted
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -808,6 +831,8 @@ func (r AccountDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccountGetParams struct {
 	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

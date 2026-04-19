@@ -51,6 +51,11 @@ func NewNamespaceValueService(opts ...option.RequestOption) (r *NamespaceValueSe
 func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, keyName string, params NamespaceValueUpdateParams, opts ...option.RequestOption) (res *NamespaceValueUpdateResponse, err error) {
 	var env NamespaceValueUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -77,6 +82,11 @@ func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, 
 func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, keyName string, body NamespaceValueDeleteParams, opts ...option.RequestOption) (res *NamespaceValueDeleteResponse, err error) {
 	var env NamespaceValueDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -106,6 +116,11 @@ func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, 
 func (r *NamespaceValueService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceValueGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -163,6 +178,8 @@ func (r namespaceValueDeleteResponseJSON) RawJSON() string {
 
 type NamespaceValueUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A byte sequence to be stored, up to 25 MiB in length.
 	Value param.Field[NamespaceValueUpdateParamsValueUnion] `json:"value" api:"required" format:"binary"`
@@ -170,8 +187,9 @@ type NamespaceValueUpdateParams struct {
 	// epoch.
 	Expiration param.Field[float64] `query:"expiration"`
 	// Expires the key after a number of seconds. Must be at least 60.
-	ExpirationTTL param.Field[float64]     `query:"expiration_ttl"`
-	Metadata      param.Field[interface{}] `json:"metadata"`
+	ExpirationTTL param.Field[float64] `query:"expiration_ttl"`
+	// Associates arbitrary JSON data with a key/value pair.
+	Metadata param.Field[interface{}] `json:"metadata"`
 }
 
 func (r NamespaceValueUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -250,6 +268,8 @@ func (r NamespaceValueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceValueDeleteParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -298,5 +318,7 @@ func (r NamespaceValueDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceValueGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -40,10 +40,19 @@ func NewAIToMarkdownService(opts ...option.RequestOption) (r *AIToMarkdownServic
 }
 
 // Converts uploaded files into Markdown format using Workers AI.
+//
+// Deprecated: Use
+// [AI > To Markdown](https://developers.cloudflare.com/api/resources/ai/subresources/to_markdown/)
+// instead.
 func (r *AIToMarkdownService) New(ctx context.Context, params AIToMarkdownNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[AIToMarkdownNewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,6 +71,10 @@ func (r *AIToMarkdownService) New(ctx context.Context, params AIToMarkdownNewPar
 }
 
 // Converts uploaded files into Markdown format using Workers AI.
+//
+// Deprecated: Use
+// [AI > To Markdown](https://developers.cloudflare.com/api/resources/ai/subresources/to_markdown/)
+// instead.
 func (r *AIToMarkdownService) NewAutoPaging(ctx context.Context, params AIToMarkdownNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AIToMarkdownNewResponse] {
 	return pagination.NewSinglePageAutoPager(r.New(ctx, params, opts...))
 }
@@ -96,6 +109,7 @@ func (r aiToMarkdownNewResponseJSON) RawJSON() string {
 }
 
 type AIToMarkdownNewParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]      `path:"account_id" api:"required"`
 	Files     param.Field[[]io.Reader] `json:"files" api:"required" format:"binary"`
 }

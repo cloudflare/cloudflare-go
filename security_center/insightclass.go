@@ -41,6 +41,12 @@ func NewInsightClassService(opts ...option.RequestOption) (r *InsightClassServic
 func (r *InsightClassService) Get(ctx context.Context, params InsightClassGetParams, opts ...option.RequestOption) (res *[]InsightClassGetResponse, err error) {
 	var env InsightClassGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -93,8 +99,12 @@ func (r insightClassGetResponseJSON) RawJSON() string {
 
 type InsightClassGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID        param.Field[string]                     `path:"zone_id"`
 	Dismissed     param.Field[bool]                       `query:"dismissed"`
 	IssueClass    param.Field[[]string]                   `query:"issue_class"`

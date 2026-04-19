@@ -37,6 +37,11 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 // Update the current settings for the active account
 func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams, opts ...option.RequestOption) (res *SettingUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -49,6 +54,11 @@ func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams,
 // Get the current settings for the active account
 func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -101,6 +111,7 @@ func (r settingGetResponseJSON) RawJSON() string {
 }
 
 type SettingUpdateParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	DefaultASN param.Field[int64]  `json:"default_asn"`
 }
@@ -110,5 +121,6 @@ func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingGetParams struct {
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

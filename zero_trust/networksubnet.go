@@ -9,9 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
-	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
@@ -27,6 +25,7 @@ import (
 // the [NewNetworkSubnetService] method instead.
 type NetworkSubnetService struct {
 	Options          []option.RequestOption
+	WARP             *NetworkSubnetWARPService
 	CloudflareSource *NetworkSubnetCloudflareSourceService
 }
 
@@ -36,15 +35,21 @@ type NetworkSubnetService struct {
 func NewNetworkSubnetService(opts ...option.RequestOption) (r *NetworkSubnetService) {
 	r = &NetworkSubnetService{}
 	r.Options = opts
+	r.WARP = NewNetworkSubnetWARPService(opts...)
 	r.CloudflareSource = NewNetworkSubnetCloudflareSourceService(opts...)
 	return
 }
 
 // Lists and filters subnets in an account.
-func (r *NetworkSubnetService) List(ctx context.Context, params NetworkSubnetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[NetworkSubnetListResponse], err error) {
+func (r *NetworkSubnetService) List(ctx context.Context, params NetworkSubnetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Subnet], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,73 +68,14 @@ func (r *NetworkSubnetService) List(ctx context.Context, params NetworkSubnetLis
 }
 
 // Lists and filters subnets in an account.
-func (r *NetworkSubnetService) ListAutoPaging(ctx context.Context, params NetworkSubnetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[NetworkSubnetListResponse] {
+func (r *NetworkSubnetService) ListAutoPaging(ctx context.Context, params NetworkSubnetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Subnet] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
-}
-
-type NetworkSubnetListResponse struct {
-	// The UUID of the subnet.
-	ID string `json:"id" format:"uuid"`
-	// An optional description of the subnet.
-	Comment string `json:"comment"`
-	// Timestamp of when the resource was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the resource was deleted. If `null`, the resource has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
-	// If `true`, this is the default subnet for the account. There can only be one
-	// default subnet per account.
-	IsDefaultNetwork bool `json:"is_default_network"`
-	// A user-friendly name for the subnet.
-	Name string `json:"name"`
-	// The private IPv4 or IPv6 range defining the subnet, in CIDR notation.
-	Network string `json:"network"`
-	// The type of subnet.
-	SubnetType NetworkSubnetListResponseSubnetType `json:"subnet_type"`
-	JSON       networkSubnetListResponseJSON       `json:"-"`
-}
-
-// networkSubnetListResponseJSON contains the JSON metadata for the struct
-// [NetworkSubnetListResponse]
-type networkSubnetListResponseJSON struct {
-	ID               apijson.Field
-	Comment          apijson.Field
-	CreatedAt        apijson.Field
-	DeletedAt        apijson.Field
-	IsDefaultNetwork apijson.Field
-	Name             apijson.Field
-	Network          apijson.Field
-	SubnetType       apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *NetworkSubnetListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkSubnetListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of subnet.
-type NetworkSubnetListResponseSubnetType string
-
-const (
-	NetworkSubnetListResponseSubnetTypeCloudflareSource NetworkSubnetListResponseSubnetType = "cloudflare_source"
-	NetworkSubnetListResponseSubnetTypeWARP             NetworkSubnetListResponseSubnetType = "warp"
-)
-
-func (r NetworkSubnetListResponseSubnetType) IsKnown() bool {
-	switch r {
-	case NetworkSubnetListResponseSubnetTypeCloudflareSource, NetworkSubnetListResponseSubnetTypeWARP:
-		return true
-	}
-	return false
 }
 
 type NetworkSubnetListParams struct {
 	// Cloudflare account ID
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If set, only include subnets in the given address family - `v4` or `v6`
 	AddressFamily param.Field[NetworkSubnetListParamsAddressFamily] `query:"address_family"`

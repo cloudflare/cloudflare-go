@@ -40,6 +40,11 @@ func NewRuleCatchAllService(opts ...option.RequestOption) (r *RuleCatchAllServic
 func (r *RuleCatchAllService) Update(ctx context.Context, params RuleCatchAllUpdateParams, opts ...option.RequestOption) (res *RuleCatchAllUpdateResponse, err error) {
 	var env RuleCatchAllUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -57,6 +62,11 @@ func (r *RuleCatchAllService) Update(ctx context.Context, params RuleCatchAllUpd
 func (r *RuleCatchAllService) Get(ctx context.Context, query RuleCatchAllGetParams, opts ...option.RequestOption) (res *RuleCatchAllGetResponse, err error) {
 	var env RuleCatchAllGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -281,6 +291,8 @@ func (r RuleCatchAllGetResponseEnabled) IsKnown() bool {
 
 type RuleCatchAllUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// List actions for the catch-all routing rule.
 	Actions param.Field[[]CatchAllActionParam] `json:"actions" api:"required"`
@@ -453,6 +465,8 @@ func (r RuleCatchAllUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleCatchAllGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

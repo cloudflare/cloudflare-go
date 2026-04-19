@@ -43,9 +43,7 @@ func TestNamespaceValueUpdateWithOptionalParams(t *testing.T) {
 			Value:         cloudflare.F[kv.NamespaceValueUpdateParamsValueUnion](shared.UnionString("Some Value")),
 			Expiration:    cloudflare.F(1578435000.000000),
 			ExpirationTTL: cloudflare.F(300.000000),
-			Metadata: cloudflare.F[any](map[string]interface{}{
-				"someMetadataKey": "someMetadataValue",
-			}),
+			Metadata:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

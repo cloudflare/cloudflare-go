@@ -45,6 +45,11 @@ func NewAppService(opts ...option.RequestOption) (r *AppService) {
 func (r *AppService) New(ctx context.Context, params AppNewParams, opts ...option.RequestOption) (res *AppNewResponse, err error) {
 	var env AppNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -63,6 +68,11 @@ func (r *AppService) New(ctx context.Context, params AppNewParams, opts ...optio
 func (r *AppService) Update(ctx context.Context, appID string, params AppUpdateParams, opts ...option.RequestOption) (res *AppUpdateResponse, err error) {
 	var env AppUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -85,6 +95,11 @@ func (r *AppService) List(ctx context.Context, params AppListParams, opts ...opt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -111,6 +126,11 @@ func (r *AppService) ListAutoPaging(ctx context.Context, params AppListParams, o
 func (r *AppService) Delete(ctx context.Context, appID string, body AppDeleteParams, opts ...option.RequestOption) (res *AppDeleteResponse, err error) {
 	var env AppDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -132,6 +152,11 @@ func (r *AppService) Delete(ctx context.Context, appID string, body AppDeletePar
 func (r *AppService) Get(ctx context.Context, appID string, query AppGetParams, opts ...option.RequestOption) (res *AppGetResponse, err error) {
 	var env AppGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -1572,6 +1597,8 @@ func (r AppGetResponseTrafficType) IsKnown() bool {
 
 type AppNewParams struct {
 	// Zone identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]   `path:"zone_id" api:"required"`
 	Body   AppNewParamsBodyUnion `json:"body" api:"required"`
 }
@@ -1954,6 +1981,8 @@ func (r AppNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AppUpdateParams struct {
 	// Zone identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]      `path:"zone_id" api:"required"`
 	Body   AppUpdateParamsBodyUnion `json:"body" api:"required"`
 }
@@ -2337,6 +2366,8 @@ func (r AppUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AppListParams struct {
 	// Zone identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Sets the direction by which results are ordered.
 	Direction param.Field[AppListParamsDirection] `query:"direction"`
@@ -2395,6 +2426,8 @@ func (r AppListParamsOrder) IsKnown() bool {
 
 type AppDeleteParams struct {
 	// Zone identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -2539,6 +2572,8 @@ func (r AppDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AppGetParams struct {
 	// Zone identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

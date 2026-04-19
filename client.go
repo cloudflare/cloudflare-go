@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/addressing"
 	"github.com/cloudflare/cloudflare-go/v6/ai"
 	"github.com/cloudflare/cloudflare-go/v6/ai_gateway"
+	"github.com/cloudflare/cloudflare-go/v6/ai_search"
 	"github.com/cloudflare/cloudflare-go/v6/alerting"
 	"github.com/cloudflare/cloudflare-go/v6/api_gateway"
 	"github.com/cloudflare/cloudflare-go/v6/argo"
@@ -29,6 +30,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/client_certificates"
 	"github.com/cloudflare/cloudflare-go/v6/cloud_connector"
 	"github.com/cloudflare/cloudflare-go/v6/cloudforce_one"
+	"github.com/cloudflare/cloudflare-go/v6/connectivity"
 	"github.com/cloudflare/cloudflare-go/v6/content_scanning"
 	"github.com/cloudflare/cloudflare-go/v6/custom_certificates"
 	"github.com/cloudflare/cloudflare-go/v6/custom_hostnames"
@@ -37,14 +39,16 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/d1"
 	"github.com/cloudflare/cloudflare-go/v6/dcv_delegation"
 	"github.com/cloudflare/cloudflare-go/v6/diagnostics"
-	"github.com/cloudflare/cloudflare-go/v6/dls"
 	"github.com/cloudflare/cloudflare-go/v6/dns"
 	"github.com/cloudflare/cloudflare-go/v6/dns_firewall"
 	"github.com/cloudflare/cloudflare-go/v6/durable_objects"
 	"github.com/cloudflare/cloudflare-go/v6/email_routing"
 	"github.com/cloudflare/cloudflare-go/v6/email_security"
+	"github.com/cloudflare/cloudflare-go/v6/email_sending"
 	"github.com/cloudflare/cloudflare-go/v6/filters"
 	"github.com/cloudflare/cloudflare-go/v6/firewall"
+	"github.com/cloudflare/cloudflare-go/v6/fraud"
+	"github.com/cloudflare/cloudflare-go/v6/google_tag_gateway"
 	"github.com/cloudflare/cloudflare-go/v6/healthchecks"
 	"github.com/cloudflare/cloudflare-go/v6/hostnames"
 	"github.com/cloudflare/cloudflare-go/v6/hyperdrive"
@@ -67,6 +71,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/mtls_certificates"
 	"github.com/cloudflare/cloudflare-go/v6/network_interconnects"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/organizations"
 	"github.com/cloudflare/cloudflare-go/v6/origin_ca_certificates"
 	"github.com/cloudflare/cloudflare-go/v6/origin_post_quantum_encryption"
 	"github.com/cloudflare/cloudflare-go/v6/origin_tls_client_auth"
@@ -76,11 +81,14 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/pipelines"
 	"github.com/cloudflare/cloudflare-go/v6/queues"
 	"github.com/cloudflare/cloudflare-go/v6/r2"
+	"github.com/cloudflare/cloudflare-go/v6/r2_data_catalog"
 	"github.com/cloudflare/cloudflare-go/v6/radar"
 	"github.com/cloudflare/cloudflare-go/v6/rate_limits"
+	"github.com/cloudflare/cloudflare-go/v6/realtime_kit"
 	"github.com/cloudflare/cloudflare-go/v6/registrar"
 	"github.com/cloudflare/cloudflare-go/v6/request_tracers"
 	"github.com/cloudflare/cloudflare-go/v6/resource_sharing"
+	"github.com/cloudflare/cloudflare-go/v6/resource_tagging"
 	"github.com/cloudflare/cloudflare-go/v6/rules"
 	"github.com/cloudflare/cloudflare-go/v6/rulesets"
 	"github.com/cloudflare/cloudflare-go/v6/rum"
@@ -93,11 +101,13 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/speed"
 	"github.com/cloudflare/cloudflare-go/v6/ssl"
 	"github.com/cloudflare/cloudflare-go/v6/stream"
+	"github.com/cloudflare/cloudflare-go/v6/token_validation"
 	"github.com/cloudflare/cloudflare-go/v6/turnstile"
 	"github.com/cloudflare/cloudflare-go/v6/url_normalization"
 	"github.com/cloudflare/cloudflare-go/v6/url_scanner"
 	"github.com/cloudflare/cloudflare-go/v6/user"
 	"github.com/cloudflare/cloudflare-go/v6/vectorize"
+	"github.com/cloudflare/cloudflare-go/v6/vulnerability_scanner"
 	"github.com/cloudflare/cloudflare-go/v6/waiting_rooms"
 	"github.com/cloudflare/cloudflare-go/v6/web3"
 	"github.com/cloudflare/cloudflare-go/v6/workers"
@@ -114,6 +124,7 @@ import (
 type Client struct {
 	Options                []option.RequestOption
 	Accounts               *accounts.AccountService
+	Organizations          *organizations.OrganizationService
 	OriginCACertificates   *origin_ca_certificates.OriginCACertificateService
 	IPs                    *ips.IPService
 	Memberships            *memberships.MembershipService
@@ -133,6 +144,7 @@ type Client struct {
 	DNS                    *dns.DNSService
 	EmailSecurity          *email_security.EmailSecurityService
 	EmailRouting           *email_routing.EmailRoutingService
+	EmailSending           *email_sending.EmailSendingService
 	// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
 	// See
 	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
@@ -163,7 +175,6 @@ type Client struct {
 	URLNormalization            *url_normalization.URLNormalizationService
 	Spectrum                    *spectrum.SpectrumService
 	Addressing                  *addressing.AddressingService
-	DLS                         *dls.DLSService
 	AuditLogs                   *audit_logs.AuditLogService
 	Billing                     *billing.BillingService
 	BrandProtection             *brand_protection.BrandProtectionService
@@ -183,21 +194,27 @@ type Client struct {
 	Alerting                    *alerting.AlertingService
 	D1                          *d1.D1Service
 	R2                          *r2.R2Service
+	R2DataCatalog               *r2_data_catalog.R2DataCatalogService
 	WorkersForPlatforms         *workers_for_platforms.WorkersForPlatformService
 	ZeroTrust                   *zero_trust.ZeroTrustService
 	Turnstile                   *turnstile.TurnstileService
+	Connectivity                *connectivity.ConnectivityService
 	Hyperdrive                  *hyperdrive.HyperdriveService
 	RUM                         *rum.RUMService
 	Vectorize                   *vectorize.VectorizeService
 	URLScanner                  *url_scanner.URLScannerService
+	VulnerabilityScanner        *vulnerability_scanner.VulnerabilityScannerService
 	Radar                       *radar.RadarService
 	BotManagement               *bot_management.BotManagementService
+	Fraud                       *fraud.FraudService
 	OriginPostQuantumEncryption *origin_post_quantum_encryption.OriginPostQuantumEncryptionService
+	GoogleTagGateway            *google_tag_gateway.GoogleTagGatewayService
 	Zaraz                       *zaraz.ZarazService
 	Speed                       *speed.SpeedService
 	DCVDelegation               *dcv_delegation.DCVDelegationService
 	Hostnames                   *hostnames.HostnameService
 	Snippets                    *snippets.SnippetService
+	RealtimeKit                 *realtime_kit.RealtimeKitService
 	Calls                       *calls.CallService
 	CloudforceOne               *cloudforce_one.CloudforceOneService
 	AIGateway                   *ai_gateway.AIGatewayService
@@ -207,21 +224,25 @@ type Client struct {
 	SecurityTXT                 *security_txt.SecurityTXTService
 	Workflows                   *workflows.WorkflowService
 	ResourceSharing             *resource_sharing.ResourceSharingService
+	ResourceTagging             *resource_tagging.ResourceTaggingService
 	LeakedCredentialChecks      *leaked_credential_checks.LeakedCredentialCheckService
 	ContentScanning             *content_scanning.ContentScanningService
 	AbuseReports                *abuse_reports.AbuseReportService
 	AI                          *ai.AIService
+	AISearch                    *ai_search.AISearchService
 	SecurityCenter              *security_center.SecurityCenterService
 	BrowserRendering            *browser_rendering.BrowserRenderingService
 	CustomPages                 *custom_pages.CustomPageService
 	SecretsStore                *secrets_store.SecretsStoreService
 	Pipelines                   *pipelines.PipelineService
 	SchemaValidation            *schema_validation.SchemaValidationService
+	TokenValidation             *token_validation.TokenValidationService
 }
 
 // DefaultClientOptions read from the environment (CLOUDFLARE_API_KEY,
 // CLOUDFLARE_API_USER_SERVICE_KEY, CLOUDFLARE_API_TOKEN, CLOUDFLARE_EMAIL,
-// CLOUDFLARE_BASE_URL). This should be used to initialize new clients.
+// CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_ZONE_ID, CLOUDFLARE_BASE_URL). This should be
+// used to initialize new clients.
 func DefaultClientOptions() []option.RequestOption {
 	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("CLOUDFLARE_BASE_URL"); ok {
@@ -239,20 +260,28 @@ func DefaultClientOptions() []option.RequestOption {
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_USER_SERVICE_KEY"); ok {
 		defaults = append(defaults, option.WithUserServiceKey(o))
 	}
+	if o, ok := os.LookupEnv("CLOUDFLARE_ACCOUNT_ID"); ok {
+		defaults = append(defaults, option.WithAccountID(o))
+	}
+	if o, ok := os.LookupEnv("CLOUDFLARE_ZONE_ID"); ok {
+		defaults = append(defaults, option.WithZoneID(o))
+	}
 	return defaults
 }
 
 // NewClient generates a new client with the default option read from the
 // environment (CLOUDFLARE_API_KEY, CLOUDFLARE_API_USER_SERVICE_KEY,
-// CLOUDFLARE_API_TOKEN, CLOUDFLARE_EMAIL, CLOUDFLARE_BASE_URL). The option passed
-// in as arguments are applied after these default arguments, and all option will
-// be passed down to the services and requests that this client makes.
+// CLOUDFLARE_API_TOKEN, CLOUDFLARE_EMAIL, CLOUDFLARE_ACCOUNT_ID,
+// CLOUDFLARE_ZONE_ID, CLOUDFLARE_BASE_URL). The option passed in as arguments are
+// applied after these default arguments, and all option will be passed down to the
+// services and requests that this client makes.
 func NewClient(opts ...option.RequestOption) (r *Client) {
 	opts = append(DefaultClientOptions(), opts...)
 
 	r = &Client{Options: opts}
 
 	r.Accounts = accounts.NewAccountService(opts...)
+	r.Organizations = organizations.NewOrganizationService(opts...)
 	r.OriginCACertificates = origin_ca_certificates.NewOriginCACertificateService(opts...)
 	r.IPs = ips.NewIPService(opts...)
 	r.Memberships = memberships.NewMembershipService(opts...)
@@ -272,6 +301,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DNS = dns.NewDNSService(opts...)
 	r.EmailSecurity = email_security.NewEmailSecurityService(opts...)
 	r.EmailRouting = email_routing.NewEmailRoutingService(opts...)
+	r.EmailSending = email_sending.NewEmailSendingService(opts...)
 	r.Filters = filters.NewFilterService(opts...)
 	r.Firewall = firewall.NewFirewallService(opts...)
 	r.Healthchecks = healthchecks.NewHealthcheckService(opts...)
@@ -294,7 +324,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.URLNormalization = url_normalization.NewURLNormalizationService(opts...)
 	r.Spectrum = spectrum.NewSpectrumService(opts...)
 	r.Addressing = addressing.NewAddressingService(opts...)
-	r.DLS = dls.NewDLSService(opts...)
 	r.AuditLogs = audit_logs.NewAuditLogService(opts...)
 	r.Billing = billing.NewBillingService(opts...)
 	r.BrandProtection = brand_protection.NewBrandProtectionService(opts...)
@@ -314,21 +343,27 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Alerting = alerting.NewAlertingService(opts...)
 	r.D1 = d1.NewD1Service(opts...)
 	r.R2 = r2.NewR2Service(opts...)
+	r.R2DataCatalog = r2_data_catalog.NewR2DataCatalogService(opts...)
 	r.WorkersForPlatforms = workers_for_platforms.NewWorkersForPlatformService(opts...)
 	r.ZeroTrust = zero_trust.NewZeroTrustService(opts...)
 	r.Turnstile = turnstile.NewTurnstileService(opts...)
+	r.Connectivity = connectivity.NewConnectivityService(opts...)
 	r.Hyperdrive = hyperdrive.NewHyperdriveService(opts...)
 	r.RUM = rum.NewRUMService(opts...)
 	r.Vectorize = vectorize.NewVectorizeService(opts...)
 	r.URLScanner = url_scanner.NewURLScannerService(opts...)
+	r.VulnerabilityScanner = vulnerability_scanner.NewVulnerabilityScannerService(opts...)
 	r.Radar = radar.NewRadarService(opts...)
 	r.BotManagement = bot_management.NewBotManagementService(opts...)
+	r.Fraud = fraud.NewFraudService(opts...)
 	r.OriginPostQuantumEncryption = origin_post_quantum_encryption.NewOriginPostQuantumEncryptionService(opts...)
+	r.GoogleTagGateway = google_tag_gateway.NewGoogleTagGatewayService(opts...)
 	r.Zaraz = zaraz.NewZarazService(opts...)
 	r.Speed = speed.NewSpeedService(opts...)
 	r.DCVDelegation = dcv_delegation.NewDCVDelegationService(opts...)
 	r.Hostnames = hostnames.NewHostnameService(opts...)
 	r.Snippets = snippets.NewSnippetService(opts...)
+	r.RealtimeKit = realtime_kit.NewRealtimeKitService(opts...)
 	r.Calls = calls.NewCallService(opts...)
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
@@ -338,16 +373,19 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.SecurityTXT = security_txt.NewSecurityTXTService(opts...)
 	r.Workflows = workflows.NewWorkflowService(opts...)
 	r.ResourceSharing = resource_sharing.NewResourceSharingService(opts...)
+	r.ResourceTagging = resource_tagging.NewResourceTaggingService(opts...)
 	r.LeakedCredentialChecks = leaked_credential_checks.NewLeakedCredentialCheckService(opts...)
 	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 	r.AI = ai.NewAIService(opts...)
+	r.AISearch = ai_search.NewAISearchService(opts...)
 	r.SecurityCenter = security_center.NewSecurityCenterService(opts...)
 	r.BrowserRendering = browser_rendering.NewBrowserRenderingService(opts...)
 	r.CustomPages = custom_pages.NewCustomPageService(opts...)
 	r.SecretsStore = secrets_store.NewSecretsStoreService(opts...)
 	r.Pipelines = pipelines.NewPipelineService(opts...)
 	r.SchemaValidation = schema_validation.NewSchemaValidationService(opts...)
+	r.TokenValidation = token_validation.NewTokenValidationService(opts...)
 
 	return
 }

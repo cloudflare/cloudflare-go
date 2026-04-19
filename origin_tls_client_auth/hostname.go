@@ -24,8 +24,7 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewHostnameService] method instead.
 type HostnameService struct {
-	Options      []option.RequestOption
-	Certificates *HostnameCertificateService
+	Options []option.RequestOption
 }
 
 // NewHostnameService generates a new service that applies the given options to
@@ -34,7 +33,6 @@ type HostnameService struct {
 func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 	r = &HostnameService{}
 	r.Options = opts
-	r.Certificates = NewHostnameCertificateService(opts...)
 	return
 }
 
@@ -47,6 +45,11 @@ func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParam
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -78,6 +81,11 @@ func (r *HostnameService) UpdateAutoPaging(ctx context.Context, params HostnameU
 func (r *HostnameService) Get(ctx context.Context, hostname string, query HostnameGetParams, opts ...option.RequestOption) (res *AuthenticatedOriginPull, err error) {
 	var env HostnameGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -242,6 +250,8 @@ func (r hostnameUpdateResponseJSON) RawJSON() string {
 
 type HostnameUpdateParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]                       `path:"zone_id" api:"required"`
 	Config param.Field[[]HostnameUpdateParamsConfig] `json:"config" api:"required"`
 }
@@ -267,6 +277,8 @@ func (r HostnameUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
 
 type HostnameGetParams struct {
 	// Identifier.
+	//
+	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
