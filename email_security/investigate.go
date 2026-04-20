@@ -882,7 +882,7 @@ type InvestigateListParams struct {
 	Metric        param.Field[string]                             `query:"metric"`
 	// Deprecated: Use cursor pagination instead.
 	Page param.Field[int64] `query:"page"`
-	// The number of results per page.
+	// The number of results per page. Maximum value is 1000.
 	PerPage param.Field[int64] `query:"per_page"`
 	// The space-delimited term used in the query. The search is case-insensitive.
 	//
