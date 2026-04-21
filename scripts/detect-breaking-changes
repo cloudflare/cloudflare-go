@@ -60,6 +60,7 @@ TEST_PATHS=(
 	cache/smarttieredcache_test.go
 	cache/variant_test.go
 	cache/regionaltieredcache_test.go
+	cache/origincloudregion_test.go
 	ssl/analyze_test.go
 	ssl/certificatepack_test.go
 	ssl/certificatepackquota_test.go

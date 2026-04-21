@@ -28,6 +28,7 @@ type CacheService struct {
 	SmartTieredCache    *SmartTieredCacheService
 	Variants            *VariantService
 	RegionalTieredCache *RegionalTieredCacheService
+	OriginCloudRegions  *OriginCloudRegionService
 }
 
 // NewCacheService generates a new service that applies the given options to each
@@ -40,6 +41,7 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 	r.SmartTieredCache = NewSmartTieredCacheService(opts...)
 	r.Variants = NewVariantService(opts...)
 	r.RegionalTieredCache = NewRegionalTieredCacheService(opts...)
+	r.OriginCloudRegions = NewOriginCloudRegionService(opts...)
 	return
 }
 
