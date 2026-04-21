@@ -696,7 +696,8 @@ type RuleSettingBISOAdminControls struct {
 	// Set to false to enable keyboard usage. Only applies when `version == "v1"`.
 	DK bool `json:"dk"`
 	// Configure download behavior. When set to remote_only, users can view downloads
-	// but cannot save them. Applies only when version == "v2".
+	// but cannot save them. If this field is absent, downloading remains enabled.
+	// Applies only when version == "v2".
 	Download RuleSettingBISOAdminControlsDownload `json:"download"`
 	// Set to false to enable printing. Only applies when `version == "v1"`.
 	DP bool `json:"dp"`
@@ -717,7 +718,10 @@ type RuleSettingBISOAdminControls struct {
 	Upload RuleSettingBISOAdminControlsUpload `json:"upload"`
 	// Indicate which version of the browser isolation controls should apply.
 	Version RuleSettingBISOAdminControlsVersion `json:"version"`
-	JSON    ruleSettingBISOAdminControlsJSON    `json:"-"`
+	// Specify the watermark ID (UUID) to apply to the isolated browser session. When
+	// present, enables watermark rendering in the isolated browser.
+	WmID string                           `json:"wm_id" format:"uuid"`
+	JSON ruleSettingBISOAdminControlsJSON `json:"-"`
 }
 
 // ruleSettingBISOAdminControlsJSON contains the JSON metadata for the struct
@@ -735,6 +739,7 @@ type ruleSettingBISOAdminControlsJSON struct {
 	Printing    apijson.Field
 	Upload      apijson.Field
 	Version     apijson.Field
+	WmID        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -767,7 +772,8 @@ func (r RuleSettingBISOAdminControlsCopy) IsKnown() bool {
 }
 
 // Configure download behavior. When set to remote_only, users can view downloads
-// but cannot save them. Applies only when version == "v2".
+// but cannot save them. If this field is absent, downloading remains enabled.
+// Applies only when version == "v2".
 type RuleSettingBISOAdminControlsDownload string
 
 const (
@@ -1391,7 +1397,8 @@ type RuleSettingBISOAdminControlsParam struct {
 	// Set to false to enable keyboard usage. Only applies when `version == "v1"`.
 	DK param.Field[bool] `json:"dk"`
 	// Configure download behavior. When set to remote_only, users can view downloads
-	// but cannot save them. Applies only when version == "v2".
+	// but cannot save them. If this field is absent, downloading remains enabled.
+	// Applies only when version == "v2".
 	Download param.Field[RuleSettingBISOAdminControlsDownload] `json:"download"`
 	// Set to false to enable printing. Only applies when `version == "v1"`.
 	DP param.Field[bool] `json:"dp"`
@@ -1412,6 +1419,9 @@ type RuleSettingBISOAdminControlsParam struct {
 	Upload param.Field[RuleSettingBISOAdminControlsUpload] `json:"upload"`
 	// Indicate which version of the browser isolation controls should apply.
 	Version param.Field[RuleSettingBISOAdminControlsVersion] `json:"version"`
+	// Specify the watermark ID (UUID) to apply to the isolated browser session. When
+	// present, enables watermark rendering in the isolated browser.
+	WmID param.Field[string] `json:"wm_id" format:"uuid"`
 }
 
 func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error) {
