@@ -32,7 +32,7 @@ func TestUserGroupMemberNew(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		iam.UserGroupMemberNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: []iam.UserGroupMemberNewParamsBody{{
+			Members: []iam.UserGroupMemberNewParamsMember{{
 				ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			}},
 		},
@@ -64,7 +64,7 @@ func TestUserGroupMemberUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		iam.UserGroupMemberUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: []iam.UserGroupMemberUpdateParamsBody{{
+			Members: []iam.UserGroupMemberUpdateParamsMember{{
 				ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			}},
 		},
