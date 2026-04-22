@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.9.1 (2026-04-22)
+
+Full Changelog: [v6.9.0...v6.9.1](https://github.com/cloudflare/cloudflare-go/compare/v6.9.0...v6.9.1)
+
+### Chores
+
+* sync codegen from staging-next (2026-04-17) ([#4262](https://github.com/cloudflare/cloudflare-go/issues/4262)) ([7138b06](https://github.com/cloudflare/cloudflare-go/commit/7138b069af7dcb2c9121faf2ed0167cf73420087))
+
 ## 6.9.0 (2026-04-01)
 
 Full Changelog: [v6.8.0...v6.9.0](https://github.com/cloudflare/cloudflare-go/compare/v6.8.0...v6.9.0)
