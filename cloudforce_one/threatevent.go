@@ -81,11 +81,11 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 	return res, err
 }
 
-// When `datasetId` is unspecified, events will be listed from the
-// `Cloudforce One Threat Events` dataset. To list existing datasets (and their
-// IDs), use the
+// Use `datasetId=all` or `datasetId=*` to query all event datasets for the account
+// (limited to 10). When `datasetId` is unspecified, events are listed from the
+// default Cloudforce One Threat Events dataset. To list existing datasets, use the
 // [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
-// endpoint). Also, must provide query parameters.
+// endpoint.
 func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListParams, opts ...option.RequestOption) (res *[]ThreatEventListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -613,7 +613,10 @@ type ThreatEventListParams struct {
 	// only need to pass cursor and pageSize. Returned in the previous response's
 	// result_info.cursor field. Use cursor-based pagination for deep pagination
 	// (beyond 100,000 records) or for optimal performance.
-	Cursor       param.Field[string]                      `query:"cursor"`
+	Cursor param.Field[string] `query:"cursor"`
+	// Dataset IDs to query events from (array of UUIDs), or special value 'all' or
+	// '\*' to query all event datasets for the account. If not provided, uses the
+	// default dataset.
 	DatasetID    param.Field[[]string]                    `query:"datasetId"`
 	ForceRefresh param.Field[bool]                        `query:"forceRefresh"`
 	Format       param.Field[ThreatEventListParamsFormat] `query:"format"`

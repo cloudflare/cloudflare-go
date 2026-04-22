@@ -203,9 +203,12 @@ type BotGetResponseBot struct {
 	// The link to the bot documentation.
 	OperatorURL string `json:"operatorUrl" api:"required"`
 	// A kebab-case identifier derived from the bot name.
-	Slug              string                `json:"slug" api:"required"`
-	UserAgentPatterns []string              `json:"userAgentPatterns" api:"required"`
-	UserAgents        []string              `json:"userAgents" api:"required"`
+	Slug              string   `json:"slug" api:"required"`
+	UserAgentPatterns []string `json:"userAgentPatterns" api:"required"`
+	UserAgents        []string `json:"userAgents" api:"required"`
+	// The URL of the agent's [Web Bot Auth](https://blog.cloudflare.com/web-bot-auth/)
+	// resource. Null for bots not verified via request signature.
+	SignatureAgentURL string                `json:"signatureAgentUrl" api:"nullable"`
 	JSON              botGetResponseBotJSON `json:"-"`
 }
 
@@ -221,6 +224,7 @@ type botGetResponseBotJSON struct {
 	Slug              apijson.Field
 	UserAgentPatterns apijson.Field
 	UserAgents        apijson.Field
+	SignatureAgentURL apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
