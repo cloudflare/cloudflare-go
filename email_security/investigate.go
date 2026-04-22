@@ -135,11 +135,12 @@ type InvestigateListResponse struct {
 	Ts               string                                  `json:"ts" api:"required"`
 	AlertID          string                                  `json:"alert_id" api:"nullable"`
 	DeliveryMode     InvestigateListResponseDeliveryMode     `json:"delivery_mode" api:"nullable"`
+	DeliveryStatus   []InvestigateListResponseDeliveryStatus `json:"delivery_status"`
 	EdfHash          string                                  `json:"edf_hash" api:"nullable"`
 	EnvelopeFrom     string                                  `json:"envelope_from" api:"nullable"`
 	EnvelopeTo       []string                                `json:"envelope_to" api:"nullable"`
 	FinalDisposition InvestigateListResponseFinalDisposition `json:"final_disposition" api:"nullable"`
-	// Deprecated.
+	// Deprecated: use `/investigate/{id}/detections` instead.
 	//
 	// Deprecated: deprecated
 	Findings               []InvestigateListResponseFinding               `json:"findings" api:"nullable"`
@@ -178,6 +179,7 @@ type investigateListResponseJSON struct {
 	Ts                     apijson.Field
 	AlertID                apijson.Field
 	DeliveryMode           apijson.Field
+	DeliveryStatus         apijson.Field
 	EdfHash                apijson.Field
 	EnvelopeFrom           apijson.Field
 	EnvelopeTo             apijson.Field
@@ -300,6 +302,27 @@ const (
 func (r InvestigateListResponseDeliveryMode) IsKnown() bool {
 	switch r {
 	case InvestigateListResponseDeliveryModeDirect, InvestigateListResponseDeliveryModeBcc, InvestigateListResponseDeliveryModeJournal, InvestigateListResponseDeliveryModeReviewSubmission, InvestigateListResponseDeliveryModeDMARCUnverified, InvestigateListResponseDeliveryModeDMARCFailureReport, InvestigateListResponseDeliveryModeDMARCAggregateReport, InvestigateListResponseDeliveryModeThreatIntelSubmission, InvestigateListResponseDeliveryModeSimulationSubmission, InvestigateListResponseDeliveryModeAPI, InvestigateListResponseDeliveryModeRetroScan:
+		return true
+	}
+	return false
+}
+
+// Delivery status of the message.
+type InvestigateListResponseDeliveryStatus string
+
+const (
+	InvestigateListResponseDeliveryStatusDelivered   InvestigateListResponseDeliveryStatus = "delivered"
+	InvestigateListResponseDeliveryStatusMoved       InvestigateListResponseDeliveryStatus = "moved"
+	InvestigateListResponseDeliveryStatusQuarantined InvestigateListResponseDeliveryStatus = "quarantined"
+	InvestigateListResponseDeliveryStatusRejected    InvestigateListResponseDeliveryStatus = "rejected"
+	InvestigateListResponseDeliveryStatusDeferred    InvestigateListResponseDeliveryStatus = "deferred"
+	InvestigateListResponseDeliveryStatusBounced     InvestigateListResponseDeliveryStatus = "bounced"
+	InvestigateListResponseDeliveryStatusQueued      InvestigateListResponseDeliveryStatus = "queued"
+)
+
+func (r InvestigateListResponseDeliveryStatus) IsKnown() bool {
+	switch r {
+	case InvestigateListResponseDeliveryStatusDelivered, InvestigateListResponseDeliveryStatusMoved, InvestigateListResponseDeliveryStatusQuarantined, InvestigateListResponseDeliveryStatusRejected, InvestigateListResponseDeliveryStatusDeferred, InvestigateListResponseDeliveryStatusBounced, InvestigateListResponseDeliveryStatusQueued:
 		return true
 	}
 	return false
@@ -505,11 +528,12 @@ type InvestigateGetResponse struct {
 	Ts               string                                 `json:"ts" api:"required"`
 	AlertID          string                                 `json:"alert_id" api:"nullable"`
 	DeliveryMode     InvestigateGetResponseDeliveryMode     `json:"delivery_mode" api:"nullable"`
+	DeliveryStatus   []InvestigateGetResponseDeliveryStatus `json:"delivery_status"`
 	EdfHash          string                                 `json:"edf_hash" api:"nullable"`
 	EnvelopeFrom     string                                 `json:"envelope_from" api:"nullable"`
 	EnvelopeTo       []string                               `json:"envelope_to" api:"nullable"`
 	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition" api:"nullable"`
-	// Deprecated.
+	// Deprecated: use `/investigate/{id}/detections` instead.
 	//
 	// Deprecated: deprecated
 	Findings               []InvestigateGetResponseFinding               `json:"findings" api:"nullable"`
@@ -548,6 +572,7 @@ type investigateGetResponseJSON struct {
 	Ts                     apijson.Field
 	AlertID                apijson.Field
 	DeliveryMode           apijson.Field
+	DeliveryStatus         apijson.Field
 	EdfHash                apijson.Field
 	EnvelopeFrom           apijson.Field
 	EnvelopeTo             apijson.Field
@@ -670,6 +695,27 @@ const (
 func (r InvestigateGetResponseDeliveryMode) IsKnown() bool {
 	switch r {
 	case InvestigateGetResponseDeliveryModeDirect, InvestigateGetResponseDeliveryModeBcc, InvestigateGetResponseDeliveryModeJournal, InvestigateGetResponseDeliveryModeReviewSubmission, InvestigateGetResponseDeliveryModeDMARCUnverified, InvestigateGetResponseDeliveryModeDMARCFailureReport, InvestigateGetResponseDeliveryModeDMARCAggregateReport, InvestigateGetResponseDeliveryModeThreatIntelSubmission, InvestigateGetResponseDeliveryModeSimulationSubmission, InvestigateGetResponseDeliveryModeAPI, InvestigateGetResponseDeliveryModeRetroScan:
+		return true
+	}
+	return false
+}
+
+// Delivery status of the message.
+type InvestigateGetResponseDeliveryStatus string
+
+const (
+	InvestigateGetResponseDeliveryStatusDelivered   InvestigateGetResponseDeliveryStatus = "delivered"
+	InvestigateGetResponseDeliveryStatusMoved       InvestigateGetResponseDeliveryStatus = "moved"
+	InvestigateGetResponseDeliveryStatusQuarantined InvestigateGetResponseDeliveryStatus = "quarantined"
+	InvestigateGetResponseDeliveryStatusRejected    InvestigateGetResponseDeliveryStatus = "rejected"
+	InvestigateGetResponseDeliveryStatusDeferred    InvestigateGetResponseDeliveryStatus = "deferred"
+	InvestigateGetResponseDeliveryStatusBounced     InvestigateGetResponseDeliveryStatus = "bounced"
+	InvestigateGetResponseDeliveryStatusQueued      InvestigateGetResponseDeliveryStatus = "queued"
+)
+
+func (r InvestigateGetResponseDeliveryStatus) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseDeliveryStatusDelivered, InvestigateGetResponseDeliveryStatusMoved, InvestigateGetResponseDeliveryStatusQuarantined, InvestigateGetResponseDeliveryStatusRejected, InvestigateGetResponseDeliveryStatusDeferred, InvestigateGetResponseDeliveryStatusBounced, InvestigateGetResponseDeliveryStatusQueued:
 		return true
 	}
 	return false
