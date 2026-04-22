@@ -16,6 +16,7 @@ import (
 )
 
 func TestInsightTypeGetWithOptionalParams(t *testing.T) {
+	t.Skip("account_id and zone_id are mutually exclusive in generated test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
