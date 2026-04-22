@@ -349,20 +349,20 @@ type UserGroupMemberNewParams struct {
 	// Account identifier tag.
 	//
 	// Use [option.WithAccountID] on the client to set a global default for this field.
-	AccountID param.Field[string]            `path:"account_id" api:"required"`
-	Body      []UserGroupMemberNewParamsBody `json:"body" api:"required"`
+	AccountID param.Field[string]              `path:"account_id" api:"required"`
+	Members   []UserGroupMemberNewParamsMember `json:"members" api:"required"`
 }
 
 func (r UserGroupMemberNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r.Members)
 }
 
-type UserGroupMemberNewParamsBody struct {
+type UserGroupMemberNewParamsMember struct {
 	// The identifier of an existing account Member.
 	ID param.Field[string] `json:"id" api:"required"`
 }
 
-func (r UserGroupMemberNewParamsBody) MarshalJSON() (data []byte, err error) {
+func (r UserGroupMemberNewParamsMember) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -512,19 +512,19 @@ type UserGroupMemberUpdateParams struct {
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Set/Replace members to a user group.
-	Body []UserGroupMemberUpdateParamsBody `json:"body" api:"required"`
+	Members []UserGroupMemberUpdateParamsMember `json:"members" api:"required"`
 }
 
 func (r UserGroupMemberUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r.Members)
 }
 
-type UserGroupMemberUpdateParamsBody struct {
+type UserGroupMemberUpdateParamsMember struct {
 	// The identifier of an existing account Member.
 	ID param.Field[string] `json:"id" api:"required"`
 }
 
-func (r UserGroupMemberUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+func (r UserGroupMemberUpdateParamsMember) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
