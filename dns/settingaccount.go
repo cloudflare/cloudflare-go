@@ -82,15 +82,22 @@ func (r *SettingAccountService) Get(ctx context.Context, query SettingAccountGet
 
 type SettingAccountEditResponse struct {
 	ZoneDefaults SettingAccountEditResponseZoneDefaults `json:"zone_defaults" api:"required"`
-	JSON         settingAccountEditResponseJSON         `json:"-"`
+	// When enabled, forces all proxied DNS records in the account to behave as
+	// DNS-only at the edge, regardless of each record's individual proxy setting. Note
+	// that this account-level override does not modify the records themselves; it only
+	// affects how they are served at the edge. See more on
+	// [Enforce DNS-only](https://developers.cloudflare.com/dns/proxy-status/enforce-dns-only).
+	EnforceDNSOnly bool                           `json:"enforce_dns_only"`
+	JSON           settingAccountEditResponseJSON `json:"-"`
 }
 
 // settingAccountEditResponseJSON contains the JSON metadata for the struct
 // [SettingAccountEditResponse]
 type settingAccountEditResponseJSON struct {
-	ZoneDefaults apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	ZoneDefaults   apijson.Field
+	EnforceDNSOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *SettingAccountEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -280,15 +287,22 @@ func (r SettingAccountEditResponseZoneDefaultsZoneMode) IsKnown() bool {
 
 type SettingAccountGetResponse struct {
 	ZoneDefaults SettingAccountGetResponseZoneDefaults `json:"zone_defaults" api:"required"`
-	JSON         settingAccountGetResponseJSON         `json:"-"`
+	// When enabled, forces all proxied DNS records in the account to behave as
+	// DNS-only at the edge, regardless of each record's individual proxy setting. Note
+	// that this account-level override does not modify the records themselves; it only
+	// affects how they are served at the edge. See more on
+	// [Enforce DNS-only](https://developers.cloudflare.com/dns/proxy-status/enforce-dns-only).
+	EnforceDNSOnly bool                          `json:"enforce_dns_only"`
+	JSON           settingAccountGetResponseJSON `json:"-"`
 }
 
 // settingAccountGetResponseJSON contains the JSON metadata for the struct
 // [SettingAccountGetResponse]
 type settingAccountGetResponseJSON struct {
-	ZoneDefaults apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	ZoneDefaults   apijson.Field
+	EnforceDNSOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *SettingAccountGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -480,8 +494,14 @@ type SettingAccountEditParams struct {
 	// Identifier.
 	//
 	// Use [option.WithAccountID] on the client to set a global default for this field.
-	AccountID    param.Field[string]                               `path:"account_id" api:"required"`
-	ZoneDefaults param.Field[SettingAccountEditParamsZoneDefaults] `json:"zone_defaults"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// When enabled, forces all proxied DNS records in the account to behave as
+	// DNS-only at the edge, regardless of each record's individual proxy setting. Note
+	// that this account-level override does not modify the records themselves; it only
+	// affects how they are served at the edge. See more on
+	// [Enforce DNS-only](https://developers.cloudflare.com/dns/proxy-status/enforce-dns-only).
+	EnforceDNSOnly param.Field[bool]                                 `json:"enforce_dns_only"`
+	ZoneDefaults   param.Field[SettingAccountEditParamsZoneDefaults] `json:"zone_defaults"`
 }
 
 func (r SettingAccountEditParams) MarshalJSON() (data []byte, err error) {

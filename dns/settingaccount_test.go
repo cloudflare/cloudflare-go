@@ -30,7 +30,8 @@ func TestSettingAccountEditWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Settings.Account.Edit(context.TODO(), dns.SettingAccountEditParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		EnforceDNSOnly: cloudflare.F(false),
 		ZoneDefaults: cloudflare.F(dns.SettingAccountEditParamsZoneDefaults{
 			FlattenAllCNAMEs: cloudflare.F(false),
 			FoundationDNS:    cloudflare.F(false),
