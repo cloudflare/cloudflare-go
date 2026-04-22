@@ -278,11 +278,12 @@ const (
 	GatewayListTypeCategory GatewayListType = "CATEGORY"
 	GatewayListTypeLocation GatewayListType = "LOCATION"
 	GatewayListTypeDevice   GatewayListType = "DEVICE"
+	GatewayListTypeAaguid   GatewayListType = "AAGUID"
 )
 
 func (r GatewayListType) IsKnown() bool {
 	switch r {
-	case GatewayListTypeSerial, GatewayListTypeURL, GatewayListTypeDomain, GatewayListTypeEmail, GatewayListTypeIP, GatewayListTypeCategory, GatewayListTypeLocation, GatewayListTypeDevice:
+	case GatewayListTypeSerial, GatewayListTypeURL, GatewayListTypeDomain, GatewayListTypeEmail, GatewayListTypeIP, GatewayListTypeCategory, GatewayListTypeLocation, GatewayListTypeDevice, GatewayListTypeAaguid:
 		return true
 	}
 	return false
@@ -338,11 +339,12 @@ const (
 	GatewayListNewResponseTypeCategory GatewayListNewResponseType = "CATEGORY"
 	GatewayListNewResponseTypeLocation GatewayListNewResponseType = "LOCATION"
 	GatewayListNewResponseTypeDevice   GatewayListNewResponseType = "DEVICE"
+	GatewayListNewResponseTypeAaguid   GatewayListNewResponseType = "AAGUID"
 )
 
 func (r GatewayListNewResponseType) IsKnown() bool {
 	switch r {
-	case GatewayListNewResponseTypeSerial, GatewayListNewResponseTypeURL, GatewayListNewResponseTypeDomain, GatewayListNewResponseTypeEmail, GatewayListNewResponseTypeIP, GatewayListNewResponseTypeCategory, GatewayListNewResponseTypeLocation, GatewayListNewResponseTypeDevice:
+	case GatewayListNewResponseTypeSerial, GatewayListNewResponseTypeURL, GatewayListNewResponseTypeDomain, GatewayListNewResponseTypeEmail, GatewayListNewResponseTypeIP, GatewayListNewResponseTypeCategory, GatewayListNewResponseTypeLocation, GatewayListNewResponseTypeDevice, GatewayListNewResponseTypeAaguid:
 		return true
 	}
 	return false
@@ -379,11 +381,12 @@ const (
 	GatewayListNewParamsTypeCategory GatewayListNewParamsType = "CATEGORY"
 	GatewayListNewParamsTypeLocation GatewayListNewParamsType = "LOCATION"
 	GatewayListNewParamsTypeDevice   GatewayListNewParamsType = "DEVICE"
+	GatewayListNewParamsTypeAaguid   GatewayListNewParamsType = "AAGUID"
 )
 
 func (r GatewayListNewParamsType) IsKnown() bool {
 	switch r {
-	case GatewayListNewParamsTypeSerial, GatewayListNewParamsTypeURL, GatewayListNewParamsTypeDomain, GatewayListNewParamsTypeEmail, GatewayListNewParamsTypeIP, GatewayListNewParamsTypeCategory, GatewayListNewParamsTypeLocation, GatewayListNewParamsTypeDevice:
+	case GatewayListNewParamsTypeSerial, GatewayListNewParamsTypeURL, GatewayListNewParamsTypeDomain, GatewayListNewParamsTypeEmail, GatewayListNewParamsTypeIP, GatewayListNewParamsTypeCategory, GatewayListNewParamsTypeLocation, GatewayListNewParamsTypeDevice, GatewayListNewParamsTypeAaguid:
 		return true
 	}
 	return false
@@ -539,11 +542,12 @@ const (
 	GatewayListListParamsTypeCategory GatewayListListParamsType = "CATEGORY"
 	GatewayListListParamsTypeLocation GatewayListListParamsType = "LOCATION"
 	GatewayListListParamsTypeDevice   GatewayListListParamsType = "DEVICE"
+	GatewayListListParamsTypeAaguid   GatewayListListParamsType = "AAGUID"
 )
 
 func (r GatewayListListParamsType) IsKnown() bool {
 	switch r {
-	case GatewayListListParamsTypeSerial, GatewayListListParamsTypeURL, GatewayListListParamsTypeDomain, GatewayListListParamsTypeEmail, GatewayListListParamsTypeIP, GatewayListListParamsTypeCategory, GatewayListListParamsTypeLocation, GatewayListListParamsTypeDevice:
+	case GatewayListListParamsTypeSerial, GatewayListListParamsTypeURL, GatewayListListParamsTypeDomain, GatewayListListParamsTypeEmail, GatewayListListParamsTypeIP, GatewayListListParamsTypeCategory, GatewayListListParamsTypeLocation, GatewayListListParamsTypeDevice, GatewayListListParamsTypeAaguid:
 		return true
 	}
 	return false

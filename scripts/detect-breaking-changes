@@ -60,6 +60,7 @@ TEST_PATHS=(
 	cache/smarttieredcache_test.go
 	cache/variant_test.go
 	cache/regionaltieredcache_test.go
+	cache/origincloudregion_test.go
 	ssl/analyze_test.go
 	ssl/certificatepack_test.go
 	ssl/certificatepackquota_test.go
@@ -310,7 +311,11 @@ TEST_PATHS=(
 	pages/projectdeployment_test.go
 	pages/projectdeploymenthistorylog_test.go
 	pages/projectdomain_test.go
+	registrar/registrar_test.go
 	registrar/domain_test.go
+	registrar/registration_test.go
+	registrar/registrationstatus_test.go
+	registrar/updatestatus_test.go
 	request_tracers/trace_test.go
 	rules/list_test.go
 	rules/listbulkoperation_test.go
@@ -457,6 +462,7 @@ TEST_PATHS=(
 	zero_trust/dlpdatasetversionentry_test.go
 	zero_trust/dlppattern_test.go
 	zero_trust/dlppayloadlog_test.go
+	zero_trust/dlpsetting_test.go
 	zero_trust/dlpemailaccountmapping_test.go
 	zero_trust/dlpemailrule_test.go
 	zero_trust/dlpprofile_test.go
@@ -503,6 +509,11 @@ TEST_PATHS=(
 	vectorize/indexmetadataindex_test.go
 	url_scanner/response_test.go
 	url_scanner/scan_test.go
+	vulnerability_scanner/credentialset_test.go
+	vulnerability_scanner/credentialsetcredential_test.go
+	vulnerability_scanner/scan_test.go
+	vulnerability_scanner/targetenvironment_test.go
+	radar/agentreadiness_test.go
 	radar/aitomarkdown_test.go
 	radar/aiinference_test.go
 	radar/aiinferencesummary_test.go
@@ -510,6 +521,7 @@ TEST_PATHS=(
 	radar/aibot_test.go
 	radar/aibotsummary_test.go
 	radar/aitimeseriesgroup_test.go
+	radar/aimarkdownforagent_test.go
 	radar/ct_test.go
 	radar/ctauthority_test.go
 	radar/ctlog_test.go
@@ -697,6 +709,10 @@ TEST_PATHS=(
 	ai/model_test.go
 	ai/modelschema_test.go
 	ai/tomarkdown_test.go
+	ai_search/namespace_test.go
+	ai_search/namespaceinstance_test.go
+	ai_search/namespaceinstancejob_test.go
+	ai_search/namespaceinstanceitem_test.go
 	ai_search/instance_test.go
 	ai_search/instancejob_test.go
 	ai_search/token_test.go
@@ -713,6 +729,10 @@ TEST_PATHS=(
 	browser_rendering/link_test.go
 	browser_rendering/markdown_test.go
 	browser_rendering/crawl_test.go
+	browser_rendering/devtoolsession_test.go
+	browser_rendering/devtoolbrowser_test.go
+	browser_rendering/devtoolbrowserpage_test.go
+	browser_rendering/devtoolbrowsertarget_test.go
 	custom_pages/custompage_test.go
 	custom_pages/asset_test.go
 	secrets_store/store_test.go

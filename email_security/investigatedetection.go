@@ -65,6 +65,7 @@ func (r *InvestigateDetectionService) Get(ctx context.Context, postfixID string,
 type InvestigateDetectionGetResponse struct {
 	Action           string                                          `json:"action" api:"required"`
 	Attachments      []InvestigateDetectionGetResponseAttachment     `json:"attachments" api:"required"`
+	Findings         []InvestigateDetectionGetResponseFinding        `json:"findings" api:"required"`
 	Headers          []InvestigateDetectionGetResponseHeader         `json:"headers" api:"required"`
 	Links            []InvestigateDetectionGetResponseLink           `json:"links" api:"required"`
 	SenderInfo       InvestigateDetectionGetResponseSenderInfo       `json:"sender_info" api:"required"`
@@ -79,6 +80,7 @@ type InvestigateDetectionGetResponse struct {
 type investigateDetectionGetResponseJSON struct {
 	Action           apijson.Field
 	Attachments      apijson.Field
+	Findings         apijson.Field
 	Headers          apijson.Field
 	Links            apijson.Field
 	SenderInfo       apijson.Field
@@ -144,6 +146,66 @@ const (
 func (r InvestigateDetectionGetResponseAttachmentsDetection) IsKnown() bool {
 	switch r {
 	case InvestigateDetectionGetResponseAttachmentsDetectionMalicious, InvestigateDetectionGetResponseAttachmentsDetectionMaliciousBec, InvestigateDetectionGetResponseAttachmentsDetectionSuspicious, InvestigateDetectionGetResponseAttachmentsDetectionSpoof, InvestigateDetectionGetResponseAttachmentsDetectionSpam, InvestigateDetectionGetResponseAttachmentsDetectionBulk, InvestigateDetectionGetResponseAttachmentsDetectionEncrypted, InvestigateDetectionGetResponseAttachmentsDetectionExternal, InvestigateDetectionGetResponseAttachmentsDetectionUnknown, InvestigateDetectionGetResponseAttachmentsDetectionNone:
+		return true
+	}
+	return false
+}
+
+type InvestigateDetectionGetResponseFinding struct {
+	Attachment string                                           `json:"attachment" api:"nullable"`
+	Detail     string                                           `json:"detail" api:"nullable"`
+	Detection  InvestigateDetectionGetResponseFindingsDetection `json:"detection" api:"nullable"`
+	Field      string                                           `json:"field" api:"nullable"`
+	Name       string                                           `json:"name" api:"nullable"`
+	Portion    string                                           `json:"portion" api:"nullable"`
+	Reason     string                                           `json:"reason" api:"nullable"`
+	Score      float64                                          `json:"score" api:"nullable"`
+	Value      string                                           `json:"value" api:"nullable"`
+	JSON       investigateDetectionGetResponseFindingJSON       `json:"-"`
+}
+
+// investigateDetectionGetResponseFindingJSON contains the JSON metadata for the
+// struct [InvestigateDetectionGetResponseFinding]
+type investigateDetectionGetResponseFindingJSON struct {
+	Attachment  apijson.Field
+	Detail      apijson.Field
+	Detection   apijson.Field
+	Field       apijson.Field
+	Name        apijson.Field
+	Portion     apijson.Field
+	Reason      apijson.Field
+	Score       apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateDetectionGetResponseFinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateDetectionGetResponseFindingJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateDetectionGetResponseFindingsDetection string
+
+const (
+	InvestigateDetectionGetResponseFindingsDetectionMalicious    InvestigateDetectionGetResponseFindingsDetection = "MALICIOUS"
+	InvestigateDetectionGetResponseFindingsDetectionMaliciousBec InvestigateDetectionGetResponseFindingsDetection = "MALICIOUS-BEC"
+	InvestigateDetectionGetResponseFindingsDetectionSuspicious   InvestigateDetectionGetResponseFindingsDetection = "SUSPICIOUS"
+	InvestigateDetectionGetResponseFindingsDetectionSpoof        InvestigateDetectionGetResponseFindingsDetection = "SPOOF"
+	InvestigateDetectionGetResponseFindingsDetectionSpam         InvestigateDetectionGetResponseFindingsDetection = "SPAM"
+	InvestigateDetectionGetResponseFindingsDetectionBulk         InvestigateDetectionGetResponseFindingsDetection = "BULK"
+	InvestigateDetectionGetResponseFindingsDetectionEncrypted    InvestigateDetectionGetResponseFindingsDetection = "ENCRYPTED"
+	InvestigateDetectionGetResponseFindingsDetectionExternal     InvestigateDetectionGetResponseFindingsDetection = "EXTERNAL"
+	InvestigateDetectionGetResponseFindingsDetectionUnknown      InvestigateDetectionGetResponseFindingsDetection = "UNKNOWN"
+	InvestigateDetectionGetResponseFindingsDetectionNone         InvestigateDetectionGetResponseFindingsDetection = "NONE"
+)
+
+func (r InvestigateDetectionGetResponseFindingsDetection) IsKnown() bool {
+	switch r {
+	case InvestigateDetectionGetResponseFindingsDetectionMalicious, InvestigateDetectionGetResponseFindingsDetectionMaliciousBec, InvestigateDetectionGetResponseFindingsDetectionSuspicious, InvestigateDetectionGetResponseFindingsDetectionSpoof, InvestigateDetectionGetResponseFindingsDetectionSpam, InvestigateDetectionGetResponseFindingsDetectionBulk, InvestigateDetectionGetResponseFindingsDetectionEncrypted, InvestigateDetectionGetResponseFindingsDetectionExternal, InvestigateDetectionGetResponseFindingsDetectionUnknown, InvestigateDetectionGetResponseFindingsDetectionNone:
 		return true
 	}
 	return false

@@ -65,6 +65,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				Printing: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsPrintingEnabled),
 				Upload:   cloudflare.F(zero_trust.RuleSettingBISOAdminControlsUploadEnabled),
 				Version:  cloudflare.F(zero_trust.RuleSettingBISOAdminControlsVersionV1),
+				WmID:     cloudflare.F("475345dc-5299-4b6e-8f6a-3d3e4c8e9f1a"),
 			}),
 			BlockPage: cloudflare.F(zero_trust.RuleSettingBlockPageParam{
 				TargetURI:      cloudflare.F("https://example.com"),
@@ -209,6 +210,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					Printing: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsPrintingEnabled),
 					Upload:   cloudflare.F(zero_trust.RuleSettingBISOAdminControlsUploadEnabled),
 					Version:  cloudflare.F(zero_trust.RuleSettingBISOAdminControlsVersionV1),
+					WmID:     cloudflare.F("475345dc-5299-4b6e-8f6a-3d3e4c8e9f1a"),
 				}),
 				BlockPage: cloudflare.F(zero_trust.RuleSettingBlockPageParam{
 					TargetURI:      cloudflare.F("https://example.com"),

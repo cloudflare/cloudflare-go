@@ -82,9 +82,11 @@ func (r finetuneAssetNewResponseJSON) RawJSON() string {
 
 type FinetuneAssetNewParams struct {
 	// Use [option.WithAccountID] on the client to set a global default for this field.
-	AccountID param.Field[string]    `path:"account_id" api:"required"`
-	File      param.Field[io.Reader] `json:"file" format:"binary"`
-	FileName  param.Field[string]    `json:"file_name"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// File to upload
+	File param.Field[io.Reader] `json:"file" api:"required" format:"binary"`
+	// Name of the file (adapter_config.json or adapter_model.safetensors)
+	FileName param.Field[string] `json:"file_name" api:"required"`
 }
 
 func (r FinetuneAssetNewParams) MarshalMultipart() (data []byte, contentType string, err error) {

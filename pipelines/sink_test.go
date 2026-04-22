@@ -130,7 +130,7 @@ func TestSinkDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Pipelines.Sinks.Delete(
+	_, err := client.Pipelines.Sinks.Delete(
 		context.TODO(),
 		"0223105f4ecef8ad9ca31a8372d0c353",
 		pipelines.SinkDeleteParams{

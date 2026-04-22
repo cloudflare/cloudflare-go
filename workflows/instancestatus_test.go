@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/workflows"
 )
 
-func TestInstanceStatusEdit(t *testing.T) {
+func TestInstanceStatusEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -35,6 +35,11 @@ func TestInstanceStatusEdit(t *testing.T) {
 		workflows.InstanceStatusEditParams{
 			AccountID: cloudflare.F("account_id"),
 			Status:    cloudflare.F(workflows.InstanceStatusEditParamsStatusResume),
+			From: cloudflare.F(workflows.InstanceStatusEditParamsFrom{
+				Name:  cloudflare.F("x"),
+				Count: cloudflare.F(int64(1)),
+				Type:  cloudflare.F(workflows.InstanceStatusEditParamsFromTypeDo),
+			}),
 		},
 	)
 	if err != nil {
