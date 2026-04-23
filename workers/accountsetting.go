@@ -38,11 +38,6 @@ func NewAccountSettingService(opts ...option.RequestOption) (r *AccountSettingSe
 func (r *AccountSettingService) Update(ctx context.Context, params AccountSettingUpdateParams, opts ...option.RequestOption) (res *AccountSettingUpdateResponse, err error) {
 	var env AccountSettingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,11 +55,6 @@ func (r *AccountSettingService) Update(ctx context.Context, params AccountSettin
 func (r *AccountSettingService) Get(ctx context.Context, query AccountSettingGetParams, opts ...option.RequestOption) (res *AccountSettingGetResponse, err error) {
 	var env AccountSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -126,8 +116,6 @@ func (r accountSettingGetResponseJSON) RawJSON() string {
 
 type AccountSettingUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	DefaultUsageModel param.Field[string] `json:"default_usage_model"`
 	GreenCompute      param.Field[bool]   `json:"green_compute"`
@@ -278,8 +266,6 @@ func (r AccountSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccountSettingGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

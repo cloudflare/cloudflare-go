@@ -41,11 +41,6 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,11 +59,6 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -86,11 +76,6 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -108,11 +93,6 @@ func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opt
 func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -130,11 +110,6 @@ func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts 
 func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -208,7 +183,6 @@ func (r configurationWARPDeviceJSON) RawJSON() string {
 }
 
 type ConfigNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
@@ -282,7 +256,6 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
@@ -356,7 +329,6 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -404,7 +376,6 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigEditParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
@@ -478,7 +449,6 @@ func (r ConfigEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

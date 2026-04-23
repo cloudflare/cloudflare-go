@@ -47,11 +47,6 @@ func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParam
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -74,11 +69,6 @@ func (r *IPSECTunnelService) Update(ctx context.Context, ipsecTunnelID string, p
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -103,11 +93,6 @@ func (r *IPSECTunnelService) List(ctx context.Context, params IPSECTunnelListPar
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -130,11 +115,6 @@ func (r *IPSECTunnelService) Delete(ctx context.Context, ipsecTunnelID string, p
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -161,11 +141,6 @@ func (r *IPSECTunnelService) BulkUpdate(ctx context.Context, params IPSECTunnelB
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -186,11 +161,6 @@ func (r *IPSECTunnelService) Get(ctx context.Context, ipsecTunnelID string, para
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -216,11 +186,6 @@ func (r *IPSECTunnelService) Get(ctx context.Context, ipsecTunnelID string, para
 func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, ipsecTunnelID string, params IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
 	var env IPSECTunnelPSKGenerateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -2389,8 +2354,6 @@ func (r ipsecTunnelPSKGenerateResponseJSON) RawJSON() string {
 
 type IPSECTunnelNewParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint" api:"required"`
@@ -2598,8 +2561,6 @@ func (r IPSECTunnelNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelUpdateParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint" api:"required"`
@@ -2807,8 +2768,6 @@ func (r IPSECTunnelUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelListParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
@@ -2858,8 +2817,6 @@ func (r IPSECTunnelListResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelDeleteParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
@@ -2909,8 +2866,6 @@ func (r IPSECTunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelBulkUpdateParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	Body              interface{}         `json:"body" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
@@ -2965,8 +2920,6 @@ func (r IPSECTunnelBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelGetParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
@@ -3016,8 +2969,6 @@ func (r IPSECTunnelGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelPSKGenerateParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Body      interface{}         `json:"body" api:"required"`
 }

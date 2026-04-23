@@ -39,11 +39,6 @@ func NewV2LogoMatchService(opts ...option.RequestOption) (r *V2LogoMatchService)
 // Get paginated list of logo matches for a specific brand protection logo query
 func (r *V2LogoMatchService) Get(ctx context.Context, params V2LogoMatchGetParams, opts ...option.RequestOption) (res *V2LogoMatchGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -114,7 +109,6 @@ func (r v2LogoMatchGetResponseMatchJSON) RawJSON() string {
 }
 
 type V2LogoMatchGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	QueryID   param.Field[string] `query:"query_id" api:"required"`
 	Download  param.Field[string] `query:"download"`

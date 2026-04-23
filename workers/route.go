@@ -39,11 +39,6 @@ func NewRouteService(opts ...option.RequestOption) (r *RouteService) {
 func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...option.RequestOption) (res *RouteNewResponse, err error) {
 	var env RouteNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -61,11 +56,6 @@ func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...o
 func (r *RouteService) Update(ctx context.Context, routeID string, params RouteUpdateParams, opts ...option.RequestOption) (res *RouteUpdateResponse, err error) {
 	var env RouteUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -88,11 +78,6 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -119,11 +104,6 @@ func (r *RouteService) ListAutoPaging(ctx context.Context, query RouteListParams
 func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
 	var env RouteDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -145,11 +125,6 @@ func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDel
 func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetParams, opts ...option.RequestOption) (res *RouteGetResponse, err error) {
 	var env RouteGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -307,8 +282,6 @@ func (r routeGetResponseJSON) RawJSON() string {
 
 type RouteNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
@@ -462,8 +435,6 @@ func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
@@ -617,15 +588,11 @@ func (r RouteUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RouteDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -770,8 +737,6 @@ func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

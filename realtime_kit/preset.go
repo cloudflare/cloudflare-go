@@ -43,11 +43,6 @@ func NewPresetService(opts ...option.RequestOption) (r *PresetService) {
 // Creates a preset belonging to the current App
 func (r *PresetService) New(ctx context.Context, appID string, params PresetNewParams, opts ...option.RequestOption) (res *PresetNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,11 +59,6 @@ func (r *PresetService) New(ctx context.Context, appID string, params PresetNewP
 // Update a preset by the provided preset ID
 func (r *PresetService) Update(ctx context.Context, appID string, presetID string, params PresetUpdateParams, opts ...option.RequestOption) (res *PresetUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -89,11 +79,6 @@ func (r *PresetService) Update(ctx context.Context, appID string, presetID strin
 // Deletes a preset using the provided preset ID
 func (r *PresetService) Delete(ctx context.Context, appID string, presetID string, body PresetDeleteParams, opts ...option.RequestOption) (res *PresetDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -114,11 +99,6 @@ func (r *PresetService) Delete(ctx context.Context, appID string, presetID strin
 // Fetches all the presets belonging to an App.
 func (r *PresetService) Get(ctx context.Context, appID string, params PresetGetParams, opts ...option.RequestOption) (res *PresetGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -135,11 +115,6 @@ func (r *PresetService) Get(ctx context.Context, appID string, params PresetGetP
 // Fetches details of a preset using the provided preset ID
 func (r *PresetService) GetPresetByID(ctx context.Context, appID string, presetID string, query PresetGetPresetByIDParams, opts ...option.RequestOption) (res *PresetGetPresetByIDResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -4010,8 +3985,6 @@ func (r PresetGetPresetByIDResponseDataPermissionsWaitingRoomType) IsKnown() boo
 
 type PresetNewParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                `path:"account_id" api:"required"`
 	Config    param.Field[PresetNewParamsConfig] `json:"config" api:"required"`
 	// Name of the preset
@@ -4529,8 +4502,6 @@ func (r PresetNewParamsPermissionsWaitingRoomType) IsKnown() bool {
 
 type PresetUpdateParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                   `path:"account_id" api:"required"`
 	Config    param.Field[PresetUpdateParamsConfig] `json:"config"`
 	// Name of the preset
@@ -5034,15 +5005,11 @@ func (r PresetUpdateParamsUIDesignTokensTheme) IsKnown() bool {
 
 type PresetDeleteParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PresetGetParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The page number from which you want your page search results to be displayed.
 	PageNo param.Field[float64] `query:"page_no"`
@@ -5060,7 +5027,5 @@ func (r PresetGetParams) URLQuery() (v url.Values) {
 
 type PresetGetPresetByIDParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

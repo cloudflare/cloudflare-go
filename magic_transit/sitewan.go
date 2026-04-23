@@ -41,11 +41,6 @@ func (r *SiteWANService) New(ctx context.Context, siteID string, params SiteWANN
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -76,11 +71,6 @@ func (r *SiteWANService) NewAutoPaging(ctx context.Context, siteID string, param
 func (r *SiteWANService) Update(ctx context.Context, siteID string, wanID string, params SiteWANUpdateParams, opts ...option.RequestOption) (res *WAN, err error) {
 	var env SiteWANUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -107,11 +97,6 @@ func (r *SiteWANService) List(ctx context.Context, siteID string, query SiteWANL
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -142,11 +127,6 @@ func (r *SiteWANService) ListAutoPaging(ctx context.Context, siteID string, quer
 func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string, body SiteWANDeleteParams, opts ...option.RequestOption) (res *WAN, err error) {
 	var env SiteWANDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -172,11 +152,6 @@ func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string
 func (r *SiteWANService) Edit(ctx context.Context, siteID string, wanID string, params SiteWANEditParams, opts ...option.RequestOption) (res *WAN, err error) {
 	var env SiteWANEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -202,11 +177,6 @@ func (r *SiteWANService) Edit(ctx context.Context, siteID string, wanID string, 
 func (r *SiteWANService) Get(ctx context.Context, siteID string, wanID string, query SiteWANGetParams, opts ...option.RequestOption) (res *WAN, err error) {
 	var env SiteWANGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -335,8 +305,6 @@ func (r WANStaticAddressingParam) MarshalJSON() (data []byte, err error) {
 
 type SiteWANNewParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Physport  param.Field[int64]  `json:"physport" api:"required"`
 	Name      param.Field[string] `json:"name"`
@@ -354,8 +322,6 @@ func (r SiteWANNewParams) MarshalJSON() (data []byte, err error) {
 
 type SiteWANUpdateParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Name      param.Field[string] `json:"name"`
 	Physport  param.Field[int64]  `json:"physport"`
@@ -416,15 +382,11 @@ func (r SiteWANUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteWANListParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SiteWANDeleteParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -473,8 +435,6 @@ func (r SiteWANDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteWANEditParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Name      param.Field[string] `json:"name"`
 	Physport  param.Field[int64]  `json:"physport"`
@@ -535,8 +495,6 @@ func (r SiteWANEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteWANGetParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -38,12 +38,6 @@ func NewAccessApplicationUserPolicyCheckService(opts ...option.RequestOption) (r
 func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appID AppIDParam, query AccessApplicationUserPolicyCheckListParams, opts ...option.RequestOption) (res *AccessApplicationUserPolicyCheckListResponse, err error) {
 	var env AccessApplicationUserPolicyCheckListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -196,12 +190,8 @@ func (r accessApplicationUserPolicyCheckListResponseUserIdentityJSON) RawJSON() 
 
 type AccessApplicationUserPolicyCheckListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 

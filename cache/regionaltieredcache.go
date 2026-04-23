@@ -42,11 +42,6 @@ func NewRegionalTieredCacheService(opts ...option.RequestOption) (r *RegionalTie
 func (r *RegionalTieredCacheService) Edit(ctx context.Context, params RegionalTieredCacheEditParams, opts ...option.RequestOption) (res *RegionalTieredCacheEditResponse, err error) {
 	var env RegionalTieredCacheEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *RegionalTieredCacheService) Edit(ctx context.Context, params RegionalTi
 func (r *RegionalTieredCacheService) Get(ctx context.Context, query RegionalTieredCacheGetParams, opts ...option.RequestOption) (res *RegionalTieredCacheGetResponse, err error) {
 	var env RegionalTieredCacheGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -195,8 +185,6 @@ func (r RegionalTieredCacheGetResponseValue) IsKnown() bool {
 
 type RegionalTieredCacheEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Value of the Regional Tiered Cache zone setting.
 	Value param.Field[RegionalTieredCacheEditParamsValue] `json:"value" api:"required"`
@@ -267,8 +255,6 @@ func (r RegionalTieredCacheEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegionalTieredCacheGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

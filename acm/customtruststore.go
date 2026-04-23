@@ -42,11 +42,6 @@ func NewCustomTrustStoreService(opts ...option.RequestOption) (r *CustomTrustSto
 func (r *CustomTrustStoreService) New(ctx context.Context, params CustomTrustStoreNewParams, opts ...option.RequestOption) (res *CustomTrustStore, err error) {
 	var env CustomTrustStoreNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -65,11 +60,6 @@ func (r *CustomTrustStoreService) List(ctx context.Context, params CustomTrustSt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -97,11 +87,6 @@ func (r *CustomTrustStoreService) ListAutoPaging(ctx context.Context, params Cus
 func (r *CustomTrustStoreService) Delete(ctx context.Context, customOriginTrustStoreID string, body CustomTrustStoreDeleteParams, opts ...option.RequestOption) (res *CustomTrustStoreDeleteResponse, err error) {
 	var env CustomTrustStoreDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -124,11 +109,6 @@ func (r *CustomTrustStoreService) Delete(ctx context.Context, customOriginTrustS
 func (r *CustomTrustStoreService) Get(ctx context.Context, customOriginTrustStoreID string, query CustomTrustStoreGetParams, opts ...option.RequestOption) (res *CustomTrustStore, err error) {
 	var env CustomTrustStoreGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -233,8 +213,6 @@ func (r customTrustStoreDeleteResponseJSON) RawJSON() string {
 
 type CustomTrustStoreNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate" api:"required"`
@@ -385,8 +363,6 @@ func (r CustomTrustStoreNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomTrustStoreListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Limit to the number of records returned.
 	Limit param.Field[int64] `query:"limit"`
@@ -409,8 +385,6 @@ func (r CustomTrustStoreListParams) URLQuery() (v url.Values) {
 
 type CustomTrustStoreDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -555,8 +529,6 @@ func (r CustomTrustStoreDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomTrustStoreGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

@@ -57,11 +57,6 @@ func NewV1Service(opts ...option.RequestOption) (r *V1Service) {
 func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.RequestOption) (res *Image, err error) {
 	var env V1NewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -83,11 +78,6 @@ func (r *V1Service) List(ctx context.Context, params V1ListParams, opts ...optio
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -118,11 +108,6 @@ func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opt
 func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env V1DeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -145,11 +130,6 @@ func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeletePar
 func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParams, opts ...option.RequestOption) (res *Image, err error) {
 	var env V1EditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -171,11 +151,6 @@ func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParam
 func (r *V1Service) Get(ctx context.Context, imageID string, query V1GetParams, opts ...option.RequestOption) (res *Image, err error) {
 	var env V1GetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -256,8 +231,6 @@ func (r v1ListResponseJSON) RawJSON() string {
 
 type V1NewParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional custom unique identifier for your image.
 	ID param.Field[string] `json:"id"`
@@ -335,8 +308,6 @@ func (r V1NewResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1ListParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Internal user ID set within the creator field. Setting to empty string "" will
 	// return images where creator field is not set
@@ -357,8 +328,6 @@ func (r V1ListParams) URLQuery() (v url.Values) {
 
 type V1DeleteParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -407,8 +376,6 @@ func (r V1DeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1EditParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Can set the creator field with an internal user ID.
 	Creator param.Field[string] `json:"creator"`
@@ -470,8 +437,6 @@ func (r V1EditResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1GetParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

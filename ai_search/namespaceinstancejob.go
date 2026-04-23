@@ -41,11 +41,6 @@ func NewNamespaceInstanceJobService(opts ...option.RequestOption) (r *NamespaceI
 func (r *NamespaceInstanceJobService) New(ctx context.Context, name string, id string, params NamespaceInstanceJobNewParams, opts ...option.RequestOption) (res *NamespaceInstanceJobNewResponse, err error) {
 	var env NamespaceInstanceJobNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,11 +66,6 @@ func (r *NamespaceInstanceJobService) New(ctx context.Context, name string, id s
 func (r *NamespaceInstanceJobService) Update(ctx context.Context, name string, id string, jobID string, params NamespaceInstanceJobUpdateParams, opts ...option.RequestOption) (res *NamespaceInstanceJobUpdateResponse, err error) {
 	var env NamespaceInstanceJobUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -106,11 +96,6 @@ func (r *NamespaceInstanceJobService) List(ctx context.Context, name string, id 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -145,11 +130,6 @@ func (r *NamespaceInstanceJobService) ListAutoPaging(ctx context.Context, name s
 func (r *NamespaceInstanceJobService) Get(ctx context.Context, name string, id string, jobID string, query NamespaceInstanceJobGetParams, opts ...option.RequestOption) (res *NamespaceInstanceJobGetResponse, err error) {
 	var env NamespaceInstanceJobGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -179,11 +159,6 @@ func (r *NamespaceInstanceJobService) Get(ctx context.Context, name string, id s
 func (r *NamespaceInstanceJobService) Logs(ctx context.Context, name string, id string, jobID string, params NamespaceInstanceJobLogsParams, opts ...option.RequestOption) (res *[]NamespaceInstanceJobLogsResponse, err error) {
 	var env NamespaceInstanceJobLogsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -429,7 +404,6 @@ func (r namespaceInstanceJobLogsResponseJSON) RawJSON() string {
 }
 
 type NamespaceInstanceJobNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string] `path:"account_id" api:"required"`
 	Description param.Field[string] `json:"description"`
 }
@@ -462,7 +436,6 @@ func (r namespaceInstanceJobNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type NamespaceInstanceJobUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                                 `path:"account_id" api:"required"`
 	Action    param.Field[NamespaceInstanceJobUpdateParamsAction] `json:"action" api:"required"`
 }
@@ -509,7 +482,6 @@ func (r namespaceInstanceJobUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type NamespaceInstanceJobListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Page      param.Field[int64]  `query:"page"`
 	PerPage   param.Field[int64]  `query:"per_page"`
@@ -525,7 +497,6 @@ func (r NamespaceInstanceJobListParams) URLQuery() (v url.Values) {
 }
 
 type NamespaceInstanceJobGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -553,7 +524,6 @@ func (r namespaceInstanceJobGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type NamespaceInstanceJobLogsParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Page      param.Field[int64]  `query:"page"`
 	PerPage   param.Field[int64]  `query:"per_page"`

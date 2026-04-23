@@ -45,11 +45,6 @@ func NewBetaWorkerVersionService(opts ...option.RequestOption) (r *BetaWorkerVer
 func (r *BetaWorkerVersionService) New(ctx context.Context, workerID string, params BetaWorkerVersionNewParams, opts ...option.RequestOption) (res *Version, err error) {
 	var env BetaWorkerVersionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -72,11 +67,6 @@ func (r *BetaWorkerVersionService) List(ctx context.Context, workerID string, pa
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -106,11 +96,6 @@ func (r *BetaWorkerVersionService) ListAutoPaging(ctx context.Context, workerID 
 // Delete a version.
 func (r *BetaWorkerVersionService) Delete(ctx context.Context, workerID string, versionID string, body BetaWorkerVersionDeleteParams, opts ...option.RequestOption) (res *BetaWorkerVersionDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -132,11 +117,6 @@ func (r *BetaWorkerVersionService) Delete(ctx context.Context, workerID string, 
 func (r *BetaWorkerVersionService) Get(ctx context.Context, workerID string, versionID string, params BetaWorkerVersionGetParams, opts ...option.RequestOption) (res *Version, err error) {
 	var env BetaWorkerVersionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -4391,8 +4371,6 @@ func (r BetaWorkerVersionDeleteResponseSuccess) IsKnown() bool {
 
 type BetaWorkerVersionNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Version   VersionParam        `json:"version" api:"required"`
 	// If true, a deployment will be created that sends 100% of traffic to the new
@@ -4554,8 +4532,6 @@ func (r BetaWorkerVersionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type BetaWorkerVersionListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Current page.
 	Page param.Field[int64] `query:"page"`
@@ -4574,15 +4550,11 @@ func (r BetaWorkerVersionListParams) URLQuery() (v url.Values) {
 
 type BetaWorkerVersionDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type BetaWorkerVersionGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether to include the `modules` property of the version in the response, which
 	// contains code and sourcemap content and may add several megabytes to the

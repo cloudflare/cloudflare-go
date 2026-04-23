@@ -47,11 +47,6 @@ func NewMTLSCertificateService(opts ...option.RequestOption) (r *MTLSCertificate
 func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateNewResponse, err error) {
 	var env MTLSCertificateNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -73,11 +68,6 @@ func (r *MTLSCertificateService) List(ctx context.Context, params MTLSCertificat
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -108,11 +98,6 @@ func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, params MTLS
 func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	var env MTLSCertificateDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -136,11 +121,6 @@ func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID s
 func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateGetParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	var env MTLSCertificateGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -294,8 +274,6 @@ func (r MTLSCertificateNewResponseType) IsKnown() bool {
 
 type MTLSCertificateNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Indicates whether the certificate is a CA or leaf certificate.
 	CA param.Field[bool] `json:"ca" api:"required"`
@@ -453,8 +431,6 @@ func (r MTLSCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MTLSCertificateListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filters results by certificate type. Multiple types can be comma-separated.
 	Type param.Field[[]MTLSCertificateListParamsType] `query:"type"`
@@ -487,8 +463,6 @@ func (r MTLSCertificateListParamsType) IsKnown() bool {
 
 type MTLSCertificateDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -633,8 +607,6 @@ func (r MTLSCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type MTLSCertificateGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

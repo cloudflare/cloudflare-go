@@ -40,11 +40,6 @@ func NewSSOService(opts ...option.RequestOption) (r *SSOService) {
 func (r *SSOService) New(ctx context.Context, params SSONewParams, opts ...option.RequestOption) (res *SSONewResponse, err error) {
 	var env SSONewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,11 +57,6 @@ func (r *SSOService) New(ctx context.Context, params SSONewParams, opts ...optio
 func (r *SSOService) Update(ctx context.Context, ssoConnectorID string, params SSOUpdateParams, opts ...option.RequestOption) (res *SSOUpdateResponse, err error) {
 	var env SSOUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -89,11 +79,6 @@ func (r *SSOService) List(ctx context.Context, query SSOListParams, opts ...opti
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -120,11 +105,6 @@ func (r *SSOService) ListAutoPaging(ctx context.Context, query SSOListParams, op
 func (r *SSOService) Delete(ctx context.Context, ssoConnectorID string, body SSODeleteParams, opts ...option.RequestOption) (res *SSODeleteResponse, err error) {
 	var env SSODeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -145,11 +125,6 @@ func (r *SSOService) Delete(ctx context.Context, ssoConnectorID string, body SSO
 // Begin SSO connector verification
 func (r *SSOService) BeginVerification(ctx context.Context, ssoConnectorID string, body SSOBeginVerificationParams, opts ...option.RequestOption) (res *SSOBeginVerificationResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -167,11 +142,6 @@ func (r *SSOService) BeginVerification(ctx context.Context, ssoConnectorID strin
 func (r *SSOService) Get(ctx context.Context, ssoConnectorID string, query SSOGetParams, opts ...option.RequestOption) (res *SSOGetResponse, err error) {
 	var env SSOGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -671,8 +641,6 @@ func (r SSOGetResponseVerificationStatus) IsKnown() bool {
 
 type SSONewParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Email domain of the new SSO connector
 	EmailDomain param.Field[string] `json:"email_domain" api:"required"`
@@ -827,8 +795,6 @@ func (r SSONewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SSOUpdateParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// SSO Connector enabled state
 	Enabled param.Field[bool] `json:"enabled"`
@@ -981,15 +947,11 @@ func (r SSOUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SSOListParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SSODeleteParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1134,15 +1096,11 @@ func (r SSODeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SSOBeginVerificationParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SSOGetParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

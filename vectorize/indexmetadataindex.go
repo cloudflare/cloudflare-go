@@ -39,11 +39,6 @@ func NewIndexMetadataIndexService(opts ...option.RequestOption) (r *IndexMetadat
 func (r *IndexMetadataIndexService) New(ctx context.Context, indexName string, params IndexMetadataIndexNewParams, opts ...option.RequestOption) (res *IndexMetadataIndexNewResponse, err error) {
 	var env IndexMetadataIndexNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,11 +60,6 @@ func (r *IndexMetadataIndexService) New(ctx context.Context, indexName string, p
 func (r *IndexMetadataIndexService) List(ctx context.Context, indexName string, query IndexMetadataIndexListParams, opts ...option.RequestOption) (res *IndexMetadataIndexListResponse, err error) {
 	var env IndexMetadataIndexListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -91,11 +81,6 @@ func (r *IndexMetadataIndexService) List(ctx context.Context, indexName string, 
 func (r *IndexMetadataIndexService) Delete(ctx context.Context, indexName string, params IndexMetadataIndexDeleteParams, opts ...option.RequestOption) (res *IndexMetadataIndexDeleteResponse, err error) {
 	var env IndexMetadataIndexDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -223,8 +208,6 @@ func (r indexMetadataIndexDeleteResponseJSON) RawJSON() string {
 
 type IndexMetadataIndexNewParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the type of metadata property to index.
 	IndexType param.Field[IndexMetadataIndexNewParamsIndexType] `json:"indexType" api:"required"`
@@ -298,8 +281,6 @@ func (r IndexMetadataIndexNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexMetadataIndexListParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -348,8 +329,6 @@ func (r IndexMetadataIndexListResponseEnvelopeSuccess) IsKnown() bool {
 
 type IndexMetadataIndexDeleteParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the metadata property for which the index must be deleted.
 	PropertyName param.Field[string] `json:"propertyName" api:"required"`

@@ -47,11 +47,6 @@ func (r *NamespaceInstanceItemService) List(ctx context.Context, name string, id
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -86,11 +81,6 @@ func (r *NamespaceInstanceItemService) ListAutoPaging(ctx context.Context, name 
 func (r *NamespaceInstanceItemService) Delete(ctx context.Context, name string, id string, itemID string, body NamespaceInstanceItemDeleteParams, opts ...option.RequestOption) (res *NamespaceInstanceItemDeleteResponse, err error) {
 	var env NamespaceInstanceItemDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -121,11 +111,6 @@ func (r *NamespaceInstanceItemService) Delete(ctx context.Context, name string, 
 func (r *NamespaceInstanceItemService) Chunks(ctx context.Context, name string, id string, itemID string, params NamespaceInstanceItemChunksParams, opts ...option.RequestOption) (res *[]NamespaceInstanceItemChunksResponse, err error) {
 	var env NamespaceInstanceItemChunksResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -155,11 +140,6 @@ func (r *NamespaceInstanceItemService) Chunks(ctx context.Context, name string, 
 func (r *NamespaceInstanceItemService) NewOrUpdate(ctx context.Context, name string, id string, params NamespaceInstanceItemNewOrUpdateParams, opts ...option.RequestOption) (res *NamespaceInstanceItemNewOrUpdateResponse, err error) {
 	var env NamespaceInstanceItemNewOrUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -186,11 +166,6 @@ func (r *NamespaceInstanceItemService) NewOrUpdate(ctx context.Context, name str
 func (r *NamespaceInstanceItemService) Download(ctx context.Context, name string, id string, itemID string, query NamespaceInstanceItemDownloadParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -216,11 +191,6 @@ func (r *NamespaceInstanceItemService) Download(ctx context.Context, name string
 func (r *NamespaceInstanceItemService) Get(ctx context.Context, name string, id string, itemID string, query NamespaceInstanceItemGetParams, opts ...option.RequestOption) (res *NamespaceInstanceItemGetResponse, err error) {
 	var env NamespaceInstanceItemGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -250,11 +220,6 @@ func (r *NamespaceInstanceItemService) Get(ctx context.Context, name string, id 
 func (r *NamespaceInstanceItemService) Logs(ctx context.Context, name string, id string, itemID string, params NamespaceInstanceItemLogsParams, opts ...option.RequestOption) (res *[]NamespaceInstanceItemLogsResponse, err error) {
 	var env NamespaceInstanceItemLogsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -284,11 +249,6 @@ func (r *NamespaceInstanceItemService) Logs(ctx context.Context, name string, id
 func (r *NamespaceInstanceItemService) Sync(ctx context.Context, name string, id string, itemID string, params NamespaceInstanceItemSyncParams, opts ...option.RequestOption) (res *NamespaceInstanceItemSyncResponse, err error) {
 	var env NamespaceInstanceItemSyncResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -319,11 +279,6 @@ func (r *NamespaceInstanceItemService) Sync(ctx context.Context, name string, id
 func (r *NamespaceInstanceItemService) Upload(ctx context.Context, name string, id string, params NamespaceInstanceItemUploadParams, opts ...option.RequestOption) (res *NamespaceInstanceItemUploadResponse, err error) {
 	var env NamespaceInstanceItemUploadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -849,7 +804,6 @@ func (r NamespaceInstanceItemUploadResponseStatus) IsKnown() bool {
 }
 
 type NamespaceInstanceItemListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter items by their unique ID. Returns at most one item.
 	ItemID param.Field[string] `query:"item_id"`
@@ -917,7 +871,6 @@ func (r NamespaceInstanceItemListParamsStatus) IsKnown() bool {
 }
 
 type NamespaceInstanceItemDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -945,7 +898,6 @@ func (r namespaceInstanceItemDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type NamespaceInstanceItemChunksParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Limit     param.Field[int64]  `query:"limit"`
 	Offset    param.Field[int64]  `query:"offset"`
@@ -1013,7 +965,6 @@ func (r namespaceInstanceItemChunksResponseEnvelopeResultInfoJSON) RawJSON() str
 }
 
 type NamespaceInstanceItemNewOrUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Item key / filename. Must not exceed 128 characters.
 	Key        param.Field[string]                                           `json:"key" api:"required"`
@@ -1062,12 +1013,10 @@ func (r namespaceInstanceItemNewOrUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type NamespaceInstanceItemDownloadParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type NamespaceInstanceItemGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1095,7 +1044,6 @@ func (r namespaceInstanceItemGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type NamespaceInstanceItemLogsParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Cursor    param.Field[string] `query:"cursor"`
 	Limit     param.Field[int64]  `query:"limit"`
@@ -1163,7 +1111,6 @@ func (r namespaceInstanceItemLogsResponseEnvelopeResultInfoJSON) RawJSON() strin
 }
 
 type NamespaceInstanceItemSyncParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID  param.Field[string]                                    `path:"account_id" api:"required"`
 	NextAction param.Field[NamespaceInstanceItemSyncParamsNextAction] `json:"next_action" api:"required"`
 }
@@ -1210,7 +1157,6 @@ func (r namespaceInstanceItemSyncResponseEnvelopeJSON) RawJSON() string {
 }
 
 type NamespaceInstanceItemUploadParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                   `path:"account_id" api:"required"`
 	File      NamespaceInstanceItemUploadParamsFile `json:"file" api:"required"`
 }

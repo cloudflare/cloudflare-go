@@ -44,11 +44,6 @@ func NewInvestigateMoveService(opts ...option.RequestOption) (r *InvestigateMove
 func (r *InvestigateMoveService) New(ctx context.Context, postfixID string, params InvestigateMoveNewParams, opts ...option.RequestOption) (res *[]InvestigateMoveNewResponse, err error) {
 	var env InvestigateMoveNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,11 +66,6 @@ func (r *InvestigateMoveService) Bulk(ctx context.Context, params InvestigateMov
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -182,8 +172,6 @@ func (r investigateMoveBulkResponseJSON) RawJSON() string {
 
 type InvestigateMoveNewParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string]                              `path:"account_id" api:"required"`
 	Destination param.Field[InvestigateMoveNewParamsDestination] `json:"destination" api:"required"`
 	// When true, search the submissions datastore only. When false or omitted, search
@@ -251,8 +239,6 @@ func (r investigateMoveNewResponseEnvelopeJSON) RawJSON() string {
 
 type InvestigateMoveBulkParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string]                               `path:"account_id" api:"required"`
 	Destination param.Field[InvestigateMoveBulkParamsDestination] `json:"destination" api:"required"`
 	// List of message IDs to move.

@@ -42,11 +42,6 @@ func (r *BucketEventNotificationService) Update(ctx context.Context, bucketName 
 		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -75,11 +70,6 @@ func (r *BucketEventNotificationService) List(ctx context.Context, bucketName st
 		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -105,11 +95,6 @@ func (r *BucketEventNotificationService) Delete(ctx context.Context, bucketName 
 		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -138,11 +123,6 @@ func (r *BucketEventNotificationService) Get(ctx context.Context, bucketName str
 		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -361,8 +341,6 @@ func (r BucketEventNotificationGetResponseRulesAction) IsKnown() bool {
 
 type BucketEventNotificationUpdateParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of rules to drive notifications.
 	Rules param.Field[[]BucketEventNotificationUpdateParamsRule] `json:"rules" api:"required"`
@@ -470,8 +448,6 @@ func (r BucketEventNotificationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketEventNotificationListParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEventNotificationListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
@@ -539,8 +515,6 @@ func (r BucketEventNotificationListResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketEventNotificationDeleteParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Jurisdiction where objects in this bucket are guaranteed to be stored.
 	Jurisdiction param.Field[BucketEventNotificationDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
@@ -608,8 +582,6 @@ func (r BucketEventNotificationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketEventNotificationGetParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The bucket jurisdiction.
 	Jurisdiction param.Field[BucketEventNotificationGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`

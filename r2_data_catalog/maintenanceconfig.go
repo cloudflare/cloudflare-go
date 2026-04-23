@@ -39,11 +39,6 @@ func NewMaintenanceConfigService(opts ...option.RequestOption) (r *MaintenanceCo
 func (r *MaintenanceConfigService) Update(ctx context.Context, bucketName string, params MaintenanceConfigUpdateParams, opts ...option.RequestOption) (res *MaintenanceConfigUpdateResponse, err error) {
 	var env MaintenanceConfigUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *MaintenanceConfigService) Update(ctx context.Context, bucketName string
 func (r *MaintenanceConfigService) Get(ctx context.Context, bucketName string, query MaintenanceConfigGetParams, opts ...option.RequestOption) (res *MaintenanceConfigGetResponse, err error) {
 	var env MaintenanceConfigGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -402,8 +392,6 @@ func (r MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState) Is
 
 type MaintenanceConfigUpdateParams struct {
 	// Use this to identify the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Updates compaction configuration (all fields optional).
 	Compaction param.Field[MaintenanceConfigUpdateParamsCompaction] `json:"compaction"`
@@ -574,8 +562,6 @@ func (r maintenanceConfigUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type MaintenanceConfigGetParams struct {
 	// Use this to identify the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

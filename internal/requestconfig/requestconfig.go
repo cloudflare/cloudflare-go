@@ -226,8 +226,6 @@ type RequestConfig struct {
 	APIKey         string
 	APIEmail       string
 	UserServiceKey string
-	AccountID      *string
-	ZoneID         *string
 	// If ResponseBodyInto not nil, then we will attempt to deserialize into
 	// ResponseBodyInto. If Destination is a []byte, then it will return the body as
 	// is.
@@ -605,8 +603,6 @@ func (cfg *RequestConfig) Clone(ctx context.Context) *RequestConfig {
 		APIKey:         cfg.APIKey,
 		APIEmail:       cfg.APIEmail,
 		UserServiceKey: cfg.UserServiceKey,
-		AccountID:      cfg.AccountID,
-		ZoneID:         cfg.ZoneID,
 	}
 
 	return new

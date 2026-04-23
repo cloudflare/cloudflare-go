@@ -39,11 +39,6 @@ func NewAccessGatewayCAService(opts ...option.RequestOption) (r *AccessGatewayCA
 func (r *AccessGatewayCAService) New(ctx context.Context, body AccessGatewayCANewParams, opts ...option.RequestOption) (res *AccessGatewayCANewResponse, err error) {
 	var env AccessGatewayCANewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,11 +57,6 @@ func (r *AccessGatewayCAService) List(ctx context.Context, query AccessGatewayCA
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -93,11 +83,6 @@ func (r *AccessGatewayCAService) ListAutoPaging(ctx context.Context, query Acces
 func (r *AccessGatewayCAService) Delete(ctx context.Context, certificateID string, body AccessGatewayCADeleteParams, opts ...option.RequestOption) (res *AccessGatewayCADeleteResponse, err error) {
 	var env AccessGatewayCADeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -189,8 +174,6 @@ func (r accessGatewayCADeleteResponseJSON) RawJSON() string {
 
 type AccessGatewayCANewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -335,15 +318,11 @@ func (r AccessGatewayCANewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessGatewayCAListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessGatewayCADeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

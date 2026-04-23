@@ -40,11 +40,6 @@ func NewRiskScoringSummaryService(opts ...option.RequestOption) (r *RiskScoringS
 func (r *RiskScoringSummaryService) Get(ctx context.Context, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
 	var env RiskScoringSummaryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -127,7 +122,6 @@ func (r RiskScoringSummaryGetResponseUsersMaxRiskLevel) IsKnown() bool {
 }
 
 type RiskScoringSummaryGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

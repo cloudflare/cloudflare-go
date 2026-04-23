@@ -40,11 +40,6 @@ func NewTunnelWARPConnectorConnectorService(opts ...option.RequestOption) (r *Tu
 func (r *TunnelWARPConnectorConnectorService) Get(ctx context.Context, tunnelID string, connectorID string, query TunnelWARPConnectorConnectorGetParams, opts ...option.RequestOption) (res *TunnelWARPConnectorConnectorGetResponse, err error) {
 	var env TunnelWARPConnectorConnectorGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -163,8 +158,6 @@ func (r TunnelWARPConnectorConnectorGetResponseHaStatus) IsKnown() bool {
 
 type TunnelWARPConnectorConnectorGetParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

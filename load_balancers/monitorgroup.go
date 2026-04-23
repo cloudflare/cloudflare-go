@@ -41,11 +41,6 @@ func NewMonitorGroupService(opts ...option.RequestOption) (r *MonitorGroupServic
 func (r *MonitorGroupService) New(ctx context.Context, params MonitorGroupNewParams, opts ...option.RequestOption) (res *MonitorGroup, err error) {
 	var env MonitorGroupNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,11 +58,6 @@ func (r *MonitorGroupService) New(ctx context.Context, params MonitorGroupNewPar
 func (r *MonitorGroupService) Update(ctx context.Context, monitorGroupID string, params MonitorGroupUpdateParams, opts ...option.RequestOption) (res *MonitorGroup, err error) {
 	var env MonitorGroupUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -90,11 +80,6 @@ func (r *MonitorGroupService) List(ctx context.Context, query MonitorGroupListPa
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -121,11 +106,6 @@ func (r *MonitorGroupService) ListAutoPaging(ctx context.Context, query MonitorG
 func (r *MonitorGroupService) Delete(ctx context.Context, monitorGroupID string, body MonitorGroupDeleteParams, opts ...option.RequestOption) (res *MonitorGroup, err error) {
 	var env MonitorGroupDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -147,11 +127,6 @@ func (r *MonitorGroupService) Delete(ctx context.Context, monitorGroupID string,
 func (r *MonitorGroupService) Edit(ctx context.Context, monitorGroupID string, params MonitorGroupEditParams, opts ...option.RequestOption) (res *MonitorGroup, err error) {
 	var env MonitorGroupEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -173,11 +148,6 @@ func (r *MonitorGroupService) Edit(ctx context.Context, monitorGroupID string, p
 func (r *MonitorGroupService) Get(ctx context.Context, monitorGroupID string, query MonitorGroupGetParams, opts ...option.RequestOption) (res *MonitorGroup, err error) {
 	var env MonitorGroupGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -299,8 +269,6 @@ func (r MonitorGroupMemberParam) MarshalJSON() (data []byte, err error) {
 
 type MonitorGroupNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID    param.Field[string] `path:"account_id" api:"required"`
 	MonitorGroup MonitorGroupParam   `json:"monitor_group" api:"required"`
 }
@@ -354,8 +322,6 @@ func (r MonitorGroupNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorGroupUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID    param.Field[string] `path:"account_id" api:"required"`
 	MonitorGroup MonitorGroupParam   `json:"monitor_group" api:"required"`
 }
@@ -409,15 +375,11 @@ func (r MonitorGroupUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorGroupListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type MonitorGroupDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -466,8 +428,6 @@ func (r MonitorGroupDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorGroupEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID    param.Field[string] `path:"account_id" api:"required"`
 	MonitorGroup MonitorGroupParam   `json:"monitor_group" api:"required"`
 }
@@ -521,8 +481,6 @@ func (r MonitorGroupEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type MonitorGroupGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -39,11 +39,6 @@ func NewV2LogoService(opts ...option.RequestOption) (r *V2LogoService) {
 // Create a new saved brand protection logo query for visual similarity matching
 func (r *V2LogoService) New(ctx context.Context, params V2LogoNewParams, opts ...option.RequestOption) (res *V2LogoNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -57,11 +52,6 @@ func (r *V2LogoService) New(ctx context.Context, params V2LogoNewParams, opts ..
 // exist.
 func (r *V2LogoService) Delete(ctx context.Context, queryID string, body V2LogoDeleteParams, opts ...option.RequestOption) (res *V2LogoDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -80,11 +70,6 @@ func (r *V2LogoService) Delete(ctx context.Context, queryID string, body V2LogoD
 // data.
 func (r *V2LogoService) Get(ctx context.Context, params V2LogoGetParams, opts ...option.RequestOption) (res *[]V2LogoGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -178,7 +163,6 @@ func (r v2LogoGetResponseJSON) RawJSON() string {
 }
 
 type V2LogoNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Base64 encoded image data. Can include data URI prefix (e.g.,
 	// 'data:image/png;base64,...') or just the base64 string.
@@ -197,12 +181,10 @@ func (r V2LogoNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V2LogoDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type V2LogoGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional query ID to retrieve a specific logo query
 	ID param.Field[string] `query:"id"`

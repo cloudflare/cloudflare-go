@@ -42,11 +42,6 @@ func NewAccessAIControlMcpServerService(opts ...option.RequestOption) (r *Access
 func (r *AccessAIControlMcpServerService) New(ctx context.Context, params AccessAIControlMcpServerNewParams, opts ...option.RequestOption) (res *AccessAIControlMcpServerNewResponse, err error) {
 	var env AccessAIControlMcpServerNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,11 +59,6 @@ func (r *AccessAIControlMcpServerService) New(ctx context.Context, params Access
 func (r *AccessAIControlMcpServerService) Update(ctx context.Context, id string, params AccessAIControlMcpServerUpdateParams, opts ...option.RequestOption) (res *AccessAIControlMcpServerUpdateResponse, err error) {
 	var env AccessAIControlMcpServerUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -91,11 +81,6 @@ func (r *AccessAIControlMcpServerService) List(ctx context.Context, params Acces
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -122,11 +107,6 @@ func (r *AccessAIControlMcpServerService) ListAutoPaging(ctx context.Context, pa
 func (r *AccessAIControlMcpServerService) Delete(ctx context.Context, id string, body AccessAIControlMcpServerDeleteParams, opts ...option.RequestOption) (res *AccessAIControlMcpServerDeleteResponse, err error) {
 	var env AccessAIControlMcpServerDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -148,11 +128,6 @@ func (r *AccessAIControlMcpServerService) Delete(ctx context.Context, id string,
 func (r *AccessAIControlMcpServerService) Read(ctx context.Context, id string, query AccessAIControlMcpServerReadParams, opts ...option.RequestOption) (res *AccessAIControlMcpServerReadResponse, err error) {
 	var env AccessAIControlMcpServerReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -174,11 +149,6 @@ func (r *AccessAIControlMcpServerService) Read(ctx context.Context, id string, q
 func (r *AccessAIControlMcpServerService) Sync(ctx context.Context, id string, body AccessAIControlMcpServerSyncParams, opts ...option.RequestOption) (res *AccessAIControlMcpServerSyncResponse, err error) {
 	var env AccessAIControlMcpServerSyncResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -819,7 +789,6 @@ func (r accessAIControlMcpServerReadResponseUpdatedToolJSON) RawJSON() string {
 type AccessAIControlMcpServerSyncResponse = interface{}
 
 type AccessAIControlMcpServerNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// server id
 	ID              param.Field[string]                                           `json:"id" api:"required"`
@@ -898,7 +867,6 @@ func (r accessAIControlMcpServerNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpServerUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID       param.Field[string]                                              `path:"account_id" api:"required"`
 	AuthCredentials param.Field[string]                                              `json:"auth_credentials"`
 	Description     param.Field[string]                                              `json:"description"`
@@ -957,7 +925,6 @@ func (r accessAIControlMcpServerUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpServerListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Page      param.Field[int64]  `query:"page"`
 	PerPage   param.Field[int64]  `query:"per_page"`
@@ -975,7 +942,6 @@ func (r AccessAIControlMcpServerListParams) URLQuery() (v url.Values) {
 }
 
 type AccessAIControlMcpServerDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1003,7 +969,6 @@ func (r accessAIControlMcpServerDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpServerReadParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1031,7 +996,6 @@ func (r accessAIControlMcpServerReadResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpServerSyncParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

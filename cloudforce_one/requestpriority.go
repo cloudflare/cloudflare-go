@@ -39,11 +39,6 @@ func NewRequestPriorityService(opts ...option.RequestOption) (r *RequestPriority
 func (r *RequestPriorityService) New(ctx context.Context, params RequestPriorityNewParams, opts ...option.RequestOption) (res *Priority, err error) {
 	var env RequestPriorityNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,11 +56,6 @@ func (r *RequestPriorityService) New(ctx context.Context, params RequestPriority
 func (r *RequestPriorityService) Update(ctx context.Context, priorityID string, params RequestPriorityUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestPriorityUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -86,11 +76,6 @@ func (r *RequestPriorityService) Update(ctx context.Context, priorityID string, 
 // Deletes a priority intelligence request from Cloudforce One.
 func (r *RequestPriorityService) Delete(ctx context.Context, priorityID string, body RequestPriorityDeleteParams, opts ...option.RequestOption) (res *RequestPriorityDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -108,11 +93,6 @@ func (r *RequestPriorityService) Delete(ctx context.Context, priorityID string, 
 func (r *RequestPriorityService) Get(ctx context.Context, priorityID string, query RequestPriorityGetParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestPriorityGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -134,11 +114,6 @@ func (r *RequestPriorityService) Get(ctx context.Context, priorityID string, que
 func (r *RequestPriorityService) Quota(ctx context.Context, query RequestPriorityQuotaParams, opts ...option.RequestOption) (res *Quota, err error) {
 	var env RequestPriorityQuotaResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -387,8 +362,6 @@ func (r RequestPriorityDeleteResponseSuccess) IsKnown() bool {
 
 type RequestPriorityNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID    param.Field[string] `path:"account_id" api:"required"`
 	PriorityEdit PriorityEditParam   `json:"priority_edit" api:"required"`
 }
@@ -538,8 +511,6 @@ func (r RequestPriorityNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestPriorityUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID    param.Field[string] `path:"account_id" api:"required"`
 	PriorityEdit PriorityEditParam   `json:"priority_edit" api:"required"`
 }
@@ -689,15 +660,11 @@ func (r RequestPriorityUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestPriorityDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestPriorityGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -842,8 +809,6 @@ func (r RequestPriorityGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestPriorityQuotaParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -40,11 +40,6 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 func (r *DownloadService) New(ctx context.Context, identifier string, body DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponse, err error) {
 	var env DownloadNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -67,11 +62,6 @@ func (r *DownloadService) New(ctx context.Context, identifier string, body Downl
 func (r *DownloadService) Delete(ctx context.Context, identifier string, body DownloadDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env DownloadDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -93,11 +83,6 @@ func (r *DownloadService) Delete(ctx context.Context, identifier string, body Do
 func (r *DownloadService) Get(ctx context.Context, identifier string, query DownloadGetParams, opts ...option.RequestOption) (res *DownloadGetResponse, err error) {
 	var env DownloadGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -355,8 +340,6 @@ func (r DownloadGetResponseDefaultStatus) IsKnown() bool {
 
 type DownloadNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -503,8 +486,6 @@ func (r DownloadNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DownloadDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -649,8 +630,6 @@ func (r DownloadDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type DownloadGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -40,11 +40,6 @@ func NewRecordingService(opts ...option.RequestOption) (r *RecordingService) {
 // Returns the active recording details for the given meeting ID.
 func (r *RecordingService) GetActiveRecordings(ctx context.Context, appID string, meetingID string, query RecordingGetActiveRecordingsParams, opts ...option.RequestOption) (res *RecordingGetActiveRecordingsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,11 +60,6 @@ func (r *RecordingService) GetActiveRecordings(ctx context.Context, appID string
 // Returns details of a recording for the given recording ID.
 func (r *RecordingService) GetOneRecording(ctx context.Context, appID string, recordingID string, query RecordingGetOneRecordingParams, opts ...option.RequestOption) (res *RecordingGetOneRecordingResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -91,11 +81,6 @@ func (r *RecordingService) GetOneRecording(ctx context.Context, appID string, re
 // returns all recordings for the given meeting ID.
 func (r *RecordingService) GetRecordings(ctx context.Context, appID string, params RecordingGetRecordingsParams, opts ...option.RequestOption) (res *RecordingGetRecordingsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -112,11 +97,6 @@ func (r *RecordingService) GetRecordings(ctx context.Context, appID string, para
 // Pause/Resume/Stop a given recording ID.
 func (r *RecordingService) PauseResumeStopRecording(ctx context.Context, appID string, recordingID string, params RecordingPauseResumeStopRecordingParams, opts ...option.RequestOption) (res *RecordingPauseResumeStopRecordingResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -139,11 +119,6 @@ func (r *RecordingService) PauseResumeStopRecording(ctx context.Context, appID s
 // authorization used.
 func (r *RecordingService) StartRecordings(ctx context.Context, appID string, params RecordingStartRecordingsParams, opts ...option.RequestOption) (res *RecordingStartRecordingsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -164,11 +139,6 @@ func (r *RecordingService) StartRecordings(ctx context.Context, appID string, pa
 func (r *RecordingService) StartTrackRecording(ctx context.Context, appID string, params RecordingStartTrackRecordingParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -1732,22 +1702,16 @@ func (r RecordingStartRecordingsResponseDataStorageConfigAuthMethod) IsKnown() b
 
 type RecordingGetActiveRecordingsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RecordingGetOneRecordingParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RecordingGetRecordingsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The end time range for which you want to retrieve the meetings. The time must be
 	// specified in ISO format.
@@ -1828,8 +1792,6 @@ func (r RecordingGetRecordingsParamsStatus) IsKnown() bool {
 
 type RecordingPauseResumeStopRecordingParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                                        `path:"account_id" api:"required"`
 	Action    param.Field[RecordingPauseResumeStopRecordingParamsAction] `json:"action" api:"required"`
 }
@@ -1856,8 +1818,6 @@ func (r RecordingPauseResumeStopRecordingParamsAction) IsKnown() bool {
 
 type RecordingStartRecordingsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// By default, a meeting allows only one recording to run at a time. Enabling the
 	// `allow_multiple_recordings` parameter to true allows you to initiate multiple
@@ -2143,8 +2103,6 @@ func (r RecordingStartRecordingsParamsVideoConfigWatermarkSize) MarshalJSON() (d
 
 type RecordingStartTrackRecordingParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                                              `path:"account_id" api:"required"`
 	Layers    param.Field[map[string]RecordingStartTrackRecordingParamsLayers] `json:"layers" api:"required"`
 	// ID of the meeting to record.

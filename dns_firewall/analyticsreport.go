@@ -48,11 +48,6 @@ func NewAnalyticsReportService(opts ...option.RequestOption) (r *AnalyticsReport
 func (r *AnalyticsReportService) Get(ctx context.Context, dnsFirewallID string, params AnalyticsReportGetParams, opts ...option.RequestOption) (res *dns.Report, err error) {
 	var env AnalyticsReportGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -72,8 +67,6 @@ func (r *AnalyticsReportService) Get(ctx context.Context, dnsFirewallID string, 
 
 type AnalyticsReportGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A comma-separated list of dimensions to group results by.
 	Dimensions param.Field[string] `query:"dimensions"`

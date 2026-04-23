@@ -37,11 +37,6 @@ func NewAppService(opts ...option.RequestOption) (r *AppService) {
 // Fetch all apps for your account
 func (r *AppService) Get(ctx context.Context, query AppGetParams, opts ...option.RequestOption) (res *AppGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -54,11 +49,6 @@ func (r *AppService) Get(ctx context.Context, query AppGetParams, opts ...option
 // Create new app for your account
 func (r *AppService) Post(ctx context.Context, params AppPostParams, opts ...option.RequestOption) (res *AppPostResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -185,13 +175,10 @@ func (r appPostResponseDataAppJSON) RawJSON() string {
 
 type AppGetParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AppPostParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Name      param.Field[string] `json:"name" api:"required"`
 }

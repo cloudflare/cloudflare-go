@@ -44,11 +44,6 @@ func NewConnectorEventService(opts ...option.RequestOption) (r *ConnectorEventSe
 func (r *ConnectorEventService) List(ctx context.Context, connectorID string, params ConnectorEventListParams, opts ...option.RequestOption) (res *ConnectorEventListResponse, err error) {
 	var env ConnectorEventListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -70,11 +65,6 @@ func (r *ConnectorEventService) List(ctx context.Context, connectorID string, pa
 func (r *ConnectorEventService) Get(ctx context.Context, connectorID string, eventT float64, eventN float64, query ConnectorEventGetParams, opts ...option.RequestOption) (res *ConnectorEventGetResponse, err error) {
 	var env ConnectorEventGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -1000,8 +990,6 @@ func (r ConnectorEventGetResponseEK) IsKnown() bool {
 
 type ConnectorEventListParams struct {
 	// Account identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	From      param.Field[float64] `query:"from" api:"required"`
 	To        param.Field[float64] `query:"to" api:"required"`
@@ -1095,8 +1083,6 @@ func (r connectorEventListResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type ConnectorEventGetParams struct {
 	// Account identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

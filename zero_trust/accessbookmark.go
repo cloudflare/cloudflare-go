@@ -41,11 +41,6 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, params AccessBookmarkNewParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -69,11 +64,6 @@ func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, para
 func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, params AccessBookmarkUpdateParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -98,11 +88,6 @@ func (r *AccessBookmarkService) List(ctx context.Context, query AccessBookmarkLi
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -133,11 +118,6 @@ func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, query Access
 func (r *AccessBookmarkService) Delete(ctx context.Context, bookmarkID string, body AccessBookmarkDeleteParams, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
 	var env AccessBookmarkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -161,11 +141,6 @@ func (r *AccessBookmarkService) Delete(ctx context.Context, bookmarkID string, b
 func (r *AccessBookmarkService) Get(ctx context.Context, bookmarkID string, query AccessBookmarkGetParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -239,7 +214,6 @@ func (r accessBookmarkDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessBookmarkNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Body      interface{}         `json:"body" api:"required"`
 }
@@ -388,7 +362,6 @@ func (r AccessBookmarkNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessBookmarkUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Body      interface{}         `json:"body" api:"required"`
 }
@@ -537,12 +510,10 @@ func (r AccessBookmarkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessBookmarkListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AccessBookmarkDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -686,7 +657,6 @@ func (r AccessBookmarkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessBookmarkGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

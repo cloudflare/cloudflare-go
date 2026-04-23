@@ -41,11 +41,6 @@ func NewScheduleService(opts ...option.RequestOption) (r *ScheduleService) {
 func (r *ScheduleService) New(ctx context.Context, url string, params ScheduleNewParams, opts ...option.RequestOption) (res *ScheduleNewResponse, err error) {
 	var env ScheduleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -67,11 +62,6 @@ func (r *ScheduleService) New(ctx context.Context, url string, params ScheduleNe
 func (r *ScheduleService) Delete(ctx context.Context, url string, params ScheduleDeleteParams, opts ...option.RequestOption) (res *ScheduleDeleteResponse, err error) {
 	var env ScheduleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -93,11 +83,6 @@ func (r *ScheduleService) Delete(ctx context.Context, url string, params Schedul
 func (r *ScheduleService) Get(ctx context.Context, url string, params ScheduleGetParams, opts ...option.RequestOption) (res *Schedule, err error) {
 	var env ScheduleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -242,8 +227,6 @@ func (r scheduleDeleteResponseJSON) RawJSON() string {
 
 type ScheduleNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The frequency of the scheduled test. Defaults to WEEKLY for free plans, DAILY
 	// for paid plans.
@@ -342,8 +325,6 @@ func (r scheduleNewResponseEnvelopeJSON) RawJSON() string {
 
 type ScheduleDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A test region.
 	Region param.Field[ScheduleDeleteParamsRegion] `query:"region"`
@@ -422,8 +403,6 @@ func (r scheduleDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type ScheduleGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A test region.
 	Region param.Field[ScheduleGetParamsRegion] `query:"region"`

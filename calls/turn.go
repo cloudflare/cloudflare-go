@@ -40,11 +40,6 @@ func NewTURNService(opts ...option.RequestOption) (r *TURNService) {
 func (r *TURNService) New(ctx context.Context, params TURNNewParams, opts ...option.RequestOption) (res *TURNNewResponse, err error) {
 	var env TURNNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,11 +57,6 @@ func (r *TURNService) New(ctx context.Context, params TURNNewParams, opts ...opt
 func (r *TURNService) Update(ctx context.Context, keyID string, params TURNUpdateParams, opts ...option.RequestOption) (res *TURNUpdateResponse, err error) {
 	var env TURNUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -89,11 +79,6 @@ func (r *TURNService) List(ctx context.Context, query TURNListParams, opts ...op
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -120,11 +105,6 @@ func (r *TURNService) ListAutoPaging(ctx context.Context, query TURNListParams, 
 func (r *TURNService) Delete(ctx context.Context, keyID string, body TURNDeleteParams, opts ...option.RequestOption) (res *TURNDeleteResponse, err error) {
 	var env TURNDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -146,11 +126,6 @@ func (r *TURNService) Delete(ctx context.Context, keyID string, body TURNDeleteP
 func (r *TURNService) Get(ctx context.Context, keyID string, query TURNGetParams, opts ...option.RequestOption) (res *TURNGetResponse, err error) {
 	var env TURNGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -326,8 +301,6 @@ func (r turnGetResponseJSON) RawJSON() string {
 
 type TURNNewParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A short description of a TURN key, not shown to end users.
 	Name param.Field[string] `json:"name"`
@@ -478,8 +451,6 @@ func (r TURNNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type TURNUpdateParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A short description of a TURN key, not shown to end users.
 	Name param.Field[string] `json:"name"`
@@ -630,15 +601,11 @@ func (r TURNUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type TURNListParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type TURNDeleteParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -783,8 +750,6 @@ func (r TURNDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type TURNGetParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

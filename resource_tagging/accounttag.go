@@ -45,11 +45,6 @@ func (r *AccountTagService) Update(ctx context.Context, params AccountTagUpdateP
 		opts = append(opts, option.WithHeader("If-Match", fmt.Sprintf("%v", params.IfMatch)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -70,11 +65,6 @@ func (r *AccountTagService) Delete(ctx context.Context, params AccountTagDeleteP
 	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -88,11 +78,6 @@ func (r *AccountTagService) Delete(ctx context.Context, params AccountTagDeleteP
 func (r *AccountTagService) Get(ctx context.Context, params AccountTagGetParams, opts ...option.RequestOption) (res *AccountTagGetResponse, err error) {
 	var env AccountTagGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -3794,8 +3779,6 @@ func (r AccountTagGetResponseType) IsKnown() bool {
 
 type AccountTagUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Request body schema for setting tags on account-level resources.
 	Body    AccountTagUpdateParamsBodyUnion `json:"body" api:"required"`
@@ -4118,16 +4101,12 @@ func (r AccountTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccountTagDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	IfMatch   param.Field[string] `header:"If-Match"`
 }
 
 type AccountTagGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The ID of the resource to retrieve tags for.
 	ResourceID param.Field[string] `query:"resource_id" api:"required"`

@@ -38,11 +38,6 @@ func NewSubdomainService(opts ...option.RequestOption) (r *SubdomainService) {
 func (r *SubdomainService) Update(ctx context.Context, params SubdomainUpdateParams, opts ...option.RequestOption) (res *SubdomainUpdateResponse, err error) {
 	var env SubdomainUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,11 +55,6 @@ func (r *SubdomainService) Update(ctx context.Context, params SubdomainUpdatePar
 func (r *SubdomainService) Delete(ctx context.Context, body SubdomainDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -78,11 +68,6 @@ func (r *SubdomainService) Delete(ctx context.Context, body SubdomainDeleteParam
 func (r *SubdomainService) Get(ctx context.Context, query SubdomainGetParams, opts ...option.RequestOption) (res *SubdomainGetResponse, err error) {
 	var env SubdomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -140,8 +125,6 @@ func (r subdomainGetResponseJSON) RawJSON() string {
 
 type SubdomainUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Subdomain param.Field[string] `json:"subdomain" api:"required"`
 }
@@ -291,15 +274,11 @@ func (r SubdomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubdomainDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SubdomainGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

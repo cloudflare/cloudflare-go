@@ -40,11 +40,6 @@ func NewDLPLimitService(opts ...option.RequestOption) (r *DLPLimitService) {
 func (r *DLPLimitService) List(ctx context.Context, query DLPLimitListParams, opts ...option.RequestOption) (res *DLPLimitListResponse, err error) {
 	var env DLPLimitListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -98,7 +93,6 @@ func (r dlpLimitListResponseJSON) RawJSON() string {
 }
 
 type DLPLimitListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

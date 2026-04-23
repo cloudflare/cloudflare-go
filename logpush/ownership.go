@@ -38,12 +38,6 @@ func NewOwnershipService(opts ...option.RequestOption) (r *OwnershipService) {
 func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, opts ...option.RequestOption) (res *OwnershipNewResponse, err error) {
 	var env OwnershipNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -75,12 +69,6 @@ func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, o
 func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *OwnershipValidation, err error) {
 	var env OwnershipValidateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -160,12 +148,8 @@ type OwnershipNewParams struct {
 	// included.
 	DestinationConf param.Field[string] `json:"destination_conf" api:"required" format:"uri"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
@@ -320,12 +304,8 @@ type OwnershipValidateParams struct {
 	// Ownership challenge token to prove destination ownership.
 	OwnershipChallenge param.Field[string] `json:"ownership_challenge" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 

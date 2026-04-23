@@ -41,11 +41,6 @@ func NewPDFService(opts ...option.RequestOption) (r *PDFService) {
 func (r *PDFService) New(ctx context.Context, params PDFNewParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/pdf")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -57,8 +52,6 @@ func (r *PDFService) New(ctx context.Context, params PDFNewParams, opts ...optio
 
 type PDFNewParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]   `path:"account_id" api:"required"`
 	Body      PDFNewParamsBodyUnion `json:"body" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.

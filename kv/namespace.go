@@ -52,11 +52,6 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *Namespace, err error) {
 	var env NamespaceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -74,11 +69,6 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *Namespace, err error) {
 	var env NamespaceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -101,11 +91,6 @@ func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -132,11 +117,6 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceL
 func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponse, err error) {
 	var env NamespaceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -159,11 +139,6 @@ func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body 
 func (r *NamespaceService) BulkDelete(ctx context.Context, namespaceID string, params NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponse, err error) {
 	var env NamespaceBulkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -187,11 +162,6 @@ func (r *NamespaceService) BulkDelete(ctx context.Context, namespaceID string, p
 func (r *NamespaceService) BulkGet(ctx context.Context, namespaceID string, params NamespaceBulkGetParams, opts ...option.RequestOption) (res *NamespaceBulkGetResponse, err error) {
 	var env NamespaceBulkGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -218,11 +188,6 @@ func (r *NamespaceService) BulkGet(ctx context.Context, namespaceID string, para
 func (r *NamespaceService) BulkUpdate(ctx context.Context, namespaceID string, params NamespaceBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceBulkUpdateResponse, err error) {
 	var env NamespaceBulkUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -244,11 +209,6 @@ func (r *NamespaceService) BulkUpdate(ctx context.Context, namespaceID string, p
 func (r *NamespaceService) Get(ctx context.Context, namespaceID string, query NamespaceGetParams, opts ...option.RequestOption) (res *Namespace, err error) {
 	var env NamespaceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -546,8 +506,6 @@ func (r namespaceBulkUpdateResponseJSON) RawJSON() string {
 
 type NamespaceNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A human-readable string name for a Namespace.
 	Title param.Field[string] `json:"title" api:"required"`
@@ -602,8 +560,6 @@ func (r NamespaceNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A human-readable string name for a Namespace.
 	Title param.Field[string] `json:"title" api:"required"`
@@ -658,8 +614,6 @@ func (r NamespaceUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to order namespaces.
 	Direction param.Field[NamespaceListParamsDirection] `query:"direction"`
@@ -713,8 +667,6 @@ func (r NamespaceListParamsOrder) IsKnown() bool {
 
 type NamespaceDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -763,8 +715,6 @@ func (r NamespaceDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceBulkDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Body      []string            `json:"body" api:"required"`
 }
@@ -818,8 +768,6 @@ func (r NamespaceBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceBulkGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of keys to retrieve (maximum of 100).
 	Keys param.Field[[]string] `json:"keys" api:"required"`
@@ -894,8 +842,6 @@ func (r NamespaceBulkGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceBulkUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]             `path:"account_id" api:"required"`
 	Body      []NamespaceBulkUpdateParamsBody `json:"body" api:"required"`
 }
@@ -972,8 +918,6 @@ func (r NamespaceBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type NamespaceGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

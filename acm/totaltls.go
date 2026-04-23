@@ -38,11 +38,6 @@ func NewTotalTLSService(opts ...option.RequestOption) (r *TotalTLSService) {
 func (r *TotalTLSService) Update(ctx context.Context, params TotalTLSUpdateParams, opts ...option.RequestOption) (res *TotalTLSUpdateResponse, err error) {
 	var env TotalTLSUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -60,11 +55,6 @@ func (r *TotalTLSService) Update(ctx context.Context, params TotalTLSUpdateParam
 func (r *TotalTLSService) Edit(ctx context.Context, params TotalTLSEditParams, opts ...option.RequestOption) (res *TotalTLSEditResponse, err error) {
 	var env TotalTLSEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -82,11 +72,6 @@ func (r *TotalTLSService) Edit(ctx context.Context, params TotalTLSEditParams, o
 func (r *TotalTLSService) Get(ctx context.Context, query TotalTLSGetParams, opts ...option.RequestOption) (res *TotalTLSGetResponse, err error) {
 	var env TotalTLSGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -251,8 +236,6 @@ func (r TotalTLSGetResponseValidityPeriod) IsKnown() bool {
 
 type TotalTLSUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
@@ -406,8 +389,6 @@ func (r TotalTLSUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type TotalTLSEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
@@ -561,8 +542,6 @@ func (r TotalTLSEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type TotalTLSGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

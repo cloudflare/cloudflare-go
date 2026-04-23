@@ -42,11 +42,6 @@ func NewDEXFleetStatusService(opts ...option.RequestOption) (r *DEXFleetStatusSe
 func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusLiveParams, opts ...option.RequestOption) (res *DEXFleetStatusLiveResponse, err error) {
 	var env DEXFleetStatusLiveResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,11 +59,6 @@ func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusL
 func (r *DEXFleetStatusService) OverTime(ctx context.Context, params DEXFleetStatusOverTimeParams, opts ...option.RequestOption) (res *DEXFleetStatusOverTimeResponse, err error) {
 	var env DEXFleetStatusOverTimeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -260,7 +250,6 @@ func (r dexFleetStatusOverTimeResponseDeviceStatsByStatusJSON) RawJSON() string 
 }
 
 type DEXFleetStatusLiveParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Number of minutes before current time
 	SinceMinutes param.Field[float64] `query:"since_minutes" api:"required"`
@@ -415,7 +404,6 @@ func (r DEXFleetStatusLiveResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXFleetStatusOverTimeParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Time range beginning in ISO format
 	From param.Field[string] `query:"from" api:"required"`

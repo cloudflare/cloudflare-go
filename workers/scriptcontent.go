@@ -48,11 +48,6 @@ func (r *ScriptContentService) Update(ctx context.Context, scriptName string, pa
 		opts = append(opts, option.WithHeader("CF-WORKER-MAIN-MODULE-PART", fmt.Sprintf("%v", params.CfWorkerMainModulePart)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -74,11 +69,6 @@ func (r *ScriptContentService) Update(ctx context.Context, scriptName string, pa
 func (r *ScriptContentService) Get(ctx context.Context, scriptName string, query ScriptContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -94,8 +84,6 @@ func (r *ScriptContentService) Get(ctx context.Context, scriptName string, query
 
 type ScriptContentUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptContentUpdateParamsMetadata] `json:"metadata" api:"required"`
@@ -281,7 +269,5 @@ func (r ScriptContentUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptContentGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

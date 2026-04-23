@@ -41,11 +41,6 @@ func NewDeviceResilienceGlobalWARPOverrideService(opts ...option.RequestOption) 
 func (r *DeviceResilienceGlobalWARPOverrideService) New(ctx context.Context, params DeviceResilienceGlobalWARPOverrideNewParams, opts ...option.RequestOption) (res *DeviceResilienceGlobalWARPOverrideNewResponse, err error) {
 	var env DeviceResilienceGlobalWARPOverrideNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,11 +58,6 @@ func (r *DeviceResilienceGlobalWARPOverrideService) New(ctx context.Context, par
 func (r *DeviceResilienceGlobalWARPOverrideService) Get(ctx context.Context, query DeviceResilienceGlobalWARPOverrideGetParams, opts ...option.RequestOption) (res *DeviceResilienceGlobalWARPOverrideGetResponse, err error) {
 	var env DeviceResilienceGlobalWARPOverrideGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -132,7 +122,6 @@ func (r deviceResilienceGlobalWARPOverrideGetResponseJSON) RawJSON() string {
 }
 
 type DeviceResilienceGlobalWARPOverrideNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Disconnects all devices on the account using Global WARP override.
 	Disconnect param.Field[bool] `json:"disconnect" api:"required"`
@@ -189,7 +178,6 @@ func (r DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeSuccess) IsKnown() 
 }
 
 type DeviceResilienceGlobalWARPOverrideGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

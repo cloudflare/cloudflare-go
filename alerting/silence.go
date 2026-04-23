@@ -38,11 +38,6 @@ func NewSilenceService(opts ...option.RequestOption) (r *SilenceService) {
 // Creates a new silence for an account.
 func (r *SilenceService) New(ctx context.Context, params SilenceNewParams, opts ...option.RequestOption) (res *SilenceNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -57,11 +52,6 @@ func (r *SilenceService) Update(ctx context.Context, params SilenceUpdateParams,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -89,11 +79,6 @@ func (r *SilenceService) List(ctx context.Context, query SilenceListParams, opts
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -119,11 +104,6 @@ func (r *SilenceService) ListAutoPaging(ctx context.Context, query SilenceListPa
 // Deletes an existing silence for an account.
 func (r *SilenceService) Delete(ctx context.Context, silenceID string, body SilenceDeleteParams, opts ...option.RequestOption) (res *SilenceDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -141,11 +121,6 @@ func (r *SilenceService) Delete(ctx context.Context, silenceID string, body Sile
 func (r *SilenceService) Get(ctx context.Context, silenceID string, query SilenceGetParams, opts ...option.RequestOption) (res *SilenceGetResponse, err error) {
 	var env SilenceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -450,8 +425,6 @@ func (r silenceGetResponseJSON) RawJSON() string {
 
 type SilenceNewParams struct {
 	// The account id
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]    `path:"account_id" api:"required"`
 	Body      []SilenceNewParamsBody `json:"body" api:"required"`
 }
@@ -475,8 +448,6 @@ func (r SilenceNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 type SilenceUpdateParams struct {
 	// The account id
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]       `path:"account_id" api:"required"`
 	Body      []SilenceUpdateParamsBody `json:"body" api:"required"`
 }
@@ -500,22 +471,16 @@ func (r SilenceUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 
 type SilenceListParams struct {
 	// The account id
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SilenceDeleteParams struct {
 	// The account id
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SilenceGetParams struct {
 	// The account id
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

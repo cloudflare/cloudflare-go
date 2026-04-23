@@ -40,11 +40,6 @@ func NewDeviceFleetStatusService(opts ...option.RequestOption) (r *DeviceFleetSt
 // table
 func (r *DeviceFleetStatusService) Get(ctx context.Context, deviceID string, params DeviceFleetStatusGetParams, opts ...option.RequestOption) (res *DeviceFleetStatusGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -561,7 +556,6 @@ func (r deviceFleetStatusGetResponseRamUsedPctByAppJSON) RawJSON() string {
 }
 
 type DeviceFleetStatusGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Number of minutes before current time
 	SinceMinutes param.Field[float64] `query:"since_minutes" api:"required"`

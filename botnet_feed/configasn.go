@@ -38,11 +38,6 @@ func NewConfigASNService(opts ...option.RequestOption) (r *ConfigASNService) {
 func (r *ConfigASNService) Delete(ctx context.Context, asnID int64, body ConfigASNDeleteParams, opts ...option.RequestOption) (res *ConfigASNDeleteResponse, err error) {
 	var env ConfigASNDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,11 +55,6 @@ func (r *ConfigASNService) Delete(ctx context.Context, asnID int64, body ConfigA
 func (r *ConfigASNService) Get(ctx context.Context, query ConfigASNGetParams, opts ...option.RequestOption) (res *ConfigASNGetResponse, err error) {
 	var env ConfigASNGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -122,8 +112,6 @@ func (r configASNGetResponseJSON) RawJSON() string {
 
 type ConfigASNDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -268,8 +256,6 @@ func (r ConfigASNDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigASNGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
