@@ -32,6 +32,7 @@ type OrganizationService struct {
 	OrganizationAccounts *OrganizationAccountService
 	OrganizationProfile  *OrganizationProfileService
 	Members              *MemberService
+	Logs                 *LogService
 }
 
 // NewOrganizationService generates a new service that applies the given options to
@@ -43,6 +44,7 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 	r.OrganizationAccounts = NewOrganizationAccountService(opts...)
 	r.OrganizationProfile = NewOrganizationProfileService(opts...)
 	r.Members = NewMemberService(opts...)
+	r.Logs = NewLogService(opts...)
 	return
 }
 
