@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
@@ -38,9 +39,10 @@ func NewUserGroupMemberService(opts ...option.RequestOption) (r *UserGroupMember
 }
 
 // Add members to a User Group.
-func (r *UserGroupMemberService) New(ctx context.Context, userGroupID string, params UserGroupMemberNewParams, opts ...option.RequestOption) (res *UserGroupMemberNewResponse, err error) {
-	var env UserGroupMemberNewResponseEnvelope
+func (r *UserGroupMemberService) New(ctx context.Context, userGroupID string, params UserGroupMemberNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[UserGroupMemberNewResponse], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return nil, err
@@ -55,12 +57,21 @@ func (r *UserGroupMemberService) New(ctx context.Context, userGroupID string, pa
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups/%s/members", params.AccountID, userGroupID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
-	res = &env.Result
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
 	return res, nil
+}
+
+// Add members to a User Group.
+func (r *UserGroupMemberService) NewAutoPaging(ctx context.Context, userGroupID string, params UserGroupMemberNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[UserGroupMemberNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, userGroupID, params, opts...))
 }
 
 // Replace the set of members attached to a User Group.
@@ -158,6 +169,36 @@ func (r *UserGroupMemberService) Delete(ctx context.Context, userGroupID string,
 	}
 	path := fmt.Sprintf("accounts/%s/iam/user_groups/%s/members/%s", body.AccountID, userGroupID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// Get details of a specific member in a user group.
+func (r *UserGroupMemberService) Get(ctx context.Context, userGroupID string, memberID string, query UserGroupMemberGetParams, opts ...option.RequestOption) (res *UserGroupMemberGetResponse, err error) {
+	var env UserGroupMemberGetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if userGroupID == "" {
+		err = errors.New("missing required user_group_id parameter")
+		return nil, err
+	}
+	if memberID == "" {
+		err = errors.New("missing required member_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/iam/user_groups/%s/members/%s", query.AccountID, userGroupID, memberID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -345,6 +386,89 @@ func (r UserGroupMemberDeleteResponseStatus) IsKnown() bool {
 	return false
 }
 
+// Detailed member information for a User Group member.
+type UserGroupMemberGetResponse struct {
+	// Account member identifier.
+	ID string `json:"id" api:"required"`
+	// When the member was added to the user group.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The contact email address of the user.
+	Email string `json:"email"`
+	// The member's status in the account.
+	Status UserGroupMemberGetResponseStatus `json:"status"`
+	// Details of the user associated with this membership.
+	User UserGroupMemberGetResponseUser `json:"user"`
+	JSON userGroupMemberGetResponseJSON `json:"-"`
+}
+
+// userGroupMemberGetResponseJSON contains the JSON metadata for the struct
+// [UserGroupMemberGetResponse]
+type userGroupMemberGetResponseJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Email       apijson.Field
+	Status      apijson.Field
+	User        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserGroupMemberGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userGroupMemberGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The member's status in the account.
+type UserGroupMemberGetResponseStatus string
+
+const (
+	UserGroupMemberGetResponseStatusAccepted UserGroupMemberGetResponseStatus = "accepted"
+	UserGroupMemberGetResponseStatusPending  UserGroupMemberGetResponseStatus = "pending"
+)
+
+func (r UserGroupMemberGetResponseStatus) IsKnown() bool {
+	switch r {
+	case UserGroupMemberGetResponseStatusAccepted, UserGroupMemberGetResponseStatusPending:
+		return true
+	}
+	return false
+}
+
+// Details of the user associated with this membership.
+type UserGroupMemberGetResponseUser struct {
+	// User identifier tag.
+	ID string `json:"id"`
+	// The contact email address of the user.
+	Email string `json:"email"`
+	// User's first name.
+	FirstName string `json:"first_name"`
+	// User's last name.
+	LastName string                             `json:"last_name"`
+	JSON     userGroupMemberGetResponseUserJSON `json:"-"`
+}
+
+// userGroupMemberGetResponseUserJSON contains the JSON metadata for the struct
+// [UserGroupMemberGetResponseUser]
+type userGroupMemberGetResponseUserJSON struct {
+	ID          apijson.Field
+	Email       apijson.Field
+	FirstName   apijson.Field
+	LastName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserGroupMemberGetResponseUser) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userGroupMemberGetResponseUserJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserGroupMemberNewParams struct {
 	// Account identifier tag.
 	//
@@ -364,146 +488,6 @@ type UserGroupMemberNewParamsMember struct {
 
 func (r UserGroupMemberNewParamsMember) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type UserGroupMemberNewResponseEnvelope struct {
-	Errors   []UserGroupMemberNewResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []UserGroupMemberNewResponseEnvelopeMessages `json:"messages" api:"required"`
-	// Whether the API call was successful.
-	Success UserGroupMemberNewResponseEnvelopeSuccess `json:"success" api:"required"`
-	// Member attached to a User Group.
-	Result UserGroupMemberNewResponse             `json:"result"`
-	JSON   userGroupMemberNewResponseEnvelopeJSON `json:"-"`
-}
-
-// userGroupMemberNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [UserGroupMemberNewResponseEnvelope]
-type userGroupMemberNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserGroupMemberNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userGroupMemberNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserGroupMemberNewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code" api:"required"`
-	Message          string                                         `json:"message" api:"required"`
-	DocumentationURL string                                         `json:"documentation_url"`
-	Source           UserGroupMemberNewResponseEnvelopeErrorsSource `json:"source"`
-	JSON             userGroupMemberNewResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// userGroupMemberNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [UserGroupMemberNewResponseEnvelopeErrors]
-type userGroupMemberNewResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *UserGroupMemberNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userGroupMemberNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserGroupMemberNewResponseEnvelopeErrorsSource struct {
-	Pointer string                                             `json:"pointer"`
-	JSON    userGroupMemberNewResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// userGroupMemberNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
-// for the struct [UserGroupMemberNewResponseEnvelopeErrorsSource]
-type userGroupMemberNewResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserGroupMemberNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userGroupMemberNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserGroupMemberNewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code" api:"required"`
-	Message          string                                           `json:"message" api:"required"`
-	DocumentationURL string                                           `json:"documentation_url"`
-	Source           UserGroupMemberNewResponseEnvelopeMessagesSource `json:"source"`
-	JSON             userGroupMemberNewResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// userGroupMemberNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [UserGroupMemberNewResponseEnvelopeMessages]
-type userGroupMemberNewResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *UserGroupMemberNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userGroupMemberNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type UserGroupMemberNewResponseEnvelopeMessagesSource struct {
-	Pointer string                                               `json:"pointer"`
-	JSON    userGroupMemberNewResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// userGroupMemberNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
-// for the struct [UserGroupMemberNewResponseEnvelopeMessagesSource]
-type userGroupMemberNewResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserGroupMemberNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userGroupMemberNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type UserGroupMemberNewResponseEnvelopeSuccess bool
-
-const (
-	UserGroupMemberNewResponseEnvelopeSuccessTrue UserGroupMemberNewResponseEnvelopeSuccess = true
-)
-
-func (r UserGroupMemberNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case UserGroupMemberNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type UserGroupMemberUpdateParams struct {
@@ -533,6 +517,10 @@ type UserGroupMemberListParams struct {
 	//
 	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The sort order of returned user group members by email.
+	Direction param.Field[UserGroupMemberListParamsDirection] `query:"direction"`
+	// A string used for filtering members by partial email match.
+	FuzzyEmail param.Field[string] `query:"fuzzyEmail"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page.
@@ -546,6 +534,22 @@ func (r UserGroupMemberListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// The sort order of returned user group members by email.
+type UserGroupMemberListParamsDirection string
+
+const (
+	UserGroupMemberListParamsDirectionAsc  UserGroupMemberListParamsDirection = "asc"
+	UserGroupMemberListParamsDirectionDesc UserGroupMemberListParamsDirection = "desc"
+)
+
+func (r UserGroupMemberListParamsDirection) IsKnown() bool {
+	switch r {
+	case UserGroupMemberListParamsDirectionAsc, UserGroupMemberListParamsDirectionDesc:
+		return true
+	}
+	return false
 }
 
 type UserGroupMemberDeleteParams struct {
@@ -690,6 +694,153 @@ const (
 func (r UserGroupMemberDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case UserGroupMemberDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type UserGroupMemberGetParams struct {
+	// Account identifier tag.
+	//
+	// Use [option.WithAccountID] on the client to set a global default for this field.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type UserGroupMemberGetResponseEnvelope struct {
+	Errors   []UserGroupMemberGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UserGroupMemberGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success UserGroupMemberGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	// Detailed member information for a User Group member.
+	Result UserGroupMemberGetResponse             `json:"result"`
+	JSON   userGroupMemberGetResponseEnvelopeJSON `json:"-"`
+}
+
+// userGroupMemberGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [UserGroupMemberGetResponseEnvelope]
+type userGroupMemberGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserGroupMemberGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userGroupMemberGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type UserGroupMemberGetResponseEnvelopeErrors struct {
+	Code             int64                                          `json:"code" api:"required"`
+	Message          string                                         `json:"message" api:"required"`
+	DocumentationURL string                                         `json:"documentation_url"`
+	Source           UserGroupMemberGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             userGroupMemberGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// userGroupMemberGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [UserGroupMemberGetResponseEnvelopeErrors]
+type userGroupMemberGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *UserGroupMemberGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userGroupMemberGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type UserGroupMemberGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                             `json:"pointer"`
+	JSON    userGroupMemberGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// userGroupMemberGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [UserGroupMemberGetResponseEnvelopeErrorsSource]
+type userGroupMemberGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserGroupMemberGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userGroupMemberGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type UserGroupMemberGetResponseEnvelopeMessages struct {
+	Code             int64                                            `json:"code" api:"required"`
+	Message          string                                           `json:"message" api:"required"`
+	DocumentationURL string                                           `json:"documentation_url"`
+	Source           UserGroupMemberGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             userGroupMemberGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// userGroupMemberGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [UserGroupMemberGetResponseEnvelopeMessages]
+type userGroupMemberGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *UserGroupMemberGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userGroupMemberGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type UserGroupMemberGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                               `json:"pointer"`
+	JSON    userGroupMemberGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// userGroupMemberGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [UserGroupMemberGetResponseEnvelopeMessagesSource]
+type userGroupMemberGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserGroupMemberGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userGroupMemberGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type UserGroupMemberGetResponseEnvelopeSuccess bool
+
+const (
+	UserGroupMemberGetResponseEnvelopeSuccessTrue UserGroupMemberGetResponseEnvelopeSuccess = true
+)
+
+func (r UserGroupMemberGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UserGroupMemberGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

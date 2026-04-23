@@ -154,6 +154,10 @@ type BotFightModeConfiguration struct {
 	AIBotsProtection BotFightModeConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant BotFightModeConfigurationCfRobotsVariant `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection BotFightModeConfigurationContentBotsProtection `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection BotFightModeConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -178,6 +182,7 @@ type BotFightModeConfiguration struct {
 type botFightModeConfigurationJSON struct {
 	AIBotsProtection       apijson.Field
 	CfRobotsVariant        apijson.Field
+	ContentBotsProtection  apijson.Field
 	CrawlerProtection      apijson.Field
 	EnableJS               apijson.Field
 	FightMode              apijson.Field
@@ -229,6 +234,24 @@ const (
 func (r BotFightModeConfigurationCfRobotsVariant) IsKnown() bool {
 	switch r {
 	case BotFightModeConfigurationCfRobotsVariantOff, BotFightModeConfigurationCfRobotsVariantPolicyOnly:
+		return true
+	}
+	return false
+}
+
+// Enable rule to block content bots. When enabled, blocks automated traffic with
+// low bot scores, excluding safe verified bot categories. Exceptions should be
+// managed via skip rules.
+type BotFightModeConfigurationContentBotsProtection string
+
+const (
+	BotFightModeConfigurationContentBotsProtectionBlock    BotFightModeConfigurationContentBotsProtection = "block"
+	BotFightModeConfigurationContentBotsProtectionDisabled BotFightModeConfigurationContentBotsProtection = "disabled"
+)
+
+func (r BotFightModeConfigurationContentBotsProtection) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationContentBotsProtectionBlock, BotFightModeConfigurationContentBotsProtectionDisabled:
 		return true
 	}
 	return false
@@ -297,6 +320,10 @@ type BotFightModeConfigurationParam struct {
 	AIBotsProtection param.Field[BotFightModeConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant param.Field[BotFightModeConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection param.Field[BotFightModeConfigurationContentBotsProtection] `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[BotFightModeConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -351,6 +378,10 @@ type SubscriptionConfiguration struct {
 	BmCookieEnabled bool `json:"bm_cookie_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant SubscriptionConfigurationCfRobotsVariant `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection SubscriptionConfigurationContentBotsProtection `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection SubscriptionConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -378,6 +409,7 @@ type subscriptionConfigurationJSON struct {
 	AutoUpdateModel        apijson.Field
 	BmCookieEnabled        apijson.Field
 	CfRobotsVariant        apijson.Field
+	ContentBotsProtection  apijson.Field
 	CrawlerProtection      apijson.Field
 	EnableJS               apijson.Field
 	IsRobotsTXTManaged     apijson.Field
@@ -429,6 +461,24 @@ const (
 func (r SubscriptionConfigurationCfRobotsVariant) IsKnown() bool {
 	switch r {
 	case SubscriptionConfigurationCfRobotsVariantOff, SubscriptionConfigurationCfRobotsVariantPolicyOnly:
+		return true
+	}
+	return false
+}
+
+// Enable rule to block content bots. When enabled, blocks automated traffic with
+// low bot scores, excluding safe verified bot categories. Exceptions should be
+// managed via skip rules.
+type SubscriptionConfigurationContentBotsProtection string
+
+const (
+	SubscriptionConfigurationContentBotsProtectionBlock    SubscriptionConfigurationContentBotsProtection = "block"
+	SubscriptionConfigurationContentBotsProtectionDisabled SubscriptionConfigurationContentBotsProtection = "disabled"
+)
+
+func (r SubscriptionConfigurationContentBotsProtection) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationContentBotsProtectionBlock, SubscriptionConfigurationContentBotsProtectionDisabled:
 		return true
 	}
 	return false
@@ -504,6 +554,10 @@ type SubscriptionConfigurationParam struct {
 	BmCookieEnabled param.Field[bool] `json:"bm_cookie_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant param.Field[SubscriptionConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection param.Field[SubscriptionConfigurationContentBotsProtection] `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[SubscriptionConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -552,6 +606,10 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 	AIBotsProtection SuperBotFightModeDefinitelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant SuperBotFightModeDefinitelyConfigurationCfRobotsVariant `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection SuperBotFightModeDefinitelyConfigurationContentBotsProtection `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection SuperBotFightModeDefinitelyConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -584,6 +642,7 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 type superBotFightModeDefinitelyConfigurationJSON struct {
 	AIBotsProtection             apijson.Field
 	CfRobotsVariant              apijson.Field
+	ContentBotsProtection        apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	IsRobotsTXTManaged           apijson.Field
@@ -638,6 +697,24 @@ const (
 func (r SuperBotFightModeDefinitelyConfigurationCfRobotsVariant) IsKnown() bool {
 	switch r {
 	case SuperBotFightModeDefinitelyConfigurationCfRobotsVariantOff, SuperBotFightModeDefinitelyConfigurationCfRobotsVariantPolicyOnly:
+		return true
+	}
+	return false
+}
+
+// Enable rule to block content bots. When enabled, blocks automated traffic with
+// low bot scores, excluding safe verified bot categories. Exceptions should be
+// managed via skip rules.
+type SuperBotFightModeDefinitelyConfigurationContentBotsProtection string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationContentBotsProtectionBlock    SuperBotFightModeDefinitelyConfigurationContentBotsProtection = "block"
+	SuperBotFightModeDefinitelyConfigurationContentBotsProtectionDisabled SuperBotFightModeDefinitelyConfigurationContentBotsProtection = "disabled"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationContentBotsProtection) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationContentBotsProtectionBlock, SuperBotFightModeDefinitelyConfigurationContentBotsProtectionDisabled:
 		return true
 	}
 	return false
@@ -727,6 +804,10 @@ type SuperBotFightModeDefinitelyConfigurationParam struct {
 	AIBotsProtection param.Field[SuperBotFightModeDefinitelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant param.Field[SuperBotFightModeDefinitelyConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection param.Field[SuperBotFightModeDefinitelyConfigurationContentBotsProtection] `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[SuperBotFightModeDefinitelyConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -774,6 +855,10 @@ type SuperBotFightModeLikelyConfiguration struct {
 	AIBotsProtection SuperBotFightModeLikelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant SuperBotFightModeLikelyConfigurationCfRobotsVariant `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection SuperBotFightModeLikelyConfigurationContentBotsProtection `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection SuperBotFightModeLikelyConfigurationCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -808,6 +893,7 @@ type SuperBotFightModeLikelyConfiguration struct {
 type superBotFightModeLikelyConfigurationJSON struct {
 	AIBotsProtection             apijson.Field
 	CfRobotsVariant              apijson.Field
+	ContentBotsProtection        apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	IsRobotsTXTManaged           apijson.Field
@@ -863,6 +949,24 @@ const (
 func (r SuperBotFightModeLikelyConfigurationCfRobotsVariant) IsKnown() bool {
 	switch r {
 	case SuperBotFightModeLikelyConfigurationCfRobotsVariantOff, SuperBotFightModeLikelyConfigurationCfRobotsVariantPolicyOnly:
+		return true
+	}
+	return false
+}
+
+// Enable rule to block content bots. When enabled, blocks automated traffic with
+// low bot scores, excluding safe verified bot categories. Exceptions should be
+// managed via skip rules.
+type SuperBotFightModeLikelyConfigurationContentBotsProtection string
+
+const (
+	SuperBotFightModeLikelyConfigurationContentBotsProtectionBlock    SuperBotFightModeLikelyConfigurationContentBotsProtection = "block"
+	SuperBotFightModeLikelyConfigurationContentBotsProtectionDisabled SuperBotFightModeLikelyConfigurationContentBotsProtection = "disabled"
+)
+
+func (r SuperBotFightModeLikelyConfigurationContentBotsProtection) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationContentBotsProtectionBlock, SuperBotFightModeLikelyConfigurationContentBotsProtectionDisabled:
 		return true
 	}
 	return false
@@ -965,6 +1069,10 @@ type SuperBotFightModeLikelyConfigurationParam struct {
 	AIBotsProtection param.Field[SuperBotFightModeLikelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant param.Field[SuperBotFightModeLikelyConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection param.Field[SuperBotFightModeLikelyConfigurationContentBotsProtection] `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[SuperBotFightModeLikelyConfigurationCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -1017,6 +1125,10 @@ type BotManagementUpdateResponse struct {
 	BmCookieEnabled bool `json:"bm_cookie_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant BotManagementUpdateResponseCfRobotsVariant `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection BotManagementUpdateResponseContentBotsProtection `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection BotManagementUpdateResponseCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -1062,6 +1174,7 @@ type botManagementUpdateResponseJSON struct {
 	AutoUpdateModel              apijson.Field
 	BmCookieEnabled              apijson.Field
 	CfRobotsVariant              apijson.Field
+	ContentBotsProtection        apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
@@ -1165,6 +1278,24 @@ func (r BotManagementUpdateResponseCfRobotsVariant) IsKnown() bool {
 	return false
 }
 
+// Enable rule to block content bots. When enabled, blocks automated traffic with
+// low bot scores, excluding safe verified bot categories. Exceptions should be
+// managed via skip rules.
+type BotManagementUpdateResponseContentBotsProtection string
+
+const (
+	BotManagementUpdateResponseContentBotsProtectionBlock    BotManagementUpdateResponseContentBotsProtection = "block"
+	BotManagementUpdateResponseContentBotsProtectionDisabled BotManagementUpdateResponseContentBotsProtection = "disabled"
+)
+
+func (r BotManagementUpdateResponseContentBotsProtection) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseContentBotsProtectionBlock, BotManagementUpdateResponseContentBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
 // Enable rule to punish AI Scrapers and Crawlers via a link maze.
 type BotManagementUpdateResponseCrawlerProtection string
 
@@ -1244,6 +1375,10 @@ type BotManagementGetResponse struct {
 	BmCookieEnabled bool `json:"bm_cookie_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant BotManagementGetResponseCfRobotsVariant `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection BotManagementGetResponseContentBotsProtection `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection BotManagementGetResponseCrawlerProtection `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -1289,6 +1424,7 @@ type botManagementGetResponseJSON struct {
 	AutoUpdateModel              apijson.Field
 	BmCookieEnabled              apijson.Field
 	CfRobotsVariant              apijson.Field
+	ContentBotsProtection        apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
@@ -1392,6 +1528,24 @@ func (r BotManagementGetResponseCfRobotsVariant) IsKnown() bool {
 	return false
 }
 
+// Enable rule to block content bots. When enabled, blocks automated traffic with
+// low bot scores, excluding safe verified bot categories. Exceptions should be
+// managed via skip rules.
+type BotManagementGetResponseContentBotsProtection string
+
+const (
+	BotManagementGetResponseContentBotsProtectionBlock    BotManagementGetResponseContentBotsProtection = "block"
+	BotManagementGetResponseContentBotsProtectionDisabled BotManagementGetResponseContentBotsProtection = "disabled"
+)
+
+func (r BotManagementGetResponseContentBotsProtection) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseContentBotsProtectionBlock, BotManagementGetResponseContentBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
 // Enable rule to punish AI Scrapers and Crawlers via a link maze.
 type BotManagementGetResponseCrawlerProtection string
 
@@ -1483,6 +1637,10 @@ type BotManagementUpdateParamsBody struct {
 	BmCookieEnabled param.Field[bool] `json:"bm_cookie_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant param.Field[BotManagementUpdateParamsBodyCfRobotsVariant] `json:"cf_robots_variant"`
+	// Enable rule to block content bots. When enabled, blocks automated traffic with
+	// low bot scores, excluding safe verified bot categories. Exceptions should be
+	// managed via skip rules.
+	ContentBotsProtection param.Field[BotManagementUpdateParamsBodyContentBotsProtection] `json:"content_bots_protection"`
 	// Enable rule to punish AI Scrapers and Crawlers via a link maze.
 	CrawlerProtection param.Field[BotManagementUpdateParamsBodyCrawlerProtection] `json:"crawler_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -1555,6 +1713,24 @@ const (
 func (r BotManagementUpdateParamsBodyCfRobotsVariant) IsKnown() bool {
 	switch r {
 	case BotManagementUpdateParamsBodyCfRobotsVariantOff, BotManagementUpdateParamsBodyCfRobotsVariantPolicyOnly:
+		return true
+	}
+	return false
+}
+
+// Enable rule to block content bots. When enabled, blocks automated traffic with
+// low bot scores, excluding safe verified bot categories. Exceptions should be
+// managed via skip rules.
+type BotManagementUpdateParamsBodyContentBotsProtection string
+
+const (
+	BotManagementUpdateParamsBodyContentBotsProtectionBlock    BotManagementUpdateParamsBodyContentBotsProtection = "block"
+	BotManagementUpdateParamsBodyContentBotsProtectionDisabled BotManagementUpdateParamsBodyContentBotsProtection = "disabled"
+)
+
+func (r BotManagementUpdateParamsBodyContentBotsProtection) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateParamsBodyContentBotsProtectionBlock, BotManagementUpdateParamsBodyContentBotsProtectionDisabled:
 		return true
 	}
 	return false

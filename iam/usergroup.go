@@ -1183,7 +1183,7 @@ type UserGroupNewParams struct {
 	// Name of the User group.
 	Name param.Field[string] `json:"name" api:"required"`
 	// Policies attached to the User group
-	Policies param.Field[[]UserGroupNewParamsPolicy] `json:"policies" api:"required"`
+	Policies param.Field[[]UserGroupNewParamsPolicy] `json:"policies"`
 }
 
 func (r UserGroupNewParams) MarshalJSON() (data []byte, err error) {
@@ -1594,9 +1594,8 @@ type UserGroupListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ID of the user group to be fetched.
 	ID param.Field[string] `query:"id"`
-	// The sort order of returned user groups by name. Default sort order is ascending.
-	// To switch to descending, set this parameter to "desc"
-	Direction param.Field[string] `query:"direction"`
+	// The sort order of returned user groups by name (ascending or descending).
+	Direction param.Field[UserGroupListParamsDirection] `query:"direction"`
 	// A string used for searching for user groups containing that substring.
 	FuzzyName param.Field[string] `query:"fuzzyName"`
 	// Name of the user group to be fetched.
@@ -1613,6 +1612,22 @@ func (r UserGroupListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// The sort order of returned user groups by name (ascending or descending).
+type UserGroupListParamsDirection string
+
+const (
+	UserGroupListParamsDirectionAsc  UserGroupListParamsDirection = "asc"
+	UserGroupListParamsDirectionDesc UserGroupListParamsDirection = "desc"
+)
+
+func (r UserGroupListParamsDirection) IsKnown() bool {
+	switch r {
+	case UserGroupListParamsDirectionAsc, UserGroupListParamsDirectionDesc:
+		return true
+	}
+	return false
 }
 
 type UserGroupDeleteParams struct {
