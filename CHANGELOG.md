@@ -1,5 +1,20 @@
 # Changelog
 
+## 6.10.0 (2026-04-23)
+
+Full Changelog: [v6.9.0...v6.10.0](https://github.com/cloudflare/cloudflare-go/compare/v6.9.0...v6.10.0)
+
+### Features
+
+* chore: remove account_id and zone_id client options ([#4271](https://github.com/cloudflare/cloudflare-go/issues/4271)) ([249ec88](https://github.com/cloudflare/cloudflare-go/commit/249ec88a144c1a1fd00d9b3bd07d54e6d8d4701d))
+* feat(iam): add user_groups and user_group_members terraform resources ([#4267](https://github.com/cloudflare/cloudflare-go/issues/4267)) ([41fb6d3](https://github.com/cloudflare/cloudflare-go/commit/41fb6d32b6bbe9d6fdb091e143557a98fb748863))
+
+
+### Chores
+
+* **api:** update composite API spec ([#4270](https://github.com/cloudflare/cloudflare-go/issues/4270)) ([8b6f7bc](https://github.com/cloudflare/cloudflare-go/commit/8b6f7bc6cc9dd94bf2ceb84096520635bf7e1c54))
+* sync codegen from staging-next (2026-04-17) ([#4262](https://github.com/cloudflare/cloudflare-go/issues/4262)) ([7138b06](https://github.com/cloudflare/cloudflare-go/commit/7138b069af7dcb2c9121faf2ed0167cf73420087))
+
 ## 6.9.0 (2026-04-01)
 
 Full Changelog: [v6.8.0...v6.9.0](https://github.com/cloudflare/cloudflare-go/compare/v6.8.0...v6.9.0)
