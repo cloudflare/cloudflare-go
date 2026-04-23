@@ -41,11 +41,6 @@ func NewDEXRuleService(opts ...option.RequestOption) (r *DEXRuleService) {
 func (r *DEXRuleService) New(ctx context.Context, params DEXRuleNewParams, opts ...option.RequestOption) (res *DEXRuleNewResponse, err error) {
 	var env DEXRuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,11 +58,6 @@ func (r *DEXRuleService) New(ctx context.Context, params DEXRuleNewParams, opts 
 func (r *DEXRuleService) Update(ctx context.Context, ruleID string, params DEXRuleUpdateParams, opts ...option.RequestOption) (res *DEXRuleUpdateResponse, err error) {
 	var env DEXRuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -90,11 +80,6 @@ func (r *DEXRuleService) List(ctx context.Context, params DEXRuleListParams, opt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -121,11 +106,6 @@ func (r *DEXRuleService) ListAutoPaging(ctx context.Context, params DEXRuleListP
 func (r *DEXRuleService) Delete(ctx context.Context, ruleID string, body DEXRuleDeleteParams, opts ...option.RequestOption) (res *bool, err error) {
 	var env DEXRuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -147,11 +127,6 @@ func (r *DEXRuleService) Delete(ctx context.Context, ruleID string, body DEXRule
 func (r *DEXRuleService) Get(ctx context.Context, ruleID string, query DEXRuleGetParams, opts ...option.RequestOption) (res *DEXRuleGetResponse, err error) {
 	var env DEXRuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -687,7 +662,6 @@ func (r DEXRuleGetResponseTargetedTestsDataMethod) IsKnown() bool {
 }
 
 type DEXRuleNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The wirefilter expression to match.
 	Match param.Field[string] `json:"match" api:"required"`
@@ -840,7 +814,6 @@ func (r DEXRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXRuleUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string] `path:"account_id" api:"required"`
 	Description param.Field[string] `json:"description"`
 	// The wirefilter expression to match.
@@ -993,7 +966,6 @@ func (r DEXRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXRuleListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of paginated results
 	Page param.Field[float64] `query:"page" api:"required"`
@@ -1049,7 +1021,6 @@ func (r DEXRuleListParamsSortOrder) IsKnown() bool {
 }
 
 type DEXRuleDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1193,7 +1164,6 @@ func (r DEXRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXRuleGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

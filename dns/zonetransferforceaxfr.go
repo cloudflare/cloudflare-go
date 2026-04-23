@@ -38,11 +38,6 @@ func NewZoneTransferForceAXFRService(opts ...option.RequestOption) (r *ZoneTrans
 func (r *ZoneTransferForceAXFRService) New(ctx context.Context, params ZoneTransferForceAXFRNewParams, opts ...option.RequestOption) (res *ForceAXFR, err error) {
 	var env ZoneTransferForceAXFRNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -59,7 +54,6 @@ func (r *ZoneTransferForceAXFRService) New(ctx context.Context, params ZoneTrans
 type ForceAXFR = string
 
 type ZoneTransferForceAXFRNewParams struct {
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Body   interface{}         `json:"body" api:"required"`
 }

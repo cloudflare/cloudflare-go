@@ -40,11 +40,6 @@ func NewConfigurationCredentialService(opts ...option.RequestOption) (r *Configu
 // Update Token Configuration credentials
 func (r *ConfigurationCredentialService) Update(ctx context.Context, configID string, params ConfigurationCredentialUpdateParams, opts ...option.RequestOption) (res *ConfigurationCredentialUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -495,8 +490,6 @@ func (r ConfigurationCredentialUpdateResponseSuccess) IsKnown() bool {
 
 type ConfigurationCredentialUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]                                        `path:"zone_id" api:"required"`
 	Keys   param.Field[[]ConfigurationCredentialUpdateParamsKeyUnion] `json:"keys" api:"required"`
 }

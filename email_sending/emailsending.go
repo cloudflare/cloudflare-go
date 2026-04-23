@@ -40,11 +40,6 @@ func NewEmailSendingService(opts ...option.RequestOption) (r *EmailSendingServic
 func (r *EmailSendingService) Send(ctx context.Context, params EmailSendingSendParams, opts ...option.RequestOption) (res *EmailSendingSendResponse, err error) {
 	var env EmailSendingSendResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,11 +57,6 @@ func (r *EmailSendingService) Send(ctx context.Context, params EmailSendingSendP
 func (r *EmailSendingService) SendRaw(ctx context.Context, params EmailSendingSendRawParams, opts ...option.RequestOption) (res *EmailSendingSendRawResponse, err error) {
 	var env EmailSendingSendRawResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -138,8 +128,6 @@ func (r emailSendingSendRawResponseJSON) RawJSON() string {
 
 type EmailSendingSendParams struct {
 	// Identifier of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sender email address. Either a plain string or an object with address and name.
 	From param.Field[EmailSendingSendParamsFromUnion] `json:"from" api:"required"`
@@ -483,8 +471,6 @@ func (r emailSendingSendResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type EmailSendingSendRawParams struct {
 	// Identifier of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sender email address.
 	From param.Field[string] `json:"from" api:"required" format:"email"`

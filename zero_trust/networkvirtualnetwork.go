@@ -43,11 +43,6 @@ func NewNetworkVirtualNetworkService(opts ...option.RequestOption) (r *NetworkVi
 func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVirtualNetworkNewParams, opts ...option.RequestOption) (res *VirtualNetwork, err error) {
 	var env NetworkVirtualNetworkNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkV
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -97,11 +87,6 @@ func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, param
 func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, body NetworkVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *VirtualNetwork, err error) {
 	var env NetworkVirtualNetworkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -123,11 +108,6 @@ func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetwor
 func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkID string, params NetworkVirtualNetworkEditParams, opts ...option.RequestOption) (res *VirtualNetwork, err error) {
 	var env NetworkVirtualNetworkEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -149,11 +129,6 @@ func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkI
 func (r *NetworkVirtualNetworkService) Get(ctx context.Context, virtualNetworkID string, query NetworkVirtualNetworkGetParams, opts ...option.RequestOption) (res *VirtualNetwork, err error) {
 	var env NetworkVirtualNetworkGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -210,8 +185,6 @@ func (r virtualNetworkJSON) RawJSON() string {
 
 type NetworkVirtualNetworkNewParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for the virtual network.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -272,8 +245,6 @@ func (r NetworkVirtualNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkVirtualNetworkListParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// UUID of the virtual network.
 	ID param.Field[string] `query:"id" format:"uuid"`
@@ -301,8 +272,6 @@ func (r NetworkVirtualNetworkListParams) URLQuery() (v url.Values) {
 
 type NetworkVirtualNetworkDeleteParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -351,8 +320,6 @@ func (r NetworkVirtualNetworkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkVirtualNetworkEditParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional remark describing the virtual network.
 	Comment param.Field[string] `json:"comment"`
@@ -411,8 +378,6 @@ func (r NetworkVirtualNetworkEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkVirtualNetworkGetParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

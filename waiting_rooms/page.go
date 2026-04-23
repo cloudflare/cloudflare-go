@@ -73,11 +73,6 @@ func NewPageService(opts ...option.RequestOption) (r *PageService) {
 func (r *PageService) Preview(ctx context.Context, params PagePreviewParams, opts ...option.RequestOption) (res *PagePreviewResponse, err error) {
 	var env PagePreviewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -115,8 +110,6 @@ func (r pagePreviewResponseJSON) RawJSON() string {
 
 type PagePreviewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Only available for the Waiting Room Advanced subscription. This is a template
 	// html file that will be rendered at the edge. If no custom_page_html is provided,

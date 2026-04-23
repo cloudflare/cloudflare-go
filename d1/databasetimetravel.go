@@ -44,11 +44,6 @@ func NewDatabaseTimeTravelService(opts ...option.RequestOption) (r *DatabaseTime
 func (r *DatabaseTimeTravelService) GetBookmark(ctx context.Context, databaseID string, params DatabaseTimeTravelGetBookmarkParams, opts ...option.RequestOption) (res *DatabaseTimeTravelGetBookmarkResponse, err error) {
 	var env DatabaseTimeTravelGetBookmarkResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,11 +66,6 @@ func (r *DatabaseTimeTravelService) GetBookmark(ctx context.Context, databaseID 
 func (r *DatabaseTimeTravelService) Restore(ctx context.Context, databaseID string, params DatabaseTimeTravelRestoreParams, opts ...option.RequestOption) (res *DatabaseTimeTravelRestoreResponse, err error) {
 	var env DatabaseTimeTravelRestoreResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -149,8 +139,6 @@ func (r databaseTimeTravelRestoreResponseJSON) RawJSON() string {
 
 type DatabaseTimeTravelGetBookmarkParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional ISO 8601 timestamp. If provided, returns the nearest available
 	// bookmark at or before this timestamp. If omitted, returns the current bookmark.
@@ -211,8 +199,6 @@ func (r DatabaseTimeTravelGetBookmarkResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseTimeTravelRestoreParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A bookmark to restore the database to. Required if `timestamp` is not provided.
 	Bookmark param.Field[string] `query:"bookmark"`

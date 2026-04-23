@@ -41,11 +41,6 @@ func NewHostnameIPFSUniversalPathContentListEntryService(opts ...option.RequestO
 func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Context, identifier string, params HostnameIPFSUniversalPathContentListEntryNewParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryNewResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -67,11 +62,6 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Conte
 func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Context, identifier string, contentListEntryIdentifier string, params HostnameIPFSUniversalPathContentListEntryUpdateParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryUpdateResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -97,11 +87,6 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Co
 func (r *HostnameIPFSUniversalPathContentListEntryService) List(ctx context.Context, identifier string, query HostnameIPFSUniversalPathContentListEntryListParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryListResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -123,11 +108,6 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) List(ctx context.Cont
 func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Context, identifier string, contentListEntryIdentifier string, body HostnameIPFSUniversalPathContentListEntryDeleteParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryDeleteResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -153,11 +133,6 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Co
 func (r *HostnameIPFSUniversalPathContentListEntryService) Get(ctx context.Context, identifier string, contentListEntryIdentifier string, query HostnameIPFSUniversalPathContentListEntryGetParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryGetResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -436,8 +411,6 @@ func (r HostnameIPFSUniversalPathContentListEntryGetResponseType) IsKnown() bool
 
 type HostnameIPFSUniversalPathContentListEntryNewParams struct {
 	// Specify the identifier of the hostname.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Specify the CID or content path of content to block.
 	Content param.Field[string] `json:"content" api:"required"`
@@ -517,8 +490,6 @@ func (r HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeSuccess) IsK
 
 type HostnameIPFSUniversalPathContentListEntryUpdateParams struct {
 	// Specify the identifier of the hostname.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Specify the CID or content path of content to block.
 	Content param.Field[string] `json:"content" api:"required"`
@@ -598,8 +569,6 @@ func (r HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccess) 
 
 type HostnameIPFSUniversalPathContentListEntryListParams struct {
 	// Specify the identifier of the hostname.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -683,8 +652,6 @@ func (r hostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfoJ
 
 type HostnameIPFSUniversalPathContentListEntryDeleteParams struct {
 	// Specify the identifier of the hostname.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -734,8 +701,6 @@ func (r HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccess) 
 
 type HostnameIPFSUniversalPathContentListEntryGetParams struct {
 	// Specify the identifier of the hostname.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

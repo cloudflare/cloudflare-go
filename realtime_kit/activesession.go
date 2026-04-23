@@ -37,11 +37,6 @@ func NewActiveSessionService(opts ...option.RequestOption) (r *ActiveSessionServ
 // Creates a new poll in an active session for the given meeting ID.
 func (r *ActiveSessionService) NewPoll(ctx context.Context, appID string, meetingID string, params ActiveSessionNewPollParams, opts ...option.RequestOption) (res *ActiveSessionNewPollResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,11 +57,6 @@ func (r *ActiveSessionService) NewPoll(ctx context.Context, appID string, meetin
 // Returns details of an ongoing active session for the given meeting ID.
 func (r *ActiveSessionService) GetActiveSession(ctx context.Context, appID string, meetingID string, query ActiveSessionGetActiveSessionParams, opts ...option.RequestOption) (res *ActiveSessionGetActiveSessionResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -87,11 +77,6 @@ func (r *ActiveSessionService) GetActiveSession(ctx context.Context, appID strin
 // Kicks all participants from an active session for the given meeting ID.
 func (r *ActiveSessionService) KickAllParticipants(ctx context.Context, appID string, meetingID string, body ActiveSessionKickAllParticipantsParams, opts ...option.RequestOption) (res *ActiveSessionKickAllParticipantsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -113,11 +98,6 @@ func (r *ActiveSessionService) KickAllParticipants(ctx context.Context, appID st
 // participant ID.
 func (r *ActiveSessionService) KickParticipants(ctx context.Context, appID string, meetingID string, params ActiveSessionKickParticipantsParams, opts ...option.RequestOption) (res *ActiveSessionKickParticipantsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -516,8 +496,6 @@ func (r activeSessionKickParticipantsResponseDataParticipantJSON) RawJSON() stri
 
 type ActiveSessionNewPollParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Different options for the question
 	Options param.Field[[]string] `json:"options" api:"required"`
@@ -535,22 +513,16 @@ func (r ActiveSessionNewPollParams) MarshalJSON() (data []byte, err error) {
 
 type ActiveSessionGetActiveSessionParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ActiveSessionKickAllParticipantsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ActiveSessionKickParticipantsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID            param.Field[string]   `path:"account_id" api:"required"`
 	CustomParticipantIDs param.Field[[]string] `json:"custom_participant_ids" api:"required"`
 	ParticipantIDs       param.Field[[]string] `json:"participant_ids" api:"required"`

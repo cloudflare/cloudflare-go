@@ -41,11 +41,6 @@ func NewSettingSchemaValidationService(opts ...option.RequestOption) (r *Setting
 // instead.
 func (r *SettingSchemaValidationService) Update(ctx context.Context, params SettingSchemaValidationUpdateParams, opts ...option.RequestOption) (res *Settings, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -62,11 +57,6 @@ func (r *SettingSchemaValidationService) Update(ctx context.Context, params Sett
 // instead.
 func (r *SettingSchemaValidationService) Edit(ctx context.Context, params SettingSchemaValidationEditParams, opts ...option.RequestOption) (res *Settings, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -83,11 +73,6 @@ func (r *SettingSchemaValidationService) Edit(ctx context.Context, params Settin
 // instead.
 func (r *SettingSchemaValidationService) Get(ctx context.Context, query SettingSchemaValidationGetParams, opts ...option.RequestOption) (res *Settings, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -99,8 +84,6 @@ func (r *SettingSchemaValidationService) Get(ctx context.Context, query SettingS
 
 type SettingSchemaValidationUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The default mitigation action used when there is no mitigation action defined on
 	// the operation
@@ -175,8 +158,6 @@ func (r SettingSchemaValidationUpdateParamsValidationOverrideMitigationAction) I
 
 type SettingSchemaValidationEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The default mitigation action used when there is no mitigation action defined on
 	// the operation Mitigation actions are as follows:
@@ -253,7 +234,5 @@ func (r SettingSchemaValidationEditParamsValidationOverrideMitigationAction) IsK
 
 type SettingSchemaValidationGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }

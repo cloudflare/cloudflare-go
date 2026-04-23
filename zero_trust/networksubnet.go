@@ -45,11 +45,6 @@ func (r *NetworkSubnetService) List(ctx context.Context, params NetworkSubnetLis
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -74,8 +69,6 @@ func (r *NetworkSubnetService) ListAutoPaging(ctx context.Context, params Networ
 
 type NetworkSubnetListParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If set, only include subnets in the given address family - `v4` or `v6`
 	AddressFamily param.Field[NetworkSubnetListParamsAddressFamily] `query:"address_family"`

@@ -43,11 +43,6 @@ func NewAnalyticsEventSummaryService(opts ...option.RequestOption) (r *Analytics
 func (r *AnalyticsEventSummaryService) Get(ctx context.Context, params AnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *AnalyticsEventSummaryGetResponse, err error) {
 	var env AnalyticsEventSummaryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -249,8 +244,6 @@ func (r AnalyticsEventSummaryGetResponseQueryMetric) IsKnown() bool {
 
 type AnalyticsEventSummaryGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Can be used to break down the data by given attributes. Options are:
 	//

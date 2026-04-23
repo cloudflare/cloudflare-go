@@ -43,11 +43,6 @@ func NewConfigurationService(opts ...option.RequestOption) (r *ConfigurationServ
 func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationUpdateParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigurationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationU
 func (r *ConfigurationService) Get(ctx context.Context, params ConfigurationGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigurationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -355,8 +345,6 @@ func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimP
 
 type ConfigurationUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID        param.Field[string] `path:"zone_id" api:"required"`
 	Configuration ConfigurationParam  `json:"configuration" api:"required"`
 	// Ensures that the configuration is written or retrieved in normalized fashion
@@ -421,8 +409,6 @@ func (r ConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigurationGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Ensures that the configuration is written or retrieved in normalized fashion
 	Normalize param.Field[bool] `query:"normalize"`

@@ -40,11 +40,6 @@ func NewScanService(opts ...option.RequestOption) (r *ScanService) {
 // https://developers.cloudflare.com/security-center/investigate/scan-limits/.
 func (r *ScanService) New(ctx context.Context, params ScanNewParams, opts ...option.RequestOption) (res *ScanNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,11 +59,6 @@ func (r *ScanService) New(ctx context.Context, params ScanNewParams, opts ...opt
 // January to 2025 February.
 func (r *ScanService) List(ctx context.Context, params ScanListParams, opts ...option.RequestOption) (res *ScanListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -84,11 +74,6 @@ func (r *ScanService) List(ctx context.Context, params ScanListParams, opts ...o
 // longer to finish.
 func (r *ScanService) BulkNew(ctx context.Context, params ScanBulkNewParams, opts ...option.RequestOption) (res *[]ScanBulkNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -103,11 +88,6 @@ func (r *ScanService) BulkNew(ctx context.Context, params ScanBulkNewParams, opt
 func (r *ScanService) DOM(ctx context.Context, scanID string, query ScanDOMParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -124,11 +104,6 @@ func (r *ScanService) DOM(ctx context.Context, scanID string, query ScanDOMParam
 // Get URL scan by uuid
 func (r *ScanService) Get(ctx context.Context, scanID string, query ScanGetParams, opts ...option.RequestOption) (res *ScanGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -146,11 +121,6 @@ func (r *ScanService) Get(ctx context.Context, scanID string, query ScanGetParam
 // http://www.softwareishard.com/blog/har-12-spec/.
 func (r *ScanService) HAR(ctx context.Context, scanID string, query ScanHARParams, opts ...option.RequestOption) (res *ScanHARResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -168,11 +138,6 @@ func (r *ScanService) HAR(ctx context.Context, scanID string, query ScanHARParam
 func (r *ScanService) Screenshot(ctx context.Context, scanID string, params ScanScreenshotParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/png")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -5576,8 +5541,6 @@ func (r scanHARResponseLogPagesPageTimingsJSON) RawJSON() string {
 
 type ScanNewParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	URL       param.Field[string] `json:"url" api:"required"`
 	// Enable agent readiness checks.
@@ -5850,8 +5813,6 @@ func (r ScanNewParamsVisibility) IsKnown() bool {
 
 type ScanListParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter scans
 	Q param.Field[string] `query:"q"`
@@ -5869,8 +5830,6 @@ func (r ScanListParams) URLQuery() (v url.Values) {
 
 type ScanBulkNewParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// List of urls to scan (up to a 100).
 	Body []ScanBulkNewParamsBody `json:"body"`
@@ -5941,29 +5900,21 @@ func (r ScanBulkNewParamsBodyVisibility) IsKnown() bool {
 
 type ScanDOMParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScanGetParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScanHARParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScanScreenshotParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Target device type.
 	Resolution param.Field[ScanScreenshotParamsResolution] `query:"resolution"`

@@ -43,11 +43,6 @@ func NewDispatchNamespaceScriptSecretService(opts ...option.RequestOption) (r *D
 func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSecretUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretUpdateResponse, err error) {
 	var env DispatchNamespaceScriptSecretUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -74,11 +69,6 @@ func (r *DispatchNamespaceScriptSecretService) List(ctx context.Context, dispatc
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -113,11 +103,6 @@ func (r *DispatchNamespaceScriptSecretService) ListAutoPaging(ctx context.Contex
 func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, params DispatchNamespaceScriptSecretDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretDeleteResponse, err error) {
 	var env DispatchNamespaceScriptSecretDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -148,11 +133,6 @@ func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispa
 func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, params DispatchNamespaceScriptSecretGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretGetResponse, err error) {
 	var env DispatchNamespaceScriptSecretGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -953,8 +933,6 @@ func (r DispatchNamespaceScriptSecretGetResponseFormat) IsKnown() bool {
 
 type DispatchNamespaceScriptSecretUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A secret value accessible through a binding.
 	Body DispatchNamespaceScriptSecretUpdateParamsBodyUnion `json:"body" api:"required"`
@@ -1295,15 +1273,11 @@ func (r DispatchNamespaceScriptSecretUpdateResponseEnvelopeSuccess) IsKnown() bo
 
 type DispatchNamespaceScriptSecretListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DispatchNamespaceScriptSecretDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Flag that indicates whether the secret name is URL encoded.
 	URLEncoded param.Field[bool] `query:"url_encoded"`
@@ -1463,8 +1437,6 @@ func (r DispatchNamespaceScriptSecretDeleteResponseEnvelopeSuccess) IsKnown() bo
 
 type DispatchNamespaceScriptSecretGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Flag that indicates whether the secret name is URL encoded.
 	URLEncoded param.Field[bool] `query:"url_encoded"`

@@ -39,11 +39,6 @@ func NewSuperSlurperConnectivityPrecheckService(opts ...option.RequestOption) (r
 func (r *SuperSlurperConnectivityPrecheckService) Source(ctx context.Context, params SuperSlurperConnectivityPrecheckSourceParams, opts ...option.RequestOption) (res *SuperSlurperConnectivityPrecheckSourceResponse, err error) {
 	var env SuperSlurperConnectivityPrecheckSourceResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,11 +56,6 @@ func (r *SuperSlurperConnectivityPrecheckService) Source(ctx context.Context, pa
 func (r *SuperSlurperConnectivityPrecheckService) Target(ctx context.Context, params SuperSlurperConnectivityPrecheckTargetParams, opts ...option.RequestOption) (res *SuperSlurperConnectivityPrecheckTargetResponse, err error) {
 	var env SuperSlurperConnectivityPrecheckTargetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -152,7 +142,6 @@ func (r SuperSlurperConnectivityPrecheckTargetResponseConnectivityStatus) IsKnow
 }
 
 type SuperSlurperConnectivityPrecheckSourceParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]                                   `path:"account_id" api:"required"`
 	Body      SuperSlurperConnectivityPrecheckSourceParamsBodyUnion `json:"body" api:"required"`
 }
@@ -383,7 +372,6 @@ func (r SuperSlurperConnectivityPrecheckSourceResponseEnvelopeSuccess) IsKnown()
 }
 
 type SuperSlurperConnectivityPrecheckTargetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID    param.Field[string]                                                   `path:"account_id" api:"required"`
 	Bucket       param.Field[string]                                                   `json:"bucket" api:"required"`
 	Secret       param.Field[SuperSlurperConnectivityPrecheckTargetParamsSecret]       `json:"secret" api:"required"`

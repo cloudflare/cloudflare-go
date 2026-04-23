@@ -43,11 +43,6 @@ func NewDevtoolBrowserService(opts ...option.RequestOption) (r *DevtoolBrowserSe
 // Get a browser session ID.
 func (r *DevtoolBrowserService) New(ctx context.Context, params DevtoolBrowserNewParams, opts ...option.RequestOption) (res *DevtoolBrowserNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,11 +55,6 @@ func (r *DevtoolBrowserService) New(ctx context.Context, params DevtoolBrowserNe
 // Closes an existing browser session.
 func (r *DevtoolBrowserService) Delete(ctx context.Context, sessionID string, body DevtoolBrowserDeleteParams, opts ...option.RequestOption) (res *DevtoolBrowserDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -82,11 +72,6 @@ func (r *DevtoolBrowserService) Delete(ctx context.Context, sessionID string, bo
 func (r *DevtoolBrowserService) Connect(ctx context.Context, sessionID string, params DevtoolBrowserConnectParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -104,11 +89,6 @@ func (r *DevtoolBrowserService) Connect(ctx context.Context, sessionID string, p
 func (r *DevtoolBrowserService) Launch(ctx context.Context, params DevtoolBrowserLaunchParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -122,11 +102,6 @@ func (r *DevtoolBrowserService) Launch(ctx context.Context, params DevtoolBrowse
 // commands, events, and types. This schema describes the entire CDP API surface.
 func (r *DevtoolBrowserService) Protocol(ctx context.Context, sessionID string, query DevtoolBrowserProtocolParams, opts ...option.RequestOption) (res *DevtoolBrowserProtocolResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -143,11 +118,6 @@ func (r *DevtoolBrowserService) Protocol(ctx context.Context, sessionID string, 
 // Get browser version metadata.
 func (r *DevtoolBrowserService) Version(ctx context.Context, sessionID string, query DevtoolBrowserVersionParams, opts ...option.RequestOption) (res *DevtoolBrowserVersionResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -349,8 +319,6 @@ func (r devtoolBrowserVersionResponseJSON) RawJSON() string {
 
 type DevtoolBrowserNewParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Keep-alive time in milliseconds.
 	KeepAlive param.Field[float64] `query:"keep_alive"`
@@ -372,15 +340,11 @@ func (r DevtoolBrowserNewParams) URLQuery() (v url.Values) {
 
 type DevtoolBrowserDeleteParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevtoolBrowserConnectParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Keep-alive time in ms (only valid when acquiring new session).
 	KeepAlive param.Field[float64] `query:"keep_alive"`
@@ -400,8 +364,6 @@ func (r DevtoolBrowserConnectParams) URLQuery() (v url.Values) {
 
 type DevtoolBrowserLaunchParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Keep-alive time in ms (only valid when acquiring new session).
 	KeepAlive param.Field[float64] `query:"keep_alive"`
@@ -421,14 +383,10 @@ func (r DevtoolBrowserLaunchParams) URLQuery() (v url.Values) {
 
 type DevtoolBrowserProtocolParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevtoolBrowserVersionParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

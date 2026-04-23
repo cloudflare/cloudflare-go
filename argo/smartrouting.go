@@ -40,11 +40,6 @@ func NewSmartRoutingService(opts ...option.RequestOption) (r *SmartRoutingServic
 func (r *SmartRoutingService) Edit(ctx context.Context, params SmartRoutingEditParams, opts ...option.RequestOption) (res *SmartRoutingEditResponse, err error) {
 	var env SmartRoutingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -62,11 +57,6 @@ func (r *SmartRoutingService) Edit(ctx context.Context, params SmartRoutingEditP
 func (r *SmartRoutingService) Get(ctx context.Context, query SmartRoutingGetParams, opts ...option.RequestOption) (res *SmartRoutingGetResponse, err error) {
 	var env SmartRoutingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -176,8 +166,6 @@ func (r SmartRoutingGetResponseValue) IsKnown() bool {
 
 type SmartRoutingEditParams struct {
 	// Specifies the zone associated with the API call.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Specifies the enablement value of Argo Smart Routing.
 	Value param.Field[SmartRoutingEditParamsValue] `json:"value" api:"required"`
@@ -248,8 +236,6 @@ func (r SmartRoutingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SmartRoutingGetParams struct {
 	// Specifies the zone associated with the API call.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

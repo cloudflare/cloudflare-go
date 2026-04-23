@@ -44,11 +44,6 @@ func NewSchemaService(opts ...option.RequestOption) (r *SchemaService) {
 func (r *SchemaService) New(ctx context.Context, params SchemaNewParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -67,11 +62,6 @@ func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -99,11 +89,6 @@ func (r *SchemaService) ListAutoPaging(ctx context.Context, params SchemaListPar
 func (r *SchemaService) Delete(ctx context.Context, schemaID string, body SchemaDeleteParams, opts ...option.RequestOption) (res *SchemaDeleteResponse, err error) {
 	var env SchemaDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -126,11 +111,6 @@ func (r *SchemaService) Delete(ctx context.Context, schemaID string, body Schema
 func (r *SchemaService) Edit(ctx context.Context, schemaID string, params SchemaEditParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -153,11 +133,6 @@ func (r *SchemaService) Edit(ctx context.Context, schemaID string, params Schema
 func (r *SchemaService) Get(ctx context.Context, schemaID string, params SchemaGetParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -250,8 +225,6 @@ func (r schemaDeleteResponseJSON) RawJSON() string {
 
 type SchemaNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The kind of the schema
 	Kind param.Field[SchemaNewParamsKind] `json:"kind" api:"required"`
@@ -440,8 +413,6 @@ func (r SchemaNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SchemaListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`
@@ -463,8 +434,6 @@ func (r SchemaListParams) URLQuery() (v url.Values) {
 
 type SchemaDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -513,8 +482,6 @@ func (r SchemaDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SchemaEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Flag whether schema is enabled for validation.
 	ValidationEnabled param.Field[bool] `json:"validation_enabled"`
@@ -570,8 +537,6 @@ func (r SchemaEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SchemaGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`

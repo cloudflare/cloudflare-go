@@ -39,11 +39,6 @@ func NewConnectivitySettingService(opts ...option.RequestOption) (r *Connectivit
 func (r *ConnectivitySettingService) Edit(ctx context.Context, params ConnectivitySettingEditParams, opts ...option.RequestOption) (res *ConnectivitySettingEditResponse, err error) {
 	var env ConnectivitySettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,11 +56,6 @@ func (r *ConnectivitySettingService) Edit(ctx context.Context, params Connectivi
 func (r *ConnectivitySettingService) Get(ctx context.Context, query ConnectivitySettingGetParams, opts ...option.RequestOption) (res *ConnectivitySettingGetResponse, err error) {
 	var env ConnectivitySettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -131,8 +121,6 @@ func (r connectivitySettingGetResponseJSON) RawJSON() string {
 
 type ConnectivitySettingEditParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A flag to enable the ICMP proxy for the account network.
 	IcmpProxyEnabled param.Field[bool] `json:"icmp_proxy_enabled"`
@@ -189,8 +177,6 @@ func (r ConnectivitySettingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConnectivitySettingGetParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

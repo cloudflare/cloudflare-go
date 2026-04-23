@@ -45,11 +45,6 @@ func NewOriginCloudRegionService(opts ...option.RequestOption) (r *OriginCloudRe
 func (r *OriginCloudRegionService) New(ctx context.Context, params OriginCloudRegionNewParams, opts ...option.RequestOption) (res *OriginCloudRegionNewResponse, err error) {
 	var env OriginCloudRegionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -70,11 +65,6 @@ func (r *OriginCloudRegionService) New(ctx context.Context, params OriginCloudRe
 func (r *OriginCloudRegionService) List(ctx context.Context, query OriginCloudRegionListParams, opts ...option.RequestOption) (res *OriginCloudRegionListResponse, err error) {
 	var env OriginCloudRegionListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -95,11 +85,6 @@ func (r *OriginCloudRegionService) List(ctx context.Context, query OriginCloudRe
 func (r *OriginCloudRegionService) Delete(ctx context.Context, originIP string, body OriginCloudRegionDeleteParams, opts ...option.RequestOption) (res *OriginCloudRegionDeleteResponse, err error) {
 	var env OriginCloudRegionDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -124,11 +109,6 @@ func (r *OriginCloudRegionService) Delete(ctx context.Context, originIP string, 
 func (r *OriginCloudRegionService) BulkDelete(ctx context.Context, body OriginCloudRegionBulkDeleteParams, opts ...option.RequestOption) (res *OriginCloudRegionBulkDeleteResponse, err error) {
 	var env OriginCloudRegionBulkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -150,11 +130,6 @@ func (r *OriginCloudRegionService) BulkDelete(ctx context.Context, body OriginCl
 func (r *OriginCloudRegionService) BulkEdit(ctx context.Context, params OriginCloudRegionBulkEditParams, opts ...option.RequestOption) (res *OriginCloudRegionBulkEditResponse, err error) {
 	var env OriginCloudRegionBulkEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -176,11 +151,6 @@ func (r *OriginCloudRegionService) BulkEdit(ctx context.Context, params OriginCl
 func (r *OriginCloudRegionService) Edit(ctx context.Context, params OriginCloudRegionEditParams, opts ...option.RequestOption) (res *OriginCloudRegionEditResponse, err error) {
 	var env OriginCloudRegionEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -200,11 +170,6 @@ func (r *OriginCloudRegionService) Edit(ctx context.Context, params OriginCloudR
 func (r *OriginCloudRegionService) Get(ctx context.Context, originIP string, query OriginCloudRegionGetParams, opts ...option.RequestOption) (res *OriginCloudRegionGetResponse, err error) {
 	var env OriginCloudRegionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -229,11 +194,6 @@ func (r *OriginCloudRegionService) Get(ctx context.Context, originIP string, que
 func (r *OriginCloudRegionService) SupportedRegions(ctx context.Context, query OriginCloudRegionSupportedRegionsParams, opts ...option.RequestOption) (res *OriginCloudRegionSupportedRegionsResponse, err error) {
 	var env OriginCloudRegionSupportedRegionsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -847,8 +807,6 @@ func (r originCloudRegionSupportedRegionsResponseVendorJSON) RawJSON() string {
 
 type OriginCloudRegionNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Origin IP address (IPv4 or IPv6). Normalized to canonical form before storage
 	// (RFC 5952 for IPv6).
@@ -928,8 +886,6 @@ func (r OriginCloudRegionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCloudRegionListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -979,8 +935,6 @@ func (r OriginCloudRegionListResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCloudRegionDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -1030,8 +984,6 @@ func (r OriginCloudRegionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCloudRegionBulkDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -1081,8 +1033,6 @@ func (r OriginCloudRegionBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCloudRegionBulkEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]                   `path:"zone_id" api:"required"`
 	Body   []OriginCloudRegionBulkEditParamsBody `json:"body" api:"required"`
 }
@@ -1171,8 +1121,6 @@ func (r OriginCloudRegionBulkEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCloudRegionEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Origin IP address (IPv4 or IPv6). Normalized to canonical form before storage
 	// (RFC 5952 for IPv6).
@@ -1252,8 +1200,6 @@ func (r OriginCloudRegionEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCloudRegionGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -1303,8 +1249,6 @@ func (r OriginCloudRegionGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type OriginCloudRegionSupportedRegionsParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

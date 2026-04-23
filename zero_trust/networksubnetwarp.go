@@ -50,11 +50,6 @@ func NewNetworkSubnetWARPService(opts ...option.RequestOption) (r *NetworkSubnet
 func (r *NetworkSubnetWARPService) New(ctx context.Context, params NetworkSubnetWARPNewParams, opts ...option.RequestOption) (res *Subnet, err error) {
 	var env NetworkSubnetWARPNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -73,11 +68,6 @@ func (r *NetworkSubnetWARPService) New(ctx context.Context, params NetworkSubnet
 func (r *NetworkSubnetWARPService) Delete(ctx context.Context, subnetID string, body NetworkSubnetWARPDeleteParams, opts ...option.RequestOption) (res *NetworkSubnetWARPDeleteResponse, err error) {
 	var env NetworkSubnetWARPDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -105,11 +95,6 @@ func (r *NetworkSubnetWARPService) Delete(ctx context.Context, subnetID string, 
 func (r *NetworkSubnetWARPService) Edit(ctx context.Context, subnetID string, params NetworkSubnetWARPEditParams, opts ...option.RequestOption) (res *Subnet, err error) {
 	var env NetworkSubnetWARPEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -131,11 +116,6 @@ func (r *NetworkSubnetWARPService) Edit(ctx context.Context, subnetID string, pa
 func (r *NetworkSubnetWARPService) Get(ctx context.Context, subnetID string, query NetworkSubnetWARPGetParams, opts ...option.RequestOption) (res *Subnet, err error) {
 	var env NetworkSubnetWARPGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -276,8 +256,6 @@ func (r NetworkSubnetWARPDeleteResponseSubnetType) IsKnown() bool {
 
 type NetworkSubnetWARPNewParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A user-friendly name for the subnet.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -339,8 +317,6 @@ func (r NetworkSubnetWARPNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkSubnetWARPDeleteParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -389,8 +365,6 @@ func (r NetworkSubnetWARPDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkSubnetWARPEditParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description of the subnet.
 	Comment param.Field[string] `json:"comment"`
@@ -452,8 +426,6 @@ func (r NetworkSubnetWARPEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type NetworkSubnetWARPGetParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

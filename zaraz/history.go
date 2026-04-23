@@ -44,11 +44,6 @@ func NewHistoryService(opts ...option.RequestOption) (r *HistoryService) {
 func (r *HistoryService) Update(ctx context.Context, params HistoryUpdateParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env HistoryUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -67,11 +62,6 @@ func (r *HistoryService) List(ctx context.Context, params HistoryListParams, opt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -130,8 +120,6 @@ func (r historyListResponseJSON) RawJSON() string {
 
 type HistoryUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// ID of the Zaraz configuration to restore.
 	Body int64 `json:"body" api:"required"`
@@ -268,8 +256,6 @@ func (r historyUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 
 type HistoryListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Maximum amount of results to list. Default value is 10.
 	Limit param.Field[int64] `query:"limit"`

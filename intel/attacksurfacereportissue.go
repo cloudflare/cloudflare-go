@@ -46,11 +46,6 @@ func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params Attac
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -82,11 +77,6 @@ func (r *AttackSurfaceReportIssueService) ListAutoPaging(ctx context.Context, pa
 func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params AttackSurfaceReportIssueClassParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueClassResponse, err error) {
 	var env AttackSurfaceReportIssueClassResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -106,11 +96,6 @@ func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params Atta
 // Deprecated: deprecated
 func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *AttackSurfaceReportIssueDismissResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -130,11 +115,6 @@ func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID s
 func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params AttackSurfaceReportIssueSeverityParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueSeverityResponse, err error) {
 	var env AttackSurfaceReportIssueSeverityResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -154,11 +134,6 @@ func (r *AttackSurfaceReportIssueService) Severity(ctx context.Context, params A
 func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params AttackSurfaceReportIssueTypeParams, opts ...option.RequestOption) (res *[]AttackSurfaceReportIssueTypeResponse, err error) {
 	var env AttackSurfaceReportIssueTypeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -571,8 +546,6 @@ func (r attackSurfaceReportIssueTypeResponseJSON) RawJSON() string {
 
 type AttackSurfaceReportIssueListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]      `path:"account_id" api:"required"`
 	Dismissed     param.Field[bool]        `query:"dismissed"`
 	IssueClass    param.Field[[]string]    `query:"issue_class"`
@@ -602,8 +575,6 @@ func (r AttackSurfaceReportIssueListParams) URLQuery() (v url.Values) {
 
 type AttackSurfaceReportIssueClassParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]               `path:"account_id" api:"required"`
 	Dismissed     param.Field[bool]                 `query:"dismissed"`
 	IssueClass    param.Field[[]string]             `query:"issue_class"`
@@ -770,8 +741,6 @@ func (r AttackSurfaceReportIssueClassResponseEnvelopeSuccess) IsKnown() bool {
 
 type AttackSurfaceReportIssueDismissParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Dismiss   param.Field[bool]   `json:"dismiss"`
 }
@@ -782,8 +751,6 @@ func (r AttackSurfaceReportIssueDismissParams) MarshalJSON() (data []byte, err e
 
 type AttackSurfaceReportIssueSeverityParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]               `path:"account_id" api:"required"`
 	Dismissed     param.Field[bool]                 `query:"dismissed"`
 	IssueClass    param.Field[[]string]             `query:"issue_class"`
@@ -951,8 +918,6 @@ func (r AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess) IsKnown() bool 
 
 type AttackSurfaceReportIssueTypeParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]               `path:"account_id" api:"required"`
 	Dismissed     param.Field[bool]                 `query:"dismissed"`
 	IssueClass    param.Field[[]string]             `query:"issue_class"`

@@ -39,11 +39,6 @@ func NewCNIService(opts ...option.RequestOption) (r *CNIService) {
 // Create a new CNI object
 func (r *CNIService) New(ctx context.Context, params CNINewParams, opts ...option.RequestOption) (res *CNINewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -56,11 +51,6 @@ func (r *CNIService) New(ctx context.Context, params CNINewParams, opts ...optio
 // Modify stored information about a CNI object
 func (r *CNIService) Update(ctx context.Context, cni string, params CNIUpdateParams, opts ...option.RequestOption) (res *CNIUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -77,11 +67,6 @@ func (r *CNIService) Update(ctx context.Context, cni string, params CNIUpdatePar
 // List existing CNI objects
 func (r *CNIService) List(ctx context.Context, params CNIListParams, opts ...option.RequestOption) (res *CNIListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -95,11 +80,6 @@ func (r *CNIService) List(ctx context.Context, params CNIListParams, opts ...opt
 func (r *CNIService) Delete(ctx context.Context, cni string, body CNIDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -116,11 +96,6 @@ func (r *CNIService) Delete(ctx context.Context, cni string, body CNIDeleteParam
 // Get information about a CNI object
 func (r *CNIService) Get(ctx context.Context, cni string, query CNIGetParams, opts ...option.RequestOption) (res *CNIGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -592,8 +567,6 @@ func (r cniGetResponseBGPJSON) RawJSON() string {
 
 type CNINewParams struct {
 	// Customer account tag
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Customer account tag
 	Account      param.Field[string]            `json:"account" api:"required"`
@@ -648,8 +621,6 @@ func (r CNINewParamsBGP) MarshalJSON() (data []byte, err error) {
 
 type CNIUpdateParams struct {
 	// Customer account tag
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	ID        param.Field[string] `json:"id" api:"required" format:"uuid"`
 	// Customer account tag
@@ -712,8 +683,6 @@ func (r CNIUpdateParamsBGP) MarshalJSON() (data []byte, err error) {
 
 type CNIListParams struct {
 	// Customer account tag
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Cursor    param.Field[int64]  `query:"cursor"`
 	Limit     param.Field[int64]  `query:"limit"`
@@ -733,14 +702,10 @@ func (r CNIListParams) URLQuery() (v url.Values) {
 
 type CNIDeleteParams struct {
 	// Customer account tag
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CNIGetParams struct {
 	// Customer account tag
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

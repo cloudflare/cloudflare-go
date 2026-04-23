@@ -46,11 +46,6 @@ func NewAbuseReportService(opts ...option.RequestOption) (r *AbuseReportService)
 func (r *AbuseReportService) New(ctx context.Context, reportParam string, params AbuseReportNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env AbuseReportNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -73,11 +68,6 @@ func (r *AbuseReportService) List(ctx context.Context, params AbuseReportListPar
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -104,11 +94,6 @@ func (r *AbuseReportService) ListAutoPaging(ctx context.Context, params AbuseRep
 func (r *AbuseReportService) Get(ctx context.Context, reportParam string, query AbuseReportGetParams, opts ...option.RequestOption) (res *AbuseReportGetResponse, err error) {
 	var env AbuseReportGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -450,7 +435,6 @@ func (r abuseReportGetResponseSubmitterJSON) RawJSON() string {
 }
 
 type AbuseReportNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]           `path:"account_id" api:"required"`
 	Body      AbuseReportNewParamsBodyUnion `json:"body" api:"required"`
 }
@@ -1635,7 +1619,6 @@ func (r abuseReportNewResponseEnvelopeRequestJSON) RawJSON() string {
 }
 
 type AbuseReportListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Returns reports created after the specified date
 	CreatedAfter param.Field[string] `query:"created_after"`
@@ -1724,7 +1707,6 @@ func (r AbuseReportListParamsType) IsKnown() bool {
 }
 
 type AbuseReportGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

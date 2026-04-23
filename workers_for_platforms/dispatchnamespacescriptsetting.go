@@ -44,11 +44,6 @@ func NewDispatchNamespaceScriptSettingService(opts ...option.RequestOption) (r *
 func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSettingEditParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingEditResponse, err error) {
 	var env DispatchNamespaceScriptSettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -74,11 +69,6 @@ func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispat
 func (r *DispatchNamespaceScriptSettingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSettingGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingGetResponse, err error) {
 	var env DispatchNamespaceScriptSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -6079,8 +6069,6 @@ func (r DispatchNamespaceScriptSettingGetResponseUsageModel) IsKnown() bool {
 
 type DispatchNamespaceScriptSettingEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Script and version settings for Workers for Platforms namespace scripts. Same as
 	// script-and-version-settings-item but without annotations, which are not
@@ -8041,8 +8029,6 @@ func (r DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess) IsKnown() boo
 
 type DispatchNamespaceScriptSettingGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

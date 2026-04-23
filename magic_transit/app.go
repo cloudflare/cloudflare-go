@@ -42,11 +42,6 @@ func NewAppService(opts ...option.RequestOption) (r *AppService) {
 func (r *AppService) New(ctx context.Context, params AppNewParams, opts ...option.RequestOption) (res *AppNewResponse, err error) {
 	var env AppNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -64,11 +59,6 @@ func (r *AppService) New(ctx context.Context, params AppNewParams, opts ...optio
 func (r *AppService) Update(ctx context.Context, accountAppID string, params AppUpdateParams, opts ...option.RequestOption) (res *AppUpdateResponse, err error) {
 	var env AppUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -91,11 +81,6 @@ func (r *AppService) List(ctx context.Context, query AppListParams, opts ...opti
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -122,11 +107,6 @@ func (r *AppService) ListAutoPaging(ctx context.Context, query AppListParams, op
 func (r *AppService) Delete(ctx context.Context, accountAppID string, body AppDeleteParams, opts ...option.RequestOption) (res *AppDeleteResponse, err error) {
 	var env AppDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -148,11 +128,6 @@ func (r *AppService) Delete(ctx context.Context, accountAppID string, body AppDe
 func (r *AppService) Edit(ctx context.Context, accountAppID string, params AppEditParams, opts ...option.RequestOption) (res *AppEditResponse, err error) {
 	var env AppEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -492,8 +467,6 @@ func (r appEditResponseJSON) RawJSON() string {
 
 type AppNewParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Display name for the app.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -559,8 +532,6 @@ func (r AppNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AppUpdateParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames param.Field[[]string] `json:"hostnames"`
@@ -626,15 +597,11 @@ func (r AppUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AppListParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AppDeleteParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -684,8 +651,6 @@ func (r AppDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AppEditParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// FQDNs to associate with traffic decisions.
 	Hostnames param.Field[[]string] `json:"hostnames"`

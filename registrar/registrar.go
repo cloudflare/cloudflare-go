@@ -96,11 +96,6 @@ func NewRegistrarService(opts ...option.RequestOption) (r *RegistrarService) {
 func (r *RegistrarService) Check(ctx context.Context, params RegistrarCheckParams, opts ...option.RequestOption) (res *RegistrarCheckResponse, err error) {
 	var env RegistrarCheckResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -148,11 +143,6 @@ func (r *RegistrarService) Check(ctx context.Context, params RegistrarCheckParam
 func (r *RegistrarService) Search(ctx context.Context, params RegistrarSearchParams, opts ...option.RequestOption) (res *RegistrarSearchResponse, err error) {
 	var env RegistrarSearchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -809,8 +799,6 @@ func (r RegistrarSearchResponseDomainsTier) IsKnown() bool {
 
 type RegistrarCheckParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// List of fully qualified domain names (FQDNs) to check for availability. Each
 	// domain must include the extension.
@@ -874,8 +862,6 @@ func (r RegistrarCheckResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegistrarSearchParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The search term to find domain suggestions. Accepts keywords, phrases, or full
 	// domain names.

@@ -37,11 +37,6 @@ func NewThreatEventCountryService(opts ...option.RequestOption) (r *ThreatEventC
 // Retrieves countries information for all countries
 func (r *ThreatEventCountryService) List(ctx context.Context, query ThreatEventCountryListParams, opts ...option.RequestOption) (res *[]ThreatEventCountryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -99,7 +94,5 @@ func (r threatEventCountryListResponseResultJSON) RawJSON() string {
 
 type ThreatEventCountryListParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -45,11 +45,6 @@ func NewOriginPostQuantumEncryptionService(opts ...option.RequestOption) (r *Ori
 func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params OriginPostQuantumEncryptionUpdateParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionUpdateResponse, err error) {
 	var env OriginPostQuantumEncryptionUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -72,11 +67,6 @@ func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params 
 func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query OriginPostQuantumEncryptionGetParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionGetResponse, err error) {
 	var env OriginPostQuantumEncryptionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -218,8 +208,6 @@ func (r OriginPostQuantumEncryptionGetResponseValue) IsKnown() bool {
 
 type OriginPostQuantumEncryptionUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Value of the Origin Post Quantum Encryption Setting.
 	Value param.Field[OriginPostQuantumEncryptionUpdateParamsValue] `json:"value" api:"required"`
@@ -291,8 +279,6 @@ func (r OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess) IsKnown() bool
 
 type OriginPostQuantumEncryptionGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

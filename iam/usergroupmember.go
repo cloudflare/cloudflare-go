@@ -43,11 +43,6 @@ func (r *UserGroupMemberService) New(ctx context.Context, userGroupID string, pa
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -79,11 +74,6 @@ func (r *UserGroupMemberService) Update(ctx context.Context, userGroupID string,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -115,11 +105,6 @@ func (r *UserGroupMemberService) List(ctx context.Context, userGroupID string, p
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -150,11 +135,6 @@ func (r *UserGroupMemberService) ListAutoPaging(ctx context.Context, userGroupID
 func (r *UserGroupMemberService) Delete(ctx context.Context, userGroupID string, memberID string, body UserGroupMemberDeleteParams, opts ...option.RequestOption) (res *UserGroupMemberDeleteResponse, err error) {
 	var env UserGroupMemberDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -180,11 +160,6 @@ func (r *UserGroupMemberService) Delete(ctx context.Context, userGroupID string,
 func (r *UserGroupMemberService) Get(ctx context.Context, userGroupID string, memberID string, query UserGroupMemberGetParams, opts ...option.RequestOption) (res *UserGroupMemberGetResponse, err error) {
 	var env UserGroupMemberGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -471,8 +446,6 @@ func (r userGroupMemberGetResponseUserJSON) RawJSON() string {
 
 type UserGroupMemberNewParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]              `path:"account_id" api:"required"`
 	Members   []UserGroupMemberNewParamsMember `json:"members" api:"required"`
 }
@@ -492,8 +465,6 @@ func (r UserGroupMemberNewParamsMember) MarshalJSON() (data []byte, err error) {
 
 type UserGroupMemberUpdateParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Set/Replace members to a user group.
 	Members []UserGroupMemberUpdateParamsMember `json:"members" api:"required"`
@@ -514,8 +485,6 @@ func (r UserGroupMemberUpdateParamsMember) MarshalJSON() (data []byte, err error
 
 type UserGroupMemberListParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The sort order of returned user group members by email.
 	Direction param.Field[UserGroupMemberListParamsDirection] `query:"direction"`
@@ -554,8 +523,6 @@ func (r UserGroupMemberListParamsDirection) IsKnown() bool {
 
 type UserGroupMemberDeleteParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -701,8 +668,6 @@ func (r UserGroupMemberDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type UserGroupMemberGetParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

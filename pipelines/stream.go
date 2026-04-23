@@ -44,11 +44,6 @@ func NewStreamService(opts ...option.RequestOption) (r *StreamService) {
 func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ...option.RequestOption) (res *StreamNewResponse, err error) {
 	var env StreamNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ..
 func (r *StreamService) Update(ctx context.Context, streamID string, params StreamUpdateParams, opts ...option.RequestOption) (res *StreamUpdateResponse, err error) {
 	var env StreamUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -93,11 +83,6 @@ func (r *StreamService) List(ctx context.Context, params StreamListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -124,11 +109,6 @@ func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListPar
 func (r *StreamService) Delete(ctx context.Context, streamID string, params StreamDeleteParams, opts ...option.RequestOption) (res *StreamDeleteResponse, err error) {
 	var env StreamDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -150,11 +130,6 @@ func (r *StreamService) Delete(ctx context.Context, streamID string, params Stre
 func (r *StreamService) Get(ctx context.Context, streamID string, query StreamGetParams, opts ...option.RequestOption) (res *StreamGetResponse, err error) {
 	var env StreamGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -4458,8 +4433,6 @@ func (r StreamGetResponseSchemaFormatTimestampFormat) IsKnown() bool {
 
 type StreamNewParams struct {
 	// Specifies the public ID of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the name of the Stream.
 	Name          param.Field[string]                       `json:"name" api:"required"`
@@ -5273,8 +5246,6 @@ func (r streamNewResponseEnvelopeJSON) RawJSON() string {
 
 type StreamUpdateParams struct {
 	// Specifies the public ID of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID     param.Field[string]                          `path:"account_id" api:"required"`
 	HTTP          param.Field[StreamUpdateParamsHTTP]          `json:"http"`
 	WorkerBinding param.Field[StreamUpdateParamsWorkerBinding] `json:"worker_binding"`
@@ -5341,8 +5312,6 @@ func (r streamUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type StreamListParams struct {
 	// Specifies the public ID of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	Page      param.Field[float64] `query:"page"`
 	PerPage   param.Field[float64] `query:"per_page"`
@@ -5360,8 +5329,6 @@ func (r StreamListParams) URLQuery() (v url.Values) {
 
 type StreamDeleteParams struct {
 	// Specifies the public ID of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Delete stream forcefully, including deleting any dependent pipelines.
 	Force param.Field[string] `query:"force"`
@@ -5401,8 +5368,6 @@ func (r streamDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type StreamGetParams struct {
 	// Specifies the public ID of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

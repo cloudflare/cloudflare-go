@@ -43,11 +43,6 @@ func NewVerificationService(opts ...option.RequestOption) (r *VerificationServic
 func (r *VerificationService) Edit(ctx context.Context, certificatePackID string, params VerificationEditParams, opts ...option.RequestOption) (res *VerificationEditResponse, err error) {
 	var env VerificationEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -69,11 +64,6 @@ func (r *VerificationService) Edit(ctx context.Context, certificatePackID string
 func (r *VerificationService) Get(ctx context.Context, params VerificationGetParams, opts ...option.RequestOption) (res *[]Verification, err error) {
 	var env VerificationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -291,8 +281,6 @@ func (r VerificationEditResponseValidationMethod) IsKnown() bool {
 
 type VerificationEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Desired validation method.
 	ValidationMethod param.Field[VerificationEditParamsValidationMethod] `json:"validation_method" api:"required"`
@@ -461,8 +449,6 @@ func (r VerificationEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type VerificationGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Immediately retry SSL Verification.
 	Retry param.Field[VerificationGetParamsRetry] `query:"retry"`

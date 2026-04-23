@@ -39,11 +39,6 @@ func NewDeviceSettingService(opts ...option.RequestOption) (r *DeviceSettingServ
 func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingUpdateParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,11 +56,6 @@ func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingU
 func (r *DeviceSettingService) Delete(ctx context.Context, body DeviceSettingDeleteParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -83,11 +73,6 @@ func (r *DeviceSettingService) Delete(ctx context.Context, body DeviceSettingDel
 func (r *DeviceSettingService) Edit(ctx context.Context, params DeviceSettingEditParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -105,11 +90,6 @@ func (r *DeviceSettingService) Edit(ctx context.Context, params DeviceSettingEdi
 func (r *DeviceSettingService) Get(ctx context.Context, query DeviceSettingGetParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -208,7 +188,6 @@ func (r DeviceSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceSettingUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID      param.Field[string] `path:"account_id" api:"required"`
 	DeviceSettings DeviceSettingsParam `json:"device_settings" api:"required"`
 }
@@ -261,7 +240,6 @@ func (r DeviceSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceSettingDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -309,7 +287,6 @@ func (r DeviceSettingDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceSettingEditParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID      param.Field[string] `path:"account_id" api:"required"`
 	DeviceSettings DeviceSettingsParam `json:"device_settings" api:"required"`
 }
@@ -362,7 +339,6 @@ func (r DeviceSettingEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceSettingGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

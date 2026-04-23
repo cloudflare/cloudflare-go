@@ -41,11 +41,6 @@ func NewLeakedCredentialCheckService(opts ...option.RequestOption) (r *LeakedCre
 func (r *LeakedCredentialCheckService) New(ctx context.Context, params LeakedCredentialCheckNewParams, opts ...option.RequestOption) (res *LeakedCredentialCheckNewResponse, err error) {
 	var env LeakedCredentialCheckNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -63,11 +58,6 @@ func (r *LeakedCredentialCheckService) New(ctx context.Context, params LeakedCre
 func (r *LeakedCredentialCheckService) Get(ctx context.Context, query LeakedCredentialCheckGetParams, opts ...option.RequestOption) (res *LeakedCredentialCheckGetResponse, err error) {
 	var env LeakedCredentialCheckGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -129,8 +119,6 @@ func (r leakedCredentialCheckGetResponseJSON) RawJSON() string {
 
 type LeakedCredentialCheckNewParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Determines whether or not Leaked Credential Checks are enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -186,8 +174,6 @@ func (r LeakedCredentialCheckNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type LeakedCredentialCheckGetParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

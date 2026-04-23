@@ -42,11 +42,6 @@ func NewSettingOperationService(opts ...option.RequestOption) (r *SettingOperati
 func (r *SettingOperationService) Update(ctx context.Context, operationID string, params SettingOperationUpdateParams, opts ...option.RequestOption) (res *SettingOperationUpdateResponse, err error) {
 	var env SettingOperationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -69,11 +64,6 @@ func (r *SettingOperationService) List(ctx context.Context, params SettingOperat
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -101,11 +91,6 @@ func (r *SettingOperationService) ListAutoPaging(ctx context.Context, params Set
 func (r *SettingOperationService) Delete(ctx context.Context, operationID string, body SettingOperationDeleteParams, opts ...option.RequestOption) (res *SettingOperationDeleteResponse, err error) {
 	var env SettingOperationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -128,11 +113,6 @@ func (r *SettingOperationService) Delete(ctx context.Context, operationID string
 func (r *SettingOperationService) BulkEdit(ctx context.Context, params SettingOperationBulkEditParams, opts ...option.RequestOption) (res *SettingOperationBulkEditResponse, err error) {
 	var env SettingOperationBulkEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -151,11 +131,6 @@ func (r *SettingOperationService) BulkEdit(ctx context.Context, params SettingOp
 func (r *SettingOperationService) Get(ctx context.Context, operationID string, query SettingOperationGetParams, opts ...option.RequestOption) (res *SettingOperationGetResponse, err error) {
 	var env SettingOperationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -423,8 +398,6 @@ func (r SettingOperationGetResponseMitigationAction) IsKnown() bool {
 
 type SettingOperationUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When set, this applies a mitigation action to this operation
 	//
@@ -510,8 +483,6 @@ func (r SettingOperationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingOperationListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Page number of paginated results.
 	Page param.Field[int64] `query:"page"`
@@ -530,8 +501,6 @@ func (r SettingOperationListParams) URLQuery() (v url.Values) {
 
 type SettingOperationDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -580,8 +549,6 @@ func (r SettingOperationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingOperationBulkEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]                           `path:"zone_id" api:"required"`
 	Body   map[string]SettingOperationBulkEditParamsBody `json:"body" api:"required"`
 }
@@ -671,8 +638,6 @@ func (r SettingOperationBulkEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingOperationGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

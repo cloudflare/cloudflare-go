@@ -45,11 +45,6 @@ func NewGatewayListService(opts ...option.RequestOption) (r *GatewayListService)
 func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParams, opts ...option.RequestOption) (res *GatewayListNewResponse, err error) {
 	var env GatewayListNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -68,11 +63,6 @@ func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParam
 func (r *GatewayListService) Update(ctx context.Context, listID string, params GatewayListUpdateParams, opts ...option.RequestOption) (res *GatewayList, err error) {
 	var env GatewayListUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -95,11 +85,6 @@ func (r *GatewayListService) List(ctx context.Context, params GatewayListListPar
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -126,11 +111,6 @@ func (r *GatewayListService) ListAutoPaging(ctx context.Context, params GatewayL
 func (r *GatewayListService) Delete(ctx context.Context, listID string, body GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponse, err error) {
 	var env GatewayListDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -152,11 +132,6 @@ func (r *GatewayListService) Delete(ctx context.Context, listID string, body Gat
 func (r *GatewayListService) Edit(ctx context.Context, listID string, params GatewayListEditParams, opts ...option.RequestOption) (res *GatewayList, err error) {
 	var env GatewayListEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -178,11 +153,6 @@ func (r *GatewayListService) Edit(ctx context.Context, listID string, params Gat
 func (r *GatewayListService) Get(ctx context.Context, listID string, query GatewayListGetParams, opts ...option.RequestOption) (res *GatewayList, err error) {
 	var env GatewayListGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -353,7 +323,6 @@ func (r GatewayListNewResponseType) IsKnown() bool {
 type GatewayListDeleteResponse = interface{}
 
 type GatewayListNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the list name.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -447,7 +416,6 @@ func (r GatewayListNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the list name.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -516,7 +484,6 @@ func (r GatewayListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the list type.
 	Type param.Field[GatewayListListParamsType] `query:"type"`
@@ -554,7 +521,6 @@ func (r GatewayListListParamsType) IsKnown() bool {
 }
 
 type GatewayListDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -602,7 +568,6 @@ func (r GatewayListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListEditParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Add items to the list.
 	Append param.Field[[]GatewayListEditParamsAppend] `json:"append"`
@@ -669,7 +634,6 @@ func (r GatewayListEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

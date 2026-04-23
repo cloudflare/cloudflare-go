@@ -42,11 +42,6 @@ func NewDeviceIPProfileService(opts ...option.RequestOption) (r *DeviceIPProfile
 func (r *DeviceIPProfileService) New(ctx context.Context, params DeviceIPProfileNewParams, opts ...option.RequestOption) (res *IPProfile, err error) {
 	var env DeviceIPProfileNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,11 +60,6 @@ func (r *DeviceIPProfileService) New(ctx context.Context, params DeviceIPProfile
 func (r *DeviceIPProfileService) Update(ctx context.Context, profileID string, params DeviceIPProfileUpdateParams, opts ...option.RequestOption) (res *IPProfile, err error) {
 	var env DeviceIPProfileUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -92,11 +82,6 @@ func (r *DeviceIPProfileService) List(ctx context.Context, params DeviceIPProfil
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -123,11 +108,6 @@ func (r *DeviceIPProfileService) ListAutoPaging(ctx context.Context, params Devi
 func (r *DeviceIPProfileService) Delete(ctx context.Context, profileID string, body DeviceIPProfileDeleteParams, opts ...option.RequestOption) (res *DeviceIPProfileDeleteResponse, err error) {
 	var env DeviceIPProfileDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -149,11 +129,6 @@ func (r *DeviceIPProfileService) Delete(ctx context.Context, profileID string, b
 func (r *DeviceIPProfileService) Get(ctx context.Context, profileID string, query DeviceIPProfileGetParams, opts ...option.RequestOption) (res *IPProfile, err error) {
 	var env DeviceIPProfileGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -243,7 +218,6 @@ func (r deviceIPProfileDeleteResponseJSON) RawJSON() string {
 }
 
 type DeviceIPProfileNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The wirefilter expression to match registrations. Available values:
 	// "identity.name", "identity.email", "identity.groups.id", "identity.groups.name",
@@ -346,7 +320,6 @@ func (r deviceIPProfileNewResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type DeviceIPProfileUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An optional description of the Device IP profile.
 	Description param.Field[string] `json:"description"`
@@ -449,7 +422,6 @@ func (r deviceIPProfileUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type DeviceIPProfileListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The number of IP profiles to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
@@ -465,7 +437,6 @@ func (r DeviceIPProfileListParams) URLQuery() (v url.Values) {
 }
 
 type DeviceIPProfileDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -548,7 +519,6 @@ func (r deviceIPProfileDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type DeviceIPProfileGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

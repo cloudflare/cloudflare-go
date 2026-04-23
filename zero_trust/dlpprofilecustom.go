@@ -38,11 +38,6 @@ func NewDLPProfileCustomService(opts ...option.RequestOption) (r *DLPProfileCust
 func (r *DLPProfileCustomService) New(ctx context.Context, params DLPProfileCustomNewParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfileCustomNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -60,11 +55,6 @@ func (r *DLPProfileCustomService) New(ctx context.Context, params DLPProfileCust
 func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, params DLPProfileCustomUpdateParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfileCustomUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -86,11 +76,6 @@ func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, 
 func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, body DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *DLPProfileCustomDeleteResponse, err error) {
 	var env DLPProfileCustomDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -112,11 +97,6 @@ func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, 
 func (r *DLPProfileCustomService) Get(ctx context.Context, profileID string, query DLPProfileCustomGetParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfileCustomGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -184,7 +164,6 @@ func (r PatternParam) MarshalJSON() (data []byte, err error) {
 type DLPProfileCustomDeleteResponse = interface{}
 
 type DLPProfileCustomNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID        param.Field[string] `path:"account_id" api:"required"`
 	Name             param.Field[string] `json:"name" api:"required"`
 	AIContextEnabled param.Field[bool]   `json:"ai_context_enabled"`
@@ -420,7 +399,6 @@ func (r DLPProfileCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfileCustomUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID           param.Field[string] `path:"account_id" api:"required"`
 	Name                param.Field[string] `json:"name" api:"required"`
 	AIContextEnabled    param.Field[bool]   `json:"ai_context_enabled"`
@@ -662,7 +640,6 @@ func (r DLPProfileCustomUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfileCustomDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -806,7 +783,6 @@ func (r DLPProfileCustomDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPProfileCustomGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
