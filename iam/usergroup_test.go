@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestUserGroupNew(t *testing.T) {
+func TestUserGroupNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -109,11 +109,11 @@ func TestUserGroupListWithOptionalParams(t *testing.T) {
 	_, err := client.IAM.UserGroups.List(context.TODO(), iam.UserGroupListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction: cloudflare.F("desc"),
+		Direction: cloudflare.F(iam.UserGroupListParamsDirectionDesc),
 		FuzzyName: cloudflare.F("Foo"),
 		Name:      cloudflare.F("NameOfTheUserGroup"),
 		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(5.000000),
+		PerPage:   cloudflare.F(1.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
