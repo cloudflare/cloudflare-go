@@ -43,11 +43,6 @@ func NewLabelManagedService(opts ...option.RequestOption) (r *LabelManagedServic
 func (r *LabelManagedService) Get(ctx context.Context, name string, params LabelManagedGetParams, opts ...option.RequestOption) (res *LabelManagedGetResponse, err error) {
 	var env LabelManagedGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -123,8 +118,6 @@ func (r LabelManagedGetResponseSource) IsKnown() bool {
 
 type LabelManagedGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Include `mapped_resources` for each label
 	WithMappedResourceCounts param.Field[bool] `query:"with_mapped_resource_counts"`

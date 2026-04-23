@@ -42,11 +42,6 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 func (r *SettingService) Edit(ctx context.Context, settingID string, params SettingEditParams, opts ...option.RequestOption) (res *SettingEditResponse, err error) {
 	var env SettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -68,11 +63,6 @@ func (r *SettingService) Edit(ctx context.Context, settingID string, params Sett
 func (r *SettingService) Get(ctx context.Context, settingID string, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
 	var env SettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -10755,8 +10745,6 @@ func (r SettingGetResponseEditable) IsKnown() bool {
 
 type SettingEditParams struct {
 	// Identifier
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string]        `path:"zone_id" api:"required"`
 	Body   SettingEditParamsBodyUnion `json:"body" api:"required"`
 }
@@ -10942,8 +10930,6 @@ func (r settingEditResponseEnvelopeJSON) RawJSON() string {
 
 type SettingGetParams struct {
 	// Identifier
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

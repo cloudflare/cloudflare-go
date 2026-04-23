@@ -42,11 +42,6 @@ func (r *DirectUploadService) New(ctx context.Context, params DirectUploadNewPar
 		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%v", params.UploadCreator)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -95,8 +90,6 @@ func (r directUploadNewResponseJSON) RawJSON() string {
 
 type DirectUploadNewParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The maximum duration in seconds for a video upload. Can be set for a video that
 	// is not yet uploaded to limit its duration. Uploads that exceed the specified

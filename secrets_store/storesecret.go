@@ -43,11 +43,6 @@ func (r *StoreSecretService) New(ctx context.Context, storeID string, params Sto
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -79,11 +74,6 @@ func (r *StoreSecretService) List(ctx context.Context, storeID string, params St
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -114,11 +104,6 @@ func (r *StoreSecretService) ListAutoPaging(ctx context.Context, storeID string,
 func (r *StoreSecretService) Delete(ctx context.Context, storeID string, secretID string, body StoreSecretDeleteParams, opts ...option.RequestOption) (res *StoreSecretDeleteResponse, err error) {
 	var env StoreSecretDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -144,11 +129,6 @@ func (r *StoreSecretService) Delete(ctx context.Context, storeID string, secretI
 func (r *StoreSecretService) BulkDelete(ctx context.Context, storeID string, body StoreSecretBulkDeleteParams, opts ...option.RequestOption) (res *StoreSecretBulkDeleteResponse, err error) {
 	var env StoreSecretBulkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -170,11 +150,6 @@ func (r *StoreSecretService) BulkDelete(ctx context.Context, storeID string, bod
 func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secretID string, params StoreSecretDuplicateParams, opts ...option.RequestOption) (res *StoreSecretDuplicateResponse, err error) {
 	var env StoreSecretDuplicateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -200,11 +175,6 @@ func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secr
 func (r *StoreSecretService) Edit(ctx context.Context, storeID string, secretID string, params StoreSecretEditParams, opts ...option.RequestOption) (res *StoreSecretEditResponse, err error) {
 	var env StoreSecretEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -230,11 +200,6 @@ func (r *StoreSecretService) Edit(ctx context.Context, storeID string, secretID 
 func (r *StoreSecretService) Get(ctx context.Context, storeID string, secretID string, query StoreSecretGetParams, opts ...option.RequestOption) (res *StoreSecretGetResponse, err error) {
 	var env StoreSecretGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -552,8 +517,6 @@ func (r StoreSecretGetResponseStatus) IsKnown() bool {
 
 type StoreSecretNewParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]        `path:"account_id" api:"required"`
 	Body      []StoreSecretNewParamsBody `json:"body" api:"required"`
 }
@@ -581,8 +544,6 @@ func (r StoreSecretNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 type StoreSecretListParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to sort objects
 	Direction param.Field[StoreSecretListParamsDirection] `query:"direction"`
@@ -643,8 +604,6 @@ func (r StoreSecretListParamsOrder) IsKnown() bool {
 
 type StoreSecretDeleteParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -790,8 +749,6 @@ func (r StoreSecretDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type StoreSecretBulkDeleteParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -937,8 +894,6 @@ func (r StoreSecretBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type StoreSecretDuplicateParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the secret
 	Name param.Field[string] `json:"name" api:"required"`
@@ -1129,8 +1084,6 @@ func (r storeSecretDuplicateResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type StoreSecretEditParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Freeform text describing the secret
 	Comment param.Field[string] `json:"comment"`
@@ -1323,8 +1276,6 @@ func (r storeSecretEditResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type StoreSecretGetParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

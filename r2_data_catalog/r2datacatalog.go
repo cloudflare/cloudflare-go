@@ -46,11 +46,6 @@ func NewR2DataCatalogService(opts ...option.RequestOption) (r *R2DataCatalogServ
 func (r *R2DataCatalogService) List(ctx context.Context, query R2DataCatalogListParams, opts ...option.RequestOption) (res *R2DataCatalogListResponse, err error) {
 	var env R2DataCatalogListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -69,11 +64,6 @@ func (r *R2DataCatalogService) List(ctx context.Context, query R2DataCatalogList
 func (r *R2DataCatalogService) Disable(ctx context.Context, bucketName string, body R2DataCatalogDisableParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -93,11 +83,6 @@ func (r *R2DataCatalogService) Disable(ctx context.Context, bucketName string, b
 func (r *R2DataCatalogService) Enable(ctx context.Context, bucketName string, body R2DataCatalogEnableParams, opts ...option.RequestOption) (res *R2DataCatalogEnableResponse, err error) {
 	var env R2DataCatalogEnableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -120,11 +105,6 @@ func (r *R2DataCatalogService) Enable(ctx context.Context, bucketName string, bo
 func (r *R2DataCatalogService) Get(ctx context.Context, bucketName string, query R2DataCatalogGetParams, opts ...option.RequestOption) (res *R2DataCatalogGetResponse, err error) {
 	var env R2DataCatalogGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -604,8 +584,6 @@ func (r R2DataCatalogGetResponseMaintenanceConfigSnapshotExpirationState) IsKnow
 
 type R2DataCatalogListParams struct {
 	// Use this to identify the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -692,15 +670,11 @@ func (r r2DataCatalogListResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type R2DataCatalogDisableParams struct {
 	// Use this to identify the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type R2DataCatalogEnableParams struct {
 	// Use this to identify the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -787,8 +761,6 @@ func (r r2DataCatalogEnableResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type R2DataCatalogGetParams struct {
 	// Use this to identify the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

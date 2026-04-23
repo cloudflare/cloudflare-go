@@ -39,11 +39,6 @@ func NewDevtoolBrowserTargetService(opts ...option.RequestOption) (r *DevtoolBro
 // Opens a new tab in the browser. Optionally specify a URL to navigate to.
 func (r *DevtoolBrowserTargetService) New(ctx context.Context, sessionID string, params DevtoolBrowserTargetNewParams, opts ...option.RequestOption) (res *DevtoolBrowserTargetNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,11 +56,6 @@ func (r *DevtoolBrowserTargetService) New(ctx context.Context, sessionID string,
 // and other browser contexts.
 func (r *DevtoolBrowserTargetService) List(ctx context.Context, sessionID string, query DevtoolBrowserTargetListParams, opts ...option.RequestOption) (res *[]DevtoolBrowserTargetListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -82,11 +72,6 @@ func (r *DevtoolBrowserTargetService) List(ctx context.Context, sessionID string
 // Activates (brings to front) a specific browser target by its ID.
 func (r *DevtoolBrowserTargetService) Activate(ctx context.Context, sessionID string, targetID string, query DevtoolBrowserTargetActivateParams, opts ...option.RequestOption) (res *DevtoolBrowserTargetActivateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -107,11 +92,6 @@ func (r *DevtoolBrowserTargetService) Activate(ctx context.Context, sessionID st
 // Returns the debuggable target with the given ID.
 func (r *DevtoolBrowserTargetService) Get(ctx context.Context, sessionID string, targetID string, query DevtoolBrowserTargetGetParams, opts ...option.RequestOption) (res *DevtoolBrowserTargetGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -273,8 +253,6 @@ func (r devtoolBrowserTargetGetResponseJSON) RawJSON() string {
 
 type DevtoolBrowserTargetNewParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	URL       param.Field[string] `query:"url" format:"uri"`
 }
@@ -290,21 +268,15 @@ func (r DevtoolBrowserTargetNewParams) URLQuery() (v url.Values) {
 
 type DevtoolBrowserTargetListParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevtoolBrowserTargetActivateParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DevtoolBrowserTargetGetParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

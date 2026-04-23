@@ -43,11 +43,6 @@ func NewCacheReserveService(opts ...option.RequestOption) (r *CacheReserveServic
 func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClearParams, opts ...option.RequestOption) (res *CacheReserveClearResponse, err error) {
 	var env CacheReserveClearResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -70,11 +65,6 @@ func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClea
 func (r *CacheReserveService) Edit(ctx context.Context, params CacheReserveEditParams, opts ...option.RequestOption) (res *CacheReserveEditResponse, err error) {
 	var env CacheReserveEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -97,11 +87,6 @@ func (r *CacheReserveService) Edit(ctx context.Context, params CacheReserveEditP
 func (r *CacheReserveService) Get(ctx context.Context, query CacheReserveGetParams, opts ...option.RequestOption) (res *CacheReserveGetResponse, err error) {
 	var env CacheReserveGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -122,11 +107,6 @@ func (r *CacheReserveService) Get(ctx context.Context, query CacheReserveGetPara
 func (r *CacheReserveService) Status(ctx context.Context, query CacheReserveStatusParams, opts ...option.RequestOption) (res *CacheReserveStatusResponse, err error) {
 	var env CacheReserveStatusResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -358,8 +338,6 @@ func (r cacheReserveStatusResponseJSON) RawJSON() string {
 
 type CacheReserveClearParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Body   interface{}         `json:"body" api:"required"`
 }
@@ -417,8 +395,6 @@ func (r CacheReserveClearResponseEnvelopeSuccess) IsKnown() bool {
 
 type CacheReserveEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Value of the Cache Reserve zone setting.
 	Value param.Field[CacheReserveEditParamsValue] `json:"value" api:"required"`
@@ -489,8 +465,6 @@ func (r CacheReserveEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type CacheReserveGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -539,8 +513,6 @@ func (r CacheReserveGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type CacheReserveStatusParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

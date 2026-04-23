@@ -48,11 +48,6 @@ func NewRequestService(opts ...option.RequestOption) (r *RequestService) {
 func (r *RequestService) New(ctx context.Context, params RequestNewParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -72,11 +67,6 @@ func (r *RequestService) New(ctx context.Context, params RequestNewParams, opts 
 func (r *RequestService) Update(ctx context.Context, requestID string, params RequestUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -99,11 +89,6 @@ func (r *RequestService) List(ctx context.Context, params RequestListParams, opt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -129,11 +114,6 @@ func (r *RequestService) ListAutoPaging(ctx context.Context, params RequestListP
 // Deletes a Cloudforce One intelligence request and all associated data.
 func (r *RequestService) Delete(ctx context.Context, requestID string, body RequestDeleteParams, opts ...option.RequestOption) (res *RequestDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -152,11 +132,6 @@ func (r *RequestService) Delete(ctx context.Context, requestID string, body Requ
 func (r *RequestService) Constants(ctx context.Context, query RequestConstantsParams, opts ...option.RequestOption) (res *RequestConstants, err error) {
 	var env RequestConstantsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -174,11 +149,6 @@ func (r *RequestService) Constants(ctx context.Context, query RequestConstantsPa
 func (r *RequestService) Get(ctx context.Context, requestID string, query RequestGetParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -200,11 +170,6 @@ func (r *RequestService) Get(ctx context.Context, requestID string, query Reques
 func (r *RequestService) Quota(ctx context.Context, query RequestQuotaParams, opts ...option.RequestOption) (res *Quota, err error) {
 	var env RequestQuotaResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -223,11 +188,6 @@ func (r *RequestService) Types(ctx context.Context, query RequestTypesParams, op
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -701,8 +661,6 @@ func (r RequestDeleteResponseSuccess) IsKnown() bool {
 
 type RequestNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Request content.
 	Content param.Field[string] `json:"content"`
@@ -880,8 +838,6 @@ func (r RequestNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Request content.
 	Content param.Field[string] `json:"content"`
@@ -1059,8 +1015,6 @@ func (r RequestUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Page number of results.
 	Page param.Field[int64] `json:"page" api:"required"`
@@ -1126,15 +1080,11 @@ func (r RequestListParamsStatus) IsKnown() bool {
 
 type RequestDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RequestConstantsParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1279,8 +1229,6 @@ func (r RequestConstantsResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1425,8 +1373,6 @@ func (r RequestGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestQuotaParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1571,7 +1517,5 @@ func (r RequestQuotaResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestTypesParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

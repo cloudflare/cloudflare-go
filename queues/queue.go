@@ -50,11 +50,6 @@ func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -74,11 +69,6 @@ func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...o
 func (r *QueueService) Update(ctx context.Context, queueID string, params QueueUpdateParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -101,11 +91,6 @@ func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -131,11 +116,6 @@ func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams
 // Deletes a queue
 func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -153,11 +133,6 @@ func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDel
 func (r *QueueService) Edit(ctx context.Context, queueID string, params QueueEditParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -179,11 +154,6 @@ func (r *QueueService) Edit(ctx context.Context, queueID string, params QueueEdi
 func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -522,8 +492,6 @@ func (r QueueDeleteResponseSuccess) IsKnown() bool {
 
 type QueueNewParams struct {
 	// A Resource identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	QueueName param.Field[string] `json:"queue_name" api:"required"`
 }
@@ -577,8 +545,6 @@ func (r QueueNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type QueueUpdateParams struct {
 	// A Resource identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Queue     QueueParam          `json:"queue"`
 }
@@ -632,22 +598,16 @@ func (r QueueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type QueueListParams struct {
 	// A Resource identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type QueueDeleteParams struct {
 	// A Resource identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type QueueEditParams struct {
 	// A Resource identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Queue     QueueParam          `json:"queue"`
 }
@@ -701,8 +661,6 @@ func (r QueueEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type QueueGetParams struct {
 	// A Resource identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

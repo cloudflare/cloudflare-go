@@ -39,11 +39,6 @@ func NewNamespaceTableMaintenanceConfigService(opts ...option.RequestOption) (r 
 func (r *NamespaceTableMaintenanceConfigService) Update(ctx context.Context, bucketName string, namespace string, tableName string, params NamespaceTableMaintenanceConfigUpdateParams, opts ...option.RequestOption) (res *NamespaceTableMaintenanceConfigUpdateResponse, err error) {
 	var env NamespaceTableMaintenanceConfigUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -74,11 +69,6 @@ func (r *NamespaceTableMaintenanceConfigService) Update(ctx context.Context, buc
 func (r *NamespaceTableMaintenanceConfigService) Get(ctx context.Context, bucketName string, namespace string, tableName string, query NamespaceTableMaintenanceConfigGetParams, opts ...option.RequestOption) (res *NamespaceTableMaintenanceConfigGetResponse, err error) {
 	var env NamespaceTableMaintenanceConfigGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -402,8 +392,6 @@ func (r NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpir
 
 type NamespaceTableMaintenanceConfigUpdateParams struct {
 	// Use this to identify the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Updates compaction configuration (all fields optional).
 	Compaction param.Field[NamespaceTableMaintenanceConfigUpdateParamsCompaction] `json:"compaction"`
@@ -576,8 +564,6 @@ func (r namespaceTableMaintenanceConfigUpdateResponseEnvelopeMessagesJSON) RawJS
 
 type NamespaceTableMaintenanceConfigGetParams struct {
 	// Use this to identify the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

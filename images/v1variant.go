@@ -39,11 +39,6 @@ func NewV1VariantService(opts ...option.RequestOption) (r *V1VariantService) {
 func (r *V1VariantService) New(ctx context.Context, params V1VariantNewParams, opts ...option.RequestOption) (res *V1VariantNewResponse, err error) {
 	var env V1VariantNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,11 +56,6 @@ func (r *V1VariantService) New(ctx context.Context, params V1VariantNewParams, o
 func (r *V1VariantService) List(ctx context.Context, query V1VariantListParams, opts ...option.RequestOption) (res *Variant, err error) {
 	var env V1VariantListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -83,11 +73,6 @@ func (r *V1VariantService) List(ctx context.Context, query V1VariantListParams, 
 func (r *V1VariantService) Delete(ctx context.Context, variantID string, body V1VariantDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env V1VariantDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -109,11 +94,6 @@ func (r *V1VariantService) Delete(ctx context.Context, variantID string, body V1
 func (r *V1VariantService) Edit(ctx context.Context, variantID string, params V1VariantEditParams, opts ...option.RequestOption) (res *V1VariantEditResponse, err error) {
 	var env V1VariantEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -135,11 +115,6 @@ func (r *V1VariantService) Edit(ctx context.Context, variantID string, params V1
 func (r *V1VariantService) Get(ctx context.Context, variantID string, query V1VariantGetParams, opts ...option.RequestOption) (res *V1VariantGetResponse, err error) {
 	var env V1VariantGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -654,8 +629,6 @@ func (r V1VariantGetResponseVariantOptionsMetadata) IsKnown() bool {
 
 type V1VariantNewParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	ID        param.Field[string] `json:"id" api:"required"`
 	// Allows you to define image resizing sizes for different use cases.
@@ -768,8 +741,6 @@ func (r V1VariantNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1VariantListParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -818,8 +789,6 @@ func (r V1VariantListResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1VariantDeleteParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -868,8 +837,6 @@ func (r V1VariantDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1VariantEditParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Allows you to define image resizing sizes for different use cases.
 	Options param.Field[V1VariantEditParamsOptions] `json:"options" api:"required"`
@@ -981,8 +948,6 @@ func (r V1VariantEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1VariantGetParams struct {
 	// Account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

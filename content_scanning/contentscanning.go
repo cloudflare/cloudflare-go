@@ -43,11 +43,6 @@ func NewContentScanningService(opts ...option.RequestOption) (r *ContentScanning
 func (r *ContentScanningService) New(ctx context.Context, params ContentScanningNewParams, opts ...option.RequestOption) (res *ContentScanningNewResponse, err error) {
 	var env ContentScanningNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -65,11 +60,6 @@ func (r *ContentScanningService) New(ctx context.Context, params ContentScanning
 func (r *ContentScanningService) Update(ctx context.Context, params ContentScanningUpdateParams, opts ...option.RequestOption) (res *ContentScanningUpdateResponse, err error) {
 	var env ContentScanningUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -87,11 +77,6 @@ func (r *ContentScanningService) Update(ctx context.Context, params ContentScann
 func (r *ContentScanningService) Disable(ctx context.Context, body ContentScanningDisableParams, opts ...option.RequestOption) (res *ContentScanningDisableResponse, err error) {
 	var env ContentScanningDisableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -109,11 +94,6 @@ func (r *ContentScanningService) Disable(ctx context.Context, body ContentScanni
 func (r *ContentScanningService) Enable(ctx context.Context, body ContentScanningEnableParams, opts ...option.RequestOption) (res *ContentScanningEnableResponse, err error) {
 	var env ContentScanningEnableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -131,11 +111,6 @@ func (r *ContentScanningService) Enable(ctx context.Context, body ContentScannin
 func (r *ContentScanningService) Get(ctx context.Context, query ContentScanningGetParams, opts ...option.RequestOption) (res *ContentScanningGetResponse, err error) {
 	var env ContentScanningGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -233,8 +208,6 @@ func (r contentScanningGetResponseJSON) RawJSON() string {
 
 type ContentScanningNewParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The status value for Content Scanning.
 	Value param.Field[ContentScanningNewParamsValue] `json:"value" api:"required"`
@@ -306,8 +279,6 @@ func (r ContentScanningNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ContentScanningUpdateParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The status value for Content Scanning.
 	Value param.Field[ContentScanningUpdateParamsValue] `json:"value" api:"required"`
@@ -379,8 +350,6 @@ func (r ContentScanningUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ContentScanningDisableParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -429,8 +398,6 @@ func (r ContentScanningDisableResponseEnvelopeSuccess) IsKnown() bool {
 
 type ContentScanningEnableParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -479,8 +446,6 @@ func (r ContentScanningEnableResponseEnvelopeSuccess) IsKnown() bool {
 
 type ContentScanningGetParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

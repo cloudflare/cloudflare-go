@@ -45,11 +45,6 @@ func (r *CfInterconnectService) Update(ctx context.Context, cfInterconnectID str
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -74,11 +69,6 @@ func (r *CfInterconnectService) List(ctx context.Context, params CfInterconnectL
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -101,11 +91,6 @@ func (r *CfInterconnectService) BulkUpdate(ctx context.Context, params CfInterco
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -126,11 +111,6 @@ func (r *CfInterconnectService) Get(ctx context.Context, cfInterconnectID string
 		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%v", params.XMagicNewHcTarget)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -595,8 +575,6 @@ func (r cfInterconnectGetResponseInterconnectGREJSON) RawJSON() string {
 
 type CfInterconnectUpdateParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise.
@@ -683,8 +661,6 @@ func (r CfInterconnectUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type CfInterconnectListParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
@@ -734,8 +710,6 @@ func (r CfInterconnectListResponseEnvelopeSuccess) IsKnown() bool {
 
 type CfInterconnectBulkUpdateParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	Body              interface{}         `json:"body" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
@@ -790,8 +764,6 @@ func (r CfInterconnectBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type CfInterconnectGetParams struct {
 	// Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID         param.Field[string] `path:"account_id" api:"required"`
 	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }

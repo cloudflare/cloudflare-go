@@ -48,11 +48,6 @@ func NewProjectDeploymentService(opts ...option.RequestOption) (r *ProjectDeploy
 func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, params ProjectDeploymentNewParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ProjectDeploymentNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -75,11 +70,6 @@ func (r *ProjectDeploymentService) List(ctx context.Context, projectName string,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -110,11 +100,6 @@ func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectNa
 func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *ProjectDeploymentDeleteResponse, err error) {
 	var env ProjectDeploymentDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -140,11 +125,6 @@ func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName strin
 func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentGetParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ProjectDeploymentGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -170,11 +150,6 @@ func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, 
 func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentRetryParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ProjectDeploymentRetryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -201,11 +176,6 @@ func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string
 func (r *ProjectDeploymentService) Rollback(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentRollbackParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ProjectDeploymentRollbackResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -231,8 +201,6 @@ type ProjectDeploymentDeleteResponse = interface{}
 
 type ProjectDeploymentNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Headers configuration file for the deployment.
 	Headers param.Field[io.Reader] `json:"_headers" format:"binary"`
@@ -439,8 +407,6 @@ func (r ProjectDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDeploymentListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// What type of deployments to fetch.
 	Env param.Field[ProjectDeploymentListParamsEnv] `query:"env"`
@@ -477,8 +443,6 @@ func (r ProjectDeploymentListParamsEnv) IsKnown() bool {
 
 type ProjectDeploymentDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Allow deletion of aliased non-production deployments when a normal delete would
 	// be rejected.
@@ -635,8 +599,6 @@ func (r ProjectDeploymentDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDeploymentGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -781,8 +743,6 @@ func (r ProjectDeploymentGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDeploymentRetryParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -927,8 +887,6 @@ func (r ProjectDeploymentRetryResponseEnvelopeSuccess) IsKnown() bool {
 
 type ProjectDeploymentRollbackParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

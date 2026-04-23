@@ -42,11 +42,6 @@ func NewDispatchNamespaceService(opts ...option.RequestOption) (r *DispatchNames
 func (r *DispatchNamespaceService) New(ctx context.Context, params DispatchNamespaceNewParams, opts ...option.RequestOption) (res *DispatchNamespaceNewResponse, err error) {
 	var env DispatchNamespaceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,11 +60,6 @@ func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNames
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -96,11 +86,6 @@ func (r *DispatchNamespaceService) ListAutoPaging(ctx context.Context, query Dis
 func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace string, body DispatchNamespaceDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceDeleteResponse, err error) {
 	var env DispatchNamespaceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -122,11 +107,6 @@ func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace
 func (r *DispatchNamespaceService) Get(ctx context.Context, dispatchNamespace string, query DispatchNamespaceGetParams, opts ...option.RequestOption) (res *DispatchNamespaceGetResponse, err error) {
 	var env DispatchNamespaceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -289,8 +269,6 @@ func (r dispatchNamespaceGetResponseJSON) RawJSON() string {
 
 type DispatchNamespaceNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the dispatch namespace.
 	Name param.Field[string] `json:"name"`
@@ -441,15 +419,11 @@ func (r DispatchNamespaceNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DispatchNamespaceListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DispatchNamespaceDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -594,8 +568,6 @@ func (r DispatchNamespaceDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type DispatchNamespaceGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -46,11 +46,6 @@ func (r *CloudIntegrationService) New(ctx context.Context, params CloudIntegrati
 		opts = append(opts, option.WithHeader("forwarded", fmt.Sprintf("%v", params.Forwarded)))
 	}
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -68,11 +63,6 @@ func (r *CloudIntegrationService) New(ctx context.Context, params CloudIntegrati
 func (r *CloudIntegrationService) Update(ctx context.Context, providerID string, params CloudIntegrationUpdateParams, opts ...option.RequestOption) (res *CloudIntegrationUpdateResponse, err error) {
 	var env CloudIntegrationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -95,11 +85,6 @@ func (r *CloudIntegrationService) List(ctx context.Context, params CloudIntegrat
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -126,11 +111,6 @@ func (r *CloudIntegrationService) ListAutoPaging(ctx context.Context, params Clo
 func (r *CloudIntegrationService) Delete(ctx context.Context, providerID string, body CloudIntegrationDeleteParams, opts ...option.RequestOption) (res *CloudIntegrationDeleteResponse, err error) {
 	var env CloudIntegrationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -151,11 +131,6 @@ func (r *CloudIntegrationService) Delete(ctx context.Context, providerID string,
 // Run discovery for a Cloud Integration (Closed Beta).
 func (r *CloudIntegrationService) Discover(ctx context.Context, providerID string, params CloudIntegrationDiscoverParams, opts ...option.RequestOption) (res *CloudIntegrationDiscoverResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -172,11 +147,6 @@ func (r *CloudIntegrationService) Discover(ctx context.Context, providerID strin
 // Run discovery for all Cloud Integrations in an account (Closed Beta).
 func (r *CloudIntegrationService) DiscoverAll(ctx context.Context, body CloudIntegrationDiscoverAllParams, opts ...option.RequestOption) (res *CloudIntegrationDiscoverAllResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -190,11 +160,6 @@ func (r *CloudIntegrationService) DiscoverAll(ctx context.Context, body CloudInt
 func (r *CloudIntegrationService) Edit(ctx context.Context, providerID string, params CloudIntegrationEditParams, opts ...option.RequestOption) (res *CloudIntegrationEditResponse, err error) {
 	var env CloudIntegrationEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -216,11 +181,6 @@ func (r *CloudIntegrationService) Edit(ctx context.Context, providerID string, p
 func (r *CloudIntegrationService) Get(ctx context.Context, providerID string, params CloudIntegrationGetParams, opts ...option.RequestOption) (res *CloudIntegrationGetResponse, err error) {
 	var env CloudIntegrationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -242,11 +202,6 @@ func (r *CloudIntegrationService) Get(ctx context.Context, providerID string, pa
 func (r *CloudIntegrationService) InitialSetup(ctx context.Context, providerID string, query CloudIntegrationInitialSetupParams, opts ...option.RequestOption) (res *CloudIntegrationInitialSetupResponse, err error) {
 	var env CloudIntegrationInitialSetupResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -2949,7 +2904,6 @@ func (r CloudIntegrationInitialSetupResponseMcnGcpSetup) implementsCloudIntegrat
 }
 
 type CloudIntegrationNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID    param.Field[string]                             `path:"account_id" api:"required"`
 	CloudType    param.Field[CloudIntegrationNewParamsCloudType] `json:"cloud_type" api:"required"`
 	FriendlyName param.Field[string]                             `json:"friendly_name" api:"required"`
@@ -3504,7 +3458,6 @@ func (r cloudIntegrationNewResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 }
 
 type CloudIntegrationUpdateParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID              param.Field[string] `path:"account_id" api:"required"`
 	AwsArn                 param.Field[string] `json:"aws_arn"`
 	AzureSubscriptionID    param.Field[string] `json:"azure_subscription_id"`
@@ -4045,7 +3998,6 @@ func (r cloudIntegrationUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 }
 
 type CloudIntegrationListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID  param.Field[string] `path:"account_id" api:"required"`
 	Cloudflare param.Field[bool]   `query:"cloudflare"`
 	Desc       param.Field[bool]   `query:"desc"`
@@ -4064,7 +4016,6 @@ func (r CloudIntegrationListParams) URLQuery() (v url.Values) {
 }
 
 type CloudIntegrationDeleteParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -4594,7 +4545,6 @@ func (r cloudIntegrationDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 }
 
 type CloudIntegrationDiscoverParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	V2        param.Field[bool]   `query:"v2"`
 }
@@ -4609,12 +4559,10 @@ func (r CloudIntegrationDiscoverParams) URLQuery() (v url.Values) {
 }
 
 type CloudIntegrationDiscoverAllParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type CloudIntegrationEditParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID              param.Field[string] `path:"account_id" api:"required"`
 	AwsArn                 param.Field[string] `json:"aws_arn"`
 	AzureSubscriptionID    param.Field[string] `json:"azure_subscription_id"`
@@ -5155,7 +5103,6 @@ func (r cloudIntegrationEditResponseEnvelopeMessagesSourceJSON) RawJSON() string
 }
 
 type CloudIntegrationGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Status    param.Field[bool]   `query:"status"`
 }
@@ -5695,7 +5642,6 @@ func (r cloudIntegrationGetResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 }
 
 type CloudIntegrationInitialSetupParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

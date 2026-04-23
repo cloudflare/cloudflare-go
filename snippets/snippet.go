@@ -49,11 +49,6 @@ func NewSnippetService(opts ...option.RequestOption) (r *SnippetService) {
 func (r *SnippetService) Update(ctx context.Context, snippetName string, params SnippetUpdateParams, opts ...option.RequestOption) (res *SnippetUpdateResponse, err error) {
 	var env SnippetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -76,11 +71,6 @@ func (r *SnippetService) List(ctx context.Context, params SnippetListParams, opt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -107,11 +97,6 @@ func (r *SnippetService) ListAutoPaging(ctx context.Context, params SnippetListP
 func (r *SnippetService) Delete(ctx context.Context, snippetName string, body SnippetDeleteParams, opts ...option.RequestOption) (res *SnippetDeleteResponse, err error) {
 	var env SnippetDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -133,11 +118,6 @@ func (r *SnippetService) Delete(ctx context.Context, snippetName string, body Sn
 func (r *SnippetService) Get(ctx context.Context, snippetName string, query SnippetGetParams, opts ...option.RequestOption) (res *SnippetGetResponse, err error) {
 	var env SnippetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -246,8 +226,6 @@ func (r snippetGetResponseJSON) RawJSON() string {
 
 type SnippetUpdateParams struct {
 	// Use this field to specify the unique ID of the zone.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Provide metadata about the snippet.
 	Metadata param.Field[SnippetUpdateParamsMetadata] `json:"metadata" api:"required"`
@@ -379,8 +357,6 @@ func (r SnippetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type SnippetListParams struct {
 	// Use this field to specify the unique ID of the zone.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Specifies the current page number.
 	Page param.Field[int64] `query:"page"`
@@ -398,8 +374,6 @@ func (r SnippetListParams) URLQuery() (v url.Values) {
 
 type SnippetDeleteParams struct {
 	// Use this field to specify the unique ID of the zone.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -504,8 +478,6 @@ func (r SnippetDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SnippetGetParams struct {
 	// Use this field to specify the unique ID of the zone.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

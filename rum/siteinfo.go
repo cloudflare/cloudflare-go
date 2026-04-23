@@ -43,11 +43,6 @@ func NewSiteInfoService(opts ...option.RequestOption) (r *SiteInfoService) {
 func (r *SiteInfoService) New(ctx context.Context, params SiteInfoNewParams, opts ...option.RequestOption) (res *Site, err error) {
 	var env SiteInfoNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,11 +60,6 @@ func (r *SiteInfoService) New(ctx context.Context, params SiteInfoNewParams, opt
 func (r *SiteInfoService) Update(ctx context.Context, siteID string, params SiteInfoUpdateParams, opts ...option.RequestOption) (res *Site, err error) {
 	var env SiteInfoUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -92,11 +82,6 @@ func (r *SiteInfoService) List(ctx context.Context, params SiteInfoListParams, o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -123,11 +108,6 @@ func (r *SiteInfoService) ListAutoPaging(ctx context.Context, params SiteInfoLis
 func (r *SiteInfoService) Delete(ctx context.Context, siteID string, body SiteInfoDeleteParams, opts ...option.RequestOption) (res *SiteInfoDeleteResponse, err error) {
 	var env SiteInfoDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -149,11 +129,6 @@ func (r *SiteInfoService) Delete(ctx context.Context, siteID string, body SiteIn
 func (r *SiteInfoService) Get(ctx context.Context, siteID string, query SiteInfoGetParams, opts ...option.RequestOption) (res *Site, err error) {
 	var env SiteInfoGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -262,8 +237,6 @@ func (r siteInfoDeleteResponseJSON) RawJSON() string {
 
 type SiteInfoNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
@@ -308,8 +281,6 @@ func (r siteInfoNewResponseEnvelopeJSON) RawJSON() string {
 
 type SiteInfoUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
@@ -360,8 +331,6 @@ func (r siteInfoUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type SiteInfoListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The property used to sort the list of results.
 	OrderBy param.Field[SiteInfoListParamsOrderBy] `query:"order_by"`
@@ -397,8 +366,6 @@ func (r SiteInfoListParamsOrderBy) IsKnown() bool {
 
 type SiteInfoDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -432,8 +399,6 @@ func (r siteInfoDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SiteInfoGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

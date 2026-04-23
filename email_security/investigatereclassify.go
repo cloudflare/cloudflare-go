@@ -42,11 +42,6 @@ func NewInvestigateReclassifyService(opts ...option.RequestOption) (r *Investiga
 func (r *InvestigateReclassifyService) New(ctx context.Context, postfixID string, params InvestigateReclassifyNewParams, opts ...option.RequestOption) (res *InvestigateReclassifyNewResponse, err error) {
 	var env InvestigateReclassifyNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -68,8 +63,6 @@ type InvestigateReclassifyNewResponse = interface{}
 
 type InvestigateReclassifyNewParams struct {
 	// Account Identifier
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID           param.Field[string]                                            `path:"account_id" api:"required"`
 	ExpectedDisposition param.Field[InvestigateReclassifyNewParamsExpectedDisposition] `json:"expected_disposition" api:"required"`
 	// When true, search the submissions datastore only. When false or omitted, search

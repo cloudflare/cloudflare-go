@@ -43,11 +43,6 @@ func NewASNService(opts ...option.RequestOption) (r *ASNService) {
 func (r *ASNService) DayReport(ctx context.Context, asnID int64, params ASNDayReportParams, opts ...option.RequestOption) (res *ASNDayReportResponse, err error) {
 	var env ASNDayReportResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *ASNService) DayReport(ctx context.Context, asnID int64, params ASNDayRe
 func (r *ASNService) FullReport(ctx context.Context, asnID int64, query ASNFullReportParams, opts ...option.RequestOption) (res *ASNFullReportResponse, err error) {
 	var env ASNFullReportResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -136,8 +126,6 @@ func (r asnFullReportResponseJSON) RawJSON() string {
 
 type ASNDayReportParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]    `path:"account_id" api:"required"`
 	Date      param.Field[time.Time] `query:"date" format:"date-time"`
 }
@@ -291,8 +279,6 @@ func (r ASNDayReportResponseEnvelopeSuccess) IsKnown() bool {
 
 type ASNFullReportParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -40,11 +40,6 @@ func NewPCAPOwnershipService(opts ...option.RequestOption) (r *PCAPOwnershipServ
 func (r *PCAPOwnershipService) New(ctx context.Context, params PCAPOwnershipNewParams, opts ...option.RequestOption) (res *Ownership, err error) {
 	var env PCAPOwnershipNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -62,11 +57,6 @@ func (r *PCAPOwnershipService) New(ctx context.Context, params PCAPOwnershipNewP
 func (r *PCAPOwnershipService) Delete(ctx context.Context, ownershipID string, body PCAPOwnershipDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -85,11 +75,6 @@ func (r *PCAPOwnershipService) Get(ctx context.Context, query PCAPOwnershipGetPa
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -116,11 +101,6 @@ func (r *PCAPOwnershipService) GetAutoPaging(ctx context.Context, query PCAPOwne
 func (r *PCAPOwnershipService) Validate(ctx context.Context, params PCAPOwnershipValidateParams, opts ...option.RequestOption) (res *Ownership, err error) {
 	var env PCAPOwnershipValidateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -189,8 +169,6 @@ func (r OwnershipStatus) IsKnown() bool {
 
 type PCAPOwnershipNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf" api:"required"`
@@ -245,22 +223,16 @@ func (r PCAPOwnershipNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PCAPOwnershipDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PCAPOwnershipGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PCAPOwnershipValidateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf" api:"required"`

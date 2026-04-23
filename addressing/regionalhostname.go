@@ -45,11 +45,6 @@ func NewRegionalHostnameService(opts ...option.RequestOption) (r *RegionalHostna
 func (r *RegionalHostnameService) New(ctx context.Context, params RegionalHostnameNewParams, opts ...option.RequestOption) (res *RegionalHostnameNewResponse, err error) {
 	var env RegionalHostnameNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -68,11 +63,6 @@ func (r *RegionalHostnameService) List(ctx context.Context, query RegionalHostna
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -98,11 +88,6 @@ func (r *RegionalHostnameService) ListAutoPaging(ctx context.Context, query Regi
 // Delete the region configuration for a specific Regional Hostname.
 func (r *RegionalHostnameService) Delete(ctx context.Context, hostname string, body RegionalHostnameDeleteParams, opts ...option.RequestOption) (res *RegionalHostnameDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -121,11 +106,6 @@ func (r *RegionalHostnameService) Delete(ctx context.Context, hostname string, b
 func (r *RegionalHostnameService) Edit(ctx context.Context, hostname string, params RegionalHostnameEditParams, opts ...option.RequestOption) (res *RegionalHostnameEditResponse, err error) {
 	var env RegionalHostnameEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -147,11 +127,6 @@ func (r *RegionalHostnameService) Edit(ctx context.Context, hostname string, par
 func (r *RegionalHostnameService) Get(ctx context.Context, hostname string, query RegionalHostnameGetParams, opts ...option.RequestOption) (res *RegionalHostnameGetResponse, err error) {
 	var env RegionalHostnameGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -436,8 +411,6 @@ func (r regionalHostnameGetResponseJSON) RawJSON() string {
 
 type RegionalHostnameNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// DNS hostname to be regionalized, must be a subdomain of the zone. Wildcards are
 	// supported for one level, e.g `*.example.com`
@@ -593,22 +566,16 @@ func (r RegionalHostnameNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegionalHostnameListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RegionalHostnameDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RegionalHostnameEditParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Identifying key for the region
 	RegionKey param.Field[string] `json:"region_key" api:"required"`
@@ -759,8 +726,6 @@ func (r RegionalHostnameEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegionalHostnameGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

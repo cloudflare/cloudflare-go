@@ -37,12 +37,6 @@ func NewAddressMapZoneService(opts ...option.RequestOption) (r *AddressMapZoneSe
 // Add a zone as a member of a particular address map.
 func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string, params AddressMapZoneUpdateParams, opts ...option.RequestOption) (res *AddressMapZoneUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -63,12 +57,6 @@ func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string,
 // Remove a zone as a member of a particular address map.
 func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string, body AddressMapZoneDeleteParams, opts ...option.RequestOption) (res *AddressMapZoneDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -434,12 +422,8 @@ func (r addressMapZoneDeleteResponseResultInfoJSON) RawJSON() string {
 
 type AddressMapZoneUpdateParams struct {
 	// Identifier of a zone.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Identifier of a Cloudflare account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Body      interface{}         `json:"body" api:"required"`
 }
@@ -450,11 +434,7 @@ func (r AddressMapZoneUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type AddressMapZoneDeleteParams struct {
 	// Identifier of a zone.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Identifier of a Cloudflare account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

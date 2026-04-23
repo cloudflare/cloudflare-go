@@ -48,11 +48,6 @@ func NewPrefixService(opts ...option.RequestOption) (r *PrefixService) {
 func (r *PrefixService) New(ctx context.Context, params PrefixNewParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	var env PrefixNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -71,11 +66,6 @@ func (r *PrefixService) List(ctx context.Context, query PrefixListParams, opts .
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -101,11 +91,6 @@ func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListPara
 // Delete an unapproved prefix owned by the account.
 func (r *PrefixService) Delete(ctx context.Context, prefixID string, body PrefixDeleteParams, opts ...option.RequestOption) (res *PrefixDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -123,11 +108,6 @@ func (r *PrefixService) Delete(ctx context.Context, prefixID string, body Prefix
 func (r *PrefixService) Edit(ctx context.Context, prefixID string, params PrefixEditParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	var env PrefixEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -149,11 +129,6 @@ func (r *PrefixService) Edit(ctx context.Context, prefixID string, params Prefix
 func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGetParams, opts ...option.RequestOption) (res *Prefix, err error) {
 	var env PrefixGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -405,8 +380,6 @@ func (r PrefixDeleteResponseSuccess) IsKnown() bool {
 
 type PrefixNewParams struct {
 	// Identifier of a Cloudflare account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	ASN param.Field[int64] `json:"asn" api:"required"`
@@ -567,22 +540,16 @@ func (r PrefixNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixListParams struct {
 	// Identifier of a Cloudflare account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixDeleteParams struct {
 	// Identifier of a Cloudflare account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type PrefixEditParams struct {
 	// Identifier of a Cloudflare account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Description of the prefix.
 	Description param.Field[string] `json:"description" api:"required"`
@@ -733,8 +700,6 @@ func (r PrefixEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrefixGetParams struct {
 	// Identifier of a Cloudflare account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

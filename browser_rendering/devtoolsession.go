@@ -39,11 +39,6 @@ func NewDevtoolSessionService(opts ...option.RequestOption) (r *DevtoolSessionSe
 // List active browser sessions.
 func (r *DevtoolSessionService) List(ctx context.Context, params DevtoolSessionListParams, opts ...option.RequestOption) (res *[]DevtoolSessionListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -56,11 +51,6 @@ func (r *DevtoolSessionService) List(ctx context.Context, params DevtoolSessionL
 // Get details for a specific browser session.
 func (r *DevtoolSessionService) Get(ctx context.Context, sessionID string, query DevtoolSessionGetParams, opts ...option.RequestOption) (res *DevtoolSessionGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -180,8 +170,6 @@ func (r devtoolSessionGetResponseJSON) RawJSON() string {
 
 type DevtoolSessionListParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]  `path:"account_id" api:"required"`
 	Limit     param.Field[float64] `query:"limit"`
 	Offset    param.Field[float64] `query:"offset"`
@@ -198,7 +186,5 @@ func (r DevtoolSessionListParams) URLQuery() (v url.Values) {
 
 type DevtoolSessionGetParams struct {
 	// Account ID.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

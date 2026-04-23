@@ -41,11 +41,6 @@ func NewInstanceJobService(opts ...option.RequestOption) (r *InstanceJobService)
 func (r *InstanceJobService) New(ctx context.Context, id string, params InstanceJobNewParams, opts ...option.RequestOption) (res *InstanceJobNewResponse, err error) {
 	var env InstanceJobNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -68,11 +63,6 @@ func (r *InstanceJobService) List(ctx context.Context, id string, params Instanc
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -103,11 +93,6 @@ func (r *InstanceJobService) ListAutoPaging(ctx context.Context, id string, para
 func (r *InstanceJobService) Get(ctx context.Context, id string, jobID string, query InstanceJobGetParams, opts ...option.RequestOption) (res *InstanceJobGetResponse, err error) {
 	var env InstanceJobGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -133,11 +118,6 @@ func (r *InstanceJobService) Get(ctx context.Context, id string, jobID string, q
 func (r *InstanceJobService) Logs(ctx context.Context, id string, jobID string, params InstanceJobLogsParams, opts ...option.RequestOption) (res *[]InstanceJobLogsResponse, err error) {
 	var env InstanceJobLogsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -331,7 +311,6 @@ func (r instanceJobLogsResponseJSON) RawJSON() string {
 }
 
 type InstanceJobNewParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID   param.Field[string] `path:"account_id" api:"required"`
 	Description param.Field[string] `json:"description"`
 }
@@ -364,7 +343,6 @@ func (r instanceJobNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceJobListParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Page      param.Field[int64]  `query:"page"`
 	PerPage   param.Field[int64]  `query:"per_page"`
@@ -379,7 +357,6 @@ func (r InstanceJobListParams) URLQuery() (v url.Values) {
 }
 
 type InstanceJobGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -407,7 +384,6 @@ func (r instanceJobGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceJobLogsParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Page      param.Field[int64]  `query:"page"`
 	PerPage   param.Field[int64]  `query:"per_page"`

@@ -39,11 +39,6 @@ func NewAccessKeyService(opts ...option.RequestOption) (r *AccessKeyService) {
 func (r *AccessKeyService) Update(ctx context.Context, params AccessKeyUpdateParams, opts ...option.RequestOption) (res *AccessKeyUpdateResponse, err error) {
 	var env AccessKeyUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -61,11 +56,6 @@ func (r *AccessKeyService) Update(ctx context.Context, params AccessKeyUpdatePar
 func (r *AccessKeyService) Get(ctx context.Context, query AccessKeyGetParams, opts ...option.RequestOption) (res *AccessKeyGetResponse, err error) {
 	var env AccessKeyGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -83,11 +73,6 @@ func (r *AccessKeyService) Get(ctx context.Context, query AccessKeyGetParams, op
 func (r *AccessKeyService) Rotate(ctx context.Context, body AccessKeyRotateParams, opts ...option.RequestOption) (res *AccessKeyRotateResponse, err error) {
 	var env AccessKeyRotateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -187,8 +172,6 @@ func (r accessKeyRotateResponseJSON) RawJSON() string {
 
 type AccessKeyUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The number of days between key rotations.
 	KeyRotationIntervalDays param.Field[float64] `json:"key_rotation_interval_days" api:"required"`
@@ -339,8 +322,6 @@ func (r AccessKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessKeyGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -485,8 +466,6 @@ func (r AccessKeyGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessKeyRotateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

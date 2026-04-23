@@ -57,11 +57,6 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -98,11 +93,6 @@ func (r *RuleService) NewAutoPaging(ctx context.Context, params RuleNewParams, o
 func (r *RuleService) Update(ctx context.Context, ruleID string, params RuleUpdateParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	var env RuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -131,11 +121,6 @@ func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -173,11 +158,6 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, params RuleListParams,
 func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	var env RuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -205,11 +185,6 @@ func (r *RuleService) BulkDelete(ctx context.Context, body RuleBulkDeleteParams,
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -247,11 +222,6 @@ func (r *RuleService) BulkEdit(ctx context.Context, params RuleBulkEditParams, o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -289,11 +259,6 @@ func (r *RuleService) BulkUpdate(ctx context.Context, params RuleBulkUpdateParam
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -331,11 +296,6 @@ func (r *RuleService) Edit(ctx context.Context, ruleID string, body RuleEditPara
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.ZoneID, precfg.ZoneID)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -376,11 +336,6 @@ func (r *RuleService) EditAutoPaging(ctx context.Context, ruleID string, body Ru
 func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	var env RuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -563,8 +518,6 @@ func (r Product) IsKnown() bool {
 
 type RuleNewParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
@@ -639,8 +592,6 @@ func (r RuleNewParamsActionResponse) MarshalJSON() (data []byte, err error) {
 
 type RuleUpdateParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
@@ -758,8 +709,6 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleListParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The unique identifier of the firewall rule.
 	ID param.Field[string] `query:"id"`
@@ -785,8 +734,6 @@ func (r RuleListParams) URLQuery() (v url.Values) {
 
 type RuleDeleteParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -835,15 +782,11 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type RuleBulkDeleteParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type RuleBulkEditParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Body   interface{}         `json:"body" api:"required"`
 }
@@ -854,8 +797,6 @@ func (r RuleBulkEditParams) MarshalJSON() (data []byte, err error) {
 
 type RuleBulkUpdateParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	Body   interface{}         `json:"body" api:"required"`
 }
@@ -866,8 +807,6 @@ func (r RuleBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type RuleEditParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -877,8 +816,6 @@ func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 
 type RuleGetParams struct {
 	// Defines an identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

@@ -41,11 +41,6 @@ func NewNetworkRouteIPService(opts ...option.RequestOption) (r *NetworkRouteIPSe
 func (r *NetworkRouteIPService) Get(ctx context.Context, ip string, params NetworkRouteIPGetParams, opts ...option.RequestOption) (res *Teamnet, err error) {
 	var env NetworkRouteIPGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -65,8 +60,6 @@ func (r *NetworkRouteIPService) Get(ctx context.Context, ip string, params Netwo
 
 type NetworkRouteIPGetParams struct {
 	// Cloudflare account ID
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// When the virtual_network_id parameter is not provided the request filter will
 	// default search routes that are in the default virtual network for the account.

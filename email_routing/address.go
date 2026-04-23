@@ -43,11 +43,6 @@ func NewAddressService(opts ...option.RequestOption) (r *AddressService) {
 func (r *AddressService) New(ctx context.Context, params AddressNewParams, opts ...option.RequestOption) (res *Address, err error) {
 	var env AddressNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -66,11 +61,6 @@ func (r *AddressService) List(ctx context.Context, params AddressListParams, opt
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -97,11 +87,6 @@ func (r *AddressService) ListAutoPaging(ctx context.Context, params AddressListP
 func (r *AddressService) Delete(ctx context.Context, destinationAddressIdentifier string, body AddressDeleteParams, opts ...option.RequestOption) (res *Address, err error) {
 	var env AddressDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -123,11 +108,6 @@ func (r *AddressService) Delete(ctx context.Context, destinationAddressIdentifie
 func (r *AddressService) Get(ctx context.Context, destinationAddressIdentifier string, query AddressGetParams, opts ...option.RequestOption) (res *Address, err error) {
 	var env AddressGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -187,8 +167,6 @@ func (r addressJSON) RawJSON() string {
 
 type AddressNewParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email" api:"required"`
@@ -339,8 +317,6 @@ func (r AddressNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AddressListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sorts results in an ascending or descending order.
 	Direction param.Field[AddressListParamsDirection] `query:"direction"`
@@ -394,8 +370,6 @@ func (r AddressListParamsVerified) IsKnown() bool {
 
 type AddressDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -540,8 +514,6 @@ func (r AddressDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AddressGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

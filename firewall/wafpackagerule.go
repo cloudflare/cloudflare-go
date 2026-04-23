@@ -50,11 +50,6 @@ func (r *WAFPackageRuleService) List(ctx context.Context, packageID string, para
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -95,11 +90,6 @@ func (r *WAFPackageRuleService) ListAutoPaging(ctx context.Context, packageID st
 func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, ruleID string, params WAFPackageRuleEditParams, opts ...option.RequestOption) (res *WAFPackageRuleEditResponse, err error) {
 	var env WAFPackageRuleEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -130,11 +120,6 @@ func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, rule
 func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query WAFPackageRuleGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env WAFPackageRuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -922,8 +907,6 @@ func (r WAFPackageRuleEditResponseDefaultMode) IsKnown() bool {
 
 type WAFPackageRuleListParams struct {
 	// Defines an identifier of a schema.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines the public description of the WAF rule.
 	Description param.Field[string] `query:"description"`
@@ -1026,8 +1009,6 @@ func (r WAFPackageRuleListParamsOrder) IsKnown() bool {
 
 type WAFPackageRuleEditParams struct {
 	// Defines an identifier of a schema.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines the mode/action of the rule when triggered. You must use a value from
 	// the `allowed_modes` array of the current rule.
@@ -1109,8 +1090,6 @@ func (r WAFPackageRuleEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type WAFPackageRuleGetParams struct {
 	// Defines an identifier of a schema.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

@@ -44,11 +44,6 @@ func NewSinkService(opts ...option.RequestOption) (r *SinkService) {
 func (r *SinkService) New(ctx context.Context, params SinkNewParams, opts ...option.RequestOption) (res *SinkNewResponse, err error) {
 	var env SinkNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -67,11 +62,6 @@ func (r *SinkService) List(ctx context.Context, params SinkListParams, opts ...o
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -98,11 +88,6 @@ func (r *SinkService) ListAutoPaging(ctx context.Context, params SinkListParams,
 func (r *SinkService) Delete(ctx context.Context, sinkID string, params SinkDeleteParams, opts ...option.RequestOption) (res *SinkDeleteResponse, err error) {
 	var env SinkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -124,11 +109,6 @@ func (r *SinkService) Delete(ctx context.Context, sinkID string, params SinkDele
 func (r *SinkService) Get(ctx context.Context, sinkID string, query SinkGetParams, opts ...option.RequestOption) (res *SinkGetResponse, err error) {
 	var env SinkGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -4820,8 +4800,6 @@ func (r SinkGetResponseSchemaFormatTimestampFormat) IsKnown() bool {
 
 type SinkNewParams struct {
 	// Specifies the public ID of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Defines the name of the Sink.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -5787,8 +5765,6 @@ func (r sinkNewResponseEnvelopeJSON) RawJSON() string {
 
 type SinkListParams struct {
 	// Specifies the public ID of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID  param.Field[string]  `path:"account_id" api:"required"`
 	Page       param.Field[float64] `query:"page"`
 	PerPage    param.Field[float64] `query:"per_page"`
@@ -5805,8 +5781,6 @@ func (r SinkListParams) URLQuery() (v url.Values) {
 
 type SinkDeleteParams struct {
 	// Specifies the public ID of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Delete sink forcefully, including deleting any dependent pipelines.
 	Force param.Field[string] `query:"force"`
@@ -5846,8 +5820,6 @@ func (r sinkDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SinkGetParams struct {
 	// Specifies the public ID of the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

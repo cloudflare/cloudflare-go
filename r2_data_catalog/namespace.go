@@ -44,11 +44,6 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 func (r *NamespaceService) List(ctx context.Context, bucketName string, params NamespaceListParams, opts ...option.RequestOption) (res *NamespaceListResponse, err error) {
 	var env NamespaceListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -136,8 +131,6 @@ func (r namespaceListResponseDetailJSON) RawJSON() string {
 
 type NamespaceListParams struct {
 	// Use this to identify the account.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Maximum number of namespaces to return per page. Defaults to 100, maximum 1000.
 	PageSize param.Field[int64] `query:"page_size"`

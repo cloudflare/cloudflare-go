@@ -48,11 +48,6 @@ func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, par
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -94,11 +89,6 @@ func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID s
 func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, groupID string, params WAFPackageGroupEditParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env WAFPackageGroupEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -129,11 +119,6 @@ func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, gro
 func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, groupID string, query WAFPackageGroupGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env WAFPackageGroupGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -235,8 +220,6 @@ func (r GroupAllowedMode) IsKnown() bool {
 
 type WAFPackageGroupListParams struct {
 	// Defines an identifier of a schema.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines the direction used to sort returned rule groups.
 	Direction param.Field[WAFPackageGroupListParamsDirection] `query:"direction"`
@@ -337,8 +320,6 @@ func (r WAFPackageGroupListParamsOrder) IsKnown() bool {
 
 type WAFPackageGroupEditParams struct {
 	// Defines an identifier of a schema.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Defines the state of the rules contained in the rule group. When `on`, the rules
 	// in the group are configurable/usable.
@@ -411,8 +392,6 @@ func (r WAFPackageGroupEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type WAFPackageGroupGetParams struct {
 	// Defines an identifier of a schema.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

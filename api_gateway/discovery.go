@@ -42,11 +42,6 @@ func NewDiscoveryService(opts ...option.RequestOption) (r *DiscoveryService) {
 func (r *DiscoveryService) Get(ctx context.Context, query DiscoveryGetParams, opts ...option.RequestOption) (res *DiscoveryGetResponse, err error) {
 	var env DiscoveryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.ZoneID, precfg.ZoneID)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -245,8 +240,6 @@ func (r discoveryGetResponseJSON) RawJSON() string {
 
 type DiscoveryGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

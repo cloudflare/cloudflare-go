@@ -43,11 +43,6 @@ func NewScriptSecretService(opts ...option.RequestOption) (r *ScriptSecretServic
 func (r *ScriptSecretService) Update(ctx context.Context, scriptName string, params ScriptSecretUpdateParams, opts ...option.RequestOption) (res *ScriptSecretUpdateResponse, err error) {
 	var env ScriptSecretUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -70,11 +65,6 @@ func (r *ScriptSecretService) List(ctx context.Context, scriptName string, query
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -105,11 +95,6 @@ func (r *ScriptSecretService) ListAutoPaging(ctx context.Context, scriptName str
 func (r *ScriptSecretService) Delete(ctx context.Context, scriptName string, secretName string, params ScriptSecretDeleteParams, opts ...option.RequestOption) (res *ScriptSecretDeleteResponse, err error) {
 	var env ScriptSecretDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -135,11 +120,6 @@ func (r *ScriptSecretService) Delete(ctx context.Context, scriptName string, sec
 func (r *ScriptSecretService) Get(ctx context.Context, scriptName string, secretName string, params ScriptSecretGetParams, opts ...option.RequestOption) (res *ScriptSecretGetResponse, err error) {
 	var env ScriptSecretGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -923,8 +903,6 @@ func (r ScriptSecretGetResponseFormat) IsKnown() bool {
 
 type ScriptSecretUpdateParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A secret value accessible through a binding.
 	Body ScriptSecretUpdateParamsBodyUnion `json:"body" api:"required"`
@@ -1259,15 +1237,11 @@ func (r ScriptSecretUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptSecretListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ScriptSecretDeleteParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Flag that indicates whether the secret name is URL encoded.
 	URLEncoded param.Field[bool] `query:"url_encoded"`
@@ -1423,8 +1397,6 @@ func (r ScriptSecretDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptSecretGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Flag that indicates whether the secret name is URL encoded.
 	URLEncoded param.Field[bool] `query:"url_encoded"`

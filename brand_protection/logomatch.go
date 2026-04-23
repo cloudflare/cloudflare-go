@@ -39,11 +39,6 @@ func NewLogoMatchService(opts ...option.RequestOption) (r *LogoMatchService) {
 // Return matches as CSV for logo queries based on ID
 func (r *LogoMatchService) Download(ctx context.Context, params LogoMatchDownloadParams, opts ...option.RequestOption) (res *LogoMatchDownloadResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -56,11 +51,6 @@ func (r *LogoMatchService) Download(ctx context.Context, params LogoMatchDownloa
 // Return matches for logo queries based on ID
 func (r *LogoMatchService) Get(ctx context.Context, params LogoMatchGetParams, opts ...option.RequestOption) (res *LogoMatchGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -117,7 +107,6 @@ func (r logoMatchGetResponseJSON) RawJSON() string {
 }
 
 type LogoMatchDownloadParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]   `path:"account_id" api:"required"`
 	Limit     param.Field[string]   `query:"limit"`
 	LogoID    param.Field[[]string] `query:"logo_id"`
@@ -134,7 +123,6 @@ func (r LogoMatchDownloadParams) URLQuery() (v url.Values) {
 }
 
 type LogoMatchGetParams struct {
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string]   `path:"account_id" api:"required"`
 	Limit     param.Field[string]   `query:"limit"`
 	LogoID    param.Field[[]string] `query:"logo_id"`

@@ -41,11 +41,6 @@ func NewRegionService(opts ...option.RequestOption) (r *RegionService) {
 func (r *RegionService) List(ctx context.Context, params RegionListParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env RegionListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -63,11 +58,6 @@ func (r *RegionService) List(ctx context.Context, params RegionListParams, opts 
 func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionID, query RegionGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env RegionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -83,8 +73,6 @@ func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionI
 
 type RegionListParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Two-letter alpha-2 country code followed in ISO 3166-1.
 	CountryCodeA2 param.Field[string] `query:"country_code_a2"`
@@ -147,8 +135,6 @@ func (r RegionListResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegionGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

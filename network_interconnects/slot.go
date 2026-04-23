@@ -39,11 +39,6 @@ func NewSlotService(opts ...option.RequestOption) (r *SlotService) {
 // Retrieve a list of all slots matching the specified parameters
 func (r *SlotService) List(ctx context.Context, params SlotListParams, opts ...option.RequestOption) (res *SlotListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -56,11 +51,6 @@ func (r *SlotService) List(ctx context.Context, params SlotListParams, opts ...o
 // Get information about the specified slot
 func (r *SlotService) Get(ctx context.Context, slot string, query SlotGetParams, opts ...option.RequestOption) (res *SlotGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -212,8 +202,6 @@ func (r slotGetResponseFacilityJSON) RawJSON() string {
 
 type SlotListParams struct {
 	// Customer account tag
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// If specified, only show slots with the given text in their address field
 	AddressContains param.Field[string] `query:"address_contains"`
@@ -237,7 +225,5 @@ func (r SlotListParams) URLQuery() (v url.Values) {
 
 type SlotGetParams struct {
 	// Customer account tag
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

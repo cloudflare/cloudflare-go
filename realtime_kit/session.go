@@ -41,11 +41,6 @@ func NewSessionService(opts ...option.RequestOption) (r *SessionService) {
 func (r *SessionService) GenerateSummaryOfTranscripts(ctx context.Context, appID string, sessionID string, body SessionGenerateSummaryOfTranscriptsParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return err
-	}
-	requestconfig.UseDefaultParam(&body.AccountID, precfg.AccountID)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
@@ -67,11 +62,6 @@ func (r *SessionService) GenerateSummaryOfTranscripts(ctx context.Context, appID
 // session ID.
 func (r *SessionService) GetParticipantDataFromPeerID(ctx context.Context, appID string, peerID string, params SessionGetParticipantDataFromPeerIDParams, opts ...option.RequestOption) (res *SessionGetParticipantDataFromPeerIDResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -92,11 +82,6 @@ func (r *SessionService) GetParticipantDataFromPeerID(ctx context.Context, appID
 // Returns a URL to download all chat messages of the session ID in CSV format.
 func (r *SessionService) GetSessionChat(ctx context.Context, appID string, sessionID string, query SessionGetSessionChatParams, opts ...option.RequestOption) (res *SessionGetSessionChatResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -117,11 +102,6 @@ func (r *SessionService) GetSessionChat(ctx context.Context, appID string, sessi
 // Returns data of the given session ID including recording details.
 func (r *SessionService) GetSessionDetails(ctx context.Context, appID string, sessionID string, params SessionGetSessionDetailsParams, opts ...option.RequestOption) (res *SessionGetSessionDetailsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -143,11 +123,6 @@ func (r *SessionService) GetSessionDetails(ctx context.Context, appID string, se
 // given session ID.
 func (r *SessionService) GetSessionParticipantDetails(ctx context.Context, appID string, sessionID string, participantID string, params SessionGetSessionParticipantDetailsParams, opts ...option.RequestOption) (res *SessionGetSessionParticipantDetailsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -172,11 +147,6 @@ func (r *SessionService) GetSessionParticipantDetails(ctx context.Context, appID
 // Returns a list of participants for the given session ID.
 func (r *SessionService) GetSessionParticipants(ctx context.Context, appID string, sessionID string, params SessionGetSessionParticipantsParams, opts ...option.RequestOption) (res *SessionGetSessionParticipantsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -198,11 +168,6 @@ func (r *SessionService) GetSessionParticipants(ctx context.Context, appID strin
 // as plain text.
 func (r *SessionService) GetSessionSummary(ctx context.Context, appID string, sessionID string, query SessionGetSessionSummaryParams, opts ...option.RequestOption) (res *SessionGetSessionSummaryResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -223,11 +188,6 @@ func (r *SessionService) GetSessionSummary(ctx context.Context, appID string, se
 // Returns a URL to download the transcript for the session ID in CSV format.
 func (r *SessionService) GetSessionTranscripts(ctx context.Context, appID string, sessionID string, query SessionGetSessionTranscriptsParams, opts ...option.RequestOption) (res *SessionGetSessionTranscriptsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&query.AccountID, precfg.AccountID)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -248,11 +208,6 @@ func (r *SessionService) GetSessionTranscripts(ctx context.Context, appID string
 // Returns details of all sessions of an App.
 func (r *SessionService) GetSessions(ctx context.Context, appID string, params SessionGetSessionsParams, opts ...option.RequestOption) (res *SessionGetSessionsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.AccountID, precfg.AccountID)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -2231,15 +2186,11 @@ func (r SessionGetSessionsResponseDataSessionsType) IsKnown() bool {
 
 type SessionGenerateSummaryOfTranscriptsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SessionGetParticipantDataFromPeerIDParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Comma separated list of filters to apply. Note that there must be no spaces
 	// between the filters.
@@ -2277,15 +2228,11 @@ func (r SessionGetParticipantDataFromPeerIDParamsFilters) IsKnown() bool {
 
 type SessionGetSessionChatParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SessionGetSessionDetailsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// List all breakout rooms
 	IncludeBreakoutRooms param.Field[bool] `query:"include_breakout_rooms"`
@@ -2302,8 +2249,6 @@ func (r SessionGetSessionDetailsParams) URLQuery() (v url.Values) {
 
 type SessionGetSessionParticipantDetailsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Comma separated list of filters to apply. Note that there must be no spaces
 	// between the filters.
@@ -2343,8 +2288,6 @@ func (r SessionGetSessionParticipantDetailsParamsFilters) IsKnown() bool {
 
 type SessionGetSessionParticipantsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// if true, response includes all the peer events of participants.
 	IncludePeerEvents param.Field[bool] `query:"include_peer_events"`
@@ -2421,22 +2364,16 @@ func (r SessionGetSessionParticipantsParamsView) IsKnown() bool {
 
 type SessionGetSessionSummaryParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SessionGetSessionTranscriptsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SessionGetSessionsParams struct {
 	// The account identifier tag.
-	//
-	// Use [option.WithAccountID] on the client to set a global default for this field.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ID of the meeting that sessions should be associated with
 	AssociatedID param.Field[string] `query:"associated_id"`

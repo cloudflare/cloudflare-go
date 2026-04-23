@@ -47,11 +47,6 @@ func NewAnalyticsReportService(opts ...option.RequestOption) (r *AnalyticsReport
 func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReportGetParams, opts ...option.RequestOption) (res *Report, err error) {
 	var env AnalyticsReportGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	precfg, err := requestconfig.PreRequestOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	requestconfig.UseDefaultParam(&params.ZoneID, precfg.ZoneID)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -174,8 +169,6 @@ func (r reportQueryJSON) RawJSON() string {
 
 type AnalyticsReportGetParams struct {
 	// Identifier.
-	//
-	// Use [option.WithZoneID] on the client to set a global default for this field.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A comma-separated list of dimensions to group results by.
 	Dimensions param.Field[string] `query:"dimensions"`
