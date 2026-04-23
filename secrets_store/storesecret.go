@@ -567,8 +567,9 @@ type StoreSecretNewParamsBody struct {
 	Name param.Field[string] `json:"name" api:"required"`
 	// The list of services that can use this secret.
 	Scopes param.Field[[]string] `json:"scopes" api:"required"`
-	// The value of the secret. Note that this is 'write only' - no API reponse will
-	// provide this value, it is only used to create/modify secrets.
+	// The value of the secret. Maximum 64 KiB (65,536 bytes). Note that this is 'write
+	// only' - no API response will provide this value, it is only used to
+	// create/modify secrets.
 	Value param.Field[string] `json:"value" api:"required"`
 	// Freeform text describing the secret
 	Comment param.Field[string] `json:"comment"`
@@ -1135,8 +1136,9 @@ type StoreSecretEditParams struct {
 	Comment param.Field[string] `json:"comment"`
 	// The list of services that can use this secret.
 	Scopes param.Field[[]string] `json:"scopes"`
-	// The value of the secret. Note that this is 'write only' - no API reponse will
-	// provide this value, it is only used to create/modify secrets.
+	// The value of the secret. Maximum 64 KiB (65,536 bytes). Note that this is 'write
+	// only' - no API response will provide this value, it is only used to
+	// create/modify secrets.
 	Value param.Field[string] `json:"value"`
 }
 
