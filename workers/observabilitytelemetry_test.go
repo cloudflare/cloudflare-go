@@ -33,8 +33,12 @@ func TestObservabilityTelemetryKeysWithOptionalParams(t *testing.T) {
 		Datasets:  cloudflare.F([]string{"string"}),
 		Filters: cloudflare.F([]workers.ObservabilityTelemetryKeysParamsFilterUnion{workers.ObservabilityTelemetryKeysParamsFiltersObject{
 			FilterCombination: cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersObjectFilterCombinationAnd),
-			Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
-			Kind:              cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersObjectKindGroup),
+			Filters: cloudflare.F([]workers.ObservabilityTelemetryKeysParamsFiltersObjectFilterUnion{workers.ObservabilityTelemetryKeysParamsFiltersObjectFiltersObject{
+				FilterCombination: cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombinationAnd),
+				Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
+				Kind:              cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectKindGroup),
+			}}),
+			Kind: cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersObjectKindGroup),
 		}}),
 		From: cloudflare.F(0.000000),
 		KeyNeedle: cloudflare.F(workers.ObservabilityTelemetryKeysParamsKeyNeedle{
@@ -99,8 +103,12 @@ func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
 			FilterCombination: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFilterCombinationAnd),
 			Filters: cloudflare.F([]workers.ObservabilityTelemetryQueryParamsParametersFilterUnion{workers.ObservabilityTelemetryQueryParamsParametersFiltersObject{
 				FilterCombination: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinationAnd),
-				Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
-				Kind:              cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectKindGroup),
+				Filters: cloudflare.F([]workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterUnion{workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObject{
+					FilterCombination: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombinationAnd),
+					Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
+					Kind:              cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectKindGroup),
+				}}),
+				Kind: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectKindGroup),
 			}}),
 			GroupBys: cloudflare.F([]workers.ObservabilityTelemetryQueryParamsParametersGroupBy{{
 				Type:  cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersGroupBysTypeString),
@@ -157,8 +165,12 @@ func TestObservabilityTelemetryValuesWithOptionalParams(t *testing.T) {
 		Type: cloudflare.F(workers.ObservabilityTelemetryValuesParamsTypeString),
 		Filters: cloudflare.F([]workers.ObservabilityTelemetryValuesParamsFilterUnion{workers.ObservabilityTelemetryValuesParamsFiltersObject{
 			FilterCombination: cloudflare.F(workers.ObservabilityTelemetryValuesParamsFiltersObjectFilterCombinationAnd),
-			Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
-			Kind:              cloudflare.F(workers.ObservabilityTelemetryValuesParamsFiltersObjectKindGroup),
+			Filters: cloudflare.F([]workers.ObservabilityTelemetryValuesParamsFiltersObjectFilterUnion{workers.ObservabilityTelemetryValuesParamsFiltersObjectFiltersObject{
+				FilterCombination: cloudflare.F(workers.ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombinationAnd),
+				Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
+				Kind:              cloudflare.F(workers.ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectKindGroup),
+			}}),
+			Kind: cloudflare.F(workers.ObservabilityTelemetryValuesParamsFiltersObjectKindGroup),
 		}}),
 		Limit: cloudflare.F(0.000000),
 		Needle: cloudflare.F(workers.ObservabilityTelemetryValuesParamsNeedle{
