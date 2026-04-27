@@ -1693,18 +1693,23 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindRatelimi
 	// The limit (requests per period).
 	Limit float64 `json:"limit" api:"required"`
 	// The period in seconds.
-	Period int64                                                                                  `json:"period" api:"required"`
-	JSON   scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
+	Period int64 `json:"period" api:"required"`
+	// Duration in seconds to apply the mitigation action after the rate limit is
+	// exceeded. Valid values are 0 (disabled), 10, or multiples of 60 up to 86400.
+	// Must be greater than or equal to the period when non-zero.
+	MitigationTimeout int64                                                                                  `json:"mitigation_timeout"`
+	JSON              scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindRatelimitSimpleJSON
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindRatelimitSimple]
 type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindRatelimitSimpleJSON struct {
-	Limit       apijson.Field
-	Period      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Limit             apijson.Field
+	Period            apijson.Field
+	MitigationTimeout apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindRatelimitSimple) UnmarshalJSON(data []byte) (err error) {
@@ -4712,18 +4717,23 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindRatelimit
 	// The limit (requests per period).
 	Limit float64 `json:"limit" api:"required"`
 	// The period in seconds.
-	Period int64                                                                                 `json:"period" api:"required"`
-	JSON   scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
+	Period int64 `json:"period" api:"required"`
+	// Duration in seconds to apply the mitigation action after the rate limit is
+	// exceeded. Valid values are 0 (disabled), 10, or multiples of 60 up to 86400.
+	// Must be greater than or equal to the period when non-zero.
+	MitigationTimeout int64                                                                                 `json:"mitigation_timeout"`
+	JSON              scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindRatelimitSimpleJSON
 // contains the JSON metadata for the struct
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindRatelimitSimple]
 type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindRatelimitSimpleJSON struct {
-	Limit       apijson.Field
-	Period      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Limit             apijson.Field
+	Period            apijson.Field
+	MitigationTimeout apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindRatelimitSimple) UnmarshalJSON(data []byte) (err error) {
@@ -7039,6 +7049,10 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindRa
 	Limit param.Field[float64] `json:"limit" api:"required"`
 	// The period in seconds.
 	Period param.Field[int64] `json:"period" api:"required"`
+	// Duration in seconds to apply the mitigation action after the rate limit is
+	// exceeded. Valid values are 0 (disabled), 10, or multiples of 60 up to 86400.
+	// Must be greater than or equal to the period when non-zero.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindRatelimitSimple) MarshalJSON() (data []byte, err error) {

@@ -1702,18 +1702,23 @@ type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindRatelimitSimple 
 	// The limit (requests per period).
 	Limit float64 `json:"limit" api:"required"`
 	// The period in seconds.
-	Period int64                                                                          `json:"period" api:"required"`
-	JSON   scriptVersionNewResponseResourcesBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
+	Period int64 `json:"period" api:"required"`
+	// Duration in seconds to apply the mitigation action after the rate limit is
+	// exceeded. Valid values are 0 (disabled), 10, or multiples of 60 up to 86400.
+	// Must be greater than or equal to the period when non-zero.
+	MitigationTimeout int64                                                                          `json:"mitigation_timeout"`
+	JSON              scriptVersionNewResponseResourcesBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
 }
 
 // scriptVersionNewResponseResourcesBindingsWorkersBindingKindRatelimitSimpleJSON
 // contains the JSON metadata for the struct
 // [ScriptVersionNewResponseResourcesBindingsWorkersBindingKindRatelimitSimple]
 type scriptVersionNewResponseResourcesBindingsWorkersBindingKindRatelimitSimpleJSON struct {
-	Limit       apijson.Field
-	Period      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Limit             apijson.Field
+	Period            apijson.Field
+	MitigationTimeout apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptVersionNewResponseResourcesBindingsWorkersBindingKindRatelimitSimple) UnmarshalJSON(data []byte) (err error) {
@@ -4443,18 +4448,23 @@ type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindRatelimitSimple 
 	// The limit (requests per period).
 	Limit float64 `json:"limit" api:"required"`
 	// The period in seconds.
-	Period int64                                                                          `json:"period" api:"required"`
-	JSON   scriptVersionGetResponseResourcesBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
+	Period int64 `json:"period" api:"required"`
+	// Duration in seconds to apply the mitigation action after the rate limit is
+	// exceeded. Valid values are 0 (disabled), 10, or multiples of 60 up to 86400.
+	// Must be greater than or equal to the period when non-zero.
+	MitigationTimeout int64                                                                          `json:"mitigation_timeout"`
+	JSON              scriptVersionGetResponseResourcesBindingsWorkersBindingKindRatelimitSimpleJSON `json:"-"`
 }
 
 // scriptVersionGetResponseResourcesBindingsWorkersBindingKindRatelimitSimpleJSON
 // contains the JSON metadata for the struct
 // [ScriptVersionGetResponseResourcesBindingsWorkersBindingKindRatelimitSimple]
 type scriptVersionGetResponseResourcesBindingsWorkersBindingKindRatelimitSimpleJSON struct {
-	Limit       apijson.Field
-	Period      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Limit             apijson.Field
+	Period            apijson.Field
+	MitigationTimeout apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptVersionGetResponseResourcesBindingsWorkersBindingKindRatelimitSimple) UnmarshalJSON(data []byte) (err error) {
@@ -6448,6 +6458,10 @@ type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindRatelimitSimple str
 	Limit param.Field[float64] `json:"limit" api:"required"`
 	// The period in seconds.
 	Period param.Field[int64] `json:"period" api:"required"`
+	// Duration in seconds to apply the mitigation action after the rate limit is
+	// exceeded. Valid values are 0 (disabled), 10, or multiples of 60 up to 86400.
+	// Must be greater than or equal to the period when non-zero.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
 }
 
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindRatelimitSimple) MarshalJSON() (data []byte, err error) {

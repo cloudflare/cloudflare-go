@@ -150,19 +150,37 @@ func (r ObservabilityTelemetryKeysResponseType) IsKnown() bool {
 	return false
 }
 
+// Complete results of a query run. The populated fields depend on the requested
+// view type (events, calculations, invocations, traces, or agents).
 type ObservabilityTelemetryQueryResponse struct {
-	// A Workers Observability Query Object
+	// The query run metadata including the query definition, execution status, and
+	// timeframe.
 	Run ObservabilityTelemetryQueryResponseRun `json:"run" api:"required"`
-	// The statistics object contains information about query performance from the
-	// database, it does not include any network latency
-	Statistics   ObservabilityTelemetryQueryResponseStatistics              `json:"statistics" api:"required"`
-	Agents       []ObservabilityTelemetryQueryResponseAgent                 `json:"agents"`
-	Calculations []ObservabilityTelemetryQueryResponseCalculation           `json:"calculations"`
-	Compare      []ObservabilityTelemetryQueryResponseCompare               `json:"compare"`
-	Events       ObservabilityTelemetryQueryResponseEvents                  `json:"events"`
-	Invocations  map[string][]ObservabilityTelemetryQueryResponseInvocation `json:"invocations"`
-	Traces       []ObservabilityTelemetryQueryResponseTrace                 `json:"traces"`
-	JSON         observabilityTelemetryQueryResponseJSON                    `json:"-"`
+	// Query performance statistics from the database. Includes execution time, rows
+	// scanned, and bytes read. Does not include network latency.
+	Statistics ObservabilityTelemetryQueryResponseStatistics `json:"statistics" api:"required"`
+	// Durable Object agent summaries. Present when the query view is 'agents'. Each
+	// entry represents an agent with its event counts and status.
+	Agents []ObservabilityTelemetryQueryResponseAgent `json:"agents"`
+	// Aggregated calculation results. Present when the query view is 'calculations'.
+	// Contains computed metrics (count, avg, p99, etc.) with optional group-by
+	// breakdowns and time-series data.
+	Calculations []ObservabilityTelemetryQueryResponseCalculation `json:"calculations"`
+	// Comparison calculation results from the previous time period. Present when the
+	// compare option is enabled. Same structure as calculations.
+	Compare []ObservabilityTelemetryQueryResponseCompare `json:"compare"`
+	// Individual event results. Present when the query view is 'events'. Contains the
+	// matching log lines and their metadata.
+	Events ObservabilityTelemetryQueryResponseEvents `json:"events"`
+	// Events grouped by invocation (request ID). Present when the query view is
+	// 'invocations'. Each key is a request ID mapping to all events from that
+	// invocation.
+	Invocations map[string][]ObservabilityTelemetryQueryResponseInvocation `json:"invocations"`
+	// Trace summaries matching the query. Present when the query view is 'traces'.
+	// Each entry represents a distributed trace with its spans, duration, and services
+	// involved.
+	Traces []ObservabilityTelemetryQueryResponseTrace `json:"traces"`
+	JSON   observabilityTelemetryQueryResponseJSON    `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseJSON contains the JSON metadata for the
@@ -188,21 +206,35 @@ func (r observabilityTelemetryQueryResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A Workers Observability Query Object
+// The query run metadata including the query definition, execution status, and
+// timeframe.
 type ObservabilityTelemetryQueryResponseRun struct {
-	ID          string                                       `json:"id" api:"required"`
-	AccountID   string                                       `json:"accountId" api:"required"`
-	Dry         bool                                         `json:"dry" api:"required"`
-	Granularity float64                                      `json:"granularity" api:"required"`
-	Query       ObservabilityTelemetryQueryResponseRunQuery  `json:"query" api:"required"`
-	Status      ObservabilityTelemetryQueryResponseRunStatus `json:"status" api:"required"`
+	// Unique identifier for this query run.
+	ID string `json:"id" api:"required"`
+	// Cloudflare account ID that owns this query run.
+	AccountID string `json:"accountId" api:"required"`
+	// Whether this was a dry run (results not persisted).
+	Dry bool `json:"dry" api:"required"`
+	// Number of time-series buckets used for the query. Higher values produce more
+	// detailed series data.
+	Granularity float64 `json:"granularity" api:"required"`
+	// A saved query definition with its parameters, metadata, and ownership
+	// information.
+	Query ObservabilityTelemetryQueryResponseRunQuery `json:"query" api:"required"`
+	// Current execution status of the query run.
+	Status ObservabilityTelemetryQueryResponseRunStatus `json:"status" api:"required"`
 	// Time range for the query execution
-	Timeframe  ObservabilityTelemetryQueryResponseRunTimeframe  `json:"timeframe" api:"required"`
-	UserID     string                                           `json:"userId" api:"required"`
-	Created    string                                           `json:"created"`
+	Timeframe ObservabilityTelemetryQueryResponseRunTimeframe `json:"timeframe" api:"required"`
+	// ID of the user who initiated the query run.
+	UserID string `json:"userId" api:"required"`
+	// ISO-8601 timestamp when the query run was created.
+	Created string `json:"created"`
+	// Query performance statistics from the database (does not include network
+	// latency).
 	Statistics ObservabilityTelemetryQueryResponseRunStatistics `json:"statistics"`
-	Updated    string                                           `json:"updated"`
-	JSON       observabilityTelemetryQueryResponseRunJSON       `json:"-"`
+	// ISO-8601 timestamp when the query run was last updated.
+	Updated string                                     `json:"updated"`
+	JSON    observabilityTelemetryQueryResponseRunJSON `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseRunJSON contains the JSON metadata for the
@@ -231,6 +263,8 @@ func (r observabilityTelemetryQueryResponseRunJSON) RawJSON() string {
 	return r.raw
 }
 
+// A saved query definition with its parameters, metadata, and ownership
+// information.
 type ObservabilityTelemetryQueryResponseRunQuery struct {
 	ID string `json:"id" api:"required"`
 	// If the query wasn't explcitly saved
@@ -435,14 +469,18 @@ type ObservabilityTelemetryQueryResponseRunQueryParametersFilter struct {
 	FilterCombination ObservabilityTelemetryQueryResponseRunQueryParametersFiltersFilterCombination `json:"filterCombination"`
 	// This field can have the runtime type of [[]interface{}].
 	Filters interface{} `json:"filters"`
-	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
-	// previous query results or the observability_keys response. Preferred keys:
-	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
-	// $metadata.error.
-	Key       string                                                                `json:"key"`
-	Kind      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKind      `json:"kind"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key  string                                                           `json:"key"`
+	Kind ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKind `json:"kind"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation `json:"operation"`
-	Type      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersType      `json:"type"`
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersType `json:"type"`
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion].
 	Value interface{}                                                     `json:"value"`
@@ -573,24 +611,27 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersObjectKind) 
 	return false
 }
 
-// Filtering best practices: use observability_keys and observability_values to
-// confirm available fields and values. If searching for errors, filter for
-// $metadata.error exists.
+// A filter condition applied to query results. Use the keys and values endpoints
+// to discover available fields and their values before constructing filters.
 type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeaf struct {
-	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
-	// previous query results or the observability_keys response. Preferred keys:
-	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
-	// $metadata.error.
-	Key       string                                                                                              `json:"key" api:"required"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key string `json:"key" api:"required"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation `json:"operation" api:"required"`
-	Type      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType      `json:"type" api:"required"`
-	Kind      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafKind      `json:"kind"`
-	// Filter comparison value. IMPORTANT: must match actual values in your logs.
-	// Verify using previous query results or the /values endpoint. Ensure value type
-	// matches the field type. String comparisons are case-sensitive unless using
-	// specific operations. Regex uses ClickHouse RE2 syntax (no
-	// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
-	// boundary.
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType `json:"type" api:"required"`
+	// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+	// omitted.
+	Kind ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafKind `json:"kind"`
+	// Comparison value. Must match actual values in your data — verify with the values
+	// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+	// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+	// lookaheads/lookbehinds).
 	Value ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion `json:"value"`
 	JSON  observabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafJSON       `json:"-"`
 }
@@ -619,6 +660,9 @@ func (r observabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObser
 func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryQueryResponseRunQueryParametersFilter() {
 }
 
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
@@ -660,6 +704,8 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObser
 	return false
 }
 
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
 type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafType string
 
 const (
@@ -676,6 +722,8 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObser
 	return false
 }
 
+// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+// omitted.
 type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafKind string
 
 const (
@@ -690,12 +738,10 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObser
 	return false
 }
 
-// Filter comparison value. IMPORTANT: must match actual values in your logs.
-// Verify using previous query results or the /values endpoint. Ensure value type
-// matches the field type. String comparisons are case-sensitive unless using
-// specific operations. Regex uses ClickHouse RE2 syntax (no
-// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
-// boundary.
+// Comparison value. Must match actual values in your data — verify with the values
+// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+// lookaheads/lookbehinds).
 //
 // Union satisfied by [shared.UnionString], [shared.UnionFloat] or
 // [shared.UnionBool].
@@ -758,6 +804,9 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKind) IsKnow
 	return false
 }
 
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation string
 
 const (
@@ -799,6 +848,8 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation) I
 	return false
 }
 
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
 type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersType string
 
 const (
@@ -990,6 +1041,7 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersOrderByOrder) IsKno
 	return false
 }
 
+// Current execution status of the query run.
 type ObservabilityTelemetryQueryResponseRunStatus string
 
 const (
@@ -1031,6 +1083,8 @@ func (r observabilityTelemetryQueryResponseRunTimeframeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Query performance statistics from the database (does not include network
+// latency).
 type ObservabilityTelemetryQueryResponseRunStatistics struct {
 	// Number of uncompressed bytes read from the table.
 	BytesRead float64 `json:"bytes_read" api:"required"`
@@ -1063,8 +1117,8 @@ func (r observabilityTelemetryQueryResponseRunStatisticsJSON) RawJSON() string {
 	return r.raw
 }
 
-// The statistics object contains information about query performance from the
-// database, it does not include any network latency
+// Query performance statistics from the database. Includes execution time, rows
+// scanned, and bytes read. Does not include network latency.
 type ObservabilityTelemetryQueryResponseStatistics struct {
 	// Number of uncompressed bytes read from the table.
 	BytesRead float64 `json:"bytes_read" api:"required"`
@@ -1098,15 +1152,24 @@ func (r observabilityTelemetryQueryResponseStatisticsJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseAgent struct {
-	AgentClass      string                                       `json:"agentClass" api:"required"`
-	EventTypeCounts map[string]float64                           `json:"eventTypeCounts" api:"required"`
-	FirstEventMs    float64                                      `json:"firstEventMs" api:"required"`
-	HasErrors       bool                                         `json:"hasErrors" api:"required"`
-	LastEventMs     float64                                      `json:"lastEventMs" api:"required"`
-	Namespace       string                                       `json:"namespace" api:"required"`
-	Service         string                                       `json:"service" api:"required"`
-	TotalEvents     float64                                      `json:"totalEvents" api:"required"`
-	JSON            observabilityTelemetryQueryResponseAgentJSON `json:"-"`
+	// Class name of the Durable Object agent.
+	AgentClass string `json:"agentClass" api:"required"`
+	// Breakdown of event counts by event type.
+	EventTypeCounts map[string]float64 `json:"eventTypeCounts" api:"required"`
+	// Timestamp of the earliest event from this agent in the queried window (Unix
+	// epoch ms).
+	FirstEventMs float64 `json:"firstEventMs" api:"required"`
+	// Whether the agent emitted any error events in the queried window.
+	HasErrors bool `json:"hasErrors" api:"required"`
+	// Timestamp of the most recent event from this agent (Unix epoch ms).
+	LastEventMs float64 `json:"lastEventMs" api:"required"`
+	// Durable Object namespace the agent belongs to.
+	Namespace string `json:"namespace" api:"required"`
+	// Worker service name that hosts this agent.
+	Service string `json:"service" api:"required"`
+	// Total number of events emitted by this agent in the queried window.
+	TotalEvents float64                                      `json:"totalEvents" api:"required"`
+	JSON        observabilityTelemetryQueryResponseAgentJSON `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseAgentJSON contains the JSON metadata for the
@@ -1570,10 +1633,18 @@ func init() {
 	)
 }
 
+// Individual event results. Present when the query view is 'events'. Contains the
+// matching log lines and their metadata.
 type ObservabilityTelemetryQueryResponseEvents struct {
-	Count  float64                                           `json:"count"`
-	Events []ObservabilityTelemetryQueryResponseEventsEvent  `json:"events"`
-	Fields []ObservabilityTelemetryQueryResponseEventsField  `json:"fields"`
+	// Total number of events matching the query (may exceed the number returned due to
+	// limits).
+	Count float64 `json:"count"`
+	// List of individual telemetry events matching the query.
+	Events []ObservabilityTelemetryQueryResponseEventsEvent `json:"events"`
+	// List of fields discovered in the matched events. Useful for building dynamic
+	// UIs.
+	Fields []ObservabilityTelemetryQueryResponseEventsField `json:"fields"`
+	// Time-series data for the matched events, bucketed by the query granularity.
 	Series []ObservabilityTelemetryQueryResponseEventsSeries `json:"series"`
 	JSON   observabilityTelemetryQueryResponseEventsJSON     `json:"-"`
 }
@@ -1597,17 +1668,24 @@ func (r observabilityTelemetryQueryResponseEventsJSON) RawJSON() string {
 	return r.raw
 }
 
-// The data structure of a telemetry event
+// A single telemetry event representing a log line, span, or metric data point
+// emitted by a Worker.
 type ObservabilityTelemetryQueryResponseEventsEvent struct {
-	Metadata  ObservabilityTelemetryQueryResponseEventsEventsMetadata `json:"$metadata" api:"required"`
-	Dataset   string                                                  `json:"dataset" api:"required"`
-	Source    interface{}                                             `json:"source" api:"required"`
-	Timestamp int64                                                   `json:"timestamp" api:"required"`
-	// Cloudflare Containers event information enriches your logs so you can easily
-	// identify and debug issues.
+	// Structured metadata extracted from the event. These fields are indexed and
+	// available for filtering and aggregation.
+	Metadata ObservabilityTelemetryQueryResponseEventsEventsMetadata `json:"$metadata" api:"required"`
+	// The dataset this event belongs to (e.g. cloudflare-workers).
+	Dataset string `json:"dataset" api:"required"`
+	// Raw log payload. May be a string or a structured object depending on how the log
+	// was emitted.
+	Source interface{} `json:"source" api:"required"`
+	// Event timestamp as a Unix epoch in milliseconds.
+	Timestamp int64 `json:"timestamp" api:"required"`
+	// Cloudflare Containers event information that enriches your logs for identifying
+	// and debugging issues.
 	Containers interface{} `json:"$containers"`
-	// Cloudflare Workers event information enriches your logs so you can easily
-	// identify and debug issues.
+	// Cloudflare Workers event information that enriches your logs for identifying and
+	// debugging issues.
 	Workers ObservabilityTelemetryQueryResponseEventsEventsWorkers `json:"$workers"`
 	JSON    observabilityTelemetryQueryResponseEventsEventJSON     `json:"-"`
 }
@@ -1633,40 +1711,72 @@ func (r observabilityTelemetryQueryResponseEventsEventJSON) RawJSON() string {
 	return r.raw
 }
 
+// Structured metadata extracted from the event. These fields are indexed and
+// available for filtering and aggregation.
 type ObservabilityTelemetryQueryResponseEventsEventsMetadata struct {
-	// Unique event ID. Use as the cursor for offset-based pagination.
-	ID              string                                                      `json:"id" api:"required"`
-	Account         string                                                      `json:"account"`
-	CloudService    string                                                      `json:"cloudService"`
-	ColdStart       int64                                                       `json:"coldStart"`
-	Cost            int64                                                       `json:"cost"`
-	Duration        int64                                                       `json:"duration"`
-	EndTime         int64                                                       `json:"endTime"`
-	Error           string                                                      `json:"error"`
-	ErrorTemplate   string                                                      `json:"errorTemplate"`
-	Fingerprint     string                                                      `json:"fingerprint"`
-	Level           string                                                      `json:"level"`
-	Message         string                                                      `json:"message"`
-	MessageTemplate string                                                      `json:"messageTemplate"`
-	MetricName      string                                                      `json:"metricName"`
-	Origin          string                                                      `json:"origin"`
-	ParentSpanID    string                                                      `json:"parentSpanId"`
-	Provider        string                                                      `json:"provider"`
-	Region          string                                                      `json:"region"`
-	RequestID       string                                                      `json:"requestId"`
-	Service         string                                                      `json:"service"`
-	SpanID          string                                                      `json:"spanId"`
-	SpanName        string                                                      `json:"spanName"`
-	StackID         string                                                      `json:"stackId"`
-	StartTime       int64                                                       `json:"startTime"`
-	StatusCode      int64                                                       `json:"statusCode"`
-	TraceDuration   int64                                                       `json:"traceDuration"`
-	TraceID         string                                                      `json:"traceId"`
-	TransactionName string                                                      `json:"transactionName"`
-	Trigger         string                                                      `json:"trigger"`
-	Type            string                                                      `json:"type"`
-	URL             string                                                      `json:"url"`
-	JSON            observabilityTelemetryQueryResponseEventsEventsMetadataJSON `json:"-"`
+	// Unique event ID. Use as the cursor value for offset-based pagination.
+	ID string `json:"id" api:"required"`
+	// Cloudflare account identifier.
+	Account string `json:"account"`
+	// Cloudflare product that generated this event (e.g. workers, pages).
+	CloudService string `json:"cloudService"`
+	// Whether this was a cold start (1) or warm invocation (0).
+	ColdStart int64 `json:"coldStart"`
+	// Estimated cost units for this invocation.
+	Cost int64 `json:"cost"`
+	// Span duration in milliseconds.
+	Duration int64 `json:"duration"`
+	// Span end time as a Unix epoch in milliseconds.
+	EndTime int64 `json:"endTime"`
+	// Error message, present when the log represents an error.
+	Error string `json:"error"`
+	// Templatized version of the error message used for grouping similar errors.
+	ErrorTemplate string `json:"errorTemplate"`
+	// Content-based fingerprint used to group similar events.
+	Fingerprint string `json:"fingerprint"`
+	// Log level (e.g. log, debug, info, warn, error).
+	Level string `json:"level"`
+	// Log message text.
+	Message string `json:"message"`
+	// Templatized version of the log message used for grouping similar messages.
+	MessageTemplate string `json:"messageTemplate"`
+	// Metric name when the event represents a metric data point.
+	MetricName string `json:"metricName"`
+	// Origin of the event (e.g. fetch, scheduled, queue).
+	Origin string `json:"origin"`
+	// Span ID of the parent span in the trace hierarchy.
+	ParentSpanID string `json:"parentSpanId"`
+	// Infrastructure provider identifier.
+	Provider string `json:"provider"`
+	// Cloudflare data center / region that handled the request.
+	Region string `json:"region"`
+	// Cloudflare request ID that ties all logs from a single invocation together.
+	RequestID string `json:"requestId"`
+	// Worker script name that produced this event.
+	Service string `json:"service"`
+	// Span ID for this individual unit of work within a trace.
+	SpanID string `json:"spanId"`
+	// Human-readable name for this span.
+	SpanName string `json:"spanName"`
+	// Stack / deployment identifier.
+	StackID string `json:"stackId"`
+	// Span start time as a Unix epoch in milliseconds.
+	StartTime int64 `json:"startTime"`
+	// HTTP response status code returned by the Worker.
+	StatusCode int64 `json:"statusCode"`
+	// Total duration of the entire trace in milliseconds.
+	TraceDuration int64 `json:"traceDuration"`
+	// Distributed trace ID linking spans across services.
+	TraceID string `json:"traceId"`
+	// Logical transaction name for this request.
+	TransactionName string `json:"transactionName"`
+	// What triggered the invocation (e.g. GET /users, POST /orders, queue message).
+	Trigger string `json:"trigger"`
+	// Event type classifier (e.g. cf-worker-event, cf-worker-log).
+	Type string `json:"type"`
+	// Request URL that triggered the Worker invocation.
+	URL  string                                                      `json:"url"`
+	JSON observabilityTelemetryQueryResponseEventsEventsMetadataJSON `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseEventsEventsMetadataJSON contains the JSON
@@ -1716,8 +1826,8 @@ func (r observabilityTelemetryQueryResponseEventsEventsMetadataJSON) RawJSON() s
 	return r.raw
 }
 
-// Cloudflare Workers event information enriches your logs so you can easily
-// identify and debug issues.
+// Cloudflare Workers event information that enriches your logs for identifying and
+// debugging issues.
 type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
 	EventType  ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType `json:"eventType" api:"required"`
 	RequestID  string                                                          `json:"requestId" api:"required"`
@@ -1736,6 +1846,8 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion].
 	ScriptVersion interface{}                                                `json:"scriptVersion"`
+	SpanID        string                                                     `json:"spanId"`
+	TraceID       string                                                     `json:"traceId"`
 	Truncated     bool                                                       `json:"truncated"`
 	WallTimeMs    float64                                                    `json:"wallTimeMs"`
 	JSON          observabilityTelemetryQueryResponseEventsEventsWorkersJSON `json:"-"`
@@ -1757,6 +1869,8 @@ type observabilityTelemetryQueryResponseEventsEventsWorkersJSON struct {
 	ExecutionModel           apijson.Field
 	Outcome                  apijson.Field
 	ScriptVersion            apijson.Field
+	SpanID                   apijson.Field
+	TraceID                  apijson.Field
 	Truncated                apijson.Field
 	WallTimeMs               apijson.Field
 	raw                      string
@@ -1786,8 +1900,8 @@ func (r ObservabilityTelemetryQueryResponseEventsEventsWorkers) AsUnion() Observ
 	return r.union
 }
 
-// Cloudflare Workers event information enriches your logs so you can easily
-// identify and debug issues.
+// Cloudflare Workers event information that enriches your logs for identifying and
+// debugging issues.
 //
 // Union satisfied by
 // [ObservabilityTelemetryQueryResponseEventsEventsWorkersObject] or
@@ -1821,6 +1935,8 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkersObject struct {
 	ExecutionModel  ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectExecutionModel `json:"executionModel"`
 	Outcome         string                                                                     `json:"outcome"`
 	ScriptVersion   ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion  `json:"scriptVersion"`
+	SpanID          string                                                                     `json:"spanId"`
+	TraceID         string                                                                     `json:"traceId"`
 	Truncated       bool                                                                       `json:"truncated"`
 	JSON            observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON           `json:"-"`
 }
@@ -1838,6 +1954,8 @@ type observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON struct {
 	ExecutionModel  apijson.Field
 	Outcome         apijson.Field
 	ScriptVersion   apijson.Field
+	SpanID          apijson.Field
+	TraceID         apijson.Field
 	Truncated       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
@@ -1959,7 +2077,9 @@ func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersExecutionModel) Is
 }
 
 type ObservabilityTelemetryQueryResponseEventsField struct {
-	Key  string                                             `json:"key" api:"required"`
+	// Field name present in the matched events.
+	Key string `json:"key" api:"required"`
+	// Data type of the field (string, number, or boolean).
 	Type string                                             `json:"type" api:"required"`
 	JSON observabilityTelemetryQueryResponseEventsFieldJSON `json:"-"`
 }
@@ -2100,17 +2220,24 @@ func init() {
 	)
 }
 
-// The data structure of a telemetry event
+// A single telemetry event representing a log line, span, or metric data point
+// emitted by a Worker.
 type ObservabilityTelemetryQueryResponseInvocation struct {
-	Metadata  ObservabilityTelemetryQueryResponseInvocationsMetadata `json:"$metadata" api:"required"`
-	Dataset   string                                                 `json:"dataset" api:"required"`
-	Source    interface{}                                            `json:"source" api:"required"`
-	Timestamp int64                                                  `json:"timestamp" api:"required"`
-	// Cloudflare Containers event information enriches your logs so you can easily
-	// identify and debug issues.
+	// Structured metadata extracted from the event. These fields are indexed and
+	// available for filtering and aggregation.
+	Metadata ObservabilityTelemetryQueryResponseInvocationsMetadata `json:"$metadata" api:"required"`
+	// The dataset this event belongs to (e.g. cloudflare-workers).
+	Dataset string `json:"dataset" api:"required"`
+	// Raw log payload. May be a string or a structured object depending on how the log
+	// was emitted.
+	Source interface{} `json:"source" api:"required"`
+	// Event timestamp as a Unix epoch in milliseconds.
+	Timestamp int64 `json:"timestamp" api:"required"`
+	// Cloudflare Containers event information that enriches your logs for identifying
+	// and debugging issues.
 	Containers interface{} `json:"$containers"`
-	// Cloudflare Workers event information enriches your logs so you can easily
-	// identify and debug issues.
+	// Cloudflare Workers event information that enriches your logs for identifying and
+	// debugging issues.
 	Workers ObservabilityTelemetryQueryResponseInvocationsWorkers `json:"$workers"`
 	JSON    observabilityTelemetryQueryResponseInvocationJSON     `json:"-"`
 }
@@ -2136,40 +2263,72 @@ func (r observabilityTelemetryQueryResponseInvocationJSON) RawJSON() string {
 	return r.raw
 }
 
+// Structured metadata extracted from the event. These fields are indexed and
+// available for filtering and aggregation.
 type ObservabilityTelemetryQueryResponseInvocationsMetadata struct {
-	// Unique event ID. Use as the cursor for offset-based pagination.
-	ID              string                                                     `json:"id" api:"required"`
-	Account         string                                                     `json:"account"`
-	CloudService    string                                                     `json:"cloudService"`
-	ColdStart       int64                                                      `json:"coldStart"`
-	Cost            int64                                                      `json:"cost"`
-	Duration        int64                                                      `json:"duration"`
-	EndTime         int64                                                      `json:"endTime"`
-	Error           string                                                     `json:"error"`
-	ErrorTemplate   string                                                     `json:"errorTemplate"`
-	Fingerprint     string                                                     `json:"fingerprint"`
-	Level           string                                                     `json:"level"`
-	Message         string                                                     `json:"message"`
-	MessageTemplate string                                                     `json:"messageTemplate"`
-	MetricName      string                                                     `json:"metricName"`
-	Origin          string                                                     `json:"origin"`
-	ParentSpanID    string                                                     `json:"parentSpanId"`
-	Provider        string                                                     `json:"provider"`
-	Region          string                                                     `json:"region"`
-	RequestID       string                                                     `json:"requestId"`
-	Service         string                                                     `json:"service"`
-	SpanID          string                                                     `json:"spanId"`
-	SpanName        string                                                     `json:"spanName"`
-	StackID         string                                                     `json:"stackId"`
-	StartTime       int64                                                      `json:"startTime"`
-	StatusCode      int64                                                      `json:"statusCode"`
-	TraceDuration   int64                                                      `json:"traceDuration"`
-	TraceID         string                                                     `json:"traceId"`
-	TransactionName string                                                     `json:"transactionName"`
-	Trigger         string                                                     `json:"trigger"`
-	Type            string                                                     `json:"type"`
-	URL             string                                                     `json:"url"`
-	JSON            observabilityTelemetryQueryResponseInvocationsMetadataJSON `json:"-"`
+	// Unique event ID. Use as the cursor value for offset-based pagination.
+	ID string `json:"id" api:"required"`
+	// Cloudflare account identifier.
+	Account string `json:"account"`
+	// Cloudflare product that generated this event (e.g. workers, pages).
+	CloudService string `json:"cloudService"`
+	// Whether this was a cold start (1) or warm invocation (0).
+	ColdStart int64 `json:"coldStart"`
+	// Estimated cost units for this invocation.
+	Cost int64 `json:"cost"`
+	// Span duration in milliseconds.
+	Duration int64 `json:"duration"`
+	// Span end time as a Unix epoch in milliseconds.
+	EndTime int64 `json:"endTime"`
+	// Error message, present when the log represents an error.
+	Error string `json:"error"`
+	// Templatized version of the error message used for grouping similar errors.
+	ErrorTemplate string `json:"errorTemplate"`
+	// Content-based fingerprint used to group similar events.
+	Fingerprint string `json:"fingerprint"`
+	// Log level (e.g. log, debug, info, warn, error).
+	Level string `json:"level"`
+	// Log message text.
+	Message string `json:"message"`
+	// Templatized version of the log message used for grouping similar messages.
+	MessageTemplate string `json:"messageTemplate"`
+	// Metric name when the event represents a metric data point.
+	MetricName string `json:"metricName"`
+	// Origin of the event (e.g. fetch, scheduled, queue).
+	Origin string `json:"origin"`
+	// Span ID of the parent span in the trace hierarchy.
+	ParentSpanID string `json:"parentSpanId"`
+	// Infrastructure provider identifier.
+	Provider string `json:"provider"`
+	// Cloudflare data center / region that handled the request.
+	Region string `json:"region"`
+	// Cloudflare request ID that ties all logs from a single invocation together.
+	RequestID string `json:"requestId"`
+	// Worker script name that produced this event.
+	Service string `json:"service"`
+	// Span ID for this individual unit of work within a trace.
+	SpanID string `json:"spanId"`
+	// Human-readable name for this span.
+	SpanName string `json:"spanName"`
+	// Stack / deployment identifier.
+	StackID string `json:"stackId"`
+	// Span start time as a Unix epoch in milliseconds.
+	StartTime int64 `json:"startTime"`
+	// HTTP response status code returned by the Worker.
+	StatusCode int64 `json:"statusCode"`
+	// Total duration of the entire trace in milliseconds.
+	TraceDuration int64 `json:"traceDuration"`
+	// Distributed trace ID linking spans across services.
+	TraceID string `json:"traceId"`
+	// Logical transaction name for this request.
+	TransactionName string `json:"transactionName"`
+	// What triggered the invocation (e.g. GET /users, POST /orders, queue message).
+	Trigger string `json:"trigger"`
+	// Event type classifier (e.g. cf-worker-event, cf-worker-log).
+	Type string `json:"type"`
+	// Request URL that triggered the Worker invocation.
+	URL  string                                                     `json:"url"`
+	JSON observabilityTelemetryQueryResponseInvocationsMetadataJSON `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseInvocationsMetadataJSON contains the JSON
@@ -2218,8 +2377,8 @@ func (r observabilityTelemetryQueryResponseInvocationsMetadataJSON) RawJSON() st
 	return r.raw
 }
 
-// Cloudflare Workers event information enriches your logs so you can easily
-// identify and debug issues.
+// Cloudflare Workers event information that enriches your logs for identifying and
+// debugging issues.
 type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
 	EventType  ObservabilityTelemetryQueryResponseInvocationsWorkersEventType `json:"eventType" api:"required"`
 	RequestID  string                                                         `json:"requestId" api:"required"`
@@ -2238,6 +2397,8 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion].
 	ScriptVersion interface{}                                               `json:"scriptVersion"`
+	SpanID        string                                                    `json:"spanId"`
+	TraceID       string                                                    `json:"traceId"`
 	Truncated     bool                                                      `json:"truncated"`
 	WallTimeMs    float64                                                   `json:"wallTimeMs"`
 	JSON          observabilityTelemetryQueryResponseInvocationsWorkersJSON `json:"-"`
@@ -2259,6 +2420,8 @@ type observabilityTelemetryQueryResponseInvocationsWorkersJSON struct {
 	ExecutionModel           apijson.Field
 	Outcome                  apijson.Field
 	ScriptVersion            apijson.Field
+	SpanID                   apijson.Field
+	TraceID                  apijson.Field
 	Truncated                apijson.Field
 	WallTimeMs               apijson.Field
 	raw                      string
@@ -2288,8 +2451,8 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkers) AsUnion() Observa
 	return r.union
 }
 
-// Cloudflare Workers event information enriches your logs so you can easily
-// identify and debug issues.
+// Cloudflare Workers event information that enriches your logs for identifying and
+// debugging issues.
 //
 // Union satisfied by [ObservabilityTelemetryQueryResponseInvocationsWorkersObject]
 // or [ObservabilityTelemetryQueryResponseInvocationsWorkersObject].
@@ -2322,6 +2485,8 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkersObject struct {
 	ExecutionModel  ObservabilityTelemetryQueryResponseInvocationsWorkersObjectExecutionModel `json:"executionModel"`
 	Outcome         string                                                                    `json:"outcome"`
 	ScriptVersion   ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion  `json:"scriptVersion"`
+	SpanID          string                                                                    `json:"spanId"`
+	TraceID         string                                                                    `json:"traceId"`
 	Truncated       bool                                                                      `json:"truncated"`
 	JSON            observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON           `json:"-"`
 }
@@ -2339,6 +2504,8 @@ type observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON struct {
 	ExecutionModel  apijson.Field
 	Outcome         apijson.Field
 	ScriptVersion   apijson.Field
+	SpanID          apijson.Field
+	TraceID         apijson.Field
 	Truncated       apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
@@ -2460,16 +2627,25 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkersExecutionModel) IsK
 }
 
 type ObservabilityTelemetryQueryResponseTrace struct {
-	RootSpanName        string                                       `json:"rootSpanName" api:"required"`
-	RootTransactionName string                                       `json:"rootTransactionName" api:"required"`
-	Service             []string                                     `json:"service" api:"required"`
-	Spans               float64                                      `json:"spans" api:"required"`
-	TraceDurationMs     float64                                      `json:"traceDurationMs" api:"required"`
-	TraceEndMs          float64                                      `json:"traceEndMs" api:"required"`
-	TraceID             string                                       `json:"traceId" api:"required"`
-	TraceStartMs        float64                                      `json:"traceStartMs" api:"required"`
-	Errors              []string                                     `json:"errors"`
-	JSON                observabilityTelemetryQueryResponseTraceJSON `json:"-"`
+	// Name of the root span that initiated the trace.
+	RootSpanName string `json:"rootSpanName" api:"required"`
+	// Logical transaction name for the root span.
+	RootTransactionName string `json:"rootTransactionName" api:"required"`
+	// List of Worker services involved in the trace.
+	Service []string `json:"service" api:"required"`
+	// Total number of spans in the trace.
+	Spans float64 `json:"spans" api:"required"`
+	// Total duration of the trace in milliseconds.
+	TraceDurationMs float64 `json:"traceDurationMs" api:"required"`
+	// Trace end time as a Unix epoch in milliseconds.
+	TraceEndMs float64 `json:"traceEndMs" api:"required"`
+	// Unique identifier for the distributed trace.
+	TraceID string `json:"traceId" api:"required"`
+	// Trace start time as a Unix epoch in milliseconds.
+	TraceStartMs float64 `json:"traceStartMs" api:"required"`
+	// Error messages encountered during the trace, if any.
+	Errors []string                                     `json:"errors"`
+	JSON   observabilityTelemetryQueryResponseTraceJSON `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseTraceJSON contains the JSON metadata for the
@@ -2591,19 +2767,23 @@ func (r ObservabilityTelemetryKeysParams) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+// Supports nested groups via kind: 'group'.
 type ObservabilityTelemetryKeysParamsFilter struct {
 	FilterCombination param.Field[ObservabilityTelemetryKeysParamsFiltersFilterCombination] `json:"filterCombination"`
 	Filters           param.Field[interface{}]                                              `json:"filters"`
-	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
-	// previous query results or the observability_keys response. Preferred keys:
-	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
-	// $metadata.error.
-	Key       param.Field[string]                                           `json:"key"`
-	Kind      param.Field[ObservabilityTelemetryKeysParamsFiltersKind]      `json:"kind"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key  param.Field[string]                                      `json:"key"`
+	Kind param.Field[ObservabilityTelemetryKeysParamsFiltersKind] `json:"kind"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersOperation] `json:"operation"`
-	Type      param.Field[ObservabilityTelemetryKeysParamsFiltersType]      `json:"type"`
-	Value     param.Field[interface{}]                                      `json:"value"`
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type  param.Field[ObservabilityTelemetryKeysParamsFiltersType] `json:"type"`
+	Value param.Field[interface{}]                                 `json:"value"`
 }
 
 func (r ObservabilityTelemetryKeysParamsFilter) MarshalJSON() (data []byte, err error) {
@@ -2613,7 +2793,7 @@ func (r ObservabilityTelemetryKeysParamsFilter) MarshalJSON() (data []byte, err 
 func (r ObservabilityTelemetryKeysParamsFilter) implementsObservabilityTelemetryKeysParamsFilterUnion() {
 }
 
-// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+// Supports nested groups via kind: 'group'.
 //
 // Satisfied by [workers.ObservabilityTelemetryKeysParamsFiltersObject],
 // [workers.ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf],
@@ -2624,7 +2804,7 @@ type ObservabilityTelemetryKeysParamsFilterUnion interface {
 
 type ObservabilityTelemetryKeysParamsFiltersObject struct {
 	FilterCombination param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination] `json:"filterCombination" api:"required"`
-	Filters           param.Field[[]interface{}]                                                  `json:"filters" api:"required"`
+	Filters           param.Field[[]ObservabilityTelemetryKeysParamsFiltersObjectFilterUnion]     `json:"filters" api:"required"`
 	Kind              param.Field[ObservabilityTelemetryKeysParamsFiltersObjectKind]              `json:"kind" api:"required"`
 }
 
@@ -2652,6 +2832,299 @@ func (r ObservabilityTelemetryKeysParamsFiltersObjectFilterCombination) IsKnown(
 	return false
 }
 
+// Supports nested groups via kind: 'group'.
+type ObservabilityTelemetryKeysParamsFiltersObjectFilter struct {
+	FilterCombination param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombination] `json:"filterCombination"`
+	Filters           param.Field[interface{}]                                                           `json:"filters"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key  param.Field[string]                                                   `json:"key"`
+	Kind param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersKind] `json:"kind"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation] `json:"operation"`
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type  param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersType] `json:"type"`
+	Value param.Field[interface{}]                                              `json:"value"`
+}
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFilter) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFilter) implementsObservabilityTelemetryKeysParamsFiltersObjectFilterUnion() {
+}
+
+// Supports nested groups via kind: 'group'.
+//
+// Satisfied by
+// [workers.ObservabilityTelemetryKeysParamsFiltersObjectFiltersObject],
+// [workers.ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeaf],
+// [ObservabilityTelemetryKeysParamsFiltersObjectFilter].
+type ObservabilityTelemetryKeysParamsFiltersObjectFilterUnion interface {
+	implementsObservabilityTelemetryKeysParamsFiltersObjectFilterUnion()
+}
+
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersObject struct {
+	FilterCombination param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombination] `json:"filterCombination" api:"required"`
+	Filters           param.Field[[]interface{}]                                                               `json:"filters" api:"required"`
+	Kind              param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectKind]              `json:"kind" api:"required"`
+}
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersObject) implementsObservabilityTelemetryKeysParamsFiltersObjectFilterUnion() {
+}
+
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombination string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombinationAnd          ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombination = "and"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombinationOr           ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombination = "or"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombinationAndUppercase ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombination = "AND"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombinationOrUppercase  ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombinationAnd, ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombinationOr, ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombinationAndUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectKind string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectKindGroup ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectKind = "group"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectKindGroup:
+		return true
+	}
+	return false
+}
+
+// A filter condition applied to query results. Use the keys and values endpoints
+// to discover available fields and their values before constructing filters.
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeaf struct {
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key param.Field[string] `json:"key" api:"required"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType] `json:"type" api:"required"`
+	// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+	// omitted.
+	Kind param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKind] `json:"kind"`
+	// Comparison value. Must match actual values in your data — verify with the values
+	// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+	// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+	// lookaheads/lookbehinds).
+	Value param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion] `json:"value"`
+}
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeaf) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryKeysParamsFiltersObjectFilterUnion() {
+}
+
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "includes"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "regex"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "exists"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "is_null"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn                  ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "in"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn               ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "not_in"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq                  ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "eq"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq                 ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "neq"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt                  ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "gt"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte                 ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "gte"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt                  ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "lt"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte                 ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "lte"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals              ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "="
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals           ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "!="
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater             ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = ">"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals     ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = ">="
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess                ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "<"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals        ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "<="
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase   ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "INCLUDES"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude      ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_INCLUDE"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex          ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "MATCH_REGEX"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase     ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "EXISTS"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist        ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_EXIST"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "IN"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+		return true
+	}
+	return false
+}
+
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeString  ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType = "string"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeNumber  ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType = "number"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeBoolean ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType = "boolean"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeString, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeNumber, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeBoolean:
+		return true
+	}
+	return false
+}
+
+// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+// omitted.
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKind string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKindFilter ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKind = "filter"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKindFilter:
+		return true
+	}
+	return false
+}
+
+// Comparison value. Must match actual values in your data — verify with the values
+// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+// lookaheads/lookbehinds).
+//
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion interface {
+	ImplementsObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion()
+}
+
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombination string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombinationAnd          ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombination = "and"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombinationOr           ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombination = "or"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombinationAndUppercase ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombination = "AND"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombinationOrUppercase  ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombinationAnd, ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombinationOr, ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombinationAndUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersKind string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersKindGroup  ObservabilityTelemetryKeysParamsFiltersObjectFiltersKind = "group"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersKindFilter ObservabilityTelemetryKeysParamsFiltersObjectFiltersKind = "filter"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersKindGroup, ObservabilityTelemetryKeysParamsFiltersObjectFiltersKindFilter:
+		return true
+	}
+	return false
+}
+
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIncludes            ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "includes"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotIncludes         ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "not_includes"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationStartsWith          ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "starts_with"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationRegex               ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "regex"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationExists              ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "exists"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIsNull              ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "is_null"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIn                  ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "in"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotIn               ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "not_in"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEq                  ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "eq"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNeq                 ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "neq"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGt                  ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "gt"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGte                 ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "gte"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLt                  ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "lt"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLte                 ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "lte"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEquals              ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "="
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotEquals           ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "!="
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGreater             ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = ">"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGreaterOrEquals     ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = ">="
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLess                ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "<"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLessOrEquals        ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "<="
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIncludesUppercase   ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "INCLUDES"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationDoesNotInclude      ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "DOES_NOT_INCLUDE"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationMatchRegex          ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "MATCH_REGEX"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationExistsUppercase     ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "EXISTS"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationDoesNotExist        ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "DOES_NOT_EXIST"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationInUppercase         ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "IN"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotInUppercase      ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "NOT_IN"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationStartsWithUppercase ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "STARTS_WITH"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationExists, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIsNull, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNeq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGreater, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLess, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationStartsWithUppercase:
+		return true
+	}
+	return false
+}
+
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
+type ObservabilityTelemetryKeysParamsFiltersObjectFiltersType string
+
+const (
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersTypeString  ObservabilityTelemetryKeysParamsFiltersObjectFiltersType = "string"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersTypeNumber  ObservabilityTelemetryKeysParamsFiltersObjectFiltersType = "number"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersTypeBoolean ObservabilityTelemetryKeysParamsFiltersObjectFiltersType = "boolean"
+)
+
+func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersTypeString, ObservabilityTelemetryKeysParamsFiltersObjectFiltersTypeNumber, ObservabilityTelemetryKeysParamsFiltersObjectFiltersTypeBoolean:
+		return true
+	}
+	return false
+}
+
 type ObservabilityTelemetryKeysParamsFiltersObjectKind string
 
 const (
@@ -2666,24 +3139,27 @@ func (r ObservabilityTelemetryKeysParamsFiltersObjectKind) IsKnown() bool {
 	return false
 }
 
-// Filtering best practices: use observability_keys and observability_values to
-// confirm available fields and values. If searching for errors, filter for
-// $metadata.error exists.
+// A filter condition applied to query results. Use the keys and values endpoints
+// to discover available fields and their values before constructing filters.
 type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf struct {
-	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
-	// previous query results or the observability_keys response. Preferred keys:
-	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
-	// $metadata.error.
-	Key       param.Field[string]                                                                         `json:"key" api:"required"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key param.Field[string] `json:"key" api:"required"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
-	Type      param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType]      `json:"type" api:"required"`
-	Kind      param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKind]      `json:"kind"`
-	// Filter comparison value. IMPORTANT: must match actual values in your logs.
-	// Verify using previous query results or the /values endpoint. Ensure value type
-	// matches the field type. String comparisons are case-sensitive unless using
-	// specific operations. Regex uses ClickHouse RE2 syntax (no
-	// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
-	// boundary.
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType] `json:"type" api:"required"`
+	// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+	// omitted.
+	Kind param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKind] `json:"kind"`
+	// Comparison value. Must match actual values in your data — verify with the values
+	// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+	// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+	// lookaheads/lookbehinds).
 	Value param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafValueUnion] `json:"value"`
 }
 
@@ -2694,6 +3170,9 @@ func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf) M
 func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryKeysParamsFilterUnion() {
 }
 
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
@@ -2735,6 +3214,8 @@ func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOpe
 	return false
 }
 
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
 type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafType string
 
 const (
@@ -2751,6 +3232,8 @@ func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafTyp
 	return false
 }
 
+// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+// omitted.
 type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKind string
 
 const (
@@ -2765,12 +3248,10 @@ func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafKin
 	return false
 }
 
-// Filter comparison value. IMPORTANT: must match actual values in your logs.
-// Verify using previous query results or the /values endpoint. Ensure value type
-// matches the field type. String comparisons are case-sensitive unless using
-// specific operations. Regex uses ClickHouse RE2 syntax (no
-// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
-// boundary.
+// Comparison value. Must match actual values in your data — verify with the values
+// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+// lookaheads/lookbehinds).
 //
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafValueUnion interface {
@@ -2809,6 +3290,9 @@ func (r ObservabilityTelemetryKeysParamsFiltersKind) IsKnown() bool {
 	return false
 }
 
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryKeysParamsFiltersOperation string
 
 const (
@@ -2850,6 +3334,8 @@ func (r ObservabilityTelemetryKeysParamsFiltersOperation) IsKnown() bool {
 	return false
 }
 
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
 type ObservabilityTelemetryKeysParamsFiltersType string
 
 const (
@@ -2869,15 +3355,20 @@ func (r ObservabilityTelemetryKeysParamsFiltersType) IsKnown() bool {
 // If the user suggests a key, use this to narrow down the list of keys returned.
 // Make sure matchCase is false to avoid case sensitivity issues.
 type ObservabilityTelemetryKeysParamsKeyNeedle struct {
-	Value     param.Field[ObservabilityTelemetryKeysParamsKeyNeedleValueUnion] `json:"value" api:"required"`
-	IsRegex   param.Field[bool]                                                `json:"isRegex"`
-	MatchCase param.Field[bool]                                                `json:"matchCase"`
+	// The text or pattern to search for.
+	Value param.Field[ObservabilityTelemetryKeysParamsKeyNeedleValueUnion] `json:"value" api:"required"`
+	// When true, treats the value as a regular expression (RE2 syntax).
+	IsRegex param.Field[bool] `json:"isRegex"`
+	// When true, performs a case-sensitive search. Defaults to case-insensitive.
+	MatchCase param.Field[bool] `json:"matchCase"`
 }
 
 func (r ObservabilityTelemetryKeysParamsKeyNeedle) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The text or pattern to search for.
+//
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type ObservabilityTelemetryKeysParamsKeyNeedleValueUnion interface {
 	ImplementsObservabilityTelemetryKeysParamsKeyNeedleValueUnion()
@@ -2885,15 +3376,20 @@ type ObservabilityTelemetryKeysParamsKeyNeedleValueUnion interface {
 
 // Search for a specific substring in any of the events
 type ObservabilityTelemetryKeysParamsNeedle struct {
-	Value     param.Field[ObservabilityTelemetryKeysParamsNeedleValueUnion] `json:"value" api:"required"`
-	IsRegex   param.Field[bool]                                             `json:"isRegex"`
-	MatchCase param.Field[bool]                                             `json:"matchCase"`
+	// The text or pattern to search for.
+	Value param.Field[ObservabilityTelemetryKeysParamsNeedleValueUnion] `json:"value" api:"required"`
+	// When true, treats the value as a regular expression (RE2 syntax).
+	IsRegex param.Field[bool] `json:"isRegex"`
+	// When true, performs a case-sensitive search. Defaults to case-insensitive.
+	MatchCase param.Field[bool] `json:"matchCase"`
 }
 
 func (r ObservabilityTelemetryKeysParamsNeedle) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The text or pattern to search for.
+//
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type ObservabilityTelemetryKeysParamsNeedleValueUnion interface {
 	ImplementsObservabilityTelemetryKeysParamsNeedleValueUnion()
@@ -2901,40 +3397,48 @@ type ObservabilityTelemetryKeysParamsNeedleValueUnion interface {
 
 type ObservabilityTelemetryQueryParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Unique identifier for the query to execute
+	// Identifier for the query. When parameters are omitted, this ID is used to load a
+	// previously saved query's parameters. When providing parameters inline, pass any
+	// identifier (e.g. an ad-hoc ID).
 	QueryID param.Field[string] `json:"queryId" api:"required"`
-	// Timeframe for your query using Unix timestamps in milliseconds. Provide from/to
-	// epoch ms; narrower timeframes provide faster responses and more specific
-	// results.
+	// Timeframe for the query using Unix timestamps in milliseconds. Narrower
+	// timeframes produce faster responses and more specific results.
 	Timeframe param.Field[ObservabilityTelemetryQueryParamsTimeframe] `json:"timeframe" api:"required"`
-	// Whether to include timeseties data in the response
+	// When true, includes time-series data in the response.
 	Chart param.Field[bool] `json:"chart"`
-	// Whether to include comparison data with previous time periods
+	// When true, includes a comparison dataset from the previous time period of equal
+	// length.
 	Compare param.Field[bool] `json:"compare"`
-	// Whether to perform a dry run without saving the results of the query. Useful for
-	// validation
+	// When true, executes the query without persisting the results. Useful for
+	// validation or previewing.
 	Dry param.Field[bool] `json:"dry"`
-	// This is only used when the view is calculations. Leaving it empty lets Workers
-	// Observability detect the correct granularity.
+	// Number of time-series buckets. Only used when view is 'calculations'. Omit to
+	// let the system auto-detect an appropriate granularity.
 	Granularity param.Field[float64] `json:"granularity"`
-	// Whether to ignore time-series data in the results and return only aggregated
-	// values
+	// When true, omits time-series data from the response and returns only aggregated
+	// values. Reduces response size when series are not needed.
 	IgnoreSeries param.Field[bool] `json:"ignoreSeries"`
-	// Use this limit to cap the number of events returned when the view is events.
+	// Maximum number of events to return when view is 'events'. Also controls the
+	// number of group-by rows when view is 'calculations'.
 	Limit param.Field[float64] `json:"limit"`
-	// Cursor pagination for event/trace/invocation views. Pass the last item's
-	// $metadata.id as the next offset.
+	// Cursor for pagination in event, trace, and invocation views. Pass the
+	// $metadata.id of the last returned item to fetch the next page.
 	Offset param.Field[string] `json:"offset"`
-	// Numeric offset for pattern results (top-N list). Use with limit to page pattern
-	// groups; not used by cursor pagination.
+	// Numeric offset for paginating grouped/pattern results (top-N lists). Use
+	// together with limit. Not used by cursor-based pagination.
 	OffsetBy param.Field[float64] `json:"offsetBy"`
-	// Direction for offset-based pagination (e.g., 'next', 'prev')
+	// Pagination direction: 'next' for forward, 'prev' for backward.
 	OffsetDirection param.Field[string] `json:"offsetDirection"`
-	// Optional parameters to pass to the query execution
+	// Query parameters defining what data to retrieve — filters, calculations,
+	// group-bys, and ordering. In practice this should always be provided for ad-hoc
+	// queries. Only omit when executing a previously saved query by queryId. Use the
+	// keys and values endpoints to discover available fields before building filters.
 	Parameters param.Field[ObservabilityTelemetryQueryParamsParameters] `json:"parameters"`
-	// Examples by view type. Events: show errors for a worker in the last 30 minutes.
-	// Calculations: p99 of wall time or count by status code. Invocations: find a
-	// specific request that resulted in a 500.
+	// Controls the shape of the response. 'events': individual log lines matching the
+	// query. 'calculations': aggregated metrics (count, avg, p99, etc.) with optional
+	// group-by breakdowns and time-series. 'invocations': events grouped by request
+	// ID. 'traces': distributed trace summaries. 'agents': Durable Object agent
+	// summaries.
 	View param.Field[ObservabilityTelemetryQueryParamsView] `json:"view"`
 }
 
@@ -2942,9 +3446,8 @@ func (r ObservabilityTelemetryQueryParams) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-// Timeframe for your query using Unix timestamps in milliseconds. Provide from/to
-// epoch ms; narrower timeframes provide faster responses and more specific
-// results.
+// Timeframe for the query using Unix timestamps in milliseconds. Narrower
+// timeframes produce faster responses and more specific results.
 type ObservabilityTelemetryQueryParamsTimeframe struct {
 	// Start timestamp for the query timeframe (Unix timestamp in milliseconds)
 	From param.Field[float64] `json:"from" api:"required"`
@@ -2956,26 +3459,37 @@ func (r ObservabilityTelemetryQueryParamsTimeframe) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-// Optional parameters to pass to the query execution
+// Query parameters defining what data to retrieve — filters, calculations,
+// group-bys, and ordering. In practice this should always be provided for ad-hoc
+// queries. Only omit when executing a previously saved query by queryId. Use the
+// keys and values endpoints to discover available fields before building filters.
 type ObservabilityTelemetryQueryParamsParameters struct {
-	// Create Calculations to compute as part of the query.
+	// Aggregation calculations to compute (e.g. count, avg, p99). Each calculation
+	// produces aggregate values and optional time-series data.
 	Calculations param.Field[[]ObservabilityTelemetryQueryParamsParametersCalculation] `json:"calculations"`
-	// Set the Datasets to query. Leave it empty to query all the datasets.
+	// Datasets to query. Leave empty to query all available datasets.
 	Datasets param.Field[[]string] `json:"datasets"`
-	// Set a Flag to describe how to combine the filters on the query.
+	// Logical operator for combining top-level filters: 'and' (all must match) or 'or'
+	// (any must match). Defaults to 'and'.
 	FilterCombination param.Field[ObservabilityTelemetryQueryParamsParametersFilterCombination] `json:"filterCombination"`
-	// Configure the Filters to apply to the query. Supports nested groups via kind:
+	// Filters to narrow query results. Use the keys and values endpoints to discover
+	// available fields before building filters. Supports nested groups via kind:
 	// 'group'. Maximum nesting depth is 4.
 	Filters param.Field[[]ObservabilityTelemetryQueryParamsParametersFilterUnion] `json:"filters"`
-	// Define how to group the results of the query.
+	// Fields to group calculation results by. Only applicable when the query view is
+	// 'calculations'. Produces per-group aggregate values.
 	GroupBys param.Field[[]ObservabilityTelemetryQueryParamsParametersGroupBy] `json:"groupBys"`
-	// Configure the Having clauses that filter on calculations in the query result.
+	// Post-aggregation filters applied to calculation results. Use to filter groups
+	// after aggregation (e.g. only groups where count > 100).
 	Havings param.Field[[]ObservabilityTelemetryQueryParamsParametersHaving] `json:"havings"`
-	// Set a limit on the number of results / records returned by the query
+	// Maximum number of group-by rows to return in calculation results. A value of 10
+	// is a sensible default for most use cases.
 	Limit param.Field[int64] `json:"limit"`
-	// Define an expression to search using full-text search.
+	// Full-text search expression applied across all event fields. Matches events
+	// containing the specified text.
 	Needle param.Field[ObservabilityTelemetryQueryParamsParametersNeedle] `json:"needle"`
-	// Configure the order of the results returned by the query.
+	// Ordering for grouped calculation results. Only effective when a group-by is
+	// present.
 	OrderBy param.Field[ObservabilityTelemetryQueryParamsParametersOrderBy] `json:"orderBy"`
 }
 
@@ -2984,11 +3498,17 @@ func (r ObservabilityTelemetryQueryParamsParameters) MarshalJSON() (data []byte,
 }
 
 type ObservabilityTelemetryQueryParamsParametersCalculation struct {
+	// Aggregation operator to apply. Examples: count, avg, sum, min, max, p50, p90,
+	// p95, p99, uniq, stddev, variance.
 	Operator param.Field[ObservabilityTelemetryQueryParamsParametersCalculationsOperator] `json:"operator" api:"required"`
-	Alias    param.Field[string]                                                          `json:"alias"`
-	// The key to use for the calculation. This key must exist in the logs. Use the
-	// observability_keys response to confirm. Do not guess keys.
-	Key     param.Field[string]                                                         `json:"key"`
+	// Custom label for this calculation in the results. Useful for distinguishing
+	// multiple calculations.
+	Alias param.Field[string] `json:"alias"`
+	// Field name to calculate over. Must exist in the data — verify with the keys
+	// endpoint. Omit for operators that don't require a key (e.g. count).
+	Key param.Field[string] `json:"key"`
+	// Data type of the key. Required when key is provided to ensure correct
+	// aggregation.
 	KeyType param.Field[ObservabilityTelemetryQueryParamsParametersCalculationsKeyType] `json:"keyType"`
 }
 
@@ -2996,6 +3516,8 @@ func (r ObservabilityTelemetryQueryParamsParametersCalculation) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
+// Aggregation operator to apply. Examples: count, avg, sum, min, max, p50, p90,
+// p95, p99, uniq, stddev, variance.
 type ObservabilityTelemetryQueryParamsParametersCalculationsOperator string
 
 const (
@@ -3047,6 +3569,8 @@ func (r ObservabilityTelemetryQueryParamsParametersCalculationsOperator) IsKnown
 	return false
 }
 
+// Data type of the key. Required when key is provided to ensure correct
+// aggregation.
 type ObservabilityTelemetryQueryParamsParametersCalculationsKeyType string
 
 const (
@@ -3063,7 +3587,8 @@ func (r ObservabilityTelemetryQueryParamsParametersCalculationsKeyType) IsKnown(
 	return false
 }
 
-// Set a Flag to describe how to combine the filters on the query.
+// Logical operator for combining top-level filters: 'and' (all must match) or 'or'
+// (any must match). Defaults to 'and'.
 type ObservabilityTelemetryQueryParamsParametersFilterCombination string
 
 const (
@@ -3081,19 +3606,23 @@ func (r ObservabilityTelemetryQueryParamsParametersFilterCombination) IsKnown() 
 	return false
 }
 
-// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+// Supports nested groups via kind: 'group'.
 type ObservabilityTelemetryQueryParamsParametersFilter struct {
 	FilterCombination param.Field[ObservabilityTelemetryQueryParamsParametersFiltersFilterCombination] `json:"filterCombination"`
 	Filters           param.Field[interface{}]                                                         `json:"filters"`
-	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
-	// previous query results or the observability_keys response. Preferred keys:
-	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
-	// $metadata.error.
-	Key       param.Field[string]                                                      `json:"key"`
-	Kind      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersKind]      `json:"kind"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key  param.Field[string]                                                 `json:"key"`
+	Kind param.Field[ObservabilityTelemetryQueryParamsParametersFiltersKind] `json:"kind"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersOperation] `json:"operation"`
-	Type      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersType]      `json:"type"`
-	Value     param.Field[interface{}]                                                 `json:"value"`
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type  param.Field[ObservabilityTelemetryQueryParamsParametersFiltersType] `json:"type"`
+	Value param.Field[interface{}]                                            `json:"value"`
 }
 
 func (r ObservabilityTelemetryQueryParamsParametersFilter) MarshalJSON() (data []byte, err error) {
@@ -3103,7 +3632,7 @@ func (r ObservabilityTelemetryQueryParamsParametersFilter) MarshalJSON() (data [
 func (r ObservabilityTelemetryQueryParamsParametersFilter) implementsObservabilityTelemetryQueryParamsParametersFilterUnion() {
 }
 
-// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+// Supports nested groups via kind: 'group'.
 //
 // Satisfied by [workers.ObservabilityTelemetryQueryParamsParametersFiltersObject],
 // [workers.ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeaf],
@@ -3114,7 +3643,7 @@ type ObservabilityTelemetryQueryParamsParametersFilterUnion interface {
 
 type ObservabilityTelemetryQueryParamsParametersFiltersObject struct {
 	FilterCombination param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombination] `json:"filterCombination" api:"required"`
-	Filters           param.Field[[]interface{}]                                                             `json:"filters" api:"required"`
+	Filters           param.Field[[]ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterUnion]     `json:"filters" api:"required"`
 	Kind              param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectKind]              `json:"kind" api:"required"`
 }
 
@@ -3142,6 +3671,299 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinatio
 	return false
 }
 
+// Supports nested groups via kind: 'group'.
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFilter struct {
+	FilterCombination param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombination] `json:"filterCombination"`
+	Filters           param.Field[interface{}]                                                                      `json:"filters"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key  param.Field[string]                                                              `json:"key"`
+	Kind param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKind] `json:"kind"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation] `json:"operation"`
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type  param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersType] `json:"type"`
+	Value param.Field[interface{}]                                                         `json:"value"`
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFilter) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFilter) implementsObservabilityTelemetryQueryParamsParametersFiltersObjectFilterUnion() {
+}
+
+// Supports nested groups via kind: 'group'.
+//
+// Satisfied by
+// [workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObject],
+// [workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeaf],
+// [ObservabilityTelemetryQueryParamsParametersFiltersObjectFilter].
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterUnion interface {
+	implementsObservabilityTelemetryQueryParamsParametersFiltersObjectFilterUnion()
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObject struct {
+	FilterCombination param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombination] `json:"filterCombination" api:"required"`
+	Filters           param.Field[[]interface{}]                                                                          `json:"filters" api:"required"`
+	Kind              param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectKind]              `json:"kind" api:"required"`
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObject) implementsObservabilityTelemetryQueryParamsParametersFiltersObjectFilterUnion() {
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombination string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombinationAnd          ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombination = "and"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombinationOr           ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombination = "or"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombinationAndUppercase ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombination = "AND"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombinationOrUppercase  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombinationAnd, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombinationOr, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombinationAndUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectKind string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectKindGroup ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectKind = "group"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectKindGroup:
+		return true
+	}
+	return false
+}
+
+// A filter condition applied to query results. Use the keys and values endpoints
+// to discover available fields and their values before constructing filters.
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeaf struct {
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key param.Field[string] `json:"key" api:"required"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafType] `json:"type" api:"required"`
+	// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+	// omitted.
+	Kind param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafKind] `json:"kind"`
+	// Comparison value. Must match actual values in your data — verify with the values
+	// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+	// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+	// lookaheads/lookbehinds).
+	Value param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion] `json:"value"`
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeaf) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryQueryParamsParametersFiltersObjectFilterUnion() {
+}
+
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "includes"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "regex"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "exists"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "is_null"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn                  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "in"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn               ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "not_in"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq                  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "eq"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq                 ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "neq"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt                  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "gt"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte                 ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "gte"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt                  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "lt"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte                 ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "lte"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals              ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "="
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals           ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "!="
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater             ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = ">"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals     ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = ">="
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess                ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "<"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals        ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "<="
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase   ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "INCLUDES"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude      ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_INCLUDE"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex          ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "MATCH_REGEX"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase     ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "EXISTS"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist        ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_EXIST"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "IN"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+		return true
+	}
+	return false
+}
+
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafType string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafTypeString  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafType = "string"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafTypeNumber  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafType = "number"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafTypeBoolean ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafType = "boolean"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafTypeString, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafTypeNumber, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafTypeBoolean:
+		return true
+	}
+	return false
+}
+
+// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+// omitted.
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafKind string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafKindFilter ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafKind = "filter"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafKindFilter:
+		return true
+	}
+	return false
+}
+
+// Comparison value. Must match actual values in your data — verify with the values
+// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+// lookaheads/lookbehinds).
+//
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion interface {
+	ImplementsObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion()
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombination string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombinationAnd          ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombination = "and"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombinationOr           ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombination = "or"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombinationAndUppercase ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombination = "AND"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombinationOrUppercase  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombinationAnd, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombinationOr, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombinationAndUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKind string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKindGroup  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKind = "group"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKindFilter ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKind = "filter"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKindGroup, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKindFilter:
+		return true
+	}
+	return false
+}
+
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIncludes            ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "includes"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotIncludes         ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "not_includes"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationStartsWith          ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "starts_with"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationRegex               ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "regex"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationExists              ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "exists"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIsNull              ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "is_null"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIn                  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "in"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotIn               ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "not_in"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEq                  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "eq"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNeq                 ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "neq"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGt                  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "gt"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGte                 ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "gte"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLt                  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "lt"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLte                 ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "lte"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEquals              ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "="
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotEquals           ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "!="
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGreater             ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = ">"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGreaterOrEquals     ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = ">="
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLess                ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "<"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLessOrEquals        ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "<="
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIncludesUppercase   ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "INCLUDES"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationDoesNotInclude      ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "DOES_NOT_INCLUDE"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationMatchRegex          ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "MATCH_REGEX"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationExistsUppercase     ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "EXISTS"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationDoesNotExist        ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "DOES_NOT_EXIST"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationInUppercase         ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "IN"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotInUppercase      ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "NOT_IN"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationStartsWithUppercase ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "STARTS_WITH"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationStartsWithUppercase:
+		return true
+	}
+	return false
+}
+
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
+type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersType string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersTypeString  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersType = "string"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersTypeNumber  ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersType = "number"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersTypeBoolean ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersType = "boolean"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersTypeString, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersTypeNumber, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersTypeBoolean:
+		return true
+	}
+	return false
+}
+
 type ObservabilityTelemetryQueryParamsParametersFiltersObjectKind string
 
 const (
@@ -3156,24 +3978,27 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectKind) IsKnown() 
 	return false
 }
 
-// Filtering best practices: use observability_keys and observability_values to
-// confirm available fields and values. If searching for errors, filter for
-// $metadata.error exists.
+// A filter condition applied to query results. Use the keys and values endpoints
+// to discover available fields and their values before constructing filters.
 type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeaf struct {
-	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
-	// previous query results or the observability_keys response. Preferred keys:
-	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
-	// $metadata.error.
-	Key       param.Field[string]                                                                                    `json:"key" api:"required"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key param.Field[string] `json:"key" api:"required"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
-	Type      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType]      `json:"type" api:"required"`
-	Kind      param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafKind]      `json:"kind"`
-	// Filter comparison value. IMPORTANT: must match actual values in your logs.
-	// Verify using previous query results or the /values endpoint. Ensure value type
-	// matches the field type. String comparisons are case-sensitive unless using
-	// specific operations. Regex uses ClickHouse RE2 syntax (no
-	// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
-	// boundary.
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType] `json:"type" api:"required"`
+	// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+	// omitted.
+	Kind param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafKind] `json:"kind"`
+	// Comparison value. Must match actual values in your data — verify with the values
+	// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+	// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+	// lookaheads/lookbehinds).
 	Value param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion] `json:"value"`
 }
 
@@ -3184,6 +4009,9 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFi
 func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryQueryParamsParametersFilterUnion() {
 }
 
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
@@ -3225,6 +4053,8 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFi
 	return false
 }
 
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
 type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafType string
 
 const (
@@ -3241,6 +4071,8 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFi
 	return false
 }
 
+// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+// omitted.
 type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafKind string
 
 const (
@@ -3255,12 +4087,10 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFi
 	return false
 }
 
-// Filter comparison value. IMPORTANT: must match actual values in your logs.
-// Verify using previous query results or the /values endpoint. Ensure value type
-// matches the field type. String comparisons are case-sensitive unless using
-// specific operations. Regex uses ClickHouse RE2 syntax (no
-// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
-// boundary.
+// Comparison value. Must match actual values in your data — verify with the values
+// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+// lookaheads/lookbehinds).
 //
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion interface {
@@ -3299,6 +4129,9 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersKind) IsKnown() bool {
 	return false
 }
 
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryParamsParametersFiltersOperation string
 
 const (
@@ -3340,6 +4173,8 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersOperation) IsKnown() b
 	return false
 }
 
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
 type ObservabilityTelemetryQueryParamsParametersFiltersType string
 
 const (
@@ -3357,14 +4192,17 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersType) IsKnown() bool {
 }
 
 type ObservabilityTelemetryQueryParamsParametersGroupBy struct {
-	Type  param.Field[ObservabilityTelemetryQueryParamsParametersGroupBysType] `json:"type" api:"required"`
-	Value param.Field[string]                                                  `json:"value" api:"required"`
+	// Data type of the group-by field.
+	Type param.Field[ObservabilityTelemetryQueryParamsParametersGroupBysType] `json:"type" api:"required"`
+	// Field name to group results by (e.g. $metadata.service, $metadata.statusCode).
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r ObservabilityTelemetryQueryParamsParametersGroupBy) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Data type of the group-by field.
 type ObservabilityTelemetryQueryParamsParametersGroupBysType string
 
 const (
@@ -3382,15 +4220,19 @@ func (r ObservabilityTelemetryQueryParamsParametersGroupBysType) IsKnown() bool 
 }
 
 type ObservabilityTelemetryQueryParamsParametersHaving struct {
-	Key       param.Field[string]                                                      `json:"key" api:"required"`
+	// Calculation alias or operator to filter on after aggregation.
+	Key param.Field[string] `json:"key" api:"required"`
+	// Numeric comparison operator: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryQueryParamsParametersHavingsOperation] `json:"operation" api:"required"`
-	Value     param.Field[float64]                                                     `json:"value" api:"required"`
+	// Threshold value to compare the calculation result against.
+	Value param.Field[float64] `json:"value" api:"required"`
 }
 
 func (r ObservabilityTelemetryQueryParamsParametersHaving) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Numeric comparison operator: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryParamsParametersHavingsOperation string
 
 const (
@@ -3410,27 +4252,35 @@ func (r ObservabilityTelemetryQueryParamsParametersHavingsOperation) IsKnown() b
 	return false
 }
 
-// Define an expression to search using full-text search.
+// Full-text search expression applied across all event fields. Matches events
+// containing the specified text.
 type ObservabilityTelemetryQueryParamsParametersNeedle struct {
-	Value     param.Field[ObservabilityTelemetryQueryParamsParametersNeedleValueUnion] `json:"value" api:"required"`
-	IsRegex   param.Field[bool]                                                        `json:"isRegex"`
-	MatchCase param.Field[bool]                                                        `json:"matchCase"`
+	// The text or pattern to search for.
+	Value param.Field[ObservabilityTelemetryQueryParamsParametersNeedleValueUnion] `json:"value" api:"required"`
+	// When true, treats the value as a regular expression (RE2 syntax).
+	IsRegex param.Field[bool] `json:"isRegex"`
+	// When true, performs a case-sensitive search. Defaults to case-insensitive.
+	MatchCase param.Field[bool] `json:"matchCase"`
 }
 
 func (r ObservabilityTelemetryQueryParamsParametersNeedle) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The text or pattern to search for.
+//
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type ObservabilityTelemetryQueryParamsParametersNeedleValueUnion interface {
 	ImplementsObservabilityTelemetryQueryParamsParametersNeedleValueUnion()
 }
 
-// Configure the order of the results returned by the query.
+// Ordering for grouped calculation results. Only effective when a group-by is
+// present.
 type ObservabilityTelemetryQueryParamsParametersOrderBy struct {
-	// Configure which Calculation to order the results by.
+	// Alias of the calculation to order results by. Must match the alias (or operator)
+	// of a calculation in the query.
 	Value param.Field[string] `json:"value" api:"required"`
-	// Set the order of the results
+	// Sort direction: 'asc' for ascending, 'desc' for descending.
 	Order param.Field[ObservabilityTelemetryQueryParamsParametersOrderByOrder] `json:"order"`
 }
 
@@ -3438,7 +4288,7 @@ func (r ObservabilityTelemetryQueryParamsParametersOrderBy) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-// Set the order of the results
+// Sort direction: 'asc' for ascending, 'desc' for descending.
 type ObservabilityTelemetryQueryParamsParametersOrderByOrder string
 
 const (
@@ -3454,9 +4304,11 @@ func (r ObservabilityTelemetryQueryParamsParametersOrderByOrder) IsKnown() bool 
 	return false
 }
 
-// Examples by view type. Events: show errors for a worker in the last 30 minutes.
-// Calculations: p99 of wall time or count by status code. Invocations: find a
-// specific request that resulted in a 500.
+// Controls the shape of the response. 'events': individual log lines matching the
+// query. 'calculations': aggregated metrics (count, avg, p99, etc.) with optional
+// group-by breakdowns and time-series. 'invocations': events grouped by request
+// ID. 'traces': distributed trace summaries. 'agents': Durable Object agent
+// summaries.
 type ObservabilityTelemetryQueryParamsView string
 
 const (
@@ -3479,9 +4331,11 @@ func (r ObservabilityTelemetryQueryParamsView) IsKnown() bool {
 type ObservabilityTelemetryQueryResponseEnvelope struct {
 	Errors   []ObservabilityTelemetryQueryResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []ObservabilityTelemetryQueryResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   ObservabilityTelemetryQueryResponse                   `json:"result" api:"required"`
-	Success  ObservabilityTelemetryQueryResponseEnvelopeSuccess    `json:"success" api:"required"`
-	JSON     observabilityTelemetryQueryResponseEnvelopeJSON       `json:"-"`
+	// Complete results of a query run. The populated fields depend on the requested
+	// view type (events, calculations, invocations, traces, or agents).
+	Result  ObservabilityTelemetryQueryResponse                `json:"result" api:"required"`
+	Success ObservabilityTelemetryQueryResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    observabilityTelemetryQueryResponseEnvelopeJSON    `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseEnvelopeJSON contains the JSON metadata for
@@ -3584,7 +4438,8 @@ type ObservabilityTelemetryValuesParams struct {
 	// Maximum nesting depth is 4.
 	Filters param.Field[[]ObservabilityTelemetryValuesParamsFilterUnion] `json:"filters"`
 	Limit   param.Field[float64]                                         `json:"limit"`
-	// Search for a specific substring in the event.
+	// Full-text search expression to match events containing the specified text or
+	// pattern.
 	Needle param.Field[ObservabilityTelemetryValuesParamsNeedle] `json:"needle"`
 }
 
@@ -3617,19 +4472,23 @@ func (r ObservabilityTelemetryValuesParamsType) IsKnown() bool {
 	return false
 }
 
-// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+// Supports nested groups via kind: 'group'.
 type ObservabilityTelemetryValuesParamsFilter struct {
 	FilterCombination param.Field[ObservabilityTelemetryValuesParamsFiltersFilterCombination] `json:"filterCombination"`
 	Filters           param.Field[interface{}]                                                `json:"filters"`
-	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
-	// previous query results or the observability_keys response. Preferred keys:
-	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
-	// $metadata.error.
-	Key       param.Field[string]                                             `json:"key"`
-	Kind      param.Field[ObservabilityTelemetryValuesParamsFiltersKind]      `json:"kind"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key  param.Field[string]                                        `json:"key"`
+	Kind param.Field[ObservabilityTelemetryValuesParamsFiltersKind] `json:"kind"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersOperation] `json:"operation"`
-	Type      param.Field[ObservabilityTelemetryValuesParamsFiltersType]      `json:"type"`
-	Value     param.Field[interface{}]                                        `json:"value"`
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type  param.Field[ObservabilityTelemetryValuesParamsFiltersType] `json:"type"`
+	Value param.Field[interface{}]                                   `json:"value"`
 }
 
 func (r ObservabilityTelemetryValuesParamsFilter) MarshalJSON() (data []byte, err error) {
@@ -3639,7 +4498,7 @@ func (r ObservabilityTelemetryValuesParamsFilter) MarshalJSON() (data []byte, er
 func (r ObservabilityTelemetryValuesParamsFilter) implementsObservabilityTelemetryValuesParamsFilterUnion() {
 }
 
-// Supports nested groups via kind: 'group'. Maximum nesting depth is 4.
+// Supports nested groups via kind: 'group'.
 //
 // Satisfied by [workers.ObservabilityTelemetryValuesParamsFiltersObject],
 // [workers.ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf],
@@ -3650,7 +4509,7 @@ type ObservabilityTelemetryValuesParamsFilterUnion interface {
 
 type ObservabilityTelemetryValuesParamsFiltersObject struct {
 	FilterCombination param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination] `json:"filterCombination" api:"required"`
-	Filters           param.Field[[]interface{}]                                                    `json:"filters" api:"required"`
+	Filters           param.Field[[]ObservabilityTelemetryValuesParamsFiltersObjectFilterUnion]     `json:"filters" api:"required"`
 	Kind              param.Field[ObservabilityTelemetryValuesParamsFiltersObjectKind]              `json:"kind" api:"required"`
 }
 
@@ -3678,6 +4537,299 @@ func (r ObservabilityTelemetryValuesParamsFiltersObjectFilterCombination) IsKnow
 	return false
 }
 
+// Supports nested groups via kind: 'group'.
+type ObservabilityTelemetryValuesParamsFiltersObjectFilter struct {
+	FilterCombination param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombination] `json:"filterCombination"`
+	Filters           param.Field[interface{}]                                                             `json:"filters"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key  param.Field[string]                                                     `json:"key"`
+	Kind param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersKind] `json:"kind"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation] `json:"operation"`
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type  param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersType] `json:"type"`
+	Value param.Field[interface{}]                                                `json:"value"`
+}
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFilter) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFilter) implementsObservabilityTelemetryValuesParamsFiltersObjectFilterUnion() {
+}
+
+// Supports nested groups via kind: 'group'.
+//
+// Satisfied by
+// [workers.ObservabilityTelemetryValuesParamsFiltersObjectFiltersObject],
+// [workers.ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeaf],
+// [ObservabilityTelemetryValuesParamsFiltersObjectFilter].
+type ObservabilityTelemetryValuesParamsFiltersObjectFilterUnion interface {
+	implementsObservabilityTelemetryValuesParamsFiltersObjectFilterUnion()
+}
+
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersObject struct {
+	FilterCombination param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombination] `json:"filterCombination" api:"required"`
+	Filters           param.Field[[]interface{}]                                                                 `json:"filters" api:"required"`
+	Kind              param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectKind]              `json:"kind" api:"required"`
+}
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersObject) implementsObservabilityTelemetryValuesParamsFiltersObjectFilterUnion() {
+}
+
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombination string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombinationAnd          ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombination = "and"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombinationOr           ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombination = "or"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombinationAndUppercase ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombination = "AND"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombinationOrUppercase  ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombinationAnd, ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombinationOr, ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombinationAndUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectKind string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectKindGroup ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectKind = "group"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectKindGroup:
+		return true
+	}
+	return false
+}
+
+// A filter condition applied to query results. Use the keys and values endpoints
+// to discover available fields and their values before constructing filters.
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeaf struct {
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key param.Field[string] `json:"key" api:"required"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType] `json:"type" api:"required"`
+	// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+	// omitted.
+	Kind param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKind] `json:"kind"`
+	// Comparison value. Must match actual values in your data — verify with the values
+	// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+	// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+	// lookaheads/lookbehinds).
+	Value param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion] `json:"value"`
+}
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeaf) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryValuesParamsFiltersObjectFilterUnion() {
+}
+
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "includes"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "regex"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "exists"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "is_null"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn                  ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "in"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn               ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "not_in"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq                  ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "eq"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq                 ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "neq"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt                  ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "gt"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte                 ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "gte"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt                  ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "lt"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte                 ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "lte"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals              ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "="
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals           ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "!="
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater             ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = ">"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals     ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = ">="
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess                ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "<"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals        ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "<="
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase   ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "INCLUDES"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude      ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_INCLUDE"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex          ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "MATCH_REGEX"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase     ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "EXISTS"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist        ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "DOES_NOT_EXIST"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "IN"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+		return true
+	}
+	return false
+}
+
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeString  ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType = "string"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeNumber  ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType = "number"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeBoolean ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType = "boolean"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeString, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeNumber, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafTypeBoolean:
+		return true
+	}
+	return false
+}
+
+// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+// omitted.
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKind string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKindFilter ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKind = "filter"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafKindFilter:
+		return true
+	}
+	return false
+}
+
+// Comparison value. Must match actual values in your data — verify with the values
+// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+// lookaheads/lookbehinds).
+//
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion interface {
+	ImplementsObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion()
+}
+
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombination string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombinationAnd          ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombination = "and"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombinationOr           ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombination = "or"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombinationAndUppercase ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombination = "AND"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombinationOrUppercase  ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombination = "OR"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombination) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombinationAnd, ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombinationOr, ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombinationAndUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersFilterCombinationOrUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersKind string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersKindGroup  ObservabilityTelemetryValuesParamsFiltersObjectFiltersKind = "group"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersKindFilter ObservabilityTelemetryValuesParamsFiltersObjectFiltersKind = "filter"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersKind) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersKindGroup, ObservabilityTelemetryValuesParamsFiltersObjectFiltersKindFilter:
+		return true
+	}
+	return false
+}
+
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIncludes            ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "includes"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotIncludes         ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "not_includes"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationStartsWith          ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "starts_with"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationRegex               ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "regex"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationExists              ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "exists"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIsNull              ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "is_null"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIn                  ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "in"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotIn               ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "not_in"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEq                  ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "eq"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNeq                 ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "neq"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGt                  ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "gt"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGte                 ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "gte"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLt                  ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "lt"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLte                 ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "lte"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEquals              ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "="
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotEquals           ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "!="
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGreater             ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = ">"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGreaterOrEquals     ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = ">="
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLess                ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "<"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLessOrEquals        ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "<="
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIncludesUppercase   ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "INCLUDES"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationDoesNotInclude      ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "DOES_NOT_INCLUDE"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationMatchRegex          ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "MATCH_REGEX"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationExistsUppercase     ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "EXISTS"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationDoesNotExist        ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "DOES_NOT_EXIST"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationInUppercase         ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "IN"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotInUppercase      ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "NOT_IN"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationStartsWithUppercase ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "STARTS_WITH"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationExists, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIsNull, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNeq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGreater, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLess, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationStartsWithUppercase:
+		return true
+	}
+	return false
+}
+
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
+type ObservabilityTelemetryValuesParamsFiltersObjectFiltersType string
+
+const (
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersTypeString  ObservabilityTelemetryValuesParamsFiltersObjectFiltersType = "string"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersTypeNumber  ObservabilityTelemetryValuesParamsFiltersObjectFiltersType = "number"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersTypeBoolean ObservabilityTelemetryValuesParamsFiltersObjectFiltersType = "boolean"
+)
+
+func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersTypeString, ObservabilityTelemetryValuesParamsFiltersObjectFiltersTypeNumber, ObservabilityTelemetryValuesParamsFiltersObjectFiltersTypeBoolean:
+		return true
+	}
+	return false
+}
+
 type ObservabilityTelemetryValuesParamsFiltersObjectKind string
 
 const (
@@ -3692,24 +4844,27 @@ func (r ObservabilityTelemetryValuesParamsFiltersObjectKind) IsKnown() bool {
 	return false
 }
 
-// Filtering best practices: use observability_keys and observability_values to
-// confirm available fields and values. If searching for errors, filter for
-// $metadata.error exists.
+// A filter condition applied to query results. Use the keys and values endpoints
+// to discover available fields and their values before constructing filters.
 type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf struct {
-	// Filter field name. IMPORTANT: do not guess keys. Always use verified keys from
-	// previous query results or the observability_keys response. Preferred keys:
-	// $metadata.service, $metadata.origin, $metadata.trigger, $metadata.message,
-	// $metadata.error.
-	Key       param.Field[string]                                                                           `json:"key" api:"required"`
+	// Filter field name. Use verified keys from previous query results or the keys
+	// endpoint. Common keys include $metadata.service, $metadata.origin,
+	// $metadata.trigger, $metadata.message, and $metadata.error.
+	Key param.Field[string] `json:"key" api:"required"`
+	// Comparison operator. String operators: includes, not_includes, starts_with,
+	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+	// values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
-	Type      param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType]      `json:"type" api:"required"`
-	Kind      param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafKind]      `json:"kind"`
-	// Filter comparison value. IMPORTANT: must match actual values in your logs.
-	// Verify using previous query results or the /values endpoint. Ensure value type
-	// matches the field type. String comparisons are case-sensitive unless using
-	// specific operations. Regex uses ClickHouse RE2 syntax (no
-	// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
-	// boundary.
+	// Data type of the filter field. Must match the actual type of the key being
+	// filtered.
+	Type param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType] `json:"type" api:"required"`
+	// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+	// omitted.
+	Kind param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafKind] `json:"kind"`
+	// Comparison value. Must match actual values in your data — verify with the values
+	// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+	// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+	// lookaheads/lookbehinds).
 	Value param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafValueUnion] `json:"value"`
 }
 
@@ -3720,6 +4875,9 @@ func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf)
 func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf) implementsObservabilityTelemetryValuesParamsFilterUnion() {
 }
 
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
@@ -3761,6 +4919,8 @@ func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafO
 	return false
 }
 
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
 type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafType string
 
 const (
@@ -3777,6 +4937,8 @@ func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafT
 	return false
 }
 
+// Discriminator for leaf filter nodes. Always 'filter' when present; may be
+// omitted.
 type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafKind string
 
 const (
@@ -3791,12 +4953,10 @@ func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafK
 	return false
 }
 
-// Filter comparison value. IMPORTANT: must match actual values in your logs.
-// Verify using previous query results or the /values endpoint. Ensure value type
-// matches the field type. String comparisons are case-sensitive unless using
-// specific operations. Regex uses ClickHouse RE2 syntax (no
-// lookaheads/lookbehinds); examples: ^5\d{2}$ for HTTP 5xx, \bERROR\b for word
-// boundary.
+// Comparison value. Must match actual values in your data — verify with the values
+// endpoint. Ensure the value type (string/number/boolean) matches the field type.
+// String comparisons are case-sensitive. Regex uses RE2 syntax (no
+// lookaheads/lookbehinds).
 //
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafValueUnion interface {
@@ -3835,6 +4995,9 @@ func (r ObservabilityTelemetryValuesParamsFiltersKind) IsKnown() bool {
 	return false
 }
 
+// Comparison operator. String operators: includes, not_includes, starts_with,
+// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
+// values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryValuesParamsFiltersOperation string
 
 const (
@@ -3876,6 +5039,8 @@ func (r ObservabilityTelemetryValuesParamsFiltersOperation) IsKnown() bool {
 	return false
 }
 
+// Data type of the filter field. Must match the actual type of the key being
+// filtered.
 type ObservabilityTelemetryValuesParamsFiltersType string
 
 const (
@@ -3892,17 +5057,23 @@ func (r ObservabilityTelemetryValuesParamsFiltersType) IsKnown() bool {
 	return false
 }
 
-// Search for a specific substring in the event.
+// Full-text search expression to match events containing the specified text or
+// pattern.
 type ObservabilityTelemetryValuesParamsNeedle struct {
-	Value     param.Field[ObservabilityTelemetryValuesParamsNeedleValueUnion] `json:"value" api:"required"`
-	IsRegex   param.Field[bool]                                               `json:"isRegex"`
-	MatchCase param.Field[bool]                                               `json:"matchCase"`
+	// The text or pattern to search for.
+	Value param.Field[ObservabilityTelemetryValuesParamsNeedleValueUnion] `json:"value" api:"required"`
+	// When true, treats the value as a regular expression (RE2 syntax).
+	IsRegex param.Field[bool] `json:"isRegex"`
+	// When true, performs a case-sensitive search. Defaults to case-insensitive.
+	MatchCase param.Field[bool] `json:"matchCase"`
 }
 
 func (r ObservabilityTelemetryValuesParamsNeedle) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The text or pattern to search for.
+//
 // Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
 type ObservabilityTelemetryValuesParamsNeedleValueUnion interface {
 	ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()
