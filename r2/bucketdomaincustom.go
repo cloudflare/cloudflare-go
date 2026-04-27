@@ -172,6 +172,8 @@ type BucketDomainCustomNewResponse struct {
 	Domain string `json:"domain" api:"required"`
 	// Whether this bucket is publicly accessible at the specified custom domain.
 	Enabled bool `json:"enabled" api:"required"`
+	// Zone ID of the custom domain.
+	ZoneID string `json:"zoneId" api:"required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
 	Ciphers []string `json:"ciphers"`
@@ -186,6 +188,7 @@ type BucketDomainCustomNewResponse struct {
 type bucketDomainCustomNewResponseJSON struct {
 	Domain      apijson.Field
 	Enabled     apijson.Field
+	ZoneID      apijson.Field
 	Ciphers     apijson.Field
 	MinTLS      apijson.Field
 	raw         string

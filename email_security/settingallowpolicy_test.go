@@ -24,6 +24,7 @@ func TestSettingAllowPolicyNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -60,6 +61,7 @@ func TestSettingAllowPolicyListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -68,15 +70,12 @@ func TestSettingAllowPolicyListWithOptionalParams(t *testing.T) {
 		Direction:          cloudflare.F(email_security.SettingAllowPolicyListParamsDirectionAsc),
 		IsAcceptableSender: cloudflare.F(true),
 		IsExemptRecipient:  cloudflare.F(true),
-		IsRecipient:        cloudflare.F(true),
-		IsSender:           cloudflare.F(true),
-		IsSpoof:            cloudflare.F(true),
 		IsTrustedSender:    cloudflare.F(true),
 		Order:              cloudflare.F(email_security.SettingAllowPolicyListParamsOrderPattern),
 		Page:               cloudflare.F(int64(1)),
 		Pattern:            cloudflare.F("pattern"),
 		PatternType:        cloudflare.F(email_security.SettingAllowPolicyListParamsPatternTypeEmail),
-		PerPage:            cloudflare.F(int64(1)),
+		PerPage:            cloudflare.F(int64(20)),
 		Search:             cloudflare.F("search"),
 		VerifySender:       cloudflare.F(true),
 	})
@@ -99,12 +98,13 @@ func TestSettingAllowPolicyDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.AllowPolicies.Delete(
 		context.TODO(),
-		int64(2401),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.SettingAllowPolicyDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -128,20 +128,24 @@ func TestSettingAllowPolicyEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.AllowPolicies.Edit(
 		context.TODO(),
-		int64(2401),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.SettingAllowPolicyEditParams{
 			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Comments:           cloudflare.F("comments"),
-			IsAcceptableSender: cloudflare.F(true),
-			IsExemptRecipient:  cloudflare.F(true),
-			IsRegex:            cloudflare.F(true),
+			Comments:           cloudflare.F("Trust all messages send from test@example.com"),
+			IsAcceptableSender: cloudflare.F(false),
+			IsExemptRecipient:  cloudflare.F(false),
+			IsRecipient:        cloudflare.F(false),
+			IsRegex:            cloudflare.F(false),
+			IsSender:           cloudflare.F(true),
+			IsSpoof:            cloudflare.F(false),
 			IsTrustedSender:    cloudflare.F(true),
-			Pattern:            cloudflare.F("x"),
+			Pattern:            cloudflare.F("test@example.com"),
 			PatternType:        cloudflare.F(email_security.SettingAllowPolicyEditParamsPatternTypeEmail),
 			VerifySender:       cloudflare.F(true),
 		},
@@ -165,12 +169,13 @@ func TestSettingAllowPolicyGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.AllowPolicies.Get(
 		context.TODO(),
-		int64(2401),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.SettingAllowPolicyGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

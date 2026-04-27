@@ -3,17 +3,7 @@
 package email_security
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"net/http"
-	"slices"
-
-	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v6/internal/param"
-	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // InvestigateRawService contains methods and other services that help with
@@ -33,79 +23,4 @@ func NewInvestigateRawService(opts ...option.RequestOption) (r *InvestigateRawSe
 	r = &InvestigateRawService{}
 	r.Options = opts
 	return
-}
-
-// Returns the raw eml of any non-benign message.
-func (r *InvestigateRawService) Get(ctx context.Context, postfixID string, query InvestigateRawGetParams, opts ...option.RequestOption) (res *InvestigateRawGetResponse, err error) {
-	var env InvestigateRawGetResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	if postfixID == "" {
-		err = errors.New("missing required postfix_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/raw", query.AccountID, postfixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
-}
-
-type InvestigateRawGetResponse struct {
-	// A UTF-8 encoded eml file of the email.
-	Raw  string                        `json:"raw" api:"required"`
-	JSON investigateRawGetResponseJSON `json:"-"`
-}
-
-// investigateRawGetResponseJSON contains the JSON metadata for the struct
-// [InvestigateRawGetResponse]
-type investigateRawGetResponseJSON struct {
-	Raw         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateRawGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateRawGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type InvestigateRawGetParams struct {
-	// Account Identifier
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-}
-
-type InvestigateRawGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo                 `json:"messages" api:"required"`
-	Result   InvestigateRawGetResponse             `json:"result" api:"required"`
-	Success  bool                                  `json:"success" api:"required"`
-	JSON     investigateRawGetResponseEnvelopeJSON `json:"-"`
-}
-
-// investigateRawGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [InvestigateRawGetResponseEnvelope]
-type investigateRawGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InvestigateRawGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r investigateRawGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }
