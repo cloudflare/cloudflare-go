@@ -293,7 +293,7 @@ func TestInstanceListWithOptionalParams(t *testing.T) {
 		OrderBy:          cloudflare.F(ai_search.InstanceListParamsOrderByCreatedAt),
 		OrderByDirection: cloudflare.F(ai_search.InstanceListParamsOrderByDirectionAsc),
 		Page:             cloudflare.F(int64(1)),
-		PerPage:          cloudflare.F(int64(1)),
+		PerPage:          cloudflare.F(int64(20)),
 		Search:           cloudflare.F("search"),
 	})
 	if err != nil {

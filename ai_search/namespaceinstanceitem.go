@@ -969,6 +969,12 @@ type NamespaceInstanceItemNewOrUpdateParams struct {
 	// Item key / filename. Must not exceed 128 characters.
 	Key        param.Field[string]                                           `json:"key" api:"required"`
 	NextAction param.Field[NamespaceInstanceItemNewOrUpdateParamsNextAction] `json:"next_action" api:"required"`
+	// Wait for indexing to fully complete before responding. On RAGs with vector
+	// indexing enabled, this additionally waits for Vectorize ingestion confirmation
+	// (up to 40s) so the returned item reflects a queryable state. On timeout the item
+	// is returned in `running` state and the background alarm continues polling.
+	// Defaults to false.
+	WaitForCompletion param.Field[bool] `json:"wait_for_completion"`
 }
 
 func (r NamespaceInstanceItemNewOrUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1113,6 +1119,12 @@ func (r namespaceInstanceItemLogsResponseEnvelopeResultInfoJSON) RawJSON() strin
 type NamespaceInstanceItemSyncParams struct {
 	AccountID  param.Field[string]                                    `path:"account_id" api:"required"`
 	NextAction param.Field[NamespaceInstanceItemSyncParamsNextAction] `json:"next_action" api:"required"`
+	// Wait for indexing to fully complete before responding. On RAGs with vector
+	// indexing enabled, this additionally waits for Vectorize ingestion confirmation
+	// (up to 40s) so the returned item reflects a queryable state. On timeout the item
+	// is returned in `running` state and the background alarm continues polling.
+	// Defaults to false.
+	WaitForCompletion param.Field[bool] `json:"wait_for_completion"`
 }
 
 func (r NamespaceInstanceItemSyncParams) MarshalJSON() (data []byte, err error) {
@@ -1181,7 +1193,11 @@ type NamespaceInstanceItemUploadParamsFile struct {
 	File param.Field[io.Reader] `json:"file" api:"required" format:"binary"`
 	// JSON string of custom metadata key-value pairs.
 	Metadata param.Field[string] `json:"metadata"`
-	// Wait for indexing to complete before responding. Defaults to false.
+	// Wait for indexing to fully complete before responding. On RAGs with vector
+	// indexing enabled, this additionally waits for Vectorize ingestion confirmation
+	// (up to 40s) so the returned item reflects a queryable state. On timeout the item
+	// is returned in `running` state and the background alarm continues polling.
+	// Defaults to false.
 	WaitForCompletion param.Field[bool] `json:"wait_for_completion"`
 }
 

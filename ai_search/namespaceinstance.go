@@ -43,7 +43,7 @@ func NewNamespaceInstanceService(opts ...option.RequestOption) (r *NamespaceInst
 	return
 }
 
-// Create a new instances.
+// Create a new instance.
 func (r *NamespaceInstanceService) New(ctx context.Context, name string, params NamespaceInstanceNewParams, opts ...option.RequestOption) (res *NamespaceInstanceNewResponse, err error) {
 	var env NamespaceInstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -64,7 +64,7 @@ func (r *NamespaceInstanceService) New(ctx context.Context, name string, params 
 	return res, nil
 }
 
-// Update instances.
+// Update instance.
 func (r *NamespaceInstanceService) Update(ctx context.Context, name string, id string, params NamespaceInstanceUpdateParams, opts ...option.RequestOption) (res *NamespaceInstanceUpdateResponse, err error) {
 	var env NamespaceInstanceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -120,7 +120,7 @@ func (r *NamespaceInstanceService) ListAutoPaging(ctx context.Context, name stri
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, name, params, opts...))
 }
 
-// Delete instances.
+// Delete instance.
 func (r *NamespaceInstanceService) Delete(ctx context.Context, name string, id string, body NamespaceInstanceDeleteParams, opts ...option.RequestOption) (res *NamespaceInstanceDeleteResponse, err error) {
 	var env NamespaceInstanceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -166,7 +166,7 @@ func (r *NamespaceInstanceService) ChatCompletions(ctx context.Context, name str
 	return res, err
 }
 
-// Read instances.
+// Read instance.
 func (r *NamespaceInstanceService) Read(ctx context.Context, name string, id string, query NamespaceInstanceReadParams, opts ...option.RequestOption) (res *NamespaceInstanceReadResponse, err error) {
 	var env NamespaceInstanceReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -6462,14 +6462,17 @@ func (r namespaceInstanceUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type NamespaceInstanceListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filter by namespace.
 	Namespace param.Field[string] `query:"namespace"`
-	// Order By Column Name
+	// Field to order results by.
 	OrderBy param.Field[NamespaceInstanceListParamsOrderBy] `query:"order_by"`
-	// Order By Direction
+	// Order direction.
 	OrderByDirection param.Field[NamespaceInstanceListParamsOrderByDirection] `query:"order_by_direction"`
-	Page             param.Field[int64]                                       `query:"page"`
-	PerPage          param.Field[int64]                                       `query:"per_page"`
-	// Search by id
+	// Page number (1-indexed).
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Filter instances whose id contains this string (case-insensitive).
 	Search param.Field[string] `query:"search"`
 }
 
@@ -6482,7 +6485,7 @@ func (r NamespaceInstanceListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Order By Column Name
+// Field to order results by.
 type NamespaceInstanceListParamsOrderBy string
 
 const (
@@ -6497,7 +6500,7 @@ func (r NamespaceInstanceListParamsOrderBy) IsKnown() bool {
 	return false
 }
 
-// Order By Direction
+// Order direction.
 type NamespaceInstanceListParamsOrderByDirection string
 
 const (
