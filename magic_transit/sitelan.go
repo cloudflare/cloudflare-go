@@ -231,6 +231,9 @@ func (r DHCPRelayParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DHCPServer struct {
+	// Optional list of custom DHCP options to include in DHCP responses. Only valid
+	// when DHCP server is enabled.
+	DHCPOptions []DHCPServerDHCPOption `json:"dhcp_options"`
 	// A valid IPv4 address.
 	DHCPPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
@@ -245,6 +248,7 @@ type DHCPServer struct {
 
 // dhcpServerJSON contains the JSON metadata for the struct [DHCPServer]
 type dhcpServerJSON struct {
+	DHCPOptions   apijson.Field
 	DHCPPoolEnd   apijson.Field
 	DHCPPoolStart apijson.Field
 	DNSServer     apijson.Field
@@ -262,7 +266,69 @@ func (r dhcpServerJSON) RawJSON() string {
 	return r.raw
 }
 
+// A custom DHCP option to include in DHCP responses.
+type DHCPServerDHCPOption struct {
+	// DHCP option number (1-254). Options 0 and 255 are reserved by RFC 2132. Options
+	// 3, 6, and 51 are not allowed because they conflict with connector-managed
+	// configuration.
+	Code int64 `json:"code" api:"required"`
+	// The type of the option value. text: a string (max 255 bytes). hex:
+	// colon-separated hex bytes (e.g. "01:04:aa:bb:cc", max 255 bytes). ip: an IPv4
+	// address (e.g. "10.20.30.40"). byte: an unsigned integer 0-255 (1 byte). short:
+	// an unsigned integer 0-65535 (2 bytes). integer: an unsigned integer 0-4294967295
+	// (4 bytes).
+	Type DHCPServerDHCPOptionsType `json:"type" api:"required"`
+	// The option value, interpreted according to the type field.
+	Value string                   `json:"value" api:"required"`
+	JSON  dhcpServerDHCPOptionJSON `json:"-"`
+}
+
+// dhcpServerDHCPOptionJSON contains the JSON metadata for the struct
+// [DHCPServerDHCPOption]
+type dhcpServerDHCPOptionJSON struct {
+	Code        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DHCPServerDHCPOption) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dhcpServerDHCPOptionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of the option value. text: a string (max 255 bytes). hex:
+// colon-separated hex bytes (e.g. "01:04:aa:bb:cc", max 255 bytes). ip: an IPv4
+// address (e.g. "10.20.30.40"). byte: an unsigned integer 0-255 (1 byte). short:
+// an unsigned integer 0-65535 (2 bytes). integer: an unsigned integer 0-4294967295
+// (4 bytes).
+type DHCPServerDHCPOptionsType string
+
+const (
+	DHCPServerDHCPOptionsTypeText    DHCPServerDHCPOptionsType = "text"
+	DHCPServerDHCPOptionsTypeHex     DHCPServerDHCPOptionsType = "hex"
+	DHCPServerDHCPOptionsTypeIP      DHCPServerDHCPOptionsType = "ip"
+	DHCPServerDHCPOptionsTypeByte    DHCPServerDHCPOptionsType = "byte"
+	DHCPServerDHCPOptionsTypeShort   DHCPServerDHCPOptionsType = "short"
+	DHCPServerDHCPOptionsTypeInteger DHCPServerDHCPOptionsType = "integer"
+)
+
+func (r DHCPServerDHCPOptionsType) IsKnown() bool {
+	switch r {
+	case DHCPServerDHCPOptionsTypeText, DHCPServerDHCPOptionsTypeHex, DHCPServerDHCPOptionsTypeIP, DHCPServerDHCPOptionsTypeByte, DHCPServerDHCPOptionsTypeShort, DHCPServerDHCPOptionsTypeInteger:
+		return true
+	}
+	return false
+}
+
 type DHCPServerParam struct {
+	// Optional list of custom DHCP options to include in DHCP responses. Only valid
+	// when DHCP server is enabled.
+	DHCPOptions param.Field[[]DHCPServerDHCPOptionParam] `json:"dhcp_options"`
 	// A valid IPv4 address.
 	DHCPPoolEnd param.Field[string] `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
@@ -275,6 +341,26 @@ type DHCPServerParam struct {
 }
 
 func (r DHCPServerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A custom DHCP option to include in DHCP responses.
+type DHCPServerDHCPOptionParam struct {
+	// DHCP option number (1-254). Options 0 and 255 are reserved by RFC 2132. Options
+	// 3, 6, and 51 are not allowed because they conflict with connector-managed
+	// configuration.
+	Code param.Field[int64] `json:"code" api:"required"`
+	// The type of the option value. text: a string (max 255 bytes). hex:
+	// colon-separated hex bytes (e.g. "01:04:aa:bb:cc", max 255 bytes). ip: an IPv4
+	// address (e.g. "10.20.30.40"). byte: an unsigned integer 0-255 (1 byte). short:
+	// an unsigned integer 0-65535 (2 bytes). integer: an unsigned integer 0-4294967295
+	// (4 bytes).
+	Type param.Field[DHCPServerDHCPOptionsType] `json:"type" api:"required"`
+	// The option value, interpreted according to the type field.
+	Value param.Field[string] `json:"value" api:"required"`
+}
+
+func (r DHCPServerDHCPOptionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
