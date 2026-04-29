@@ -189,7 +189,8 @@ type GRETunnelNewResponse struct {
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
 	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                          `json:"automatic_return_routing"`
 	BGP                    GRETunnelNewResponseBGP       `json:"bgp"`
 	BGPStatus              GRETunnelNewResponseBGPStatus `json:"bgp_status"`
@@ -506,7 +507,8 @@ type GRETunnelUpdateResponseModifiedGRETunnel struct {
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
 	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                                              `json:"automatic_return_routing"`
 	BGP                    GRETunnelUpdateResponseModifiedGRETunnelBGP       `json:"bgp"`
 	BGPStatus              GRETunnelUpdateResponseModifiedGRETunnelBGPStatus `json:"bgp_status"`
@@ -822,7 +824,8 @@ type GRETunnelListResponseGRETunnel struct {
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
 	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                                     `json:"automatic_return_routing"`
 	BGP                    GRETunnelListResponseGRETunnelsBGP       `json:"bgp"`
 	BGPStatus              GRETunnelListResponseGRETunnelsBGPStatus `json:"bgp_status"`
@@ -1140,7 +1143,8 @@ type GRETunnelDeleteResponseDeletedGRETunnel struct {
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
 	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                                             `json:"automatic_return_routing"`
 	BGP                    GRETunnelDeleteResponseDeletedGRETunnelBGP       `json:"bgp"`
 	BGPStatus              GRETunnelDeleteResponseDeletedGRETunnelBGPStatus `json:"bgp_status"`
@@ -1458,7 +1462,8 @@ type GRETunnelBulkUpdateResponseModifiedGRETunnel struct {
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
 	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                                                   `json:"automatic_return_routing"`
 	BGP                    GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP       `json:"bgp"`
 	BGPStatus              GRETunnelBulkUpdateResponseModifiedGRETunnelsBGPStatus `json:"bgp_status"`
@@ -1775,7 +1780,8 @@ type GRETunnelGetResponseGRETunnel struct {
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
 	Name string `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                                   `json:"automatic_return_routing"`
 	BGP                    GRETunnelGetResponseGRETunnelBGP       `json:"bgp"`
 	BGPStatus              GRETunnelGetResponseGRETunnelBGPStatus `json:"bgp_status"`
@@ -2070,7 +2076,8 @@ type GRETunnelNewParams struct {
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
 	Name param.Field[string] `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting param.Field[bool]                  `json:"automatic_return_routing"`
 	BGP                    param.Field[GRETunnelNewParamsBGP] `json:"bgp"`
 	// An optional description of the GRE tunnel.
@@ -2260,7 +2267,8 @@ type GRETunnelUpdateParams struct {
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
 	Name param.Field[string] `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting param.Field[bool] `json:"automatic_return_routing"`
 	// An optional description of the GRE tunnel.
 	Description param.Field[string]                           `json:"description"`
