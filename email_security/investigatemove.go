@@ -36,6 +36,41 @@ func NewInvestigateMoveService(opts ...option.RequestOption) (r *InvestigateMove
 	return
 }
 
+// Moves a single message to a specified mailbox folder (Inbox, JunkEmail,
+// DeletedItems, RecoverableItemsDeletions, or RecoverableItemsPurges). Requires
+// active integration.
+func (r *InvestigateMoveService) New(ctx context.Context, investigateID string, params InvestigateMoveNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateMoveNewResponse], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if investigateID == "" {
+		err = errors.New("missing required investigate_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/move", params.AccountID, investigateID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Moves a single message to a specified mailbox folder (Inbox, JunkEmail,
+// DeletedItems, RecoverableItemsDeletions, or RecoverableItemsPurges). Requires
+// active integration.
+func (r *InvestigateMoveService) NewAutoPaging(ctx context.Context, investigateID string, params InvestigateMoveNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateMoveNewResponse] {
+	return pagination.NewSinglePageAutoPager(r.New(ctx, investigateID, params, opts...))
+}
+
 // Moves multiple messages to a specified mailbox folder (Inbox, JunkEmail,
 // DeletedItems, RecoverableItemsDeletions, or RecoverableItemsPurges). Requires
 // active integration.
@@ -65,6 +100,56 @@ func (r *InvestigateMoveService) Bulk(ctx context.Context, params InvestigateMov
 // active integration.
 func (r *InvestigateMoveService) BulkAutoPaging(ctx context.Context, params InvestigateMoveBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateMoveBulkResponse] {
 	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, params, opts...))
+}
+
+type InvestigateMoveNewResponse struct {
+	// Whether the operation succeeded
+	Success bool `json:"success" api:"required"`
+	// When the move operation completed (UTC)
+	CompletedAt time.Time `json:"completed_at" api:"nullable" format:"date-time"`
+	// Deprecated, use `completed_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	CompletedTimestamp time.Time `json:"completed_timestamp" format:"date-time"`
+	// Destination folder for the message
+	Destination string `json:"destination" api:"nullable"`
+	// Number of items moved. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	ItemCount int64 `json:"item_count"`
+	// Message identifier
+	MessageID string `json:"message_id" api:"nullable"`
+	// Type of operation performed
+	Operation string `json:"operation" api:"nullable"`
+	// Recipient email address
+	Recipient string `json:"recipient" api:"nullable"`
+	// Operation status
+	Status string                         `json:"status" api:"nullable"`
+	JSON   investigateMoveNewResponseJSON `json:"-"`
+}
+
+// investigateMoveNewResponseJSON contains the JSON metadata for the struct
+// [InvestigateMoveNewResponse]
+type investigateMoveNewResponseJSON struct {
+	Success            apijson.Field
+	CompletedAt        apijson.Field
+	CompletedTimestamp apijson.Field
+	Destination        apijson.Field
+	ItemCount          apijson.Field
+	MessageID          apijson.Field
+	Operation          apijson.Field
+	Recipient          apijson.Field
+	Status             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *InvestigateMoveNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateMoveNewResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type InvestigateMoveBulkResponse struct {
@@ -115,6 +200,34 @@ func (r *InvestigateMoveBulkResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r investigateMoveBulkResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type InvestigateMoveNewParams struct {
+	// Identifier.
+	AccountID   param.Field[string]                              `path:"account_id" api:"required"`
+	Destination param.Field[InvestigateMoveNewParamsDestination] `json:"destination" api:"required"`
+}
+
+func (r InvestigateMoveNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InvestigateMoveNewParamsDestination string
+
+const (
+	InvestigateMoveNewParamsDestinationInbox                     InvestigateMoveNewParamsDestination = "Inbox"
+	InvestigateMoveNewParamsDestinationJunkEmail                 InvestigateMoveNewParamsDestination = "JunkEmail"
+	InvestigateMoveNewParamsDestinationDeletedItems              InvestigateMoveNewParamsDestination = "DeletedItems"
+	InvestigateMoveNewParamsDestinationRecoverableItemsDeletions InvestigateMoveNewParamsDestination = "RecoverableItemsDeletions"
+	InvestigateMoveNewParamsDestinationRecoverableItemsPurges    InvestigateMoveNewParamsDestination = "RecoverableItemsPurges"
+)
+
+func (r InvestigateMoveNewParamsDestination) IsKnown() bool {
+	switch r {
+	case InvestigateMoveNewParamsDestinationInbox, InvestigateMoveNewParamsDestinationJunkEmail, InvestigateMoveNewParamsDestinationDeletedItems, InvestigateMoveNewParamsDestinationRecoverableItemsDeletions, InvestigateMoveNewParamsDestinationRecoverableItemsPurges:
+		return true
+	}
+	return false
 }
 
 type InvestigateMoveBulkParams struct {
