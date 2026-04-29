@@ -301,7 +301,7 @@ func TestNamespaceInstanceListWithOptionalParams(t *testing.T) {
 			OrderBy:          cloudflare.F(ai_search.NamespaceInstanceListParamsOrderByCreatedAt),
 			OrderByDirection: cloudflare.F(ai_search.NamespaceInstanceListParamsOrderByDirectionAsc),
 			Page:             cloudflare.F(int64(1)),
-			PerPage:          cloudflare.F(int64(1)),
+			PerPage:          cloudflare.F(int64(20)),
 			Search:           cloudflare.F("search"),
 		},
 	)
