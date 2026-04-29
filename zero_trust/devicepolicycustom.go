@@ -222,6 +222,8 @@ type DevicePolicyCustomNewParams struct {
 	SwitchLocked param.Field[bool] `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol param.Field[string] `json:"tunnel_protocol"`
+	// Virtual network access settings for the device.
+	VirtualNetworks param.Field[DevicePolicyCustomNewParamsVirtualNetworks] `json:"virtual_networks"`
 }
 
 func (r DevicePolicyCustomNewParams) MarshalJSON() (data []byte, err error) {
@@ -236,6 +238,19 @@ type DevicePolicyCustomNewParamsServiceModeV2 struct {
 }
 
 func (r DevicePolicyCustomNewParamsServiceModeV2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Virtual network access settings for the device.
+type DevicePolicyCustomNewParamsVirtualNetworks struct {
+	// List of virtual network IDs the device is allowed to access. When
+	// virtual_networks is set, at least one entry is required.
+	Allowed param.Field[[]string] `json:"allowed" api:"required" format:"uuid"`
+	// The default virtual network ID. Must be included in the `allowed` list.
+	Default param.Field[string] `json:"default" api:"required" format:"uuid"`
+}
+
+func (r DevicePolicyCustomNewParamsVirtualNetworks) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -350,6 +365,8 @@ type DevicePolicyCustomEditParams struct {
 	SwitchLocked param.Field[bool] `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol param.Field[string] `json:"tunnel_protocol"`
+	// Virtual network access settings for the device.
+	VirtualNetworks param.Field[DevicePolicyCustomEditParamsVirtualNetworks] `json:"virtual_networks"`
 }
 
 func (r DevicePolicyCustomEditParams) MarshalJSON() (data []byte, err error) {
@@ -364,6 +381,19 @@ type DevicePolicyCustomEditParamsServiceModeV2 struct {
 }
 
 func (r DevicePolicyCustomEditParamsServiceModeV2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Virtual network access settings for the device.
+type DevicePolicyCustomEditParamsVirtualNetworks struct {
+	// List of virtual network IDs the device is allowed to access. When
+	// virtual_networks is set, at least one entry is required.
+	Allowed param.Field[[]string] `json:"allowed" api:"required" format:"uuid"`
+	// The default virtual network ID. Must be included in the `allowed` list.
+	Default param.Field[string] `json:"default" api:"required" format:"uuid"`
+}
+
+func (r DevicePolicyCustomEditParamsVirtualNetworks) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

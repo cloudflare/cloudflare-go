@@ -118,8 +118,10 @@ type DevicePolicyDefaultEditResponse struct {
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
 	SwitchLocked bool `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
-	TunnelProtocol string                              `json:"tunnel_protocol"`
-	JSON           devicePolicyDefaultEditResponseJSON `json:"-"`
+	TunnelProtocol string `json:"tunnel_protocol"`
+	// Virtual network access settings for the device.
+	VirtualNetworks DevicePolicyDefaultEditResponseVirtualNetworks `json:"virtual_networks" api:"nullable"`
+	JSON            devicePolicyDefaultEditResponseJSON            `json:"-"`
 }
 
 // devicePolicyDefaultEditResponseJSON contains the JSON metadata for the struct
@@ -145,6 +147,7 @@ type devicePolicyDefaultEditResponseJSON struct {
 	SupportURL                 apijson.Field
 	SwitchLocked               apijson.Field
 	TunnelProtocol             apijson.Field
+	VirtualNetworks            apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field
 }
@@ -179,6 +182,33 @@ func (r *DevicePolicyDefaultEditResponseServiceModeV2) UnmarshalJSON(data []byte
 }
 
 func (r devicePolicyDefaultEditResponseServiceModeV2JSON) RawJSON() string {
+	return r.raw
+}
+
+// Virtual network access settings for the device.
+type DevicePolicyDefaultEditResponseVirtualNetworks struct {
+	// List of virtual network IDs the device is allowed to access. When
+	// virtual_networks is set, at least one entry is required.
+	Allowed []string `json:"allowed" api:"required" format:"uuid"`
+	// The default virtual network ID. Must be included in the `allowed` list.
+	Default string                                             `json:"default" api:"required" format:"uuid"`
+	JSON    devicePolicyDefaultEditResponseVirtualNetworksJSON `json:"-"`
+}
+
+// devicePolicyDefaultEditResponseVirtualNetworksJSON contains the JSON metadata
+// for the struct [DevicePolicyDefaultEditResponseVirtualNetworks]
+type devicePolicyDefaultEditResponseVirtualNetworksJSON struct {
+	Allowed     apijson.Field
+	Default     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyDefaultEditResponseVirtualNetworks) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePolicyDefaultEditResponseVirtualNetworksJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -223,8 +253,10 @@ type DevicePolicyDefaultGetResponse struct {
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
 	SwitchLocked bool `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
-	TunnelProtocol string                             `json:"tunnel_protocol"`
-	JSON           devicePolicyDefaultGetResponseJSON `json:"-"`
+	TunnelProtocol string `json:"tunnel_protocol"`
+	// Virtual network access settings for the device.
+	VirtualNetworks DevicePolicyDefaultGetResponseVirtualNetworks `json:"virtual_networks" api:"nullable"`
+	JSON            devicePolicyDefaultGetResponseJSON            `json:"-"`
 }
 
 // devicePolicyDefaultGetResponseJSON contains the JSON metadata for the struct
@@ -250,6 +282,7 @@ type devicePolicyDefaultGetResponseJSON struct {
 	SupportURL                 apijson.Field
 	SwitchLocked               apijson.Field
 	TunnelProtocol             apijson.Field
+	VirtualNetworks            apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field
 }
@@ -284,6 +317,33 @@ func (r *DevicePolicyDefaultGetResponseServiceModeV2) UnmarshalJSON(data []byte)
 }
 
 func (r devicePolicyDefaultGetResponseServiceModeV2JSON) RawJSON() string {
+	return r.raw
+}
+
+// Virtual network access settings for the device.
+type DevicePolicyDefaultGetResponseVirtualNetworks struct {
+	// List of virtual network IDs the device is allowed to access. When
+	// virtual_networks is set, at least one entry is required.
+	Allowed []string `json:"allowed" api:"required" format:"uuid"`
+	// The default virtual network ID. Must be included in the `allowed` list.
+	Default string                                            `json:"default" api:"required" format:"uuid"`
+	JSON    devicePolicyDefaultGetResponseVirtualNetworksJSON `json:"-"`
+}
+
+// devicePolicyDefaultGetResponseVirtualNetworksJSON contains the JSON metadata for
+// the struct [DevicePolicyDefaultGetResponseVirtualNetworks]
+type devicePolicyDefaultGetResponseVirtualNetworksJSON struct {
+	Allowed     apijson.Field
+	Default     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyDefaultGetResponseVirtualNetworks) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePolicyDefaultGetResponseVirtualNetworksJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -333,6 +393,8 @@ type DevicePolicyDefaultEditParams struct {
 	SwitchLocked param.Field[bool] `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol param.Field[string] `json:"tunnel_protocol"`
+	// Virtual network access settings for the device.
+	VirtualNetworks param.Field[DevicePolicyDefaultEditParamsVirtualNetworks] `json:"virtual_networks"`
 }
 
 func (r DevicePolicyDefaultEditParams) MarshalJSON() (data []byte, err error) {
@@ -347,6 +409,19 @@ type DevicePolicyDefaultEditParamsServiceModeV2 struct {
 }
 
 func (r DevicePolicyDefaultEditParamsServiceModeV2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Virtual network access settings for the device.
+type DevicePolicyDefaultEditParamsVirtualNetworks struct {
+	// List of virtual network IDs the device is allowed to access. When
+	// virtual_networks is set, at least one entry is required.
+	Allowed param.Field[[]string] `json:"allowed" api:"required" format:"uuid"`
+	// The default virtual network ID. Must be included in the `allowed` list.
+	Default param.Field[string] `json:"default" api:"required" format:"uuid"`
+}
+
+func (r DevicePolicyDefaultEditParamsVirtualNetworks) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
