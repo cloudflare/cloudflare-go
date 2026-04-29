@@ -55,6 +55,11 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 					ServerAddresses: cloudflare.F([]string{"192.0.2.1"}),
 				}),
 				DHCPServer: cloudflare.F(magic_transit.DHCPServerParam{
+					DHCPOptions: cloudflare.F([]magic_transit.DHCPServerDHCPOptionParam{{
+						Code:  cloudflare.F(int64(66)),
+						Type:  cloudflare.F(magic_transit.DHCPServerDHCPOptionsTypeIP),
+						Value: cloudflare.F("10.20.30.40"),
+					}}),
 					DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
 					DHCPPoolStart: cloudflare.F("192.0.2.1"),
 					DNSServer:     cloudflare.F("192.0.2.1"),
@@ -120,6 +125,11 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 					ServerAddresses: cloudflare.F([]string{"192.0.2.1"}),
 				}),
 				DHCPServer: cloudflare.F(magic_transit.DHCPServerParam{
+					DHCPOptions: cloudflare.F([]magic_transit.DHCPServerDHCPOptionParam{{
+						Code:  cloudflare.F(int64(66)),
+						Type:  cloudflare.F(magic_transit.DHCPServerDHCPOptionsTypeIP),
+						Value: cloudflare.F("10.20.30.40"),
+					}}),
 					DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
 					DHCPPoolStart: cloudflare.F("192.0.2.1"),
 					DNSServer:     cloudflare.F("192.0.2.1"),
@@ -246,6 +256,11 @@ func TestSiteLANEditWithOptionalParams(t *testing.T) {
 					ServerAddresses: cloudflare.F([]string{"192.0.2.1"}),
 				}),
 				DHCPServer: cloudflare.F(magic_transit.DHCPServerParam{
+					DHCPOptions: cloudflare.F([]magic_transit.DHCPServerDHCPOptionParam{{
+						Code:  cloudflare.F(int64(66)),
+						Type:  cloudflare.F(magic_transit.DHCPServerDHCPOptionsTypeIP),
+						Value: cloudflare.F("10.20.30.40"),
+					}}),
 					DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
 					DHCPPoolStart: cloudflare.F("192.0.2.1"),
 					DNSServer:     cloudflare.F("192.0.2.1"),

@@ -171,6 +171,28 @@ func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetPa
 	return res, nil
 }
 
+// Return best-effort metrics for a queue. Values may be approximate due to the
+// distributed nature of queues.
+func (r *QueueService) GetMetrics(ctx context.Context, queueID string, query QueueGetMetricsParams, opts ...option.RequestOption) (res *QueueGetMetricsResponse, err error) {
+	var env QueueGetMetricsResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/queues/%s/metrics", query.AccountID, queueID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 type Queue struct {
 	Consumers           []Consumer      `json:"consumers"`
 	ConsumersTotalCount float64         `json:"consumers_total_count"`
@@ -490,6 +512,37 @@ func (r QueueDeleteResponseSuccess) IsKnown() bool {
 	return false
 }
 
+// Best-effort metrics for the queue. Values may be approximate due to the
+// distributed nature of queues.
+type QueueGetMetricsResponse struct {
+	// The size in bytes of unacknowledged messages in the queue.
+	BacklogBytes float64 `json:"backlog_bytes" api:"required"`
+	// The number of unacknowledged messages in the queue.
+	BacklogCount float64 `json:"backlog_count" api:"required"`
+	// Unix timestamp in milliseconds of the oldest unacknowledged message in the
+	// queue. Returns 0 if unknown.
+	OldestMessageTimestampMs float64                     `json:"oldest_message_timestamp_ms" api:"required"`
+	JSON                     queueGetMetricsResponseJSON `json:"-"`
+}
+
+// queueGetMetricsResponseJSON contains the JSON metadata for the struct
+// [QueueGetMetricsResponse]
+type queueGetMetricsResponseJSON struct {
+	BacklogBytes             apijson.Field
+	BacklogCount             apijson.Field
+	OldestMessageTimestampMs apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *QueueGetMetricsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueGetMetricsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueNewParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -702,6 +755,56 @@ const (
 func (r QueueGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case QueueGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type QueueGetMetricsParams struct {
+	// A Resource identifier.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type QueueGetMetricsResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	// Best-effort metrics for the queue. Values may be approximate due to the
+	// distributed nature of queues.
+	Result QueueGetMetricsResponse `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success QueueGetMetricsResponseEnvelopeSuccess `json:"success"`
+	JSON    queueGetMetricsResponseEnvelopeJSON    `json:"-"`
+}
+
+// queueGetMetricsResponseEnvelopeJSON contains the JSON metadata for the struct
+// [QueueGetMetricsResponseEnvelope]
+type queueGetMetricsResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueGetMetricsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueGetMetricsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates if the API call was successful or not.
+type QueueGetMetricsResponseEnvelopeSuccess bool
+
+const (
+	QueueGetMetricsResponseEnvelopeSuccessTrue QueueGetMetricsResponseEnvelopeSuccess = true
+)
+
+func (r QueueGetMetricsResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case QueueGetMetricsResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

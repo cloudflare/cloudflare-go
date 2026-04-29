@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
 	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // SettingBlockSenderService contains methods and other services that help with
@@ -39,8 +38,9 @@ func NewSettingBlockSenderService(opts ...option.RequestOption) (r *SettingBlock
 	return
 }
 
-// Adds a sender pattern to the email block list, preventing messages from matching
-// senders from being delivered.
+// Creates a new blocked sender pattern. Emails matching this pattern will be
+// blocked from delivery. Patterns can be email addresses, domains, or IP
+// addresses, and support regular expressions.
 func (r *SettingBlockSenderService) New(ctx context.Context, params SettingBlockSenderNewParams, opts ...option.RequestOption) (res *SettingBlockSenderNewResponse, err error) {
 	var env SettingBlockSenderNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +57,9 @@ func (r *SettingBlockSenderService) New(ctx context.Context, params SettingBlock
 	return res, nil
 }
 
-// Lists all blocked sender entries with their patterns and block reasons.
+// Returns a paginated list of blocked email sender patterns. These patterns
+// prevent emails from matching senders from being delivered. Supports filtering by
+// pattern type and searching across patterns.
 func (r *SettingBlockSenderService) List(ctx context.Context, params SettingBlockSenderListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingBlockSenderListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -79,21 +81,27 @@ func (r *SettingBlockSenderService) List(ctx context.Context, params SettingBloc
 	return res, nil
 }
 
-// Lists all blocked sender entries with their patterns and block reasons.
+// Returns a paginated list of blocked email sender patterns. These patterns
+// prevent emails from matching senders from being delivered. Supports filtering by
+// pattern type and searching across patterns.
 func (r *SettingBlockSenderService) ListAutoPaging(ctx context.Context, params SettingBlockSenderListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingBlockSenderListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Removes a sender from the email block list, allowing their messages to be
-// delivered normally.
-func (r *SettingBlockSenderService) Delete(ctx context.Context, patternID int64, body SettingBlockSenderDeleteParams, opts ...option.RequestOption) (res *SettingBlockSenderDeleteResponse, err error) {
+// Removes a blocked sender pattern. After deletion, emails from this sender will
+// no longer be automatically blocked based on this rule.
+func (r *SettingBlockSenderService) Delete(ctx context.Context, patternID string, body SettingBlockSenderDeleteParams, opts ...option.RequestOption) (res *SettingBlockSenderDeleteResponse, err error) {
 	var env SettingBlockSenderDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/email-security/settings/block_senders/%v", body.AccountID, patternID)
+	if patternID == "" {
+		err = errors.New("missing required pattern_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/settings/block_senders/%s", body.AccountID, patternID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -102,15 +110,20 @@ func (r *SettingBlockSenderService) Delete(ctx context.Context, patternID int64,
 	return res, nil
 }
 
-// Modifies a blocked sender entry, updating its pattern or block reason.
-func (r *SettingBlockSenderService) Edit(ctx context.Context, patternID int64, params SettingBlockSenderEditParams, opts ...option.RequestOption) (res *SettingBlockSenderEditResponse, err error) {
+// Updates an existing blocked sender pattern. Only provided fields will be
+// modified. The pattern will continue blocking emails until deleted.
+func (r *SettingBlockSenderService) Edit(ctx context.Context, patternID string, params SettingBlockSenderEditParams, opts ...option.RequestOption) (res *SettingBlockSenderEditResponse, err error) {
 	var env SettingBlockSenderEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/email-security/settings/block_senders/%v", params.AccountID, patternID)
+	if patternID == "" {
+		err = errors.New("missing required pattern_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/settings/block_senders/%s", params.AccountID, patternID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -119,16 +132,20 @@ func (r *SettingBlockSenderService) Edit(ctx context.Context, patternID int64, p
 	return res, nil
 }
 
-// Gets information about a specific blocked sender entry, including the pattern
-// and block reason.
-func (r *SettingBlockSenderService) Get(ctx context.Context, patternID int64, query SettingBlockSenderGetParams, opts ...option.RequestOption) (res *SettingBlockSenderGetResponse, err error) {
+// Retrieves details for a specific blocked sender pattern including its pattern
+// type, value, and metadata.
+func (r *SettingBlockSenderService) Get(ctx context.Context, patternID string, query SettingBlockSenderGetParams, opts ...option.RequestOption) (res *SettingBlockSenderGetResponse, err error) {
 	var env SettingBlockSenderGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/email-security/settings/block_senders/%v", query.AccountID, patternID)
+	if patternID == "" {
+		err = errors.New("missing required pattern_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/settings/block_senders/%s", query.AccountID, patternID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -137,28 +154,36 @@ func (r *SettingBlockSenderService) Get(ctx context.Context, patternID int64, qu
 	return res, nil
 }
 
+// A blocked sender pattern
 type SettingBlockSenderNewResponse struct {
-	// The unique identifier for the allow policy.
-	ID           int64                                    `json:"id" api:"required"`
-	CreatedAt    time.Time                                `json:"created_at" api:"required" format:"date-time"`
-	IsRegex      bool                                     `json:"is_regex" api:"required"`
-	LastModified time.Time                                `json:"last_modified" api:"required" format:"date-time"`
-	Pattern      string                                   `json:"pattern" api:"required"`
-	PatternType  SettingBlockSenderNewResponsePatternType `json:"pattern_type" api:"required"`
-	Comments     string                                   `json:"comments" api:"nullable"`
-	JSON         settingBlockSenderNewResponseJSON        `json:"-"`
+	// Blocked sender pattern identifier
+	ID        string    `json:"id" format:"uuid"`
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	IsRegex   bool      `json:"is_regex"`
+	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	Pattern      string    `json:"pattern"`
+	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+	// creating or updating policies, but may be returned for existing entries.
+	PatternType SettingBlockSenderNewResponsePatternType `json:"pattern_type"`
+	JSON        settingBlockSenderNewResponseJSON        `json:"-"`
 }
 
 // settingBlockSenderNewResponseJSON contains the JSON metadata for the struct
 // [SettingBlockSenderNewResponse]
 type settingBlockSenderNewResponseJSON struct {
 	ID           apijson.Field
+	Comments     apijson.Field
 	CreatedAt    apijson.Field
 	IsRegex      apijson.Field
 	LastModified apijson.Field
+	ModifiedAt   apijson.Field
 	Pattern      apijson.Field
 	PatternType  apijson.Field
-	Comments     apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -171,6 +196,8 @@ func (r settingBlockSenderNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+// creating or updating policies, but may be returned for existing entries.
 type SettingBlockSenderNewResponsePatternType string
 
 const (
@@ -188,28 +215,36 @@ func (r SettingBlockSenderNewResponsePatternType) IsKnown() bool {
 	return false
 }
 
+// A blocked sender pattern
 type SettingBlockSenderListResponse struct {
-	// The unique identifier for the allow policy.
-	ID           int64                                     `json:"id" api:"required"`
-	CreatedAt    time.Time                                 `json:"created_at" api:"required" format:"date-time"`
-	IsRegex      bool                                      `json:"is_regex" api:"required"`
-	LastModified time.Time                                 `json:"last_modified" api:"required" format:"date-time"`
-	Pattern      string                                    `json:"pattern" api:"required"`
-	PatternType  SettingBlockSenderListResponsePatternType `json:"pattern_type" api:"required"`
-	Comments     string                                    `json:"comments" api:"nullable"`
-	JSON         settingBlockSenderListResponseJSON        `json:"-"`
+	// Blocked sender pattern identifier
+	ID        string    `json:"id" format:"uuid"`
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	IsRegex   bool      `json:"is_regex"`
+	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	Pattern      string    `json:"pattern"`
+	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+	// creating or updating policies, but may be returned for existing entries.
+	PatternType SettingBlockSenderListResponsePatternType `json:"pattern_type"`
+	JSON        settingBlockSenderListResponseJSON        `json:"-"`
 }
 
 // settingBlockSenderListResponseJSON contains the JSON metadata for the struct
 // [SettingBlockSenderListResponse]
 type settingBlockSenderListResponseJSON struct {
 	ID           apijson.Field
+	Comments     apijson.Field
 	CreatedAt    apijson.Field
 	IsRegex      apijson.Field
 	LastModified apijson.Field
+	ModifiedAt   apijson.Field
 	Pattern      apijson.Field
 	PatternType  apijson.Field
-	Comments     apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -222,6 +257,8 @@ func (r settingBlockSenderListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+// creating or updating policies, but may be returned for existing entries.
 type SettingBlockSenderListResponsePatternType string
 
 const (
@@ -240,8 +277,8 @@ func (r SettingBlockSenderListResponsePatternType) IsKnown() bool {
 }
 
 type SettingBlockSenderDeleteResponse struct {
-	// The unique identifier for the allow policy.
-	ID   int64                                `json:"id" api:"required"`
+	// Blocked sender pattern identifier
+	ID   string                               `json:"id" api:"required" format:"uuid"`
 	JSON settingBlockSenderDeleteResponseJSON `json:"-"`
 }
 
@@ -261,28 +298,36 @@ func (r settingBlockSenderDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// A blocked sender pattern
 type SettingBlockSenderEditResponse struct {
-	// The unique identifier for the allow policy.
-	ID           int64                                     `json:"id" api:"required"`
-	CreatedAt    time.Time                                 `json:"created_at" api:"required" format:"date-time"`
-	IsRegex      bool                                      `json:"is_regex" api:"required"`
-	LastModified time.Time                                 `json:"last_modified" api:"required" format:"date-time"`
-	Pattern      string                                    `json:"pattern" api:"required"`
-	PatternType  SettingBlockSenderEditResponsePatternType `json:"pattern_type" api:"required"`
-	Comments     string                                    `json:"comments" api:"nullable"`
-	JSON         settingBlockSenderEditResponseJSON        `json:"-"`
+	// Blocked sender pattern identifier
+	ID        string    `json:"id" format:"uuid"`
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	IsRegex   bool      `json:"is_regex"`
+	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	Pattern      string    `json:"pattern"`
+	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+	// creating or updating policies, but may be returned for existing entries.
+	PatternType SettingBlockSenderEditResponsePatternType `json:"pattern_type"`
+	JSON        settingBlockSenderEditResponseJSON        `json:"-"`
 }
 
 // settingBlockSenderEditResponseJSON contains the JSON metadata for the struct
 // [SettingBlockSenderEditResponse]
 type settingBlockSenderEditResponseJSON struct {
 	ID           apijson.Field
+	Comments     apijson.Field
 	CreatedAt    apijson.Field
 	IsRegex      apijson.Field
 	LastModified apijson.Field
+	ModifiedAt   apijson.Field
 	Pattern      apijson.Field
 	PatternType  apijson.Field
-	Comments     apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -295,6 +340,8 @@ func (r settingBlockSenderEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+// creating or updating policies, but may be returned for existing entries.
 type SettingBlockSenderEditResponsePatternType string
 
 const (
@@ -312,28 +359,36 @@ func (r SettingBlockSenderEditResponsePatternType) IsKnown() bool {
 	return false
 }
 
+// A blocked sender pattern
 type SettingBlockSenderGetResponse struct {
-	// The unique identifier for the allow policy.
-	ID           int64                                    `json:"id" api:"required"`
-	CreatedAt    time.Time                                `json:"created_at" api:"required" format:"date-time"`
-	IsRegex      bool                                     `json:"is_regex" api:"required"`
-	LastModified time.Time                                `json:"last_modified" api:"required" format:"date-time"`
-	Pattern      string                                   `json:"pattern" api:"required"`
-	PatternType  SettingBlockSenderGetResponsePatternType `json:"pattern_type" api:"required"`
-	Comments     string                                   `json:"comments" api:"nullable"`
-	JSON         settingBlockSenderGetResponseJSON        `json:"-"`
+	// Blocked sender pattern identifier
+	ID        string    `json:"id" format:"uuid"`
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	IsRegex   bool      `json:"is_regex"`
+	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	Pattern      string    `json:"pattern"`
+	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+	// creating or updating policies, but may be returned for existing entries.
+	PatternType SettingBlockSenderGetResponsePatternType `json:"pattern_type"`
+	JSON        settingBlockSenderGetResponseJSON        `json:"-"`
 }
 
 // settingBlockSenderGetResponseJSON contains the JSON metadata for the struct
 // [SettingBlockSenderGetResponse]
 type settingBlockSenderGetResponseJSON struct {
 	ID           apijson.Field
+	Comments     apijson.Field
 	CreatedAt    apijson.Field
 	IsRegex      apijson.Field
 	LastModified apijson.Field
+	ModifiedAt   apijson.Field
 	Pattern      apijson.Field
 	PatternType  apijson.Field
-	Comments     apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -346,6 +401,8 @@ func (r settingBlockSenderGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+// creating or updating policies, but may be returned for existing entries.
 type SettingBlockSenderGetResponsePatternType string
 
 const (
@@ -364,10 +421,12 @@ func (r SettingBlockSenderGetResponsePatternType) IsKnown() bool {
 }
 
 type SettingBlockSenderNewParams struct {
-	// Account Identifier
-	AccountID   param.Field[string]                                 `path:"account_id" api:"required"`
-	IsRegex     param.Field[bool]                                   `json:"is_regex" api:"required"`
-	Pattern     param.Field[string]                                 `json:"pattern" api:"required"`
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	IsRegex   param.Field[bool]   `json:"is_regex" api:"required"`
+	Pattern   param.Field[string] `json:"pattern" api:"required"`
+	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+	// creating or updating policies, but may be returned for existing entries.
 	PatternType param.Field[SettingBlockSenderNewParamsPatternType] `json:"pattern_type" api:"required"`
 	Comments    param.Field[string]                                 `json:"comments"`
 }
@@ -376,6 +435,8 @@ func (r SettingBlockSenderNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+// creating or updating policies, but may be returned for existing entries.
 type SettingBlockSenderNewParamsPatternType string
 
 const (
@@ -394,11 +455,13 @@ func (r SettingBlockSenderNewParamsPatternType) IsKnown() bool {
 }
 
 type SettingBlockSenderNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo                     `json:"messages" api:"required"`
-	Result   SettingBlockSenderNewResponse             `json:"result" api:"required"`
-	Success  bool                                      `json:"success" api:"required"`
-	JSON     settingBlockSenderNewResponseEnvelopeJSON `json:"-"`
+	Errors   []SettingBlockSenderNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingBlockSenderNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success SettingBlockSenderNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	// A blocked sender pattern
+	Result SettingBlockSenderNewResponse             `json:"result"`
+	JSON   settingBlockSenderNewResponseEnvelopeJSON `json:"-"`
 }
 
 // settingBlockSenderNewResponseEnvelopeJSON contains the JSON metadata for the
@@ -406,8 +469,8 @@ type SettingBlockSenderNewResponseEnvelope struct {
 type settingBlockSenderNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -420,22 +483,133 @@ func (r settingBlockSenderNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type SettingBlockSenderNewResponseEnvelopeErrors struct {
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           SettingBlockSenderNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingBlockSenderNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingBlockSenderNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingBlockSenderNewResponseEnvelopeErrors]
+type settingBlockSenderNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    settingBlockSenderNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingBlockSenderNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [SettingBlockSenderNewResponseEnvelopeErrorsSource]
+type settingBlockSenderNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderNewResponseEnvelopeMessages struct {
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           SettingBlockSenderNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingBlockSenderNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingBlockSenderNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SettingBlockSenderNewResponseEnvelopeMessages]
+type settingBlockSenderNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    settingBlockSenderNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingBlockSenderNewResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [SettingBlockSenderNewResponseEnvelopeMessagesSource]
+type settingBlockSenderNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type SettingBlockSenderNewResponseEnvelopeSuccess bool
+
+const (
+	SettingBlockSenderNewResponseEnvelopeSuccessTrue SettingBlockSenderNewResponseEnvelopeSuccess = true
+)
+
+func (r SettingBlockSenderNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingBlockSenderNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SettingBlockSenderListParams struct {
-	// Account Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The sorting direction.
 	Direction param.Field[SettingBlockSenderListParamsDirection] `query:"direction"`
-	// The field to sort by.
+	// Field to sort by.
 	Order param.Field[SettingBlockSenderListParamsOrder] `query:"order"`
-	// The page number of paginated results.
-	Page        param.Field[int64]                                   `query:"page"`
-	Pattern     param.Field[string]                                  `query:"pattern"`
+	// Current page within paginated list of results.
+	Page param.Field[int64] `query:"page"`
+	// Filter by pattern value.
+	Pattern param.Field[string] `query:"pattern"`
+	// Filter by pattern type.
 	PatternType param.Field[SettingBlockSenderListParamsPatternType] `query:"pattern_type"`
-	// The number of results per page.
+	// The number of results per page. Maximum value is 1000.
 	PerPage param.Field[int64] `query:"per_page"`
-	// Allows searching in multiple properties of a record simultaneously. This
-	// parameter is intended for human users, not automation. Its exact behavior is
-	// intentionally left unspecified and is subject to change in the future.
+	// Search term for filtering records. Behavior may change.
 	Search param.Field[string] `query:"search"`
 }
 
@@ -464,7 +638,7 @@ func (r SettingBlockSenderListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// The field to sort by.
+// Field to sort by.
 type SettingBlockSenderListParamsOrder string
 
 const (
@@ -480,6 +654,7 @@ func (r SettingBlockSenderListParamsOrder) IsKnown() bool {
 	return false
 }
 
+// Filter by pattern type.
 type SettingBlockSenderListParamsPatternType string
 
 const (
@@ -498,16 +673,17 @@ func (r SettingBlockSenderListParamsPatternType) IsKnown() bool {
 }
 
 type SettingBlockSenderDeleteParams struct {
-	// Account Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SettingBlockSenderDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                        `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo                        `json:"messages" api:"required"`
-	Result   SettingBlockSenderDeleteResponse             `json:"result" api:"required"`
-	Success  bool                                         `json:"success" api:"required"`
-	JSON     settingBlockSenderDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   []SettingBlockSenderDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingBlockSenderDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success SettingBlockSenderDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  SettingBlockSenderDeleteResponse                `json:"result"`
+	JSON    settingBlockSenderDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
 // settingBlockSenderDeleteResponseEnvelopeJSON contains the JSON metadata for the
@@ -515,8 +691,8 @@ type SettingBlockSenderDeleteResponseEnvelope struct {
 type settingBlockSenderDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -529,12 +705,125 @@ func (r settingBlockSenderDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type SettingBlockSenderDeleteResponseEnvelopeErrors struct {
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           SettingBlockSenderDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingBlockSenderDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingBlockSenderDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingBlockSenderDeleteResponseEnvelopeErrors]
+type settingBlockSenderDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    settingBlockSenderDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingBlockSenderDeleteResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [SettingBlockSenderDeleteResponseEnvelopeErrorsSource]
+type settingBlockSenderDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderDeleteResponseEnvelopeMessages struct {
+	Code             int64                                                  `json:"code" api:"required"`
+	Message          string                                                 `json:"message" api:"required"`
+	DocumentationURL string                                                 `json:"documentation_url"`
+	Source           SettingBlockSenderDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingBlockSenderDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingBlockSenderDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingBlockSenderDeleteResponseEnvelopeMessages]
+type settingBlockSenderDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                                     `json:"pointer"`
+	JSON    settingBlockSenderDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingBlockSenderDeleteResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [SettingBlockSenderDeleteResponseEnvelopeMessagesSource]
+type settingBlockSenderDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type SettingBlockSenderDeleteResponseEnvelopeSuccess bool
+
+const (
+	SettingBlockSenderDeleteResponseEnvelopeSuccessTrue SettingBlockSenderDeleteResponseEnvelopeSuccess = true
+)
+
+func (r SettingBlockSenderDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingBlockSenderDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SettingBlockSenderEditParams struct {
-	// Account Identifier
-	AccountID   param.Field[string]                                  `path:"account_id" api:"required"`
-	Comments    param.Field[string]                                  `json:"comments"`
-	IsRegex     param.Field[bool]                                    `json:"is_regex"`
-	Pattern     param.Field[string]                                  `json:"pattern"`
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	Comments  param.Field[string] `json:"comments"`
+	IsRegex   param.Field[bool]   `json:"is_regex"`
+	Pattern   param.Field[string] `json:"pattern"`
+	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+	// creating or updating policies, but may be returned for existing entries.
 	PatternType param.Field[SettingBlockSenderEditParamsPatternType] `json:"pattern_type"`
 }
 
@@ -542,6 +831,8 @@ func (r SettingBlockSenderEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
+// creating or updating policies, but may be returned for existing entries.
 type SettingBlockSenderEditParamsPatternType string
 
 const (
@@ -560,11 +851,13 @@ func (r SettingBlockSenderEditParamsPatternType) IsKnown() bool {
 }
 
 type SettingBlockSenderEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                      `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo                      `json:"messages" api:"required"`
-	Result   SettingBlockSenderEditResponse             `json:"result" api:"required"`
-	Success  bool                                       `json:"success" api:"required"`
-	JSON     settingBlockSenderEditResponseEnvelopeJSON `json:"-"`
+	Errors   []SettingBlockSenderEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingBlockSenderEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success SettingBlockSenderEditResponseEnvelopeSuccess `json:"success" api:"required"`
+	// A blocked sender pattern
+	Result SettingBlockSenderEditResponse             `json:"result"`
+	JSON   settingBlockSenderEditResponseEnvelopeJSON `json:"-"`
 }
 
 // settingBlockSenderEditResponseEnvelopeJSON contains the JSON metadata for the
@@ -572,8 +865,8 @@ type SettingBlockSenderEditResponseEnvelope struct {
 type settingBlockSenderEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -586,17 +879,130 @@ func (r settingBlockSenderEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type SettingBlockSenderEditResponseEnvelopeErrors struct {
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           SettingBlockSenderEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingBlockSenderEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingBlockSenderEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingBlockSenderEditResponseEnvelopeErrors]
+type settingBlockSenderEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    settingBlockSenderEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingBlockSenderEditResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [SettingBlockSenderEditResponseEnvelopeErrorsSource]
+type settingBlockSenderEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderEditResponseEnvelopeMessages struct {
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           SettingBlockSenderEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingBlockSenderEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingBlockSenderEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingBlockSenderEditResponseEnvelopeMessages]
+type settingBlockSenderEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    settingBlockSenderEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingBlockSenderEditResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [SettingBlockSenderEditResponseEnvelopeMessagesSource]
+type settingBlockSenderEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type SettingBlockSenderEditResponseEnvelopeSuccess bool
+
+const (
+	SettingBlockSenderEditResponseEnvelopeSuccessTrue SettingBlockSenderEditResponseEnvelopeSuccess = true
+)
+
+func (r SettingBlockSenderEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingBlockSenderEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SettingBlockSenderGetParams struct {
-	// Account Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SettingBlockSenderGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                     `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo                     `json:"messages" api:"required"`
-	Result   SettingBlockSenderGetResponse             `json:"result" api:"required"`
-	Success  bool                                      `json:"success" api:"required"`
-	JSON     settingBlockSenderGetResponseEnvelopeJSON `json:"-"`
+	Errors   []SettingBlockSenderGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingBlockSenderGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success SettingBlockSenderGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	// A blocked sender pattern
+	Result SettingBlockSenderGetResponse             `json:"result"`
+	JSON   settingBlockSenderGetResponseEnvelopeJSON `json:"-"`
 }
 
 // settingBlockSenderGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -604,8 +1010,8 @@ type SettingBlockSenderGetResponseEnvelope struct {
 type settingBlockSenderGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -616,4 +1022,115 @@ func (r *SettingBlockSenderGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 
 func (r settingBlockSenderGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+type SettingBlockSenderGetResponseEnvelopeErrors struct {
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           SettingBlockSenderGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingBlockSenderGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingBlockSenderGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingBlockSenderGetResponseEnvelopeErrors]
+type settingBlockSenderGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    settingBlockSenderGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingBlockSenderGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [SettingBlockSenderGetResponseEnvelopeErrorsSource]
+type settingBlockSenderGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderGetResponseEnvelopeMessages struct {
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           SettingBlockSenderGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingBlockSenderGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingBlockSenderGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SettingBlockSenderGetResponseEnvelopeMessages]
+type settingBlockSenderGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingBlockSenderGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    settingBlockSenderGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingBlockSenderGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [SettingBlockSenderGetResponseEnvelopeMessagesSource]
+type settingBlockSenderGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBlockSenderGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingBlockSenderGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type SettingBlockSenderGetResponseEnvelopeSuccess bool
+
+const (
+	SettingBlockSenderGetResponseEnvelopeSuccessTrue SettingBlockSenderGetResponseEnvelopeSuccess = true
+)
+
+func (r SettingBlockSenderGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingBlockSenderGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

@@ -41,7 +41,7 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 	return
 }
 
-// Create a new instances.
+// Create a new instance.
 func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -58,7 +58,7 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 	return res, nil
 }
 
-// Update instances.
+// Update instance.
 func (r *InstanceService) Update(ctx context.Context, id string, params InstanceUpdateParams, opts ...option.RequestOption) (res *InstanceUpdateResponse, err error) {
 	var env InstanceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -106,7 +106,7 @@ func (r *InstanceService) ListAutoPaging(ctx context.Context, params InstanceLis
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete instances.
+// Delete instance.
 func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDeleteParams, opts ...option.RequestOption) (res *InstanceDeleteResponse, err error) {
 	var env InstanceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -144,7 +144,7 @@ func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params
 	return res, err
 }
 
-// Read instances.
+// Read instance.
 func (r *InstanceService) Read(ctx context.Context, id string, query InstanceReadParams, opts ...option.RequestOption) (res *InstanceReadResponse, err error) {
 	var env InstanceReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -6410,14 +6410,17 @@ func (r instanceUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type InstanceListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filter by namespace.
 	Namespace param.Field[string] `query:"namespace"`
-	// Order By Column Name
+	// Field to order results by.
 	OrderBy param.Field[InstanceListParamsOrderBy] `query:"order_by"`
-	// Order By Direction
+	// Order direction.
 	OrderByDirection param.Field[InstanceListParamsOrderByDirection] `query:"order_by_direction"`
-	Page             param.Field[int64]                              `query:"page"`
-	PerPage          param.Field[int64]                              `query:"per_page"`
-	// Search by id
+	// Page number (1-indexed).
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Filter instances whose id contains this string (case-insensitive).
 	Search param.Field[string] `query:"search"`
 }
 
@@ -6429,7 +6432,7 @@ func (r InstanceListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Order By Column Name
+// Field to order results by.
 type InstanceListParamsOrderBy string
 
 const (
@@ -6444,7 +6447,7 @@ func (r InstanceListParamsOrderBy) IsKnown() bool {
 	return false
 }
 
-// Order By Direction
+// Order direction.
 type InstanceListParamsOrderByDirection string
 
 const (

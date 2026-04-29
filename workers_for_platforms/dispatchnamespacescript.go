@@ -1665,6 +1665,10 @@ type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRateli
 	Limit param.Field[float64] `json:"limit" api:"required"`
 	// The period in seconds.
 	Period param.Field[int64] `json:"period" api:"required"`
+	// Duration in seconds to apply the mitigation action after the rate limit is
+	// exceeded. Valid values are 0 (disabled), 10, or multiples of 60 up to 86400.
+	// Must be greater than or equal to the period when non-zero.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimitSimple) MarshalJSON() (data []byte, err error) {

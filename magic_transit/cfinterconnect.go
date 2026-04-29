@@ -155,7 +155,8 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 	// Identifier
 	ID string `json:"id"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool `json:"automatic_return_routing"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
@@ -265,7 +266,8 @@ type CfInterconnectListResponseInterconnect struct {
 	// Identifier
 	ID string `json:"id"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool `json:"automatic_return_routing"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
@@ -377,7 +379,8 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 	// Identifier
 	ID string `json:"id"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool `json:"automatic_return_routing"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
@@ -488,7 +491,8 @@ type CfInterconnectGetResponseInterconnect struct {
 	// Identifier
 	ID string `json:"id"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool `json:"automatic_return_routing"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
@@ -577,7 +581,8 @@ type CfInterconnectUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting param.Field[bool] `json:"automatic_return_routing"`
 	// An optional description of the interconnect.
 	Description param.Field[string] `json:"description"`
