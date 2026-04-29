@@ -79,6 +79,29 @@ func (r *InvestigateService) ListAutoPaging(ctx context.Context, params Investig
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
+// Retrieves comprehensive details for a specific email message including headers,
+// recipients, sender information, and current quarantine status. Use the
+// investigate_id from search results to fetch detailed information.
+func (r *InvestigateService) Get(ctx context.Context, investigateID string, params InvestigateGetParams, opts ...option.RequestOption) (res *InvestigateGetResponse, err error) {
+	var env InvestigateGetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if investigateID == "" {
+		err = errors.New("missing required investigate_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s", params.AccountID, investigateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 type InvestigateListResponse struct {
 	// Unique identifier for a message retrieved from investigation
 	ID string `json:"id" api:"required"`
@@ -567,6 +590,494 @@ func (r InvestigateListResponseValidationSPF) IsKnown() bool {
 	return false
 }
 
+type InvestigateGetResponse struct {
+	// Unique identifier for a message retrieved from investigation
+	ID string `json:"id" api:"required"`
+	// Deprecated, use `GET /investigate/{investigate_id}/action_log` instead. End of
+	// life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	ActionLog         []InvestigateGetResponseActionLog `json:"action_log" api:"required"`
+	ClientRecipients  []string                          `json:"client_recipients" api:"required"`
+	DetectionReasons  []string                          `json:"detection_reasons" api:"required"`
+	IsPhishSubmission bool                              `json:"is_phish_submission" api:"required"`
+	IsQuarantined     bool                              `json:"is_quarantined" api:"required"`
+	// The identifier of the message
+	PostfixID string `json:"postfix_id" api:"required"`
+	// Message processing properties
+	Properties InvestigateGetResponseProperties `json:"properties" api:"required"`
+	// Deprecated, use `scanned_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	Ts               string                                 `json:"ts" api:"required"`
+	AlertID          string                                 `json:"alert_id" api:"nullable"`
+	DeliveryMode     InvestigateGetResponseDeliveryMode     `json:"delivery_mode"`
+	DeliveryStatus   []InvestigateGetResponseDeliveryStatus `json:"delivery_status" api:"nullable"`
+	EdfHash          string                                 `json:"edf_hash" api:"nullable"`
+	EnvelopeFrom     string                                 `json:"envelope_from" api:"nullable"`
+	EnvelopeTo       []string                               `json:"envelope_to" api:"nullable"`
+	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition"`
+	// Deprecated, use the `findings` field from
+	// `GET /investigate/{investigate_id}/detections` instead. End of life: November
+	// 1, 2026. Detection findings for this message.
+	//
+	// Deprecated: deprecated
+	Findings              []InvestigateGetResponseFinding `json:"findings" api:"nullable"`
+	From                  string                          `json:"from" api:"nullable"`
+	FromName              string                          `json:"from_name" api:"nullable"`
+	HtmltextStructureHash string                          `json:"htmltext_structure_hash" api:"nullable"`
+	MessageID             string                          `json:"message_id" api:"nullable"`
+	// Post-delivery operations performed on this message
+	PostDeliveryOperations []InvestigateGetResponsePostDeliveryOperation `json:"post_delivery_operations" api:"nullable"`
+	PostfixIDOutbound      string                                        `json:"postfix_id_outbound" api:"nullable"`
+	Replyto                string                                        `json:"replyto" api:"nullable"`
+	// When the message was scanned (UTC)
+	ScannedAt time.Time `json:"scanned_at" api:"nullable" format:"date-time"`
+	// When the message was sent (UTC)
+	SentAt           time.Time                        `json:"sent_at" api:"nullable" format:"date-time"`
+	SentDate         string                           `json:"sent_date" api:"nullable"`
+	Subject          string                           `json:"subject" api:"nullable"`
+	ThreatCategories []string                         `json:"threat_categories" api:"nullable"`
+	To               []string                         `json:"to" api:"nullable"`
+	ToName           []string                         `json:"to_name" api:"nullable"`
+	Validation       InvestigateGetResponseValidation `json:"validation"`
+	JSON             investigateGetResponseJSON       `json:"-"`
+}
+
+// investigateGetResponseJSON contains the JSON metadata for the struct
+// [InvestigateGetResponse]
+type investigateGetResponseJSON struct {
+	ID                     apijson.Field
+	ActionLog              apijson.Field
+	ClientRecipients       apijson.Field
+	DetectionReasons       apijson.Field
+	IsPhishSubmission      apijson.Field
+	IsQuarantined          apijson.Field
+	PostfixID              apijson.Field
+	Properties             apijson.Field
+	Ts                     apijson.Field
+	AlertID                apijson.Field
+	DeliveryMode           apijson.Field
+	DeliveryStatus         apijson.Field
+	EdfHash                apijson.Field
+	EnvelopeFrom           apijson.Field
+	EnvelopeTo             apijson.Field
+	FinalDisposition       apijson.Field
+	Findings               apijson.Field
+	From                   apijson.Field
+	FromName               apijson.Field
+	HtmltextStructureHash  apijson.Field
+	MessageID              apijson.Field
+	PostDeliveryOperations apijson.Field
+	PostfixIDOutbound      apijson.Field
+	Replyto                apijson.Field
+	ScannedAt              apijson.Field
+	SentAt                 apijson.Field
+	SentDate               apijson.Field
+	Subject                apijson.Field
+	ThreatCategories       apijson.Field
+	To                     apijson.Field
+	ToName                 apijson.Field
+	Validation             apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateGetResponseActionLog struct {
+	// Timestamp when action completed
+	CompletedAt time.Time `json:"completed_at" api:"required" format:"date-time"`
+	// Type of action performed
+	Operation InvestigateGetResponseActionLogOperation `json:"operation" api:"required"`
+	// Deprecated, use `completed_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	CompletedTimestamp string `json:"completed_timestamp"`
+	// Additional properties for the action
+	Properties InvestigateGetResponseActionLogProperties `json:"properties"`
+	// Status of the action
+	Status string                              `json:"status" api:"nullable"`
+	JSON   investigateGetResponseActionLogJSON `json:"-"`
+}
+
+// investigateGetResponseActionLogJSON contains the JSON metadata for the struct
+// [InvestigateGetResponseActionLog]
+type investigateGetResponseActionLogJSON struct {
+	CompletedAt        apijson.Field
+	Operation          apijson.Field
+	CompletedTimestamp apijson.Field
+	Properties         apijson.Field
+	Status             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseActionLog) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseActionLogJSON) RawJSON() string {
+	return r.raw
+}
+
+// Type of action performed
+type InvestigateGetResponseActionLogOperation string
+
+const (
+	InvestigateGetResponseActionLogOperationMove              InvestigateGetResponseActionLogOperation = "MOVE"
+	InvestigateGetResponseActionLogOperationRelease           InvestigateGetResponseActionLogOperation = "RELEASE"
+	InvestigateGetResponseActionLogOperationReclassify        InvestigateGetResponseActionLogOperation = "RECLASSIFY"
+	InvestigateGetResponseActionLogOperationSubmission        InvestigateGetResponseActionLogOperation = "SUBMISSION"
+	InvestigateGetResponseActionLogOperationQuarantineRelease InvestigateGetResponseActionLogOperation = "QUARANTINE_RELEASE"
+	InvestigateGetResponseActionLogOperationPreview           InvestigateGetResponseActionLogOperation = "PREVIEW"
+)
+
+func (r InvestigateGetResponseActionLogOperation) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseActionLogOperationMove, InvestigateGetResponseActionLogOperationRelease, InvestigateGetResponseActionLogOperationReclassify, InvestigateGetResponseActionLogOperationSubmission, InvestigateGetResponseActionLogOperationQuarantineRelease, InvestigateGetResponseActionLogOperationPreview:
+		return true
+	}
+	return false
+}
+
+// Additional properties for the action
+type InvestigateGetResponseActionLogProperties struct {
+	// Target folder for move operations
+	Folder string `json:"folder"`
+	// User who requested the action
+	RequestedBy string                                        `json:"requested_by"`
+	JSON        investigateGetResponseActionLogPropertiesJSON `json:"-"`
+}
+
+// investigateGetResponseActionLogPropertiesJSON contains the JSON metadata for the
+// struct [InvestigateGetResponseActionLogProperties]
+type investigateGetResponseActionLogPropertiesJSON struct {
+	Folder      apijson.Field
+	RequestedBy apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseActionLogProperties) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseActionLogPropertiesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Message processing properties
+type InvestigateGetResponseProperties struct {
+	// Pattern that allowlisted this message
+	AllowlistedPattern string `json:"allowlisted_pattern" api:"nullable"`
+	// Type of allowlist pattern
+	AllowlistedPatternType InvestigateGetResponsePropertiesAllowlistedPatternType `json:"allowlisted_pattern_type" api:"nullable"`
+	// Whether message was blocklisted
+	BlocklistedMessage bool `json:"blocklisted_message" api:"nullable"`
+	// Pattern that blocklisted this message
+	BlocklistedPattern string `json:"blocklisted_pattern" api:"nullable"`
+	// Legacy field for allowlist pattern type
+	WhitelistedPatternType InvestigateGetResponsePropertiesWhitelistedPatternType `json:"whitelisted_pattern_type" api:"nullable"`
+	JSON                   investigateGetResponsePropertiesJSON                   `json:"-"`
+}
+
+// investigateGetResponsePropertiesJSON contains the JSON metadata for the struct
+// [InvestigateGetResponseProperties]
+type investigateGetResponsePropertiesJSON struct {
+	AllowlistedPattern     apijson.Field
+	AllowlistedPatternType apijson.Field
+	BlocklistedMessage     apijson.Field
+	BlocklistedPattern     apijson.Field
+	WhitelistedPatternType apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseProperties) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponsePropertiesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Type of allowlist pattern
+type InvestigateGetResponsePropertiesAllowlistedPatternType string
+
+const (
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeQuarantineRelease       InvestigateGetResponsePropertiesAllowlistedPatternType = "quarantine_release"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeAcceptableSender        InvestigateGetResponsePropertiesAllowlistedPatternType = "acceptable_sender"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedSender           InvestigateGetResponsePropertiesAllowlistedPatternType = "allowed_sender"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedRecipient        InvestigateGetResponsePropertiesAllowlistedPatternType = "allowed_recipient"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainSimilarity        InvestigateGetResponsePropertiesAllowlistedPatternType = "domain_similarity"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainRecency           InvestigateGetResponsePropertiesAllowlistedPatternType = "domain_recency"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender InvestigateGetResponsePropertiesAllowlistedPatternType = "managed_acceptable_sender"
+	InvestigateGetResponsePropertiesAllowlistedPatternTypeOutboundNdr             InvestigateGetResponsePropertiesAllowlistedPatternType = "outbound_ndr"
+)
+
+func (r InvestigateGetResponsePropertiesAllowlistedPatternType) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponsePropertiesAllowlistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesAllowlistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesAllowlistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesAllowlistedPatternTypeManagedAcceptableSender, InvestigateGetResponsePropertiesAllowlistedPatternTypeOutboundNdr:
+		return true
+	}
+	return false
+}
+
+// Legacy field for allowlist pattern type
+type InvestigateGetResponsePropertiesWhitelistedPatternType string
+
+const (
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeQuarantineRelease       InvestigateGetResponsePropertiesWhitelistedPatternType = "quarantine_release"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeAcceptableSender        InvestigateGetResponsePropertiesWhitelistedPatternType = "acceptable_sender"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedSender           InvestigateGetResponsePropertiesWhitelistedPatternType = "allowed_sender"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedRecipient        InvestigateGetResponsePropertiesWhitelistedPatternType = "allowed_recipient"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity        InvestigateGetResponsePropertiesWhitelistedPatternType = "domain_similarity"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency           InvestigateGetResponsePropertiesWhitelistedPatternType = "domain_recency"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender InvestigateGetResponsePropertiesWhitelistedPatternType = "managed_acceptable_sender"
+	InvestigateGetResponsePropertiesWhitelistedPatternTypeOutboundNdr             InvestigateGetResponsePropertiesWhitelistedPatternType = "outbound_ndr"
+)
+
+func (r InvestigateGetResponsePropertiesWhitelistedPatternType) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponsePropertiesWhitelistedPatternTypeQuarantineRelease, InvestigateGetResponsePropertiesWhitelistedPatternTypeAcceptableSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeAllowedRecipient, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainSimilarity, InvestigateGetResponsePropertiesWhitelistedPatternTypeDomainRecency, InvestigateGetResponsePropertiesWhitelistedPatternTypeManagedAcceptableSender, InvestigateGetResponsePropertiesWhitelistedPatternTypeOutboundNdr:
+		return true
+	}
+	return false
+}
+
+type InvestigateGetResponseDeliveryMode string
+
+const (
+	InvestigateGetResponseDeliveryModeDirect                InvestigateGetResponseDeliveryMode = "DIRECT"
+	InvestigateGetResponseDeliveryModeBcc                   InvestigateGetResponseDeliveryMode = "BCC"
+	InvestigateGetResponseDeliveryModeJournal               InvestigateGetResponseDeliveryMode = "JOURNAL"
+	InvestigateGetResponseDeliveryModeReviewSubmission      InvestigateGetResponseDeliveryMode = "REVIEW_SUBMISSION"
+	InvestigateGetResponseDeliveryModeDMARCUnverified       InvestigateGetResponseDeliveryMode = "DMARC_UNVERIFIED"
+	InvestigateGetResponseDeliveryModeDMARCFailureReport    InvestigateGetResponseDeliveryMode = "DMARC_FAILURE_REPORT"
+	InvestigateGetResponseDeliveryModeDMARCAggregateReport  InvestigateGetResponseDeliveryMode = "DMARC_AGGREGATE_REPORT"
+	InvestigateGetResponseDeliveryModeThreatIntelSubmission InvestigateGetResponseDeliveryMode = "THREAT_INTEL_SUBMISSION"
+	InvestigateGetResponseDeliveryModeSimulationSubmission  InvestigateGetResponseDeliveryMode = "SIMULATION_SUBMISSION"
+	InvestigateGetResponseDeliveryModeAPI                   InvestigateGetResponseDeliveryMode = "API"
+	InvestigateGetResponseDeliveryModeRetroScan             InvestigateGetResponseDeliveryMode = "RETRO_SCAN"
+)
+
+func (r InvestigateGetResponseDeliveryMode) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseDeliveryModeDirect, InvestigateGetResponseDeliveryModeBcc, InvestigateGetResponseDeliveryModeJournal, InvestigateGetResponseDeliveryModeReviewSubmission, InvestigateGetResponseDeliveryModeDMARCUnverified, InvestigateGetResponseDeliveryModeDMARCFailureReport, InvestigateGetResponseDeliveryModeDMARCAggregateReport, InvestigateGetResponseDeliveryModeThreatIntelSubmission, InvestigateGetResponseDeliveryModeSimulationSubmission, InvestigateGetResponseDeliveryModeAPI, InvestigateGetResponseDeliveryModeRetroScan:
+		return true
+	}
+	return false
+}
+
+// Delivery status of the message.
+type InvestigateGetResponseDeliveryStatus string
+
+const (
+	InvestigateGetResponseDeliveryStatusDelivered   InvestigateGetResponseDeliveryStatus = "delivered"
+	InvestigateGetResponseDeliveryStatusMoved       InvestigateGetResponseDeliveryStatus = "moved"
+	InvestigateGetResponseDeliveryStatusQuarantined InvestigateGetResponseDeliveryStatus = "quarantined"
+	InvestigateGetResponseDeliveryStatusRejected    InvestigateGetResponseDeliveryStatus = "rejected"
+	InvestigateGetResponseDeliveryStatusDeferred    InvestigateGetResponseDeliveryStatus = "deferred"
+	InvestigateGetResponseDeliveryStatusBounced     InvestigateGetResponseDeliveryStatus = "bounced"
+	InvestigateGetResponseDeliveryStatusQueued      InvestigateGetResponseDeliveryStatus = "queued"
+)
+
+func (r InvestigateGetResponseDeliveryStatus) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseDeliveryStatusDelivered, InvestigateGetResponseDeliveryStatusMoved, InvestigateGetResponseDeliveryStatusQuarantined, InvestigateGetResponseDeliveryStatusRejected, InvestigateGetResponseDeliveryStatusDeferred, InvestigateGetResponseDeliveryStatusBounced, InvestigateGetResponseDeliveryStatusQueued:
+		return true
+	}
+	return false
+}
+
+type InvestigateGetResponseFinalDisposition string
+
+const (
+	InvestigateGetResponseFinalDispositionMalicious    InvestigateGetResponseFinalDisposition = "MALICIOUS"
+	InvestigateGetResponseFinalDispositionMaliciousBec InvestigateGetResponseFinalDisposition = "MALICIOUS-BEC"
+	InvestigateGetResponseFinalDispositionSuspicious   InvestigateGetResponseFinalDisposition = "SUSPICIOUS"
+	InvestigateGetResponseFinalDispositionSpoof        InvestigateGetResponseFinalDisposition = "SPOOF"
+	InvestigateGetResponseFinalDispositionSpam         InvestigateGetResponseFinalDisposition = "SPAM"
+	InvestigateGetResponseFinalDispositionBulk         InvestigateGetResponseFinalDisposition = "BULK"
+	InvestigateGetResponseFinalDispositionEncrypted    InvestigateGetResponseFinalDisposition = "ENCRYPTED"
+	InvestigateGetResponseFinalDispositionExternal     InvestigateGetResponseFinalDisposition = "EXTERNAL"
+	InvestigateGetResponseFinalDispositionUnknown      InvestigateGetResponseFinalDisposition = "UNKNOWN"
+	InvestigateGetResponseFinalDispositionNone         InvestigateGetResponseFinalDisposition = "NONE"
+)
+
+func (r InvestigateGetResponseFinalDisposition) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseFinalDispositionMalicious, InvestigateGetResponseFinalDispositionMaliciousBec, InvestigateGetResponseFinalDispositionSuspicious, InvestigateGetResponseFinalDispositionSpoof, InvestigateGetResponseFinalDispositionSpam, InvestigateGetResponseFinalDispositionBulk, InvestigateGetResponseFinalDispositionEncrypted, InvestigateGetResponseFinalDispositionExternal, InvestigateGetResponseFinalDispositionUnknown, InvestigateGetResponseFinalDispositionNone:
+		return true
+	}
+	return false
+}
+
+type InvestigateGetResponseFinding struct {
+	Attachment string                                  `json:"attachment" api:"nullable"`
+	Detail     string                                  `json:"detail" api:"nullable"`
+	Detection  InvestigateGetResponseFindingsDetection `json:"detection"`
+	Field      string                                  `json:"field" api:"nullable"`
+	Name       string                                  `json:"name" api:"nullable"`
+	Portion    string                                  `json:"portion" api:"nullable"`
+	Reason     string                                  `json:"reason" api:"nullable"`
+	Score      float64                                 `json:"score" api:"nullable"`
+	Value      string                                  `json:"value" api:"nullable"`
+	JSON       investigateGetResponseFindingJSON       `json:"-"`
+}
+
+// investigateGetResponseFindingJSON contains the JSON metadata for the struct
+// [InvestigateGetResponseFinding]
+type investigateGetResponseFindingJSON struct {
+	Attachment  apijson.Field
+	Detail      apijson.Field
+	Detection   apijson.Field
+	Field       apijson.Field
+	Name        apijson.Field
+	Portion     apijson.Field
+	Reason      apijson.Field
+	Score       apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseFinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseFindingJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateGetResponseFindingsDetection string
+
+const (
+	InvestigateGetResponseFindingsDetectionMalicious    InvestigateGetResponseFindingsDetection = "MALICIOUS"
+	InvestigateGetResponseFindingsDetectionMaliciousBec InvestigateGetResponseFindingsDetection = "MALICIOUS-BEC"
+	InvestigateGetResponseFindingsDetectionSuspicious   InvestigateGetResponseFindingsDetection = "SUSPICIOUS"
+	InvestigateGetResponseFindingsDetectionSpoof        InvestigateGetResponseFindingsDetection = "SPOOF"
+	InvestigateGetResponseFindingsDetectionSpam         InvestigateGetResponseFindingsDetection = "SPAM"
+	InvestigateGetResponseFindingsDetectionBulk         InvestigateGetResponseFindingsDetection = "BULK"
+	InvestigateGetResponseFindingsDetectionEncrypted    InvestigateGetResponseFindingsDetection = "ENCRYPTED"
+	InvestigateGetResponseFindingsDetectionExternal     InvestigateGetResponseFindingsDetection = "EXTERNAL"
+	InvestigateGetResponseFindingsDetectionUnknown      InvestigateGetResponseFindingsDetection = "UNKNOWN"
+	InvestigateGetResponseFindingsDetectionNone         InvestigateGetResponseFindingsDetection = "NONE"
+)
+
+func (r InvestigateGetResponseFindingsDetection) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseFindingsDetectionMalicious, InvestigateGetResponseFindingsDetectionMaliciousBec, InvestigateGetResponseFindingsDetectionSuspicious, InvestigateGetResponseFindingsDetectionSpoof, InvestigateGetResponseFindingsDetectionSpam, InvestigateGetResponseFindingsDetectionBulk, InvestigateGetResponseFindingsDetectionEncrypted, InvestigateGetResponseFindingsDetectionExternal, InvestigateGetResponseFindingsDetectionUnknown, InvestigateGetResponseFindingsDetectionNone:
+		return true
+	}
+	return false
+}
+
+type InvestigateGetResponsePostDeliveryOperation string
+
+const (
+	InvestigateGetResponsePostDeliveryOperationPreview           InvestigateGetResponsePostDeliveryOperation = "PREVIEW"
+	InvestigateGetResponsePostDeliveryOperationQuarantineRelease InvestigateGetResponsePostDeliveryOperation = "QUARANTINE_RELEASE"
+	InvestigateGetResponsePostDeliveryOperationSubmission        InvestigateGetResponsePostDeliveryOperation = "SUBMISSION"
+	InvestigateGetResponsePostDeliveryOperationMove              InvestigateGetResponsePostDeliveryOperation = "MOVE"
+)
+
+func (r InvestigateGetResponsePostDeliveryOperation) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponsePostDeliveryOperationPreview, InvestigateGetResponsePostDeliveryOperationQuarantineRelease, InvestigateGetResponsePostDeliveryOperationSubmission, InvestigateGetResponsePostDeliveryOperationMove:
+		return true
+	}
+	return false
+}
+
+type InvestigateGetResponseValidation struct {
+	Comment string                                `json:"comment" api:"nullable"`
+	DKIM    InvestigateGetResponseValidationDKIM  `json:"dkim"`
+	DMARC   InvestigateGetResponseValidationDMARC `json:"dmarc"`
+	SPF     InvestigateGetResponseValidationSPF   `json:"spf"`
+	JSON    investigateGetResponseValidationJSON  `json:"-"`
+}
+
+// investigateGetResponseValidationJSON contains the JSON metadata for the struct
+// [InvestigateGetResponseValidation]
+type investigateGetResponseValidationJSON struct {
+	Comment     apijson.Field
+	DKIM        apijson.Field
+	DMARC       apijson.Field
+	SPF         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseValidation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseValidationJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateGetResponseValidationDKIM string
+
+const (
+	InvestigateGetResponseValidationDKIMPass    InvestigateGetResponseValidationDKIM = "pass"
+	InvestigateGetResponseValidationDKIMNeutral InvestigateGetResponseValidationDKIM = "neutral"
+	InvestigateGetResponseValidationDKIMFail    InvestigateGetResponseValidationDKIM = "fail"
+	InvestigateGetResponseValidationDKIMError   InvestigateGetResponseValidationDKIM = "error"
+	InvestigateGetResponseValidationDKIMNone    InvestigateGetResponseValidationDKIM = "none"
+)
+
+func (r InvestigateGetResponseValidationDKIM) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseValidationDKIMPass, InvestigateGetResponseValidationDKIMNeutral, InvestigateGetResponseValidationDKIMFail, InvestigateGetResponseValidationDKIMError, InvestigateGetResponseValidationDKIMNone:
+		return true
+	}
+	return false
+}
+
+type InvestigateGetResponseValidationDMARC string
+
+const (
+	InvestigateGetResponseValidationDMARCPass    InvestigateGetResponseValidationDMARC = "pass"
+	InvestigateGetResponseValidationDMARCNeutral InvestigateGetResponseValidationDMARC = "neutral"
+	InvestigateGetResponseValidationDMARCFail    InvestigateGetResponseValidationDMARC = "fail"
+	InvestigateGetResponseValidationDMARCError   InvestigateGetResponseValidationDMARC = "error"
+	InvestigateGetResponseValidationDMARCNone    InvestigateGetResponseValidationDMARC = "none"
+)
+
+func (r InvestigateGetResponseValidationDMARC) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseValidationDMARCPass, InvestigateGetResponseValidationDMARCNeutral, InvestigateGetResponseValidationDMARCFail, InvestigateGetResponseValidationDMARCError, InvestigateGetResponseValidationDMARCNone:
+		return true
+	}
+	return false
+}
+
+type InvestigateGetResponseValidationSPF string
+
+const (
+	InvestigateGetResponseValidationSPFPass    InvestigateGetResponseValidationSPF = "pass"
+	InvestigateGetResponseValidationSPFNeutral InvestigateGetResponseValidationSPF = "neutral"
+	InvestigateGetResponseValidationSPFFail    InvestigateGetResponseValidationSPF = "fail"
+	InvestigateGetResponseValidationSPFError   InvestigateGetResponseValidationSPF = "error"
+	InvestigateGetResponseValidationSPFNone    InvestigateGetResponseValidationSPF = "none"
+)
+
+func (r InvestigateGetResponseValidationSPF) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseValidationSPFPass, InvestigateGetResponseValidationSPFNeutral, InvestigateGetResponseValidationSPFFail, InvestigateGetResponseValidationSPFError, InvestigateGetResponseValidationSPFNone:
+		return true
+	}
+	return false
+}
+
 type InvestigateListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -639,6 +1150,161 @@ const (
 func (r InvestigateListParamsMessageAction) IsKnown() bool {
 	switch r {
 	case InvestigateListParamsMessageActionPreview, InvestigateListParamsMessageActionQuarantineReleased, InvestigateListParamsMessageActionMoved:
+		return true
+	}
+	return false
+}
+
+type InvestigateGetParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// When true, search the submissions datastore only. When false or omitted, search
+	// the regular datastore only.
+	Submission param.Field[bool] `query:"submission"`
+}
+
+// URLQuery serializes [InvestigateGetParams]'s query parameters as `url.Values`.
+func (r InvestigateGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type InvestigateGetResponseEnvelope struct {
+	Errors   []InvestigateGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []InvestigateGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   InvestigateGetResponse                   `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success InvestigateGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    investigateGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// investigateGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [InvestigateGetResponseEnvelope]
+type investigateGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateGetResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           InvestigateGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             investigateGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// investigateGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [InvestigateGetResponseEnvelopeErrors]
+type investigateGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    investigateGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// investigateGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [InvestigateGetResponseEnvelopeErrorsSource]
+type investigateGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateGetResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           InvestigateGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             investigateGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// investigateGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [InvestigateGetResponseEnvelopeMessages]
+type investigateGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    investigateGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// investigateGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [InvestigateGetResponseEnvelopeMessagesSource]
+type investigateGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type InvestigateGetResponseEnvelopeSuccess bool
+
+const (
+	InvestigateGetResponseEnvelopeSuccessTrue InvestigateGetResponseEnvelopeSuccess = true
+)
+
+func (r InvestigateGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case InvestigateGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

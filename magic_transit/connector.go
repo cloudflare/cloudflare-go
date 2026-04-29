@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
@@ -78,16 +80,16 @@ func (r *ConnectorService) Update(ctx context.Context, connectorID string, param
 }
 
 // List Connectors
-func (r *ConnectorService) List(ctx context.Context, query ConnectorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConnectorListResponse], err error) {
+func (r *ConnectorService) List(ctx context.Context, params ConnectorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConnectorListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/magic/connectors", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/connectors", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -100,8 +102,8 @@ func (r *ConnectorService) List(ctx context.Context, query ConnectorListParams, 
 }
 
 // List Connectors
-func (r *ConnectorService) ListAutoPaging(ctx context.Context, query ConnectorListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ConnectorListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *ConnectorService) ListAutoPaging(ctx context.Context, params ConnectorListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ConnectorListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Remove a connector from your account
@@ -237,6 +239,7 @@ func (r ConnectorNewResponseInterruptWindowDaysOfWeek) IsKnown() bool {
 type ConnectorNewResponseDevice struct {
 	ID           string                         `json:"id" api:"required"`
 	SerialNumber string                         `json:"serial_number"`
+	Type         ConnectorNewResponseDeviceType `json:"type"`
 	JSON         connectorNewResponseDeviceJSON `json:"-"`
 }
 
@@ -245,6 +248,7 @@ type ConnectorNewResponseDevice struct {
 type connectorNewResponseDeviceJSON struct {
 	ID           apijson.Field
 	SerialNumber apijson.Field
+	Type         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -255,6 +259,21 @@ func (r *ConnectorNewResponseDevice) UnmarshalJSON(data []byte) (err error) {
 
 func (r connectorNewResponseDeviceJSON) RawJSON() string {
 	return r.raw
+}
+
+type ConnectorNewResponseDeviceType string
+
+const (
+	ConnectorNewResponseDeviceTypeManaged  ConnectorNewResponseDeviceType = "MANAGED"
+	ConnectorNewResponseDeviceTypeLicensed ConnectorNewResponseDeviceType = "LICENSED"
+)
+
+func (r ConnectorNewResponseDeviceType) IsKnown() bool {
+	switch r {
+	case ConnectorNewResponseDeviceTypeManaged, ConnectorNewResponseDeviceTypeLicensed:
+		return true
+	}
+	return false
 }
 
 type ConnectorUpdateResponse struct {
@@ -327,6 +346,7 @@ func (r ConnectorUpdateResponseInterruptWindowDaysOfWeek) IsKnown() bool {
 type ConnectorUpdateResponseDevice struct {
 	ID           string                            `json:"id" api:"required"`
 	SerialNumber string                            `json:"serial_number"`
+	Type         ConnectorUpdateResponseDeviceType `json:"type"`
 	JSON         connectorUpdateResponseDeviceJSON `json:"-"`
 }
 
@@ -335,6 +355,7 @@ type ConnectorUpdateResponseDevice struct {
 type connectorUpdateResponseDeviceJSON struct {
 	ID           apijson.Field
 	SerialNumber apijson.Field
+	Type         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -345,6 +366,21 @@ func (r *ConnectorUpdateResponseDevice) UnmarshalJSON(data []byte) (err error) {
 
 func (r connectorUpdateResponseDeviceJSON) RawJSON() string {
 	return r.raw
+}
+
+type ConnectorUpdateResponseDeviceType string
+
+const (
+	ConnectorUpdateResponseDeviceTypeManaged  ConnectorUpdateResponseDeviceType = "MANAGED"
+	ConnectorUpdateResponseDeviceTypeLicensed ConnectorUpdateResponseDeviceType = "LICENSED"
+)
+
+func (r ConnectorUpdateResponseDeviceType) IsKnown() bool {
+	switch r {
+	case ConnectorUpdateResponseDeviceTypeManaged, ConnectorUpdateResponseDeviceTypeLicensed:
+		return true
+	}
+	return false
 }
 
 type ConnectorListResponse struct {
@@ -417,6 +453,7 @@ func (r ConnectorListResponseInterruptWindowDaysOfWeek) IsKnown() bool {
 type ConnectorListResponseDevice struct {
 	ID           string                          `json:"id" api:"required"`
 	SerialNumber string                          `json:"serial_number"`
+	Type         ConnectorListResponseDeviceType `json:"type"`
 	JSON         connectorListResponseDeviceJSON `json:"-"`
 }
 
@@ -425,6 +462,7 @@ type ConnectorListResponseDevice struct {
 type connectorListResponseDeviceJSON struct {
 	ID           apijson.Field
 	SerialNumber apijson.Field
+	Type         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -435,6 +473,21 @@ func (r *ConnectorListResponseDevice) UnmarshalJSON(data []byte) (err error) {
 
 func (r connectorListResponseDeviceJSON) RawJSON() string {
 	return r.raw
+}
+
+type ConnectorListResponseDeviceType string
+
+const (
+	ConnectorListResponseDeviceTypeManaged  ConnectorListResponseDeviceType = "MANAGED"
+	ConnectorListResponseDeviceTypeLicensed ConnectorListResponseDeviceType = "LICENSED"
+)
+
+func (r ConnectorListResponseDeviceType) IsKnown() bool {
+	switch r {
+	case ConnectorListResponseDeviceTypeManaged, ConnectorListResponseDeviceTypeLicensed:
+		return true
+	}
+	return false
 }
 
 type ConnectorDeleteResponse struct {
@@ -507,6 +560,7 @@ func (r ConnectorDeleteResponseInterruptWindowDaysOfWeek) IsKnown() bool {
 type ConnectorDeleteResponseDevice struct {
 	ID           string                            `json:"id" api:"required"`
 	SerialNumber string                            `json:"serial_number"`
+	Type         ConnectorDeleteResponseDeviceType `json:"type"`
 	JSON         connectorDeleteResponseDeviceJSON `json:"-"`
 }
 
@@ -515,6 +569,7 @@ type ConnectorDeleteResponseDevice struct {
 type connectorDeleteResponseDeviceJSON struct {
 	ID           apijson.Field
 	SerialNumber apijson.Field
+	Type         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -525,6 +580,21 @@ func (r *ConnectorDeleteResponseDevice) UnmarshalJSON(data []byte) (err error) {
 
 func (r connectorDeleteResponseDeviceJSON) RawJSON() string {
 	return r.raw
+}
+
+type ConnectorDeleteResponseDeviceType string
+
+const (
+	ConnectorDeleteResponseDeviceTypeManaged  ConnectorDeleteResponseDeviceType = "MANAGED"
+	ConnectorDeleteResponseDeviceTypeLicensed ConnectorDeleteResponseDeviceType = "LICENSED"
+)
+
+func (r ConnectorDeleteResponseDeviceType) IsKnown() bool {
+	switch r {
+	case ConnectorDeleteResponseDeviceTypeManaged, ConnectorDeleteResponseDeviceTypeLicensed:
+		return true
+	}
+	return false
 }
 
 type ConnectorEditResponse struct {
@@ -597,6 +667,7 @@ func (r ConnectorEditResponseInterruptWindowDaysOfWeek) IsKnown() bool {
 type ConnectorEditResponseDevice struct {
 	ID           string                          `json:"id" api:"required"`
 	SerialNumber string                          `json:"serial_number"`
+	Type         ConnectorEditResponseDeviceType `json:"type"`
 	JSON         connectorEditResponseDeviceJSON `json:"-"`
 }
 
@@ -605,6 +676,7 @@ type ConnectorEditResponseDevice struct {
 type connectorEditResponseDeviceJSON struct {
 	ID           apijson.Field
 	SerialNumber apijson.Field
+	Type         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -615,6 +687,21 @@ func (r *ConnectorEditResponseDevice) UnmarshalJSON(data []byte) (err error) {
 
 func (r connectorEditResponseDeviceJSON) RawJSON() string {
 	return r.raw
+}
+
+type ConnectorEditResponseDeviceType string
+
+const (
+	ConnectorEditResponseDeviceTypeManaged  ConnectorEditResponseDeviceType = "MANAGED"
+	ConnectorEditResponseDeviceTypeLicensed ConnectorEditResponseDeviceType = "LICENSED"
+)
+
+func (r ConnectorEditResponseDeviceType) IsKnown() bool {
+	switch r {
+	case ConnectorEditResponseDeviceTypeManaged, ConnectorEditResponseDeviceTypeLicensed:
+		return true
+	}
+	return false
 }
 
 type ConnectorGetResponse struct {
@@ -687,6 +774,7 @@ func (r ConnectorGetResponseInterruptWindowDaysOfWeek) IsKnown() bool {
 type ConnectorGetResponseDevice struct {
 	ID           string                         `json:"id" api:"required"`
 	SerialNumber string                         `json:"serial_number"`
+	Type         ConnectorGetResponseDeviceType `json:"type"`
 	JSON         connectorGetResponseDeviceJSON `json:"-"`
 }
 
@@ -695,6 +783,7 @@ type ConnectorGetResponseDevice struct {
 type connectorGetResponseDeviceJSON struct {
 	ID           apijson.Field
 	SerialNumber apijson.Field
+	Type         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -705,6 +794,21 @@ func (r *ConnectorGetResponseDevice) UnmarshalJSON(data []byte) (err error) {
 
 func (r connectorGetResponseDeviceJSON) RawJSON() string {
 	return r.raw
+}
+
+type ConnectorGetResponseDeviceType string
+
+const (
+	ConnectorGetResponseDeviceTypeManaged  ConnectorGetResponseDeviceType = "MANAGED"
+	ConnectorGetResponseDeviceTypeLicensed ConnectorGetResponseDeviceType = "LICENSED"
+)
+
+func (r ConnectorGetResponseDeviceType) IsKnown() bool {
+	switch r {
+	case ConnectorGetResponseDeviceTypeManaged, ConnectorGetResponseDeviceTypeLicensed:
+		return true
+	}
+	return false
 }
 
 type ConnectorNewParams struct {
@@ -948,6 +1052,32 @@ func (r connectorUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 type ConnectorListParams struct {
 	// Account identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filter connectors by device type.
+	DeviceType param.Field[ConnectorListParamsDeviceType] `query:"device_type"`
+}
+
+// URLQuery serializes [ConnectorListParams]'s query parameters as `url.Values`.
+func (r ConnectorListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Filter connectors by device type.
+type ConnectorListParamsDeviceType string
+
+const (
+	ConnectorListParamsDeviceTypeManaged  ConnectorListParamsDeviceType = "MANAGED"
+	ConnectorListParamsDeviceTypeLicensed ConnectorListParamsDeviceType = "LICENSED"
+)
+
+func (r ConnectorListParamsDeviceType) IsKnown() bool {
+	switch r {
+	case ConnectorListParamsDeviceTypeManaged, ConnectorListParamsDeviceTypeLicensed:
+		return true
+	}
+	return false
 }
 
 type ConnectorDeleteParams struct {

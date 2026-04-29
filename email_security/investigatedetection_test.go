@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestInvestigatePreviewNew(t *testing.T) {
+func TestInvestigateDetectionGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,37 +28,10 @@ func TestInvestigatePreviewNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailSecurity.Investigate.Preview.New(context.TODO(), email_security.InvestigatePreviewNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		PostfixID: cloudflare.F("4Njp3P0STMz2c02Q"),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestInvestigatePreviewGet(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.EmailSecurity.Investigate.Preview.Get(
+	_, err := client.EmailSecurity.Investigate.Detections.Get(
 		context.TODO(),
 		"4Njp3P0STMz2c02Q-2024-01-05T10:00:00-12345678",
-		email_security.InvestigatePreviewGetParams{
+		email_security.InvestigateDetectionGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

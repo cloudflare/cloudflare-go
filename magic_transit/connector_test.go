@@ -91,7 +91,7 @@ func TestConnectorUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestConnectorList(t *testing.T) {
+func TestConnectorListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -106,7 +106,8 @@ func TestConnectorList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.Connectors.List(context.TODO(), magic_transit.ConnectorListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		DeviceType: cloudflare.F(magic_transit.ConnectorListParamsDeviceTypeManaged),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -53,6 +53,28 @@ func (r *InvestigatePreviewService) New(ctx context.Context, params InvestigateP
 	return res, nil
 }
 
+// Returns a preview of the message body as a base64 encoded PNG image for
+// non-benign messages.
+func (r *InvestigatePreviewService) Get(ctx context.Context, investigateID string, query InvestigatePreviewGetParams, opts ...option.RequestOption) (res *InvestigatePreviewGetResponse, err error) {
+	var env InvestigatePreviewGetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if investigateID == "" {
+		err = errors.New("missing required investigate_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/preview", query.AccountID, investigateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 type InvestigatePreviewNewResponse struct {
 	// A base64 encoded PNG image of the email.
 	Screenshot string                            `json:"screenshot" api:"required"`
@@ -72,6 +94,28 @@ func (r *InvestigatePreviewNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r investigatePreviewNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigatePreviewGetResponse struct {
+	// A base64 encoded PNG image of the email.
+	Screenshot string                            `json:"screenshot" api:"required"`
+	JSON       investigatePreviewGetResponseJSON `json:"-"`
+}
+
+// investigatePreviewGetResponseJSON contains the JSON metadata for the struct
+// [InvestigatePreviewGetResponse]
+type investigatePreviewGetResponseJSON struct {
+	Screenshot  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigatePreviewGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigatePreviewGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -220,6 +264,150 @@ const (
 func (r InvestigatePreviewNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case InvestigatePreviewNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type InvestigatePreviewGetParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type InvestigatePreviewGetResponseEnvelope struct {
+	Errors   []InvestigatePreviewGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []InvestigatePreviewGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   InvestigatePreviewGetResponse                   `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success InvestigatePreviewGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    investigatePreviewGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// investigatePreviewGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [InvestigatePreviewGetResponseEnvelope]
+type investigatePreviewGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigatePreviewGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigatePreviewGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigatePreviewGetResponseEnvelopeErrors struct {
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           InvestigatePreviewGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             investigatePreviewGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// investigatePreviewGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [InvestigatePreviewGetResponseEnvelopeErrors]
+type investigatePreviewGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InvestigatePreviewGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigatePreviewGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigatePreviewGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    investigatePreviewGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// investigatePreviewGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [InvestigatePreviewGetResponseEnvelopeErrorsSource]
+type investigatePreviewGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigatePreviewGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigatePreviewGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigatePreviewGetResponseEnvelopeMessages struct {
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           InvestigatePreviewGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             investigatePreviewGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// investigatePreviewGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [InvestigatePreviewGetResponseEnvelopeMessages]
+type investigatePreviewGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InvestigatePreviewGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigatePreviewGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigatePreviewGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    investigatePreviewGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// investigatePreviewGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [InvestigatePreviewGetResponseEnvelopeMessagesSource]
+type investigatePreviewGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigatePreviewGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigatePreviewGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type InvestigatePreviewGetResponseEnvelopeSuccess bool
+
+const (
+	InvestigatePreviewGetResponseEnvelopeSuccessTrue InvestigatePreviewGetResponseEnvelopeSuccess = true
+)
+
+func (r InvestigatePreviewGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case InvestigatePreviewGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
