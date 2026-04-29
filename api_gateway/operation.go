@@ -198,7 +198,10 @@ type OperationNewResponse struct {
 	// UUID.
 	OperationID string                       `json:"operation_id" api:"required"`
 	Features    OperationNewResponseFeatures `json:"features"`
-	JSON        operationNewResponseJSON     `json:"-"`
+	// OpenAPI JSON schemas for an operation, including both user-uploaded and
+	// Cloudflare-learned schemas.
+	Schemas OperationNewResponseSchemas `json:"schemas"`
+	JSON    operationNewResponseJSON    `json:"-"`
 }
 
 // operationNewResponseJSON contains the JSON metadata for the struct
@@ -210,6 +213,7 @@ type operationNewResponseJSON struct {
 	Method      apijson.Field
 	OperationID apijson.Field
 	Features    apijson.Field
+	Schemas     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -826,6 +830,93 @@ func (r OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 		return true
 	}
 	return false
+}
+
+// OpenAPI JSON schemas for an operation, including both user-uploaded and
+// Cloudflare-learned schemas.
+type OperationNewResponseSchemas struct {
+	// An OpenAPI operation object fragment containing schema information for an
+	// operation. May include parameter definitions, request body specifications, and a
+	// component schema extension.
+	Learned OperationNewResponseSchemasLearned `json:"learned" api:"nullable"`
+	// An OpenAPI operation object fragment containing schema information for an
+	// operation. May include parameter definitions, request body specifications, and a
+	// component schema extension.
+	Uploaded OperationNewResponseSchemasUploaded `json:"uploaded" api:"nullable"`
+	JSON     operationNewResponseSchemasJSON     `json:"-"`
+}
+
+// operationNewResponseSchemasJSON contains the JSON metadata for the struct
+// [OperationNewResponseSchemas]
+type operationNewResponseSchemasJSON struct {
+	Learned     apijson.Field
+	Uploaded    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OperationNewResponseSchemas) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r operationNewResponseSchemasJSON) RawJSON() string {
+	return r.raw
+}
+
+// An OpenAPI operation object fragment containing schema information for an
+// operation. May include parameter definitions, request body specifications, and a
+// component schema extension.
+type OperationNewResponseSchemasLearned struct {
+	// OpenAPI parameter objects describing path, query, header, or cookie parameters.
+	Parameters []map[string]interface{} `json:"parameters"`
+	// OpenAPI request body object describing the expected request payload.
+	RequestBody map[string]interface{}                 `json:"requestBody"`
+	JSON        operationNewResponseSchemasLearnedJSON `json:"-"`
+}
+
+// operationNewResponseSchemasLearnedJSON contains the JSON metadata for the struct
+// [OperationNewResponseSchemasLearned]
+type operationNewResponseSchemasLearnedJSON struct {
+	Parameters  apijson.Field
+	RequestBody apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OperationNewResponseSchemasLearned) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r operationNewResponseSchemasLearnedJSON) RawJSON() string {
+	return r.raw
+}
+
+// An OpenAPI operation object fragment containing schema information for an
+// operation. May include parameter definitions, request body specifications, and a
+// component schema extension.
+type OperationNewResponseSchemasUploaded struct {
+	// OpenAPI parameter objects describing path, query, header, or cookie parameters.
+	Parameters []map[string]interface{} `json:"parameters"`
+	// OpenAPI request body object describing the expected request payload.
+	RequestBody map[string]interface{}                  `json:"requestBody"`
+	JSON        operationNewResponseSchemasUploadedJSON `json:"-"`
+}
+
+// operationNewResponseSchemasUploadedJSON contains the JSON metadata for the
+// struct [OperationNewResponseSchemasUploaded]
+type operationNewResponseSchemasUploadedJSON struct {
+	Parameters  apijson.Field
+	RequestBody apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OperationNewResponseSchemasUploaded) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r operationNewResponseSchemasUploadedJSON) RawJSON() string {
+	return r.raw
 }
 
 type OperationListResponse struct {
@@ -2212,7 +2303,10 @@ type OperationGetResponse struct {
 	// UUID.
 	OperationID string                       `json:"operation_id" api:"required"`
 	Features    OperationGetResponseFeatures `json:"features"`
-	JSON        operationGetResponseJSON     `json:"-"`
+	// OpenAPI JSON schemas for an operation, including both user-uploaded and
+	// Cloudflare-learned schemas.
+	Schemas OperationGetResponseSchemas `json:"schemas"`
+	JSON    operationGetResponseJSON    `json:"-"`
 }
 
 // operationGetResponseJSON contains the JSON metadata for the struct
@@ -2224,6 +2318,7 @@ type operationGetResponseJSON struct {
 	Method      apijson.Field
 	OperationID apijson.Field
 	Features    apijson.Field
+	Schemas     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2842,6 +2937,93 @@ func (r OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 	return false
 }
 
+// OpenAPI JSON schemas for an operation, including both user-uploaded and
+// Cloudflare-learned schemas.
+type OperationGetResponseSchemas struct {
+	// An OpenAPI operation object fragment containing schema information for an
+	// operation. May include parameter definitions, request body specifications, and a
+	// component schema extension.
+	Learned OperationGetResponseSchemasLearned `json:"learned" api:"nullable"`
+	// An OpenAPI operation object fragment containing schema information for an
+	// operation. May include parameter definitions, request body specifications, and a
+	// component schema extension.
+	Uploaded OperationGetResponseSchemasUploaded `json:"uploaded" api:"nullable"`
+	JSON     operationGetResponseSchemasJSON     `json:"-"`
+}
+
+// operationGetResponseSchemasJSON contains the JSON metadata for the struct
+// [OperationGetResponseSchemas]
+type operationGetResponseSchemasJSON struct {
+	Learned     apijson.Field
+	Uploaded    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OperationGetResponseSchemas) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r operationGetResponseSchemasJSON) RawJSON() string {
+	return r.raw
+}
+
+// An OpenAPI operation object fragment containing schema information for an
+// operation. May include parameter definitions, request body specifications, and a
+// component schema extension.
+type OperationGetResponseSchemasLearned struct {
+	// OpenAPI parameter objects describing path, query, header, or cookie parameters.
+	Parameters []map[string]interface{} `json:"parameters"`
+	// OpenAPI request body object describing the expected request payload.
+	RequestBody map[string]interface{}                 `json:"requestBody"`
+	JSON        operationGetResponseSchemasLearnedJSON `json:"-"`
+}
+
+// operationGetResponseSchemasLearnedJSON contains the JSON metadata for the struct
+// [OperationGetResponseSchemasLearned]
+type operationGetResponseSchemasLearnedJSON struct {
+	Parameters  apijson.Field
+	RequestBody apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OperationGetResponseSchemasLearned) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r operationGetResponseSchemasLearnedJSON) RawJSON() string {
+	return r.raw
+}
+
+// An OpenAPI operation object fragment containing schema information for an
+// operation. May include parameter definitions, request body specifications, and a
+// component schema extension.
+type OperationGetResponseSchemasUploaded struct {
+	// OpenAPI parameter objects describing path, query, header, or cookie parameters.
+	Parameters []map[string]interface{} `json:"parameters"`
+	// OpenAPI request body object describing the expected request payload.
+	RequestBody map[string]interface{}                  `json:"requestBody"`
+	JSON        operationGetResponseSchemasUploadedJSON `json:"-"`
+}
+
+// operationGetResponseSchemasUploadedJSON contains the JSON metadata for the
+// struct [OperationGetResponseSchemasUploaded]
+type operationGetResponseSchemasUploadedJSON struct {
+	Parameters  apijson.Field
+	RequestBody apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OperationGetResponseSchemasUploaded) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r operationGetResponseSchemasUploadedJSON) RawJSON() string {
+	return r.raw
+}
+
 type OperationNewParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
@@ -3075,6 +3257,10 @@ type OperationGetParams struct {
 	// to the resulting feature object. Have a look at the top-level object description
 	// for more details on the specific meaning.
 	Feature param.Field[[]OperationGetParamsFeature] `query:"feature"`
+	// When true, includes OpenAPI schemas (both uploaded and learned) for the
+	// operation in the response. Due to the conversion overhead, this parameter is
+	// only supported on single-operation retrieval.
+	WithSchemas param.Field[bool] `query:"with_schemas"`
 }
 
 // URLQuery serializes [OperationGetParams]'s query parameters as `url.Values`.
