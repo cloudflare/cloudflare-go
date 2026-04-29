@@ -16,6 +16,7 @@ import (
 )
 
 func TestObservabilityTelemetryKeysWithOptionalParams(t *testing.T) {
+	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -64,6 +65,7 @@ func TestObservabilityTelemetryKeysWithOptionalParams(t *testing.T) {
 }
 
 func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
+	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -142,6 +144,7 @@ func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
 }
 
 func TestObservabilityTelemetryValuesWithOptionalParams(t *testing.T) {
+	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
