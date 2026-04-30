@@ -123,7 +123,7 @@ func TestNamespaceInstanceItemChunksWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestNamespaceInstanceItemNewOrUpdate(t *testing.T) {
+func TestNamespaceInstanceItemNewOrUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -142,9 +142,10 @@ func TestNamespaceInstanceItemNewOrUpdate(t *testing.T) {
 		"my-namespace",
 		"my-ai-search",
 		ai_search.NamespaceInstanceItemNewOrUpdateParams{
-			AccountID:  cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
-			Key:        cloudflare.F("key"),
-			NextAction: cloudflare.F(ai_search.NamespaceInstanceItemNewOrUpdateParamsNextActionIndex),
+			AccountID:         cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+			Key:               cloudflare.F("key"),
+			NextAction:        cloudflare.F(ai_search.NamespaceInstanceItemNewOrUpdateParamsNextActionIndex),
+			WaitForCompletion: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -266,7 +267,7 @@ func TestNamespaceInstanceItemLogsWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestNamespaceInstanceItemSync(t *testing.T) {
+func TestNamespaceInstanceItemSyncWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -286,8 +287,9 @@ func TestNamespaceInstanceItemSync(t *testing.T) {
 		"my-ai-search",
 		"item_id",
 		ai_search.NamespaceInstanceItemSyncParams{
-			AccountID:  cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
-			NextAction: cloudflare.F(ai_search.NamespaceInstanceItemSyncParamsNextActionIndex),
+			AccountID:         cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+			NextAction:        cloudflare.F(ai_search.NamespaceInstanceItemSyncParamsNextActionIndex),
+			WaitForCompletion: cloudflare.F(true),
 		},
 	)
 	if err != nil {
