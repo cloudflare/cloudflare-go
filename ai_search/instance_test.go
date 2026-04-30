@@ -56,7 +56,12 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		MaxNumResults: cloudflare.F(int64(1)),
 		Metadata: cloudflare.F(ai_search.InstanceNewParamsMetadata{
 			CreatedFromAISearchWizard: cloudflare.F(true),
-			WorkerDomain:              cloudflare.F("worker_domain"),
+			SearchForAgents: cloudflare.F(ai_search.InstanceNewParamsMetadataSearchForAgents{
+				Hostname: cloudflare.F("hostname"),
+				ZoneID:   cloudflare.F("zone_id"),
+				ZoneName: cloudflare.F("zone_name"),
+			}),
+			WorkerDomain: cloudflare.F("worker_domain"),
 		}),
 		PublicEndpointParams: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParams{
 			AuthorizedHosts: cloudflare.F([]string{"string"}),
@@ -178,7 +183,12 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.InstanceUpdateParamsMetadata{
 				CreatedFromAISearchWizard: cloudflare.F(true),
-				WorkerDomain:              cloudflare.F("worker_domain"),
+				SearchForAgents: cloudflare.F(ai_search.InstanceUpdateParamsMetadataSearchForAgents{
+					Hostname: cloudflare.F("hostname"),
+					ZoneID:   cloudflare.F("zone_id"),
+					ZoneName: cloudflare.F("zone_name"),
+				}),
+				WorkerDomain: cloudflare.F("worker_domain"),
 			}),
 			Paused: cloudflare.F(true),
 			PublicEndpointParams: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParams{
@@ -283,7 +293,7 @@ func TestInstanceListWithOptionalParams(t *testing.T) {
 		OrderBy:          cloudflare.F(ai_search.InstanceListParamsOrderByCreatedAt),
 		OrderByDirection: cloudflare.F(ai_search.InstanceListParamsOrderByDirectionAsc),
 		Page:             cloudflare.F(int64(1)),
-		PerPage:          cloudflare.F(int64(20)),
+		PerPage:          cloudflare.F(int64(1)),
 		Search:           cloudflare.F("search"),
 	})
 	if err != nil {

@@ -59,7 +59,12 @@ func TestNamespaceInstanceNewWithOptionalParams(t *testing.T) {
 			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.NamespaceInstanceNewParamsMetadata{
 				CreatedFromAISearchWizard: cloudflare.F(true),
-				WorkerDomain:              cloudflare.F("worker_domain"),
+				SearchForAgents: cloudflare.F(ai_search.NamespaceInstanceNewParamsMetadataSearchForAgents{
+					Hostname: cloudflare.F("hostname"),
+					ZoneID:   cloudflare.F("zone_id"),
+					ZoneName: cloudflare.F("zone_name"),
+				}),
+				WorkerDomain: cloudflare.F("worker_domain"),
 			}),
 			PublicEndpointParams: cloudflare.F(ai_search.NamespaceInstanceNewParamsPublicEndpointParams{
 				AuthorizedHosts: cloudflare.F([]string{"string"}),
@@ -183,7 +188,12 @@ func TestNamespaceInstanceUpdateWithOptionalParams(t *testing.T) {
 			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsMetadata{
 				CreatedFromAISearchWizard: cloudflare.F(true),
-				WorkerDomain:              cloudflare.F("worker_domain"),
+				SearchForAgents: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsMetadataSearchForAgents{
+					Hostname: cloudflare.F("hostname"),
+					ZoneID:   cloudflare.F("zone_id"),
+					ZoneName: cloudflare.F("zone_name"),
+				}),
+				WorkerDomain: cloudflare.F("worker_domain"),
 			}),
 			Paused: cloudflare.F(true),
 			PublicEndpointParams: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsPublicEndpointParams{
@@ -291,7 +301,7 @@ func TestNamespaceInstanceListWithOptionalParams(t *testing.T) {
 			OrderBy:          cloudflare.F(ai_search.NamespaceInstanceListParamsOrderByCreatedAt),
 			OrderByDirection: cloudflare.F(ai_search.NamespaceInstanceListParamsOrderByDirectionAsc),
 			Page:             cloudflare.F(int64(1)),
-			PerPage:          cloudflare.F(int64(20)),
+			PerPage:          cloudflare.F(int64(1)),
 			Search:           cloudflare.F("search"),
 		},
 	)

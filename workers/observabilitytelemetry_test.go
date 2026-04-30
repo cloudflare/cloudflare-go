@@ -16,7 +16,6 @@ import (
 )
 
 func TestObservabilityTelemetryKeysWithOptionalParams(t *testing.T) {
-	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -34,12 +33,8 @@ func TestObservabilityTelemetryKeysWithOptionalParams(t *testing.T) {
 		Datasets:  cloudflare.F([]string{"string"}),
 		Filters: cloudflare.F([]workers.ObservabilityTelemetryKeysParamsFilterUnion{workers.ObservabilityTelemetryKeysParamsFiltersObject{
 			FilterCombination: cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersObjectFilterCombinationAnd),
-			Filters: cloudflare.F([]workers.ObservabilityTelemetryKeysParamsFiltersObjectFilterUnion{workers.ObservabilityTelemetryKeysParamsFiltersObjectFiltersObject{
-				FilterCombination: cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectFilterCombinationAnd),
-				Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
-				Kind:              cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersObjectFiltersObjectKindGroup),
-			}}),
-			Kind: cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersObjectKindGroup),
+			Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
+			Kind:              cloudflare.F(workers.ObservabilityTelemetryKeysParamsFiltersObjectKindGroup),
 		}}),
 		From: cloudflare.F(0.000000),
 		KeyNeedle: cloudflare.F(workers.ObservabilityTelemetryKeysParamsKeyNeedle{
@@ -65,7 +60,6 @@ func TestObservabilityTelemetryKeysWithOptionalParams(t *testing.T) {
 }
 
 func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
-	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -105,12 +99,8 @@ func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
 			FilterCombination: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFilterCombinationAnd),
 			Filters: cloudflare.F([]workers.ObservabilityTelemetryQueryParamsParametersFilterUnion{workers.ObservabilityTelemetryQueryParamsParametersFiltersObject{
 				FilterCombination: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterCombinationAnd),
-				Filters: cloudflare.F([]workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFilterUnion{workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObject{
-					FilterCombination: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectFilterCombinationAnd),
-					Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
-					Kind:              cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersObjectKindGroup),
-				}}),
-				Kind: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectKindGroup),
+				Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
+				Kind:              cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFiltersObjectKindGroup),
 			}}),
 			GroupBys: cloudflare.F([]workers.ObservabilityTelemetryQueryParamsParametersGroupBy{{
 				Type:  cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersGroupBysTypeString),
@@ -144,7 +134,6 @@ func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
 }
 
 func TestObservabilityTelemetryValuesWithOptionalParams(t *testing.T) {
-	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -168,12 +157,8 @@ func TestObservabilityTelemetryValuesWithOptionalParams(t *testing.T) {
 		Type: cloudflare.F(workers.ObservabilityTelemetryValuesParamsTypeString),
 		Filters: cloudflare.F([]workers.ObservabilityTelemetryValuesParamsFilterUnion{workers.ObservabilityTelemetryValuesParamsFiltersObject{
 			FilterCombination: cloudflare.F(workers.ObservabilityTelemetryValuesParamsFiltersObjectFilterCombinationAnd),
-			Filters: cloudflare.F([]workers.ObservabilityTelemetryValuesParamsFiltersObjectFilterUnion{workers.ObservabilityTelemetryValuesParamsFiltersObjectFiltersObject{
-				FilterCombination: cloudflare.F(workers.ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectFilterCombinationAnd),
-				Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
-				Kind:              cloudflare.F(workers.ObservabilityTelemetryValuesParamsFiltersObjectFiltersObjectKindGroup),
-			}}),
-			Kind: cloudflare.F(workers.ObservabilityTelemetryValuesParamsFiltersObjectKindGroup),
+			Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
+			Kind:              cloudflare.F(workers.ObservabilityTelemetryValuesParamsFiltersObjectKindGroup),
 		}}),
 		Limit: cloudflare.F(0.000000),
 		Needle: cloudflare.F(workers.ObservabilityTelemetryValuesParamsNeedle{
