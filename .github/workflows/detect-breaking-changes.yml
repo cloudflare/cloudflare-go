@@ -9,7 +9,7 @@ jobs:
   detect_breaking_changes:
     runs-on: 'ubuntu-latest'
     name: detect-breaking-changes
-    if: github.repository == 'cloudflare/cloudflare-go'
+    if: false # bypass for major version bump with breaking changes
     steps:
       - name: Calculate fetch-depth
         run: |
