@@ -32,13 +32,19 @@ func (UnionString) ImplementsObservabilityTelemetryQueryResponseCompareAggregate
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseCompareSeriesDataGroupsValueUnion() {}
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseEventsSeriesDataGroupsUnion()       {}
 func (UnionString) ImplementsObservabilityTelemetryValuesResponseValueUnion()                       {}
+func (UnionString) ImplementsObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionString) ImplementsObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionString) ImplementsObservabilityTelemetryKeysParamsKeyNeedleValueUnion() {}
 func (UnionString) ImplementsObservabilityTelemetryKeysParamsNeedleValueUnion()    {}
+func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersNeedleValueUnion() {}
+func (UnionString) ImplementsObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionString) ImplementsObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionString) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()                  {}
@@ -175,13 +181,19 @@ func (UnionBool) ImplementsObservabilityTelemetryQueryResponseCompareAggregatesG
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseCompareSeriesDataGroupsValueUnion() {}
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseEventsSeriesDataGroupsUnion()       {}
 func (UnionBool) ImplementsObservabilityTelemetryValuesResponseValueUnion()                       {}
+func (UnionBool) ImplementsObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionBool) ImplementsObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionBool) ImplementsObservabilityTelemetryKeysParamsKeyNeedleValueUnion() {}
 func (UnionBool) ImplementsObservabilityTelemetryKeysParamsNeedleValueUnion()    {}
+func (UnionBool) ImplementsObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionBool) ImplementsObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionBool) ImplementsObservabilityTelemetryQueryParamsParametersNeedleValueUnion() {}
+func (UnionBool) ImplementsObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionBool) ImplementsObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionBool) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()           {}
@@ -245,13 +257,19 @@ func (UnionFloat) ImplementsObservabilityTelemetryQueryResponseCompareAggregates
 func (UnionFloat) ImplementsObservabilityTelemetryQueryResponseCompareSeriesDataGroupsValueUnion() {}
 func (UnionFloat) ImplementsObservabilityTelemetryQueryResponseEventsSeriesDataGroupsUnion()       {}
 func (UnionFloat) ImplementsObservabilityTelemetryValuesResponseValueUnion()                       {}
+func (UnionFloat) ImplementsObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionFloat) ImplementsObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionFloat) ImplementsObservabilityTelemetryKeysParamsKeyNeedleValueUnion() {}
 func (UnionFloat) ImplementsObservabilityTelemetryKeysParamsNeedleValueUnion()    {}
+func (UnionFloat) ImplementsObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionFloat) ImplementsObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionFloat) ImplementsObservabilityTelemetryQueryParamsParametersNeedleValueUnion() {}
+func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionFloat) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion()               {}

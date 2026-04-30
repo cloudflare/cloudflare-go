@@ -24,6 +24,7 @@ func TestSettingBlockSenderNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -32,7 +33,7 @@ func TestSettingBlockSenderNewWithOptionalParams(t *testing.T) {
 		IsRegex:     cloudflare.F(false),
 		Pattern:     cloudflare.F("test@example.com"),
 		PatternType: cloudflare.F(email_security.SettingBlockSenderNewParamsPatternTypeEmail),
-		Comments:    cloudflare.F("block sender with email test@example.com"),
+		Comments:    cloudflare.F("Block sender with email test@example.com"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -53,6 +54,7 @@ func TestSettingBlockSenderListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -63,7 +65,7 @@ func TestSettingBlockSenderListWithOptionalParams(t *testing.T) {
 		Page:        cloudflare.F(int64(1)),
 		Pattern:     cloudflare.F("pattern"),
 		PatternType: cloudflare.F(email_security.SettingBlockSenderListParamsPatternTypeEmail),
-		PerPage:     cloudflare.F(int64(1)),
+		PerPage:     cloudflare.F(int64(20)),
 		Search:      cloudflare.F("search"),
 	})
 	if err != nil {
@@ -85,12 +87,13 @@ func TestSettingBlockSenderDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.BlockSenders.Delete(
 		context.TODO(),
-		int64(2402),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.SettingBlockSenderDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -105,6 +108,7 @@ func TestSettingBlockSenderDelete(t *testing.T) {
 }
 
 func TestSettingBlockSenderEditWithOptionalParams(t *testing.T) {
+	t.Skip("HTTP 422 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -114,17 +118,18 @@ func TestSettingBlockSenderEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.BlockSenders.Edit(
 		context.TODO(),
-		int64(2402),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.SettingBlockSenderEditParams{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Comments:    cloudflare.F("comments"),
-			IsRegex:     cloudflare.F(true),
-			Pattern:     cloudflare.F("x"),
+			Comments:    cloudflare.F("Block sender with email test@example.com"),
+			IsRegex:     cloudflare.F(false),
+			Pattern:     cloudflare.F("test@example.com"),
 			PatternType: cloudflare.F(email_security.SettingBlockSenderEditParamsPatternTypeEmail),
 		},
 	)
@@ -147,12 +152,13 @@ func TestSettingBlockSenderGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.BlockSenders.Get(
 		context.TODO(),
-		int64(2402),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.SettingBlockSenderGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

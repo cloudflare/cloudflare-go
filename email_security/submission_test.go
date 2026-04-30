@@ -25,17 +25,17 @@ func TestSubmissionListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Submissions.List(context.TODO(), email_security.SubmissionListParams{
 		AccountID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		CustomerStatus:       cloudflare.F(email_security.SubmissionListParamsCustomerStatusEscalated),
 		End:                  cloudflare.F(time.Now()),
 		OriginalDisposition:  cloudflare.F(email_security.SubmissionListParamsOriginalDispositionMalicious),
 		OutcomeDisposition:   cloudflare.F(email_security.SubmissionListParamsOutcomeDispositionMalicious),
 		Page:                 cloudflare.F(int64(1)),
-		PerPage:              cloudflare.F(int64(1)),
+		PerPage:              cloudflare.F(int64(20)),
 		Query:                cloudflare.F("query"),
 		RequestedDisposition: cloudflare.F(email_security.SubmissionListParamsRequestedDispositionMalicious),
 		Start:                cloudflare.F(time.Now()),

@@ -240,7 +240,8 @@ type IPSECTunnelNewResponse struct {
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                            `json:"automatic_return_routing"`
 	BGP                    IPSECTunnelNewResponseBGP       `json:"bgp"`
 	BGPStatus              IPSECTunnelNewResponseBGPStatus `json:"bgp_status"`
@@ -593,7 +594,8 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnel struct {
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                                                  `json:"automatic_return_routing"`
 	BGP                    IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP       `json:"bgp"`
 	BGPStatus              IPSECTunnelUpdateResponseModifiedIPSECTunnelBGPStatus `json:"bgp_status"`
@@ -946,7 +948,8 @@ type IPSECTunnelListResponseIPSECTunnel struct {
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                                         `json:"automatic_return_routing"`
 	BGP                    IPSECTunnelListResponseIPSECTunnelsBGP       `json:"bgp"`
 	BGPStatus              IPSECTunnelListResponseIPSECTunnelsBGPStatus `json:"bgp_status"`
@@ -1300,7 +1303,8 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnel struct {
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                                                 `json:"automatic_return_routing"`
 	BGP                    IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP       `json:"bgp"`
 	BGPStatus              IPSECTunnelDeleteResponseDeletedIPSECTunnelBGPStatus `json:"bgp_status"`
@@ -1654,7 +1658,8 @@ type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel struct {
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                                                       `json:"automatic_return_routing"`
 	BGP                    IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP       `json:"bgp"`
 	BGPStatus              IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPStatus `json:"bgp_status"`
@@ -2008,7 +2013,8 @@ type IPSECTunnelGetResponseIPSECTunnel struct {
 	// (Phase 2).
 	AllowNullCipher bool `json:"allow_null_cipher"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting bool                                       `json:"automatic_return_routing"`
 	BGP                    IPSECTunnelGetResponseIPSECTunnelBGP       `json:"bgp"`
 	BGPStatus              IPSECTunnelGetResponseIPSECTunnelBGPStatus `json:"bgp_status"`
@@ -2364,7 +2370,8 @@ type IPSECTunnelNewParams struct {
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name param.Field[string] `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting param.Field[bool]                                       `json:"automatic_return_routing"`
 	BGP                    param.Field[IPSECTunnelNewParamsBGP]                    `json:"bgp"`
 	CustomRemoteIdentities param.Field[IPSECTunnelNewParamsCustomRemoteIdentities] `json:"custom_remote_identities"`
@@ -2571,7 +2578,8 @@ type IPSECTunnelUpdateParams struct {
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name param.Field[string] `json:"name" api:"required"`
 	// True if automatic stateful return routing should be enabled for a tunnel, false
-	// otherwise.
+	// otherwise. Requires the `coupler_integration` account flag to be enabled;
+	// requests setting this to `true` without that flag will be rejected.
 	AutomaticReturnRouting param.Field[bool]                                          `json:"automatic_return_routing"`
 	BGP                    param.Field[IPSECTunnelUpdateParamsBGP]                    `json:"bgp"`
 	CustomRemoteIdentities param.Field[IPSECTunnelUpdateParamsCustomRemoteIdentities] `json:"custom_remote_identities"`

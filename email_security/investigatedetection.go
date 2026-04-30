@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // InvestigateDetectionService contains methods and other services that help with
@@ -37,18 +36,18 @@ func NewInvestigateDetectionService(opts ...option.RequestOption) (r *Investigat
 
 // Returns detection details such as threat categories and sender information for
 // non-benign messages.
-func (r *InvestigateDetectionService) Get(ctx context.Context, postfixID string, query InvestigateDetectionGetParams, opts ...option.RequestOption) (res *InvestigateDetectionGetResponse, err error) {
+func (r *InvestigateDetectionService) Get(ctx context.Context, investigateID string, query InvestigateDetectionGetParams, opts ...option.RequestOption) (res *InvestigateDetectionGetResponse, err error) {
 	var env InvestigateDetectionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if postfixID == "" {
-		err = errors.New("missing required postfix_id parameter")
+	if investigateID == "" {
+		err = errors.New("missing required investigate_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/detections", query.AccountID, postfixID)
+	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/detections", query.AccountID, investigateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -60,13 +59,13 @@ func (r *InvestigateDetectionService) Get(ctx context.Context, postfixID string,
 type InvestigateDetectionGetResponse struct {
 	Action           string                                          `json:"action" api:"required"`
 	Attachments      []InvestigateDetectionGetResponseAttachment     `json:"attachments" api:"required"`
-	Findings         []InvestigateDetectionGetResponseFinding        `json:"findings" api:"required"`
+	Findings         []InvestigateDetectionGetResponseFinding        `json:"findings" api:"required,nullable"`
 	Headers          []InvestigateDetectionGetResponseHeader         `json:"headers" api:"required"`
 	Links            []InvestigateDetectionGetResponseLink           `json:"links" api:"required"`
 	SenderInfo       InvestigateDetectionGetResponseSenderInfo       `json:"sender_info" api:"required"`
 	ThreatCategories []InvestigateDetectionGetResponseThreatCategory `json:"threat_categories" api:"required"`
 	Validation       InvestigateDetectionGetResponseValidation       `json:"validation" api:"required"`
-	FinalDisposition InvestigateDetectionGetResponseFinalDisposition `json:"final_disposition" api:"nullable"`
+	FinalDisposition InvestigateDetectionGetResponseFinalDisposition `json:"final_disposition"`
 	JSON             investigateDetectionGetResponseJSON             `json:"-"`
 }
 
@@ -95,12 +94,25 @@ func (r investigateDetectionGetResponseJSON) RawJSON() string {
 }
 
 type InvestigateDetectionGetResponseAttachment struct {
-	Size        int64                                               `json:"size" api:"required"`
-	ContentType string                                              `json:"content_type" api:"nullable"`
-	Detection   InvestigateDetectionGetResponseAttachmentsDetection `json:"detection" api:"nullable"`
-	Encrypted   bool                                                `json:"encrypted" api:"nullable"`
-	Name        string                                              `json:"name" api:"nullable"`
-	JSON        investigateDetectionGetResponseAttachmentJSON       `json:"-"`
+	// Size of the attachment in bytes
+	Size int64 `json:"size" api:"required"`
+	// MIME type of the attachment
+	ContentType string `json:"content_type" api:"nullable"`
+	// Detection result for this attachment
+	Detection InvestigateDetectionGetResponseAttachmentsDetection `json:"detection" api:"nullable"`
+	// Whether the attachment is encrypted
+	Encrypted bool `json:"encrypted" api:"nullable"`
+	// Name of the attached file
+	Filename string `json:"filename" api:"nullable"`
+	// MD5 hash of the attachment
+	Md5 string `json:"md5" api:"nullable"`
+	// Attachment name (alternative to filename)
+	Name string `json:"name" api:"nullable"`
+	// SHA1 hash of the attachment
+	Sha1 string `json:"sha1" api:"nullable"`
+	// SHA256 hash of the attachment
+	Sha256 string                                        `json:"sha256" api:"nullable"`
+	JSON   investigateDetectionGetResponseAttachmentJSON `json:"-"`
 }
 
 // investigateDetectionGetResponseAttachmentJSON contains the JSON metadata for the
@@ -110,7 +122,11 @@ type investigateDetectionGetResponseAttachmentJSON struct {
 	ContentType apijson.Field
 	Detection   apijson.Field
 	Encrypted   apijson.Field
+	Filename    apijson.Field
+	Md5         apijson.Field
 	Name        apijson.Field
+	Sha1        apijson.Field
+	Sha256      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -123,6 +139,7 @@ func (r investigateDetectionGetResponseAttachmentJSON) RawJSON() string {
 	return r.raw
 }
 
+// Detection result for this attachment
 type InvestigateDetectionGetResponseAttachmentsDetection string
 
 const (
@@ -149,7 +166,7 @@ func (r InvestigateDetectionGetResponseAttachmentsDetection) IsKnown() bool {
 type InvestigateDetectionGetResponseFinding struct {
 	Attachment string                                           `json:"attachment" api:"nullable"`
 	Detail     string                                           `json:"detail" api:"nullable"`
-	Detection  InvestigateDetectionGetResponseFindingsDetection `json:"detection" api:"nullable"`
+	Detection  InvestigateDetectionGetResponseFindingsDetection `json:"detection"`
 	Field      string                                           `json:"field" api:"nullable"`
 	Name       string                                           `json:"name" api:"nullable"`
 	Portion    string                                           `json:"portion" api:"nullable"`
@@ -284,7 +301,7 @@ func (r investigateDetectionGetResponseSenderInfoJSON) RawJSON() string {
 }
 
 type InvestigateDetectionGetResponseThreatCategory struct {
-	ID          int64                                             `json:"id" api:"required"`
+	ID          int64                                             `json:"id"`
 	Description string                                            `json:"description" api:"nullable"`
 	Name        string                                            `json:"name" api:"nullable"`
 	JSON        investigateDetectionGetResponseThreatCategoryJSON `json:"-"`
@@ -310,9 +327,9 @@ func (r investigateDetectionGetResponseThreatCategoryJSON) RawJSON() string {
 
 type InvestigateDetectionGetResponseValidation struct {
 	Comment string                                         `json:"comment" api:"nullable"`
-	DKIM    InvestigateDetectionGetResponseValidationDKIM  `json:"dkim" api:"nullable"`
-	DMARC   InvestigateDetectionGetResponseValidationDMARC `json:"dmarc" api:"nullable"`
-	SPF     InvestigateDetectionGetResponseValidationSPF   `json:"spf" api:"nullable"`
+	DKIM    InvestigateDetectionGetResponseValidationDKIM  `json:"dkim"`
+	DMARC   InvestigateDetectionGetResponseValidationDMARC `json:"dmarc"`
+	SPF     InvestigateDetectionGetResponseValidationSPF   `json:"spf"`
 	JSON    investigateDetectionGetResponseValidationJSON  `json:"-"`
 }
 
@@ -413,16 +430,17 @@ func (r InvestigateDetectionGetResponseFinalDisposition) IsKnown() bool {
 }
 
 type InvestigateDetectionGetParams struct {
-	// Account Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type InvestigateDetectionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo                       `json:"messages" api:"required"`
-	Result   InvestigateDetectionGetResponse             `json:"result" api:"required"`
-	Success  bool                                        `json:"success" api:"required"`
-	JSON     investigateDetectionGetResponseEnvelopeJSON `json:"-"`
+	Errors   []InvestigateDetectionGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []InvestigateDetectionGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   InvestigateDetectionGetResponse                   `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success InvestigateDetectionGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    investigateDetectionGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // investigateDetectionGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -442,4 +460,115 @@ func (r *InvestigateDetectionGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 
 func (r investigateDetectionGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+type InvestigateDetectionGetResponseEnvelopeErrors struct {
+	Code             int64                                               `json:"code" api:"required"`
+	Message          string                                              `json:"message" api:"required"`
+	DocumentationURL string                                              `json:"documentation_url"`
+	Source           InvestigateDetectionGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             investigateDetectionGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// investigateDetectionGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [InvestigateDetectionGetResponseEnvelopeErrors]
+type investigateDetectionGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InvestigateDetectionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateDetectionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateDetectionGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                                  `json:"pointer"`
+	JSON    investigateDetectionGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// investigateDetectionGetResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [InvestigateDetectionGetResponseEnvelopeErrorsSource]
+type investigateDetectionGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateDetectionGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateDetectionGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateDetectionGetResponseEnvelopeMessages struct {
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           InvestigateDetectionGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             investigateDetectionGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// investigateDetectionGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [InvestigateDetectionGetResponseEnvelopeMessages]
+type investigateDetectionGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InvestigateDetectionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateDetectionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateDetectionGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    investigateDetectionGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// investigateDetectionGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [InvestigateDetectionGetResponseEnvelopeMessagesSource]
+type investigateDetectionGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateDetectionGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateDetectionGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type InvestigateDetectionGetResponseEnvelopeSuccess bool
+
+const (
+	InvestigateDetectionGetResponseEnvelopeSuccessTrue InvestigateDetectionGetResponseEnvelopeSuccess = true
+)
+
+func (r InvestigateDetectionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case InvestigateDetectionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

@@ -182,8 +182,9 @@ func TestOperationGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.OperationGetParams{
-			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Feature: cloudflare.F([]api_gateway.OperationGetParamsFeature{api_gateway.OperationGetParamsFeatureThresholds}),
+			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Feature:     cloudflare.F([]api_gateway.OperationGetParamsFeature{api_gateway.OperationGetParamsFeatureThresholds}),
+			WithSchemas: cloudflare.F(true),
 		},
 	)
 	if err != nil {

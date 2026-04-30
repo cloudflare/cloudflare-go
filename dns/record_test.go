@@ -432,6 +432,7 @@ func TestRecordScan(t *testing.T) {
 }
 
 func TestRecordScanList(t *testing.T) {
+	t.Skip("mock server returns invalid data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -458,6 +459,7 @@ func TestRecordScanList(t *testing.T) {
 }
 
 func TestRecordScanReviewWithOptionalParams(t *testing.T) {
+	t.Skip("mock server returns invalid data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

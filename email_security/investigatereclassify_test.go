@@ -24,16 +24,16 @@ func TestInvestigateReclassifyNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Investigate.Reclassify.New(
 		context.TODO(),
-		"4Njp3P0STMz2c02Q",
+		"4Njp3P0STMz2c02Q-2024-01-05T10:00:00-12345678",
 		email_security.InvestigateReclassifyNewParams{
 			AccountID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ExpectedDisposition:   cloudflare.F(email_security.InvestigateReclassifyNewParamsExpectedDispositionNone),
-			Submission:            cloudflare.F(true),
 			EmlContent:            cloudflare.F("eml_content"),
 			EscalatedSubmissionID: cloudflare.F("escalated_submission_id"),
 		},

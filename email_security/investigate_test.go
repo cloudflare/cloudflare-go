@@ -25,6 +25,7 @@ func TestInvestigateListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -36,19 +37,17 @@ func TestInvestigateListWithOptionalParams(t *testing.T) {
 		DetectionsOnly:   cloudflare.F(true),
 		Domain:           cloudflare.F("domain"),
 		End:              cloudflare.F(time.Now()),
-		ExactSubject:     cloudflare.F("exact_subject"),
 		FinalDisposition: cloudflare.F(email_security.InvestigateListParamsFinalDispositionMalicious),
 		MessageAction:    cloudflare.F(email_security.InvestigateListParamsMessageActionPreview),
 		MessageID:        cloudflare.F("message_id"),
 		Metric:           cloudflare.F("metric"),
 		Page:             cloudflare.F(int64(1)),
-		PerPage:          cloudflare.F(int64(1)),
+		PerPage:          cloudflare.F(int64(20)),
 		Query:            cloudflare.F("query"),
 		Recipient:        cloudflare.F("recipient"),
 		Sender:           cloudflare.F("sender"),
 		Start:            cloudflare.F(time.Now()),
 		Subject:          cloudflare.F("subject"),
-		Submissions:      cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -69,12 +68,13 @@ func TestInvestigateGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Investigate.Get(
 		context.TODO(),
-		"4Njp3P0STMz2c02Q",
+		"4Njp3P0STMz2c02Q-2024-01-05T10:00:00-12345678",
 		email_security.InvestigateGetParams{
 			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Submission: cloudflare.F(true),

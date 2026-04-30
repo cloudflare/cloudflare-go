@@ -121,7 +121,7 @@ func TestPDFNewWithOptionalParams(t *testing.T) {
 			}),
 			WaitForTimeout: cloudflare.F(120000.000000),
 		},
-		CacheTTL: cloudflare.F(86400.000000),
+		CacheTTL: cloudflare.F(0.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
