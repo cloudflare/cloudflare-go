@@ -31,6 +31,16 @@ func TestFraudUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Fraud.Update(context.TODO(), fraud.FraudUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		FraudSettings: fraud.FraudSettingsParam{
+			AuthenticationSettings: cloudflare.F(fraud.FraudSettingsAuthenticationSettingsParam{
+				FailureCriteria: cloudflare.F(fraud.FraudSettingsAuthenticationSettingsFailureCriteriaParam{
+					Kind:        cloudflare.F(fraud.FraudSettingsAuthenticationSettingsFailureCriteriaKindStatusCode),
+					StatusCodes: cloudflare.F([]int64{int64(200), int64(201)}),
+				}),
+				SuccessCriteria: cloudflare.F(fraud.FraudSettingsAuthenticationSettingsSuccessCriteriaParam{
+					Kind:        cloudflare.F(fraud.FraudSettingsAuthenticationSettingsSuccessCriteriaKindStatusCode),
+					StatusCodes: cloudflare.F([]int64{int64(200), int64(201)}),
+				}),
+			}),
 			UserProfiles:        cloudflare.F(fraud.FraudSettingsUserProfilesDisabled),
 			UsernameExpressions: cloudflare.F([]string{"string"}),
 		},
