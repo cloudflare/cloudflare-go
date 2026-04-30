@@ -72,11 +72,11 @@ func (r *EmailSendingService) SendRaw(ctx context.Context, params EmailSendingSe
 
 type EmailSendingSendResponse struct {
 	// Email addresses to which the message was delivered immediately.
-	Delivered []string `json:"delivered" api:"required" format:"email"`
+	Delivered []string `json:"delivered" api:"required"`
 	// Email addresses that permanently bounced.
-	PermanentBounces []string `json:"permanent_bounces" api:"required" format:"email"`
+	PermanentBounces []string `json:"permanent_bounces" api:"required"`
 	// Email addresses for which delivery was queued for later.
-	Queued []string                     `json:"queued" api:"required" format:"email"`
+	Queued []string                     `json:"queued" api:"required"`
 	JSON   emailSendingSendResponseJSON `json:"-"`
 }
 
@@ -100,11 +100,11 @@ func (r emailSendingSendResponseJSON) RawJSON() string {
 
 type EmailSendingSendRawResponse struct {
 	// Email addresses to which the message was delivered immediately.
-	Delivered []string `json:"delivered" api:"required" format:"email"`
+	Delivered []string `json:"delivered" api:"required"`
 	// Email addresses that permanently bounced.
-	PermanentBounces []string `json:"permanent_bounces" api:"required" format:"email"`
+	PermanentBounces []string `json:"permanent_bounces" api:"required"`
 	// Email addresses for which delivery was queued for later.
-	Queued []string                        `json:"queued" api:"required" format:"email"`
+	Queued []string                        `json:"queued" api:"required"`
 	JSON   emailSendingSendRawResponseJSON `json:"-"`
 }
 
@@ -473,14 +473,14 @@ type EmailSendingSendRawParams struct {
 	// Identifier of the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sender email address.
-	From param.Field[string] `json:"from" api:"required" format:"email"`
+	From param.Field[string] `json:"from" api:"required"`
 	// The full MIME-encoded email message. Should include standard RFC 5322 headers
 	// such as From, To, Subject, and Content-Type. The from and recipients fields in
 	// the request body control SMTP envelope routing; the From and To headers in the
 	// MIME message control what the recipient's email client displays.
 	MimeMessage param.Field[string] `json:"mime_message" api:"required"`
 	// List of recipient email addresses.
-	Recipients param.Field[[]string] `json:"recipients" api:"required" format:"email"`
+	Recipients param.Field[[]string] `json:"recipients" api:"required"`
 }
 
 func (r EmailSendingSendRawParams) MarshalJSON() (data []byte, err error) {
