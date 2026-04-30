@@ -554,17 +554,15 @@ func (r NamespaceInstanceNewResponseIndexingOptionsKeywordTokenizer) IsKnown() b
 }
 
 type NamespaceInstanceNewResponseMetadata struct {
-	CreatedFromAISearchWizard bool                                                `json:"created_from_aisearch_wizard"`
-	SearchForAgents           NamespaceInstanceNewResponseMetadataSearchForAgents `json:"search_for_agents"`
-	WorkerDomain              string                                              `json:"worker_domain"`
-	JSON                      namespaceInstanceNewResponseMetadataJSON            `json:"-"`
+	CreatedFromAISearchWizard bool                                     `json:"created_from_aisearch_wizard"`
+	WorkerDomain              string                                   `json:"worker_domain"`
+	JSON                      namespaceInstanceNewResponseMetadataJSON `json:"-"`
 }
 
 // namespaceInstanceNewResponseMetadataJSON contains the JSON metadata for the
 // struct [NamespaceInstanceNewResponseMetadata]
 type namespaceInstanceNewResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
-	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -575,31 +573,6 @@ func (r *NamespaceInstanceNewResponseMetadata) UnmarshalJSON(data []byte) (err e
 }
 
 func (r namespaceInstanceNewResponseMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
-type NamespaceInstanceNewResponseMetadataSearchForAgents struct {
-	Hostname string                                                  `json:"hostname" api:"required"`
-	ZoneID   string                                                  `json:"zone_id" api:"required"`
-	ZoneName string                                                  `json:"zone_name" api:"required"`
-	JSON     namespaceInstanceNewResponseMetadataSearchForAgentsJSON `json:"-"`
-}
-
-// namespaceInstanceNewResponseMetadataSearchForAgentsJSON contains the JSON
-// metadata for the struct [NamespaceInstanceNewResponseMetadataSearchForAgents]
-type namespaceInstanceNewResponseMetadataSearchForAgentsJSON struct {
-	Hostname    apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceInstanceNewResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceInstanceNewResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1465,17 +1438,15 @@ func (r NamespaceInstanceUpdateResponseIndexingOptionsKeywordTokenizer) IsKnown(
 }
 
 type NamespaceInstanceUpdateResponseMetadata struct {
-	CreatedFromAISearchWizard bool                                                   `json:"created_from_aisearch_wizard"`
-	SearchForAgents           NamespaceInstanceUpdateResponseMetadataSearchForAgents `json:"search_for_agents"`
-	WorkerDomain              string                                                 `json:"worker_domain"`
-	JSON                      namespaceInstanceUpdateResponseMetadataJSON            `json:"-"`
+	CreatedFromAISearchWizard bool                                        `json:"created_from_aisearch_wizard"`
+	WorkerDomain              string                                      `json:"worker_domain"`
+	JSON                      namespaceInstanceUpdateResponseMetadataJSON `json:"-"`
 }
 
 // namespaceInstanceUpdateResponseMetadataJSON contains the JSON metadata for the
 // struct [NamespaceInstanceUpdateResponseMetadata]
 type namespaceInstanceUpdateResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
-	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -1486,31 +1457,6 @@ func (r *NamespaceInstanceUpdateResponseMetadata) UnmarshalJSON(data []byte) (er
 }
 
 func (r namespaceInstanceUpdateResponseMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
-type NamespaceInstanceUpdateResponseMetadataSearchForAgents struct {
-	Hostname string                                                     `json:"hostname" api:"required"`
-	ZoneID   string                                                     `json:"zone_id" api:"required"`
-	ZoneName string                                                     `json:"zone_name" api:"required"`
-	JSON     namespaceInstanceUpdateResponseMetadataSearchForAgentsJSON `json:"-"`
-}
-
-// namespaceInstanceUpdateResponseMetadataSearchForAgentsJSON contains the JSON
-// metadata for the struct [NamespaceInstanceUpdateResponseMetadataSearchForAgents]
-type namespaceInstanceUpdateResponseMetadataSearchForAgentsJSON struct {
-	Hostname    apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceInstanceUpdateResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceInstanceUpdateResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2376,17 +2322,15 @@ func (r NamespaceInstanceListResponseIndexingOptionsKeywordTokenizer) IsKnown() 
 }
 
 type NamespaceInstanceListResponseMetadata struct {
-	CreatedFromAISearchWizard bool                                                 `json:"created_from_aisearch_wizard"`
-	SearchForAgents           NamespaceInstanceListResponseMetadataSearchForAgents `json:"search_for_agents"`
-	WorkerDomain              string                                               `json:"worker_domain"`
-	JSON                      namespaceInstanceListResponseMetadataJSON            `json:"-"`
+	CreatedFromAISearchWizard bool                                      `json:"created_from_aisearch_wizard"`
+	WorkerDomain              string                                    `json:"worker_domain"`
+	JSON                      namespaceInstanceListResponseMetadataJSON `json:"-"`
 }
 
 // namespaceInstanceListResponseMetadataJSON contains the JSON metadata for the
 // struct [NamespaceInstanceListResponseMetadata]
 type namespaceInstanceListResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
-	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -2397,31 +2341,6 @@ func (r *NamespaceInstanceListResponseMetadata) UnmarshalJSON(data []byte) (err 
 }
 
 func (r namespaceInstanceListResponseMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
-type NamespaceInstanceListResponseMetadataSearchForAgents struct {
-	Hostname string                                                   `json:"hostname" api:"required"`
-	ZoneID   string                                                   `json:"zone_id" api:"required"`
-	ZoneName string                                                   `json:"zone_name" api:"required"`
-	JSON     namespaceInstanceListResponseMetadataSearchForAgentsJSON `json:"-"`
-}
-
-// namespaceInstanceListResponseMetadataSearchForAgentsJSON contains the JSON
-// metadata for the struct [NamespaceInstanceListResponseMetadataSearchForAgents]
-type namespaceInstanceListResponseMetadataSearchForAgentsJSON struct {
-	Hostname    apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceInstanceListResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceInstanceListResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3287,17 +3206,15 @@ func (r NamespaceInstanceDeleteResponseIndexingOptionsKeywordTokenizer) IsKnown(
 }
 
 type NamespaceInstanceDeleteResponseMetadata struct {
-	CreatedFromAISearchWizard bool                                                   `json:"created_from_aisearch_wizard"`
-	SearchForAgents           NamespaceInstanceDeleteResponseMetadataSearchForAgents `json:"search_for_agents"`
-	WorkerDomain              string                                                 `json:"worker_domain"`
-	JSON                      namespaceInstanceDeleteResponseMetadataJSON            `json:"-"`
+	CreatedFromAISearchWizard bool                                        `json:"created_from_aisearch_wizard"`
+	WorkerDomain              string                                      `json:"worker_domain"`
+	JSON                      namespaceInstanceDeleteResponseMetadataJSON `json:"-"`
 }
 
 // namespaceInstanceDeleteResponseMetadataJSON contains the JSON metadata for the
 // struct [NamespaceInstanceDeleteResponseMetadata]
 type namespaceInstanceDeleteResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
-	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -3308,31 +3225,6 @@ func (r *NamespaceInstanceDeleteResponseMetadata) UnmarshalJSON(data []byte) (er
 }
 
 func (r namespaceInstanceDeleteResponseMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
-type NamespaceInstanceDeleteResponseMetadataSearchForAgents struct {
-	Hostname string                                                     `json:"hostname" api:"required"`
-	ZoneID   string                                                     `json:"zone_id" api:"required"`
-	ZoneName string                                                     `json:"zone_name" api:"required"`
-	JSON     namespaceInstanceDeleteResponseMetadataSearchForAgentsJSON `json:"-"`
-}
-
-// namespaceInstanceDeleteResponseMetadataSearchForAgentsJSON contains the JSON
-// metadata for the struct [NamespaceInstanceDeleteResponseMetadataSearchForAgents]
-type namespaceInstanceDeleteResponseMetadataSearchForAgentsJSON struct {
-	Hostname    apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceInstanceDeleteResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceInstanceDeleteResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -4396,17 +4288,15 @@ func (r NamespaceInstanceReadResponseIndexingOptionsKeywordTokenizer) IsKnown() 
 }
 
 type NamespaceInstanceReadResponseMetadata struct {
-	CreatedFromAISearchWizard bool                                                 `json:"created_from_aisearch_wizard"`
-	SearchForAgents           NamespaceInstanceReadResponseMetadataSearchForAgents `json:"search_for_agents"`
-	WorkerDomain              string                                               `json:"worker_domain"`
-	JSON                      namespaceInstanceReadResponseMetadataJSON            `json:"-"`
+	CreatedFromAISearchWizard bool                                      `json:"created_from_aisearch_wizard"`
+	WorkerDomain              string                                    `json:"worker_domain"`
+	JSON                      namespaceInstanceReadResponseMetadataJSON `json:"-"`
 }
 
 // namespaceInstanceReadResponseMetadataJSON contains the JSON metadata for the
 // struct [NamespaceInstanceReadResponseMetadata]
 type namespaceInstanceReadResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
-	SearchForAgents           apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -4417,31 +4307,6 @@ func (r *NamespaceInstanceReadResponseMetadata) UnmarshalJSON(data []byte) (err 
 }
 
 func (r namespaceInstanceReadResponseMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
-type NamespaceInstanceReadResponseMetadataSearchForAgents struct {
-	Hostname string                                                   `json:"hostname" api:"required"`
-	ZoneID   string                                                   `json:"zone_id" api:"required"`
-	ZoneName string                                                   `json:"zone_name" api:"required"`
-	JSON     namespaceInstanceReadResponseMetadataSearchForAgentsJSON `json:"-"`
-}
-
-// namespaceInstanceReadResponseMetadataSearchForAgentsJSON contains the JSON
-// metadata for the struct [NamespaceInstanceReadResponseMetadataSearchForAgents]
-type namespaceInstanceReadResponseMetadataSearchForAgentsJSON struct {
-	Hostname    apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceInstanceReadResponseMetadataSearchForAgents) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceInstanceReadResponseMetadataSearchForAgentsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -5446,22 +5311,11 @@ func (r NamespaceInstanceNewParamsIndexingOptionsKeywordTokenizer) IsKnown() boo
 }
 
 type NamespaceInstanceNewParamsMetadata struct {
-	CreatedFromAISearchWizard param.Field[bool]                                              `json:"created_from_aisearch_wizard"`
-	SearchForAgents           param.Field[NamespaceInstanceNewParamsMetadataSearchForAgents] `json:"search_for_agents"`
-	WorkerDomain              param.Field[string]                                            `json:"worker_domain"`
+	CreatedFromAISearchWizard param.Field[bool]   `json:"created_from_aisearch_wizard"`
+	WorkerDomain              param.Field[string] `json:"worker_domain"`
 }
 
 func (r NamespaceInstanceNewParamsMetadata) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type NamespaceInstanceNewParamsMetadataSearchForAgents struct {
-	Hostname param.Field[string] `json:"hostname" api:"required"`
-	ZoneID   param.Field[string] `json:"zone_id" api:"required"`
-	ZoneName param.Field[string] `json:"zone_name" api:"required"`
-}
-
-func (r NamespaceInstanceNewParamsMetadataSearchForAgents) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -6044,22 +5898,11 @@ func (r NamespaceInstanceUpdateParamsIndexingOptionsKeywordTokenizer) IsKnown() 
 }
 
 type NamespaceInstanceUpdateParamsMetadata struct {
-	CreatedFromAISearchWizard param.Field[bool]                                                 `json:"created_from_aisearch_wizard"`
-	SearchForAgents           param.Field[NamespaceInstanceUpdateParamsMetadataSearchForAgents] `json:"search_for_agents"`
-	WorkerDomain              param.Field[string]                                               `json:"worker_domain"`
+	CreatedFromAISearchWizard param.Field[bool]   `json:"created_from_aisearch_wizard"`
+	WorkerDomain              param.Field[string] `json:"worker_domain"`
 }
 
 func (r NamespaceInstanceUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type NamespaceInstanceUpdateParamsMetadataSearchForAgents struct {
-	Hostname param.Field[string] `json:"hostname" api:"required"`
-	ZoneID   param.Field[string] `json:"zone_id" api:"required"`
-	ZoneName param.Field[string] `json:"zone_name" api:"required"`
-}
-
-func (r NamespaceInstanceUpdateParamsMetadataSearchForAgents) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
