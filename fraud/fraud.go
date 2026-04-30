@@ -74,6 +74,14 @@ func (r *FraudService) Get(ctx context.Context, query FraudGetParams, opts ...op
 }
 
 type FraudSettings struct {
+	// Configuration for classifying login authentication outcomes based on the origin
+	// response. Requires `user_profiles` to be enabled.
+	//
+	//   - Success and failure criteria are independently updatable — sending only
+	//     `success_criteria` leaves failure codes untouched, and vice versa.
+	//   - Omit `authentication_settings` entirely to leave both unchanged.
+	//   - Status codes must not overlap between success and failure criteria.
+	AuthenticationSettings FraudSettingsAuthenticationSettings `json:"authentication_settings"`
 	// Whether Fraud User Profiles is enabled for the zone.
 	UserProfiles FraudSettingsUserProfiles `json:"user_profiles"`
 	// List of expressions to detect usernames in write HTTP requests.
@@ -89,10 +97,11 @@ type FraudSettings struct {
 
 // fraudSettingsJSON contains the JSON metadata for the struct [FraudSettings]
 type fraudSettingsJSON struct {
-	UserProfiles        apijson.Field
-	UsernameExpressions apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+	AuthenticationSettings apijson.Field
+	UserProfiles           apijson.Field
+	UsernameExpressions    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *FraudSettings) UnmarshalJSON(data []byte) (err error) {
@@ -101,6 +110,132 @@ func (r *FraudSettings) UnmarshalJSON(data []byte) (err error) {
 
 func (r fraudSettingsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configuration for classifying login authentication outcomes based on the origin
+// response. Requires `user_profiles` to be enabled.
+//
+//   - Success and failure criteria are independently updatable — sending only
+//     `success_criteria` leaves failure codes untouched, and vice versa.
+//   - Omit `authentication_settings` entirely to leave both unchanged.
+//   - Status codes must not overlap between success and failure criteria.
+type FraudSettingsAuthenticationSettings struct {
+	// Criterion for identifying failed login responses.
+	FailureCriteria FraudSettingsAuthenticationSettingsFailureCriteria `json:"failure_criteria"`
+	// Criterion for identifying successful login responses.
+	SuccessCriteria FraudSettingsAuthenticationSettingsSuccessCriteria `json:"success_criteria"`
+	JSON            fraudSettingsAuthenticationSettingsJSON            `json:"-"`
+}
+
+// fraudSettingsAuthenticationSettingsJSON contains the JSON metadata for the
+// struct [FraudSettingsAuthenticationSettings]
+type fraudSettingsAuthenticationSettingsJSON struct {
+	FailureCriteria apijson.Field
+	SuccessCriteria apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *FraudSettingsAuthenticationSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r fraudSettingsAuthenticationSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Criterion for identifying failed login responses.
+type FraudSettingsAuthenticationSettingsFailureCriteria struct {
+	// The type of criterion. Currently only `status_code` is supported.
+	Kind FraudSettingsAuthenticationSettingsFailureCriteriaKind `json:"kind" api:"required"`
+	// HTTP status codes to match against the origin response.
+	//
+	// - Maximum of 10 codes per criterion.
+	// - Each code must be a valid HTTP status code (100-599).
+	// - Codes are deduplicated and sorted on save.
+	// - Omit to leave unchanged on update.
+	// - Provide an empty array `[]` to clear codes on update.
+	StatusCodes []int64                                                `json:"status_codes"`
+	JSON        fraudSettingsAuthenticationSettingsFailureCriteriaJSON `json:"-"`
+}
+
+// fraudSettingsAuthenticationSettingsFailureCriteriaJSON contains the JSON
+// metadata for the struct [FraudSettingsAuthenticationSettingsFailureCriteria]
+type fraudSettingsAuthenticationSettingsFailureCriteriaJSON struct {
+	Kind        apijson.Field
+	StatusCodes apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FraudSettingsAuthenticationSettingsFailureCriteria) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r fraudSettingsAuthenticationSettingsFailureCriteriaJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of criterion. Currently only `status_code` is supported.
+type FraudSettingsAuthenticationSettingsFailureCriteriaKind string
+
+const (
+	FraudSettingsAuthenticationSettingsFailureCriteriaKindStatusCode FraudSettingsAuthenticationSettingsFailureCriteriaKind = "status_code"
+)
+
+func (r FraudSettingsAuthenticationSettingsFailureCriteriaKind) IsKnown() bool {
+	switch r {
+	case FraudSettingsAuthenticationSettingsFailureCriteriaKindStatusCode:
+		return true
+	}
+	return false
+}
+
+// Criterion for identifying successful login responses.
+type FraudSettingsAuthenticationSettingsSuccessCriteria struct {
+	// The type of criterion. Currently only `status_code` is supported.
+	Kind FraudSettingsAuthenticationSettingsSuccessCriteriaKind `json:"kind" api:"required"`
+	// HTTP status codes to match against the origin response.
+	//
+	// - Maximum of 10 codes per criterion.
+	// - Each code must be a valid HTTP status code (100-599).
+	// - Codes are deduplicated and sorted on save.
+	// - Omit to leave unchanged on update.
+	// - Provide an empty array `[]` to clear codes on update.
+	StatusCodes []int64                                                `json:"status_codes"`
+	JSON        fraudSettingsAuthenticationSettingsSuccessCriteriaJSON `json:"-"`
+}
+
+// fraudSettingsAuthenticationSettingsSuccessCriteriaJSON contains the JSON
+// metadata for the struct [FraudSettingsAuthenticationSettingsSuccessCriteria]
+type fraudSettingsAuthenticationSettingsSuccessCriteriaJSON struct {
+	Kind        apijson.Field
+	StatusCodes apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FraudSettingsAuthenticationSettingsSuccessCriteria) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r fraudSettingsAuthenticationSettingsSuccessCriteriaJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of criterion. Currently only `status_code` is supported.
+type FraudSettingsAuthenticationSettingsSuccessCriteriaKind string
+
+const (
+	FraudSettingsAuthenticationSettingsSuccessCriteriaKindStatusCode FraudSettingsAuthenticationSettingsSuccessCriteriaKind = "status_code"
+)
+
+func (r FraudSettingsAuthenticationSettingsSuccessCriteriaKind) IsKnown() bool {
+	switch r {
+	case FraudSettingsAuthenticationSettingsSuccessCriteriaKindStatusCode:
+		return true
+	}
+	return false
 }
 
 // Whether Fraud User Profiles is enabled for the zone.
@@ -120,6 +255,14 @@ func (r FraudSettingsUserProfiles) IsKnown() bool {
 }
 
 type FraudSettingsParam struct {
+	// Configuration for classifying login authentication outcomes based on the origin
+	// response. Requires `user_profiles` to be enabled.
+	//
+	//   - Success and failure criteria are independently updatable — sending only
+	//     `success_criteria` leaves failure codes untouched, and vice versa.
+	//   - Omit `authentication_settings` entirely to leave both unchanged.
+	//   - Status codes must not overlap between success and failure criteria.
+	AuthenticationSettings param.Field[FraudSettingsAuthenticationSettingsParam] `json:"authentication_settings"`
 	// Whether Fraud User Profiles is enabled for the zone.
 	UserProfiles param.Field[FraudSettingsUserProfiles] `json:"user_profiles"`
 	// List of expressions to detect usernames in write HTTP requests.
@@ -133,6 +276,60 @@ type FraudSettingsParam struct {
 }
 
 func (r FraudSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configuration for classifying login authentication outcomes based on the origin
+// response. Requires `user_profiles` to be enabled.
+//
+//   - Success and failure criteria are independently updatable — sending only
+//     `success_criteria` leaves failure codes untouched, and vice versa.
+//   - Omit `authentication_settings` entirely to leave both unchanged.
+//   - Status codes must not overlap between success and failure criteria.
+type FraudSettingsAuthenticationSettingsParam struct {
+	// Criterion for identifying failed login responses.
+	FailureCriteria param.Field[FraudSettingsAuthenticationSettingsFailureCriteriaParam] `json:"failure_criteria"`
+	// Criterion for identifying successful login responses.
+	SuccessCriteria param.Field[FraudSettingsAuthenticationSettingsSuccessCriteriaParam] `json:"success_criteria"`
+}
+
+func (r FraudSettingsAuthenticationSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Criterion for identifying failed login responses.
+type FraudSettingsAuthenticationSettingsFailureCriteriaParam struct {
+	// The type of criterion. Currently only `status_code` is supported.
+	Kind param.Field[FraudSettingsAuthenticationSettingsFailureCriteriaKind] `json:"kind" api:"required"`
+	// HTTP status codes to match against the origin response.
+	//
+	// - Maximum of 10 codes per criterion.
+	// - Each code must be a valid HTTP status code (100-599).
+	// - Codes are deduplicated and sorted on save.
+	// - Omit to leave unchanged on update.
+	// - Provide an empty array `[]` to clear codes on update.
+	StatusCodes param.Field[[]int64] `json:"status_codes"`
+}
+
+func (r FraudSettingsAuthenticationSettingsFailureCriteriaParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Criterion for identifying successful login responses.
+type FraudSettingsAuthenticationSettingsSuccessCriteriaParam struct {
+	// The type of criterion. Currently only `status_code` is supported.
+	Kind param.Field[FraudSettingsAuthenticationSettingsSuccessCriteriaKind] `json:"kind" api:"required"`
+	// HTTP status codes to match against the origin response.
+	//
+	// - Maximum of 10 codes per criterion.
+	// - Each code must be a valid HTTP status code (100-599).
+	// - Codes are deduplicated and sorted on save.
+	// - Omit to leave unchanged on update.
+	// - Provide an empty array `[]` to clear codes on update.
+	StatusCodes param.Field[[]int64] `json:"status_codes"`
+}
+
+func (r FraudSettingsAuthenticationSettingsSuccessCriteriaParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
