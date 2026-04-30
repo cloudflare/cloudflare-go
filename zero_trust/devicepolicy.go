@@ -169,8 +169,10 @@ type SettingsPolicy struct {
 	SwitchLocked bool                       `json:"switch_locked"`
 	TargetTests  []SettingsPolicyTargetTest `json:"target_tests"`
 	// Determines which tunnel protocol to use.
-	TunnelProtocol string             `json:"tunnel_protocol"`
-	JSON           settingsPolicyJSON `json:"-"`
+	TunnelProtocol string `json:"tunnel_protocol"`
+	// Virtual network access settings for the device.
+	VirtualNetworks SettingsPolicyVirtualNetworks `json:"virtual_networks" api:"nullable"`
+	JSON            settingsPolicyJSON            `json:"-"`
 }
 
 // settingsPolicyJSON contains the JSON metadata for the struct [SettingsPolicy]
@@ -202,6 +204,7 @@ type settingsPolicyJSON struct {
 	SwitchLocked               apijson.Field
 	TargetTests                apijson.Field
 	TunnelProtocol             apijson.Field
+	VirtualNetworks            apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field
 }
@@ -261,6 +264,33 @@ func (r *SettingsPolicyTargetTest) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r settingsPolicyTargetTestJSON) RawJSON() string {
+	return r.raw
+}
+
+// Virtual network access settings for the device.
+type SettingsPolicyVirtualNetworks struct {
+	// List of virtual network IDs the device is allowed to access. When
+	// virtual_networks is set, at least one entry is required.
+	Allowed []string `json:"allowed" api:"required" format:"uuid"`
+	// The default virtual network ID. Must be included in the `allowed` list.
+	Default string                            `json:"default" api:"required" format:"uuid"`
+	JSON    settingsPolicyVirtualNetworksJSON `json:"-"`
+}
+
+// settingsPolicyVirtualNetworksJSON contains the JSON metadata for the struct
+// [SettingsPolicyVirtualNetworks]
+type settingsPolicyVirtualNetworksJSON struct {
+	Allowed     apijson.Field
+	Default     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingsPolicyVirtualNetworks) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingsPolicyVirtualNetworksJSON) RawJSON() string {
 	return r.raw
 }
 
