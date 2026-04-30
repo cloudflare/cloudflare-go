@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestInvestigateMoveNewWithOptionalParams(t *testing.T) {
+func TestInvestigateMoveNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -24,16 +24,16 @@ func TestInvestigateMoveNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Investigate.Move.New(
 		context.TODO(),
-		"4Njp3P0STMz2c02Q",
+		"4Njp3P0STMz2c02Q-2024-01-05T10:00:00-12345678",
 		email_security.InvestigateMoveNewParams{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Destination: cloudflare.F(email_security.InvestigateMoveNewParamsDestinationInbox),
-			Submission:  cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -55,13 +55,14 @@ func TestInvestigateMoveBulkWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Investigate.Move.Bulk(context.TODO(), email_security.InvestigateMoveBulkParams{
 		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Destination: cloudflare.F(email_security.InvestigateMoveBulkParamsDestinationInbox),
-		IDs:         cloudflare.F([]string{"string"}),
+		IDs:         cloudflare.F([]string{"4Njp3P0STMz2c02Q-2024-01-05T10:00:00-12345678"}),
 		PostfixIDs:  cloudflare.F([]string{"4Njp3P0STMz2c02Q"}),
 	})
 	if err != nil {
