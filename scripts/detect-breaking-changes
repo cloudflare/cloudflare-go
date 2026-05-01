@@ -380,6 +380,7 @@ TEST_PATHS=(
 	zero_trust/deviceregistration_test.go
 	zero_trust/devicedextest_test.go
 	zero_trust/deviceipprofile_test.go
+	zero_trust/devicedeploymentgroup_test.go
 	zero_trust/devicenetwork_test.go
 	zero_trust/devicefleetstatus_test.go
 	zero_trust/devicepolicydefault_test.go
