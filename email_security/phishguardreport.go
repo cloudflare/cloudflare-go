@@ -38,8 +38,9 @@ func NewPhishguardReportService(opts ...option.RequestOption) (r *PhishguardRepo
 	return
 }
 
-// Retrieves `PhishGuard` reports showing phishing attempts and suspicious email
-// patterns detected.
+// Retrieves PhishGuard security alert reports for a specified date range. Reports
+// include detected threats, dispositions, and contextual information. Use for
+// security monitoring and threat analysis.
 func (r *PhishguardReportService) List(ctx context.Context, params PhishguardReportListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PhishguardReportListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -61,8 +62,9 @@ func (r *PhishguardReportService) List(ctx context.Context, params PhishguardRep
 	return res, nil
 }
 
-// Retrieves `PhishGuard` reports showing phishing attempts and suspicious email
-// patterns detected.
+// Retrieves PhishGuard security alert reports for a specified date range. Reports
+// include detected threats, dispositions, and contextual information. Use for
+// security monitoring and threat analysis.
 func (r *PhishguardReportService) ListAutoPaging(ctx context.Context, params PhishguardReportListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PhishguardReportListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
@@ -70,15 +72,18 @@ func (r *PhishguardReportService) ListAutoPaging(ctx context.Context, params Phi
 type PhishguardReportListResponse struct {
 	ID          int64                                   `json:"id" api:"required"`
 	Content     string                                  `json:"content" api:"required"`
-	CreatedAt   time.Time                               `json:"created_at" api:"required" format:"date-time"`
 	Disposition PhishguardReportListResponseDisposition `json:"disposition" api:"required"`
 	Fields      PhishguardReportListResponseFields      `json:"fields" api:"required"`
 	Priority    string                                  `json:"priority" api:"required"`
 	Title       string                                  `json:"title" api:"required"`
-	Ts          time.Time                               `json:"ts" api:"required" format:"date-time"`
-	UpdatedAt   time.Time                               `json:"updated_at" api:"required" format:"date-time"`
+	CreatedAt   time.Time                               `json:"created_at" api:"nullable" format:"date-time"`
 	Tags        []PhishguardReportListResponseTag       `json:"tags" api:"nullable"`
-	JSON        phishguardReportListResponseJSON        `json:"-"`
+	// Deprecated, use `created_at` instead
+	//
+	// Deprecated: deprecated
+	Ts        time.Time                        `json:"ts" format:"date-time"`
+	UpdatedAt time.Time                        `json:"updated_at" api:"nullable" format:"date-time"`
+	JSON      phishguardReportListResponseJSON `json:"-"`
 }
 
 // phishguardReportListResponseJSON contains the JSON metadata for the struct
@@ -86,14 +91,14 @@ type PhishguardReportListResponse struct {
 type phishguardReportListResponseJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
-	CreatedAt   apijson.Field
 	Disposition apijson.Field
 	Fields      apijson.Field
 	Priority    apijson.Field
 	Title       apijson.Field
+	CreatedAt   apijson.Field
+	Tags        apijson.Field
 	Ts          apijson.Field
 	UpdatedAt   apijson.Field
-	Tags        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -130,20 +135,25 @@ func (r PhishguardReportListResponseDisposition) IsKnown() bool {
 }
 
 type PhishguardReportListResponseFields struct {
-	To        []string                               `json:"to" api:"required"`
-	Ts        time.Time                              `json:"ts" api:"required" format:"date-time"`
-	From      string                                 `json:"from" api:"nullable"`
-	PostfixID string                                 `json:"postfix_id" api:"nullable"`
-	JSON      phishguardReportListResponseFieldsJSON `json:"-"`
+	To         []string  `json:"to" api:"required"`
+	From       string    `json:"from" api:"nullable"`
+	OccurredAt time.Time `json:"occurred_at" format:"date-time"`
+	PostfixID  string    `json:"postfix_id" api:"nullable"`
+	// Deprecated, use `occurred_at` instead
+	//
+	// Deprecated: deprecated
+	Ts   time.Time                              `json:"ts" format:"date-time"`
+	JSON phishguardReportListResponseFieldsJSON `json:"-"`
 }
 
 // phishguardReportListResponseFieldsJSON contains the JSON metadata for the struct
 // [PhishguardReportListResponseFields]
 type phishguardReportListResponseFieldsJSON struct {
 	To          apijson.Field
-	Ts          apijson.Field
 	From        apijson.Field
+	OccurredAt  apijson.Field
 	PostfixID   apijson.Field
+	Ts          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -180,13 +190,15 @@ func (r phishguardReportListResponseTagJSON) RawJSON() string {
 }
 
 type PhishguardReportListParams struct {
-	// Account Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The end of the search date range (RFC3339 format).
-	End      param.Field[time.Time] `query:"end" format:"date-time"`
+	// End of the time range (RFC3339). Takes precedence over to_date.
+	End param.Field[time.Time] `query:"end" format:"date-time"`
+	// Deprecated, use `start` instead. Start date in YYYY-MM-DD format.
 	FromDate param.Field[time.Time] `query:"from_date" format:"date"`
-	// The beginning of the search date range (RFC3339 format).
-	Start  param.Field[time.Time] `query:"start" format:"date-time"`
+	// Start of the time range (RFC3339). Takes precedence over from_date.
+	Start param.Field[time.Time] `query:"start" format:"date-time"`
+	// Deprecated, use `end` instead. End date in YYYY-MM-DD format.
 	ToDate param.Field[time.Time] `query:"to_date" format:"date"`
 }
 

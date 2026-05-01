@@ -38,7 +38,9 @@ func NewSubmissionService(opts ...option.RequestOption) (r *SubmissionService) {
 	return
 }
 
-// This endpoint returns information for submissions to made to reclassify emails.
+// Returns information for submissions made to reclassify emails. Shows the status,
+// outcome, and disposition changes for reclassification requests made by users or
+// the security team. Useful for tracking false positive/negative reports.
 func (r *SubmissionService) List(ctx context.Context, params SubmissionListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SubmissionListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -60,40 +62,45 @@ func (r *SubmissionService) List(ctx context.Context, params SubmissionListParam
 	return res, nil
 }
 
-// This endpoint returns information for submissions to made to reclassify emails.
+// Returns information for submissions made to reclassify emails. Shows the status,
+// outcome, and disposition changes for reclassification requests made by users or
+// the security team. Useful for tracking false positive/negative reports.
 func (r *SubmissionService) ListAutoPaging(ctx context.Context, params SubmissionListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SubmissionListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type SubmissionListResponse struct {
-	// deprecated as of 2026-04-01, use `requested_at` instead.
+	// When the submission was requested (UTC).
+	RequestedAt           time.Time                                 `json:"requested_at" api:"required" format:"date-time"`
+	SubmissionID          string                                    `json:"submission_id" api:"required"`
+	CustomerStatus        SubmissionListResponseCustomerStatus      `json:"customer_status" api:"nullable"`
+	EscalatedAs           SubmissionListResponseEscalatedAs         `json:"escalated_as" api:"nullable"`
+	EscalatedAt           time.Time                                 `json:"escalated_at" api:"nullable" format:"date-time"`
+	EscalatedBy           string                                    `json:"escalated_by" api:"nullable"`
+	EscalatedSubmissionID string                                    `json:"escalated_submission_id" api:"nullable"`
+	OriginalDisposition   SubmissionListResponseOriginalDisposition `json:"original_disposition" api:"nullable"`
+	OriginalEdfHash       string                                    `json:"original_edf_hash" api:"nullable"`
+	// The postfix ID of the original message that was submitted
+	OriginalPostfixID    string                                     `json:"original_postfix_id" api:"nullable"`
+	Outcome              string                                     `json:"outcome" api:"nullable"`
+	OutcomeDisposition   SubmissionListResponseOutcomeDisposition   `json:"outcome_disposition" api:"nullable"`
+	RequestedBy          string                                     `json:"requested_by" api:"nullable"`
+	RequestedDisposition SubmissionListResponseRequestedDisposition `json:"requested_disposition" api:"nullable"`
+	// Deprecated, use `requested_at` instead
 	//
 	// Deprecated: deprecated
-	RequestedTs           time.Time                                  `json:"requested_ts" api:"required" format:"date-time"`
-	SubmissionID          string                                     `json:"submission_id" api:"required"`
-	CustomerStatus        SubmissionListResponseCustomerStatus       `json:"customer_status" api:"nullable"`
-	EscalatedAs           SubmissionListResponseEscalatedAs          `json:"escalated_as" api:"nullable"`
-	EscalatedAt           time.Time                                  `json:"escalated_at" api:"nullable" format:"date-time"`
-	EscalatedBy           string                                     `json:"escalated_by" api:"nullable"`
-	EscalatedSubmissionID string                                     `json:"escalated_submission_id" api:"nullable"`
-	OriginalDisposition   SubmissionListResponseOriginalDisposition  `json:"original_disposition" api:"nullable"`
-	OriginalEdfHash       string                                     `json:"original_edf_hash" api:"nullable"`
-	OriginalPostfixID     string                                     `json:"original_postfix_id" api:"nullable"`
-	Outcome               string                                     `json:"outcome" api:"nullable"`
-	OutcomeDisposition    SubmissionListResponseOutcomeDisposition   `json:"outcome_disposition" api:"nullable"`
-	RequestedAt           time.Time                                  `json:"requested_at" api:"nullable" format:"date-time"`
-	RequestedBy           string                                     `json:"requested_by" api:"nullable"`
-	RequestedDisposition  SubmissionListResponseRequestedDisposition `json:"requested_disposition" api:"nullable"`
-	Status                string                                     `json:"status" api:"nullable"`
-	Subject               string                                     `json:"subject" api:"nullable"`
-	Type                  string                                     `json:"type" api:"nullable"`
-	JSON                  submissionListResponseJSON                 `json:"-"`
+	RequestedTs string `json:"requested_ts"`
+	Status      string `json:"status" api:"nullable"`
+	Subject     string `json:"subject" api:"nullable"`
+	// Whether the submission was created by a team member or an end user.
+	Type SubmissionListResponseType `json:"type" api:"nullable"`
+	JSON submissionListResponseJSON `json:"-"`
 }
 
 // submissionListResponseJSON contains the JSON metadata for the struct
 // [SubmissionListResponse]
 type submissionListResponseJSON struct {
-	RequestedTs           apijson.Field
+	RequestedAt           apijson.Field
 	SubmissionID          apijson.Field
 	CustomerStatus        apijson.Field
 	EscalatedAs           apijson.Field
@@ -105,9 +112,9 @@ type submissionListResponseJSON struct {
 	OriginalPostfixID     apijson.Field
 	Outcome               apijson.Field
 	OutcomeDisposition    apijson.Field
-	RequestedAt           apijson.Field
 	RequestedBy           apijson.Field
 	RequestedDisposition  apijson.Field
+	RequestedTs           apijson.Field
 	Status                apijson.Field
 	Subject               apijson.Field
 	Type                  apijson.Field
@@ -142,21 +149,17 @@ func (r SubmissionListResponseCustomerStatus) IsKnown() bool {
 type SubmissionListResponseEscalatedAs string
 
 const (
-	SubmissionListResponseEscalatedAsMalicious    SubmissionListResponseEscalatedAs = "MALICIOUS"
-	SubmissionListResponseEscalatedAsMaliciousBec SubmissionListResponseEscalatedAs = "MALICIOUS-BEC"
-	SubmissionListResponseEscalatedAsSuspicious   SubmissionListResponseEscalatedAs = "SUSPICIOUS"
-	SubmissionListResponseEscalatedAsSpoof        SubmissionListResponseEscalatedAs = "SPOOF"
-	SubmissionListResponseEscalatedAsSpam         SubmissionListResponseEscalatedAs = "SPAM"
-	SubmissionListResponseEscalatedAsBulk         SubmissionListResponseEscalatedAs = "BULK"
-	SubmissionListResponseEscalatedAsEncrypted    SubmissionListResponseEscalatedAs = "ENCRYPTED"
-	SubmissionListResponseEscalatedAsExternal     SubmissionListResponseEscalatedAs = "EXTERNAL"
-	SubmissionListResponseEscalatedAsUnknown      SubmissionListResponseEscalatedAs = "UNKNOWN"
-	SubmissionListResponseEscalatedAsNone         SubmissionListResponseEscalatedAs = "NONE"
+	SubmissionListResponseEscalatedAsMalicious  SubmissionListResponseEscalatedAs = "MALICIOUS"
+	SubmissionListResponseEscalatedAsSuspicious SubmissionListResponseEscalatedAs = "SUSPICIOUS"
+	SubmissionListResponseEscalatedAsSpoof      SubmissionListResponseEscalatedAs = "SPOOF"
+	SubmissionListResponseEscalatedAsSpam       SubmissionListResponseEscalatedAs = "SPAM"
+	SubmissionListResponseEscalatedAsBulk       SubmissionListResponseEscalatedAs = "BULK"
+	SubmissionListResponseEscalatedAsNone       SubmissionListResponseEscalatedAs = "NONE"
 )
 
 func (r SubmissionListResponseEscalatedAs) IsKnown() bool {
 	switch r {
-	case SubmissionListResponseEscalatedAsMalicious, SubmissionListResponseEscalatedAsMaliciousBec, SubmissionListResponseEscalatedAsSuspicious, SubmissionListResponseEscalatedAsSpoof, SubmissionListResponseEscalatedAsSpam, SubmissionListResponseEscalatedAsBulk, SubmissionListResponseEscalatedAsEncrypted, SubmissionListResponseEscalatedAsExternal, SubmissionListResponseEscalatedAsUnknown, SubmissionListResponseEscalatedAsNone:
+	case SubmissionListResponseEscalatedAsMalicious, SubmissionListResponseEscalatedAsSuspicious, SubmissionListResponseEscalatedAsSpoof, SubmissionListResponseEscalatedAsSpam, SubmissionListResponseEscalatedAsBulk, SubmissionListResponseEscalatedAsNone:
 		return true
 	}
 	return false
@@ -165,21 +168,17 @@ func (r SubmissionListResponseEscalatedAs) IsKnown() bool {
 type SubmissionListResponseOriginalDisposition string
 
 const (
-	SubmissionListResponseOriginalDispositionMalicious    SubmissionListResponseOriginalDisposition = "MALICIOUS"
-	SubmissionListResponseOriginalDispositionMaliciousBec SubmissionListResponseOriginalDisposition = "MALICIOUS-BEC"
-	SubmissionListResponseOriginalDispositionSuspicious   SubmissionListResponseOriginalDisposition = "SUSPICIOUS"
-	SubmissionListResponseOriginalDispositionSpoof        SubmissionListResponseOriginalDisposition = "SPOOF"
-	SubmissionListResponseOriginalDispositionSpam         SubmissionListResponseOriginalDisposition = "SPAM"
-	SubmissionListResponseOriginalDispositionBulk         SubmissionListResponseOriginalDisposition = "BULK"
-	SubmissionListResponseOriginalDispositionEncrypted    SubmissionListResponseOriginalDisposition = "ENCRYPTED"
-	SubmissionListResponseOriginalDispositionExternal     SubmissionListResponseOriginalDisposition = "EXTERNAL"
-	SubmissionListResponseOriginalDispositionUnknown      SubmissionListResponseOriginalDisposition = "UNKNOWN"
-	SubmissionListResponseOriginalDispositionNone         SubmissionListResponseOriginalDisposition = "NONE"
+	SubmissionListResponseOriginalDispositionMalicious  SubmissionListResponseOriginalDisposition = "MALICIOUS"
+	SubmissionListResponseOriginalDispositionSuspicious SubmissionListResponseOriginalDisposition = "SUSPICIOUS"
+	SubmissionListResponseOriginalDispositionSpoof      SubmissionListResponseOriginalDisposition = "SPOOF"
+	SubmissionListResponseOriginalDispositionSpam       SubmissionListResponseOriginalDisposition = "SPAM"
+	SubmissionListResponseOriginalDispositionBulk       SubmissionListResponseOriginalDisposition = "BULK"
+	SubmissionListResponseOriginalDispositionNone       SubmissionListResponseOriginalDisposition = "NONE"
 )
 
 func (r SubmissionListResponseOriginalDisposition) IsKnown() bool {
 	switch r {
-	case SubmissionListResponseOriginalDispositionMalicious, SubmissionListResponseOriginalDispositionMaliciousBec, SubmissionListResponseOriginalDispositionSuspicious, SubmissionListResponseOriginalDispositionSpoof, SubmissionListResponseOriginalDispositionSpam, SubmissionListResponseOriginalDispositionBulk, SubmissionListResponseOriginalDispositionEncrypted, SubmissionListResponseOriginalDispositionExternal, SubmissionListResponseOriginalDispositionUnknown, SubmissionListResponseOriginalDispositionNone:
+	case SubmissionListResponseOriginalDispositionMalicious, SubmissionListResponseOriginalDispositionSuspicious, SubmissionListResponseOriginalDispositionSpoof, SubmissionListResponseOriginalDispositionSpam, SubmissionListResponseOriginalDispositionBulk, SubmissionListResponseOriginalDispositionNone:
 		return true
 	}
 	return false
@@ -188,21 +187,17 @@ func (r SubmissionListResponseOriginalDisposition) IsKnown() bool {
 type SubmissionListResponseOutcomeDisposition string
 
 const (
-	SubmissionListResponseOutcomeDispositionMalicious    SubmissionListResponseOutcomeDisposition = "MALICIOUS"
-	SubmissionListResponseOutcomeDispositionMaliciousBec SubmissionListResponseOutcomeDisposition = "MALICIOUS-BEC"
-	SubmissionListResponseOutcomeDispositionSuspicious   SubmissionListResponseOutcomeDisposition = "SUSPICIOUS"
-	SubmissionListResponseOutcomeDispositionSpoof        SubmissionListResponseOutcomeDisposition = "SPOOF"
-	SubmissionListResponseOutcomeDispositionSpam         SubmissionListResponseOutcomeDisposition = "SPAM"
-	SubmissionListResponseOutcomeDispositionBulk         SubmissionListResponseOutcomeDisposition = "BULK"
-	SubmissionListResponseOutcomeDispositionEncrypted    SubmissionListResponseOutcomeDisposition = "ENCRYPTED"
-	SubmissionListResponseOutcomeDispositionExternal     SubmissionListResponseOutcomeDisposition = "EXTERNAL"
-	SubmissionListResponseOutcomeDispositionUnknown      SubmissionListResponseOutcomeDisposition = "UNKNOWN"
-	SubmissionListResponseOutcomeDispositionNone         SubmissionListResponseOutcomeDisposition = "NONE"
+	SubmissionListResponseOutcomeDispositionMalicious  SubmissionListResponseOutcomeDisposition = "MALICIOUS"
+	SubmissionListResponseOutcomeDispositionSuspicious SubmissionListResponseOutcomeDisposition = "SUSPICIOUS"
+	SubmissionListResponseOutcomeDispositionSpoof      SubmissionListResponseOutcomeDisposition = "SPOOF"
+	SubmissionListResponseOutcomeDispositionSpam       SubmissionListResponseOutcomeDisposition = "SPAM"
+	SubmissionListResponseOutcomeDispositionBulk       SubmissionListResponseOutcomeDisposition = "BULK"
+	SubmissionListResponseOutcomeDispositionNone       SubmissionListResponseOutcomeDisposition = "NONE"
 )
 
 func (r SubmissionListResponseOutcomeDisposition) IsKnown() bool {
 	switch r {
-	case SubmissionListResponseOutcomeDispositionMalicious, SubmissionListResponseOutcomeDispositionMaliciousBec, SubmissionListResponseOutcomeDispositionSuspicious, SubmissionListResponseOutcomeDispositionSpoof, SubmissionListResponseOutcomeDispositionSpam, SubmissionListResponseOutcomeDispositionBulk, SubmissionListResponseOutcomeDispositionEncrypted, SubmissionListResponseOutcomeDispositionExternal, SubmissionListResponseOutcomeDispositionUnknown, SubmissionListResponseOutcomeDispositionNone:
+	case SubmissionListResponseOutcomeDispositionMalicious, SubmissionListResponseOutcomeDispositionSuspicious, SubmissionListResponseOutcomeDispositionSpoof, SubmissionListResponseOutcomeDispositionSpam, SubmissionListResponseOutcomeDispositionBulk, SubmissionListResponseOutcomeDispositionNone:
 		return true
 	}
 	return false
@@ -211,42 +206,52 @@ func (r SubmissionListResponseOutcomeDisposition) IsKnown() bool {
 type SubmissionListResponseRequestedDisposition string
 
 const (
-	SubmissionListResponseRequestedDispositionMalicious    SubmissionListResponseRequestedDisposition = "MALICIOUS"
-	SubmissionListResponseRequestedDispositionMaliciousBec SubmissionListResponseRequestedDisposition = "MALICIOUS-BEC"
-	SubmissionListResponseRequestedDispositionSuspicious   SubmissionListResponseRequestedDisposition = "SUSPICIOUS"
-	SubmissionListResponseRequestedDispositionSpoof        SubmissionListResponseRequestedDisposition = "SPOOF"
-	SubmissionListResponseRequestedDispositionSpam         SubmissionListResponseRequestedDisposition = "SPAM"
-	SubmissionListResponseRequestedDispositionBulk         SubmissionListResponseRequestedDisposition = "BULK"
-	SubmissionListResponseRequestedDispositionEncrypted    SubmissionListResponseRequestedDisposition = "ENCRYPTED"
-	SubmissionListResponseRequestedDispositionExternal     SubmissionListResponseRequestedDisposition = "EXTERNAL"
-	SubmissionListResponseRequestedDispositionUnknown      SubmissionListResponseRequestedDisposition = "UNKNOWN"
-	SubmissionListResponseRequestedDispositionNone         SubmissionListResponseRequestedDisposition = "NONE"
+	SubmissionListResponseRequestedDispositionMalicious  SubmissionListResponseRequestedDisposition = "MALICIOUS"
+	SubmissionListResponseRequestedDispositionSuspicious SubmissionListResponseRequestedDisposition = "SUSPICIOUS"
+	SubmissionListResponseRequestedDispositionSpoof      SubmissionListResponseRequestedDisposition = "SPOOF"
+	SubmissionListResponseRequestedDispositionSpam       SubmissionListResponseRequestedDisposition = "SPAM"
+	SubmissionListResponseRequestedDispositionBulk       SubmissionListResponseRequestedDisposition = "BULK"
+	SubmissionListResponseRequestedDispositionNone       SubmissionListResponseRequestedDisposition = "NONE"
 )
 
 func (r SubmissionListResponseRequestedDisposition) IsKnown() bool {
 	switch r {
-	case SubmissionListResponseRequestedDispositionMalicious, SubmissionListResponseRequestedDispositionMaliciousBec, SubmissionListResponseRequestedDispositionSuspicious, SubmissionListResponseRequestedDispositionSpoof, SubmissionListResponseRequestedDispositionSpam, SubmissionListResponseRequestedDispositionBulk, SubmissionListResponseRequestedDispositionEncrypted, SubmissionListResponseRequestedDispositionExternal, SubmissionListResponseRequestedDispositionUnknown, SubmissionListResponseRequestedDispositionNone:
+	case SubmissionListResponseRequestedDispositionMalicious, SubmissionListResponseRequestedDispositionSuspicious, SubmissionListResponseRequestedDispositionSpoof, SubmissionListResponseRequestedDispositionSpam, SubmissionListResponseRequestedDispositionBulk, SubmissionListResponseRequestedDispositionNone:
+		return true
+	}
+	return false
+}
+
+// Whether the submission was created by a team member or an end user.
+type SubmissionListResponseType string
+
+const (
+	SubmissionListResponseTypeTeam SubmissionListResponseType = "Team"
+	SubmissionListResponseTypeUser SubmissionListResponseType = "User"
+)
+
+func (r SubmissionListResponseType) IsKnown() bool {
+	switch r {
+	case SubmissionListResponseTypeTeam, SubmissionListResponseTypeUser:
 		return true
 	}
 	return false
 }
 
 type SubmissionListParams struct {
-	// Account Identifier
-	AccountID      param.Field[string]                             `path:"account_id" api:"required"`
-	CustomerStatus param.Field[SubmissionListParamsCustomerStatus] `query:"customer_status"`
-	// The end of the search date range. Defaults to `now` if not provided.
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The end of the search date range. Defaults to `now`.
 	End                 param.Field[time.Time]                               `query:"end" format:"date-time"`
 	OriginalDisposition param.Field[SubmissionListParamsOriginalDisposition] `query:"original_disposition"`
 	OutcomeDisposition  param.Field[SubmissionListParamsOutcomeDisposition]  `query:"outcome_disposition"`
-	// The page number of paginated results.
+	// Current page within paginated list of results.
 	Page param.Field[int64] `query:"page"`
-	// The number of results per page.
+	// The number of results per page. Maximum value is 1000.
 	PerPage              param.Field[int64]                                    `query:"per_page"`
 	Query                param.Field[string]                                   `query:"query"`
 	RequestedDisposition param.Field[SubmissionListParamsRequestedDisposition] `query:"requested_disposition"`
-	// The beginning of the search date range. Defaults to `now - 30 days` if not
-	// provided.
+	// The beginning of the search date range. Defaults to `now - 30 days`.
 	Start        param.Field[time.Time]                `query:"start" format:"date-time"`
 	Status       param.Field[string]                   `query:"status"`
 	SubmissionID param.Field[string]                   `query:"submission_id"`
@@ -259,22 +264,6 @@ func (r SubmissionListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type SubmissionListParamsCustomerStatus string
-
-const (
-	SubmissionListParamsCustomerStatusEscalated  SubmissionListParamsCustomerStatus = "escalated"
-	SubmissionListParamsCustomerStatusReviewed   SubmissionListParamsCustomerStatus = "reviewed"
-	SubmissionListParamsCustomerStatusUnreviewed SubmissionListParamsCustomerStatus = "unreviewed"
-)
-
-func (r SubmissionListParamsCustomerStatus) IsKnown() bool {
-	switch r {
-	case SubmissionListParamsCustomerStatusEscalated, SubmissionListParamsCustomerStatusReviewed, SubmissionListParamsCustomerStatusUnreviewed:
-		return true
-	}
-	return false
 }
 
 type SubmissionListParamsOriginalDisposition string

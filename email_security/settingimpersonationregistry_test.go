@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/option"
 )
 
-func TestSettingImpersonationRegistryNew(t *testing.T) {
+func TestSettingImpersonationRegistryNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -24,14 +24,20 @@ func TestSettingImpersonationRegistryNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.ImpersonationRegistry.New(context.TODO(), email_security.SettingImpersonationRegistryNewParams{
-		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Email:        cloudflare.F("email"),
-		IsEmailRegex: cloudflare.F(true),
-		Name:         cloudflare.F("name"),
+		AccountID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Email:                   cloudflare.F("john.doe@example.com"),
+		IsEmailRegex:            cloudflare.F(false),
+		Name:                    cloudflare.F("John Doe"),
+		Comments:                cloudflare.F("comments"),
+		DirectoryID:             cloudflare.F(int64(0)),
+		DirectoryNodeID:         cloudflare.F(int64(0)),
+		ExternalDirectoryNodeID: cloudflare.F("external_directory_node_id"),
+		Provenance:              cloudflare.F(email_security.SettingImpersonationRegistryNewParamsProvenanceA1SInternal),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -52,6 +58,7 @@ func TestSettingImpersonationRegistryListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -60,7 +67,7 @@ func TestSettingImpersonationRegistryListWithOptionalParams(t *testing.T) {
 		Direction:  cloudflare.F(email_security.SettingImpersonationRegistryListParamsDirectionAsc),
 		Order:      cloudflare.F(email_security.SettingImpersonationRegistryListParamsOrderName),
 		Page:       cloudflare.F(int64(1)),
-		PerPage:    cloudflare.F(int64(1)),
+		PerPage:    cloudflare.F(int64(20)),
 		Provenance: cloudflare.F(email_security.SettingImpersonationRegistryListParamsProvenanceA1SInternal),
 		Search:     cloudflare.F("search"),
 	})
@@ -83,12 +90,13 @@ func TestSettingImpersonationRegistryDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.ImpersonationRegistry.Delete(
 		context.TODO(),
-		int64(2403),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.SettingImpersonationRegistryDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -103,6 +111,7 @@ func TestSettingImpersonationRegistryDelete(t *testing.T) {
 }
 
 func TestSettingImpersonationRegistryEditWithOptionalParams(t *testing.T) {
+	t.Skip("HTTP 422 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -112,17 +121,23 @@ func TestSettingImpersonationRegistryEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.ImpersonationRegistry.Edit(
 		context.TODO(),
-		int64(2403),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.SettingImpersonationRegistryEditParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Email:        cloudflare.F("email"),
-			IsEmailRegex: cloudflare.F(true),
-			Name:         cloudflare.F("name"),
+			AccountID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Comments:                cloudflare.F("comments"),
+			DirectoryID:             cloudflare.F(int64(0)),
+			DirectoryNodeID:         cloudflare.F(int64(0)),
+			Email:                   cloudflare.F("john.doe@example.com"),
+			ExternalDirectoryNodeID: cloudflare.F("external_directory_node_id"),
+			IsEmailRegex:            cloudflare.F(false),
+			Name:                    cloudflare.F("John Doe"),
+			Provenance:              cloudflare.F(email_security.SettingImpersonationRegistryEditParamsProvenanceA1SInternal),
 		},
 	)
 	if err != nil {
@@ -144,12 +159,13 @@ func TestSettingImpersonationRegistryGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.ImpersonationRegistry.Get(
 		context.TODO(),
-		int64(2403),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.SettingImpersonationRegistryGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

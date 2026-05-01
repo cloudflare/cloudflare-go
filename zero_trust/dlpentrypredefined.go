@@ -153,9 +153,10 @@ type DLPEntryPredefinedNewResponse struct {
 	Enabled    bool                                    `json:"enabled" api:"required"`
 	Name       string                                  `json:"name" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                               `json:"profile_id" api:"nullable" format:"uuid"`
-	Variant   DLPEntryPredefinedNewResponseVariant `json:"variant"`
-	JSON      dlpEntryPredefinedNewResponseJSON    `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// A Predefined AI prompt classification topic entry.
+	Variant DLPEntryPredefinedNewResponseVariant `json:"variant"`
+	JSON    dlpEntryPredefinedNewResponseJSON    `json:"-"`
 }
 
 // dlpEntryPredefinedNewResponseJSON contains the JSON metadata for the struct
@@ -205,16 +206,86 @@ func (r dlpEntryPredefinedNewResponseConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
+// A Predefined AI prompt classification topic entry.
 type DLPEntryPredefinedNewResponseVariant struct {
-	TopicType   DLPEntryPredefinedNewResponseVariantTopicType `json:"topic_type" api:"required"`
-	Type        DLPEntryPredefinedNewResponseVariantType      `json:"type" api:"required"`
+	Type DLPEntryPredefinedNewResponseVariantType `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
 	Description string                                        `json:"description" api:"nullable"`
+	TopicType   DLPEntryPredefinedNewResponseVariantTopicType `json:"topic_type"`
 	JSON        dlpEntryPredefinedNewResponseVariantJSON      `json:"-"`
+	union       DLPEntryPredefinedNewResponseVariantUnion
 }
 
 // dlpEntryPredefinedNewResponseVariantJSON contains the JSON metadata for the
 // struct [DLPEntryPredefinedNewResponseVariant]
 type dlpEntryPredefinedNewResponseVariantJSON struct {
+	Type        apijson.Field
+	Description apijson.Field
+	TopicType   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r dlpEntryPredefinedNewResponseVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *DLPEntryPredefinedNewResponseVariant) UnmarshalJSON(data []byte) (err error) {
+	*r = DLPEntryPredefinedNewResponseVariant{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [DLPEntryPredefinedNewResponseVariantUnion] interface which
+// you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [DLPEntryPredefinedNewResponseVariantObject],
+// [DLPEntryPredefinedNewResponseVariantObject].
+func (r DLPEntryPredefinedNewResponseVariant) AsUnion() DLPEntryPredefinedNewResponseVariantUnion {
+	return r.union
+}
+
+// A Predefined AI prompt classification topic entry.
+//
+// Union satisfied by [DLPEntryPredefinedNewResponseVariantObject] or
+// [DLPEntryPredefinedNewResponseVariantObject].
+type DLPEntryPredefinedNewResponseVariantUnion interface {
+	implementsDLPEntryPredefinedNewResponseVariant()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DLPEntryPredefinedNewResponseVariantUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryPredefinedNewResponseVariantObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryPredefinedNewResponseVariantObject{}),
+		},
+	)
+}
+
+// A Predefined AI prompt classification topic entry.
+type DLPEntryPredefinedNewResponseVariantObject struct {
+	TopicType DLPEntryPredefinedNewResponseVariantObjectTopicType `json:"topic_type" api:"required"`
+	Type      DLPEntryPredefinedNewResponseVariantObjectType      `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
+	Description string                                         `json:"description" api:"nullable"`
+	JSON        dlpEntryPredefinedNewResponseVariantObjectJSON `json:"-"`
+}
+
+// dlpEntryPredefinedNewResponseVariantObjectJSON contains the JSON metadata for
+// the struct [DLPEntryPredefinedNewResponseVariantObject]
+type dlpEntryPredefinedNewResponseVariantObjectJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
 	Description apijson.Field
@@ -222,12 +293,59 @@ type dlpEntryPredefinedNewResponseVariantJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPEntryPredefinedNewResponseVariant) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPEntryPredefinedNewResponseVariantObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryPredefinedNewResponseVariantJSON) RawJSON() string {
+func (r dlpEntryPredefinedNewResponseVariantObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r DLPEntryPredefinedNewResponseVariantObject) implementsDLPEntryPredefinedNewResponseVariant() {
+}
+
+type DLPEntryPredefinedNewResponseVariantObjectTopicType string
+
+const (
+	DLPEntryPredefinedNewResponseVariantObjectTopicTypeIntent  DLPEntryPredefinedNewResponseVariantObjectTopicType = "Intent"
+	DLPEntryPredefinedNewResponseVariantObjectTopicTypeContent DLPEntryPredefinedNewResponseVariantObjectTopicType = "Content"
+)
+
+func (r DLPEntryPredefinedNewResponseVariantObjectTopicType) IsKnown() bool {
+	switch r {
+	case DLPEntryPredefinedNewResponseVariantObjectTopicTypeIntent, DLPEntryPredefinedNewResponseVariantObjectTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type DLPEntryPredefinedNewResponseVariantObjectType string
+
+const (
+	DLPEntryPredefinedNewResponseVariantObjectTypePromptTopic DLPEntryPredefinedNewResponseVariantObjectType = "PromptTopic"
+)
+
+func (r DLPEntryPredefinedNewResponseVariantObjectType) IsKnown() bool {
+	switch r {
+	case DLPEntryPredefinedNewResponseVariantObjectTypePromptTopic:
+		return true
+	}
+	return false
+}
+
+type DLPEntryPredefinedNewResponseVariantType string
+
+const (
+	DLPEntryPredefinedNewResponseVariantTypePromptTopic DLPEntryPredefinedNewResponseVariantType = "PromptTopic"
+	DLPEntryPredefinedNewResponseVariantTypeGeneral     DLPEntryPredefinedNewResponseVariantType = "General"
+)
+
+func (r DLPEntryPredefinedNewResponseVariantType) IsKnown() bool {
+	switch r {
+	case DLPEntryPredefinedNewResponseVariantTypePromptTopic, DLPEntryPredefinedNewResponseVariantTypeGeneral:
+		return true
+	}
+	return false
 }
 
 type DLPEntryPredefinedNewResponseVariantTopicType string
@@ -245,29 +363,16 @@ func (r DLPEntryPredefinedNewResponseVariantTopicType) IsKnown() bool {
 	return false
 }
 
-type DLPEntryPredefinedNewResponseVariantType string
-
-const (
-	DLPEntryPredefinedNewResponseVariantTypePromptTopic DLPEntryPredefinedNewResponseVariantType = "PromptTopic"
-)
-
-func (r DLPEntryPredefinedNewResponseVariantType) IsKnown() bool {
-	switch r {
-	case DLPEntryPredefinedNewResponseVariantTypePromptTopic:
-		return true
-	}
-	return false
-}
-
 type DLPEntryPredefinedUpdateResponse struct {
 	ID         string                                     `json:"id" api:"required" format:"uuid"`
 	Confidence DLPEntryPredefinedUpdateResponseConfidence `json:"confidence" api:"required"`
 	Enabled    bool                                       `json:"enabled" api:"required"`
 	Name       string                                     `json:"name" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                  `json:"profile_id" api:"nullable" format:"uuid"`
-	Variant   DLPEntryPredefinedUpdateResponseVariant `json:"variant"`
-	JSON      dlpEntryPredefinedUpdateResponseJSON    `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// A Predefined AI prompt classification topic entry.
+	Variant DLPEntryPredefinedUpdateResponseVariant `json:"variant"`
+	JSON    dlpEntryPredefinedUpdateResponseJSON    `json:"-"`
 }
 
 // dlpEntryPredefinedUpdateResponseJSON contains the JSON metadata for the struct
@@ -317,16 +422,86 @@ func (r dlpEntryPredefinedUpdateResponseConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
+// A Predefined AI prompt classification topic entry.
 type DLPEntryPredefinedUpdateResponseVariant struct {
-	TopicType   DLPEntryPredefinedUpdateResponseVariantTopicType `json:"topic_type" api:"required"`
-	Type        DLPEntryPredefinedUpdateResponseVariantType      `json:"type" api:"required"`
+	Type DLPEntryPredefinedUpdateResponseVariantType `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
 	Description string                                           `json:"description" api:"nullable"`
+	TopicType   DLPEntryPredefinedUpdateResponseVariantTopicType `json:"topic_type"`
 	JSON        dlpEntryPredefinedUpdateResponseVariantJSON      `json:"-"`
+	union       DLPEntryPredefinedUpdateResponseVariantUnion
 }
 
 // dlpEntryPredefinedUpdateResponseVariantJSON contains the JSON metadata for the
 // struct [DLPEntryPredefinedUpdateResponseVariant]
 type dlpEntryPredefinedUpdateResponseVariantJSON struct {
+	Type        apijson.Field
+	Description apijson.Field
+	TopicType   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r dlpEntryPredefinedUpdateResponseVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *DLPEntryPredefinedUpdateResponseVariant) UnmarshalJSON(data []byte) (err error) {
+	*r = DLPEntryPredefinedUpdateResponseVariant{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [DLPEntryPredefinedUpdateResponseVariantUnion] interface which
+// you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [DLPEntryPredefinedUpdateResponseVariantObject],
+// [DLPEntryPredefinedUpdateResponseVariantObject].
+func (r DLPEntryPredefinedUpdateResponseVariant) AsUnion() DLPEntryPredefinedUpdateResponseVariantUnion {
+	return r.union
+}
+
+// A Predefined AI prompt classification topic entry.
+//
+// Union satisfied by [DLPEntryPredefinedUpdateResponseVariantObject] or
+// [DLPEntryPredefinedUpdateResponseVariantObject].
+type DLPEntryPredefinedUpdateResponseVariantUnion interface {
+	implementsDLPEntryPredefinedUpdateResponseVariant()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DLPEntryPredefinedUpdateResponseVariantUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryPredefinedUpdateResponseVariantObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryPredefinedUpdateResponseVariantObject{}),
+		},
+	)
+}
+
+// A Predefined AI prompt classification topic entry.
+type DLPEntryPredefinedUpdateResponseVariantObject struct {
+	TopicType DLPEntryPredefinedUpdateResponseVariantObjectTopicType `json:"topic_type" api:"required"`
+	Type      DLPEntryPredefinedUpdateResponseVariantObjectType      `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
+	Description string                                            `json:"description" api:"nullable"`
+	JSON        dlpEntryPredefinedUpdateResponseVariantObjectJSON `json:"-"`
+}
+
+// dlpEntryPredefinedUpdateResponseVariantObjectJSON contains the JSON metadata for
+// the struct [DLPEntryPredefinedUpdateResponseVariantObject]
+type dlpEntryPredefinedUpdateResponseVariantObjectJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
 	Description apijson.Field
@@ -334,12 +509,59 @@ type dlpEntryPredefinedUpdateResponseVariantJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPEntryPredefinedUpdateResponseVariant) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPEntryPredefinedUpdateResponseVariantObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpEntryPredefinedUpdateResponseVariantJSON) RawJSON() string {
+func (r dlpEntryPredefinedUpdateResponseVariantObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r DLPEntryPredefinedUpdateResponseVariantObject) implementsDLPEntryPredefinedUpdateResponseVariant() {
+}
+
+type DLPEntryPredefinedUpdateResponseVariantObjectTopicType string
+
+const (
+	DLPEntryPredefinedUpdateResponseVariantObjectTopicTypeIntent  DLPEntryPredefinedUpdateResponseVariantObjectTopicType = "Intent"
+	DLPEntryPredefinedUpdateResponseVariantObjectTopicTypeContent DLPEntryPredefinedUpdateResponseVariantObjectTopicType = "Content"
+)
+
+func (r DLPEntryPredefinedUpdateResponseVariantObjectTopicType) IsKnown() bool {
+	switch r {
+	case DLPEntryPredefinedUpdateResponseVariantObjectTopicTypeIntent, DLPEntryPredefinedUpdateResponseVariantObjectTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type DLPEntryPredefinedUpdateResponseVariantObjectType string
+
+const (
+	DLPEntryPredefinedUpdateResponseVariantObjectTypePromptTopic DLPEntryPredefinedUpdateResponseVariantObjectType = "PromptTopic"
+)
+
+func (r DLPEntryPredefinedUpdateResponseVariantObjectType) IsKnown() bool {
+	switch r {
+	case DLPEntryPredefinedUpdateResponseVariantObjectTypePromptTopic:
+		return true
+	}
+	return false
+}
+
+type DLPEntryPredefinedUpdateResponseVariantType string
+
+const (
+	DLPEntryPredefinedUpdateResponseVariantTypePromptTopic DLPEntryPredefinedUpdateResponseVariantType = "PromptTopic"
+	DLPEntryPredefinedUpdateResponseVariantTypeGeneral     DLPEntryPredefinedUpdateResponseVariantType = "General"
+)
+
+func (r DLPEntryPredefinedUpdateResponseVariantType) IsKnown() bool {
+	switch r {
+	case DLPEntryPredefinedUpdateResponseVariantTypePromptTopic, DLPEntryPredefinedUpdateResponseVariantTypeGeneral:
+		return true
+	}
+	return false
 }
 
 type DLPEntryPredefinedUpdateResponseVariantTopicType string
@@ -352,20 +574,6 @@ const (
 func (r DLPEntryPredefinedUpdateResponseVariantTopicType) IsKnown() bool {
 	switch r {
 	case DLPEntryPredefinedUpdateResponseVariantTopicTypeIntent, DLPEntryPredefinedUpdateResponseVariantTopicTypeContent:
-		return true
-	}
-	return false
-}
-
-type DLPEntryPredefinedUpdateResponseVariantType string
-
-const (
-	DLPEntryPredefinedUpdateResponseVariantTypePromptTopic DLPEntryPredefinedUpdateResponseVariantType = "PromptTopic"
-)
-
-func (r DLPEntryPredefinedUpdateResponseVariantType) IsKnown() bool {
-	switch r {
-	case DLPEntryPredefinedUpdateResponseVariantTypePromptTopic:
 		return true
 	}
 	return false

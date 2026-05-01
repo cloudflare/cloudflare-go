@@ -89,6 +89,27 @@ func (r *DevtoolBrowserTargetService) Activate(ctx context.Context, sessionID st
 	return res, err
 }
 
+// Closes a specific browser target (tab, page, etc.) by its ID. Returns 'Target is
+// closing' on success or an error if the target is not found.
+func (r *DevtoolBrowserTargetService) Close(ctx context.Context, sessionID string, targetID string, query DevtoolBrowserTargetCloseParams, opts ...option.RequestOption) (res *DevtoolBrowserTargetCloseResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if sessionID == "" {
+		err = errors.New("missing required session_id parameter")
+		return nil, err
+	}
+	if targetID == "" {
+		err = errors.New("missing required target_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/browser-rendering/devtools/browser/%s/json/close/%s", query.AccountID, sessionID, targetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
+}
+
 // Returns the debuggable target with the given ID.
 func (r *DevtoolBrowserTargetService) Get(ctx context.Context, sessionID string, targetID string, query DevtoolBrowserTargetGetParams, opts ...option.RequestOption) (res *DevtoolBrowserTargetGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
@@ -211,6 +232,28 @@ func (r devtoolBrowserTargetActivateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type DevtoolBrowserTargetCloseResponse struct {
+	// Target is closing.
+	Message string                                `json:"message" api:"required"`
+	JSON    devtoolBrowserTargetCloseResponseJSON `json:"-"`
+}
+
+// devtoolBrowserTargetCloseResponseJSON contains the JSON metadata for the struct
+// [DevtoolBrowserTargetCloseResponse]
+type devtoolBrowserTargetCloseResponseJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevtoolBrowserTargetCloseResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devtoolBrowserTargetCloseResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type DevtoolBrowserTargetGetResponse struct {
 	// Target ID.
 	ID string `json:"id" api:"required"`
@@ -272,6 +315,11 @@ type DevtoolBrowserTargetListParams struct {
 }
 
 type DevtoolBrowserTargetActivateParams struct {
+	// Account ID.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type DevtoolBrowserTargetCloseParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

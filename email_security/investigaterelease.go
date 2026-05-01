@@ -35,8 +35,9 @@ func NewInvestigateReleaseService(opts ...option.RequestOption) (r *InvestigateR
 	return
 }
 
-// Releases a quarantined email message, allowing it to be delivered to the
-// recipient.
+// Releases one or more quarantined messages, delivering them to the intended
+// recipients. Use when a message was incorrectly quarantined. Returns delivery
+// status for each recipient.
 func (r *InvestigateReleaseService) Bulk(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateReleaseBulkResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -58,18 +59,22 @@ func (r *InvestigateReleaseService) Bulk(ctx context.Context, params Investigate
 	return res, nil
 }
 
-// Releases a quarantined email message, allowing it to be delivered to the
-// recipient.
+// Releases one or more quarantined messages, delivering them to the intended
+// recipients. Use when a message was incorrectly quarantined. Returns delivery
+// status for each recipient.
 func (r *InvestigateReleaseService) BulkAutoPaging(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateReleaseBulkResponse] {
 	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, params, opts...))
 }
 
 type InvestigateReleaseBulkResponse struct {
-	ID string `json:"id" api:"required"`
-	// The identifier of the message.
-	PostfixID   string                             `json:"postfix_id" api:"required"`
-	Delivered   []string                           `json:"delivered" api:"nullable"`
-	Failed      []string                           `json:"failed" api:"nullable"`
+	// Unique identifier for a message retrieved from investigation
+	ID        string   `json:"id" api:"required"`
+	Delivered []string `json:"delivered" api:"nullable"`
+	Failed    []string `json:"failed" api:"nullable"`
+	// Deprecated, use `id` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	PostfixID   string                             `json:"postfix_id"`
 	Undelivered []string                           `json:"undelivered" api:"nullable"`
 	JSON        investigateReleaseBulkResponseJSON `json:"-"`
 }
@@ -78,9 +83,9 @@ type InvestigateReleaseBulkResponse struct {
 // [InvestigateReleaseBulkResponse]
 type investigateReleaseBulkResponseJSON struct {
 	ID          apijson.Field
-	PostfixID   apijson.Field
 	Delivered   apijson.Field
 	Failed      apijson.Field
+	PostfixID   apijson.Field
 	Undelivered apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -95,10 +100,9 @@ func (r investigateReleaseBulkResponseJSON) RawJSON() string {
 }
 
 type InvestigateReleaseBulkParams struct {
-	// Account Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// A list of messages identfied by their `postfix_id`s that should be released.
-	Body []string `json:"body" api:"required"`
+	Body      []string            `json:"body" api:"required"`
 }
 
 func (r InvestigateReleaseBulkParams) MarshalJSON() (data []byte, err error) {

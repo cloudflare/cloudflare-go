@@ -123,7 +123,7 @@ func TestCrawlNewWithOptionalParams(t *testing.T) {
 			}),
 			WaitForTimeout: cloudflare.F(120000.000000),
 		},
-		CacheTTL: cloudflare.F(86400.000000),
+		CacheTTL: cloudflare.F(0.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -183,7 +183,7 @@ func TestCrawlGetWithOptionalParams(t *testing.T) {
 		"x",
 		browser_rendering.CrawlGetParams{
 			AccountID: cloudflare.F("account_id"),
-			CacheTTL:  cloudflare.F(86400.000000),
+			CacheTTL:  cloudflare.F(0.000000),
 			Cursor:    cloudflare.F(0.000000),
 			Limit:     cloudflare.F(0.000000),
 			Status:    cloudflare.F(browser_rendering.CrawlGetParamsStatusQueued),

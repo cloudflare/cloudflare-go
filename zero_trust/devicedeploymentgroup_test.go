@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package queues_test
+package zero_trust_test
 
 import (
 	"context"
@@ -11,10 +11,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6"
 	"github.com/cloudflare/cloudflare-go/v6/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/queues"
+	"github.com/cloudflare/cloudflare-go/v6/zero_trust"
 )
 
-func TestQueueNew(t *testing.T) {
+func TestDeviceDeploymentGroupNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,9 +28,14 @@ func TestQueueNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.New(context.TODO(), queues.QueueNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		QueueName: cloudflare.F("example-queue"),
+	_, err := client.ZeroTrust.Devices.DeploymentGroups.New(context.TODO(), zero_trust.DeviceDeploymentGroupNewParams{
+		AccountID: cloudflare.F("account_id"),
+		Name:      cloudflare.F("Engineering Ring 0"),
+		VersionConfig: cloudflare.F([]zero_trust.DeviceDeploymentGroupNewParamsVersionConfig{{
+			TargetEnvironment: cloudflare.F("windows"),
+			Version:           cloudflare.F("2026.5.234.0"),
+		}}),
+		PolicyIDs: cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -41,7 +46,7 @@ func TestQueueNew(t *testing.T) {
 	}
 }
 
-func TestQueueUpdateWithOptionalParams(t *testing.T) {
+func TestDeviceDeploymentGroupListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -55,46 +60,10 @@ func TestQueueUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.QueueUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Queue: queues.QueueParam{
-				QueueName: cloudflare.F("example-queue"),
-				Settings: cloudflare.F(queues.QueueSettingsParam{
-					DeliveryDelay:          cloudflare.F(5.000000),
-					DeliveryPaused:         cloudflare.F(true),
-					MessageRetentionPeriod: cloudflare.F(345600.000000),
-				}),
-			},
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestQueueList(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Queues.List(context.TODO(), queues.QueueListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	_, err := client.ZeroTrust.Devices.DeploymentGroups.List(context.TODO(), zero_trust.DeviceDeploymentGroupListParams{
+		AccountID: cloudflare.F("account_id"),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(1)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -105,7 +74,7 @@ func TestQueueList(t *testing.T) {
 	}
 }
 
-func TestQueueDelete(t *testing.T) {
+func TestDeviceDeploymentGroupDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -119,11 +88,11 @@ func TestQueueDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Delete(
+	_, err := client.ZeroTrust.Devices.DeploymentGroups.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.QueueDeleteParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		"group_id",
+		zero_trust.DeviceDeploymentGroupDeleteParams{
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -135,7 +104,7 @@ func TestQueueDelete(t *testing.T) {
 	}
 }
 
-func TestQueueEditWithOptionalParams(t *testing.T) {
+func TestDeviceDeploymentGroupEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -149,19 +118,17 @@ func TestQueueEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Edit(
+	_, err := client.ZeroTrust.Devices.DeploymentGroups.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.QueueEditParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Queue: queues.QueueParam{
-				QueueName: cloudflare.F("example-queue"),
-				Settings: cloudflare.F(queues.QueueSettingsParam{
-					DeliveryDelay:          cloudflare.F(5.000000),
-					DeliveryPaused:         cloudflare.F(true),
-					MessageRetentionPeriod: cloudflare.F(345600.000000),
-				}),
-			},
+		"group_id",
+		zero_trust.DeviceDeploymentGroupEditParams{
+			AccountID: cloudflare.F("account_id"),
+			Name:      cloudflare.F("Engineering Ring 0"),
+			PolicyIDs: cloudflare.F([]string{"string"}),
+			VersionConfig: cloudflare.F([]zero_trust.DeviceDeploymentGroupEditParamsVersionConfig{{
+				TargetEnvironment: cloudflare.F("windows"),
+				Version:           cloudflare.F("2026.5.234.0"),
+			}}),
 		},
 	)
 	if err != nil {
@@ -173,7 +140,7 @@ func TestQueueEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestQueueGet(t *testing.T) {
+func TestDeviceDeploymentGroupGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -187,41 +154,11 @@ func TestQueueGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Queues.Get(
+	_, err := client.ZeroTrust.Devices.DeploymentGroups.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.QueueGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestQueueGetMetrics(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Queues.GetMetrics(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		queues.QueueGetMetricsParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		"group_id",
+		zero_trust.DeviceDeploymentGroupGetParams{
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

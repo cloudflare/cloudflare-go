@@ -7,16 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
 // InvestigateTraceService contains methods and other services that help with
@@ -38,21 +35,22 @@ func NewInvestigateTraceService(opts ...option.RequestOption) (r *InvestigateTra
 	return
 }
 
-// Gets the delivery trace for an email message, showing its path through email
-// security processing.
-func (r *InvestigateTraceService) Get(ctx context.Context, postfixID string, params InvestigateTraceGetParams, opts ...option.RequestOption) (res *InvestigateTraceGetResponse, err error) {
+// Retrieves delivery and processing trace information for an email message. Shows
+// the delivery path, retraction history, and move operations performed on the
+// message. Useful for debugging delivery issues.
+func (r *InvestigateTraceService) Get(ctx context.Context, investigateID string, query InvestigateTraceGetParams, opts ...option.RequestOption) (res *InvestigateTraceGetResponse, err error) {
 	var env InvestigateTraceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if postfixID == "" {
-		err = errors.New("missing required postfix_id parameter")
+	if investigateID == "" {
+		err = errors.New("missing required investigate_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/trace", params.AccountID, postfixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/email-security/investigate/%s/trace", query.AccountID, investigateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -107,16 +105,22 @@ func (r investigateTraceGetResponseInboundJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseInboundLine struct {
-	Lineno  int64                                      `json:"lineno" api:"required"`
-	Message string                                     `json:"message" api:"required"`
-	Ts      time.Time                                  `json:"ts" api:"required" format:"date-time"`
-	JSON    investigateTraceGetResponseInboundLineJSON `json:"-"`
+	// Line number in the trace log
+	Lineno   int64     `json:"lineno"`
+	LoggedAt time.Time `json:"logged_at" api:"nullable" format:"date-time"`
+	Message  string    `json:"message"`
+	// Deprecated, use `logged_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	Ts   string                                     `json:"ts"`
+	JSON investigateTraceGetResponseInboundLineJSON `json:"-"`
 }
 
 // investigateTraceGetResponseInboundLineJSON contains the JSON metadata for the
 // struct [InvestigateTraceGetResponseInboundLine]
 type investigateTraceGetResponseInboundLineJSON struct {
 	Lineno      apijson.Field
+	LoggedAt    apijson.Field
 	Message     apijson.Field
 	Ts          apijson.Field
 	raw         string
@@ -155,16 +159,22 @@ func (r investigateTraceGetResponseOutboundJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseOutboundLine struct {
-	Lineno  int64                                       `json:"lineno" api:"required"`
-	Message string                                      `json:"message" api:"required"`
-	Ts      time.Time                                   `json:"ts" api:"required" format:"date-time"`
-	JSON    investigateTraceGetResponseOutboundLineJSON `json:"-"`
+	// Line number in the trace log
+	Lineno   int64     `json:"lineno"`
+	LoggedAt time.Time `json:"logged_at" api:"nullable" format:"date-time"`
+	Message  string    `json:"message"`
+	// Deprecated, use `logged_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: deprecated
+	Ts   string                                      `json:"ts"`
+	JSON investigateTraceGetResponseOutboundLineJSON `json:"-"`
 }
 
 // investigateTraceGetResponseOutboundLineJSON contains the JSON metadata for the
 // struct [InvestigateTraceGetResponseOutboundLine]
 type investigateTraceGetResponseOutboundLineJSON struct {
 	Lineno      apijson.Field
+	LoggedAt    apijson.Field
 	Message     apijson.Field
 	Ts          apijson.Field
 	raw         string
@@ -180,28 +190,17 @@ func (r investigateTraceGetResponseOutboundLineJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetParams struct {
-	// Account Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// When true, search the submissions datastore only. When false or omitted, search
-	// the regular datastore only.
-	Submission param.Field[bool] `query:"submission"`
-}
-
-// URLQuery serializes [InvestigateTraceGetParams]'s query parameters as
-// `url.Values`.
-func (r InvestigateTraceGetParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type InvestigateTraceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                   `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo                   `json:"messages" api:"required"`
-	Result   InvestigateTraceGetResponse             `json:"result" api:"required"`
-	Success  bool                                    `json:"success" api:"required"`
-	JSON     investigateTraceGetResponseEnvelopeJSON `json:"-"`
+	Errors   []InvestigateTraceGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []InvestigateTraceGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   InvestigateTraceGetResponse                   `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success InvestigateTraceGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    investigateTraceGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // investigateTraceGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -221,4 +220,115 @@ func (r *InvestigateTraceGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 
 func (r investigateTraceGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+type InvestigateTraceGetResponseEnvelopeErrors struct {
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           InvestigateTraceGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             investigateTraceGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// investigateTraceGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [InvestigateTraceGetResponseEnvelopeErrors]
+type investigateTraceGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InvestigateTraceGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateTraceGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateTraceGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    investigateTraceGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// investigateTraceGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [InvestigateTraceGetResponseEnvelopeErrorsSource]
+type investigateTraceGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateTraceGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateTraceGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateTraceGetResponseEnvelopeMessages struct {
+	Code             int64                                             `json:"code" api:"required"`
+	Message          string                                            `json:"message" api:"required"`
+	DocumentationURL string                                            `json:"documentation_url"`
+	Source           InvestigateTraceGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             investigateTraceGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// investigateTraceGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [InvestigateTraceGetResponseEnvelopeMessages]
+type investigateTraceGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *InvestigateTraceGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateTraceGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type InvestigateTraceGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                                `json:"pointer"`
+	JSON    investigateTraceGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// investigateTraceGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [InvestigateTraceGetResponseEnvelopeMessagesSource]
+type investigateTraceGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InvestigateTraceGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r investigateTraceGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type InvestigateTraceGetResponseEnvelopeSuccess bool
+
+const (
+	InvestigateTraceGetResponseEnvelopeSuccessTrue InvestigateTraceGetResponseEnvelopeSuccess = true
+)
+
+func (r InvestigateTraceGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case InvestigateTraceGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

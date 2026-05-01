@@ -582,6 +582,10 @@ type ZoneListParams struct {
 	PerPage param.Field[float64] `query:"per_page"`
 	// Specify a zone status to filter by.
 	Status param.Field[ZoneListParamsStatus] `query:"status"`
+	// Zone types to filter by. Multiple types can be specified as a comma-separated
+	// list (e.g., ?type=full,partial,secondary). When this parameter is not provided,
+	// zones with type "internal" are excluded from the results.
+	Type param.Field[[]ZoneListParamsType] `query:"type"`
 }
 
 // URLQuery serializes [ZoneListParams]'s query parameters as `url.Values`.
@@ -681,6 +685,23 @@ const (
 func (r ZoneListParamsStatus) IsKnown() bool {
 	switch r {
 	case ZoneListParamsStatusInitializing, ZoneListParamsStatusPending, ZoneListParamsStatusActive, ZoneListParamsStatusMoved:
+		return true
+	}
+	return false
+}
+
+type ZoneListParamsType string
+
+const (
+	ZoneListParamsTypeFull      ZoneListParamsType = "full"
+	ZoneListParamsTypePartial   ZoneListParamsType = "partial"
+	ZoneListParamsTypeSecondary ZoneListParamsType = "secondary"
+	ZoneListParamsTypeInternal  ZoneListParamsType = "internal"
+)
+
+func (r ZoneListParamsType) IsKnown() bool {
+	switch r {
+	case ZoneListParamsTypeFull, ZoneListParamsTypePartial, ZoneListParamsTypeSecondary, ZoneListParamsTypeInternal:
 		return true
 	}
 	return false

@@ -526,9 +526,10 @@ type ProfileCustomProfileEntriesPredefinedEntry struct {
 	Name       string                                               `json:"name" api:"required"`
 	Type       ProfileCustomProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                            `json:"profile_id" api:"nullable" format:"uuid"`
-	Variant   ProfileCustomProfileEntriesPredefinedEntryVariant `json:"variant"`
-	JSON      profileCustomProfileEntriesPredefinedEntryJSON    `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// A Predefined AI prompt classification topic entry.
+	Variant ProfileCustomProfileEntriesPredefinedEntryVariant `json:"variant"`
+	JSON    profileCustomProfileEntriesPredefinedEntryJSON    `json:"-"`
 }
 
 // profileCustomProfileEntriesPredefinedEntryJSON contains the JSON metadata for
@@ -595,16 +596,87 @@ func (r ProfileCustomProfileEntriesPredefinedEntryType) IsKnown() bool {
 	return false
 }
 
+// A Predefined AI prompt classification topic entry.
 type ProfileCustomProfileEntriesPredefinedEntryVariant struct {
-	TopicType   ProfileCustomProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
-	Type        ProfileCustomProfileEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Type ProfileCustomProfileEntriesPredefinedEntryVariantType `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
 	Description string                                                     `json:"description" api:"nullable"`
+	TopicType   ProfileCustomProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type"`
 	JSON        profileCustomProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
+	union       ProfileCustomProfileEntriesPredefinedEntryVariantUnion
 }
 
 // profileCustomProfileEntriesPredefinedEntryVariantJSON contains the JSON metadata
 // for the struct [ProfileCustomProfileEntriesPredefinedEntryVariant]
 type profileCustomProfileEntriesPredefinedEntryVariantJSON struct {
+	Type        apijson.Field
+	Description apijson.Field
+	TopicType   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r profileCustomProfileEntriesPredefinedEntryVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ProfileCustomProfileEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfileCustomProfileEntriesPredefinedEntryVariant{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ProfileCustomProfileEntriesPredefinedEntryVariantUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ProfileCustomProfileEntriesPredefinedEntryVariantObject],
+// [ProfileCustomProfileEntriesPredefinedEntryVariantObject].
+func (r ProfileCustomProfileEntriesPredefinedEntryVariant) AsUnion() ProfileCustomProfileEntriesPredefinedEntryVariantUnion {
+	return r.union
+}
+
+// A Predefined AI prompt classification topic entry.
+//
+// Union satisfied by [ProfileCustomProfileEntriesPredefinedEntryVariantObject] or
+// [ProfileCustomProfileEntriesPredefinedEntryVariantObject].
+type ProfileCustomProfileEntriesPredefinedEntryVariantUnion interface {
+	implementsProfileCustomProfileEntriesPredefinedEntryVariant()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProfileCustomProfileEntriesPredefinedEntryVariantUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileEntriesPredefinedEntryVariantObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileEntriesPredefinedEntryVariantObject{}),
+		},
+	)
+}
+
+// A Predefined AI prompt classification topic entry.
+type ProfileCustomProfileEntriesPredefinedEntryVariantObject struct {
+	TopicType ProfileCustomProfileEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
+	Type      ProfileCustomProfileEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
+	Description string                                                      `json:"description" api:"nullable"`
+	JSON        profileCustomProfileEntriesPredefinedEntryVariantObjectJSON `json:"-"`
+}
+
+// profileCustomProfileEntriesPredefinedEntryVariantObjectJSON contains the JSON
+// metadata for the struct
+// [ProfileCustomProfileEntriesPredefinedEntryVariantObject]
+type profileCustomProfileEntriesPredefinedEntryVariantObjectJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
 	Description apijson.Field
@@ -612,12 +684,59 @@ type profileCustomProfileEntriesPredefinedEntryVariantJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileCustomProfileEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileCustomProfileEntriesPredefinedEntryVariantObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileCustomProfileEntriesPredefinedEntryVariantJSON) RawJSON() string {
+func (r profileCustomProfileEntriesPredefinedEntryVariantObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ProfileCustomProfileEntriesPredefinedEntryVariantObject) implementsProfileCustomProfileEntriesPredefinedEntryVariant() {
+}
+
+type ProfileCustomProfileEntriesPredefinedEntryVariantObjectTopicType string
+
+const (
+	ProfileCustomProfileEntriesPredefinedEntryVariantObjectTopicTypeIntent  ProfileCustomProfileEntriesPredefinedEntryVariantObjectTopicType = "Intent"
+	ProfileCustomProfileEntriesPredefinedEntryVariantObjectTopicTypeContent ProfileCustomProfileEntriesPredefinedEntryVariantObjectTopicType = "Content"
+)
+
+func (r ProfileCustomProfileEntriesPredefinedEntryVariantObjectTopicType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileEntriesPredefinedEntryVariantObjectTopicTypeIntent, ProfileCustomProfileEntriesPredefinedEntryVariantObjectTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomProfileEntriesPredefinedEntryVariantObjectType string
+
+const (
+	ProfileCustomProfileEntriesPredefinedEntryVariantObjectTypePromptTopic ProfileCustomProfileEntriesPredefinedEntryVariantObjectType = "PromptTopic"
+)
+
+func (r ProfileCustomProfileEntriesPredefinedEntryVariantObjectType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileEntriesPredefinedEntryVariantObjectTypePromptTopic:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomProfileEntriesPredefinedEntryVariantType string
+
+const (
+	ProfileCustomProfileEntriesPredefinedEntryVariantTypePromptTopic ProfileCustomProfileEntriesPredefinedEntryVariantType = "PromptTopic"
+	ProfileCustomProfileEntriesPredefinedEntryVariantTypeGeneral     ProfileCustomProfileEntriesPredefinedEntryVariantType = "General"
+)
+
+func (r ProfileCustomProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileEntriesPredefinedEntryVariantTypePromptTopic, ProfileCustomProfileEntriesPredefinedEntryVariantTypeGeneral:
+		return true
+	}
+	return false
 }
 
 type ProfileCustomProfileEntriesPredefinedEntryVariantTopicType string
@@ -630,20 +749,6 @@ const (
 func (r ProfileCustomProfileEntriesPredefinedEntryVariantTopicType) IsKnown() bool {
 	switch r {
 	case ProfileCustomProfileEntriesPredefinedEntryVariantTopicTypeIntent, ProfileCustomProfileEntriesPredefinedEntryVariantTopicTypeContent:
-		return true
-	}
-	return false
-}
-
-type ProfileCustomProfileEntriesPredefinedEntryVariantType string
-
-const (
-	ProfileCustomProfileEntriesPredefinedEntryVariantTypePromptTopic ProfileCustomProfileEntriesPredefinedEntryVariantType = "PromptTopic"
-)
-
-func (r ProfileCustomProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
-	switch r {
-	case ProfileCustomProfileEntriesPredefinedEntryVariantTypePromptTopic:
 		return true
 	}
 	return false
@@ -1071,9 +1176,10 @@ type ProfileCustomProfileSharedEntriesPredefinedEntry struct {
 	Name       string                                                     `json:"name" api:"required"`
 	Type       ProfileCustomProfileSharedEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                                  `json:"profile_id" api:"nullable" format:"uuid"`
-	Variant   ProfileCustomProfileSharedEntriesPredefinedEntryVariant `json:"variant"`
-	JSON      profileCustomProfileSharedEntriesPredefinedEntryJSON    `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// A Predefined AI prompt classification topic entry.
+	Variant ProfileCustomProfileSharedEntriesPredefinedEntryVariant `json:"variant"`
+	JSON    profileCustomProfileSharedEntriesPredefinedEntryJSON    `json:"-"`
 }
 
 // profileCustomProfileSharedEntriesPredefinedEntryJSON contains the JSON metadata
@@ -1142,17 +1248,89 @@ func (r ProfileCustomProfileSharedEntriesPredefinedEntryType) IsKnown() bool {
 	return false
 }
 
+// A Predefined AI prompt classification topic entry.
 type ProfileCustomProfileSharedEntriesPredefinedEntryVariant struct {
-	TopicType   ProfileCustomProfileSharedEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
-	Type        ProfileCustomProfileSharedEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Type ProfileCustomProfileSharedEntriesPredefinedEntryVariantType `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
 	Description string                                                           `json:"description" api:"nullable"`
+	TopicType   ProfileCustomProfileSharedEntriesPredefinedEntryVariantTopicType `json:"topic_type"`
 	JSON        profileCustomProfileSharedEntriesPredefinedEntryVariantJSON      `json:"-"`
+	union       ProfileCustomProfileSharedEntriesPredefinedEntryVariantUnion
 }
 
 // profileCustomProfileSharedEntriesPredefinedEntryVariantJSON contains the JSON
 // metadata for the struct
 // [ProfileCustomProfileSharedEntriesPredefinedEntryVariant]
 type profileCustomProfileSharedEntriesPredefinedEntryVariantJSON struct {
+	Type        apijson.Field
+	Description apijson.Field
+	TopicType   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r profileCustomProfileSharedEntriesPredefinedEntryVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ProfileCustomProfileSharedEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfileCustomProfileSharedEntriesPredefinedEntryVariant{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ProfileCustomProfileSharedEntriesPredefinedEntryVariantUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject],
+// [ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject].
+func (r ProfileCustomProfileSharedEntriesPredefinedEntryVariant) AsUnion() ProfileCustomProfileSharedEntriesPredefinedEntryVariantUnion {
+	return r.union
+}
+
+// A Predefined AI prompt classification topic entry.
+//
+// Union satisfied by
+// [ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject] or
+// [ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject].
+type ProfileCustomProfileSharedEntriesPredefinedEntryVariantUnion interface {
+	implementsProfileCustomProfileSharedEntriesPredefinedEntryVariant()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProfileCustomProfileSharedEntriesPredefinedEntryVariantUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject{}),
+		},
+	)
+}
+
+// A Predefined AI prompt classification topic entry.
+type ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject struct {
+	TopicType ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
+	Type      ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
+	Description string                                                            `json:"description" api:"nullable"`
+	JSON        profileCustomProfileSharedEntriesPredefinedEntryVariantObjectJSON `json:"-"`
+}
+
+// profileCustomProfileSharedEntriesPredefinedEntryVariantObjectJSON contains the
+// JSON metadata for the struct
+// [ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject]
+type profileCustomProfileSharedEntriesPredefinedEntryVariantObjectJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
 	Description apijson.Field
@@ -1160,12 +1338,59 @@ type profileCustomProfileSharedEntriesPredefinedEntryVariantJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileCustomProfileSharedEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileCustomProfileSharedEntriesPredefinedEntryVariantJSON) RawJSON() string {
+func (r profileCustomProfileSharedEntriesPredefinedEntryVariantObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject) implementsProfileCustomProfileSharedEntriesPredefinedEntryVariant() {
+}
+
+type ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTopicType string
+
+const (
+	ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTopicTypeIntent  ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTopicType = "Intent"
+	ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTopicTypeContent ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTopicType = "Content"
+)
+
+func (r ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTopicType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTopicTypeIntent, ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectType string
+
+const (
+	ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTypePromptTopic ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectType = "PromptTopic"
+)
+
+func (r ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTypePromptTopic:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomProfileSharedEntriesPredefinedEntryVariantType string
+
+const (
+	ProfileCustomProfileSharedEntriesPredefinedEntryVariantTypePromptTopic ProfileCustomProfileSharedEntriesPredefinedEntryVariantType = "PromptTopic"
+	ProfileCustomProfileSharedEntriesPredefinedEntryVariantTypeGeneral     ProfileCustomProfileSharedEntriesPredefinedEntryVariantType = "General"
+)
+
+func (r ProfileCustomProfileSharedEntriesPredefinedEntryVariantType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileSharedEntriesPredefinedEntryVariantTypePromptTopic, ProfileCustomProfileSharedEntriesPredefinedEntryVariantTypeGeneral:
+		return true
+	}
+	return false
 }
 
 type ProfileCustomProfileSharedEntriesPredefinedEntryVariantTopicType string
@@ -1178,20 +1403,6 @@ const (
 func (r ProfileCustomProfileSharedEntriesPredefinedEntryVariantTopicType) IsKnown() bool {
 	switch r {
 	case ProfileCustomProfileSharedEntriesPredefinedEntryVariantTopicTypeIntent, ProfileCustomProfileSharedEntriesPredefinedEntryVariantTopicTypeContent:
-		return true
-	}
-	return false
-}
-
-type ProfileCustomProfileSharedEntriesPredefinedEntryVariantType string
-
-const (
-	ProfileCustomProfileSharedEntriesPredefinedEntryVariantTypePromptTopic ProfileCustomProfileSharedEntriesPredefinedEntryVariantType = "PromptTopic"
-)
-
-func (r ProfileCustomProfileSharedEntriesPredefinedEntryVariantType) IsKnown() bool {
-	switch r {
-	case ProfileCustomProfileSharedEntriesPredefinedEntryVariantTypePromptTopic:
 		return true
 	}
 	return false
@@ -1648,9 +1859,10 @@ type ProfilePredefinedProfileEntriesPredefinedEntry struct {
 	Name       string                                                   `json:"name" api:"required"`
 	Type       ProfilePredefinedProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                                `json:"profile_id" api:"nullable" format:"uuid"`
-	Variant   ProfilePredefinedProfileEntriesPredefinedEntryVariant `json:"variant"`
-	JSON      profilePredefinedProfileEntriesPredefinedEntryJSON    `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// A Predefined AI prompt classification topic entry.
+	Variant ProfilePredefinedProfileEntriesPredefinedEntryVariant `json:"variant"`
+	JSON    profilePredefinedProfileEntriesPredefinedEntryJSON    `json:"-"`
 }
 
 // profilePredefinedProfileEntriesPredefinedEntryJSON contains the JSON metadata
@@ -1718,16 +1930,87 @@ func (r ProfilePredefinedProfileEntriesPredefinedEntryType) IsKnown() bool {
 	return false
 }
 
+// A Predefined AI prompt classification topic entry.
 type ProfilePredefinedProfileEntriesPredefinedEntryVariant struct {
-	TopicType   ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
-	Type        ProfilePredefinedProfileEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Type ProfilePredefinedProfileEntriesPredefinedEntryVariantType `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
 	Description string                                                         `json:"description" api:"nullable"`
+	TopicType   ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type"`
 	JSON        profilePredefinedProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
+	union       ProfilePredefinedProfileEntriesPredefinedEntryVariantUnion
 }
 
 // profilePredefinedProfileEntriesPredefinedEntryVariantJSON contains the JSON
 // metadata for the struct [ProfilePredefinedProfileEntriesPredefinedEntryVariant]
 type profilePredefinedProfileEntriesPredefinedEntryVariantJSON struct {
+	Type        apijson.Field
+	Description apijson.Field
+	TopicType   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r profilePredefinedProfileEntriesPredefinedEntryVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ProfilePredefinedProfileEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfilePredefinedProfileEntriesPredefinedEntryVariant{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ProfilePredefinedProfileEntriesPredefinedEntryVariantUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ProfilePredefinedProfileEntriesPredefinedEntryVariantObject],
+// [ProfilePredefinedProfileEntriesPredefinedEntryVariantObject].
+func (r ProfilePredefinedProfileEntriesPredefinedEntryVariant) AsUnion() ProfilePredefinedProfileEntriesPredefinedEntryVariantUnion {
+	return r.union
+}
+
+// A Predefined AI prompt classification topic entry.
+//
+// Union satisfied by [ProfilePredefinedProfileEntriesPredefinedEntryVariantObject]
+// or [ProfilePredefinedProfileEntriesPredefinedEntryVariantObject].
+type ProfilePredefinedProfileEntriesPredefinedEntryVariantUnion interface {
+	implementsProfilePredefinedProfileEntriesPredefinedEntryVariant()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProfilePredefinedProfileEntriesPredefinedEntryVariantUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesPredefinedEntryVariantObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesPredefinedEntryVariantObject{}),
+		},
+	)
+}
+
+// A Predefined AI prompt classification topic entry.
+type ProfilePredefinedProfileEntriesPredefinedEntryVariantObject struct {
+	TopicType ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
+	Type      ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
+	Description string                                                          `json:"description" api:"nullable"`
+	JSON        profilePredefinedProfileEntriesPredefinedEntryVariantObjectJSON `json:"-"`
+}
+
+// profilePredefinedProfileEntriesPredefinedEntryVariantObjectJSON contains the
+// JSON metadata for the struct
+// [ProfilePredefinedProfileEntriesPredefinedEntryVariantObject]
+type profilePredefinedProfileEntriesPredefinedEntryVariantObjectJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
 	Description apijson.Field
@@ -1735,12 +2018,59 @@ type profilePredefinedProfileEntriesPredefinedEntryVariantJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfilePredefinedProfileEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfilePredefinedProfileEntriesPredefinedEntryVariantObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profilePredefinedProfileEntriesPredefinedEntryVariantJSON) RawJSON() string {
+func (r profilePredefinedProfileEntriesPredefinedEntryVariantObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ProfilePredefinedProfileEntriesPredefinedEntryVariantObject) implementsProfilePredefinedProfileEntriesPredefinedEntryVariant() {
+}
+
+type ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTopicType string
+
+const (
+	ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTopicTypeIntent  ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTopicType = "Intent"
+	ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTopicTypeContent ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTopicType = "Content"
+)
+
+func (r ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTopicType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTopicTypeIntent, ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectType string
+
+const (
+	ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTypePromptTopic ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectType = "PromptTopic"
+)
+
+func (r ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTypePromptTopic:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedProfileEntriesPredefinedEntryVariantType string
+
+const (
+	ProfilePredefinedProfileEntriesPredefinedEntryVariantTypePromptTopic ProfilePredefinedProfileEntriesPredefinedEntryVariantType = "PromptTopic"
+	ProfilePredefinedProfileEntriesPredefinedEntryVariantTypeGeneral     ProfilePredefinedProfileEntriesPredefinedEntryVariantType = "General"
+)
+
+func (r ProfilePredefinedProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedProfileEntriesPredefinedEntryVariantTypePromptTopic, ProfilePredefinedProfileEntriesPredefinedEntryVariantTypeGeneral:
+		return true
+	}
+	return false
 }
 
 type ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType string
@@ -1753,20 +2083,6 @@ const (
 func (r ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicType) IsKnown() bool {
 	switch r {
 	case ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicTypeIntent, ProfilePredefinedProfileEntriesPredefinedEntryVariantTopicTypeContent:
-		return true
-	}
-	return false
-}
-
-type ProfilePredefinedProfileEntriesPredefinedEntryVariantType string
-
-const (
-	ProfilePredefinedProfileEntriesPredefinedEntryVariantTypePromptTopic ProfilePredefinedProfileEntriesPredefinedEntryVariantType = "PromptTopic"
-)
-
-func (r ProfilePredefinedProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
-	switch r {
-	case ProfilePredefinedProfileEntriesPredefinedEntryVariantTypePromptTopic:
 		return true
 	}
 	return false
@@ -2242,9 +2558,10 @@ type ProfileIntegrationProfileEntriesPredefinedEntry struct {
 	Name       string                                                    `json:"name" api:"required"`
 	Type       ProfileIntegrationProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                                 `json:"profile_id" api:"nullable" format:"uuid"`
-	Variant   ProfileIntegrationProfileEntriesPredefinedEntryVariant `json:"variant"`
-	JSON      profileIntegrationProfileEntriesPredefinedEntryJSON    `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// A Predefined AI prompt classification topic entry.
+	Variant ProfileIntegrationProfileEntriesPredefinedEntryVariant `json:"variant"`
+	JSON    profileIntegrationProfileEntriesPredefinedEntryJSON    `json:"-"`
 }
 
 // profileIntegrationProfileEntriesPredefinedEntryJSON contains the JSON metadata
@@ -2312,16 +2629,88 @@ func (r ProfileIntegrationProfileEntriesPredefinedEntryType) IsKnown() bool {
 	return false
 }
 
+// A Predefined AI prompt classification topic entry.
 type ProfileIntegrationProfileEntriesPredefinedEntryVariant struct {
-	TopicType   ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
-	Type        ProfileIntegrationProfileEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Type ProfileIntegrationProfileEntriesPredefinedEntryVariantType `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
 	Description string                                                          `json:"description" api:"nullable"`
+	TopicType   ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType `json:"topic_type"`
 	JSON        profileIntegrationProfileEntriesPredefinedEntryVariantJSON      `json:"-"`
+	union       ProfileIntegrationProfileEntriesPredefinedEntryVariantUnion
 }
 
 // profileIntegrationProfileEntriesPredefinedEntryVariantJSON contains the JSON
 // metadata for the struct [ProfileIntegrationProfileEntriesPredefinedEntryVariant]
 type profileIntegrationProfileEntriesPredefinedEntryVariantJSON struct {
+	Type        apijson.Field
+	Description apijson.Field
+	TopicType   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r profileIntegrationProfileEntriesPredefinedEntryVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ProfileIntegrationProfileEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfileIntegrationProfileEntriesPredefinedEntryVariant{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ProfileIntegrationProfileEntriesPredefinedEntryVariantUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ProfileIntegrationProfileEntriesPredefinedEntryVariantObject],
+// [ProfileIntegrationProfileEntriesPredefinedEntryVariantObject].
+func (r ProfileIntegrationProfileEntriesPredefinedEntryVariant) AsUnion() ProfileIntegrationProfileEntriesPredefinedEntryVariantUnion {
+	return r.union
+}
+
+// A Predefined AI prompt classification topic entry.
+//
+// Union satisfied by
+// [ProfileIntegrationProfileEntriesPredefinedEntryVariantObject] or
+// [ProfileIntegrationProfileEntriesPredefinedEntryVariantObject].
+type ProfileIntegrationProfileEntriesPredefinedEntryVariantUnion interface {
+	implementsProfileIntegrationProfileEntriesPredefinedEntryVariant()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProfileIntegrationProfileEntriesPredefinedEntryVariantUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesPredefinedEntryVariantObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesPredefinedEntryVariantObject{}),
+		},
+	)
+}
+
+// A Predefined AI prompt classification topic entry.
+type ProfileIntegrationProfileEntriesPredefinedEntryVariantObject struct {
+	TopicType ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
+	Type      ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
+	Description string                                                           `json:"description" api:"nullable"`
+	JSON        profileIntegrationProfileEntriesPredefinedEntryVariantObjectJSON `json:"-"`
+}
+
+// profileIntegrationProfileEntriesPredefinedEntryVariantObjectJSON contains the
+// JSON metadata for the struct
+// [ProfileIntegrationProfileEntriesPredefinedEntryVariantObject]
+type profileIntegrationProfileEntriesPredefinedEntryVariantObjectJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
 	Description apijson.Field
@@ -2329,12 +2718,59 @@ type profileIntegrationProfileEntriesPredefinedEntryVariantJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileIntegrationProfileEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileIntegrationProfileEntriesPredefinedEntryVariantObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileIntegrationProfileEntriesPredefinedEntryVariantJSON) RawJSON() string {
+func (r profileIntegrationProfileEntriesPredefinedEntryVariantObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ProfileIntegrationProfileEntriesPredefinedEntryVariantObject) implementsProfileIntegrationProfileEntriesPredefinedEntryVariant() {
+}
+
+type ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTopicType string
+
+const (
+	ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTopicTypeIntent  ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTopicType = "Intent"
+	ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTopicTypeContent ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTopicType = "Content"
+)
+
+func (r ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTopicType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTopicTypeIntent, ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectType string
+
+const (
+	ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTypePromptTopic ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectType = "PromptTopic"
+)
+
+func (r ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTypePromptTopic:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationProfileEntriesPredefinedEntryVariantType string
+
+const (
+	ProfileIntegrationProfileEntriesPredefinedEntryVariantTypePromptTopic ProfileIntegrationProfileEntriesPredefinedEntryVariantType = "PromptTopic"
+	ProfileIntegrationProfileEntriesPredefinedEntryVariantTypeGeneral     ProfileIntegrationProfileEntriesPredefinedEntryVariantType = "General"
+)
+
+func (r ProfileIntegrationProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileEntriesPredefinedEntryVariantTypePromptTopic, ProfileIntegrationProfileEntriesPredefinedEntryVariantTypeGeneral:
+		return true
+	}
+	return false
 }
 
 type ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType string
@@ -2347,20 +2783,6 @@ const (
 func (r ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicType) IsKnown() bool {
 	switch r {
 	case ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicTypeIntent, ProfileIntegrationProfileEntriesPredefinedEntryVariantTopicTypeContent:
-		return true
-	}
-	return false
-}
-
-type ProfileIntegrationProfileEntriesPredefinedEntryVariantType string
-
-const (
-	ProfileIntegrationProfileEntriesPredefinedEntryVariantTypePromptTopic ProfileIntegrationProfileEntriesPredefinedEntryVariantType = "PromptTopic"
-)
-
-func (r ProfileIntegrationProfileEntriesPredefinedEntryVariantType) IsKnown() bool {
-	switch r {
-	case ProfileIntegrationProfileEntriesPredefinedEntryVariantTypePromptTopic:
 		return true
 	}
 	return false
@@ -2768,9 +3190,10 @@ type ProfileIntegrationProfileSharedEntriesPredefinedEntry struct {
 	Name       string                                                          `json:"name" api:"required"`
 	Type       ProfileIntegrationProfileSharedEntriesPredefinedEntryType       `json:"type" api:"required"`
 	// Deprecated: deprecated
-	ProfileID string                                                       `json:"profile_id" api:"nullable" format:"uuid"`
-	Variant   ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant `json:"variant"`
-	JSON      profileIntegrationProfileSharedEntriesPredefinedEntryJSON    `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// A Predefined AI prompt classification topic entry.
+	Variant ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant `json:"variant"`
+	JSON    profileIntegrationProfileSharedEntriesPredefinedEntryJSON    `json:"-"`
 }
 
 // profileIntegrationProfileSharedEntriesPredefinedEntryJSON contains the JSON
@@ -2839,17 +3262,90 @@ func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryType) IsKnown() boo
 	return false
 }
 
+// A Predefined AI prompt classification topic entry.
 type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant struct {
-	TopicType   ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTopicType `json:"topic_type" api:"required"`
-	Type        ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType      `json:"type" api:"required"`
+	Type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
 	Description string                                                                `json:"description" api:"nullable"`
+	TopicType   ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTopicType `json:"topic_type"`
 	JSON        profileIntegrationProfileSharedEntriesPredefinedEntryVariantJSON      `json:"-"`
+	union       ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantUnion
 }
 
 // profileIntegrationProfileSharedEntriesPredefinedEntryVariantJSON contains the
 // JSON metadata for the struct
 // [ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant]
 type profileIntegrationProfileSharedEntriesPredefinedEntryVariantJSON struct {
+	Type        apijson.Field
+	Description apijson.Field
+	TopicType   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r profileIntegrationProfileSharedEntriesPredefinedEntryVariantJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject],
+// [ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject].
+func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant) AsUnion() ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantUnion {
+	return r.union
+}
+
+// A Predefined AI prompt classification topic entry.
+//
+// Union satisfied by
+// [ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject] or
+// [ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject].
+type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantUnion interface {
+	implementsProfileIntegrationProfileSharedEntriesPredefinedEntryVariant()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject{}),
+		},
+	)
+}
+
+// A Predefined AI prompt classification topic entry.
+type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject struct {
+	TopicType ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
+	Type      ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
+	// A customer-facing explanation of what this predefined AI prompt topic
+	// represents.
+	Description string                                                                 `json:"description" api:"nullable"`
+	JSON        profileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectJSON `json:"-"`
+}
+
+// profileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectJSON contains
+// the JSON metadata for the struct
+// [ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject]
+type profileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectJSON struct {
 	TopicType   apijson.Field
 	Type        apijson.Field
 	Description apijson.Field
@@ -2857,12 +3353,59 @@ type profileIntegrationProfileSharedEntriesPredefinedEntryVariantJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileIntegrationProfileSharedEntriesPredefinedEntryVariantJSON) RawJSON() string {
+func (r profileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject) implementsProfileIntegrationProfileSharedEntriesPredefinedEntryVariant() {
+}
+
+type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTopicType string
+
+const (
+	ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTopicTypeIntent  ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTopicType = "Intent"
+	ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTopicTypeContent ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTopicType = "Content"
+)
+
+func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTopicType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTopicTypeIntent, ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTopicTypeContent:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectType string
+
+const (
+	ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTypePromptTopic ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectType = "PromptTopic"
+)
+
+func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTypePromptTopic:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType string
+
+const (
+	ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTypePromptTopic ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType = "PromptTopic"
+	ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTypeGeneral     ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType = "General"
+)
+
+func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTypePromptTopic, ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTypeGeneral:
+		return true
+	}
+	return false
 }
 
 type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTopicType string
@@ -2875,20 +3418,6 @@ const (
 func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTopicType) IsKnown() bool {
 	switch r {
 	case ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTopicTypeIntent, ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTopicTypeContent:
-		return true
-	}
-	return false
-}
-
-type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType string
-
-const (
-	ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTypePromptTopic ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType = "PromptTopic"
-)
-
-func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType) IsKnown() bool {
-	switch r {
-	case ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantTypePromptTopic:
 		return true
 	}
 	return false
