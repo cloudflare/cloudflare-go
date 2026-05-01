@@ -25,20 +25,21 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDeviceService] method instead.
 type DeviceService struct {
-	Options       []option.RequestOption
-	Devices       *DeviceDeviceService
-	Resilience    *DeviceResilienceService
-	Registrations *DeviceRegistrationService
-	DEXTests      *DeviceDEXTestService
-	IPProfiles    *DeviceIPProfileService
-	Networks      *DeviceNetworkService
-	FleetStatus   *DeviceFleetStatusService
-	Policies      *DevicePolicyService
-	Posture       *DevicePostureService
-	Revoke        *DeviceRevokeService
-	Settings      *DeviceSettingService
-	Unrevoke      *DeviceUnrevokeService
-	OverrideCodes *DeviceOverrideCodeService
+	Options          []option.RequestOption
+	Devices          *DeviceDeviceService
+	Resilience       *DeviceResilienceService
+	Registrations    *DeviceRegistrationService
+	DEXTests         *DeviceDEXTestService
+	IPProfiles       *DeviceIPProfileService
+	DeploymentGroups *DeviceDeploymentGroupService
+	Networks         *DeviceNetworkService
+	FleetStatus      *DeviceFleetStatusService
+	Policies         *DevicePolicyService
+	Posture          *DevicePostureService
+	Revoke           *DeviceRevokeService
+	Settings         *DeviceSettingService
+	Unrevoke         *DeviceUnrevokeService
+	OverrideCodes    *DeviceOverrideCodeService
 }
 
 // NewDeviceService generates a new service that applies the given options to each
@@ -52,6 +53,7 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 	r.Registrations = NewDeviceRegistrationService(opts...)
 	r.DEXTests = NewDeviceDEXTestService(opts...)
 	r.IPProfiles = NewDeviceIPProfileService(opts...)
+	r.DeploymentGroups = NewDeviceDeploymentGroupService(opts...)
 	r.Networks = NewDeviceNetworkService(opts...)
 	r.FleetStatus = NewDeviceFleetStatusService(opts...)
 	r.Policies = NewDevicePolicyService(opts...)
