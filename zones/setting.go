@@ -3986,9 +3986,9 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesReplaceInsecureJSValue],
 	// [SettingEditResponseZonesSchemasResponseBufferingValue],
 	// [SettingEditResponseZonesSchemasRocketLoaderValue],
-	// [AutomaticPlatformOptimization], [SecurityHeadersValue],
-	// [SettingEditResponseZonesSchemasSecurityLevelValue], [ServerSideExcludesValue],
-	// [SettingEditResponseZonesSha1SupportValue],
+	// [AutomaticPlatformOptimization], [SettingEditResponseZonesSearchForAgentsValue],
+	// [SecurityHeadersValue], [SettingEditResponseZonesSchemasSecurityLevelValue],
+	// [ServerSideExcludesValue], [SettingEditResponseZonesSha1SupportValue],
 	// [SettingEditResponseZonesSchemasSortQueryStringForCacheValue],
 	// [SettingEditResponseZonesSchemasSSLValue],
 	// [SettingEditResponseZonesTLS1_2OnlyValue], [TLS1_3Value], [TLSClientAuthValue],
@@ -4056,8 +4056,9 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [SettingEditResponseZonesSchemasResponseBuffering],
 // [SettingEditResponseZonesSchemasRocketLoader],
 // [SettingEditResponseZonesSchemasAutomaticPlatformOptimization],
-// [SecurityHeaders], [SettingEditResponseZonesSchemasSecurityLevel],
-// [ServerSideExcludes], [SettingEditResponseZonesSha1Support],
+// [SettingEditResponseZonesSearchForAgents], [SecurityHeaders],
+// [SettingEditResponseZonesSchemasSecurityLevel], [ServerSideExcludes],
+// [SettingEditResponseZonesSha1Support],
 // [SettingEditResponseZonesSchemasSortQueryStringForCache],
 // [SettingEditResponseZonesSchemasSSL], [SSLRecommender],
 // [SettingEditResponseZonesTLS1_2Only], [TLS1_3], [TLSClientAuth],
@@ -4098,8 +4099,9 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [SettingEditResponseZonesSchemasResponseBuffering],
 // [SettingEditResponseZonesSchemasRocketLoader],
 // [SettingEditResponseZonesSchemasAutomaticPlatformOptimization],
-// [SecurityHeaders], [SettingEditResponseZonesSchemasSecurityLevel],
-// [ServerSideExcludes], [SettingEditResponseZonesSha1Support],
+// [SettingEditResponseZonesSearchForAgents], [SecurityHeaders],
+// [SettingEditResponseZonesSchemasSecurityLevel], [ServerSideExcludes],
+// [SettingEditResponseZonesSha1Support],
 // [SettingEditResponseZonesSchemasSortQueryStringForCache],
 // [SettingEditResponseZonesSchemasSSL], [SSLRecommender],
 // [SettingEditResponseZonesTLS1_2Only], [TLS1_3], [TLSClientAuth],
@@ -4298,6 +4300,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasAutomaticPlatformOptimization{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSearchForAgents{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -6472,6 +6478,92 @@ func (r SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditable) Is
 	return false
 }
 
+// When enabled, Cloudflare provisions an AI Search instance for the zone and
+// exposes a /.well-known/ai-search endpoint that AI agents can query. Markdown
+// responses also receive an agent: YAML capability block advertising the search
+// endpoint.
+type SettingEditResponseZonesSearchForAgents struct {
+	// ID of the zone setting.
+	ID SettingEditResponseZonesSearchForAgentsID `json:"id" api:"required"`
+	// Current value of the zone setting.
+	Value SettingEditResponseZonesSearchForAgentsValue `json:"value" api:"required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingEditResponseZonesSearchForAgentsEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                   `json:"modified_on" api:"nullable" format:"date-time"`
+	JSON       settingEditResponseZonesSearchForAgentsJSON `json:"-"`
+}
+
+// settingEditResponseZonesSearchForAgentsJSON contains the JSON metadata for the
+// struct [SettingEditResponseZonesSearchForAgents]
+type settingEditResponseZonesSearchForAgentsJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesSearchForAgentsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesSearchForAgents) implementsSettingEditResponse() {}
+
+// ID of the zone setting.
+type SettingEditResponseZonesSearchForAgentsID string
+
+const (
+	SettingEditResponseZonesSearchForAgentsIDSearchForAgents SettingEditResponseZonesSearchForAgentsID = "search_for_agents"
+)
+
+func (r SettingEditResponseZonesSearchForAgentsID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesSearchForAgentsIDSearchForAgents:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+type SettingEditResponseZonesSearchForAgentsValue string
+
+const (
+	SettingEditResponseZonesSearchForAgentsValueOff SettingEditResponseZonesSearchForAgentsValue = "off"
+	SettingEditResponseZonesSearchForAgentsValueOn  SettingEditResponseZonesSearchForAgentsValue = "on"
+)
+
+func (r SettingEditResponseZonesSearchForAgentsValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesSearchForAgentsValueOff, SettingEditResponseZonesSearchForAgentsValueOn:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditResponseZonesSearchForAgentsEditable bool
+
+const (
+	SettingEditResponseZonesSearchForAgentsEditableTrue  SettingEditResponseZonesSearchForAgentsEditable = true
+	SettingEditResponseZonesSearchForAgentsEditableFalse SettingEditResponseZonesSearchForAgentsEditable = false
+)
+
+func (r SettingEditResponseZonesSearchForAgentsEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesSearchForAgentsEditableTrue, SettingEditResponseZonesSearchForAgentsEditableFalse:
+		return true
+	}
+	return false
+}
+
 // Choose the appropriate security profile for your website, which will
 // automatically adjust each of the security settings. If you choose to customize
 // an individual security setting, the profile will become Custom.
@@ -7302,6 +7394,7 @@ const (
 	SettingEditResponseIDResponseBuffering             SettingEditResponseID = "response_buffering"
 	SettingEditResponseIDRocketLoader                  SettingEditResponseID = "rocket_loader"
 	SettingEditResponseIDAutomaticPlatformOptimization SettingEditResponseID = "automatic_platform_optimization"
+	SettingEditResponseIDSearchForAgents               SettingEditResponseID = "search_for_agents"
 	SettingEditResponseIDSecurityHeader                SettingEditResponseID = "security_header"
 	SettingEditResponseIDSecurityLevel                 SettingEditResponseID = "security_level"
 	SettingEditResponseIDServerSideExclude             SettingEditResponseID = "server_side_exclude"
@@ -7322,7 +7415,7 @@ const (
 
 func (r SettingEditResponseID) IsKnown() bool {
 	switch r {
-	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDChinaNetworkEnabled, SettingEditResponseIDContentConverter, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDRedirectsForAITraining, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTransformations, SettingEditResponseIDTransformationsAllowedOrigins, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
+	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDChinaNetworkEnabled, SettingEditResponseIDContentConverter, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDRedirectsForAITraining, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSearchForAgents, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTransformations, SettingEditResponseIDTransformationsAllowedOrigins, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -7385,9 +7478,9 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesReplaceInsecureJSValue],
 	// [SettingGetResponseZonesSchemasResponseBufferingValue],
 	// [SettingGetResponseZonesSchemasRocketLoaderValue],
-	// [AutomaticPlatformOptimization], [SecurityHeadersValue],
-	// [SettingGetResponseZonesSchemasSecurityLevelValue], [ServerSideExcludesValue],
-	// [SettingGetResponseZonesSha1SupportValue],
+	// [AutomaticPlatformOptimization], [SettingGetResponseZonesSearchForAgentsValue],
+	// [SecurityHeadersValue], [SettingGetResponseZonesSchemasSecurityLevelValue],
+	// [ServerSideExcludesValue], [SettingGetResponseZonesSha1SupportValue],
 	// [SettingGetResponseZonesSchemasSortQueryStringForCacheValue],
 	// [SettingGetResponseZonesSchemasSSLValue],
 	// [SettingGetResponseZonesTLS1_2OnlyValue], [TLS1_3Value], [TLSClientAuthValue],
@@ -7455,8 +7548,9 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [SettingGetResponseZonesSchemasResponseBuffering],
 // [SettingGetResponseZonesSchemasRocketLoader],
 // [SettingGetResponseZonesSchemasAutomaticPlatformOptimization],
-// [SecurityHeaders], [SettingGetResponseZonesSchemasSecurityLevel],
-// [ServerSideExcludes], [SettingGetResponseZonesSha1Support],
+// [SettingGetResponseZonesSearchForAgents], [SecurityHeaders],
+// [SettingGetResponseZonesSchemasSecurityLevel], [ServerSideExcludes],
+// [SettingGetResponseZonesSha1Support],
 // [SettingGetResponseZonesSchemasSortQueryStringForCache],
 // [SettingGetResponseZonesSchemasSSL], [SSLRecommender],
 // [SettingGetResponseZonesTLS1_2Only], [TLS1_3], [TLSClientAuth],
@@ -7497,8 +7591,9 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [SettingGetResponseZonesSchemasResponseBuffering],
 // [SettingGetResponseZonesSchemasRocketLoader],
 // [SettingGetResponseZonesSchemasAutomaticPlatformOptimization],
-// [SecurityHeaders], [SettingGetResponseZonesSchemasSecurityLevel],
-// [ServerSideExcludes], [SettingGetResponseZonesSha1Support],
+// [SettingGetResponseZonesSearchForAgents], [SecurityHeaders],
+// [SettingGetResponseZonesSchemasSecurityLevel], [ServerSideExcludes],
+// [SettingGetResponseZonesSha1Support],
 // [SettingGetResponseZonesSchemasSortQueryStringForCache],
 // [SettingGetResponseZonesSchemasSSL], [SSLRecommender],
 // [SettingGetResponseZonesTLS1_2Only], [TLS1_3], [TLSClientAuth],
@@ -7697,6 +7792,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasAutomaticPlatformOptimization{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSearchForAgents{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -9870,6 +9969,92 @@ func (r SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable) IsK
 	return false
 }
 
+// When enabled, Cloudflare provisions an AI Search instance for the zone and
+// exposes a /.well-known/ai-search endpoint that AI agents can query. Markdown
+// responses also receive an agent: YAML capability block advertising the search
+// endpoint.
+type SettingGetResponseZonesSearchForAgents struct {
+	// ID of the zone setting.
+	ID SettingGetResponseZonesSearchForAgentsID `json:"id" api:"required"`
+	// Current value of the zone setting.
+	Value SettingGetResponseZonesSearchForAgentsValue `json:"value" api:"required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingGetResponseZonesSearchForAgentsEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                  `json:"modified_on" api:"nullable" format:"date-time"`
+	JSON       settingGetResponseZonesSearchForAgentsJSON `json:"-"`
+}
+
+// settingGetResponseZonesSearchForAgentsJSON contains the JSON metadata for the
+// struct [SettingGetResponseZonesSearchForAgents]
+type settingGetResponseZonesSearchForAgentsJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesSearchForAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesSearchForAgentsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesSearchForAgents) implementsSettingGetResponse() {}
+
+// ID of the zone setting.
+type SettingGetResponseZonesSearchForAgentsID string
+
+const (
+	SettingGetResponseZonesSearchForAgentsIDSearchForAgents SettingGetResponseZonesSearchForAgentsID = "search_for_agents"
+)
+
+func (r SettingGetResponseZonesSearchForAgentsID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesSearchForAgentsIDSearchForAgents:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+type SettingGetResponseZonesSearchForAgentsValue string
+
+const (
+	SettingGetResponseZonesSearchForAgentsValueOff SettingGetResponseZonesSearchForAgentsValue = "off"
+	SettingGetResponseZonesSearchForAgentsValueOn  SettingGetResponseZonesSearchForAgentsValue = "on"
+)
+
+func (r SettingGetResponseZonesSearchForAgentsValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesSearchForAgentsValueOff, SettingGetResponseZonesSearchForAgentsValueOn:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingGetResponseZonesSearchForAgentsEditable bool
+
+const (
+	SettingGetResponseZonesSearchForAgentsEditableTrue  SettingGetResponseZonesSearchForAgentsEditable = true
+	SettingGetResponseZonesSearchForAgentsEditableFalse SettingGetResponseZonesSearchForAgentsEditable = false
+)
+
+func (r SettingGetResponseZonesSearchForAgentsEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesSearchForAgentsEditableTrue, SettingGetResponseZonesSearchForAgentsEditableFalse:
+		return true
+	}
+	return false
+}
+
 // Choose the appropriate security profile for your website, which will
 // automatically adjust each of the security settings. If you choose to customize
 // an individual security setting, the profile will become Custom.
@@ -10700,6 +10885,7 @@ const (
 	SettingGetResponseIDResponseBuffering             SettingGetResponseID = "response_buffering"
 	SettingGetResponseIDRocketLoader                  SettingGetResponseID = "rocket_loader"
 	SettingGetResponseIDAutomaticPlatformOptimization SettingGetResponseID = "automatic_platform_optimization"
+	SettingGetResponseIDSearchForAgents               SettingGetResponseID = "search_for_agents"
 	SettingGetResponseIDSecurityHeader                SettingGetResponseID = "security_header"
 	SettingGetResponseIDSecurityLevel                 SettingGetResponseID = "security_level"
 	SettingGetResponseIDServerSideExclude             SettingGetResponseID = "server_side_exclude"
@@ -10720,7 +10906,7 @@ const (
 
 func (r SettingGetResponseID) IsKnown() bool {
 	switch r {
-	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDChinaNetworkEnabled, SettingGetResponseIDContentConverter, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDRedirectsForAITraining, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTransformations, SettingGetResponseIDTransformationsAllowedOrigins, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
+	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDChinaNetworkEnabled, SettingGetResponseIDContentConverter, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDRedirectsForAITraining, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSearchForAgents, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTransformations, SettingGetResponseIDTransformationsAllowedOrigins, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
 		return true
 	}
 	return false
