@@ -70,6 +70,7 @@ func TestZoneListWithOptionalParams(t *testing.T) {
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 		Status:    cloudflare.F(zones.ZoneListParamsStatusInitializing),
+		Type:      cloudflare.F([]zones.ZoneListParamsType{zones.ZoneListParamsTypeFull}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
