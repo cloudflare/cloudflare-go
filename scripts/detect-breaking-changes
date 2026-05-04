@@ -722,6 +722,9 @@ TEST_PATHS=(
 	security_center/insightclass_test.go
 	security_center/insightseverity_test.go
 	security_center/insighttype_test.go
+	security_center/insightauditlog_test.go
+	security_center/insightclassification_test.go
+	security_center/insightcontext_test.go
 	browser_rendering/content_test.go
 	browser_rendering/pdf_test.go
 	browser_rendering/scrape_test.go

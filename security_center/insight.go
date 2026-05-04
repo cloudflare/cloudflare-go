@@ -27,10 +27,13 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewInsightService] method instead.
 type InsightService struct {
-	Options  []option.RequestOption
-	Class    *InsightClassService
-	Severity *InsightSeverityService
-	Type     *InsightTypeService
+	Options        []option.RequestOption
+	Class          *InsightClassService
+	Severity       *InsightSeverityService
+	Type           *InsightTypeService
+	AuditLogs      *InsightAuditLogService
+	Classification *InsightClassificationService
+	Context        *InsightContextService
 }
 
 // NewInsightService generates a new service that applies the given options to each
@@ -42,6 +45,9 @@ func NewInsightService(opts ...option.RequestOption) (r *InsightService) {
 	r.Class = NewInsightClassService(opts...)
 	r.Severity = NewInsightSeverityService(opts...)
 	r.Type = NewInsightTypeService(opts...)
+	r.AuditLogs = NewInsightAuditLogService(opts...)
+	r.Classification = NewInsightClassificationService(opts...)
+	r.Context = NewInsightContextService(opts...)
 	return
 }
 
