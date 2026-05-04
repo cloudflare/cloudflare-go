@@ -282,7 +282,7 @@ type IndicatorFeedGetResponse struct {
 	// The name of the indicator feed
 	Name string `json:"name"`
 	// The unique identifier for the provider
-	ProviderID string `json:"provider_id"`
+	ProviderID int64 `json:"provider_id"`
 	// The provider of the indicator feed
 	ProviderName string                       `json:"provider_name"`
 	JSON         indicatorFeedGetResponseJSON `json:"-"`

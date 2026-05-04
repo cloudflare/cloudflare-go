@@ -1666,24 +1666,25 @@ func (r DNSTimeseriesGroupsV2Params) URLQuery() (v url.Values) {
 type DNSTimeseriesGroupsV2ParamsDimension string
 
 const (
-	DNSTimeseriesGroupsV2ParamsDimensionAs             DNSTimeseriesGroupsV2ParamsDimension = "AS"
-	DNSTimeseriesGroupsV2ParamsDimensionCacheHit       DNSTimeseriesGroupsV2ParamsDimension = "CACHE_HIT"
-	DNSTimeseriesGroupsV2ParamsDimensionDNSSEC         DNSTimeseriesGroupsV2ParamsDimension = "DNSSEC"
-	DNSTimeseriesGroupsV2ParamsDimensionDNSSECAware    DNSTimeseriesGroupsV2ParamsDimension = "DNSSEC_AWARE"
-	DNSTimeseriesGroupsV2ParamsDimensionDNSSECE2E      DNSTimeseriesGroupsV2ParamsDimension = "DNSSEC_E2E"
-	DNSTimeseriesGroupsV2ParamsDimensionIPVersion      DNSTimeseriesGroupsV2ParamsDimension = "IP_VERSION"
-	DNSTimeseriesGroupsV2ParamsDimensionLocation       DNSTimeseriesGroupsV2ParamsDimension = "LOCATION"
-	DNSTimeseriesGroupsV2ParamsDimensionMatchingAnswer DNSTimeseriesGroupsV2ParamsDimension = "MATCHING_ANSWER"
-	DNSTimeseriesGroupsV2ParamsDimensionProtocol       DNSTimeseriesGroupsV2ParamsDimension = "PROTOCOL"
-	DNSTimeseriesGroupsV2ParamsDimensionQueryType      DNSTimeseriesGroupsV2ParamsDimension = "QUERY_TYPE"
-	DNSTimeseriesGroupsV2ParamsDimensionResponseCode   DNSTimeseriesGroupsV2ParamsDimension = "RESPONSE_CODE"
-	DNSTimeseriesGroupsV2ParamsDimensionResponseTTL    DNSTimeseriesGroupsV2ParamsDimension = "RESPONSE_TTL"
-	DNSTimeseriesGroupsV2ParamsDimensionTLD            DNSTimeseriesGroupsV2ParamsDimension = "TLD"
+	DNSTimeseriesGroupsV2ParamsDimensionAs              DNSTimeseriesGroupsV2ParamsDimension = "AS"
+	DNSTimeseriesGroupsV2ParamsDimensionCacheHit        DNSTimeseriesGroupsV2ParamsDimension = "CACHE_HIT"
+	DNSTimeseriesGroupsV2ParamsDimensionDNSSEC          DNSTimeseriesGroupsV2ParamsDimension = "DNSSEC"
+	DNSTimeseriesGroupsV2ParamsDimensionDNSSECAware     DNSTimeseriesGroupsV2ParamsDimension = "DNSSEC_AWARE"
+	DNSTimeseriesGroupsV2ParamsDimensionDNSSECE2E       DNSTimeseriesGroupsV2ParamsDimension = "DNSSEC_E2E"
+	DNSTimeseriesGroupsV2ParamsDimensionIPVersion       DNSTimeseriesGroupsV2ParamsDimension = "IP_VERSION"
+	DNSTimeseriesGroupsV2ParamsDimensionLocation        DNSTimeseriesGroupsV2ParamsDimension = "LOCATION"
+	DNSTimeseriesGroupsV2ParamsDimensionMatchingAnswer  DNSTimeseriesGroupsV2ParamsDimension = "MATCHING_ANSWER"
+	DNSTimeseriesGroupsV2ParamsDimensionProtocol        DNSTimeseriesGroupsV2ParamsDimension = "PROTOCOL"
+	DNSTimeseriesGroupsV2ParamsDimensionQueryType       DNSTimeseriesGroupsV2ParamsDimension = "QUERY_TYPE"
+	DNSTimeseriesGroupsV2ParamsDimensionResponseCode    DNSTimeseriesGroupsV2ParamsDimension = "RESPONSE_CODE"
+	DNSTimeseriesGroupsV2ParamsDimensionResponseTTL     DNSTimeseriesGroupsV2ParamsDimension = "RESPONSE_TTL"
+	DNSTimeseriesGroupsV2ParamsDimensionTLD             DNSTimeseriesGroupsV2ParamsDimension = "TLD"
+	DNSTimeseriesGroupsV2ParamsDimensionTLDDNSMagnitude DNSTimeseriesGroupsV2ParamsDimension = "TLD_DNS_MAGNITUDE"
 )
 
 func (r DNSTimeseriesGroupsV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupsV2ParamsDimensionAs, DNSTimeseriesGroupsV2ParamsDimensionCacheHit, DNSTimeseriesGroupsV2ParamsDimensionDNSSEC, DNSTimeseriesGroupsV2ParamsDimensionDNSSECAware, DNSTimeseriesGroupsV2ParamsDimensionDNSSECE2E, DNSTimeseriesGroupsV2ParamsDimensionIPVersion, DNSTimeseriesGroupsV2ParamsDimensionLocation, DNSTimeseriesGroupsV2ParamsDimensionMatchingAnswer, DNSTimeseriesGroupsV2ParamsDimensionProtocol, DNSTimeseriesGroupsV2ParamsDimensionQueryType, DNSTimeseriesGroupsV2ParamsDimensionResponseCode, DNSTimeseriesGroupsV2ParamsDimensionResponseTTL, DNSTimeseriesGroupsV2ParamsDimensionTLD:
+	case DNSTimeseriesGroupsV2ParamsDimensionAs, DNSTimeseriesGroupsV2ParamsDimensionCacheHit, DNSTimeseriesGroupsV2ParamsDimensionDNSSEC, DNSTimeseriesGroupsV2ParamsDimensionDNSSECAware, DNSTimeseriesGroupsV2ParamsDimensionDNSSECE2E, DNSTimeseriesGroupsV2ParamsDimensionIPVersion, DNSTimeseriesGroupsV2ParamsDimensionLocation, DNSTimeseriesGroupsV2ParamsDimensionMatchingAnswer, DNSTimeseriesGroupsV2ParamsDimensionProtocol, DNSTimeseriesGroupsV2ParamsDimensionQueryType, DNSTimeseriesGroupsV2ParamsDimensionResponseCode, DNSTimeseriesGroupsV2ParamsDimensionResponseTTL, DNSTimeseriesGroupsV2ParamsDimensionTLD, DNSTimeseriesGroupsV2ParamsDimensionTLDDNSMagnitude:
 		return true
 	}
 	return false
@@ -1779,11 +1780,12 @@ type DNSTimeseriesGroupsV2ParamsNormalization string
 const (
 	DNSTimeseriesGroupsV2ParamsNormalizationPercentage DNSTimeseriesGroupsV2ParamsNormalization = "PERCENTAGE"
 	DNSTimeseriesGroupsV2ParamsNormalizationMin0Max    DNSTimeseriesGroupsV2ParamsNormalization = "MIN0_MAX"
+	DNSTimeseriesGroupsV2ParamsNormalizationRank       DNSTimeseriesGroupsV2ParamsNormalization = "RANK"
 )
 
 func (r DNSTimeseriesGroupsV2ParamsNormalization) IsKnown() bool {
 	switch r {
-	case DNSTimeseriesGroupsV2ParamsNormalizationPercentage, DNSTimeseriesGroupsV2ParamsNormalizationMin0Max:
+	case DNSTimeseriesGroupsV2ParamsNormalizationPercentage, DNSTimeseriesGroupsV2ParamsNormalizationMin0Max, DNSTimeseriesGroupsV2ParamsNormalizationRank:
 		return true
 	}
 	return false
