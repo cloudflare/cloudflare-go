@@ -69,7 +69,9 @@ type UsagePaygoResponse struct {
 	ChargePeriodStart time.Time `json:"ChargePeriodStart" api:"required" format:"date-time"`
 	// Specifies the quantity consumed during this charge period.
 	ConsumedQuantity float64 `json:"ConsumedQuantity" api:"required"`
-	// Specifies the unit of measurement for consumed quantity.
+	// A display name for the unit of measurement used for the product (for example,
+	// "GB-months", "GB-seconds"). May be empty when the unit is implicit in the
+	// service name.
 	ConsumedUnit string `json:"ConsumedUnit" api:"required"`
 	// Specifies the cost for this charge period in the billing currency.
 	ContractedCost float64 `json:"ContractedCost" api:"required"`

@@ -32,6 +32,7 @@ func TestSubmissionListWithOptionalParams(t *testing.T) {
 	_, err := client.EmailSecurity.Submissions.List(context.TODO(), email_security.SubmissionListParams{
 		AccountID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		End:                  cloudflare.F(time.Now()),
+		EscalatedFromUser:    cloudflare.F(true),
 		OriginalDisposition:  cloudflare.F(email_security.SubmissionListParamsOriginalDispositionMalicious),
 		OutcomeDisposition:   cloudflare.F(email_security.SubmissionListParamsOutcomeDispositionMalicious),
 		Page:                 cloudflare.F(int64(1)),

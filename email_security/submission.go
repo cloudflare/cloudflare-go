@@ -242,7 +242,11 @@ type SubmissionListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The end of the search date range. Defaults to `now`.
-	End                 param.Field[time.Time]                               `query:"end" format:"date-time"`
+	End param.Field[time.Time] `query:"end" format:"date-time"`
+	// When true, return only submissions that were escalated by an end user (vs. by
+	// the security team). When false, return only submissions that were not escalated
+	// by an end user. When omitted, no filter is applied.
+	EscalatedFromUser   param.Field[bool]                                    `query:"escalated_from_user"`
 	OriginalDisposition param.Field[SubmissionListParamsOriginalDisposition] `query:"original_disposition"`
 	OutcomeDisposition  param.Field[SubmissionListParamsOutcomeDisposition]  `query:"outcome_disposition"`
 	// Current page within paginated list of results.
