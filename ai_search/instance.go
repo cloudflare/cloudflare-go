@@ -210,13 +210,17 @@ func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceSt
 
 type InstanceNewResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                              `json:"id" api:"required"`
-	CreatedAt      time.Time                           `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                           `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                              `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel  InstanceNewResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
-	Cache          bool                                `json:"cache"`
-	CacheThreshold InstanceNewResponseCacheThreshold   `json:"cache_threshold"`
+	ID             string                            `json:"id" api:"required"`
+	CreatedAt      time.Time                         `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                         `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                            `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceNewResponseAISearchModel  `json:"ai_search_model" api:"nullable"`
+	Cache          bool                              `json:"cache"`
+	CacheThreshold InstanceNewResponseCacheThreshold `json:"cache_threshold"`
+	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+	// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+	// (72h), 518400 (6d).
+	CacheTTL       InstanceNewResponseCacheTTL         `json:"cache_ttl"`
 	ChunkOverlap   int64                               `json:"chunk_overlap"`
 	ChunkSize      int64                               `json:"chunk_size"`
 	CreatedBy      string                              `json:"created_by" api:"nullable"`
@@ -268,6 +272,7 @@ type instanceNewResponseJSON struct {
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
 	CacheThreshold       apijson.Field
+	CacheTTL             apijson.Field
 	ChunkOverlap         apijson.Field
 	ChunkSize            apijson.Field
 	CreatedBy            apijson.Field
@@ -366,6 +371,32 @@ const (
 func (r InstanceNewResponseCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceNewResponseCacheThresholdSuperStrictMatch, InstanceNewResponseCacheThresholdCloseEnough, InstanceNewResponseCacheThresholdFlexibleFriend, InstanceNewResponseCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+// (72h), 518400 (6d).
+type InstanceNewResponseCacheTTL float64
+
+const (
+	InstanceNewResponseCacheTTL600    InstanceNewResponseCacheTTL = 600
+	InstanceNewResponseCacheTTL1800   InstanceNewResponseCacheTTL = 1800
+	InstanceNewResponseCacheTTL3600   InstanceNewResponseCacheTTL = 3600
+	InstanceNewResponseCacheTTL7200   InstanceNewResponseCacheTTL = 7200
+	InstanceNewResponseCacheTTL21600  InstanceNewResponseCacheTTL = 21600
+	InstanceNewResponseCacheTTL43200  InstanceNewResponseCacheTTL = 43200
+	InstanceNewResponseCacheTTL86400  InstanceNewResponseCacheTTL = 86400
+	InstanceNewResponseCacheTTL172800 InstanceNewResponseCacheTTL = 172800
+	InstanceNewResponseCacheTTL259200 InstanceNewResponseCacheTTL = 259200
+	InstanceNewResponseCacheTTL518400 InstanceNewResponseCacheTTL = 518400
+)
+
+func (r InstanceNewResponseCacheTTL) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseCacheTTL600, InstanceNewResponseCacheTTL1800, InstanceNewResponseCacheTTL3600, InstanceNewResponseCacheTTL7200, InstanceNewResponseCacheTTL21600, InstanceNewResponseCacheTTL43200, InstanceNewResponseCacheTTL86400, InstanceNewResponseCacheTTL172800, InstanceNewResponseCacheTTL259200, InstanceNewResponseCacheTTL518400:
 		return true
 	}
 	return false
@@ -1089,13 +1120,17 @@ func (r InstanceNewResponseType) IsKnown() bool {
 
 type InstanceUpdateResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                                 `json:"id" api:"required"`
-	CreatedAt      time.Time                              `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                              `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                                 `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel  InstanceUpdateResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
-	Cache          bool                                   `json:"cache"`
-	CacheThreshold InstanceUpdateResponseCacheThreshold   `json:"cache_threshold"`
+	ID             string                               `json:"id" api:"required"`
+	CreatedAt      time.Time                            `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                            `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                               `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceUpdateResponseAISearchModel  `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                 `json:"cache"`
+	CacheThreshold InstanceUpdateResponseCacheThreshold `json:"cache_threshold"`
+	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+	// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+	// (72h), 518400 (6d).
+	CacheTTL       InstanceUpdateResponseCacheTTL         `json:"cache_ttl"`
 	ChunkOverlap   int64                                  `json:"chunk_overlap"`
 	ChunkSize      int64                                  `json:"chunk_size"`
 	CreatedBy      string                                 `json:"created_by" api:"nullable"`
@@ -1147,6 +1182,7 @@ type instanceUpdateResponseJSON struct {
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
 	CacheThreshold       apijson.Field
+	CacheTTL             apijson.Field
 	ChunkOverlap         apijson.Field
 	ChunkSize            apijson.Field
 	CreatedBy            apijson.Field
@@ -1245,6 +1281,32 @@ const (
 func (r InstanceUpdateResponseCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceUpdateResponseCacheThresholdSuperStrictMatch, InstanceUpdateResponseCacheThresholdCloseEnough, InstanceUpdateResponseCacheThresholdFlexibleFriend, InstanceUpdateResponseCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+// (72h), 518400 (6d).
+type InstanceUpdateResponseCacheTTL float64
+
+const (
+	InstanceUpdateResponseCacheTTL600    InstanceUpdateResponseCacheTTL = 600
+	InstanceUpdateResponseCacheTTL1800   InstanceUpdateResponseCacheTTL = 1800
+	InstanceUpdateResponseCacheTTL3600   InstanceUpdateResponseCacheTTL = 3600
+	InstanceUpdateResponseCacheTTL7200   InstanceUpdateResponseCacheTTL = 7200
+	InstanceUpdateResponseCacheTTL21600  InstanceUpdateResponseCacheTTL = 21600
+	InstanceUpdateResponseCacheTTL43200  InstanceUpdateResponseCacheTTL = 43200
+	InstanceUpdateResponseCacheTTL86400  InstanceUpdateResponseCacheTTL = 86400
+	InstanceUpdateResponseCacheTTL172800 InstanceUpdateResponseCacheTTL = 172800
+	InstanceUpdateResponseCacheTTL259200 InstanceUpdateResponseCacheTTL = 259200
+	InstanceUpdateResponseCacheTTL518400 InstanceUpdateResponseCacheTTL = 518400
+)
+
+func (r InstanceUpdateResponseCacheTTL) IsKnown() bool {
+	switch r {
+	case InstanceUpdateResponseCacheTTL600, InstanceUpdateResponseCacheTTL1800, InstanceUpdateResponseCacheTTL3600, InstanceUpdateResponseCacheTTL7200, InstanceUpdateResponseCacheTTL21600, InstanceUpdateResponseCacheTTL43200, InstanceUpdateResponseCacheTTL86400, InstanceUpdateResponseCacheTTL172800, InstanceUpdateResponseCacheTTL259200, InstanceUpdateResponseCacheTTL518400:
 		return true
 	}
 	return false
@@ -1972,13 +2034,17 @@ func (r InstanceUpdateResponseType) IsKnown() bool {
 
 type InstanceListResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                               `json:"id" api:"required"`
-	CreatedAt      time.Time                            `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                            `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                               `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel  InstanceListResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
-	Cache          bool                                 `json:"cache"`
-	CacheThreshold InstanceListResponseCacheThreshold   `json:"cache_threshold"`
+	ID             string                             `json:"id" api:"required"`
+	CreatedAt      time.Time                          `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                          `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                             `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceListResponseAISearchModel  `json:"ai_search_model" api:"nullable"`
+	Cache          bool                               `json:"cache"`
+	CacheThreshold InstanceListResponseCacheThreshold `json:"cache_threshold"`
+	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+	// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+	// (72h), 518400 (6d).
+	CacheTTL       InstanceListResponseCacheTTL         `json:"cache_ttl"`
 	ChunkOverlap   int64                                `json:"chunk_overlap"`
 	ChunkSize      int64                                `json:"chunk_size"`
 	CreatedBy      string                               `json:"created_by" api:"nullable"`
@@ -2030,6 +2096,7 @@ type instanceListResponseJSON struct {
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
 	CacheThreshold       apijson.Field
+	CacheTTL             apijson.Field
 	ChunkOverlap         apijson.Field
 	ChunkSize            apijson.Field
 	CreatedBy            apijson.Field
@@ -2128,6 +2195,32 @@ const (
 func (r InstanceListResponseCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceListResponseCacheThresholdSuperStrictMatch, InstanceListResponseCacheThresholdCloseEnough, InstanceListResponseCacheThresholdFlexibleFriend, InstanceListResponseCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+// (72h), 518400 (6d).
+type InstanceListResponseCacheTTL float64
+
+const (
+	InstanceListResponseCacheTTL600    InstanceListResponseCacheTTL = 600
+	InstanceListResponseCacheTTL1800   InstanceListResponseCacheTTL = 1800
+	InstanceListResponseCacheTTL3600   InstanceListResponseCacheTTL = 3600
+	InstanceListResponseCacheTTL7200   InstanceListResponseCacheTTL = 7200
+	InstanceListResponseCacheTTL21600  InstanceListResponseCacheTTL = 21600
+	InstanceListResponseCacheTTL43200  InstanceListResponseCacheTTL = 43200
+	InstanceListResponseCacheTTL86400  InstanceListResponseCacheTTL = 86400
+	InstanceListResponseCacheTTL172800 InstanceListResponseCacheTTL = 172800
+	InstanceListResponseCacheTTL259200 InstanceListResponseCacheTTL = 259200
+	InstanceListResponseCacheTTL518400 InstanceListResponseCacheTTL = 518400
+)
+
+func (r InstanceListResponseCacheTTL) IsKnown() bool {
+	switch r {
+	case InstanceListResponseCacheTTL600, InstanceListResponseCacheTTL1800, InstanceListResponseCacheTTL3600, InstanceListResponseCacheTTL7200, InstanceListResponseCacheTTL21600, InstanceListResponseCacheTTL43200, InstanceListResponseCacheTTL86400, InstanceListResponseCacheTTL172800, InstanceListResponseCacheTTL259200, InstanceListResponseCacheTTL518400:
 		return true
 	}
 	return false
@@ -2851,13 +2944,17 @@ func (r InstanceListResponseType) IsKnown() bool {
 
 type InstanceDeleteResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                                 `json:"id" api:"required"`
-	CreatedAt      time.Time                              `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                              `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                                 `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel  InstanceDeleteResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
-	Cache          bool                                   `json:"cache"`
-	CacheThreshold InstanceDeleteResponseCacheThreshold   `json:"cache_threshold"`
+	ID             string                               `json:"id" api:"required"`
+	CreatedAt      time.Time                            `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                            `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                               `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceDeleteResponseAISearchModel  `json:"ai_search_model" api:"nullable"`
+	Cache          bool                                 `json:"cache"`
+	CacheThreshold InstanceDeleteResponseCacheThreshold `json:"cache_threshold"`
+	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+	// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+	// (72h), 518400 (6d).
+	CacheTTL       InstanceDeleteResponseCacheTTL         `json:"cache_ttl"`
 	ChunkOverlap   int64                                  `json:"chunk_overlap"`
 	ChunkSize      int64                                  `json:"chunk_size"`
 	CreatedBy      string                                 `json:"created_by" api:"nullable"`
@@ -2909,6 +3006,7 @@ type instanceDeleteResponseJSON struct {
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
 	CacheThreshold       apijson.Field
+	CacheTTL             apijson.Field
 	ChunkOverlap         apijson.Field
 	ChunkSize            apijson.Field
 	CreatedBy            apijson.Field
@@ -3007,6 +3105,32 @@ const (
 func (r InstanceDeleteResponseCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceDeleteResponseCacheThresholdSuperStrictMatch, InstanceDeleteResponseCacheThresholdCloseEnough, InstanceDeleteResponseCacheThresholdFlexibleFriend, InstanceDeleteResponseCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+// (72h), 518400 (6d).
+type InstanceDeleteResponseCacheTTL float64
+
+const (
+	InstanceDeleteResponseCacheTTL600    InstanceDeleteResponseCacheTTL = 600
+	InstanceDeleteResponseCacheTTL1800   InstanceDeleteResponseCacheTTL = 1800
+	InstanceDeleteResponseCacheTTL3600   InstanceDeleteResponseCacheTTL = 3600
+	InstanceDeleteResponseCacheTTL7200   InstanceDeleteResponseCacheTTL = 7200
+	InstanceDeleteResponseCacheTTL21600  InstanceDeleteResponseCacheTTL = 21600
+	InstanceDeleteResponseCacheTTL43200  InstanceDeleteResponseCacheTTL = 43200
+	InstanceDeleteResponseCacheTTL86400  InstanceDeleteResponseCacheTTL = 86400
+	InstanceDeleteResponseCacheTTL172800 InstanceDeleteResponseCacheTTL = 172800
+	InstanceDeleteResponseCacheTTL259200 InstanceDeleteResponseCacheTTL = 259200
+	InstanceDeleteResponseCacheTTL518400 InstanceDeleteResponseCacheTTL = 518400
+)
+
+func (r InstanceDeleteResponseCacheTTL) IsKnown() bool {
+	switch r {
+	case InstanceDeleteResponseCacheTTL600, InstanceDeleteResponseCacheTTL1800, InstanceDeleteResponseCacheTTL3600, InstanceDeleteResponseCacheTTL7200, InstanceDeleteResponseCacheTTL21600, InstanceDeleteResponseCacheTTL43200, InstanceDeleteResponseCacheTTL86400, InstanceDeleteResponseCacheTTL172800, InstanceDeleteResponseCacheTTL259200, InstanceDeleteResponseCacheTTL518400:
 		return true
 	}
 	return false
@@ -3931,13 +4055,17 @@ func (r InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod) IsKnown
 
 type InstanceReadResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                               `json:"id" api:"required"`
-	CreatedAt      time.Time                            `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                            `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                               `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel  InstanceReadResponseAISearchModel    `json:"ai_search_model" api:"nullable"`
-	Cache          bool                                 `json:"cache"`
-	CacheThreshold InstanceReadResponseCacheThreshold   `json:"cache_threshold"`
+	ID             string                             `json:"id" api:"required"`
+	CreatedAt      time.Time                          `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt     time.Time                          `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID    string                             `json:"ai_gateway_id" api:"nullable"`
+	AISearchModel  InstanceReadResponseAISearchModel  `json:"ai_search_model" api:"nullable"`
+	Cache          bool                               `json:"cache"`
+	CacheThreshold InstanceReadResponseCacheThreshold `json:"cache_threshold"`
+	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+	// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+	// (72h), 518400 (6d).
+	CacheTTL       InstanceReadResponseCacheTTL         `json:"cache_ttl"`
 	ChunkOverlap   int64                                `json:"chunk_overlap"`
 	ChunkSize      int64                                `json:"chunk_size"`
 	CreatedBy      string                               `json:"created_by" api:"nullable"`
@@ -3989,6 +4117,7 @@ type instanceReadResponseJSON struct {
 	AISearchModel        apijson.Field
 	Cache                apijson.Field
 	CacheThreshold       apijson.Field
+	CacheTTL             apijson.Field
 	ChunkOverlap         apijson.Field
 	ChunkSize            apijson.Field
 	CreatedBy            apijson.Field
@@ -4087,6 +4216,32 @@ const (
 func (r InstanceReadResponseCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceReadResponseCacheThresholdSuperStrictMatch, InstanceReadResponseCacheThresholdCloseEnough, InstanceReadResponseCacheThresholdFlexibleFriend, InstanceReadResponseCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+// (72h), 518400 (6d).
+type InstanceReadResponseCacheTTL float64
+
+const (
+	InstanceReadResponseCacheTTL600    InstanceReadResponseCacheTTL = 600
+	InstanceReadResponseCacheTTL1800   InstanceReadResponseCacheTTL = 1800
+	InstanceReadResponseCacheTTL3600   InstanceReadResponseCacheTTL = 3600
+	InstanceReadResponseCacheTTL7200   InstanceReadResponseCacheTTL = 7200
+	InstanceReadResponseCacheTTL21600  InstanceReadResponseCacheTTL = 21600
+	InstanceReadResponseCacheTTL43200  InstanceReadResponseCacheTTL = 43200
+	InstanceReadResponseCacheTTL86400  InstanceReadResponseCacheTTL = 86400
+	InstanceReadResponseCacheTTL172800 InstanceReadResponseCacheTTL = 172800
+	InstanceReadResponseCacheTTL259200 InstanceReadResponseCacheTTL = 259200
+	InstanceReadResponseCacheTTL518400 InstanceReadResponseCacheTTL = 518400
+)
+
+func (r InstanceReadResponseCacheTTL) IsKnown() bool {
+	switch r {
+	case InstanceReadResponseCacheTTL600, InstanceReadResponseCacheTTL1800, InstanceReadResponseCacheTTL3600, InstanceReadResponseCacheTTL7200, InstanceReadResponseCacheTTL21600, InstanceReadResponseCacheTTL43200, InstanceReadResponseCacheTTL86400, InstanceReadResponseCacheTTL172800, InstanceReadResponseCacheTTL259200, InstanceReadResponseCacheTTL518400:
 		return true
 	}
 	return false
@@ -5052,11 +5207,15 @@ func (r instanceStatsResponseEngineVectorizeJSON) RawJSON() string {
 type InstanceNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             param.Field[string]                            `json:"id" api:"required"`
-	AIGatewayID    param.Field[string]                            `json:"ai_gateway_id"`
-	AISearchModel  param.Field[InstanceNewParamsAISearchModel]    `json:"ai_search_model"`
-	Cache          param.Field[bool]                              `json:"cache"`
-	CacheThreshold param.Field[InstanceNewParamsCacheThreshold]   `json:"cache_threshold"`
+	ID             param.Field[string]                          `json:"id" api:"required"`
+	AIGatewayID    param.Field[string]                          `json:"ai_gateway_id"`
+	AISearchModel  param.Field[InstanceNewParamsAISearchModel]  `json:"ai_search_model"`
+	Cache          param.Field[bool]                            `json:"cache"`
+	CacheThreshold param.Field[InstanceNewParamsCacheThreshold] `json:"cache_threshold"`
+	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+	// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+	// (72h), 518400 (6d).
+	CacheTTL       param.Field[InstanceNewParamsCacheTTL]         `json:"cache_ttl"`
 	Chunk          param.Field[bool]                              `json:"chunk"`
 	ChunkOverlap   param.Field[int64]                             `json:"chunk_overlap"`
 	ChunkSize      param.Field[int64]                             `json:"chunk_size"`
@@ -5146,6 +5305,32 @@ const (
 func (r InstanceNewParamsCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceNewParamsCacheThresholdSuperStrictMatch, InstanceNewParamsCacheThresholdCloseEnough, InstanceNewParamsCacheThresholdFlexibleFriend, InstanceNewParamsCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+// (72h), 518400 (6d).
+type InstanceNewParamsCacheTTL float64
+
+const (
+	InstanceNewParamsCacheTTL600    InstanceNewParamsCacheTTL = 600
+	InstanceNewParamsCacheTTL1800   InstanceNewParamsCacheTTL = 1800
+	InstanceNewParamsCacheTTL3600   InstanceNewParamsCacheTTL = 3600
+	InstanceNewParamsCacheTTL7200   InstanceNewParamsCacheTTL = 7200
+	InstanceNewParamsCacheTTL21600  InstanceNewParamsCacheTTL = 21600
+	InstanceNewParamsCacheTTL43200  InstanceNewParamsCacheTTL = 43200
+	InstanceNewParamsCacheTTL86400  InstanceNewParamsCacheTTL = 86400
+	InstanceNewParamsCacheTTL172800 InstanceNewParamsCacheTTL = 172800
+	InstanceNewParamsCacheTTL259200 InstanceNewParamsCacheTTL = 259200
+	InstanceNewParamsCacheTTL518400 InstanceNewParamsCacheTTL = 518400
+)
+
+func (r InstanceNewParamsCacheTTL) IsKnown() bool {
+	switch r {
+	case InstanceNewParamsCacheTTL600, InstanceNewParamsCacheTTL1800, InstanceNewParamsCacheTTL3600, InstanceNewParamsCacheTTL7200, InstanceNewParamsCacheTTL21600, InstanceNewParamsCacheTTL43200, InstanceNewParamsCacheTTL86400, InstanceNewParamsCacheTTL172800, InstanceNewParamsCacheTTL259200, InstanceNewParamsCacheTTL518400:
 		return true
 	}
 	return false
@@ -5637,11 +5822,15 @@ func (r instanceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceUpdateParams struct {
-	AccountID      param.Field[string]                               `path:"account_id" api:"required"`
-	AIGatewayID    param.Field[string]                               `json:"ai_gateway_id"`
-	AISearchModel  param.Field[InstanceUpdateParamsAISearchModel]    `json:"ai_search_model"`
-	Cache          param.Field[bool]                                 `json:"cache"`
-	CacheThreshold param.Field[InstanceUpdateParamsCacheThreshold]   `json:"cache_threshold"`
+	AccountID      param.Field[string]                             `path:"account_id" api:"required"`
+	AIGatewayID    param.Field[string]                             `json:"ai_gateway_id"`
+	AISearchModel  param.Field[InstanceUpdateParamsAISearchModel]  `json:"ai_search_model"`
+	Cache          param.Field[bool]                               `json:"cache"`
+	CacheThreshold param.Field[InstanceUpdateParamsCacheThreshold] `json:"cache_threshold"`
+	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+	// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+	// (72h), 518400 (6d).
+	CacheTTL       param.Field[InstanceUpdateParamsCacheTTL]         `json:"cache_ttl"`
 	Chunk          param.Field[bool]                                 `json:"chunk"`
 	ChunkOverlap   param.Field[int64]                                `json:"chunk_overlap"`
 	ChunkSize      param.Field[int64]                                `json:"chunk_size"`
@@ -5733,6 +5922,32 @@ const (
 func (r InstanceUpdateParamsCacheThreshold) IsKnown() bool {
 	switch r {
 	case InstanceUpdateParamsCacheThresholdSuperStrictMatch, InstanceUpdateParamsCacheThresholdCloseEnough, InstanceUpdateParamsCacheThresholdFlexibleFriend, InstanceUpdateParamsCacheThresholdAnythingGoes:
+		return true
+	}
+	return false
+}
+
+// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
+// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
+// (72h), 518400 (6d).
+type InstanceUpdateParamsCacheTTL float64
+
+const (
+	InstanceUpdateParamsCacheTTL600    InstanceUpdateParamsCacheTTL = 600
+	InstanceUpdateParamsCacheTTL1800   InstanceUpdateParamsCacheTTL = 1800
+	InstanceUpdateParamsCacheTTL3600   InstanceUpdateParamsCacheTTL = 3600
+	InstanceUpdateParamsCacheTTL7200   InstanceUpdateParamsCacheTTL = 7200
+	InstanceUpdateParamsCacheTTL21600  InstanceUpdateParamsCacheTTL = 21600
+	InstanceUpdateParamsCacheTTL43200  InstanceUpdateParamsCacheTTL = 43200
+	InstanceUpdateParamsCacheTTL86400  InstanceUpdateParamsCacheTTL = 86400
+	InstanceUpdateParamsCacheTTL172800 InstanceUpdateParamsCacheTTL = 172800
+	InstanceUpdateParamsCacheTTL259200 InstanceUpdateParamsCacheTTL = 259200
+	InstanceUpdateParamsCacheTTL518400 InstanceUpdateParamsCacheTTL = 518400
+)
+
+func (r InstanceUpdateParamsCacheTTL) IsKnown() bool {
+	switch r {
+	case InstanceUpdateParamsCacheTTL600, InstanceUpdateParamsCacheTTL1800, InstanceUpdateParamsCacheTTL3600, InstanceUpdateParamsCacheTTL7200, InstanceUpdateParamsCacheTTL21600, InstanceUpdateParamsCacheTTL43200, InstanceUpdateParamsCacheTTL86400, InstanceUpdateParamsCacheTTL172800, InstanceUpdateParamsCacheTTL259200, InstanceUpdateParamsCacheTTL518400:
 		return true
 	}
 	return false
