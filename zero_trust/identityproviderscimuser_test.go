@@ -33,9 +33,9 @@ func TestIdentityProviderSCIMUserListWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.IdentityProviderSCIMUserListParams{
 			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfResourceID:  cloudflare.F("bd97ef8d-7986-43e3-9ee0-c25dda33e4b0"),
+			CfResourceID:  cloudflare.F([]string{"bd97ef8d-7986-43e3-9ee0-c25dda33e4b0"}),
 			Email:         cloudflare.F("john.smith@example.com"),
-			IdPResourceID: cloudflare.F("john_smith_01"),
+			IdPResourceID: cloudflare.F([]string{"john_smith_01"}),
 			Name:          cloudflare.F("John Smith"),
 			Page:          cloudflare.F(int64(0)),
 			PerPage:       cloudflare.F(int64(0)),

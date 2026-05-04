@@ -275,6 +275,13 @@ type IndicatorFeedGetResponse struct {
 	IsDownloadable bool `json:"is_downloadable"`
 	// Whether the indicator feed is exposed to customers
 	IsPublic bool `json:"is_public"`
+	// Summary of indicator counts from the last successful upload to this feed.
+	// Populated by the custom-threat-feeds loader at the end of each successful load.
+	// Absent (omitted) when no upload has completed successfully or the upload errored
+	// before the summary write. Surfaces silent-failure paths so operators can see
+	// when their indicators were dropped (popularity allowlist, expired valid_until,
+	// etc.) without reading loader logs.
+	LastUploadSummary IndicatorFeedGetResponseLastUploadSummary `json:"last_upload_summary"`
 	// Status of the latest snapshot uploaded
 	LatestUploadStatus IndicatorFeedGetResponseLatestUploadStatus `json:"latest_upload_status"`
 	// The date and time when the data entry was last modified
@@ -297,6 +304,7 @@ type indicatorFeedGetResponseJSON struct {
 	IsAttributable     apijson.Field
 	IsDownloadable     apijson.Field
 	IsPublic           apijson.Field
+	LastUploadSummary  apijson.Field
 	LatestUploadStatus apijson.Field
 	ModifiedOn         apijson.Field
 	Name               apijson.Field
@@ -311,6 +319,140 @@ func (r *IndicatorFeedGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r indicatorFeedGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Summary of indicator counts from the last successful upload to this feed.
+// Populated by the custom-threat-feeds loader at the end of each successful load.
+// Absent (omitted) when no upload has completed successfully or the upload errored
+// before the summary write. Surfaces silent-failure paths so operators can see
+// when their indicators were dropped (popularity allowlist, expired valid_until,
+// etc.) without reading loader logs.
+type IndicatorFeedGetResponseLastUploadSummary struct {
+	// Net delta applied to feed indicators by this upload. Snapshot uploads emit both
+	// _\_added and _\_removed; delta-add emits only _\_added; delta-remove emits only
+	// _\_removed.
+	Persisted IndicatorFeedGetResponseLastUploadSummaryPersisted `json:"persisted"`
+	// Counts of indicators that were uploaded but did not reach QuickSilver, broken
+	// down by reason.
+	Skipped IndicatorFeedGetResponseLastUploadSummarySkipped `json:"skipped"`
+	// Indicator counts from the unified file the loader received
+	Uploaded IndicatorFeedGetResponseLastUploadSummaryUploaded `json:"uploaded"`
+	JSON     indicatorFeedGetResponseLastUploadSummaryJSON     `json:"-"`
+}
+
+// indicatorFeedGetResponseLastUploadSummaryJSON contains the JSON metadata for the
+// struct [IndicatorFeedGetResponseLastUploadSummary]
+type indicatorFeedGetResponseLastUploadSummaryJSON struct {
+	Persisted   apijson.Field
+	Skipped     apijson.Field
+	Uploaded    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IndicatorFeedGetResponseLastUploadSummary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indicatorFeedGetResponseLastUploadSummaryJSON) RawJSON() string {
+	return r.raw
+}
+
+// Net delta applied to feed indicators by this upload. Snapshot uploads emit both
+// _\_added and _\_removed; delta-add emits only _\_added; delta-remove emits only
+// _\_removed.
+type IndicatorFeedGetResponseLastUploadSummaryPersisted struct {
+	DomainsAdded   int64                                                  `json:"domains_added"`
+	DomainsRemoved int64                                                  `json:"domains_removed"`
+	IPsAdded       int64                                                  `json:"ips_added"`
+	IPsRemoved     int64                                                  `json:"ips_removed"`
+	URLsAdded      int64                                                  `json:"urls_added"`
+	URLsRemoved    int64                                                  `json:"urls_removed"`
+	JSON           indicatorFeedGetResponseLastUploadSummaryPersistedJSON `json:"-"`
+}
+
+// indicatorFeedGetResponseLastUploadSummaryPersistedJSON contains the JSON
+// metadata for the struct [IndicatorFeedGetResponseLastUploadSummaryPersisted]
+type indicatorFeedGetResponseLastUploadSummaryPersistedJSON struct {
+	DomainsAdded   apijson.Field
+	DomainsRemoved apijson.Field
+	IPsAdded       apijson.Field
+	IPsRemoved     apijson.Field
+	URLsAdded      apijson.Field
+	URLsRemoved    apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *IndicatorFeedGetResponseLastUploadSummaryPersisted) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indicatorFeedGetResponseLastUploadSummaryPersistedJSON) RawJSON() string {
+	return r.raw
+}
+
+// Counts of indicators that were uploaded but did not reach QuickSilver, broken
+// down by reason.
+type IndicatorFeedGetResponseLastUploadSummarySkipped struct {
+	// Domains filtered by the global popularity allowlist at QS provisioning time.
+	// Popular domains (bing.com, naver.com, etc.) are protected from
+	// custom-threat-feed enforcement.
+	AllowlistedDomains int64 `json:"allowlisted_domains"`
+	// Indicators in the upload whose valid_until is already in the past. These are not
+	// added to QS; the expiration cron handles cleanup.
+	ExpiredIndicators int64 `json:"expired_indicators"`
+	// Reserved for future use. Currently always 0 — the unifier aborts the entire
+	// upload on a single bad indicator.
+	InvalidIndicators int64                                                `json:"invalid_indicators"`
+	JSON              indicatorFeedGetResponseLastUploadSummarySkippedJSON `json:"-"`
+}
+
+// indicatorFeedGetResponseLastUploadSummarySkippedJSON contains the JSON metadata
+// for the struct [IndicatorFeedGetResponseLastUploadSummarySkipped]
+type indicatorFeedGetResponseLastUploadSummarySkippedJSON struct {
+	AllowlistedDomains apijson.Field
+	ExpiredIndicators  apijson.Field
+	InvalidIndicators  apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *IndicatorFeedGetResponseLastUploadSummarySkipped) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indicatorFeedGetResponseLastUploadSummarySkippedJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicator counts from the unified file the loader received
+type IndicatorFeedGetResponseLastUploadSummaryUploaded struct {
+	// Number of domain indicators in the upload
+	Domains int64 `json:"domains"`
+	// Number of IP indicators in the upload
+	IPs int64 `json:"ips"`
+	// Number of URL indicators in the upload
+	URLs int64                                                 `json:"urls"`
+	JSON indicatorFeedGetResponseLastUploadSummaryUploadedJSON `json:"-"`
+}
+
+// indicatorFeedGetResponseLastUploadSummaryUploadedJSON contains the JSON metadata
+// for the struct [IndicatorFeedGetResponseLastUploadSummaryUploaded]
+type indicatorFeedGetResponseLastUploadSummaryUploadedJSON struct {
+	Domains     apijson.Field
+	IPs         apijson.Field
+	URLs        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IndicatorFeedGetResponseLastUploadSummaryUploaded) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indicatorFeedGetResponseLastUploadSummaryUploadedJSON) RawJSON() string {
 	return r.raw
 }
 

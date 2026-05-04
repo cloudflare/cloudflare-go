@@ -33,8 +33,8 @@ func TestIdentityProviderSCIMGroupListWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.IdentityProviderSCIMGroupListParams{
 			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfResourceID:  cloudflare.F("a2abeb50-59c9-4c01-8c5c-963d3bf5700f"),
-			IdPResourceID: cloudflare.F("all_employees"),
+			CfResourceID:  cloudflare.F([]string{"a2abeb50-59c9-4c01-8c5c-963d3bf5700f"}),
+			IdPResourceID: cloudflare.F([]string{"all_employees"}),
 			Name:          cloudflare.F("ALL_EMPLOYEES"),
 			Page:          cloudflare.F(int64(0)),
 			PerPage:       cloudflare.F(int64(0)),

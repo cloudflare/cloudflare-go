@@ -73,11 +73,17 @@ type IdentityProviderSCIMGroupListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The unique Cloudflare-generated Id of the SCIM Group resource; also known as the
-	// "Id".
-	CfResourceID param.Field[string] `query:"cf_resource_id"`
+	// "Id". Pass once for a single lookup (`?cf_resource_id=A`) or repeat the
+	// parameter (`?cf_resource_id=A&cf_resource_id=B`) to look up multiple groups in
+	// one request, up to 50 values. Mutually exclusive with `idp_resource_id`, `name`,
+	// `search_contains`, and `search_starts_with`.
+	CfResourceID param.Field[[]string] `query:"cf_resource_id"`
 	// The IdP-generated Id of the SCIM Group resource; also known as the "external
-	// Id".
-	IdPResourceID param.Field[string] `query:"idp_resource_id"`
+	// Id". Pass once for a single lookup (`?idp_resource_id=A`) or repeat the
+	// parameter (`?idp_resource_id=A&idp_resource_id=B`) to look up multiple groups in
+	// one request, up to 50 values. Mutually exclusive with `cf_resource_id`, `name`,
+	// `search_contains`, and `search_starts_with`.
+	IdPResourceID param.Field[[]string] `query:"idp_resource_id"`
 	// The display name of the SCIM Group resource.
 	Name param.Field[string] `query:"name"`
 	// Page number of results.

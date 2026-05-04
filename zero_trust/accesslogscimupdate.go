@@ -126,12 +126,18 @@ type AccessLogSCIMUpdateListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The unique Id of the IdP that has SCIM enabled.
 	IdPID param.Field[[]string] `query:"idp_id" api:"required"`
-	// The unique Cloudflare-generated Id of the SCIM resource.
-	CfResourceID param.Field[string] `query:"cf_resource_id"`
+	// The unique Cloudflare-generated Id of the SCIM resource. Pass once for a single
+	// lookup (`?cf_resource_id=A`) or repeat the parameter
+	// (`?cf_resource_id=A&cf_resource_id=B`) to filter by multiple resources in one
+	// request.
+	CfResourceID param.Field[[]string] `query:"cf_resource_id"`
 	// The chronological order used to sort the logs.
 	Direction param.Field[AccessLogSCIMUpdateListParamsDirection] `query:"direction"`
-	// The IdP-generated Id of the SCIM resource.
-	IdPResourceID param.Field[string] `query:"idp_resource_id"`
+	// The IdP-generated Id of the SCIM resource. Pass once for a single lookup
+	// (`?idp_resource_id=A`) or repeat the parameter
+	// (`?idp_resource_id=A&idp_resource_id=B`) to filter by multiple resources in one
+	// request.
+	IdPResourceID param.Field[[]string] `query:"idp_resource_id"`
 	// The maximum number of update logs to retrieve.
 	Limit param.Field[int64] `query:"limit"`
 	// Page number of results.
@@ -140,12 +146,18 @@ type AccessLogSCIMUpdateListParams struct {
 	PerPage param.Field[int64] `query:"per_page"`
 	// The request method of the SCIM request.
 	RequestMethod param.Field[[]AccessLogSCIMUpdateListParamsRequestMethod] `query:"request_method"`
-	// The display name of the SCIM Group resource.
-	ResourceGroupName param.Field[string] `query:"resource_group_name"`
+	// The display name of the SCIM Group resource. Pass once for a single lookup
+	// (`?resource_group_name=A`) or repeat the parameter
+	// (`?resource_group_name=A&resource_group_name=B`) to filter by multiple group
+	// names in one request.
+	ResourceGroupName param.Field[[]string] `query:"resource_group_name"`
 	// The resource type of the SCIM request.
 	ResourceType param.Field[[]AccessLogSCIMUpdateListParamsResourceType] `query:"resource_type"`
-	// The email address of the SCIM User resource.
-	ResourceUserEmail param.Field[string] `query:"resource_user_email" format:"email"`
+	// The email address of the SCIM User resource. Pass once for a single lookup
+	// (`?resource_user_email=A`) or repeat the parameter
+	// (`?resource_user_email=A&resource_user_email=B`) to filter by multiple emails in
+	// one request.
+	ResourceUserEmail param.Field[[]string] `query:"resource_user_email" format:"email"`
 	// the timestamp of the earliest update log.
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
 	// The status of the SCIM request.
