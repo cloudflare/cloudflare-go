@@ -104,6 +104,7 @@ func TestResourceSharingListWithOptionalParams(t *testing.T) {
 		PerPage:                cloudflare.F(int64(20)),
 		ResourceTypes:          cloudflare.F([]resource_sharing.ResourceSharingListParamsResourceType{resource_sharing.ResourceSharingListParamsResourceTypeCustomRuleset}),
 		Status:                 cloudflare.F(resource_sharing.ResourceSharingListParamsStatusActive),
+		Tag:                    cloudflare.F([]string{"env=production"}),
 		TargetType:             cloudflare.F(resource_sharing.ResourceSharingListParamsTargetTypeAccount),
 	})
 	if err != nil {

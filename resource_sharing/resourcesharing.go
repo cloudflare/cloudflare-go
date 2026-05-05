@@ -1266,6 +1266,11 @@ type ResourceSharingListParams struct {
 	ResourceTypes param.Field[[]ResourceSharingListParamsResourceType] `query:"resource_types"`
 	// Filter shares by status.
 	Status param.Field[ResourceSharingListParamsStatus] `query:"status"`
+	// Filter shares by tag. Each value is either `key=value` (matches shares whose
+	// tags contain that key/value pair) or `key` alone (matches shares that have any
+	// value for that key). May be repeated; multiple `tag` parameters are ANDed
+	// together. Maximum 20 `tag` parameters per request.
+	Tag param.Field[[]string] `query:"tag"`
 	// Filter shares by target_type.
 	TargetType param.Field[ResourceSharingListParamsTargetType] `query:"target_type"`
 }
