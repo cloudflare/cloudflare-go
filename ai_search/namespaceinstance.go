@@ -1017,10 +1017,14 @@ func (r NamespaceInstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSource) Is
 type NamespaceInstanceNewResponseSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed.
+	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
+	// the field to disable content selection — empty arrays are rejected.
 	ContentSelector []NamespaceInstanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
-	IncludeHeaders  map[string]string                                                               `json:"include_headers"`
-	IncludeImages   bool                                                                            `json:"include_images"`
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
+	// token characters (no spaces, colons, or control characters); values must be
+	// HTAB + printable ASCII (no CR/LF).
+	IncludeHeaders map[string]string `json:"include_headers"`
+	IncludeImages  bool              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
 	// 'sitemap'.
 	SpecificSitemaps    []string                                                           `json:"specific_sitemaps" format:"uri"`
@@ -1053,8 +1057,9 @@ type NamespaceInstanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelect
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path string `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Supports
-	// standard CSS selectors including class, ID, element, and attribute selectors.
+	// CSS selector to extract content from pages matching the path pattern. Must not
+	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
+	// if multiple elements match, the selector is ignored and the full page is used.
 	Selector string                                                                            `json:"selector" api:"required"`
 	JSON     namespaceInstanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
@@ -1932,10 +1937,14 @@ func (r NamespaceInstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSource)
 type NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed.
+	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
+	// the field to disable content selection — empty arrays are rejected.
 	ContentSelector []NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
-	IncludeHeaders  map[string]string                                                                  `json:"include_headers"`
-	IncludeImages   bool                                                                               `json:"include_images"`
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
+	// token characters (no spaces, colons, or control characters); values must be
+	// HTAB + printable ASCII (no CR/LF).
+	IncludeHeaders map[string]string `json:"include_headers"`
+	IncludeImages  bool              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
 	// 'sitemap'.
 	SpecificSitemaps    []string                                                              `json:"specific_sitemaps" format:"uri"`
@@ -1968,8 +1977,9 @@ type NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSel
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path string `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Supports
-	// standard CSS selectors including class, ID, element, and attribute selectors.
+	// CSS selector to extract content from pages matching the path pattern. Must not
+	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
+	// if multiple elements match, the selector is ignored and the full page is used.
 	Selector string                                                                               `json:"selector" api:"required"`
 	JSON     namespaceInstanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
@@ -2847,10 +2857,14 @@ func (r NamespaceInstanceListResponseSourceParamsWebCrawlerCrawlOptionsSource) I
 type NamespaceInstanceListResponseSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed.
+	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
+	// the field to disable content selection — empty arrays are rejected.
 	ContentSelector []NamespaceInstanceListResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
-	IncludeHeaders  map[string]string                                                                `json:"include_headers"`
-	IncludeImages   bool                                                                             `json:"include_images"`
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
+	// token characters (no spaces, colons, or control characters); values must be
+	// HTAB + printable ASCII (no CR/LF).
+	IncludeHeaders map[string]string `json:"include_headers"`
+	IncludeImages  bool              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
 	// 'sitemap'.
 	SpecificSitemaps    []string                                                            `json:"specific_sitemaps" format:"uri"`
@@ -2883,8 +2897,9 @@ type NamespaceInstanceListResponseSourceParamsWebCrawlerParseOptionsContentSelec
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path string `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Supports
-	// standard CSS selectors including class, ID, element, and attribute selectors.
+	// CSS selector to extract content from pages matching the path pattern. Must not
+	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
+	// if multiple elements match, the selector is ignored and the full page is used.
 	Selector string                                                                             `json:"selector" api:"required"`
 	JSON     namespaceInstanceListResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
@@ -3762,10 +3777,14 @@ func (r NamespaceInstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSource)
 type NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed.
+	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
+	// the field to disable content selection — empty arrays are rejected.
 	ContentSelector []NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
-	IncludeHeaders  map[string]string                                                                  `json:"include_headers"`
-	IncludeImages   bool                                                                               `json:"include_images"`
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
+	// token characters (no spaces, colons, or control characters); values must be
+	// HTAB + printable ASCII (no CR/LF).
+	IncludeHeaders map[string]string `json:"include_headers"`
+	IncludeImages  bool              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
 	// 'sitemap'.
 	SpecificSitemaps    []string                                                              `json:"specific_sitemaps" format:"uri"`
@@ -3798,8 +3817,9 @@ type NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSel
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path string `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Supports
-	// standard CSS selectors including class, ID, element, and attribute selectors.
+	// CSS selector to extract content from pages matching the path pattern. Must not
+	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
+	// if multiple elements match, the selector is ignored and the full page is used.
 	Selector string                                                                               `json:"selector" api:"required"`
 	JSON     namespaceInstanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
@@ -4875,10 +4895,14 @@ func (r NamespaceInstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSource) I
 type NamespaceInstanceReadResponseSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed.
+	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
+	// the field to disable content selection — empty arrays are rejected.
 	ContentSelector []NamespaceInstanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
-	IncludeHeaders  map[string]string                                                                `json:"include_headers"`
-	IncludeImages   bool                                                                             `json:"include_images"`
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
+	// token characters (no spaces, colons, or control characters); values must be
+	// HTAB + printable ASCII (no CR/LF).
+	IncludeHeaders map[string]string `json:"include_headers"`
+	IncludeImages  bool              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
 	// 'sitemap'.
 	SpecificSitemaps    []string                                                            `json:"specific_sitemaps" format:"uri"`
@@ -4911,8 +4935,9 @@ type NamespaceInstanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelec
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path string `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Supports
-	// standard CSS selectors including class, ID, element, and attribute selectors.
+	// CSS selector to extract content from pages matching the path pattern. Must not
+	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
+	// if multiple elements match, the selector is ignored and the full page is used.
 	Selector string                                                                             `json:"selector" api:"required"`
 	JSON     namespaceInstanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
@@ -5759,10 +5784,14 @@ func (r NamespaceInstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSource) IsKn
 type NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed.
+	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
+	// the field to disable content selection — empty arrays are rejected.
 	ContentSelector param.Field[[]NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector] `json:"content_selector"`
-	IncludeHeaders  param.Field[map[string]string]                                                             `json:"include_headers"`
-	IncludeImages   param.Field[bool]                                                                          `json:"include_images"`
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
+	// token characters (no spaces, colons, or control characters); values must be
+	// HTAB + printable ASCII (no CR/LF).
+	IncludeHeaders param.Field[map[string]string] `json:"include_headers"`
+	IncludeImages  param.Field[bool]              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
 	// 'sitemap'.
 	SpecificSitemaps    param.Field[[]string] `json:"specific_sitemaps" format:"uri"`
@@ -5777,8 +5806,9 @@ type NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path param.Field[string] `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Supports
-	// standard CSS selectors including class, ID, element, and attribute selectors.
+	// CSS selector to extract content from pages matching the path pattern. Must not
+	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
+	// if multiple elements match, the selector is ignored and the full page is used.
 	Selector param.Field[string] `json:"selector" api:"required"`
 }
 
@@ -6376,10 +6406,14 @@ func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSource) I
 type NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed.
+	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
+	// the field to disable content selection — empty arrays are rejected.
 	ContentSelector param.Field[[]NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector] `json:"content_selector"`
-	IncludeHeaders  param.Field[map[string]string]                                                                `json:"include_headers"`
-	IncludeImages   param.Field[bool]                                                                             `json:"include_images"`
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
+	// token characters (no spaces, colons, or control characters); values must be
+	// HTAB + printable ASCII (no CR/LF).
+	IncludeHeaders param.Field[map[string]string] `json:"include_headers"`
+	IncludeImages  param.Field[bool]              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
 	// 'sitemap'.
 	SpecificSitemaps    param.Field[[]string] `json:"specific_sitemaps" format:"uri"`
@@ -6394,8 +6428,9 @@ type NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelec
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path param.Field[string] `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Supports
-	// standard CSS selectors including class, ID, element, and attribute selectors.
+	// CSS selector to extract content from pages matching the path pattern. Must not
+	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
+	// if multiple elements match, the selector is ignored and the full page is used.
 	Selector param.Field[string] `json:"selector" api:"required"`
 }
 

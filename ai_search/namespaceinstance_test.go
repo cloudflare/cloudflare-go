@@ -110,10 +110,13 @@ func TestNamespaceInstanceNewWithOptionalParams(t *testing.T) {
 					ParseOptions: cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptions{
 						ContentSelector: cloudflare.F([]ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector{{
 							Path:     cloudflare.F("**/blog/**"),
-							Selector: cloudflare.F("article .post-body"),
+							Selector: cloudflare.F("article div.post-body"),
+						}, {
+							Path:     cloudflare.F("**/docs/**"),
+							Selector: cloudflare.F("main"),
 						}}),
 						IncludeHeaders: cloudflare.F(map[string]string{
-							"foo": "string",
+							"cache-control": "no-cache, no-store",
 						}),
 						IncludeImages:       cloudflare.F(true),
 						SpecificSitemaps:    cloudflare.F([]string{"https://example.com/sitemap.xml", "https://example.com/blog-sitemap.xml"}),
@@ -235,10 +238,13 @@ func TestNamespaceInstanceUpdateWithOptionalParams(t *testing.T) {
 					ParseOptions: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptions{
 						ContentSelector: cloudflare.F([]ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector{{
 							Path:     cloudflare.F("**/blog/**"),
-							Selector: cloudflare.F("article .post-body"),
+							Selector: cloudflare.F("article div.post-body"),
+						}, {
+							Path:     cloudflare.F("**/docs/**"),
+							Selector: cloudflare.F("main"),
 						}}),
 						IncludeHeaders: cloudflare.F(map[string]string{
-							"foo": "string",
+							"cache-control": "no-cache, no-store",
 						}),
 						IncludeImages:       cloudflare.F(true),
 						SpecificSitemaps:    cloudflare.F([]string{"https://example.com/sitemap.xml", "https://example.com/blog-sitemap.xml"}),
