@@ -502,6 +502,8 @@ TEST_PATHS=(
 	zero_trust/riskscoringsummary_test.go
 	zero_trust/riskscoringintegration_test.go
 	zero_trust/riskscoringintegrationreference_test.go
+	zero_trust/resourcelibraryapplication_test.go
+	zero_trust/resourcelibrarycategory_test.go
 	turnstile/widget_test.go
 	connectivity/directoryservice_test.go
 	hyperdrive/config_test.go
