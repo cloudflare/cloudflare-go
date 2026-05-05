@@ -15,6 +15,7 @@ import (
 type BGPRPKIService struct {
 	Options []option.RequestOption
 	ASPA    *BGPRPKIASPAService
+	Roas    *BGPRPKIRoaService
 }
 
 // NewBGPRPKIService generates a new service that applies the given options to each
@@ -24,5 +25,6 @@ func NewBGPRPKIService(opts ...option.RequestOption) (r *BGPRPKIService) {
 	r = &BGPRPKIService{}
 	r.Options = opts
 	r.ASPA = NewBGPRPKIASPAService(opts...)
+	r.Roas = NewBGPRPKIRoaService(opts...)
 	return
 }

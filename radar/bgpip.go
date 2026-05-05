@@ -24,6 +24,7 @@ import (
 // the [NewBGPIPService] method instead.
 type BGPIPService struct {
 	Options []option.RequestOption
+	Top     *BGPIPTopService
 }
 
 // NewBGPIPService generates a new service that applies the given options to each
@@ -32,6 +33,7 @@ type BGPIPService struct {
 func NewBGPIPService(opts ...option.RequestOption) (r *BGPIPService) {
 	r = &BGPIPService{}
 	r.Options = opts
+	r.Top = NewBGPIPTopService(opts...)
 	return
 }
 

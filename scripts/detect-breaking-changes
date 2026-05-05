@@ -539,7 +539,9 @@ TEST_PATHS=(
 	radar/bgphijackevent_test.go
 	radar/bgproute_test.go
 	radar/bgpip_test.go
+	radar/bgpiptop_test.go
 	radar/bgprpkiaspa_test.go
+	radar/bgprpkiroa_test.go
 	radar/bot_test.go
 	radar/botwebcrawler_test.go
 	radar/dataset_test.go
