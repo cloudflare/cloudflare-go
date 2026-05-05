@@ -25,7 +25,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewMonitorGroupService] method instead.
 type MonitorGroupService struct {
-	Options []option.RequestOption
+	Options    []option.RequestOption
+	References *MonitorGroupReferenceService
 }
 
 // NewMonitorGroupService generates a new service that applies the given options to
@@ -34,6 +35,7 @@ type MonitorGroupService struct {
 func NewMonitorGroupService(opts ...option.RequestOption) (r *MonitorGroupService) {
 	r = &MonitorGroupService{}
 	r.Options = opts
+	r.References = NewMonitorGroupReferenceService(opts...)
 	return
 }
 
