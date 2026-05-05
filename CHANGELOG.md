@@ -1,5 +1,44 @@
 # Changelog
 
+## 6.10.0 (2026-05-05)
+
+Full Changelog: [v6.9.0...v6.10.0](https://github.com/cloudflare/cloudflare-go/compare/v6.9.0...v6.10.0)
+
+### Features
+
+* chore: skip failing deployment_groups tests ([#4282](https://github.com/cloudflare/cloudflare-go/issues/4282)) ([af12b26](https://github.com/cloudflare/cloudflare-go/commit/af12b266b67124d42aec8dd473111db49a126a57))
+* chore: skip failing tests for dns.records and workers.beta.workers ([240fba0](https://github.com/cloudflare/cloudflare-go/commit/240fba08b4ef87e756bb2d63dfb58cdd7da4c7d3))
+* chore: skip failing tests for email_security.settings and workers.observability.telemetry ([43d77b2](https://github.com/cloudflare/cloudflare-go/commit/43d77b2ebf13f9c692b7a1adeaf85367d27a4ec0))
+* chore: skip fraud.update test (HTTP 422 from prism) ([8adcf22](https://github.com/cloudflare/cloudflare-go/commit/8adcf225a6d66d6d381598a9020cd2bbf4a4b35a))
+* feat: add organization audit logs endpoint ([7264650](https://github.com/cloudflare/cloudflare-go/commit/7264650576a0ead8476e7693d71bc2d050b92fc2))
+* feat(queues): add queues metrics endpoint ([0285d04](https://github.com/cloudflare/cloudflare-go/commit/0285d048cc7f6be8dddf2f71c53761e7dabe5819))
+* **security_center:** update generated types and methods ([dd6fb99](https://github.com/cloudflare/cloudflare-go/commit/dd6fb997f2af76dccfe323947633a82ddfc68a5a))
+* **zero_trust_device_deployment_groups:** add zero_trust_device_deployment_groups resource ([#4281](https://github.com/cloudflare/cloudflare-go/issues/4281)) ([11daf46](https://github.com/cloudflare/cloudflare-go/commit/11daf4653659e337563c4f4f29586e7846df1411))
+
+
+### Chores
+
+* **ai_search:** update generated types and methods ([c8c8524](https://github.com/cloudflare/cloudflare-go/commit/c8c8524b235a348171a3a744e0f7498b645a7784))
+* **api:** update composite API spec ([dc5fd9b](https://github.com/cloudflare/cloudflare-go/commit/dc5fd9b34ab9492c752d39a673d639e2604e9ef2))
+* **api:** update composite API spec ([78653bc](https://github.com/cloudflare/cloudflare-go/commit/78653bc81d630619dd2a08e45feaa47e7ab53e1d))
+* **api:** update composite API spec ([a5cfc46](https://github.com/cloudflare/cloudflare-go/commit/a5cfc46cc26148339759ca8dc6df96f4a4c5d1e7))
+* **api:** update composite API spec ([5b3ab0a](https://github.com/cloudflare/cloudflare-go/commit/5b3ab0af0b07a194a00b328765f1f197a778beb8))
+* **api:** update composite API spec ([34ed80e](https://github.com/cloudflare/cloudflare-go/commit/34ed80efcfa908a6922c049752e535950ac3b878))
+* **api:** update composite API spec ([30ebdc3](https://github.com/cloudflare/cloudflare-go/commit/30ebdc33bd1189577ec50ce5c67ccd6314dd9832))
+* **api:** update composite API spec ([2abd1bb](https://github.com/cloudflare/cloudflare-go/commit/2abd1bbba76eba79f67afe2d866d643dd24b5f09))
+* **api:** update composite API spec ([1921bc7](https://github.com/cloudflare/cloudflare-go/commit/1921bc7cd51af69c1945929d6270c39750ed667f))
+* **api:** update composite API spec ([853be0e](https://github.com/cloudflare/cloudflare-go/commit/853be0efc97477a2431ac851265645fe71af5e39))
+* **api:** update composite API spec ([e2fb4a1](https://github.com/cloudflare/cloudflare-go/commit/e2fb4a1f505e701214f406ad69756c01728c1279))
+* **billing:** update generated types and methods ([f92cc05](https://github.com/cloudflare/cloudflare-go/commit/f92cc05e2b8791db055bbcaa4ff8c3bceccce1d4))
+* **ci:** add breaking change back ([#4279](https://github.com/cloudflare/cloudflare-go/issues/4279)) ([f29df83](https://github.com/cloudflare/cloudflare-go/commit/f29df83f2c1dd8b117258f6d17d11d59f98e4265))
+* **email_security:** update generated types and methods ([af03891](https://github.com/cloudflare/cloudflare-go/commit/af03891f4873afa137326f7806f294303da9ab90))
+* **intel:** update generated types and methods ([d500a81](https://github.com/cloudflare/cloudflare-go/commit/d500a8181d46ba4787874cd6778658f255dd9c64))
+* **radar:** update generated types and methods ([95b1b37](https://github.com/cloudflare/cloudflare-go/commit/95b1b37b8eb32b2cbd3d11e006bacb790f9ce90a))
+* sync repo ([788d726](https://github.com/cloudflare/cloudflare-go/commit/788d726331a63a195417394a375b3f29403b4671))
+* sync shared codegen files from staging-next ([b8f86ea](https://github.com/cloudflare/cloudflare-go/commit/b8f86ea92a7d5e6472ed35ab869c7281a985509e))
+* **zero_trust:** update generated types and methods ([5d8ddfb](https://github.com/cloudflare/cloudflare-go/commit/5d8ddfb54fbf4fb78ebba46e07f95d48cc520256))
+* **zones:** sync codegen changes ([3998a55](https://github.com/cloudflare/cloudflare-go/commit/3998a55dba6d4e1c5f721375c86ce8dc1881c4d8))
+
 ## 6.9.0 (2026-04-01)
 
 Full Changelog: [v6.8.0...v6.9.0](https://github.com/cloudflare/cloudflare-go/compare/v6.8.0...v6.9.0)
