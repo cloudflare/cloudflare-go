@@ -72,7 +72,9 @@ func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (re
 
 type UserEditResponse struct {
 	// Identifier of the user.
-	ID string `json:"id"`
+	ID string `json:"id" api:"required"`
+	// Current email address of the user.
+	Email string `json:"email" api:"required" format:"email"`
 	// Lists the betas that the user is participating in.
 	Betas []string `json:"betas"`
 	// The country in which the user lives.
@@ -107,6 +109,7 @@ type UserEditResponse struct {
 // [UserEditResponse]
 type userEditResponseJSON struct {
 	ID                             apijson.Field
+	Email                          apijson.Field
 	Betas                          apijson.Field
 	Country                        apijson.Field
 	FirstName                      apijson.Field
@@ -134,7 +137,9 @@ func (r userEditResponseJSON) RawJSON() string {
 
 type UserGetResponse struct {
 	// Identifier of the user.
-	ID string `json:"id"`
+	ID string `json:"id" api:"required"`
+	// Current email address of the user.
+	Email string `json:"email" api:"required" format:"email"`
 	// Lists the betas that the user is participating in.
 	Betas []string `json:"betas"`
 	// The country in which the user lives.
@@ -168,6 +173,7 @@ type UserGetResponse struct {
 // userGetResponseJSON contains the JSON metadata for the struct [UserGetResponse]
 type userGetResponseJSON struct {
 	ID                             apijson.Field
+	Email                          apijson.Field
 	Betas                          apijson.Field
 	Country                        apijson.Field
 	FirstName                      apijson.Field
