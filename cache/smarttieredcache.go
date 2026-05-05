@@ -37,6 +37,28 @@ func NewSmartTieredCacheService(opts ...option.RequestOption) (r *SmartTieredCac
 }
 
 // Smart Tiered Cache dynamically selects the single closest upper tier for each of
+// your website's origins with no configuration required, using our in-house
+// performance and routing data. Cloudflare collects latency data for each request
+// to an origin, and uses the latency data to determine how well any upper-tier
+// data center is connected with an origin. As a result, Cloudflare can select the
+// data center with the lowest latency to be the upper-tier for an origin.
+func (r *SmartTieredCacheService) New(ctx context.Context, params SmartTieredCacheNewParams, opts ...option.RequestOption) (res *SmartTieredCacheNewResponse, err error) {
+	var env SmartTieredCacheNewResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// Smart Tiered Cache dynamically selects the single closest upper tier for each of
 // your website’s origins with no configuration required, using our in-house
 // performance and routing data. Cloudflare collects latency data for each request
 // to an origin, and uses the latency data to determine how well any upper-tier
@@ -100,6 +122,68 @@ func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCach
 	}
 	res = &env.Result
 	return res, nil
+}
+
+type SmartTieredCacheNewResponse struct {
+	// The identifier of the caching setting.
+	ID SmartTieredCacheNewResponseID `json:"id" api:"required"`
+	// Whether the setting is editable.
+	Editable bool `json:"editable" api:"required"`
+	// Value of the Smart Tiered Cache zone setting.
+	Value SmartTieredCacheNewResponseValue `json:"value" api:"required"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time                       `json:"modified_on" api:"nullable" format:"date-time"`
+	JSON       smartTieredCacheNewResponseJSON `json:"-"`
+}
+
+// smartTieredCacheNewResponseJSON contains the JSON metadata for the struct
+// [SmartTieredCacheNewResponse]
+type smartTieredCacheNewResponseJSON struct {
+	ID          apijson.Field
+	Editable    apijson.Field
+	Value       apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SmartTieredCacheNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r smartTieredCacheNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The identifier of the caching setting.
+type SmartTieredCacheNewResponseID string
+
+const (
+	SmartTieredCacheNewResponseIDTieredCacheSmartTopologyEnable SmartTieredCacheNewResponseID = "tiered_cache_smart_topology_enable"
+)
+
+func (r SmartTieredCacheNewResponseID) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheNewResponseIDTieredCacheSmartTopologyEnable:
+		return true
+	}
+	return false
+}
+
+// Value of the Smart Tiered Cache zone setting.
+type SmartTieredCacheNewResponseValue string
+
+const (
+	SmartTieredCacheNewResponseValueOn  SmartTieredCacheNewResponseValue = "on"
+	SmartTieredCacheNewResponseValueOff SmartTieredCacheNewResponseValue = "off"
+)
+
+func (r SmartTieredCacheNewResponseValue) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheNewResponseValueOn, SmartTieredCacheNewResponseValueOff:
+		return true
+	}
+	return false
 }
 
 type SmartTieredCacheDeleteResponse struct {
@@ -264,6 +348,76 @@ const (
 func (r SmartTieredCacheGetResponseValue) IsKnown() bool {
 	switch r {
 	case SmartTieredCacheGetResponseValueOn, SmartTieredCacheGetResponseValueOff:
+		return true
+	}
+	return false
+}
+
+type SmartTieredCacheNewParams struct {
+	// Identifier.
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	// Enable or disable the Smart Tiered Cache.
+	Value param.Field[SmartTieredCacheNewParamsValue] `json:"value" api:"required"`
+}
+
+func (r SmartTieredCacheNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Enable or disable the Smart Tiered Cache.
+type SmartTieredCacheNewParamsValue string
+
+const (
+	SmartTieredCacheNewParamsValueOn  SmartTieredCacheNewParamsValue = "on"
+	SmartTieredCacheNewParamsValueOff SmartTieredCacheNewParamsValue = "off"
+)
+
+func (r SmartTieredCacheNewParamsValue) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheNewParamsValueOn, SmartTieredCacheNewParamsValueOff:
+		return true
+	}
+	return false
+}
+
+type SmartTieredCacheNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success SmartTieredCacheNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  SmartTieredCacheNewResponse                `json:"result"`
+	JSON    smartTieredCacheNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// smartTieredCacheNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SmartTieredCacheNewResponseEnvelope]
+type smartTieredCacheNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SmartTieredCacheNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r smartTieredCacheNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type SmartTieredCacheNewResponseEnvelopeSuccess bool
+
+const (
+	SmartTieredCacheNewResponseEnvelopeSuccessTrue SmartTieredCacheNewResponseEnvelopeSuccess = true
+)
+
+func (r SmartTieredCacheNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
