@@ -7,13 +7,16 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v6/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v6/internal/param"
 	"github.com/cloudflare/cloudflare-go/v6/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v6/shared"
 )
 
@@ -36,21 +39,27 @@ func NewOriginCloudRegionService(opts ...option.RequestOption) (r *OriginCloudRe
 	return
 }
 
-// Adds a single IP-to-cloud-region mapping for the zone. The IP must be a valid
-// IPv4 or IPv6 address and is normalized to canonical form before storage (RFC
-// 5952 for IPv6). Returns 400 (code 1145) if a mapping for that IP already exists
-// — use PATCH to update an existing entry. The vendor and region are validated
-// against the list from
-// `GET /zones/{zone_id}/cache/origin_cloud_regions/supported_regions`.
-func (r *OriginCloudRegionService) New(ctx context.Context, params OriginCloudRegionNewParams, opts ...option.RequestOption) (res *OriginCloudRegionNewResponse, err error) {
-	var env OriginCloudRegionNewResponseEnvelope
+// Creates a new IP-to-cloud-region mapping or replaces the existing mapping for
+// the specified IP. PUT is idempotent — calling it repeatedly with the same body
+// produces the same result. The IP path parameter is normalized to canonical form
+// (RFC 5952 for IPv6) before storage. The vendor and region are validated against
+// the list from `GET /zones/{zone_id}/origin/cloud_regions/supported_regions`.
+// Returns 400 if the `origin_ip` in the body does not match the URL path
+// parameter. Returns 403 (code 1164) when the zone has reached the limit of 3,500
+// IP mappings.
+func (r *OriginCloudRegionService) Update(ctx context.Context, originIP string, params OriginCloudRegionUpdateParams, opts ...option.RequestOption) (res *OriginCloudRegion, err error) {
+	var env OriginCloudRegionUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/cache/origin_cloud_regions", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if originIP == "" {
+		err = errors.New("missing required origin_ip parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/origin/cloud_regions/%s", params.ZoneID, originIP)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -58,30 +67,45 @@ func (r *OriginCloudRegionService) New(ctx context.Context, params OriginCloudRe
 	return res, nil
 }
 
-// Returns all IP-to-cloud-region mappings configured for the zone. Each mapping
-// tells Cloudflare which cloud vendor and region hosts the origin at that IP,
-// enabling the edge to route via the nearest Tiered Cache upper-tier co-located
-// with that cloud provider. Returns an empty array when no mappings exist.
-func (r *OriginCloudRegionService) List(ctx context.Context, query OriginCloudRegionListParams, opts ...option.RequestOption) (res *OriginCloudRegionListResponse, err error) {
-	var env OriginCloudRegionListResponseEnvelope
+// Returns all IP-to-cloud-region mappings configured for the zone with pagination
+// support. Each mapping tells Cloudflare which cloud vendor and region hosts the
+// origin at that IP, enabling the edge to route via the nearest Tiered Cache
+// upper-tier co-located with that cloud provider. Returns an empty array when no
+// mappings exist.
+func (r *OriginCloudRegionService) List(ctx context.Context, params OriginCloudRegionListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[OriginCloudRegion], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
-	if query.ZoneID.Value == "" {
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/cache/origin_cloud_regions", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin/cloud_regions", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
-	res = &env.Result
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
 	return res, nil
 }
 
+// Returns all IP-to-cloud-region mappings configured for the zone with pagination
+// support. Each mapping tells Cloudflare which cloud vendor and region hosts the
+// origin at that IP, enabling the edge to route via the nearest Tiered Cache
+// upper-tier co-located with that cloud provider. Returns an empty array when no
+// mappings exist.
+func (r *OriginCloudRegionService) ListAutoPaging(ctx context.Context, params OriginCloudRegionListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[OriginCloudRegion] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+}
+
 // Removes the cloud region mapping for a single origin IP address. The IP path
-// parameter is normalized before lookup. Returns the deleted entry on success.
-// Returns 404 (code 1163) if no mapping exists for the specified IP. When the last
-// mapping for the zone is removed the underlying rule record is also deleted.
+// parameter is normalized before lookup. Returns the deleted IP on success.
+// Returns 404 if no mapping exists for the specified IP. When the last mapping for
+// the zone is removed the underlying rule record is also deleted.
 func (r *OriginCloudRegionService) Delete(ctx context.Context, originIP string, body OriginCloudRegionDeleteParams, opts ...option.RequestOption) (res *OriginCloudRegionDeleteResponse, err error) {
 	var env OriginCloudRegionDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -93,7 +117,7 @@ func (r *OriginCloudRegionService) Delete(ctx context.Context, originIP string, 
 		err = errors.New("missing required origin_ip parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/cache/origin_cloud_regions/%s", body.ZoneID, originIP)
+	path := fmt.Sprintf("zones/%s/origin/cloud_regions/%s", body.ZoneID, originIP)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -113,7 +137,7 @@ func (r *OriginCloudRegionService) BulkDelete(ctx context.Context, body OriginCl
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/cache/origin_cloud_regions/batch", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/origin/cloud_regions/batch", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -122,41 +146,22 @@ func (r *OriginCloudRegionService) BulkDelete(ctx context.Context, body OriginCl
 	return res, nil
 }
 
-// Adds or updates up to 100 IP-to-cloud-region mappings in a single request. Each
-// item is validated independently — valid items are applied and invalid items are
-// returned in the `failed` array. The vendor and region for every item are
-// validated against the list from
-// `GET /zones/{zone_id}/cache/origin_cloud_regions/supported_regions`.
-func (r *OriginCloudRegionService) BulkEdit(ctx context.Context, params OriginCloudRegionBulkEditParams, opts ...option.RequestOption) (res *OriginCloudRegionBulkEditResponse, err error) {
-	var env OriginCloudRegionBulkEditResponseEnvelope
+// Upserts up to 100 IP-to-cloud-region mappings in a single request. Items in the
+// request body are created or replaced; mappings not included in the request body
+// are preserved unchanged (this is a merge operation, not a full collection
+// replacement). Each item is validated independently — valid items are applied and
+// invalid items are returned in the `failed` array. The vendor and region for
+// every item are validated against the list from
+// `GET /zones/{zone_id}/origin/cloud_regions/supported_regions`.
+func (r *OriginCloudRegionService) BulkUpdate(ctx context.Context, params OriginCloudRegionBulkUpdateParams, opts ...option.RequestOption) (res *OriginCloudRegionBulkUpdateResponse, err error) {
+	var env OriginCloudRegionBulkUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/cache/origin_cloud_regions/batch", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
-}
-
-// Adds or updates a single IP-to-cloud-region mapping for the zone. Unlike POST,
-// this operation is idempotent — if a mapping for the IP already exists it is
-// overwritten. Returns the complete updated list of all mappings for the zone.
-// Returns 403 (code 1164) when the zone has reached the limit of 3,500 IP
-// mappings.
-func (r *OriginCloudRegionService) Edit(ctx context.Context, params OriginCloudRegionEditParams, opts ...option.RequestOption) (res *OriginCloudRegionEditResponse, err error) {
-	var env OriginCloudRegionEditResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("zones/%s/cache/origin_cloud_regions", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin/cloud_regions/batch", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -165,9 +170,9 @@ func (r *OriginCloudRegionService) Edit(ctx context.Context, params OriginCloudR
 }
 
 // Returns the cloud region mapping for a single origin IP address. The IP path
-// parameter is normalized before lookup (RFC 5952 for IPv6). Returns 404
-// (code 1142) if the zone has no mappings or if the specified IP has no mapping.
-func (r *OriginCloudRegionService) Get(ctx context.Context, originIP string, query OriginCloudRegionGetParams, opts ...option.RequestOption) (res *OriginCloudRegionGetResponse, err error) {
+// parameter is normalized before lookup (RFC 5952 for IPv6). Returns 404 if the
+// zone has no mappings or if the specified IP has no mapping.
+func (r *OriginCloudRegionService) Get(ctx context.Context, originIP string, query OriginCloudRegionGetParams, opts ...option.RequestOption) (res *OriginCloudRegion, err error) {
 	var env OriginCloudRegionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
@@ -178,7 +183,7 @@ func (r *OriginCloudRegionService) Get(ctx context.Context, originIP string, que
 		err = errors.New("missing required origin_ip parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/cache/origin_cloud_regions/%s", query.ZoneID, originIP)
+	path := fmt.Sprintf("zones/%s/origin/cloud_regions/%s", query.ZoneID, originIP)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -198,7 +203,7 @@ func (r *OriginCloudRegionService) SupportedRegions(ctx context.Context, query O
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/cache/origin_cloud_regions/supported_regions", query.ZoneID)
+	path := fmt.Sprintf("zones/%s/origin/cloud_regions/supported_regions", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -209,8 +214,9 @@ func (r *OriginCloudRegionService) SupportedRegions(ctx context.Context, query O
 
 // A single origin IP-to-cloud-region mapping.
 type OriginCloudRegion struct {
-	// The origin IP address (IPv4 or IPv6, canonicalized).
-	OriginIP string `json:"origin-ip" api:"required"`
+	// The origin IP address (IPv4 or IPv6). Normalized to canonical form (RFC 5952 for
+	// IPv6).
+	OriginIP string `json:"origin_ip" api:"required"`
 	// Cloud vendor region identifier.
 	Region string `json:"region" api:"required"`
 	// Cloud vendor hosting the origin.
@@ -257,114 +263,17 @@ func (r OriginCloudRegionVendor) IsKnown() bool {
 	return false
 }
 
-// Response result for a single origin cloud region mapping.
-type OriginCloudRegionNewResponse struct {
-	ID OriginCloudRegionNewResponseID `json:"id" api:"required"`
-	// Whether the setting can be modified by the current user.
-	Editable bool `json:"editable" api:"required"`
-	// A single origin IP-to-cloud-region mapping.
-	Value OriginCloudRegion `json:"value" api:"required"`
-	// Time the mapping was last modified.
-	ModifiedOn time.Time                        `json:"modified_on" format:"date-time"`
-	JSON       originCloudRegionNewResponseJSON `json:"-"`
-}
-
-// originCloudRegionNewResponseJSON contains the JSON metadata for the struct
-// [OriginCloudRegionNewResponse]
-type originCloudRegionNewResponseJSON struct {
-	ID          apijson.Field
-	Editable    apijson.Field
-	Value       apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCloudRegionNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCloudRegionNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCloudRegionNewResponseID string
-
-const (
-	OriginCloudRegionNewResponseIDOriginPublicCloudRegion OriginCloudRegionNewResponseID = "origin_public_cloud_region"
-)
-
-func (r OriginCloudRegionNewResponseID) IsKnown() bool {
-	switch r {
-	case OriginCloudRegionNewResponseIDOriginPublicCloudRegion:
-		return true
-	}
-	return false
-}
-
-// Response result for a list of origin cloud region mappings.
-type OriginCloudRegionListResponse struct {
-	ID OriginCloudRegionListResponseID `json:"id" api:"required"`
-	// Whether the setting can be modified by the current user.
-	Editable bool                `json:"editable" api:"required"`
-	Value    []OriginCloudRegion `json:"value" api:"required"`
-	// Time the mapping set was last modified. Null when no mappings exist.
-	ModifiedOn time.Time                         `json:"modified_on" api:"nullable" format:"date-time"`
-	JSON       originCloudRegionListResponseJSON `json:"-"`
-}
-
-// originCloudRegionListResponseJSON contains the JSON metadata for the struct
-// [OriginCloudRegionListResponse]
-type originCloudRegionListResponseJSON struct {
-	ID          apijson.Field
-	Editable    apijson.Field
-	Value       apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCloudRegionListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCloudRegionListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCloudRegionListResponseID string
-
-const (
-	OriginCloudRegionListResponseIDOriginPublicCloudRegion OriginCloudRegionListResponseID = "origin_public_cloud_region"
-)
-
-func (r OriginCloudRegionListResponseID) IsKnown() bool {
-	switch r {
-	case OriginCloudRegionListResponseIDOriginPublicCloudRegion:
-		return true
-	}
-	return false
-}
-
-// Response result for a single origin cloud region mapping.
+// Response result for a delete operation. Identifies the deleted mapping.
 type OriginCloudRegionDeleteResponse struct {
-	ID OriginCloudRegionDeleteResponseID `json:"id" api:"required"`
-	// Whether the setting can be modified by the current user.
-	Editable bool `json:"editable" api:"required"`
-	// A single origin IP-to-cloud-region mapping.
-	Value OriginCloudRegion `json:"value" api:"required"`
-	// Time the mapping was last modified.
-	ModifiedOn time.Time                           `json:"modified_on" format:"date-time"`
-	JSON       originCloudRegionDeleteResponseJSON `json:"-"`
+	// The origin IP address whose mapping was deleted.
+	OriginIP string                              `json:"origin_ip" api:"required"`
+	JSON     originCloudRegionDeleteResponseJSON `json:"-"`
 }
 
 // originCloudRegionDeleteResponseJSON contains the JSON metadata for the struct
 // [OriginCloudRegionDeleteResponse]
 type originCloudRegionDeleteResponseJSON struct {
-	ID          apijson.Field
-	Editable    apijson.Field
-	Value       apijson.Field
-	ModifiedOn  apijson.Field
+	OriginIP    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -377,39 +286,20 @@ func (r originCloudRegionDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type OriginCloudRegionDeleteResponseID string
-
-const (
-	OriginCloudRegionDeleteResponseIDOriginPublicCloudRegion OriginCloudRegionDeleteResponseID = "origin_public_cloud_region"
-)
-
-func (r OriginCloudRegionDeleteResponseID) IsKnown() bool {
-	switch r {
-	case OriginCloudRegionDeleteResponseIDOriginPublicCloudRegion:
-		return true
-	}
-	return false
-}
-
 // Response result for a batch origin cloud region operation.
 type OriginCloudRegionBulkDeleteResponse struct {
-	ID OriginCloudRegionBulkDeleteResponseID `json:"id" api:"required"`
-	// Whether the setting can be modified by the current user.
-	Editable bool                                     `json:"editable" api:"required"`
-	Value    OriginCloudRegionBulkDeleteResponseValue `json:"value" api:"required"`
-	// Time the mapping set was last modified. Null when no items were successfully
-	// applied.
-	ModifiedOn time.Time                               `json:"modified_on" api:"nullable" format:"date-time"`
-	JSON       originCloudRegionBulkDeleteResponseJSON `json:"-"`
+	// Items that could not be applied, with error details.
+	Failed []OriginCloudRegionBulkDeleteResponseFailed `json:"failed" api:"required"`
+	// Items that were successfully applied.
+	Succeeded []OriginCloudRegionBulkDeleteResponseSucceeded `json:"succeeded" api:"required"`
+	JSON      originCloudRegionBulkDeleteResponseJSON        `json:"-"`
 }
 
 // originCloudRegionBulkDeleteResponseJSON contains the JSON metadata for the
 // struct [OriginCloudRegionBulkDeleteResponse]
 type originCloudRegionBulkDeleteResponseJSON struct {
-	ID          apijson.Field
-	Editable    apijson.Field
-	Value       apijson.Field
-	ModifiedOn  apijson.Field
+	Failed      apijson.Field
+	Succeeded   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -422,61 +312,24 @@ func (r originCloudRegionBulkDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type OriginCloudRegionBulkDeleteResponseID string
-
-const (
-	OriginCloudRegionBulkDeleteResponseIDOriginPublicCloudRegion OriginCloudRegionBulkDeleteResponseID = "origin_public_cloud_region"
-)
-
-func (r OriginCloudRegionBulkDeleteResponseID) IsKnown() bool {
-	switch r {
-	case OriginCloudRegionBulkDeleteResponseIDOriginPublicCloudRegion:
-		return true
-	}
-	return false
-}
-
-type OriginCloudRegionBulkDeleteResponseValue struct {
-	// Items that could not be applied, with error details.
-	Failed []OriginCloudRegionBulkDeleteResponseValueFailed `json:"failed" api:"required"`
-	// Items that were successfully applied.
-	Succeeded []OriginCloudRegionBulkDeleteResponseValueSucceeded `json:"succeeded" api:"required"`
-	JSON      originCloudRegionBulkDeleteResponseValueJSON        `json:"-"`
-}
-
-// originCloudRegionBulkDeleteResponseValueJSON contains the JSON metadata for the
-// struct [OriginCloudRegionBulkDeleteResponseValue]
-type originCloudRegionBulkDeleteResponseValueJSON struct {
-	Failed      apijson.Field
-	Succeeded   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCloudRegionBulkDeleteResponseValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCloudRegionBulkDeleteResponseValueJSON) RawJSON() string {
-	return r.raw
-}
-
 // Result for a single item in a batch operation.
-type OriginCloudRegionBulkDeleteResponseValueFailed struct {
+type OriginCloudRegionBulkDeleteResponseFailed struct {
 	// The origin IP address for this item.
-	OriginIP string `json:"origin-ip" api:"required"`
+	OriginIP string `json:"origin_ip" api:"required"`
 	// Error message explaining why the item failed. Present only on failed items.
 	Error string `json:"error"`
-	// Cloud vendor region identifier. Present on succeeded items for patch operations.
+	// Cloud vendor region identifier. Present on succeeded items (the new value for
+	// upsert, the deleted value for delete).
 	Region string `json:"region"`
-	// Cloud vendor identifier. Present on succeeded items for patch operations.
-	Vendor string                                             `json:"vendor"`
-	JSON   originCloudRegionBulkDeleteResponseValueFailedJSON `json:"-"`
+	// Cloud vendor identifier. Present on succeeded items (the new value for upsert,
+	// the deleted value for delete).
+	Vendor string                                        `json:"vendor"`
+	JSON   originCloudRegionBulkDeleteResponseFailedJSON `json:"-"`
 }
 
-// originCloudRegionBulkDeleteResponseValueFailedJSON contains the JSON metadata
-// for the struct [OriginCloudRegionBulkDeleteResponseValueFailed]
-type originCloudRegionBulkDeleteResponseValueFailedJSON struct {
+// originCloudRegionBulkDeleteResponseFailedJSON contains the JSON metadata for the
+// struct [OriginCloudRegionBulkDeleteResponseFailed]
+type originCloudRegionBulkDeleteResponseFailedJSON struct {
 	OriginIP    apijson.Field
 	Error       apijson.Field
 	Region      apijson.Field
@@ -485,30 +338,32 @@ type originCloudRegionBulkDeleteResponseValueFailedJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OriginCloudRegionBulkDeleteResponseValueFailed) UnmarshalJSON(data []byte) (err error) {
+func (r *OriginCloudRegionBulkDeleteResponseFailed) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originCloudRegionBulkDeleteResponseValueFailedJSON) RawJSON() string {
+func (r originCloudRegionBulkDeleteResponseFailedJSON) RawJSON() string {
 	return r.raw
 }
 
 // Result for a single item in a batch operation.
-type OriginCloudRegionBulkDeleteResponseValueSucceeded struct {
+type OriginCloudRegionBulkDeleteResponseSucceeded struct {
 	// The origin IP address for this item.
-	OriginIP string `json:"origin-ip" api:"required"`
+	OriginIP string `json:"origin_ip" api:"required"`
 	// Error message explaining why the item failed. Present only on failed items.
 	Error string `json:"error"`
-	// Cloud vendor region identifier. Present on succeeded items for patch operations.
+	// Cloud vendor region identifier. Present on succeeded items (the new value for
+	// upsert, the deleted value for delete).
 	Region string `json:"region"`
-	// Cloud vendor identifier. Present on succeeded items for patch operations.
-	Vendor string                                                `json:"vendor"`
-	JSON   originCloudRegionBulkDeleteResponseValueSucceededJSON `json:"-"`
+	// Cloud vendor identifier. Present on succeeded items (the new value for upsert,
+	// the deleted value for delete).
+	Vendor string                                           `json:"vendor"`
+	JSON   originCloudRegionBulkDeleteResponseSucceededJSON `json:"-"`
 }
 
-// originCloudRegionBulkDeleteResponseValueSucceededJSON contains the JSON metadata
-// for the struct [OriginCloudRegionBulkDeleteResponseValueSucceeded]
-type originCloudRegionBulkDeleteResponseValueSucceededJSON struct {
+// originCloudRegionBulkDeleteResponseSucceededJSON contains the JSON metadata for
+// the struct [OriginCloudRegionBulkDeleteResponseSucceeded]
+type originCloudRegionBulkDeleteResponseSucceededJSON struct {
 	OriginIP    apijson.Field
 	Error       apijson.Field
 	Region      apijson.Field
@@ -517,100 +372,92 @@ type originCloudRegionBulkDeleteResponseValueSucceededJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OriginCloudRegionBulkDeleteResponseValueSucceeded) UnmarshalJSON(data []byte) (err error) {
+func (r *OriginCloudRegionBulkDeleteResponseSucceeded) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originCloudRegionBulkDeleteResponseValueSucceededJSON) RawJSON() string {
+func (r originCloudRegionBulkDeleteResponseSucceededJSON) RawJSON() string {
 	return r.raw
 }
 
 // Response result for a batch origin cloud region operation.
-type OriginCloudRegionBulkEditResponse struct {
-	ID OriginCloudRegionBulkEditResponseID `json:"id" api:"required"`
-	// Whether the setting can be modified by the current user.
-	Editable bool                                   `json:"editable" api:"required"`
-	Value    OriginCloudRegionBulkEditResponseValue `json:"value" api:"required"`
-	// Time the mapping set was last modified. Null when no items were successfully
-	// applied.
-	ModifiedOn time.Time                             `json:"modified_on" api:"nullable" format:"date-time"`
-	JSON       originCloudRegionBulkEditResponseJSON `json:"-"`
-}
-
-// originCloudRegionBulkEditResponseJSON contains the JSON metadata for the struct
-// [OriginCloudRegionBulkEditResponse]
-type originCloudRegionBulkEditResponseJSON struct {
-	ID          apijson.Field
-	Editable    apijson.Field
-	Value       apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCloudRegionBulkEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCloudRegionBulkEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCloudRegionBulkEditResponseID string
-
-const (
-	OriginCloudRegionBulkEditResponseIDOriginPublicCloudRegion OriginCloudRegionBulkEditResponseID = "origin_public_cloud_region"
-)
-
-func (r OriginCloudRegionBulkEditResponseID) IsKnown() bool {
-	switch r {
-	case OriginCloudRegionBulkEditResponseIDOriginPublicCloudRegion:
-		return true
-	}
-	return false
-}
-
-type OriginCloudRegionBulkEditResponseValue struct {
+type OriginCloudRegionBulkUpdateResponse struct {
 	// Items that could not be applied, with error details.
-	Failed []OriginCloudRegionBulkEditResponseValueFailed `json:"failed" api:"required"`
+	Failed []OriginCloudRegionBulkUpdateResponseFailed `json:"failed" api:"required"`
 	// Items that were successfully applied.
-	Succeeded []OriginCloudRegionBulkEditResponseValueSucceeded `json:"succeeded" api:"required"`
-	JSON      originCloudRegionBulkEditResponseValueJSON        `json:"-"`
+	Succeeded []OriginCloudRegionBulkUpdateResponseSucceeded `json:"succeeded" api:"required"`
+	JSON      originCloudRegionBulkUpdateResponseJSON        `json:"-"`
 }
 
-// originCloudRegionBulkEditResponseValueJSON contains the JSON metadata for the
-// struct [OriginCloudRegionBulkEditResponseValue]
-type originCloudRegionBulkEditResponseValueJSON struct {
+// originCloudRegionBulkUpdateResponseJSON contains the JSON metadata for the
+// struct [OriginCloudRegionBulkUpdateResponse]
+type originCloudRegionBulkUpdateResponseJSON struct {
 	Failed      apijson.Field
 	Succeeded   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OriginCloudRegionBulkEditResponseValue) UnmarshalJSON(data []byte) (err error) {
+func (r *OriginCloudRegionBulkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originCloudRegionBulkEditResponseValueJSON) RawJSON() string {
+func (r originCloudRegionBulkUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Result for a single item in a batch operation.
-type OriginCloudRegionBulkEditResponseValueFailed struct {
+type OriginCloudRegionBulkUpdateResponseFailed struct {
 	// The origin IP address for this item.
-	OriginIP string `json:"origin-ip" api:"required"`
+	OriginIP string `json:"origin_ip" api:"required"`
 	// Error message explaining why the item failed. Present only on failed items.
 	Error string `json:"error"`
-	// Cloud vendor region identifier. Present on succeeded items for patch operations.
+	// Cloud vendor region identifier. Present on succeeded items (the new value for
+	// upsert, the deleted value for delete).
 	Region string `json:"region"`
-	// Cloud vendor identifier. Present on succeeded items for patch operations.
+	// Cloud vendor identifier. Present on succeeded items (the new value for upsert,
+	// the deleted value for delete).
+	Vendor string                                        `json:"vendor"`
+	JSON   originCloudRegionBulkUpdateResponseFailedJSON `json:"-"`
+}
+
+// originCloudRegionBulkUpdateResponseFailedJSON contains the JSON metadata for the
+// struct [OriginCloudRegionBulkUpdateResponseFailed]
+type originCloudRegionBulkUpdateResponseFailedJSON struct {
+	OriginIP    apijson.Field
+	Error       apijson.Field
+	Region      apijson.Field
+	Vendor      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginCloudRegionBulkUpdateResponseFailed) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originCloudRegionBulkUpdateResponseFailedJSON) RawJSON() string {
+	return r.raw
+}
+
+// Result for a single item in a batch operation.
+type OriginCloudRegionBulkUpdateResponseSucceeded struct {
+	// The origin IP address for this item.
+	OriginIP string `json:"origin_ip" api:"required"`
+	// Error message explaining why the item failed. Present only on failed items.
+	Error string `json:"error"`
+	// Cloud vendor region identifier. Present on succeeded items (the new value for
+	// upsert, the deleted value for delete).
+	Region string `json:"region"`
+	// Cloud vendor identifier. Present on succeeded items (the new value for upsert,
+	// the deleted value for delete).
 	Vendor string                                           `json:"vendor"`
-	JSON   originCloudRegionBulkEditResponseValueFailedJSON `json:"-"`
+	JSON   originCloudRegionBulkUpdateResponseSucceededJSON `json:"-"`
 }
 
-// originCloudRegionBulkEditResponseValueFailedJSON contains the JSON metadata for
-// the struct [OriginCloudRegionBulkEditResponseValueFailed]
-type originCloudRegionBulkEditResponseValueFailedJSON struct {
+// originCloudRegionBulkUpdateResponseSucceededJSON contains the JSON metadata for
+// the struct [OriginCloudRegionBulkUpdateResponseSucceeded]
+type originCloudRegionBulkUpdateResponseSucceededJSON struct {
 	OriginIP    apijson.Field
 	Error       apijson.Field
 	Region      apijson.Field
@@ -619,133 +466,12 @@ type originCloudRegionBulkEditResponseValueFailedJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OriginCloudRegionBulkEditResponseValueFailed) UnmarshalJSON(data []byte) (err error) {
+func (r *OriginCloudRegionBulkUpdateResponseSucceeded) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originCloudRegionBulkEditResponseValueFailedJSON) RawJSON() string {
+func (r originCloudRegionBulkUpdateResponseSucceededJSON) RawJSON() string {
 	return r.raw
-}
-
-// Result for a single item in a batch operation.
-type OriginCloudRegionBulkEditResponseValueSucceeded struct {
-	// The origin IP address for this item.
-	OriginIP string `json:"origin-ip" api:"required"`
-	// Error message explaining why the item failed. Present only on failed items.
-	Error string `json:"error"`
-	// Cloud vendor region identifier. Present on succeeded items for patch operations.
-	Region string `json:"region"`
-	// Cloud vendor identifier. Present on succeeded items for patch operations.
-	Vendor string                                              `json:"vendor"`
-	JSON   originCloudRegionBulkEditResponseValueSucceededJSON `json:"-"`
-}
-
-// originCloudRegionBulkEditResponseValueSucceededJSON contains the JSON metadata
-// for the struct [OriginCloudRegionBulkEditResponseValueSucceeded]
-type originCloudRegionBulkEditResponseValueSucceededJSON struct {
-	OriginIP    apijson.Field
-	Error       apijson.Field
-	Region      apijson.Field
-	Vendor      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCloudRegionBulkEditResponseValueSucceeded) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCloudRegionBulkEditResponseValueSucceededJSON) RawJSON() string {
-	return r.raw
-}
-
-// Response result for a list of origin cloud region mappings.
-type OriginCloudRegionEditResponse struct {
-	ID OriginCloudRegionEditResponseID `json:"id" api:"required"`
-	// Whether the setting can be modified by the current user.
-	Editable bool                `json:"editable" api:"required"`
-	Value    []OriginCloudRegion `json:"value" api:"required"`
-	// Time the mapping set was last modified. Null when no mappings exist.
-	ModifiedOn time.Time                         `json:"modified_on" api:"nullable" format:"date-time"`
-	JSON       originCloudRegionEditResponseJSON `json:"-"`
-}
-
-// originCloudRegionEditResponseJSON contains the JSON metadata for the struct
-// [OriginCloudRegionEditResponse]
-type originCloudRegionEditResponseJSON struct {
-	ID          apijson.Field
-	Editable    apijson.Field
-	Value       apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCloudRegionEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCloudRegionEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCloudRegionEditResponseID string
-
-const (
-	OriginCloudRegionEditResponseIDOriginPublicCloudRegion OriginCloudRegionEditResponseID = "origin_public_cloud_region"
-)
-
-func (r OriginCloudRegionEditResponseID) IsKnown() bool {
-	switch r {
-	case OriginCloudRegionEditResponseIDOriginPublicCloudRegion:
-		return true
-	}
-	return false
-}
-
-// Response result for a single origin cloud region mapping.
-type OriginCloudRegionGetResponse struct {
-	ID OriginCloudRegionGetResponseID `json:"id" api:"required"`
-	// Whether the setting can be modified by the current user.
-	Editable bool `json:"editable" api:"required"`
-	// A single origin IP-to-cloud-region mapping.
-	Value OriginCloudRegion `json:"value" api:"required"`
-	// Time the mapping was last modified.
-	ModifiedOn time.Time                        `json:"modified_on" format:"date-time"`
-	JSON       originCloudRegionGetResponseJSON `json:"-"`
-}
-
-// originCloudRegionGetResponseJSON contains the JSON metadata for the struct
-// [OriginCloudRegionGetResponse]
-type originCloudRegionGetResponseJSON struct {
-	ID          apijson.Field
-	Editable    apijson.Field
-	Value       apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCloudRegionGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCloudRegionGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCloudRegionGetResponseID string
-
-const (
-	OriginCloudRegionGetResponseIDOriginPublicCloudRegion OriginCloudRegionGetResponseID = "origin_public_cloud_region"
-)
-
-func (r OriginCloudRegionGetResponseID) IsKnown() bool {
-	switch r {
-	case OriginCloudRegionGetResponseIDOriginPublicCloudRegion:
-		return true
-	}
-	return false
 }
 
 // Cloud vendors and their supported regions for origin cloud region mappings.
@@ -805,54 +531,56 @@ func (r originCloudRegionSupportedRegionsResponseVendorJSON) RawJSON() string {
 	return r.raw
 }
 
-type OriginCloudRegionNewParams struct {
+type OriginCloudRegionUpdateParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	// Origin IP address (IPv4 or IPv6). Normalized to canonical form before storage
-	// (RFC 5952 for IPv6).
-	IP param.Field[string] `json:"ip" api:"required"`
+	// Origin IP address (IPv4 or IPv6). For the single PUT endpoint
+	// (`PUT /origin/cloud_regions/{origin_ip}`), this field must match the path
+	// parameter or the request will be rejected with a 400 error. For the batch PUT
+	// endpoint, this field identifies which mapping to upsert.
+	OriginIP param.Field[string] `json:"origin_ip" api:"required"`
 	// Cloud vendor region identifier. Must be a valid region for the specified vendor
 	// as returned by the supported_regions endpoint.
 	Region param.Field[string] `json:"region" api:"required"`
 	// Cloud vendor hosting the origin. Must be one of the supported vendors.
-	Vendor param.Field[OriginCloudRegionNewParamsVendor] `json:"vendor" api:"required"`
+	Vendor param.Field[OriginCloudRegionUpdateParamsVendor] `json:"vendor" api:"required"`
 }
 
-func (r OriginCloudRegionNewParams) MarshalJSON() (data []byte, err error) {
+func (r OriginCloudRegionUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Cloud vendor hosting the origin. Must be one of the supported vendors.
-type OriginCloudRegionNewParamsVendor string
+type OriginCloudRegionUpdateParamsVendor string
 
 const (
-	OriginCloudRegionNewParamsVendorAws   OriginCloudRegionNewParamsVendor = "aws"
-	OriginCloudRegionNewParamsVendorAzure OriginCloudRegionNewParamsVendor = "azure"
-	OriginCloudRegionNewParamsVendorGcp   OriginCloudRegionNewParamsVendor = "gcp"
-	OriginCloudRegionNewParamsVendorOci   OriginCloudRegionNewParamsVendor = "oci"
+	OriginCloudRegionUpdateParamsVendorAws   OriginCloudRegionUpdateParamsVendor = "aws"
+	OriginCloudRegionUpdateParamsVendorAzure OriginCloudRegionUpdateParamsVendor = "azure"
+	OriginCloudRegionUpdateParamsVendorGcp   OriginCloudRegionUpdateParamsVendor = "gcp"
+	OriginCloudRegionUpdateParamsVendorOci   OriginCloudRegionUpdateParamsVendor = "oci"
 )
 
-func (r OriginCloudRegionNewParamsVendor) IsKnown() bool {
+func (r OriginCloudRegionUpdateParamsVendor) IsKnown() bool {
 	switch r {
-	case OriginCloudRegionNewParamsVendorAws, OriginCloudRegionNewParamsVendorAzure, OriginCloudRegionNewParamsVendorGcp, OriginCloudRegionNewParamsVendorOci:
+	case OriginCloudRegionUpdateParamsVendorAws, OriginCloudRegionUpdateParamsVendorAzure, OriginCloudRegionUpdateParamsVendorGcp, OriginCloudRegionUpdateParamsVendorOci:
 		return true
 	}
 	return false
 }
 
-type OriginCloudRegionNewResponseEnvelope struct {
+type OriginCloudRegionUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
 	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OriginCloudRegionNewResponseEnvelopeSuccess `json:"success" api:"required"`
-	// Response result for a single origin cloud region mapping.
-	Result OriginCloudRegionNewResponse             `json:"result"`
-	JSON   originCloudRegionNewResponseEnvelopeJSON `json:"-"`
+	Success OriginCloudRegionUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
+	// A single origin IP-to-cloud-region mapping.
+	Result OriginCloudRegion                           `json:"result"`
+	JSON   originCloudRegionUpdateResponseEnvelopeJSON `json:"-"`
 }
 
-// originCloudRegionNewResponseEnvelopeJSON contains the JSON metadata for the
-// struct [OriginCloudRegionNewResponseEnvelope]
-type originCloudRegionNewResponseEnvelopeJSON struct {
+// originCloudRegionUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [OriginCloudRegionUpdateResponseEnvelope]
+type originCloudRegionUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -861,24 +589,24 @@ type originCloudRegionNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OriginCloudRegionNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *OriginCloudRegionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originCloudRegionNewResponseEnvelopeJSON) RawJSON() string {
+func (r originCloudRegionUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful.
-type OriginCloudRegionNewResponseEnvelopeSuccess bool
+type OriginCloudRegionUpdateResponseEnvelopeSuccess bool
 
 const (
-	OriginCloudRegionNewResponseEnvelopeSuccessTrue OriginCloudRegionNewResponseEnvelopeSuccess = true
+	OriginCloudRegionUpdateResponseEnvelopeSuccessTrue OriginCloudRegionUpdateResponseEnvelopeSuccess = true
 )
 
-func (r OriginCloudRegionNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r OriginCloudRegionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case OriginCloudRegionNewResponseEnvelopeSuccessTrue:
+	case OriginCloudRegionUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
@@ -887,50 +615,19 @@ func (r OriginCloudRegionNewResponseEnvelopeSuccess) IsKnown() bool {
 type OriginCloudRegionListParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	// Page number of paginated results.
+	Page param.Field[int64] `query:"page"`
+	// Number of items per page.
+	PerPage param.Field[int64] `query:"per_page"`
 }
 
-type OriginCloudRegionListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	// Whether the API call was successful.
-	Success OriginCloudRegionListResponseEnvelopeSuccess `json:"success" api:"required"`
-	// Response result for a list of origin cloud region mappings.
-	Result OriginCloudRegionListResponse             `json:"result"`
-	JSON   originCloudRegionListResponseEnvelopeJSON `json:"-"`
-}
-
-// originCloudRegionListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [OriginCloudRegionListResponseEnvelope]
-type originCloudRegionListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCloudRegionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCloudRegionListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type OriginCloudRegionListResponseEnvelopeSuccess bool
-
-const (
-	OriginCloudRegionListResponseEnvelopeSuccessTrue OriginCloudRegionListResponseEnvelopeSuccess = true
-)
-
-func (r OriginCloudRegionListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case OriginCloudRegionListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
+// URLQuery serializes [OriginCloudRegionListParams]'s query parameters as
+// `url.Values`.
+func (r OriginCloudRegionListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type OriginCloudRegionDeleteParams struct {
@@ -943,7 +640,7 @@ type OriginCloudRegionDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success OriginCloudRegionDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
-	// Response result for a single origin cloud region mapping.
+	// Response result for a delete operation. Identifies the deleted mapping.
 	Result OriginCloudRegionDeleteResponse             `json:"result"`
 	JSON   originCloudRegionDeleteResponseEnvelopeJSON `json:"-"`
 }
@@ -1031,63 +728,65 @@ func (r OriginCloudRegionBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type OriginCloudRegionBulkEditParams struct {
+type OriginCloudRegionBulkUpdateParams struct {
 	// Identifier.
-	ZoneID param.Field[string]                   `path:"zone_id" api:"required"`
-	Body   []OriginCloudRegionBulkEditParamsBody `json:"body" api:"required"`
+	ZoneID param.Field[string]                     `path:"zone_id" api:"required"`
+	Body   []OriginCloudRegionBulkUpdateParamsBody `json:"body" api:"required"`
 }
 
-func (r OriginCloudRegionBulkEditParams) MarshalJSON() (data []byte, err error) {
+func (r OriginCloudRegionBulkUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-// Request body for creating or updating an origin cloud region mapping.
-type OriginCloudRegionBulkEditParamsBody struct {
-	// Origin IP address (IPv4 or IPv6). Normalized to canonical form before storage
-	// (RFC 5952 for IPv6).
-	IP param.Field[string] `json:"ip" api:"required"`
+// Request body for creating or replacing an origin cloud region mapping.
+type OriginCloudRegionBulkUpdateParamsBody struct {
+	// Origin IP address (IPv4 or IPv6). For the single PUT endpoint
+	// (`PUT /origin/cloud_regions/{origin_ip}`), this field must match the path
+	// parameter or the request will be rejected with a 400 error. For the batch PUT
+	// endpoint, this field identifies which mapping to upsert.
+	OriginIP param.Field[string] `json:"origin_ip" api:"required"`
 	// Cloud vendor region identifier. Must be a valid region for the specified vendor
 	// as returned by the supported_regions endpoint.
 	Region param.Field[string] `json:"region" api:"required"`
 	// Cloud vendor hosting the origin. Must be one of the supported vendors.
-	Vendor param.Field[OriginCloudRegionBulkEditParamsBodyVendor] `json:"vendor" api:"required"`
+	Vendor param.Field[OriginCloudRegionBulkUpdateParamsBodyVendor] `json:"vendor" api:"required"`
 }
 
-func (r OriginCloudRegionBulkEditParamsBody) MarshalJSON() (data []byte, err error) {
+func (r OriginCloudRegionBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Cloud vendor hosting the origin. Must be one of the supported vendors.
-type OriginCloudRegionBulkEditParamsBodyVendor string
+type OriginCloudRegionBulkUpdateParamsBodyVendor string
 
 const (
-	OriginCloudRegionBulkEditParamsBodyVendorAws   OriginCloudRegionBulkEditParamsBodyVendor = "aws"
-	OriginCloudRegionBulkEditParamsBodyVendorAzure OriginCloudRegionBulkEditParamsBodyVendor = "azure"
-	OriginCloudRegionBulkEditParamsBodyVendorGcp   OriginCloudRegionBulkEditParamsBodyVendor = "gcp"
-	OriginCloudRegionBulkEditParamsBodyVendorOci   OriginCloudRegionBulkEditParamsBodyVendor = "oci"
+	OriginCloudRegionBulkUpdateParamsBodyVendorAws   OriginCloudRegionBulkUpdateParamsBodyVendor = "aws"
+	OriginCloudRegionBulkUpdateParamsBodyVendorAzure OriginCloudRegionBulkUpdateParamsBodyVendor = "azure"
+	OriginCloudRegionBulkUpdateParamsBodyVendorGcp   OriginCloudRegionBulkUpdateParamsBodyVendor = "gcp"
+	OriginCloudRegionBulkUpdateParamsBodyVendorOci   OriginCloudRegionBulkUpdateParamsBodyVendor = "oci"
 )
 
-func (r OriginCloudRegionBulkEditParamsBodyVendor) IsKnown() bool {
+func (r OriginCloudRegionBulkUpdateParamsBodyVendor) IsKnown() bool {
 	switch r {
-	case OriginCloudRegionBulkEditParamsBodyVendorAws, OriginCloudRegionBulkEditParamsBodyVendorAzure, OriginCloudRegionBulkEditParamsBodyVendorGcp, OriginCloudRegionBulkEditParamsBodyVendorOci:
+	case OriginCloudRegionBulkUpdateParamsBodyVendorAws, OriginCloudRegionBulkUpdateParamsBodyVendorAzure, OriginCloudRegionBulkUpdateParamsBodyVendorGcp, OriginCloudRegionBulkUpdateParamsBodyVendorOci:
 		return true
 	}
 	return false
 }
 
-type OriginCloudRegionBulkEditResponseEnvelope struct {
+type OriginCloudRegionBulkUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
 	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success OriginCloudRegionBulkEditResponseEnvelopeSuccess `json:"success" api:"required"`
+	Success OriginCloudRegionBulkUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Response result for a batch origin cloud region operation.
-	Result OriginCloudRegionBulkEditResponse             `json:"result"`
-	JSON   originCloudRegionBulkEditResponseEnvelopeJSON `json:"-"`
+	Result OriginCloudRegionBulkUpdateResponse             `json:"result"`
+	JSON   originCloudRegionBulkUpdateResponseEnvelopeJSON `json:"-"`
 }
 
-// originCloudRegionBulkEditResponseEnvelopeJSON contains the JSON metadata for the
-// struct [OriginCloudRegionBulkEditResponseEnvelope]
-type originCloudRegionBulkEditResponseEnvelopeJSON struct {
+// originCloudRegionBulkUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [OriginCloudRegionBulkUpdateResponseEnvelope]
+type originCloudRegionBulkUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -1096,103 +795,24 @@ type originCloudRegionBulkEditResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OriginCloudRegionBulkEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *OriginCloudRegionBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originCloudRegionBulkEditResponseEnvelopeJSON) RawJSON() string {
+func (r originCloudRegionBulkUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful.
-type OriginCloudRegionBulkEditResponseEnvelopeSuccess bool
+type OriginCloudRegionBulkUpdateResponseEnvelopeSuccess bool
 
 const (
-	OriginCloudRegionBulkEditResponseEnvelopeSuccessTrue OriginCloudRegionBulkEditResponseEnvelopeSuccess = true
+	OriginCloudRegionBulkUpdateResponseEnvelopeSuccessTrue OriginCloudRegionBulkUpdateResponseEnvelopeSuccess = true
 )
 
-func (r OriginCloudRegionBulkEditResponseEnvelopeSuccess) IsKnown() bool {
+func (r OriginCloudRegionBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case OriginCloudRegionBulkEditResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type OriginCloudRegionEditParams struct {
-	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	// Origin IP address (IPv4 or IPv6). Normalized to canonical form before storage
-	// (RFC 5952 for IPv6).
-	IP param.Field[string] `json:"ip" api:"required"`
-	// Cloud vendor region identifier. Must be a valid region for the specified vendor
-	// as returned by the supported_regions endpoint.
-	Region param.Field[string] `json:"region" api:"required"`
-	// Cloud vendor hosting the origin. Must be one of the supported vendors.
-	Vendor param.Field[OriginCloudRegionEditParamsVendor] `json:"vendor" api:"required"`
-}
-
-func (r OriginCloudRegionEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Cloud vendor hosting the origin. Must be one of the supported vendors.
-type OriginCloudRegionEditParamsVendor string
-
-const (
-	OriginCloudRegionEditParamsVendorAws   OriginCloudRegionEditParamsVendor = "aws"
-	OriginCloudRegionEditParamsVendorAzure OriginCloudRegionEditParamsVendor = "azure"
-	OriginCloudRegionEditParamsVendorGcp   OriginCloudRegionEditParamsVendor = "gcp"
-	OriginCloudRegionEditParamsVendorOci   OriginCloudRegionEditParamsVendor = "oci"
-)
-
-func (r OriginCloudRegionEditParamsVendor) IsKnown() bool {
-	switch r {
-	case OriginCloudRegionEditParamsVendorAws, OriginCloudRegionEditParamsVendorAzure, OriginCloudRegionEditParamsVendorGcp, OriginCloudRegionEditParamsVendorOci:
-		return true
-	}
-	return false
-}
-
-type OriginCloudRegionEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	// Whether the API call was successful.
-	Success OriginCloudRegionEditResponseEnvelopeSuccess `json:"success" api:"required"`
-	// Response result for a list of origin cloud region mappings.
-	Result OriginCloudRegionEditResponse             `json:"result"`
-	JSON   originCloudRegionEditResponseEnvelopeJSON `json:"-"`
-}
-
-// originCloudRegionEditResponseEnvelopeJSON contains the JSON metadata for the
-// struct [OriginCloudRegionEditResponseEnvelope]
-type originCloudRegionEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCloudRegionEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCloudRegionEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type OriginCloudRegionEditResponseEnvelopeSuccess bool
-
-const (
-	OriginCloudRegionEditResponseEnvelopeSuccessTrue OriginCloudRegionEditResponseEnvelopeSuccess = true
-)
-
-func (r OriginCloudRegionEditResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case OriginCloudRegionEditResponseEnvelopeSuccessTrue:
+	case OriginCloudRegionBulkUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
@@ -1208,8 +828,8 @@ type OriginCloudRegionGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success OriginCloudRegionGetResponseEnvelopeSuccess `json:"success" api:"required"`
-	// Response result for a single origin cloud region mapping.
-	Result OriginCloudRegionGetResponse             `json:"result"`
+	// A single origin IP-to-cloud-region mapping.
+	Result OriginCloudRegion                        `json:"result"`
 	JSON   originCloudRegionGetResponseEnvelopeJSON `json:"-"`
 }
 
