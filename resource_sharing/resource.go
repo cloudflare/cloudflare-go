@@ -223,11 +223,12 @@ const (
 	ResourceNewResponseResourceTypeGatewayDestinationIP         ResourceNewResponseResourceType = "gateway-destination-ip"
 	ResourceNewResponseResourceTypeGatewayBlockPageSettings     ResourceNewResponseResourceType = "gateway-block-page-settings"
 	ResourceNewResponseResourceTypeGatewayExtendedEmailMatching ResourceNewResponseResourceType = "gateway-extended-email-matching"
+	ResourceNewResponseResourceTypeIdPFederationGrant           ResourceNewResponseResourceType = "idp-federation-grant"
 )
 
 func (r ResourceNewResponseResourceType) IsKnown() bool {
 	switch r {
-	case ResourceNewResponseResourceTypeCustomRuleset, ResourceNewResponseResourceTypeGatewayPolicy, ResourceNewResponseResourceTypeGatewayDestinationIP, ResourceNewResponseResourceTypeGatewayBlockPageSettings, ResourceNewResponseResourceTypeGatewayExtendedEmailMatching:
+	case ResourceNewResponseResourceTypeCustomRuleset, ResourceNewResponseResourceTypeGatewayPolicy, ResourceNewResponseResourceTypeGatewayDestinationIP, ResourceNewResponseResourceTypeGatewayBlockPageSettings, ResourceNewResponseResourceTypeGatewayExtendedEmailMatching, ResourceNewResponseResourceTypeIdPFederationGrant:
 		return true
 	}
 	return false
@@ -305,11 +306,12 @@ const (
 	ResourceUpdateResponseResourceTypeGatewayDestinationIP         ResourceUpdateResponseResourceType = "gateway-destination-ip"
 	ResourceUpdateResponseResourceTypeGatewayBlockPageSettings     ResourceUpdateResponseResourceType = "gateway-block-page-settings"
 	ResourceUpdateResponseResourceTypeGatewayExtendedEmailMatching ResourceUpdateResponseResourceType = "gateway-extended-email-matching"
+	ResourceUpdateResponseResourceTypeIdPFederationGrant           ResourceUpdateResponseResourceType = "idp-federation-grant"
 )
 
 func (r ResourceUpdateResponseResourceType) IsKnown() bool {
 	switch r {
-	case ResourceUpdateResponseResourceTypeCustomRuleset, ResourceUpdateResponseResourceTypeGatewayPolicy, ResourceUpdateResponseResourceTypeGatewayDestinationIP, ResourceUpdateResponseResourceTypeGatewayBlockPageSettings, ResourceUpdateResponseResourceTypeGatewayExtendedEmailMatching:
+	case ResourceUpdateResponseResourceTypeCustomRuleset, ResourceUpdateResponseResourceTypeGatewayPolicy, ResourceUpdateResponseResourceTypeGatewayDestinationIP, ResourceUpdateResponseResourceTypeGatewayBlockPageSettings, ResourceUpdateResponseResourceTypeGatewayExtendedEmailMatching, ResourceUpdateResponseResourceTypeIdPFederationGrant:
 		return true
 	}
 	return false
@@ -387,11 +389,12 @@ const (
 	ResourceListResponseResourceTypeGatewayDestinationIP         ResourceListResponseResourceType = "gateway-destination-ip"
 	ResourceListResponseResourceTypeGatewayBlockPageSettings     ResourceListResponseResourceType = "gateway-block-page-settings"
 	ResourceListResponseResourceTypeGatewayExtendedEmailMatching ResourceListResponseResourceType = "gateway-extended-email-matching"
+	ResourceListResponseResourceTypeIdPFederationGrant           ResourceListResponseResourceType = "idp-federation-grant"
 )
 
 func (r ResourceListResponseResourceType) IsKnown() bool {
 	switch r {
-	case ResourceListResponseResourceTypeCustomRuleset, ResourceListResponseResourceTypeGatewayPolicy, ResourceListResponseResourceTypeGatewayDestinationIP, ResourceListResponseResourceTypeGatewayBlockPageSettings, ResourceListResponseResourceTypeGatewayExtendedEmailMatching:
+	case ResourceListResponseResourceTypeCustomRuleset, ResourceListResponseResourceTypeGatewayPolicy, ResourceListResponseResourceTypeGatewayDestinationIP, ResourceListResponseResourceTypeGatewayBlockPageSettings, ResourceListResponseResourceTypeGatewayExtendedEmailMatching, ResourceListResponseResourceTypeIdPFederationGrant:
 		return true
 	}
 	return false
@@ -469,11 +472,12 @@ const (
 	ResourceDeleteResponseResourceTypeGatewayDestinationIP         ResourceDeleteResponseResourceType = "gateway-destination-ip"
 	ResourceDeleteResponseResourceTypeGatewayBlockPageSettings     ResourceDeleteResponseResourceType = "gateway-block-page-settings"
 	ResourceDeleteResponseResourceTypeGatewayExtendedEmailMatching ResourceDeleteResponseResourceType = "gateway-extended-email-matching"
+	ResourceDeleteResponseResourceTypeIdPFederationGrant           ResourceDeleteResponseResourceType = "idp-federation-grant"
 )
 
 func (r ResourceDeleteResponseResourceType) IsKnown() bool {
 	switch r {
-	case ResourceDeleteResponseResourceTypeCustomRuleset, ResourceDeleteResponseResourceTypeGatewayPolicy, ResourceDeleteResponseResourceTypeGatewayDestinationIP, ResourceDeleteResponseResourceTypeGatewayBlockPageSettings, ResourceDeleteResponseResourceTypeGatewayExtendedEmailMatching:
+	case ResourceDeleteResponseResourceTypeCustomRuleset, ResourceDeleteResponseResourceTypeGatewayPolicy, ResourceDeleteResponseResourceTypeGatewayDestinationIP, ResourceDeleteResponseResourceTypeGatewayBlockPageSettings, ResourceDeleteResponseResourceTypeGatewayExtendedEmailMatching, ResourceDeleteResponseResourceTypeIdPFederationGrant:
 		return true
 	}
 	return false
@@ -551,11 +555,12 @@ const (
 	ResourceGetResponseResourceTypeGatewayDestinationIP         ResourceGetResponseResourceType = "gateway-destination-ip"
 	ResourceGetResponseResourceTypeGatewayBlockPageSettings     ResourceGetResponseResourceType = "gateway-block-page-settings"
 	ResourceGetResponseResourceTypeGatewayExtendedEmailMatching ResourceGetResponseResourceType = "gateway-extended-email-matching"
+	ResourceGetResponseResourceTypeIdPFederationGrant           ResourceGetResponseResourceType = "idp-federation-grant"
 )
 
 func (r ResourceGetResponseResourceType) IsKnown() bool {
 	switch r {
-	case ResourceGetResponseResourceTypeCustomRuleset, ResourceGetResponseResourceTypeGatewayPolicy, ResourceGetResponseResourceTypeGatewayDestinationIP, ResourceGetResponseResourceTypeGatewayBlockPageSettings, ResourceGetResponseResourceTypeGatewayExtendedEmailMatching:
+	case ResourceGetResponseResourceTypeCustomRuleset, ResourceGetResponseResourceTypeGatewayPolicy, ResourceGetResponseResourceTypeGatewayDestinationIP, ResourceGetResponseResourceTypeGatewayBlockPageSettings, ResourceGetResponseResourceTypeGatewayExtendedEmailMatching, ResourceGetResponseResourceTypeIdPFederationGrant:
 		return true
 	}
 	return false
@@ -604,11 +609,12 @@ const (
 	ResourceNewParamsResourceTypeGatewayDestinationIP         ResourceNewParamsResourceType = "gateway-destination-ip"
 	ResourceNewParamsResourceTypeGatewayBlockPageSettings     ResourceNewParamsResourceType = "gateway-block-page-settings"
 	ResourceNewParamsResourceTypeGatewayExtendedEmailMatching ResourceNewParamsResourceType = "gateway-extended-email-matching"
+	ResourceNewParamsResourceTypeIdPFederationGrant           ResourceNewParamsResourceType = "idp-federation-grant"
 )
 
 func (r ResourceNewParamsResourceType) IsKnown() bool {
 	switch r {
-	case ResourceNewParamsResourceTypeCustomRuleset, ResourceNewParamsResourceTypeGatewayPolicy, ResourceNewParamsResourceTypeGatewayDestinationIP, ResourceNewParamsResourceTypeGatewayBlockPageSettings, ResourceNewParamsResourceTypeGatewayExtendedEmailMatching:
+	case ResourceNewParamsResourceTypeCustomRuleset, ResourceNewParamsResourceTypeGatewayPolicy, ResourceNewParamsResourceTypeGatewayDestinationIP, ResourceNewParamsResourceTypeGatewayBlockPageSettings, ResourceNewParamsResourceTypeGatewayExtendedEmailMatching, ResourceNewParamsResourceTypeIdPFederationGrant:
 		return true
 	}
 	return false
@@ -707,11 +713,12 @@ const (
 	ResourceListParamsResourceTypeGatewayDestinationIP         ResourceListParamsResourceType = "gateway-destination-ip"
 	ResourceListParamsResourceTypeGatewayBlockPageSettings     ResourceListParamsResourceType = "gateway-block-page-settings"
 	ResourceListParamsResourceTypeGatewayExtendedEmailMatching ResourceListParamsResourceType = "gateway-extended-email-matching"
+	ResourceListParamsResourceTypeIdPFederationGrant           ResourceListParamsResourceType = "idp-federation-grant"
 )
 
 func (r ResourceListParamsResourceType) IsKnown() bool {
 	switch r {
-	case ResourceListParamsResourceTypeCustomRuleset, ResourceListParamsResourceTypeGatewayPolicy, ResourceListParamsResourceTypeGatewayDestinationIP, ResourceListParamsResourceTypeGatewayBlockPageSettings, ResourceListParamsResourceTypeGatewayExtendedEmailMatching:
+	case ResourceListParamsResourceTypeCustomRuleset, ResourceListParamsResourceTypeGatewayPolicy, ResourceListParamsResourceTypeGatewayDestinationIP, ResourceListParamsResourceTypeGatewayBlockPageSettings, ResourceListParamsResourceTypeGatewayExtendedEmailMatching, ResourceListParamsResourceTypeIdPFederationGrant:
 		return true
 	}
 	return false

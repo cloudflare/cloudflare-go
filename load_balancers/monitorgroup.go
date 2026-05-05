@@ -176,10 +176,10 @@ type MonitorGroup struct {
 	// List of monitors in this group
 	Members []MonitorGroupMember `json:"members" api:"required"`
 	// The timestamp of when the monitor group was created
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The timestamp of when the monitor group was last updated
-	UpdatedAt time.Time        `json:"updated_at" format:"date-time"`
-	JSON      monitorGroupJSON `json:"-"`
+	ModifiedOn time.Time        `json:"modified_on" format:"date-time"`
+	JSON       monitorGroupJSON `json:"-"`
 }
 
 // monitorGroupJSON contains the JSON metadata for the struct [MonitorGroup]
@@ -187,8 +187,8 @@ type monitorGroupJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Members     apijson.Field
-	CreatedAt   apijson.Field
-	UpdatedAt   apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -240,9 +240,6 @@ func (r monitorGroupMemberJSON) RawJSON() string {
 }
 
 type MonitorGroupParam struct {
-	// The ID of the Monitor Group to use for checking the health of origins within
-	// this pool.
-	ID param.Field[string] `json:"id" api:"required"`
 	// A short description of the monitor group
 	Description param.Field[string] `json:"description" api:"required"`
 	// List of monitors in this group
