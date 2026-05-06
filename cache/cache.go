@@ -76,7 +76,7 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 // Single file purge example with url and header pairs:
 //
 // ```
-// {"files": [{url: "http://www.example.com/cat_picture.jpg", headers: { "CF-IPCountry": "US", "CF-Device-Type": "desktop", "Accept-Language": "zh-CN" }}, {url: "http://www.example.com/dog_picture.jpg", headers: { "CF-IPCountry": "EU", "CF-Device-Type": "mobile", "Accept-Language": "en-US" }}]}
+// {"files": [{"url": "http://www.example.com/cat_picture.jpg", "headers": {"CF-IPCountry": "US", "CF-Device-Type": "desktop", "Accept-Language": "zh-CN"}}, {"url": "http://www.example.com/dog_picture.jpg", "headers": {"CF-IPCountry": "EU", "CF-Device-Type": "mobile", "Accept-Language": "en-US"}}]}
 // ```
 //
 // ### Purge Cached Content by Tag, Host or Prefix
@@ -104,7 +104,7 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 //
 // ### Availability and limits
 //
-// please refer to
+// Please refer to
 // [purge cache availability and limits documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/#availability-and-limits).
 func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts ...option.RequestOption) (res *CachePurgeResponse, err error) {
 	var env CachePurgeResponseEnvelope
@@ -114,6 +114,34 @@ func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts 
 		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/purge_cache", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// Purge cached content scoped to a specific environment. Supports the same purge
+// types as the zone-level endpoint (purge everything, by URL, by tag, host, or
+// prefix).
+//
+// ### Availability and limits
+//
+// Please refer to
+// [purge cache availability and limits documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/#availability-and-limits).
+func (r *CacheService) PurgeEnvironment(ctx context.Context, environmentID string, params CachePurgeEnvironmentParams, opts ...option.RequestOption) (res *CachePurgeEnvironmentResponse, err error) {
+	var env CachePurgeEnvironmentResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return nil, err
+	}
+	if environmentID == "" {
+		err = errors.New("missing required environment_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/environments/%s/purge_cache", params.ZoneID, environmentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -140,6 +168,27 @@ func (r *CachePurgeResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r cachePurgeResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type CachePurgeEnvironmentResponse struct {
+	ID   string                            `json:"id" api:"required"`
+	JSON cachePurgeEnvironmentResponseJSON `json:"-"`
+}
+
+// cachePurgeEnvironmentResponseJSON contains the JSON metadata for the struct
+// [CachePurgeEnvironmentResponse]
+type cachePurgeEnvironmentResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CachePurgeEnvironmentResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cachePurgeEnvironmentResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -286,5 +335,156 @@ func (r *CachePurgeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r cachePurgeResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CachePurgeEnvironmentParams struct {
+	ZoneID param.Field[string]                  `path:"zone_id" api:"required"`
+	Body   CachePurgeEnvironmentParamsBodyUnion `json:"body" api:"required"`
+}
+
+func (r CachePurgeEnvironmentParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type CachePurgeEnvironmentParamsBody struct {
+	Files    param.Field[interface{}] `json:"files"`
+	Hosts    param.Field[interface{}] `json:"hosts"`
+	Prefixes param.Field[interface{}] `json:"prefixes"`
+	// For more information, please refer to
+	// [purge everything documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
+	PurgeEverything param.Field[bool]        `json:"purge_everything"`
+	Tags            param.Field[interface{}] `json:"tags"`
+}
+
+func (r CachePurgeEnvironmentParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CachePurgeEnvironmentParamsBody) implementsCachePurgeEnvironmentParamsBodyUnion() {}
+
+// Satisfied by [cache.CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByTags],
+// [cache.CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByHostnames],
+// [cache.CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByPrefixes],
+// [cache.CachePurgeEnvironmentParamsBodyCachePurgeEverything],
+// [cache.CachePurgeEnvironmentParamsBodyCachePurgeSingleFile],
+// [cache.CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeaders],
+// [CachePurgeEnvironmentParamsBody].
+type CachePurgeEnvironmentParamsBodyUnion interface {
+	implementsCachePurgeEnvironmentParamsBodyUnion()
+}
+
+type CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByTags struct {
+	// For more information on cache tags and purging by tags, please refer to
+	// [purge by cache-tags documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-tags/).
+	Tags param.Field[[]string] `json:"tags"`
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByTags) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByTags) implementsCachePurgeEnvironmentParamsBodyUnion() {
+}
+
+type CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByHostnames struct {
+	// For more information purging by hostnames, please refer to
+	// [purge by hostname documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-hostname/).
+	Hosts param.Field[[]string] `json:"hosts"`
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByHostnames) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByHostnames) implementsCachePurgeEnvironmentParamsBodyUnion() {
+}
+
+type CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByPrefixes struct {
+	// For more information on purging by prefixes, please refer to
+	// [purge by prefix documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge_by_prefix/).
+	Prefixes param.Field[[]string] `json:"prefixes"`
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByPrefixes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByPrefixes) implementsCachePurgeEnvironmentParamsBodyUnion() {
+}
+
+type CachePurgeEnvironmentParamsBodyCachePurgeEverything struct {
+	// For more information, please refer to
+	// [purge everything documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
+	PurgeEverything param.Field[bool] `json:"purge_everything"`
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeEverything) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeEverything) implementsCachePurgeEnvironmentParamsBodyUnion() {
+}
+
+type CachePurgeEnvironmentParamsBodyCachePurgeSingleFile struct {
+	// For more information on purging files, please refer to
+	// [purge by single-file documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
+	Files param.Field[[]string] `json:"files"`
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeSingleFile) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeSingleFile) implementsCachePurgeEnvironmentParamsBodyUnion() {
+}
+
+type CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeaders struct {
+	// For more information on purging files with URL and headers, please refer to
+	// [purge by single-file documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
+	Files param.Field[[]CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeadersFile] `json:"files"`
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeaders) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeaders) implementsCachePurgeEnvironmentParamsBodyUnion() {
+}
+
+type CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeadersFile struct {
+	Headers param.Field[map[string]string] `json:"headers"`
+	URL     param.Field[string]            `json:"url"`
+}
+
+func (r CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeadersFile) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type CachePurgeEnvironmentResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	// Indicates the API call's success or failure.
+	Success bool                                      `json:"success" api:"required"`
+	Result  CachePurgeEnvironmentResponse             `json:"result" api:"nullable"`
+	JSON    cachePurgeEnvironmentResponseEnvelopeJSON `json:"-"`
+}
+
+// cachePurgeEnvironmentResponseEnvelopeJSON contains the JSON metadata for the
+// struct [CachePurgeEnvironmentResponseEnvelope]
+type cachePurgeEnvironmentResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CachePurgeEnvironmentResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cachePurgeEnvironmentResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
