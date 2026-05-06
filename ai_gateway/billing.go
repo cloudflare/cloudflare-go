@@ -887,9 +887,9 @@ type BillingUsageHistoryParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Grouping window for usage data.
 	ValueGroupingWindow param.Field[BillingUsageHistoryParamsValueGroupingWindow] `query:"value_grouping_window" api:"required"`
-	// End time (Unix timestamp).
+	// End time as Unix timestamp in milliseconds.
 	EndTime param.Field[float64] `query:"end_time"`
-	// Start time (Unix timestamp).
+	// Start time as Unix timestamp in milliseconds.
 	StartTime param.Field[float64] `query:"start_time"`
 }
 

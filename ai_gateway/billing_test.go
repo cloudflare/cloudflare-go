@@ -111,8 +111,8 @@ func TestBillingUsageHistoryWithOptionalParams(t *testing.T) {
 	_, err := client.AIGateway.Billing.UsageHistory(context.TODO(), ai_gateway.BillingUsageHistoryParams{
 		AccountID:           cloudflare.F("account_id"),
 		ValueGroupingWindow: cloudflare.F(ai_gateway.BillingUsageHistoryParamsValueGroupingWindowDay),
-		EndTime:             cloudflare.F(1700086400.000000),
-		StartTime:           cloudflare.F(1700000000.000000),
+		EndTime:             cloudflare.F(1700086400000.000000),
+		StartTime:           cloudflare.F(1700000000000.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
