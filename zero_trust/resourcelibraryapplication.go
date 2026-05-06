@@ -112,6 +112,8 @@ type ResourceLibraryApplicationListResponse struct {
 	PortProtocols []string `json:"port_protocols" api:"required"`
 	// Returns the list of support domains for the application.
 	SupportDomains []string `json:"support_domains" api:"required"`
+	// Cloudflare products that support this application.
+	Supported []ResourceLibraryApplicationListResponseSupported `json:"supported" api:"required"`
 	// Returns the application update time.
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Returns the application version.
@@ -139,6 +141,7 @@ type resourceLibraryApplicationListResponseJSON struct {
 	Name                        apijson.Field
 	PortProtocols               apijson.Field
 	SupportDomains              apijson.Field
+	Supported                   apijson.Field
 	UpdatedAt                   apijson.Field
 	Version                     apijson.Field
 	ApplicationScoreComposition apijson.Field
@@ -153,6 +156,22 @@ func (r *ResourceLibraryApplicationListResponse) UnmarshalJSON(data []byte) (err
 
 func (r resourceLibraryApplicationListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type ResourceLibraryApplicationListResponseSupported string
+
+const (
+	ResourceLibraryApplicationListResponseSupportedGateway ResourceLibraryApplicationListResponseSupported = "GATEWAY"
+	ResourceLibraryApplicationListResponseSupportedAccess  ResourceLibraryApplicationListResponseSupported = "ACCESS"
+	ResourceLibraryApplicationListResponseSupportedCasb    ResourceLibraryApplicationListResponseSupported = "CASB"
+)
+
+func (r ResourceLibraryApplicationListResponseSupported) IsKnown() bool {
+	switch r {
+	case ResourceLibraryApplicationListResponseSupportedGateway, ResourceLibraryApplicationListResponseSupportedAccess, ResourceLibraryApplicationListResponseSupportedCasb:
+		return true
+	}
+	return false
 }
 
 type ResourceLibraryApplicationGetResponse struct {
@@ -182,6 +201,8 @@ type ResourceLibraryApplicationGetResponse struct {
 	PortProtocols []string `json:"port_protocols" api:"required"`
 	// Returns the list of support domains for the application.
 	SupportDomains []string `json:"support_domains" api:"required"`
+	// Cloudflare products that support this application.
+	Supported []ResourceLibraryApplicationGetResponseSupported `json:"supported" api:"required"`
 	// Returns the application update time.
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Returns the application version.
@@ -209,6 +230,7 @@ type resourceLibraryApplicationGetResponseJSON struct {
 	Name                        apijson.Field
 	PortProtocols               apijson.Field
 	SupportDomains              apijson.Field
+	Supported                   apijson.Field
 	UpdatedAt                   apijson.Field
 	Version                     apijson.Field
 	ApplicationScoreComposition apijson.Field
@@ -225,6 +247,22 @@ func (r resourceLibraryApplicationGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type ResourceLibraryApplicationGetResponseSupported string
+
+const (
+	ResourceLibraryApplicationGetResponseSupportedGateway ResourceLibraryApplicationGetResponseSupported = "GATEWAY"
+	ResourceLibraryApplicationGetResponseSupportedAccess  ResourceLibraryApplicationGetResponseSupported = "ACCESS"
+	ResourceLibraryApplicationGetResponseSupportedCasb    ResourceLibraryApplicationGetResponseSupported = "CASB"
+)
+
+func (r ResourceLibraryApplicationGetResponseSupported) IsKnown() bool {
+	switch r {
+	case ResourceLibraryApplicationGetResponseSupportedGateway, ResourceLibraryApplicationGetResponseSupportedAccess, ResourceLibraryApplicationGetResponseSupportedCasb:
+		return true
+	}
+	return false
+}
+
 type ResourceLibraryApplicationListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter applications using key:value format. Supported filter keys:
@@ -238,14 +276,25 @@ type ResourceLibraryApplicationListParams struct {
 	//   - ip_subnet: Filter by IP subnet using CIDR containment — returns applications
 	//     where any stored subnet contains the search value (e.g., ip_subnet:10.0.1.5/32
 	//     matches apps with 10.0.0.0/16)
-	//   - intel_id: Filter by Intel API ID (e.g., intel_id:498). .
+	//   - intel_id: Filter by Intel API ID (e.g., intel_id:498). also supports multiple
+	//     values (e.g., intel_id:498,1001)
+	//   - category_id: Filter by category ID (e.g.,
+	//     category_id:37f8ec03-8766-49d4-9a15-369b044c842c).
+	//   - category_name: Filter by category name (e.g., category_name:HR).
+	//   - supported: Filter by supported Cloudflare product (e.g., supported:ACCESS).
+	//     Values: GATEWAY, ACCESS, CASB. .
 	Filter param.Field[string] `query:"filter"`
 	// Limit of number of results to return (max 250).
 	Limit param.Field[int64] `query:"limit"`
 	// Offset of results to return.
 	Offset param.Field[int64] `query:"offset"`
-	// Order by result by field name and order (e.g., name:asc).
+	// Order results by field name and direction (e.g., name:asc). Ignored when search
+	// is provided; results are ranked by relevance instead.
 	OrderBy param.Field[string] `query:"order_by"`
+	// Fuzzy search across application name and hostnames. Results are ranked by
+	// relevance. Must be between 2 and 200 characters. Can be combined with filter
+	// parameters.
+	Search param.Field[string] `query:"search"`
 }
 
 // URLQuery serializes [ResourceLibraryApplicationListParams]'s query parameters as

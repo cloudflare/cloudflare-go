@@ -34,6 +34,7 @@ func TestResourceLibraryApplicationListWithOptionalParams(t *testing.T) {
 		Limit:     cloudflare.F(int64(0)),
 		Offset:    cloudflare.F(int64(0)),
 		OrderBy:   cloudflare.F("order_by"),
+		Search:    cloudflare.F("xx"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

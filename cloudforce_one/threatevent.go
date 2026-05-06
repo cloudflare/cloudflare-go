@@ -614,11 +614,12 @@ type ThreatEventListParamsFormat string
 const (
 	ThreatEventListParamsFormatJson  ThreatEventListParamsFormat = "json"
 	ThreatEventListParamsFormatStix2 ThreatEventListParamsFormat = "stix2"
+	ThreatEventListParamsFormatTaxii ThreatEventListParamsFormat = "taxii"
 )
 
 func (r ThreatEventListParamsFormat) IsKnown() bool {
 	switch r {
-	case ThreatEventListParamsFormatJson, ThreatEventListParamsFormatStix2:
+	case ThreatEventListParamsFormatJson, ThreatEventListParamsFormatStix2, ThreatEventListParamsFormatTaxii:
 		return true
 	}
 	return false

@@ -2119,6 +2119,7 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotA
 type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerce struct {
 	Acp  ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcp  `json:"acp" api:"required"`
 	Ap2  ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2  `json:"ap2" api:"required"`
+	Mpp  ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMpp  `json:"mpp" api:"required"`
 	Ucp  ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcp  `json:"ucp" api:"required"`
 	X402 ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402 `json:"x402" api:"required"`
 	JSON scanGetResponseMetaProcessorsAgentReadinessChecksCommerceJSON `json:"-"`
@@ -2130,6 +2131,7 @@ type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerce struct {
 type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceJSON struct {
 	Acp         apijson.Field
 	Ap2         apijson.Field
+	Mpp         apijson.Field
 	Ucp         apijson.Field
 	X402        apijson.Field
 	raw         string
@@ -2425,6 +2427,148 @@ func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2EvidenceRes
 }
 
 func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2EvidenceResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMpp struct {
+	Status     string                                                                 `json:"status" api:"required"`
+	Details    interface{}                                                            `json:"details"`
+	DurationMs float64                                                                `json:"durationMs"`
+	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidence `json:"evidence"`
+	Message    string                                                                 `json:"message"`
+	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppJSON       `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppJSON contains the
+// JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMpp]
+type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppJSON struct {
+	Status      apijson.Field
+	Details     apijson.Field
+	DurationMs  apijson.Field
+	Evidence    apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMpp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidence struct {
+	Action   string                                                                       `json:"action" api:"required"`
+	Label    string                                                                       `json:"label" api:"required"`
+	Finding  ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceFinding  `json:"finding"`
+	Request  ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceRequest  `json:"request"`
+	Response ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceResponse `json:"response"`
+	JSON     scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceJSON     `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceJSON
+// contains the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidence]
+type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceJSON struct {
+	Action      apijson.Field
+	Label       apijson.Field
+	Finding     apijson.Field
+	Request     apijson.Field
+	Response    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidence) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceFinding struct {
+	Outcome string                                                                          `json:"outcome" api:"required"`
+	Summary string                                                                          `json:"summary" api:"required"`
+	JSON    scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceFindingJSON `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceFindingJSON
+// contains the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceFinding]
+type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceFindingJSON struct {
+	Outcome     apijson.Field
+	Summary     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceFinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceFindingJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceRequest struct {
+	Method  string                                                                          `json:"method" api:"required"`
+	URL     string                                                                          `json:"url" api:"required"`
+	Headers interface{}                                                                     `json:"headers"`
+	JSON    scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceRequestJSON `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceRequestJSON
+// contains the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceRequest]
+type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceRequestJSON struct {
+	Method      apijson.Field
+	URL         apijson.Field
+	Headers     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceRequestJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceResponse struct {
+	Status       int64                                                                            `json:"status" api:"required"`
+	StatusText   string                                                                           `json:"statusText" api:"required"`
+	BodyPreview  string                                                                           `json:"bodyPreview"`
+	BodySize     int64                                                                            `json:"bodySize"`
+	Headers      interface{}                                                                      `json:"headers"`
+	RedirectedTo string                                                                           `json:"redirectedTo"`
+	JSON         scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceResponseJSON `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceResponseJSON
+// contains the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceResponse]
+type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceResponseJSON struct {
+	Status       apijson.Field
+	StatusText   apijson.Field
+	BodyPreview  apijson.Field
+	BodySize     apijson.Field
+	Headers      apijson.Field
+	RedirectedTo apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceResponseJSON) RawJSON() string {
 	return r.raw
 }
 
