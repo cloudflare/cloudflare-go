@@ -678,6 +678,10 @@ TEST_PATHS=(
 	ai_gateway/dynamicrouting_test.go
 	ai_gateway/providerconfig_test.go
 	ai_gateway/url_test.go
+	ai_gateway/billing_test.go
+	ai_gateway/billingtopup_test.go
+	ai_gateway/billingtopupconfig_test.go
+	ai_gateway/billingspendinglimit_test.go
 	iam/permissiongroup_test.go
 	iam/resourcegroup_test.go
 	iam/usergroup_test.go

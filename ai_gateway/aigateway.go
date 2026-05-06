@@ -36,6 +36,7 @@ type AIGatewayService struct {
 	DynamicRouting  *DynamicRoutingService
 	ProviderConfigs *ProviderConfigService
 	URLs            *URLService
+	Billing         *BillingService
 }
 
 // NewAIGatewayService generates a new service that applies the given options to
@@ -51,6 +52,7 @@ func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 	r.DynamicRouting = NewDynamicRoutingService(opts...)
 	r.ProviderConfigs = NewProviderConfigService(opts...)
 	r.URLs = NewURLService(opts...)
+	r.Billing = NewBillingService(opts...)
 	return
 }
 
