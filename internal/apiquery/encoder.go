@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v6/internal/param"
+	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 )
 
 var encoders sync.Map // map[reflect.Type]encoderFunc

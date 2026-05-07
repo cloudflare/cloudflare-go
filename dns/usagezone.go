@@ -3,7 +3,7 @@
 package dns
 
 import (
-	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
 // UsageZoneService contains methods and other services that help with interacting

@@ -3,7 +3,7 @@
 package request_tracers
 
 import (
-	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
 // RequestTracerService contains methods and other services that help with

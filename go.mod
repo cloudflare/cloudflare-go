@@ -1,4 +1,4 @@
-module github.com/cloudflare/cloudflare-go/v6
+module github.com/cloudflare/cloudflare-go/v7
 
 go 1.22
 

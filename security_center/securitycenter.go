@@ -3,7 +3,7 @@
 package security_center
 
 import (
-	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
 // SecurityCenterService contains methods and other services that help with

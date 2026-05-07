@@ -3,7 +3,7 @@
 package brand_protection
 
 import (
-	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
 // V2Service contains methods and other services that help with interacting with

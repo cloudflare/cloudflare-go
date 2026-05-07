@@ -3,8 +3,8 @@
 package registrar
 
 import (
-	"github.com/cloudflare/cloudflare-go/v6/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v6/shared"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 type Error = apierror.Error

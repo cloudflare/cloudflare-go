@@ -3,7 +3,7 @@
 package rum
 
 import (
-	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
 // RUMService contains methods and other services that help with interacting with

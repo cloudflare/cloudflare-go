@@ -3,7 +3,7 @@
 package schema_validation
 
 import (
-	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
 // SchemaValidationService contains methods and other services that help with

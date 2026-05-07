@@ -1,37 +1,37 @@
 # Shared Params Types
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#ASNParam">ASNParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#CertificateCA">CertificateCA</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#CertificateRequestType">CertificateRequestType</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#PermissionGrantParam">PermissionGrantParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#RatePlanParam">RatePlanParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#RoleParam">RoleParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#SortDirection">SortDirection</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#SubscriptionParam">SubscriptionParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#TokenParam">TokenParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#TokenConditionCIDRListParam">TokenConditionCIDRListParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#TokenPolicyParam">TokenPolicyParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#ASNParam">ASNParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#CertificateCA">CertificateCA</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#CertificateRequestType">CertificateRequestType</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#PermissionGrantParam">PermissionGrantParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#RatePlanParam">RatePlanParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#RoleParam">RoleParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#SortDirection">SortDirection</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#SubscriptionParam">SubscriptionParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#TokenParam">TokenParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#TokenConditionCIDRListParam">TokenConditionCIDRListParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#TokenPolicyParam">TokenPolicyParam</a>
 
 # Shared Response Types
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#ASN">ASN</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#AuditLog">AuditLog</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#CertificateCA">CertificateCA</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#CertificateRequestType">CertificateRequestType</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#CloudflareTunnel">CloudflareTunnel</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#ErrorData">ErrorData</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#Member">Member</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#Permission">Permission</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#PermissionGrant">PermissionGrant</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#RatePlan">RatePlan</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#ResponseInfo">ResponseInfo</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#Role">Role</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#SortDirection">SortDirection</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#Subscription">Subscription</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#Token">Token</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#TokenConditionCIDRList">TokenConditionCIDRList</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#TokenPolicy">TokenPolicy</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v6/shared#TokenValue">TokenValue</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#ASN">ASN</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#AuditLog">AuditLog</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#CertificateCA">CertificateCA</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#CertificateRequestType">CertificateRequestType</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#CloudflareTunnel">CloudflareTunnel</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#ErrorData">ErrorData</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#Member">Member</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#Permission">Permission</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#PermissionGrant">PermissionGrant</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#RatePlan">RatePlan</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#ResponseInfo">ResponseInfo</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#Role">Role</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#SortDirection">SortDirection</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#Subscription">Subscription</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#Token">Token</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#TokenConditionCIDRList">TokenConditionCIDRList</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#TokenPolicy">TokenPolicy</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#TokenValue">TokenValue</a>
 
 # [Accounts](accounts/api.md)
 

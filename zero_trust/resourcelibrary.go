@@ -3,7 +3,7 @@
 package zero_trust
 
 import (
-	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
 // ResourceLibraryService contains methods and other services that help with

@@ -3,7 +3,7 @@
 package realtime_kit
 
 import (
-	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
 // RealtimeKitService contains methods and other services that help with
