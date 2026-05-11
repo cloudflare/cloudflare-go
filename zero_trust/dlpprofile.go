@@ -414,6 +414,7 @@ func (r *ProfileCustomProfileEntry) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are
 // [ProfileCustomProfileEntriesCustomEntry],
+// [ProfileCustomProfileEntriesCustomPromptTopicEntry],
 // [ProfileCustomProfileEntriesPredefinedEntry],
 // [ProfileCustomProfileEntriesIntegrationEntry],
 // [ProfileCustomProfileEntriesExactDataEntry],
@@ -424,6 +425,7 @@ func (r ProfileCustomProfileEntry) AsUnion() ProfileCustomProfileEntriesUnion {
 }
 
 // Union satisfied by [ProfileCustomProfileEntriesCustomEntry],
+// [ProfileCustomProfileEntriesCustomPromptTopicEntry],
 // [ProfileCustomProfileEntriesPredefinedEntry],
 // [ProfileCustomProfileEntriesIntegrationEntry],
 // [ProfileCustomProfileEntriesExactDataEntry],
@@ -440,6 +442,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfileCustomProfileEntriesCustomEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileEntriesCustomPromptTopicEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -514,6 +520,54 @@ const (
 func (r ProfileCustomProfileEntriesCustomEntryType) IsKnown() bool {
 	switch r {
 	case ProfileCustomProfileEntriesCustomEntryTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomProfileEntriesCustomPromptTopicEntry struct {
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Deprecated: deprecated
+	Enabled   bool                                                  `json:"enabled" api:"required"`
+	Name      string                                                `json:"name" api:"required"`
+	Type      ProfileCustomProfileEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                             `json:"updated_at" api:"required" format:"date-time"`
+	JSON      profileCustomProfileEntriesCustomPromptTopicEntryJSON `json:"-"`
+}
+
+// profileCustomProfileEntriesCustomPromptTopicEntryJSON contains the JSON metadata
+// for the struct [ProfileCustomProfileEntriesCustomPromptTopicEntry]
+type profileCustomProfileEntriesCustomPromptTopicEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomProfileEntriesCustomPromptTopicEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomProfileEntriesCustomPromptTopicEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileCustomProfileEntriesCustomPromptTopicEntry) implementsProfileCustomProfileEntry() {}
+
+type ProfileCustomProfileEntriesCustomPromptTopicEntryType string
+
+const (
+	ProfileCustomProfileEntriesCustomPromptTopicEntryTypeCustomPromptTopic ProfileCustomProfileEntriesCustomPromptTopicEntryType = "custom_prompt_topic"
+)
+
+func (r ProfileCustomProfileEntriesCustomPromptTopicEntryType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileEntriesCustomPromptTopicEntryTypeCustomPromptTopic:
 		return true
 	}
 	return false
@@ -958,6 +1012,7 @@ type ProfileCustomProfileEntriesType string
 
 const (
 	ProfileCustomProfileEntriesTypeCustom              ProfileCustomProfileEntriesType = "custom"
+	ProfileCustomProfileEntriesTypeCustomPromptTopic   ProfileCustomProfileEntriesType = "custom_prompt_topic"
 	ProfileCustomProfileEntriesTypePredefined          ProfileCustomProfileEntriesType = "predefined"
 	ProfileCustomProfileEntriesTypeIntegration         ProfileCustomProfileEntriesType = "integration"
 	ProfileCustomProfileEntriesTypeExactData           ProfileCustomProfileEntriesType = "exact_data"
@@ -967,7 +1022,7 @@ const (
 
 func (r ProfileCustomProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfileCustomProfileEntriesTypeCustom, ProfileCustomProfileEntriesTypePredefined, ProfileCustomProfileEntriesTypeIntegration, ProfileCustomProfileEntriesTypeExactData, ProfileCustomProfileEntriesTypeDocumentFingerprint, ProfileCustomProfileEntriesTypeWordList:
+	case ProfileCustomProfileEntriesTypeCustom, ProfileCustomProfileEntriesTypeCustomPromptTopic, ProfileCustomProfileEntriesTypePredefined, ProfileCustomProfileEntriesTypeIntegration, ProfileCustomProfileEntriesTypeExactData, ProfileCustomProfileEntriesTypeDocumentFingerprint, ProfileCustomProfileEntriesTypeWordList:
 		return true
 	}
 	return false
@@ -1064,6 +1119,7 @@ func (r *ProfileCustomProfileSharedEntry) UnmarshalJSON(data []byte) (err error)
 //
 // Possible runtime types of the union are
 // [ProfileCustomProfileSharedEntriesCustomEntry],
+// [ProfileCustomProfileSharedEntriesCustomPromptTopicEntry],
 // [ProfileCustomProfileSharedEntriesPredefinedEntry],
 // [ProfileCustomProfileSharedEntriesIntegrationEntry],
 // [ProfileCustomProfileSharedEntriesExactDataEntry],
@@ -1074,6 +1130,7 @@ func (r ProfileCustomProfileSharedEntry) AsUnion() ProfileCustomProfileSharedEnt
 }
 
 // Union satisfied by [ProfileCustomProfileSharedEntriesCustomEntry],
+// [ProfileCustomProfileSharedEntriesCustomPromptTopicEntry],
 // [ProfileCustomProfileSharedEntriesPredefinedEntry],
 // [ProfileCustomProfileSharedEntriesIntegrationEntry],
 // [ProfileCustomProfileSharedEntriesExactDataEntry],
@@ -1090,6 +1147,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfileCustomProfileSharedEntriesCustomEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileSharedEntriesCustomPromptTopicEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1164,6 +1225,56 @@ const (
 func (r ProfileCustomProfileSharedEntriesCustomEntryType) IsKnown() bool {
 	switch r {
 	case ProfileCustomProfileSharedEntriesCustomEntryTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomProfileSharedEntriesCustomPromptTopicEntry struct {
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Deprecated: deprecated
+	Enabled   bool                                                        `json:"enabled" api:"required"`
+	Name      string                                                      `json:"name" api:"required"`
+	Type      ProfileCustomProfileSharedEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                                   `json:"updated_at" api:"required" format:"date-time"`
+	JSON      profileCustomProfileSharedEntriesCustomPromptTopicEntryJSON `json:"-"`
+}
+
+// profileCustomProfileSharedEntriesCustomPromptTopicEntryJSON contains the JSON
+// metadata for the struct
+// [ProfileCustomProfileSharedEntriesCustomPromptTopicEntry]
+type profileCustomProfileSharedEntriesCustomPromptTopicEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomProfileSharedEntriesCustomPromptTopicEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomProfileSharedEntriesCustomPromptTopicEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileCustomProfileSharedEntriesCustomPromptTopicEntry) implementsProfileCustomProfileSharedEntry() {
+}
+
+type ProfileCustomProfileSharedEntriesCustomPromptTopicEntryType string
+
+const (
+	ProfileCustomProfileSharedEntriesCustomPromptTopicEntryTypeCustomPromptTopic ProfileCustomProfileSharedEntriesCustomPromptTopicEntryType = "custom_prompt_topic"
+)
+
+func (r ProfileCustomProfileSharedEntriesCustomPromptTopicEntryType) IsKnown() bool {
+	switch r {
+	case ProfileCustomProfileSharedEntriesCustomPromptTopicEntryTypeCustomPromptTopic:
 		return true
 	}
 	return false
@@ -1616,6 +1727,7 @@ type ProfileCustomProfileSharedEntriesType string
 
 const (
 	ProfileCustomProfileSharedEntriesTypeCustom              ProfileCustomProfileSharedEntriesType = "custom"
+	ProfileCustomProfileSharedEntriesTypeCustomPromptTopic   ProfileCustomProfileSharedEntriesType = "custom_prompt_topic"
 	ProfileCustomProfileSharedEntriesTypePredefined          ProfileCustomProfileSharedEntriesType = "predefined"
 	ProfileCustomProfileSharedEntriesTypeIntegration         ProfileCustomProfileSharedEntriesType = "integration"
 	ProfileCustomProfileSharedEntriesTypeExactData           ProfileCustomProfileSharedEntriesType = "exact_data"
@@ -1625,7 +1737,7 @@ const (
 
 func (r ProfileCustomProfileSharedEntriesType) IsKnown() bool {
 	switch r {
-	case ProfileCustomProfileSharedEntriesTypeCustom, ProfileCustomProfileSharedEntriesTypePredefined, ProfileCustomProfileSharedEntriesTypeIntegration, ProfileCustomProfileSharedEntriesTypeExactData, ProfileCustomProfileSharedEntriesTypeDocumentFingerprint, ProfileCustomProfileSharedEntriesTypeWordList:
+	case ProfileCustomProfileSharedEntriesTypeCustom, ProfileCustomProfileSharedEntriesTypeCustomPromptTopic, ProfileCustomProfileSharedEntriesTypePredefined, ProfileCustomProfileSharedEntriesTypeIntegration, ProfileCustomProfileSharedEntriesTypeExactData, ProfileCustomProfileSharedEntriesTypeDocumentFingerprint, ProfileCustomProfileSharedEntriesTypeWordList:
 		return true
 	}
 	return false
@@ -1747,6 +1859,7 @@ func (r *ProfilePredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are
 // [ProfilePredefinedProfileEntriesCustomEntry],
+// [ProfilePredefinedProfileEntriesCustomPromptTopicEntry],
 // [ProfilePredefinedProfileEntriesPredefinedEntry],
 // [ProfilePredefinedProfileEntriesIntegrationEntry],
 // [ProfilePredefinedProfileEntriesExactDataEntry],
@@ -1757,6 +1870,7 @@ func (r ProfilePredefinedProfileEntry) AsUnion() ProfilePredefinedProfileEntries
 }
 
 // Union satisfied by [ProfilePredefinedProfileEntriesCustomEntry],
+// [ProfilePredefinedProfileEntriesCustomPromptTopicEntry],
 // [ProfilePredefinedProfileEntriesPredefinedEntry],
 // [ProfilePredefinedProfileEntriesIntegrationEntry],
 // [ProfilePredefinedProfileEntriesExactDataEntry],
@@ -1773,6 +1887,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesCustomEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesCustomPromptTopicEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1847,6 +1965,55 @@ const (
 func (r ProfilePredefinedProfileEntriesCustomEntryType) IsKnown() bool {
 	switch r {
 	case ProfilePredefinedProfileEntriesCustomEntryTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedProfileEntriesCustomPromptTopicEntry struct {
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Deprecated: deprecated
+	Enabled   bool                                                      `json:"enabled" api:"required"`
+	Name      string                                                    `json:"name" api:"required"`
+	Type      ProfilePredefinedProfileEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                                 `json:"updated_at" api:"required" format:"date-time"`
+	JSON      profilePredefinedProfileEntriesCustomPromptTopicEntryJSON `json:"-"`
+}
+
+// profilePredefinedProfileEntriesCustomPromptTopicEntryJSON contains the JSON
+// metadata for the struct [ProfilePredefinedProfileEntriesCustomPromptTopicEntry]
+type profilePredefinedProfileEntriesCustomPromptTopicEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfilePredefinedProfileEntriesCustomPromptTopicEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedProfileEntriesCustomPromptTopicEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfilePredefinedProfileEntriesCustomPromptTopicEntry) implementsProfilePredefinedProfileEntry() {
+}
+
+type ProfilePredefinedProfileEntriesCustomPromptTopicEntryType string
+
+const (
+	ProfilePredefinedProfileEntriesCustomPromptTopicEntryTypeCustomPromptTopic ProfilePredefinedProfileEntriesCustomPromptTopicEntryType = "custom_prompt_topic"
+)
+
+func (r ProfilePredefinedProfileEntriesCustomPromptTopicEntryType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedProfileEntriesCustomPromptTopicEntryTypeCustomPromptTopic:
 		return true
 	}
 	return false
@@ -2294,6 +2461,7 @@ type ProfilePredefinedProfileEntriesType string
 
 const (
 	ProfilePredefinedProfileEntriesTypeCustom              ProfilePredefinedProfileEntriesType = "custom"
+	ProfilePredefinedProfileEntriesTypeCustomPromptTopic   ProfilePredefinedProfileEntriesType = "custom_prompt_topic"
 	ProfilePredefinedProfileEntriesTypePredefined          ProfilePredefinedProfileEntriesType = "predefined"
 	ProfilePredefinedProfileEntriesTypeIntegration         ProfilePredefinedProfileEntriesType = "integration"
 	ProfilePredefinedProfileEntriesTypeExactData           ProfilePredefinedProfileEntriesType = "exact_data"
@@ -2303,7 +2471,7 @@ const (
 
 func (r ProfilePredefinedProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedProfileEntriesTypeCustom, ProfilePredefinedProfileEntriesTypePredefined, ProfilePredefinedProfileEntriesTypeIntegration, ProfilePredefinedProfileEntriesTypeExactData, ProfilePredefinedProfileEntriesTypeDocumentFingerprint, ProfilePredefinedProfileEntriesTypeWordList:
+	case ProfilePredefinedProfileEntriesTypeCustom, ProfilePredefinedProfileEntriesTypeCustomPromptTopic, ProfilePredefinedProfileEntriesTypePredefined, ProfilePredefinedProfileEntriesTypeIntegration, ProfilePredefinedProfileEntriesTypeExactData, ProfilePredefinedProfileEntriesTypeDocumentFingerprint, ProfilePredefinedProfileEntriesTypeWordList:
 		return true
 	}
 	return false
@@ -2446,6 +2614,7 @@ func (r *ProfileIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) 
 //
 // Possible runtime types of the union are
 // [ProfileIntegrationProfileEntriesCustomEntry],
+// [ProfileIntegrationProfileEntriesCustomPromptTopicEntry],
 // [ProfileIntegrationProfileEntriesPredefinedEntry],
 // [ProfileIntegrationProfileEntriesIntegrationEntry],
 // [ProfileIntegrationProfileEntriesExactDataEntry],
@@ -2456,6 +2625,7 @@ func (r ProfileIntegrationProfileEntry) AsUnion() ProfileIntegrationProfileEntri
 }
 
 // Union satisfied by [ProfileIntegrationProfileEntriesCustomEntry],
+// [ProfileIntegrationProfileEntriesCustomPromptTopicEntry],
 // [ProfileIntegrationProfileEntriesPredefinedEntry],
 // [ProfileIntegrationProfileEntriesIntegrationEntry],
 // [ProfileIntegrationProfileEntriesExactDataEntry],
@@ -2472,6 +2642,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesCustomEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesCustomPromptTopicEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -2546,6 +2720,55 @@ const (
 func (r ProfileIntegrationProfileEntriesCustomEntryType) IsKnown() bool {
 	switch r {
 	case ProfileIntegrationProfileEntriesCustomEntryTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationProfileEntriesCustomPromptTopicEntry struct {
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Deprecated: deprecated
+	Enabled   bool                                                       `json:"enabled" api:"required"`
+	Name      string                                                     `json:"name" api:"required"`
+	Type      ProfileIntegrationProfileEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                                  `json:"updated_at" api:"required" format:"date-time"`
+	JSON      profileIntegrationProfileEntriesCustomPromptTopicEntryJSON `json:"-"`
+}
+
+// profileIntegrationProfileEntriesCustomPromptTopicEntryJSON contains the JSON
+// metadata for the struct [ProfileIntegrationProfileEntriesCustomPromptTopicEntry]
+type profileIntegrationProfileEntriesCustomPromptTopicEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationProfileEntriesCustomPromptTopicEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationProfileEntriesCustomPromptTopicEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileIntegrationProfileEntriesCustomPromptTopicEntry) implementsProfileIntegrationProfileEntry() {
+}
+
+type ProfileIntegrationProfileEntriesCustomPromptTopicEntryType string
+
+const (
+	ProfileIntegrationProfileEntriesCustomPromptTopicEntryTypeCustomPromptTopic ProfileIntegrationProfileEntriesCustomPromptTopicEntryType = "custom_prompt_topic"
+)
+
+func (r ProfileIntegrationProfileEntriesCustomPromptTopicEntryType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileEntriesCustomPromptTopicEntryTypeCustomPromptTopic:
 		return true
 	}
 	return false
@@ -2995,6 +3218,7 @@ type ProfileIntegrationProfileEntriesType string
 
 const (
 	ProfileIntegrationProfileEntriesTypeCustom              ProfileIntegrationProfileEntriesType = "custom"
+	ProfileIntegrationProfileEntriesTypeCustomPromptTopic   ProfileIntegrationProfileEntriesType = "custom_prompt_topic"
 	ProfileIntegrationProfileEntriesTypePredefined          ProfileIntegrationProfileEntriesType = "predefined"
 	ProfileIntegrationProfileEntriesTypeIntegration         ProfileIntegrationProfileEntriesType = "integration"
 	ProfileIntegrationProfileEntriesTypeExactData           ProfileIntegrationProfileEntriesType = "exact_data"
@@ -3004,7 +3228,7 @@ const (
 
 func (r ProfileIntegrationProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationProfileEntriesTypeCustom, ProfileIntegrationProfileEntriesTypePredefined, ProfileIntegrationProfileEntriesTypeIntegration, ProfileIntegrationProfileEntriesTypeExactData, ProfileIntegrationProfileEntriesTypeDocumentFingerprint, ProfileIntegrationProfileEntriesTypeWordList:
+	case ProfileIntegrationProfileEntriesTypeCustom, ProfileIntegrationProfileEntriesTypeCustomPromptTopic, ProfileIntegrationProfileEntriesTypePredefined, ProfileIntegrationProfileEntriesTypeIntegration, ProfileIntegrationProfileEntriesTypeExactData, ProfileIntegrationProfileEntriesTypeDocumentFingerprint, ProfileIntegrationProfileEntriesTypeWordList:
 		return true
 	}
 	return false
@@ -3077,6 +3301,7 @@ func (r *ProfileIntegrationProfileSharedEntry) UnmarshalJSON(data []byte) (err e
 //
 // Possible runtime types of the union are
 // [ProfileIntegrationProfileSharedEntriesCustomEntry],
+// [ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntry],
 // [ProfileIntegrationProfileSharedEntriesPredefinedEntry],
 // [ProfileIntegrationProfileSharedEntriesIntegrationEntry],
 // [ProfileIntegrationProfileSharedEntriesExactDataEntry],
@@ -3087,6 +3312,7 @@ func (r ProfileIntegrationProfileSharedEntry) AsUnion() ProfileIntegrationProfil
 }
 
 // Union satisfied by [ProfileIntegrationProfileSharedEntriesCustomEntry],
+// [ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntry],
 // [ProfileIntegrationProfileSharedEntriesPredefinedEntry],
 // [ProfileIntegrationProfileSharedEntriesIntegrationEntry],
 // [ProfileIntegrationProfileSharedEntriesExactDataEntry],
@@ -3103,6 +3329,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ProfileIntegrationProfileSharedEntriesCustomEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -3178,6 +3408,56 @@ const (
 func (r ProfileIntegrationProfileSharedEntriesCustomEntryType) IsKnown() bool {
 	switch r {
 	case ProfileIntegrationProfileSharedEntriesCustomEntryTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntry struct {
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Deprecated: deprecated
+	Enabled   bool                                                             `json:"enabled" api:"required"`
+	Name      string                                                           `json:"name" api:"required"`
+	Type      ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                                        `json:"updated_at" api:"required" format:"date-time"`
+	JSON      profileIntegrationProfileSharedEntriesCustomPromptTopicEntryJSON `json:"-"`
+}
+
+// profileIntegrationProfileSharedEntriesCustomPromptTopicEntryJSON contains the
+// JSON metadata for the struct
+// [ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntry]
+type profileIntegrationProfileSharedEntriesCustomPromptTopicEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationProfileSharedEntriesCustomPromptTopicEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntry) implementsProfileIntegrationProfileSharedEntry() {
+}
+
+type ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntryType string
+
+const (
+	ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntryTypeCustomPromptTopic ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntryType = "custom_prompt_topic"
+)
+
+func (r ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntryType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntryTypeCustomPromptTopic:
 		return true
 	}
 	return false
@@ -3632,6 +3912,7 @@ type ProfileIntegrationProfileSharedEntriesType string
 
 const (
 	ProfileIntegrationProfileSharedEntriesTypeCustom              ProfileIntegrationProfileSharedEntriesType = "custom"
+	ProfileIntegrationProfileSharedEntriesTypeCustomPromptTopic   ProfileIntegrationProfileSharedEntriesType = "custom_prompt_topic"
 	ProfileIntegrationProfileSharedEntriesTypePredefined          ProfileIntegrationProfileSharedEntriesType = "predefined"
 	ProfileIntegrationProfileSharedEntriesTypeIntegration         ProfileIntegrationProfileSharedEntriesType = "integration"
 	ProfileIntegrationProfileSharedEntriesTypeExactData           ProfileIntegrationProfileSharedEntriesType = "exact_data"
@@ -3641,7 +3922,7 @@ const (
 
 func (r ProfileIntegrationProfileSharedEntriesType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationProfileSharedEntriesTypeCustom, ProfileIntegrationProfileSharedEntriesTypePredefined, ProfileIntegrationProfileSharedEntriesTypeIntegration, ProfileIntegrationProfileSharedEntriesTypeExactData, ProfileIntegrationProfileSharedEntriesTypeDocumentFingerprint, ProfileIntegrationProfileSharedEntriesTypeWordList:
+	case ProfileIntegrationProfileSharedEntriesTypeCustom, ProfileIntegrationProfileSharedEntriesTypeCustomPromptTopic, ProfileIntegrationProfileSharedEntriesTypePredefined, ProfileIntegrationProfileSharedEntriesTypeIntegration, ProfileIntegrationProfileSharedEntriesTypeExactData, ProfileIntegrationProfileSharedEntriesTypeDocumentFingerprint, ProfileIntegrationProfileSharedEntriesTypeWordList:
 		return true
 	}
 	return false

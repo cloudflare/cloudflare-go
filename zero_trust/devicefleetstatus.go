@@ -78,7 +78,11 @@ type DeviceFleetStatusGetResponse struct {
 	DeviceIPV4      DeviceFleetStatusGetResponseDeviceIPV4      `json:"deviceIpv4"`
 	DeviceIPV6      DeviceFleetStatusGetResponseDeviceIPV6      `json:"deviceIpv6"`
 	// Device identifier (human readable)
-	DeviceName         string                                  `json:"deviceName"`
+	DeviceName string `json:"deviceName"`
+	// Deprecated: use registrationId. Device registration identifier (UUID v4).
+	//
+	// Deprecated: Use `registrationId` instead.
+	DeviceRegistration string                                  `json:"deviceRegistration" api:"nullable"`
 	DiskReadBps        int64                                   `json:"diskReadBps" api:"nullable"`
 	DiskUsagePct       float64                                 `json:"diskUsagePct" api:"nullable"`
 	DiskWriteBps       int64                                   `json:"diskWriteBps" api:"nullable"`
@@ -127,6 +131,7 @@ type deviceFleetStatusGetResponseJSON struct {
 	DeviceIPV4         apijson.Field
 	DeviceIPV6         apijson.Field
 	DeviceName         apijson.Field
+	DeviceRegistration apijson.Field
 	DiskReadBps        apijson.Field
 	DiskUsagePct       apijson.Field
 	DiskWriteBps       apijson.Field

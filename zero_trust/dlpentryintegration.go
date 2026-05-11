@@ -281,12 +281,14 @@ func (r *DLPEntryIntegrationListResponse) UnmarshalJSON(data []byte) (err error)
 // [DLPEntryIntegrationListResponseObject],
 // [DLPEntryIntegrationListResponseObject],
 // [DLPEntryIntegrationListResponseObject],
+// [DLPEntryIntegrationListResponseObject],
 // [DLPEntryIntegrationListResponseObject].
 func (r DLPEntryIntegrationListResponse) AsUnion() DLPEntryIntegrationListResponseUnion {
 	return r.union
 }
 
 // Union satisfied by [DLPEntryIntegrationListResponseObject],
+// [DLPEntryIntegrationListResponseObject],
 // [DLPEntryIntegrationListResponseObject],
 // [DLPEntryIntegrationListResponseObject],
 // [DLPEntryIntegrationListResponseObject], [DLPEntryIntegrationListResponseObject]
@@ -299,6 +301,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*DLPEntryIntegrationListResponseUnion)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryIntegrationListResponseObject{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(DLPEntryIntegrationListResponseObject{}),
@@ -406,6 +412,7 @@ type DLPEntryIntegrationListResponseType string
 
 const (
 	DLPEntryIntegrationListResponseTypeCustom              DLPEntryIntegrationListResponseType = "custom"
+	DLPEntryIntegrationListResponseTypeCustomPromptTopic   DLPEntryIntegrationListResponseType = "custom_prompt_topic"
 	DLPEntryIntegrationListResponseTypePredefined          DLPEntryIntegrationListResponseType = "predefined"
 	DLPEntryIntegrationListResponseTypeIntegration         DLPEntryIntegrationListResponseType = "integration"
 	DLPEntryIntegrationListResponseTypeExactData           DLPEntryIntegrationListResponseType = "exact_data"
@@ -415,7 +422,7 @@ const (
 
 func (r DLPEntryIntegrationListResponseType) IsKnown() bool {
 	switch r {
-	case DLPEntryIntegrationListResponseTypeCustom, DLPEntryIntegrationListResponseTypePredefined, DLPEntryIntegrationListResponseTypeIntegration, DLPEntryIntegrationListResponseTypeExactData, DLPEntryIntegrationListResponseTypeDocumentFingerprint, DLPEntryIntegrationListResponseTypeWordList:
+	case DLPEntryIntegrationListResponseTypeCustom, DLPEntryIntegrationListResponseTypeCustomPromptTopic, DLPEntryIntegrationListResponseTypePredefined, DLPEntryIntegrationListResponseTypeIntegration, DLPEntryIntegrationListResponseTypeExactData, DLPEntryIntegrationListResponseTypeDocumentFingerprint, DLPEntryIntegrationListResponseTypeWordList:
 		return true
 	}
 	return false
@@ -516,15 +523,16 @@ func (r *DLPEntryIntegrationGetResponse) UnmarshalJSON(data []byte) (err error) 
 // Possible runtime types of the union are [DLPEntryIntegrationGetResponseObject],
 // [DLPEntryIntegrationGetResponseObject], [DLPEntryIntegrationGetResponseObject],
 // [DLPEntryIntegrationGetResponseObject], [DLPEntryIntegrationGetResponseObject],
-// [DLPEntryIntegrationGetResponseObject].
+// [DLPEntryIntegrationGetResponseObject], [DLPEntryIntegrationGetResponseObject].
 func (r DLPEntryIntegrationGetResponse) AsUnion() DLPEntryIntegrationGetResponseUnion {
 	return r.union
 }
 
 // Union satisfied by [DLPEntryIntegrationGetResponseObject],
 // [DLPEntryIntegrationGetResponseObject], [DLPEntryIntegrationGetResponseObject],
-// [DLPEntryIntegrationGetResponseObject], [DLPEntryIntegrationGetResponseObject]
-// or [DLPEntryIntegrationGetResponseObject].
+// [DLPEntryIntegrationGetResponseObject], [DLPEntryIntegrationGetResponseObject],
+// [DLPEntryIntegrationGetResponseObject] or
+// [DLPEntryIntegrationGetResponseObject].
 type DLPEntryIntegrationGetResponseUnion interface {
 	implementsDLPEntryIntegrationGetResponse()
 }
@@ -533,6 +541,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*DLPEntryIntegrationGetResponseUnion)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DLPEntryIntegrationGetResponseObject{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(DLPEntryIntegrationGetResponseObject{}),
@@ -666,6 +678,7 @@ type DLPEntryIntegrationGetResponseType string
 
 const (
 	DLPEntryIntegrationGetResponseTypeCustom              DLPEntryIntegrationGetResponseType = "custom"
+	DLPEntryIntegrationGetResponseTypeCustomPromptTopic   DLPEntryIntegrationGetResponseType = "custom_prompt_topic"
 	DLPEntryIntegrationGetResponseTypePredefined          DLPEntryIntegrationGetResponseType = "predefined"
 	DLPEntryIntegrationGetResponseTypeIntegration         DLPEntryIntegrationGetResponseType = "integration"
 	DLPEntryIntegrationGetResponseTypeExactData           DLPEntryIntegrationGetResponseType = "exact_data"
@@ -675,7 +688,7 @@ const (
 
 func (r DLPEntryIntegrationGetResponseType) IsKnown() bool {
 	switch r {
-	case DLPEntryIntegrationGetResponseTypeCustom, DLPEntryIntegrationGetResponseTypePredefined, DLPEntryIntegrationGetResponseTypeIntegration, DLPEntryIntegrationGetResponseTypeExactData, DLPEntryIntegrationGetResponseTypeDocumentFingerprint, DLPEntryIntegrationGetResponseTypeWordList:
+	case DLPEntryIntegrationGetResponseTypeCustom, DLPEntryIntegrationGetResponseTypeCustomPromptTopic, DLPEntryIntegrationGetResponseTypePredefined, DLPEntryIntegrationGetResponseTypeIntegration, DLPEntryIntegrationGetResponseTypeExactData, DLPEntryIntegrationGetResponseTypeDocumentFingerprint, DLPEntryIntegrationGetResponseTypeWordList:
 		return true
 	}
 	return false

@@ -215,6 +215,7 @@ func (r *PredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
 // to the specific types for more type safety.
 //
 // Possible runtime types of the union are [PredefinedProfileEntriesCustomEntry],
+// [PredefinedProfileEntriesCustomPromptTopicEntry],
 // [PredefinedProfileEntriesPredefinedEntry],
 // [PredefinedProfileEntriesIntegrationEntry],
 // [PredefinedProfileEntriesExactDataEntry],
@@ -225,6 +226,7 @@ func (r PredefinedProfileEntry) AsUnion() PredefinedProfileEntriesUnion {
 }
 
 // Union satisfied by [PredefinedProfileEntriesCustomEntry],
+// [PredefinedProfileEntriesCustomPromptTopicEntry],
 // [PredefinedProfileEntriesPredefinedEntry],
 // [PredefinedProfileEntriesIntegrationEntry],
 // [PredefinedProfileEntriesExactDataEntry],
@@ -241,6 +243,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(PredefinedProfileEntriesCustomEntry{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(PredefinedProfileEntriesCustomPromptTopicEntry{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -315,6 +321,54 @@ const (
 func (r PredefinedProfileEntriesCustomEntryType) IsKnown() bool {
 	switch r {
 	case PredefinedProfileEntriesCustomEntryTypeCustom:
+		return true
+	}
+	return false
+}
+
+type PredefinedProfileEntriesCustomPromptTopicEntry struct {
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Deprecated: deprecated
+	Enabled   bool                                               `json:"enabled" api:"required"`
+	Name      string                                             `json:"name" api:"required"`
+	Type      PredefinedProfileEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
+	UpdatedAt time.Time                                          `json:"updated_at" api:"required" format:"date-time"`
+	JSON      predefinedProfileEntriesCustomPromptTopicEntryJSON `json:"-"`
+}
+
+// predefinedProfileEntriesCustomPromptTopicEntryJSON contains the JSON metadata
+// for the struct [PredefinedProfileEntriesCustomPromptTopicEntry]
+type predefinedProfileEntriesCustomPromptTopicEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PredefinedProfileEntriesCustomPromptTopicEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r predefinedProfileEntriesCustomPromptTopicEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r PredefinedProfileEntriesCustomPromptTopicEntry) implementsPredefinedProfileEntry() {}
+
+type PredefinedProfileEntriesCustomPromptTopicEntryType string
+
+const (
+	PredefinedProfileEntriesCustomPromptTopicEntryTypeCustomPromptTopic PredefinedProfileEntriesCustomPromptTopicEntryType = "custom_prompt_topic"
+)
+
+func (r PredefinedProfileEntriesCustomPromptTopicEntryType) IsKnown() bool {
+	switch r {
+	case PredefinedProfileEntriesCustomPromptTopicEntryTypeCustomPromptTopic:
 		return true
 	}
 	return false
@@ -758,6 +812,7 @@ type PredefinedProfileEntriesType string
 
 const (
 	PredefinedProfileEntriesTypeCustom              PredefinedProfileEntriesType = "custom"
+	PredefinedProfileEntriesTypeCustomPromptTopic   PredefinedProfileEntriesType = "custom_prompt_topic"
 	PredefinedProfileEntriesTypePredefined          PredefinedProfileEntriesType = "predefined"
 	PredefinedProfileEntriesTypeIntegration         PredefinedProfileEntriesType = "integration"
 	PredefinedProfileEntriesTypeExactData           PredefinedProfileEntriesType = "exact_data"
@@ -767,7 +822,7 @@ const (
 
 func (r PredefinedProfileEntriesType) IsKnown() bool {
 	switch r {
-	case PredefinedProfileEntriesTypeCustom, PredefinedProfileEntriesTypePredefined, PredefinedProfileEntriesTypeIntegration, PredefinedProfileEntriesTypeExactData, PredefinedProfileEntriesTypeDocumentFingerprint, PredefinedProfileEntriesTypeWordList:
+	case PredefinedProfileEntriesTypeCustom, PredefinedProfileEntriesTypeCustomPromptTopic, PredefinedProfileEntriesTypePredefined, PredefinedProfileEntriesTypeIntegration, PredefinedProfileEntriesTypeExactData, PredefinedProfileEntriesTypeDocumentFingerprint, PredefinedProfileEntriesTypeWordList:
 		return true
 	}
 	return false
