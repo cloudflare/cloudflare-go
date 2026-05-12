@@ -84,11 +84,14 @@ func (r *StoreService) ListAutoPaging(ctx context.Context, params StoreListParam
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes a single store
-func (r *StoreService) Delete(ctx context.Context, storeID string, body StoreDeleteParams, opts ...option.RequestOption) (res *StoreDeleteResponse, err error) {
+// Deletes a single store. By default, a store that still contains secrets cannot
+// be deleted and returns HTTP 409 (Conflict) with the "store_not_empty" error.
+// Pass `force=true` to cascade-delete all secrets in the store. Empty stores are
+// always deleted regardless of the force parameter.
+func (r *StoreService) Delete(ctx context.Context, storeID string, params StoreDeleteParams, opts ...option.RequestOption) (res *StoreDeleteResponse, err error) {
 	var env StoreDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -96,8 +99,8 @@ func (r *StoreService) Delete(ctx context.Context, storeID string, body StoreDel
 		err = errors.New("missing required store_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s", body.AccountID, storeID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/secrets_store/stores/%s", params.AccountID, storeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -420,6 +423,18 @@ func (r StoreListParamsOrder) IsKnown() bool {
 type StoreDeleteParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// When true, cascade-deletes all secrets in the store before deleting the store
+	// itself. Required when deleting a non-empty store. Without this parameter,
+	// attempting to delete a non-empty store returns 409.
+	Force param.Field[bool] `query:"force"`
+}
+
+// URLQuery serializes [StoreDeleteParams]'s query parameters as `url.Values`.
+func (r StoreDeleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type StoreDeleteResponseEnvelope struct {
