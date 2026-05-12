@@ -225,6 +225,8 @@
 
 # [ContentScanning](content_scanning/api.md)
 
+# [AISecurity](ai_security/api.md)
+
 # [AbuseReports](abuse_reports/api.md)
 
 # [AI](ai/api.md)

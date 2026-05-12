@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/ai"
 	"github.com/cloudflare/cloudflare-go/v7/ai_gateway"
 	"github.com/cloudflare/cloudflare-go/v7/ai_search"
+	"github.com/cloudflare/cloudflare-go/v7/ai_security"
 	"github.com/cloudflare/cloudflare-go/v7/alerting"
 	"github.com/cloudflare/cloudflare-go/v7/api_gateway"
 	"github.com/cloudflare/cloudflare-go/v7/argo"
@@ -227,6 +228,7 @@ type Client struct {
 	ResourceTagging             *resource_tagging.ResourceTaggingService
 	LeakedCredentialChecks      *leaked_credential_checks.LeakedCredentialCheckService
 	ContentScanning             *content_scanning.ContentScanningService
+	AISecurity                  *ai_security.AISecurityService
 	AbuseReports                *abuse_reports.AbuseReportService
 	AI                          *ai.AIService
 	AISearch                    *ai_search.AISearchService
@@ -368,6 +370,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.ResourceTagging = resource_tagging.NewResourceTaggingService(opts...)
 	r.LeakedCredentialChecks = leaked_credential_checks.NewLeakedCredentialCheckService(opts...)
 	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
+	r.AISecurity = ai_security.NewAISecurityService(opts...)
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 	r.AI = ai.NewAIService(opts...)
 	r.AISearch = ai_search.NewAISearchService(opts...)

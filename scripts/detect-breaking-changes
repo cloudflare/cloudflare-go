@@ -709,6 +709,8 @@ TEST_PATHS=(
 	content_scanning/contentscanning_test.go
 	content_scanning/payload_test.go
 	content_scanning/setting_test.go
+	ai_security/aisecurity_test.go
+	ai_security/customtopic_test.go
 	abuse_reports/abusereport_test.go
 	abuse_reports/mitigation_test.go
 	ai/ai_test.go
