@@ -86,7 +86,7 @@ func TestDynamicRoutingUpdate(t *testing.T) {
 	}
 }
 
-func TestDynamicRoutingList(t *testing.T) {
+func TestDynamicRoutingListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -105,6 +105,8 @@ func TestDynamicRoutingList(t *testing.T) {
 		"54442216",
 		ai_gateway.DynamicRoutingListParams{
 			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
+			Page:      cloudflare.F(int64(1)),
+			PerPage:   cloudflare.F(int64(20)),
 		},
 	)
 	if err != nil {

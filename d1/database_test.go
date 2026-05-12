@@ -33,6 +33,9 @@ func TestDatabaseNewWithOptionalParams(t *testing.T) {
 		Name:                cloudflare.F("my-database"),
 		Jurisdiction:        cloudflare.F(d1.DatabaseNewParamsJurisdictionEu),
 		PrimaryLocationHint: cloudflare.F(d1.DatabaseNewParamsPrimaryLocationHintWnam),
+		ReadReplication: cloudflare.F(d1.DatabaseNewParamsReadReplication{
+			Mode: cloudflare.F(d1.DatabaseNewParamsReadReplicationModeAuto),
+		}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

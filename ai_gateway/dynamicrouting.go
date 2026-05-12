@@ -7,11 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -79,9 +81,9 @@ func (r *DynamicRoutingService) Update(ctx context.Context, gatewayID string, id
 }
 
 // List all AI Gateway Dynamic Routes.
-func (r *DynamicRoutingService) List(ctx context.Context, gatewayID string, query DynamicRoutingListParams, opts ...option.RequestOption) (res *DynamicRoutingListResponse, err error) {
+func (r *DynamicRoutingService) List(ctx context.Context, gatewayID string, params DynamicRoutingListParams, opts ...option.RequestOption) (res *DynamicRoutingListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -89,8 +91,8 @@ func (r *DynamicRoutingService) List(ctx context.Context, gatewayID string, quer
 		err = errors.New("missing required gateway_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes", query.AccountID, gatewayID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/routes", params.AccountID, gatewayID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return res, err
 }
 
@@ -523,6 +525,7 @@ type DynamicRoutingNewResponseVersion struct {
 	CreatedAt string                                 `json:"created_at" api:"required"`
 	Data      string                                 `json:"data" api:"required"`
 	VersionID string                                 `json:"version_id" api:"required"`
+	IsValid   bool                                   `json:"is_valid"`
 	JSON      dynamicRoutingNewResponseVersionJSON   `json:"-"`
 }
 
@@ -533,6 +536,7 @@ type dynamicRoutingNewResponseVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
+	IsValid     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -847,6 +851,7 @@ type DynamicRoutingUpdateResponseRouteVersion struct {
 	CreatedAt string                                         `json:"created_at" api:"required"`
 	Data      string                                         `json:"data" api:"required"`
 	VersionID string                                         `json:"version_id" api:"required"`
+	IsValid   bool                                           `json:"is_valid"`
 	JSON      dynamicRoutingUpdateResponseRouteVersionJSON   `json:"-"`
 }
 
@@ -857,6 +862,7 @@ type dynamicRoutingUpdateResponseRouteVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
+	IsValid     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1201,6 +1207,7 @@ type DynamicRoutingListResponseDataRoutesVersion struct {
 	CreatedAt string                                            `json:"created_at" api:"required"`
 	Data      string                                            `json:"data" api:"required"`
 	VersionID string                                            `json:"version_id" api:"required"`
+	IsValid   bool                                              `json:"is_valid"`
 	JSON      dynamicRoutingListResponseDataRoutesVersionJSON   `json:"-"`
 }
 
@@ -1211,6 +1218,7 @@ type dynamicRoutingListResponseDataRoutesVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
+	IsValid     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2181,6 +2189,7 @@ type DynamicRoutingGetResponseVersion struct {
 	CreatedAt string                                 `json:"created_at" api:"required"`
 	Data      string                                 `json:"data" api:"required"`
 	VersionID string                                 `json:"version_id" api:"required"`
+	IsValid   bool                                   `json:"is_valid"`
 	JSON      dynamicRoutingGetResponseVersionJSON   `json:"-"`
 }
 
@@ -2191,6 +2200,7 @@ type dynamicRoutingGetResponseVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
+	IsValid     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2228,6 +2238,7 @@ type DynamicRoutingGetVersionResponse struct {
 	ModifiedAt time.Time                                 `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                                    `json:"name" api:"required"`
 	VersionID  string                                    `json:"version_id" api:"required"`
+	IsValid    bool                                      `json:"is_valid"`
 	JSON       dynamicRoutingGetVersionResponseJSON      `json:"-"`
 }
 
@@ -2243,6 +2254,7 @@ type dynamicRoutingGetVersionResponseJSON struct {
 	ModifiedAt  apijson.Field
 	Name        apijson.Field
 	VersionID   apijson.Field
+	IsValid     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2601,6 +2613,7 @@ type DynamicRoutingListVersionsResponseDataVersion struct {
 	CreatedAt string                                               `json:"created_at" api:"required"`
 	Data      string                                               `json:"data" api:"required"`
 	VersionID string                                               `json:"version_id" api:"required"`
+	IsValid   bool                                                 `json:"is_valid"`
 	JSON      dynamicRoutingListVersionsResponseDataVersionJSON    `json:"-"`
 }
 
@@ -2611,6 +2624,7 @@ type dynamicRoutingListVersionsResponseDataVersionJSON struct {
 	CreatedAt   apijson.Field
 	Data        apijson.Field
 	VersionID   apijson.Field
+	IsValid     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2767,6 +2781,19 @@ func (r DynamicRoutingUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type DynamicRoutingListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Page number
+	Page param.Field[int64] `query:"page"`
+	// Number of routes per page
+	PerPage param.Field[int64] `query:"per_page"`
+}
+
+// URLQuery serializes [DynamicRoutingListParams]'s query parameters as
+// `url.Values`.
+func (r DynamicRoutingListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type DynamicRoutingDeleteParams struct {

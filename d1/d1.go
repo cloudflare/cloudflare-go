@@ -91,9 +91,9 @@ func (r D1Jurisdiction) IsKnown() bool {
 
 // Configuration for D1 read replication.
 type D1ReadReplication struct {
-	// The read replication mode for the database. Use 'auto' to create replicas and
-	// allow D1 automatically place them around the world, or 'disabled' to not use any
-	// database replicas (it can take a few hours for all replicas to be deleted).
+	// The read replication mode for the database. Mode 'auto' denotes that D1 creates
+	// replicas and automatically places them around the world. Mode 'disabled' denotes
+	// that no database replicas are used.
 	Mode D1ReadReplicationMode `json:"mode" api:"required"`
 	JSON d1ReadReplicationJSON `json:"-"`
 }
@@ -114,9 +114,9 @@ func (r d1ReadReplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The read replication mode for the database. Use 'auto' to create replicas and
-// allow D1 automatically place them around the world, or 'disabled' to not use any
-// database replicas (it can take a few hours for all replicas to be deleted).
+// The read replication mode for the database. Mode 'auto' denotes that D1 creates
+// replicas and automatically places them around the world. Mode 'disabled' denotes
+// that no database replicas are used.
 type D1ReadReplicationMode string
 
 const (
