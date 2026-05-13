@@ -7,6 +7,8 @@ on:
 
 jobs:
   detect_breaking_changes:
+    permissions:
+      contents: read
     runs-on: 'ubuntu-latest'
     name: detect-breaking-changes
     if: false # bypass for major version bump with breaking changes
