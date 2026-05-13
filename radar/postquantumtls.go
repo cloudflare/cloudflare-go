@@ -35,8 +35,9 @@ func NewPostQuantumTLSService(opts ...option.RequestOption) (r *PostQuantumTLSSe
 }
 
 // Tests whether a hostname or IP address supports Post-Quantum (PQ) TLS key
-// exchange. Returns information about the negotiated key exchange algorithm and
-// whether it uses PQ cryptography.
+// exchange. Returns information about the negotiated key exchange algorithm,
+// whether it uses PQ cryptography, and any detected TLS implementation bugs (Split
+// ClientHello, HRR failure, etc.).
 func (r *PostQuantumTLSService) Support(ctx context.Context, query PostQuantumTLSSupportParams, opts ...option.RequestOption) (res *PostQuantumTLSSupportResponse, err error) {
 	var env PostQuantumTLSSupportResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -50,13 +51,15 @@ func (r *PostQuantumTLSService) Support(ctx context.Context, query PostQuantumTL
 }
 
 type PostQuantumTLSSupportResponse struct {
+	Bugs PostQuantumTLSSupportResponseBugs `json:"bugs" api:"required"`
 	// The host that was tested
 	Host string `json:"host" api:"required"`
 	// TLS CurveID of the negotiated key exchange
 	Kex float64 `json:"kex" api:"required"`
 	// Human-readable name of the key exchange algorithm
 	KexName string `json:"kexName" api:"required"`
-	// Whether the negotiated key exchange uses Post-Quantum cryptography
+	// Whether the negotiated key exchange uses Post-Quantum cryptography (specifically
+	// X25519MLKEM768)
 	Pq   bool                              `json:"pq" api:"required"`
 	JSON postQuantumTLSSupportResponseJSON `json:"-"`
 }
@@ -64,6 +67,7 @@ type PostQuantumTLSSupportResponse struct {
 // postQuantumTLSSupportResponseJSON contains the JSON metadata for the struct
 // [PostQuantumTLSSupportResponse]
 type postQuantumTLSSupportResponseJSON struct {
+	Bugs        apijson.Field
 	Host        apijson.Field
 	Kex         apijson.Field
 	KexName     apijson.Field
@@ -77,6 +81,40 @@ func (r *PostQuantumTLSSupportResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r postQuantumTLSSupportResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type PostQuantumTLSSupportResponseBugs struct {
+	// Server sends a HelloRetryRequest but fails to complete the handshake after the
+	// client sends the second ClientHello. Often caused by non-compliant TLS 1.3
+	// implementations on shared hosting providers.
+	HrrFailure bool `json:"hrrFailure" api:"required"`
+	// Server rejects fragmented ClientHello caused by large PQ keyshare, but accepts
+	// classical (non-PQ) handshakes. Typically caused by middleboxes or firewalls that
+	// cannot reassemble split TLS ClientHello messages.
+	SplitClientHello bool `json:"splitClientHello" api:"required"`
+	// Server cannot handle an unknown key exchange algorithm in the ClientHello
+	// keyshare extension. Compliant servers should respond with HelloRetryRequest for
+	// a supported algorithm.
+	UnknownKeyshare bool                                  `json:"unknownKeyshare" api:"required"`
+	JSON            postQuantumTLSSupportResponseBugsJSON `json:"-"`
+}
+
+// postQuantumTLSSupportResponseBugsJSON contains the JSON metadata for the struct
+// [PostQuantumTLSSupportResponseBugs]
+type postQuantumTLSSupportResponseBugsJSON struct {
+	HrrFailure       apijson.Field
+	SplitClientHello apijson.Field
+	UnknownKeyshare  apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PostQuantumTLSSupportResponseBugs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r postQuantumTLSSupportResponseBugsJSON) RawJSON() string {
 	return r.raw
 }
 

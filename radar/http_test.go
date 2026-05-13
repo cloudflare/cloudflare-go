@@ -33,6 +33,7 @@ func TestHTTPSummaryV2WithOptionalParams(t *testing.T) {
 		context.TODO(),
 		radar.HTTPSummaryV2ParamsDimensionAdm1,
 		radar.HTTPSummaryV2Params{
+			APITraffic:    cloudflare.F([]radar.HTTPSummaryV2ParamsAPITraffic{radar.HTTPSummaryV2ParamsAPITrafficAPI}),
 			ASN:           cloudflare.F([]string{"string"}),
 			BotClass:      cloudflare.F([]radar.HTTPSummaryV2ParamsBotClass{radar.HTTPSummaryV2ParamsBotClassLikelyAutomated}),
 			Continent:     cloudflare.F([]string{"string"}),
@@ -77,6 +78,7 @@ func TestHTTPTimeseriesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.HTTP.Timeseries(context.TODO(), radar.HTTPTimeseriesParams{
 		AggInterval:   cloudflare.F(radar.HTTPTimeseriesParamsAggInterval1h),
+		APITraffic:    cloudflare.F([]radar.HTTPTimeseriesParamsAPITraffic{radar.HTTPTimeseriesParamsAPITrafficAPI}),
 		ASN:           cloudflare.F([]string{"string"}),
 		BotClass:      cloudflare.F([]radar.HTTPTimeseriesParamsBotClass{radar.HTTPTimeseriesParamsBotClassLikelyAutomated}),
 		BrowserFamily: cloudflare.F([]radar.HTTPTimeseriesParamsBrowserFamily{radar.HTTPTimeseriesParamsBrowserFamilyChrome}),
@@ -124,6 +126,7 @@ func TestHTTPTimeseriesGroupsV2WithOptionalParams(t *testing.T) {
 		radar.HTTPTimeseriesGroupsV2ParamsDimensionAdm1,
 		radar.HTTPTimeseriesGroupsV2Params{
 			AggInterval:   cloudflare.F(radar.HTTPTimeseriesGroupsV2ParamsAggInterval1h),
+			APITraffic:    cloudflare.F([]radar.HTTPTimeseriesGroupsV2ParamsAPITraffic{radar.HTTPTimeseriesGroupsV2ParamsAPITrafficAPI}),
 			ASN:           cloudflare.F([]string{"string"}),
 			BotClass:      cloudflare.F([]radar.HTTPTimeseriesGroupsV2ParamsBotClass{radar.HTTPTimeseriesGroupsV2ParamsBotClassLikelyAutomated}),
 			Continent:     cloudflare.F([]string{"string"}),

@@ -34,6 +34,7 @@ func TestInvestigateListWithOptionalParams(t *testing.T) {
 		ActionLog:        cloudflare.F(true),
 		AlertID:          cloudflare.F("alert_id"),
 		Cursor:           cloudflare.F("cursor"),
+		DeliveryStatus:   cloudflare.F(email_security.InvestigateListParamsDeliveryStatusDelivered),
 		DetectionsOnly:   cloudflare.F(true),
 		Domain:           cloudflare.F("domain"),
 		End:              cloudflare.F(time.Now()),
