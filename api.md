@@ -135,6 +135,8 @@
 
 # [MagicTransit](magic_transit/api.md)
 
+# [DDoSProtection](ddos_protection/api.md)
+
 # [MagicNetworkMonitoring](magic_network_monitoring/api.md)
 
 # [MagicCloudNetworking](magic_cloud_networking/api.md)

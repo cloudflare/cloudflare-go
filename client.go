@@ -39,6 +39,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/custom_pages"
 	"github.com/cloudflare/cloudflare-go/v7/d1"
 	"github.com/cloudflare/cloudflare-go/v7/dcv_delegation"
+	"github.com/cloudflare/cloudflare-go/v7/ddos_protection"
 	"github.com/cloudflare/cloudflare-go/v7/diagnostics"
 	"github.com/cloudflare/cloudflare-go/v7/dns"
 	"github.com/cloudflare/cloudflare-go/v7/dns_firewall"
@@ -183,6 +184,7 @@ type Client struct {
 	Images                      *images.ImageService
 	Intel                       *intel.IntelService
 	MagicTransit                *magic_transit.MagicTransitService
+	DDoSProtection              *ddos_protection.DDoSProtectionService
 	MagicNetworkMonitoring      *magic_network_monitoring.MagicNetworkMonitoringService
 	MagicCloudNetworking        *magic_cloud_networking.MagicCloudNetworkingService
 	NetworkInterconnects        *network_interconnects.NetworkInterconnectService
@@ -325,6 +327,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Images = images.NewImageService(opts...)
 	r.Intel = intel.NewIntelService(opts...)
 	r.MagicTransit = magic_transit.NewMagicTransitService(opts...)
+	r.DDoSProtection = ddos_protection.NewDDoSProtectionService(opts...)
 	r.MagicNetworkMonitoring = magic_network_monitoring.NewMagicNetworkMonitoringService(opts...)
 	r.MagicCloudNetworking = magic_cloud_networking.NewMagicCloudNetworkingService(opts...)
 	r.NetworkInterconnects = network_interconnects.NewNetworkInterconnectService(opts...)
