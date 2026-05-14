@@ -27,8 +27,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewIdentityProviderService] method instead.
 type IdentityProviderService struct {
-	Options []option.RequestOption
-	SCIM    *IdentityProviderSCIMService
+	Options         []option.RequestOption
+	SCIM            *IdentityProviderSCIMService
+	SAMLCertificate *IdentityProviderSAMLCertificateService
 }
 
 // NewIdentityProviderService generates a new service that applies the given
@@ -38,6 +39,7 @@ func NewIdentityProviderService(opts ...option.RequestOption) (r *IdentityProvid
 	r = &IdentityProviderService{}
 	r.Options = opts
 	r.SCIM = NewIdentityProviderSCIMService(opts...)
+	r.SAMLCertificate = NewIdentityProviderSAMLCertificateService(opts...)
 	return
 }
 
