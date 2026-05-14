@@ -41,8 +41,9 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 				Prompt:                   cloudflare.F(zero_trust.AzureADConfigPromptLogin),
 				SupportGroups:            cloudflare.F(true),
 			}),
-			Name: cloudflare.F("Widget Corps IDP"),
-			Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
+			Name:                 cloudflare.F("Widget Corps IDP"),
+			Type:                 cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
+			SAMLCertificateSetID: cloudflare.F("c409ef44-e72c-41c8-8c0b-278c8a6f4fd8"),
 			SCIMConfig: cloudflare.F(zero_trust.IdentityProviderSCIMConfigParam{
 				Enabled:                cloudflare.F(true),
 				IdentityUpdateBehavior: cloudflare.F(zero_trust.IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic),
@@ -91,8 +92,9 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 					Prompt:                   cloudflare.F(zero_trust.AzureADConfigPromptLogin),
 					SupportGroups:            cloudflare.F(true),
 				}),
-				Name: cloudflare.F("Widget Corps IDP"),
-				Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
+				Name:                 cloudflare.F("Widget Corps IDP"),
+				Type:                 cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
+				SAMLCertificateSetID: cloudflare.F("c409ef44-e72c-41c8-8c0b-278c8a6f4fd8"),
 				SCIMConfig: cloudflare.F(zero_trust.IdentityProviderSCIMConfigParam{
 					Enabled:                cloudflare.F(true),
 					IdentityUpdateBehavior: cloudflare.F(zero_trust.IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic),

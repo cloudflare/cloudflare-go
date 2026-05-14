@@ -415,12 +415,14 @@ TEST_PATHS=(
 	zero_trust/identityprovider_test.go
 	zero_trust/identityproviderscimgroup_test.go
 	zero_trust/identityproviderscimuser_test.go
+	zero_trust/identityprovidersamlcertificate_test.go
 	zero_trust/organization_test.go
 	zero_trust/organizationdoh_test.go
 	zero_trust/seat_test.go
 	zero_trust/accessaicontrolmcpportal_test.go
 	zero_trust/accessaicontrolmcpserver_test.go
 	zero_trust/accessgatewayca_test.go
+	zero_trust/accesssamlcertificate_test.go
 	zero_trust/accessinfrastructuretarget_test.go
 	zero_trust/accessapplication_test.go
 	zero_trust/accessapplicationca_test.go
