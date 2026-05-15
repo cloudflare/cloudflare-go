@@ -71,6 +71,9 @@ type ModelListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter by Author
 	Author param.Field[string] `query:"author"`
+	// If set, return models in the requested marketplace format instead of the default
+	// response.
+	Format param.Field[ModelListParamsFormat] `query:"format"`
 	// Filter to hide experimental models
 	HideExperimental param.Field[bool]  `query:"hide_experimental"`
 	Page             param.Field[int64] `query:"page"`
@@ -89,4 +92,20 @@ func (r ModelListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// If set, return models in the requested marketplace format instead of the default
+// response.
+type ModelListParamsFormat string
+
+const (
+	ModelListParamsFormatOpenrouter ModelListParamsFormat = "openrouter"
+)
+
+func (r ModelListParamsFormat) IsKnown() bool {
+	switch r {
+	case ModelListParamsFormatOpenrouter:
+		return true
+	}
+	return false
 }
