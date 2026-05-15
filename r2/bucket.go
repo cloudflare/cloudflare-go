@@ -33,6 +33,7 @@ type BucketService struct {
 	Locks              *BucketLockService
 	Metrics            *BucketMetricService
 	Sippy              *BucketSippyService
+	Objects            *BucketObjectService
 }
 
 // NewBucketService generates a new service that applies the given options to each
@@ -48,6 +49,7 @@ func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 	r.Locks = NewBucketLockService(opts...)
 	r.Metrics = NewBucketMetricService(opts...)
 	r.Sippy = NewBucketSippyService(opts...)
+	r.Objects = NewBucketObjectService(opts...)
 	return
 }
 

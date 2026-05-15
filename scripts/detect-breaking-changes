@@ -370,6 +370,7 @@ TEST_PATHS=(
 	r2/bucketlock_test.go
 	r2/bucketmetric_test.go
 	r2/bucketsippy_test.go
+	r2/bucketobject_test.go
 	r2/temporarycredential_test.go
 	r2/superslurperjob_test.go
 	r2/superslurperjoblog_test.go
