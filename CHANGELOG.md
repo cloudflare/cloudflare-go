@@ -1,5 +1,17 @@
 # Changelog
 
+## 7.2.1 (2026-05-15)
+
+Full Changelog: [v7.2.0...v7.2.1](https://github.com/cloudflare/cloudflare-go/compare/v7.2.0...v7.2.1)
+
+### Chores
+
+* **acm:** update generated types and methods ([7087016](https://github.com/cloudflare/cloudflare-go/commit/7087016f3a2ec722fe93a0391f37c99009e77964))
+* **ai_gateway:** update generated types and methods ([4a0250a](https://github.com/cloudflare/cloudflare-go/commit/4a0250a73a308ee0c2567dda9c32b67f4a70c136))
+* remove dangling references for excluded resources ([62e8a9e](https://github.com/cloudflare/cloudflare-go/commit/62e8a9e34070d2e7d7d3bc54e3c9afb20f1fc9ef))
+* sync infrastructure packages from staging-next ([1ae3bb7](https://github.com/cloudflare/cloudflare-go/commit/1ae3bb717d2776eec717cd49e5bde6aa07e2d851))
+* sync shared codegen files from staging-next ([2b9d783](https://github.com/cloudflare/cloudflare-go/commit/2b9d78371d763e1747f8d1de80a1560152050f7c))
+
 ## 6.9.0 (2026-04-01)
 
 Full Changelog: [v6.8.0...v6.9.0](https://github.com/cloudflare/cloudflare-go/compare/v6.8.0...v6.9.0)
