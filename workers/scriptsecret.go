@@ -116,6 +116,34 @@ func (r *ScriptSecretService) Delete(ctx context.Context, scriptName string, sec
 	return res, nil
 }
 
+// Create, update, or delete multiple secrets on a script in a single operation
+// using JSON Merge Patch (RFC 7396).
+//
+// Usage:
+//
+// - To create or update a secret, set its value to a secret object.
+// - To delete a secret, set its value to `null`.
+// - Secrets not included in the request are left unchanged.
+func (r *ScriptSecretService) BulkUpdate(ctx context.Context, scriptName string, params ScriptSecretBulkUpdateParams, opts ...option.RequestOption) (res *ScriptSecretBulkUpdateResponse, err error) {
+	var env ScriptSecretBulkUpdateResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/secrets-bulk", params.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 // Get a given secret binding (value omitted) on a script.
 func (r *ScriptSecretService) Get(ctx context.Context, scriptName string, secretName string, params ScriptSecretGetParams, opts ...option.RequestOption) (res *ScriptSecretGetResponse, err error) {
 	var env ScriptSecretGetResponseEnvelope
@@ -648,6 +676,265 @@ func (r ScriptSecretListResponseFormat) IsKnown() bool {
 }
 
 type ScriptSecretDeleteResponse = interface{}
+
+type ScriptSecretBulkUpdateResponse map[string]ScriptSecretBulkUpdateResponseItem
+
+// A secret value accessible through a binding.
+type ScriptSecretBulkUpdateResponseItem struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// The kind of resource that the binding provides.
+	Type ScriptSecretBulkUpdateResponseItemType `json:"type" api:"required"`
+	// This field can have the runtime type of [interface{}].
+	Algorithm interface{} `json:"algorithm"`
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+	Format ScriptSecretBulkUpdateResponseItemFormat `json:"format"`
+	// This field can have the runtime type of [interface{}].
+	KeyJwk interface{} `json:"key_jwk"`
+	// This field can have the runtime type of
+	// [[]ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage].
+	Usages interface{}                            `json:"usages"`
+	JSON   scriptSecretBulkUpdateResponseItemJSON `json:"-"`
+	union  ScriptSecretBulkUpdateResponseItemUnion
+}
+
+// scriptSecretBulkUpdateResponseItemJSON contains the JSON metadata for the struct
+// [ScriptSecretBulkUpdateResponseItem]
+type scriptSecretBulkUpdateResponseItemJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Algorithm   apijson.Field
+	Format      apijson.Field
+	KeyJwk      apijson.Field
+	Usages      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r scriptSecretBulkUpdateResponseItemJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ScriptSecretBulkUpdateResponseItem) UnmarshalJSON(data []byte) (err error) {
+	*r = ScriptSecretBulkUpdateResponseItem{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ScriptSecretBulkUpdateResponseItemUnion] interface which you
+// can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretText],
+// [ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKey].
+func (r ScriptSecretBulkUpdateResponseItem) AsUnion() ScriptSecretBulkUpdateResponseItemUnion {
+	return r.union
+}
+
+// A secret value accessible through a binding.
+//
+// Union satisfied by
+// [ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretText] or
+// [ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKey].
+type ScriptSecretBulkUpdateResponseItemUnion interface {
+	implementsScriptSecretBulkUpdateResponseItem()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ScriptSecretBulkUpdateResponseItemUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretText{}),
+			DiscriminatorValue: "secret_text",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKey{}),
+			DiscriminatorValue: "secret_key",
+		},
+	)
+}
+
+type ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretText struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// The kind of resource that the binding provides.
+	Type ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretTextType `json:"type" api:"required"`
+	JSON scriptSecretBulkUpdateResponseItemWorkersBindingKindSecretTextJSON `json:"-"`
+}
+
+// scriptSecretBulkUpdateResponseItemWorkersBindingKindSecretTextJSON contains the
+// JSON metadata for the struct
+// [ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretText]
+type scriptSecretBulkUpdateResponseItemWorkersBindingKindSecretTextJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretText) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSecretBulkUpdateResponseItemWorkersBindingKindSecretTextJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretText) implementsScriptSecretBulkUpdateResponseItem() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretTextType string
+
+const (
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretTextTypeSecretText ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretTextType = "secret_text"
+)
+
+func (r ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretTextType) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretTextTypeSecretText:
+		return true
+	}
+	return false
+}
+
+type ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKey struct {
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
+	Algorithm interface{} `json:"algorithm" api:"required"`
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+	Format ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormat `json:"format" api:"required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// The kind of resource that the binding provides.
+	Type ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyType `json:"type" api:"required"`
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
+	Usages []ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage `json:"usages" api:"required"`
+	JSON   scriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyJSON    `json:"-"`
+}
+
+// scriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyJSON contains the
+// JSON metadata for the struct
+// [ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKey]
+type scriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyJSON struct {
+	Algorithm   apijson.Field
+	Format      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	Usages      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKey) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKey) implementsScriptSecretBulkUpdateResponseItem() {
+}
+
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+type ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormat string
+
+const (
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormatRaw   ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormat = "raw"
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormatPkcs8 ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormat = "pkcs8"
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormatSpki  ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormat = "spki"
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormatJwk   ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormat = "jwk"
+)
+
+func (r ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormat) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormatRaw, ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormatPkcs8, ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormatSpki, ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The kind of resource that the binding provides.
+type ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyType string
+
+const (
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyTypeSecretKey ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyType = "secret_key"
+)
+
+func (r ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyType) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+type ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage string
+
+const (
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageEncrypt    ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage = "encrypt"
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageDecrypt    ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage = "decrypt"
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageSign       ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage = "sign"
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageVerify     ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage = "verify"
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageDeriveKey  ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage = "deriveKey"
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageDeriveBits ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage = "deriveBits"
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageWrapKey    ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage = "wrapKey"
+	ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage = "unwrapKey"
+)
+
+func (r ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsage) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageEncrypt, ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageDecrypt, ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageSign, ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageVerify, ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageDeriveKey, ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageDeriveBits, ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageWrapKey, ScriptSecretBulkUpdateResponseItemWorkersBindingKindSecretKeyUsageUnwrapKey:
+		return true
+	}
+	return false
+}
+
+// The kind of resource that the binding provides.
+type ScriptSecretBulkUpdateResponseItemType string
+
+const (
+	ScriptSecretBulkUpdateResponseItemTypeSecretText ScriptSecretBulkUpdateResponseItemType = "secret_text"
+	ScriptSecretBulkUpdateResponseItemTypeSecretKey  ScriptSecretBulkUpdateResponseItemType = "secret_key"
+)
+
+func (r ScriptSecretBulkUpdateResponseItemType) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateResponseItemTypeSecretText, ScriptSecretBulkUpdateResponseItemTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+type ScriptSecretBulkUpdateResponseItemFormat string
+
+const (
+	ScriptSecretBulkUpdateResponseItemFormatRaw   ScriptSecretBulkUpdateResponseItemFormat = "raw"
+	ScriptSecretBulkUpdateResponseItemFormatPkcs8 ScriptSecretBulkUpdateResponseItemFormat = "pkcs8"
+	ScriptSecretBulkUpdateResponseItemFormatSpki  ScriptSecretBulkUpdateResponseItemFormat = "spki"
+	ScriptSecretBulkUpdateResponseItemFormatJwk   ScriptSecretBulkUpdateResponseItemFormat = "jwk"
+)
+
+func (r ScriptSecretBulkUpdateResponseItemFormat) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateResponseItemFormatRaw, ScriptSecretBulkUpdateResponseItemFormatPkcs8, ScriptSecretBulkUpdateResponseItemFormatSpki, ScriptSecretBulkUpdateResponseItemFormatJwk:
+		return true
+	}
+	return false
+}
 
 // A secret value accessible through a binding.
 type ScriptSecretGetResponse struct {
@@ -1390,6 +1677,347 @@ const (
 func (r ScriptSecretDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case ScriptSecretDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type ScriptSecretBulkUpdateParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Map of secret names to secret values:
+	//
+	// - Set to a secret object to create or update.
+	// - Set to `null` to delete.
+	// - Omit to leave unchanged.
+	Secrets param.Field[map[string]ScriptSecretBulkUpdateParamsSecretsUnion] `json:"secrets"`
+	// Optional version tags to apply to the new script version.
+	VersionTags param.Field[map[string]interface{}] `json:"version_tags"`
+}
+
+func (r ScriptSecretBulkUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A secret value accessible through a binding.
+type ScriptSecretBulkUpdateParamsSecrets struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// The kind of resource that the binding provides.
+	Type      param.Field[ScriptSecretBulkUpdateParamsSecretsType] `json:"type" api:"required"`
+	Algorithm param.Field[interface{}]                             `json:"algorithm"`
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+	Format param.Field[ScriptSecretBulkUpdateParamsSecretsFormat] `json:"format"`
+	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
+	KeyBase64 param.Field[string]      `json:"key_base64"`
+	KeyJwk    param.Field[interface{}] `json:"key_jwk"`
+	// The secret value to use.
+	Text   param.Field[string]      `json:"text"`
+	Usages param.Field[interface{}] `json:"usages"`
+}
+
+func (r ScriptSecretBulkUpdateParamsSecrets) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptSecretBulkUpdateParamsSecrets) implementsScriptSecretBulkUpdateParamsSecretsUnion() {}
+
+// A secret value accessible through a binding.
+//
+// Satisfied by
+// [workers.ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretText],
+// [workers.ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKey],
+// [ScriptSecretBulkUpdateParamsSecrets].
+type ScriptSecretBulkUpdateParamsSecretsUnion interface {
+	implementsScriptSecretBulkUpdateParamsSecretsUnion()
+}
+
+type ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretText struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// The secret value to use.
+	Text param.Field[string] `json:"text" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretTextType] `json:"type" api:"required"`
+}
+
+func (r ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretText) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretText) implementsScriptSecretBulkUpdateParamsSecretsUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretTextType string
+
+const (
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretTextTypeSecretText ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretTextType = "secret_text"
+)
+
+func (r ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretTextType) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretTextTypeSecretText:
+		return true
+	}
+	return false
+}
+
+type ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKey struct {
+	// Algorithm-specific key parameters.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#algorithm).
+	Algorithm param.Field[interface{}] `json:"algorithm" api:"required"`
+	// Data format of the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+	Format param.Field[ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormat] `json:"format" api:"required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyType] `json:"type" api:"required"`
+	// Allowed operations with the key.
+	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#keyUsages).
+	Usages param.Field[[]ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage] `json:"usages" api:"required"`
+	// Base64-encoded key data. Required if `format` is "raw", "pkcs8", or "spki".
+	KeyBase64 param.Field[string] `json:"key_base64"`
+	// Key data in
+	// [JSON Web Key](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#json_web_key)
+	// format. Required if `format` is "jwk".
+	KeyJwk param.Field[interface{}] `json:"key_jwk"`
+}
+
+func (r ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKey) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKey) implementsScriptSecretBulkUpdateParamsSecretsUnion() {
+}
+
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+type ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormat string
+
+const (
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormatRaw   ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormat = "raw"
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormatPkcs8 ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormat = "pkcs8"
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormatSpki  ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormat = "spki"
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormatJwk   ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormat = "jwk"
+)
+
+func (r ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormat) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormatRaw, ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormatPkcs8, ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormatSpki, ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyFormatJwk:
+		return true
+	}
+	return false
+}
+
+// The kind of resource that the binding provides.
+type ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyType string
+
+const (
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyTypeSecretKey ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyType = "secret_key"
+)
+
+func (r ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyType) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+type ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage string
+
+const (
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageEncrypt    ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage = "encrypt"
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageDecrypt    ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage = "decrypt"
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageSign       ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage = "sign"
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageVerify     ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage = "verify"
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageDeriveKey  ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage = "deriveKey"
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageDeriveBits ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage = "deriveBits"
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageWrapKey    ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage = "wrapKey"
+	ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageUnwrapKey  ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage = "unwrapKey"
+)
+
+func (r ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsage) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageEncrypt, ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageDecrypt, ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageSign, ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageVerify, ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageDeriveKey, ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageDeriveBits, ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageWrapKey, ScriptSecretBulkUpdateParamsSecretsWorkersBindingKindSecretKeyUsageUnwrapKey:
+		return true
+	}
+	return false
+}
+
+// The kind of resource that the binding provides.
+type ScriptSecretBulkUpdateParamsSecretsType string
+
+const (
+	ScriptSecretBulkUpdateParamsSecretsTypeSecretText ScriptSecretBulkUpdateParamsSecretsType = "secret_text"
+	ScriptSecretBulkUpdateParamsSecretsTypeSecretKey  ScriptSecretBulkUpdateParamsSecretsType = "secret_key"
+)
+
+func (r ScriptSecretBulkUpdateParamsSecretsType) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateParamsSecretsTypeSecretText, ScriptSecretBulkUpdateParamsSecretsTypeSecretKey:
+		return true
+	}
+	return false
+}
+
+// Data format of the key.
+// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
+type ScriptSecretBulkUpdateParamsSecretsFormat string
+
+const (
+	ScriptSecretBulkUpdateParamsSecretsFormatRaw   ScriptSecretBulkUpdateParamsSecretsFormat = "raw"
+	ScriptSecretBulkUpdateParamsSecretsFormatPkcs8 ScriptSecretBulkUpdateParamsSecretsFormat = "pkcs8"
+	ScriptSecretBulkUpdateParamsSecretsFormatSpki  ScriptSecretBulkUpdateParamsSecretsFormat = "spki"
+	ScriptSecretBulkUpdateParamsSecretsFormatJwk   ScriptSecretBulkUpdateParamsSecretsFormat = "jwk"
+)
+
+func (r ScriptSecretBulkUpdateParamsSecretsFormat) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateParamsSecretsFormatRaw, ScriptSecretBulkUpdateParamsSecretsFormatPkcs8, ScriptSecretBulkUpdateParamsSecretsFormatSpki, ScriptSecretBulkUpdateParamsSecretsFormatJwk:
+		return true
+	}
+	return false
+}
+
+type ScriptSecretBulkUpdateResponseEnvelope struct {
+	Errors   []ScriptSecretBulkUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ScriptSecretBulkUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success ScriptSecretBulkUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
+	// Map of secret names to secret metadata for resulting secrets.
+	Result ScriptSecretBulkUpdateResponse             `json:"result"`
+	JSON   scriptSecretBulkUpdateResponseEnvelopeJSON `json:"-"`
+}
+
+// scriptSecretBulkUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ScriptSecretBulkUpdateResponseEnvelope]
+type scriptSecretBulkUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSecretBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSecretBulkUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSecretBulkUpdateResponseEnvelopeErrors struct {
+	Code             int64                                              `json:"code" api:"required"`
+	Message          string                                             `json:"message" api:"required"`
+	DocumentationURL string                                             `json:"documentation_url"`
+	Source           ScriptSecretBulkUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             scriptSecretBulkUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// scriptSecretBulkUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ScriptSecretBulkUpdateResponseEnvelopeErrors]
+type scriptSecretBulkUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSecretBulkUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSecretBulkUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSecretBulkUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                                 `json:"pointer"`
+	JSON    scriptSecretBulkUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// scriptSecretBulkUpdateResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [ScriptSecretBulkUpdateResponseEnvelopeErrorsSource]
+type scriptSecretBulkUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSecretBulkUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSecretBulkUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSecretBulkUpdateResponseEnvelopeMessages struct {
+	Code             int64                                                `json:"code" api:"required"`
+	Message          string                                               `json:"message" api:"required"`
+	DocumentationURL string                                               `json:"documentation_url"`
+	Source           ScriptSecretBulkUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             scriptSecretBulkUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// scriptSecretBulkUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ScriptSecretBulkUpdateResponseEnvelopeMessages]
+type scriptSecretBulkUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSecretBulkUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSecretBulkUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptSecretBulkUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                                   `json:"pointer"`
+	JSON    scriptSecretBulkUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// scriptSecretBulkUpdateResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [ScriptSecretBulkUpdateResponseEnvelopeMessagesSource]
+type scriptSecretBulkUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSecretBulkUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSecretBulkUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type ScriptSecretBulkUpdateResponseEnvelopeSuccess bool
+
+const (
+	ScriptSecretBulkUpdateResponseEnvelopeSuccessTrue ScriptSecretBulkUpdateResponseEnvelopeSuccess = true
+)
+
+func (r ScriptSecretBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptSecretBulkUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
