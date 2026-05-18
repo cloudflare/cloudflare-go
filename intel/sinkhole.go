@@ -36,7 +36,7 @@ func NewSinkholeService(opts ...option.RequestOption) (r *SinkholeService) {
 	return
 }
 
-// List sinkholes owned by this account
+// Lists sinkholes owned by the account for redirecting malicious traffic.
 func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Sinkhole], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -58,25 +58,25 @@ func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, op
 	return res, nil
 }
 
-// List sinkholes owned by this account
+// Lists sinkholes owned by the account for redirecting malicious traffic.
 func (r *SinkholeService) ListAutoPaging(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Sinkhole] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type Sinkhole struct {
-	// The unique identifier for the sinkhole
+	// The unique identifier for the sinkhole.
 	ID int64 `json:"id"`
-	// The account tag that owns this sinkhole
+	// The account tag that owns this sinkhole.
 	AccountTag string `json:"account_tag"`
-	// The date and time when the sinkhole was created
+	// The date and time when the sinkhole was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// The date and time when the sinkhole was last modified
+	// The date and time when the sinkhole was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The name of the sinkhole
+	// The name of the sinkhole.
 	Name string `json:"name"`
-	// The name of the R2 bucket to store results
+	// The name of the R2 bucket to store results.
 	R2Bucket string `json:"r2_bucket"`
-	// The id of the R2 instance
+	// The id of the R2 instance.
 	R2ID string       `json:"r2_id"`
 	JSON sinkholeJSON `json:"-"`
 }
@@ -103,6 +103,6 @@ func (r sinkholeJSON) RawJSON() string {
 }
 
 type SinkholeListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

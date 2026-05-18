@@ -3,17 +3,7 @@
 package addressing
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"net/http"
-	"slices"
-
-	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v7/internal/param"
-	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 )
 
 // RegionalHostnameRegionService contains methods and other services that help with
@@ -33,61 +23,4 @@ func NewRegionalHostnameRegionService(opts ...option.RequestOption) (r *Regional
 	r = &RegionalHostnameRegionService{}
 	r.Options = opts
 	return
-}
-
-// List all Regional Services regions available for use by this account.
-func (r *RegionalHostnameRegionService) List(ctx context.Context, query RegionalHostnameRegionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RegionalHostnameRegionListResponse], err error) {
-	var raw *http.Response
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/addressing/regional_hostnames/regions", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// List all Regional Services regions available for use by this account.
-func (r *RegionalHostnameRegionService) ListAutoPaging(ctx context.Context, query RegionalHostnameRegionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RegionalHostnameRegionListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
-}
-
-type RegionalHostnameRegionListResponse struct {
-	// Identifying key for the region
-	Key string `json:"key"`
-	// Human-readable text label for the region
-	Label string                                 `json:"label"`
-	JSON  regionalHostnameRegionListResponseJSON `json:"-"`
-}
-
-// regionalHostnameRegionListResponseJSON contains the JSON metadata for the struct
-// [RegionalHostnameRegionListResponse]
-type regionalHostnameRegionListResponseJSON struct {
-	Key         apijson.Field
-	Label       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionalHostnameRegionListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalHostnameRegionListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionalHostnameRegionListParams struct {
-	// Identifier.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

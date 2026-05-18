@@ -227,8 +227,6 @@ TEST_PATHS=(
 	spectrum/analyticseventbytime_test.go
 	spectrum/analyticseventsummary_test.go
 	spectrum/app_test.go
-	addressing/regionalhostname_test.go
-	addressing/regionalhostnameregion_test.go
 	addressing/service_test.go
 	addressing/addressmap_test.go
 	addressing/addressmapaccount_test.go
