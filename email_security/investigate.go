@@ -146,14 +146,17 @@ type InvestigateListResponse struct {
 	// When the message was scanned (UTC)
 	ScannedAt time.Time `json:"scanned_at" api:"nullable" format:"date-time"`
 	// When the message was sent (UTC)
-	SentAt           time.Time                         `json:"sent_at" api:"nullable" format:"date-time"`
-	SentDate         string                            `json:"sent_date" api:"nullable"`
-	Subject          string                            `json:"subject" api:"nullable"`
-	ThreatCategories []string                          `json:"threat_categories" api:"nullable"`
-	To               []string                          `json:"to" api:"nullable"`
-	ToName           []string                          `json:"to_name" api:"nullable"`
-	Validation       InvestigateListResponseValidation `json:"validation"`
-	JSON             investigateListResponseJSON       `json:"-"`
+	SentAt            time.Time                         `json:"sent_at" api:"nullable" format:"date-time"`
+	SentDate          string                            `json:"sent_date" api:"nullable"`
+	SmtpHeloServerIP  string                            `json:"smtp_helo_server_ip" api:"nullable"`
+	SmtpPreviousHopIP string                            `json:"smtp_previous_hop_ip" api:"nullable"`
+	Subject           string                            `json:"subject" api:"nullable"`
+	ThreatCategories  []string                          `json:"threat_categories" api:"nullable"`
+	To                []string                          `json:"to" api:"nullable"`
+	ToName            []string                          `json:"to_name" api:"nullable"`
+	Validation        InvestigateListResponseValidation `json:"validation"`
+	XOriginatingIP    string                            `json:"x_originating_ip" api:"nullable"`
+	JSON              investigateListResponseJSON       `json:"-"`
 }
 
 // investigateListResponseJSON contains the JSON metadata for the struct
@@ -186,11 +189,14 @@ type investigateListResponseJSON struct {
 	ScannedAt              apijson.Field
 	SentAt                 apijson.Field
 	SentDate               apijson.Field
+	SmtpHeloServerIP       apijson.Field
+	SmtpPreviousHopIP      apijson.Field
 	Subject                apijson.Field
 	ThreatCategories       apijson.Field
 	To                     apijson.Field
 	ToName                 apijson.Field
 	Validation             apijson.Field
+	XOriginatingIP         apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -634,14 +640,17 @@ type InvestigateGetResponse struct {
 	// When the message was scanned (UTC)
 	ScannedAt time.Time `json:"scanned_at" api:"nullable" format:"date-time"`
 	// When the message was sent (UTC)
-	SentAt           time.Time                        `json:"sent_at" api:"nullable" format:"date-time"`
-	SentDate         string                           `json:"sent_date" api:"nullable"`
-	Subject          string                           `json:"subject" api:"nullable"`
-	ThreatCategories []string                         `json:"threat_categories" api:"nullable"`
-	To               []string                         `json:"to" api:"nullable"`
-	ToName           []string                         `json:"to_name" api:"nullable"`
-	Validation       InvestigateGetResponseValidation `json:"validation"`
-	JSON             investigateGetResponseJSON       `json:"-"`
+	SentAt            time.Time                        `json:"sent_at" api:"nullable" format:"date-time"`
+	SentDate          string                           `json:"sent_date" api:"nullable"`
+	SmtpHeloServerIP  string                           `json:"smtp_helo_server_ip" api:"nullable"`
+	SmtpPreviousHopIP string                           `json:"smtp_previous_hop_ip" api:"nullable"`
+	Subject           string                           `json:"subject" api:"nullable"`
+	ThreatCategories  []string                         `json:"threat_categories" api:"nullable"`
+	To                []string                         `json:"to" api:"nullable"`
+	ToName            []string                         `json:"to_name" api:"nullable"`
+	Validation        InvestigateGetResponseValidation `json:"validation"`
+	XOriginatingIP    string                           `json:"x_originating_ip" api:"nullable"`
+	JSON              investigateGetResponseJSON       `json:"-"`
 }
 
 // investigateGetResponseJSON contains the JSON metadata for the struct
@@ -674,11 +683,14 @@ type investigateGetResponseJSON struct {
 	ScannedAt              apijson.Field
 	SentAt                 apijson.Field
 	SentDate               apijson.Field
+	SmtpHeloServerIP       apijson.Field
+	SmtpPreviousHopIP      apijson.Field
 	Subject                apijson.Field
 	ThreatCategories       apijson.Field
 	To                     apijson.Field
 	ToName                 apijson.Field
 	Validation             apijson.Field
+	XOriginatingIP         apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -1085,6 +1097,8 @@ type InvestigateListParams struct {
 	ActionLog param.Field[bool]   `query:"action_log"`
 	AlertID   param.Field[string] `query:"alert_id"`
 	Cursor    param.Field[string] `query:"cursor"`
+	// Delivery status to filter by.
+	DeliveryStatus param.Field[InvestigateListParamsDeliveryStatus] `query:"delivery_status"`
 	// Whether to include only detections in search results.
 	DetectionsOnly param.Field[bool] `query:"detections_only"`
 	// Sender domains to filter by.
@@ -1116,6 +1130,27 @@ func (r InvestigateListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Delivery status to filter by.
+type InvestigateListParamsDeliveryStatus string
+
+const (
+	InvestigateListParamsDeliveryStatusDelivered   InvestigateListParamsDeliveryStatus = "delivered"
+	InvestigateListParamsDeliveryStatusMoved       InvestigateListParamsDeliveryStatus = "moved"
+	InvestigateListParamsDeliveryStatusQuarantined InvestigateListParamsDeliveryStatus = "quarantined"
+	InvestigateListParamsDeliveryStatusRejected    InvestigateListParamsDeliveryStatus = "rejected"
+	InvestigateListParamsDeliveryStatusDeferred    InvestigateListParamsDeliveryStatus = "deferred"
+	InvestigateListParamsDeliveryStatusBounced     InvestigateListParamsDeliveryStatus = "bounced"
+	InvestigateListParamsDeliveryStatusQueued      InvestigateListParamsDeliveryStatus = "queued"
+)
+
+func (r InvestigateListParamsDeliveryStatus) IsKnown() bool {
+	switch r {
+	case InvestigateListParamsDeliveryStatusDelivered, InvestigateListParamsDeliveryStatusMoved, InvestigateListParamsDeliveryStatusQuarantined, InvestigateListParamsDeliveryStatusRejected, InvestigateListParamsDeliveryStatusDeferred, InvestigateListParamsDeliveryStatusBounced, InvestigateListParamsDeliveryStatusQueued:
+		return true
+	}
+	return false
 }
 
 // Dispositions to filter by.
