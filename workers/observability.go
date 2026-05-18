@@ -16,6 +16,7 @@ type ObservabilityService struct {
 	Options      []option.RequestOption
 	Telemetry    *ObservabilityTelemetryService
 	Destinations *ObservabilityDestinationService
+	Queries      *ObservabilityQueryService
 }
 
 // NewObservabilityService generates a new service that applies the given options
@@ -26,5 +27,6 @@ func NewObservabilityService(opts ...option.RequestOption) (r *ObservabilityServ
 	r.Options = opts
 	r.Telemetry = NewObservabilityTelemetryService(opts...)
 	r.Destinations = NewObservabilityDestinationService(opts...)
+	r.Queries = NewObservabilityQueryService(opts...)
 	return
 }

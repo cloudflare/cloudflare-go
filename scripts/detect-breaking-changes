@@ -182,6 +182,7 @@ TEST_PATHS=(
 	workers/subdomain_test.go
 	workers/observabilitytelemetry_test.go
 	workers/observabilitydestination_test.go
+	workers/observabilityquery_test.go
 	kv/namespace_test.go
 	kv/namespacekey_test.go
 	kv/namespacemetadata_test.go
