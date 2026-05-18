@@ -907,6 +907,9 @@ func (r httpTimeseriesGroupsV2ResponseSerie0JSON) RawJSON() string {
 }
 
 type HTTPSummaryV2Params struct {
+	// Filters results by API traffic classification. API traffic is identified by JSON
+	// or XML response content types on dynamic (non-cacheable) HTTP requests.
+	APITraffic param.Field[[]HTTPSummaryV2ParamsAPITraffic] `query:"apiTraffic"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
@@ -971,6 +974,7 @@ type HTTPSummaryV2ParamsDimension string
 
 const (
 	HTTPSummaryV2ParamsDimensionAdm1          HTTPSummaryV2ParamsDimension = "ADM1"
+	HTTPSummaryV2ParamsDimensionAPITraffic    HTTPSummaryV2ParamsDimension = "API_TRAFFIC"
 	HTTPSummaryV2ParamsDimensionAs            HTTPSummaryV2ParamsDimension = "AS"
 	HTTPSummaryV2ParamsDimensionBotClass      HTTPSummaryV2ParamsDimension = "BOT_CLASS"
 	HTTPSummaryV2ParamsDimensionBrowser       HTTPSummaryV2ParamsDimension = "BROWSER"
@@ -987,7 +991,22 @@ const (
 
 func (r HTTPSummaryV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case HTTPSummaryV2ParamsDimensionAdm1, HTTPSummaryV2ParamsDimensionAs, HTTPSummaryV2ParamsDimensionBotClass, HTTPSummaryV2ParamsDimensionBrowser, HTTPSummaryV2ParamsDimensionBrowserFamily, HTTPSummaryV2ParamsDimensionDeviceType, HTTPSummaryV2ParamsDimensionHTTPProtocol, HTTPSummaryV2ParamsDimensionHTTPVersion, HTTPSummaryV2ParamsDimensionIPVersion, HTTPSummaryV2ParamsDimensionLocation, HTTPSummaryV2ParamsDimensionOS, HTTPSummaryV2ParamsDimensionPostQuantum, HTTPSummaryV2ParamsDimensionTLSVersion:
+	case HTTPSummaryV2ParamsDimensionAdm1, HTTPSummaryV2ParamsDimensionAPITraffic, HTTPSummaryV2ParamsDimensionAs, HTTPSummaryV2ParamsDimensionBotClass, HTTPSummaryV2ParamsDimensionBrowser, HTTPSummaryV2ParamsDimensionBrowserFamily, HTTPSummaryV2ParamsDimensionDeviceType, HTTPSummaryV2ParamsDimensionHTTPProtocol, HTTPSummaryV2ParamsDimensionHTTPVersion, HTTPSummaryV2ParamsDimensionIPVersion, HTTPSummaryV2ParamsDimensionLocation, HTTPSummaryV2ParamsDimensionOS, HTTPSummaryV2ParamsDimensionPostQuantum, HTTPSummaryV2ParamsDimensionTLSVersion:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryV2ParamsAPITraffic string
+
+const (
+	HTTPSummaryV2ParamsAPITrafficAPI    HTTPSummaryV2ParamsAPITraffic = "API"
+	HTTPSummaryV2ParamsAPITrafficNonAPI HTTPSummaryV2ParamsAPITraffic = "NON_API"
+)
+
+func (r HTTPSummaryV2ParamsAPITraffic) IsKnown() bool {
+	switch r {
+	case HTTPSummaryV2ParamsAPITrafficAPI, HTTPSummaryV2ParamsAPITrafficNonAPI:
 		return true
 	}
 	return false
@@ -1152,6 +1171,9 @@ type HTTPTimeseriesParams struct {
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesParamsAggInterval] `query:"aggInterval"`
+	// Filters results by API traffic classification. API traffic is identified by JSON
+	// or XML response content types on dynamic (non-cacheable) HTTP requests.
+	APITraffic param.Field[[]HTTPTimeseriesParamsAPITraffic] `query:"apiTraffic"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
@@ -1227,6 +1249,21 @@ const (
 func (r HTTPTimeseriesParamsAggInterval) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesParamsAggInterval15m, HTTPTimeseriesParamsAggInterval1h, HTTPTimeseriesParamsAggInterval1d, HTTPTimeseriesParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesParamsAPITraffic string
+
+const (
+	HTTPTimeseriesParamsAPITrafficAPI    HTTPTimeseriesParamsAPITraffic = "API"
+	HTTPTimeseriesParamsAPITrafficNonAPI HTTPTimeseriesParamsAPITraffic = "NON_API"
+)
+
+func (r HTTPTimeseriesParamsAPITraffic) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsAPITrafficAPI, HTTPTimeseriesParamsAPITrafficNonAPI:
 		return true
 	}
 	return false
@@ -1425,6 +1462,9 @@ type HTTPTimeseriesGroupsV2Params struct {
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[HTTPTimeseriesGroupsV2ParamsAggInterval] `query:"aggInterval"`
+	// Filters results by API traffic classification. API traffic is identified by JSON
+	// or XML response content types on dynamic (non-cacheable) HTTP requests.
+	APITraffic param.Field[[]HTTPTimeseriesGroupsV2ParamsAPITraffic] `query:"apiTraffic"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
 	// results. For example, `-174, 3356` excludes results from AS174, but includes
@@ -1493,6 +1533,7 @@ type HTTPTimeseriesGroupsV2ParamsDimension string
 
 const (
 	HTTPTimeseriesGroupsV2ParamsDimensionAdm1          HTTPTimeseriesGroupsV2ParamsDimension = "ADM1"
+	HTTPTimeseriesGroupsV2ParamsDimensionAPITraffic    HTTPTimeseriesGroupsV2ParamsDimension = "API_TRAFFIC"
 	HTTPTimeseriesGroupsV2ParamsDimensionAs            HTTPTimeseriesGroupsV2ParamsDimension = "AS"
 	HTTPTimeseriesGroupsV2ParamsDimensionBotClass      HTTPTimeseriesGroupsV2ParamsDimension = "BOT_CLASS"
 	HTTPTimeseriesGroupsV2ParamsDimensionBrowser       HTTPTimeseriesGroupsV2ParamsDimension = "BROWSER"
@@ -1509,7 +1550,7 @@ const (
 
 func (r HTTPTimeseriesGroupsV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupsV2ParamsDimensionAdm1, HTTPTimeseriesGroupsV2ParamsDimensionAs, HTTPTimeseriesGroupsV2ParamsDimensionBotClass, HTTPTimeseriesGroupsV2ParamsDimensionBrowser, HTTPTimeseriesGroupsV2ParamsDimensionBrowserFamily, HTTPTimeseriesGroupsV2ParamsDimensionDeviceType, HTTPTimeseriesGroupsV2ParamsDimensionHTTPProtocol, HTTPTimeseriesGroupsV2ParamsDimensionHTTPVersion, HTTPTimeseriesGroupsV2ParamsDimensionIPVersion, HTTPTimeseriesGroupsV2ParamsDimensionLocation, HTTPTimeseriesGroupsV2ParamsDimensionOS, HTTPTimeseriesGroupsV2ParamsDimensionPostQuantum, HTTPTimeseriesGroupsV2ParamsDimensionTLSVersion:
+	case HTTPTimeseriesGroupsV2ParamsDimensionAdm1, HTTPTimeseriesGroupsV2ParamsDimensionAPITraffic, HTTPTimeseriesGroupsV2ParamsDimensionAs, HTTPTimeseriesGroupsV2ParamsDimensionBotClass, HTTPTimeseriesGroupsV2ParamsDimensionBrowser, HTTPTimeseriesGroupsV2ParamsDimensionBrowserFamily, HTTPTimeseriesGroupsV2ParamsDimensionDeviceType, HTTPTimeseriesGroupsV2ParamsDimensionHTTPProtocol, HTTPTimeseriesGroupsV2ParamsDimensionHTTPVersion, HTTPTimeseriesGroupsV2ParamsDimensionIPVersion, HTTPTimeseriesGroupsV2ParamsDimensionLocation, HTTPTimeseriesGroupsV2ParamsDimensionOS, HTTPTimeseriesGroupsV2ParamsDimensionPostQuantum, HTTPTimeseriesGroupsV2ParamsDimensionTLSVersion:
 		return true
 	}
 	return false
@@ -1530,6 +1571,21 @@ const (
 func (r HTTPTimeseriesGroupsV2ParamsAggInterval) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupsV2ParamsAggInterval15m, HTTPTimeseriesGroupsV2ParamsAggInterval1h, HTTPTimeseriesGroupsV2ParamsAggInterval1d, HTTPTimeseriesGroupsV2ParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupsV2ParamsAPITraffic string
+
+const (
+	HTTPTimeseriesGroupsV2ParamsAPITrafficAPI    HTTPTimeseriesGroupsV2ParamsAPITraffic = "API"
+	HTTPTimeseriesGroupsV2ParamsAPITrafficNonAPI HTTPTimeseriesGroupsV2ParamsAPITraffic = "NON_API"
+)
+
+func (r HTTPTimeseriesGroupsV2ParamsAPITraffic) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupsV2ParamsAPITrafficAPI, HTTPTimeseriesGroupsV2ParamsAPITrafficNonAPI:
 		return true
 	}
 	return false
