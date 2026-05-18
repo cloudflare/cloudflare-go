@@ -595,7 +595,10 @@ type InstanceGetResponseStepsObjectConfig struct {
 	Retries InstanceGetResponseStepsObjectConfigRetries `json:"retries" api:"required"`
 	// Specifies the timeout duration.
 	Timeout InstanceGetResponseStepsObjectConfigTimeoutUnion `json:"timeout" api:"required"`
-	JSON    instanceGetResponseStepsObjectConfigJSON         `json:"-"`
+	// When set to 'output', step output is redacted from log and step output
+	// responses.
+	Sensitive InstanceGetResponseStepsObjectConfigSensitive `json:"sensitive"`
+	JSON      instanceGetResponseStepsObjectConfigJSON      `json:"-"`
 }
 
 // instanceGetResponseStepsObjectConfigJSON contains the JSON metadata for the
@@ -603,6 +606,7 @@ type InstanceGetResponseStepsObjectConfig struct {
 type instanceGetResponseStepsObjectConfigJSON struct {
 	Retries     apijson.Field
 	Timeout     apijson.Field
+	Sensitive   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -699,6 +703,22 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
 	)
+}
+
+// When set to 'output', step output is redacted from log and step output
+// responses.
+type InstanceGetResponseStepsObjectConfigSensitive string
+
+const (
+	InstanceGetResponseStepsObjectConfigSensitiveOutput InstanceGetResponseStepsObjectConfigSensitive = "output"
+)
+
+func (r InstanceGetResponseStepsObjectConfigSensitive) IsKnown() bool {
+	switch r {
+	case InstanceGetResponseStepsObjectConfigSensitiveOutput:
+		return true
+	}
+	return false
 }
 
 type InstanceGetResponseStepsObjectType string
