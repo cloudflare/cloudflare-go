@@ -13,10 +13,10 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/tidwall/gjson"
 )
 
