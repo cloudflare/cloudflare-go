@@ -360,8 +360,6 @@ type CustomCertificateNewParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate" api:"required"`
-	// The zone's private key.
-	PrivateKey param.Field[string] `json:"private_key" api:"required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
@@ -391,6 +389,9 @@ type CustomCertificateNewParams struct {
 	// "policy_restrictions" in requests. Responses return this field as
 	// "policy_restrictions".
 	Policy param.Field[string] `json:"policy"`
+	// The zone's private key. Not required if custom_csr_id is provided, in which case
+	// the private key is retrieved from the CSR record held by Cloudflare.
+	PrivateKey param.Field[string] `json:"private_key"`
 	// The type 'legacy_custom' enables support for legacy clients which do not include
 	// SNI in the TLS handshake.
 	Type param.Field[CustomCertificateNewParamsType] `json:"type"`
@@ -807,7 +808,8 @@ type CustomCertificateEditParams struct {
 	// "policy_restrictions" in requests. Responses return this field as
 	// "policy_restrictions".
 	Policy param.Field[string] `json:"policy"`
-	// The zone's private key.
+	// The zone's private key. Not required if custom_csr_id is provided, in which case
+	// the private key is retrieved from the CSR record held by Cloudflare.
 	PrivateKey param.Field[string] `json:"private_key"`
 }
 
