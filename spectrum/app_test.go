@@ -51,9 +51,10 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 				TTL:  cloudflare.F(int64(600)),
 				Type: cloudflare.F(spectrum.OriginDNSTypeEmpty),
 			}),
-			OriginPort:    cloudflare.F[spectrum.OriginPortUnionParam](shared.UnionInt(int64(22))),
-			ProxyProtocol: cloudflare.F(spectrum.AppNewParamsBodySpectrumConfigAppConfigProxyProtocolOff),
-			TLS:           cloudflare.F(spectrum.AppNewParamsBodySpectrumConfigAppConfigTLSOff),
+			OriginPort:       cloudflare.F[spectrum.OriginPortUnionParam](shared.UnionInt(int64(22))),
+			ProxyProtocol:    cloudflare.F(spectrum.AppNewParamsBodySpectrumConfigAppConfigProxyProtocolOff),
+			TLS:              cloudflare.F(spectrum.AppNewParamsBodySpectrumConfigAppConfigTLSOff),
+			VirtualNetworkID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		},
 	})
 	if err != nil {
@@ -104,9 +105,10 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 					TTL:  cloudflare.F(int64(600)),
 					Type: cloudflare.F(spectrum.OriginDNSTypeEmpty),
 				}),
-				OriginPort:    cloudflare.F[spectrum.OriginPortUnionParam](shared.UnionInt(int64(22))),
-				ProxyProtocol: cloudflare.F(spectrum.AppUpdateParamsBodySpectrumConfigAppConfigProxyProtocolOff),
-				TLS:           cloudflare.F(spectrum.AppUpdateParamsBodySpectrumConfigAppConfigTLSOff),
+				OriginPort:       cloudflare.F[spectrum.OriginPortUnionParam](shared.UnionInt(int64(22))),
+				ProxyProtocol:    cloudflare.F(spectrum.AppUpdateParamsBodySpectrumConfigAppConfigProxyProtocolOff),
+				TLS:              cloudflare.F(spectrum.AppUpdateParamsBodySpectrumConfigAppConfigTLSOff),
+				VirtualNetworkID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			},
 		},
 	)

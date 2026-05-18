@@ -192,8 +192,11 @@ type AppNewResponse struct {
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
 	// the application type matches this property exactly.
 	TrafficType AppNewResponseTrafficType `json:"traffic_type"`
-	JSON        appNewResponseJSON        `json:"-"`
-	union       AppNewResponseUnion
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID string             `json:"virtual_network_id" format:"uuid"`
+	JSON             appNewResponseJSON `json:"-"`
+	union            AppNewResponseUnion
 }
 
 // appNewResponseJSON contains the JSON metadata for the struct [AppNewResponse]
@@ -212,6 +215,7 @@ type appNewResponseJSON struct {
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
+	VirtualNetworkID apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -302,8 +306,11 @@ type AppNewResponseSpectrumConfigAppConfig struct {
 	// Proxy Protocol.
 	ProxyProtocol AppNewResponseSpectrumConfigAppConfigProxyProtocol `json:"proxy_protocol"`
 	// The type of TLS termination associated with the application.
-	TLS  AppNewResponseSpectrumConfigAppConfigTLS  `json:"tls"`
-	JSON appNewResponseSpectrumConfigAppConfigJSON `json:"-"`
+	TLS AppNewResponseSpectrumConfigAppConfigTLS `json:"tls"`
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID string                                    `json:"virtual_network_id" format:"uuid"`
+	JSON             appNewResponseSpectrumConfigAppConfigJSON `json:"-"`
 }
 
 // appNewResponseSpectrumConfigAppConfigJSON contains the JSON metadata for the
@@ -323,6 +330,7 @@ type appNewResponseSpectrumConfigAppConfigJSON struct {
 	OriginPort       apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
+	VirtualNetworkID apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -541,8 +549,11 @@ type AppUpdateResponse struct {
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
 	// the application type matches this property exactly.
 	TrafficType AppUpdateResponseTrafficType `json:"traffic_type"`
-	JSON        appUpdateResponseJSON        `json:"-"`
-	union       AppUpdateResponseUnion
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID string                `json:"virtual_network_id" format:"uuid"`
+	JSON             appUpdateResponseJSON `json:"-"`
+	union            AppUpdateResponseUnion
 }
 
 // appUpdateResponseJSON contains the JSON metadata for the struct
@@ -562,6 +573,7 @@ type appUpdateResponseJSON struct {
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
+	VirtualNetworkID apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -653,8 +665,11 @@ type AppUpdateResponseSpectrumConfigAppConfig struct {
 	// Proxy Protocol.
 	ProxyProtocol AppUpdateResponseSpectrumConfigAppConfigProxyProtocol `json:"proxy_protocol"`
 	// The type of TLS termination associated with the application.
-	TLS  AppUpdateResponseSpectrumConfigAppConfigTLS  `json:"tls"`
-	JSON appUpdateResponseSpectrumConfigAppConfigJSON `json:"-"`
+	TLS AppUpdateResponseSpectrumConfigAppConfigTLS `json:"tls"`
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID string                                       `json:"virtual_network_id" format:"uuid"`
+	JSON             appUpdateResponseSpectrumConfigAppConfigJSON `json:"-"`
 }
 
 // appUpdateResponseSpectrumConfigAppConfigJSON contains the JSON metadata for the
@@ -674,6 +689,7 @@ type appUpdateResponseSpectrumConfigAppConfigJSON struct {
 	OriginPort       apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
+	VirtualNetworkID apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -892,8 +908,11 @@ type AppListResponse struct {
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
 	// the application type matches this property exactly.
 	TrafficType AppListResponseTrafficType `json:"traffic_type"`
-	JSON        appListResponseJSON        `json:"-"`
-	union       AppListResponseUnion
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID string              `json:"virtual_network_id" format:"uuid"`
+	JSON             appListResponseJSON `json:"-"`
+	union            AppListResponseUnion
 }
 
 // appListResponseJSON contains the JSON metadata for the struct [AppListResponse]
@@ -912,6 +931,7 @@ type appListResponseJSON struct {
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
+	VirtualNetworkID apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1003,8 +1023,11 @@ type AppListResponseSpectrumConfigAppConfig struct {
 	// Proxy Protocol.
 	ProxyProtocol AppListResponseSpectrumConfigAppConfigProxyProtocol `json:"proxy_protocol"`
 	// The type of TLS termination associated with the application.
-	TLS  AppListResponseSpectrumConfigAppConfigTLS  `json:"tls"`
-	JSON appListResponseSpectrumConfigAppConfigJSON `json:"-"`
+	TLS AppListResponseSpectrumConfigAppConfigTLS `json:"tls"`
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID string                                     `json:"virtual_network_id" format:"uuid"`
+	JSON             appListResponseSpectrumConfigAppConfigJSON `json:"-"`
 }
 
 // appListResponseSpectrumConfigAppConfigJSON contains the JSON metadata for the
@@ -1024,6 +1047,7 @@ type appListResponseSpectrumConfigAppConfigJSON struct {
 	OriginPort       apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
+	VirtualNetworkID apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1264,8 +1288,11 @@ type AppGetResponse struct {
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
 	// the application type matches this property exactly.
 	TrafficType AppGetResponseTrafficType `json:"traffic_type"`
-	JSON        appGetResponseJSON        `json:"-"`
-	union       AppGetResponseUnion
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID string             `json:"virtual_network_id" format:"uuid"`
+	JSON             appGetResponseJSON `json:"-"`
+	union            AppGetResponseUnion
 }
 
 // appGetResponseJSON contains the JSON metadata for the struct [AppGetResponse]
@@ -1284,6 +1311,7 @@ type appGetResponseJSON struct {
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
+	VirtualNetworkID apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1374,8 +1402,11 @@ type AppGetResponseSpectrumConfigAppConfig struct {
 	// Proxy Protocol.
 	ProxyProtocol AppGetResponseSpectrumConfigAppConfigProxyProtocol `json:"proxy_protocol"`
 	// The type of TLS termination associated with the application.
-	TLS  AppGetResponseSpectrumConfigAppConfigTLS  `json:"tls"`
-	JSON appGetResponseSpectrumConfigAppConfigJSON `json:"-"`
+	TLS AppGetResponseSpectrumConfigAppConfigTLS `json:"tls"`
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID string                                    `json:"virtual_network_id" format:"uuid"`
+	JSON             appGetResponseSpectrumConfigAppConfigJSON `json:"-"`
 }
 
 // appGetResponseSpectrumConfigAppConfigJSON contains the JSON metadata for the
@@ -1395,6 +1426,7 @@ type appGetResponseSpectrumConfigAppConfigJSON struct {
 	OriginPort       apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
+	VirtualNetworkID apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1616,6 +1648,9 @@ type AppNewParamsBody struct {
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
 	// the application type matches this property exactly.
 	TrafficType param.Field[AppNewParamsBodyTrafficType] `json:"traffic_type"`
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
 func (r AppNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -1668,6 +1703,9 @@ type AppNewParamsBodySpectrumConfigAppConfig struct {
 	ProxyProtocol param.Field[AppNewParamsBodySpectrumConfigAppConfigProxyProtocol] `json:"proxy_protocol"`
 	// The type of TLS termination associated with the application.
 	TLS param.Field[AppNewParamsBodySpectrumConfigAppConfigTLS] `json:"tls"`
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
 func (r AppNewParamsBodySpectrumConfigAppConfig) MarshalJSON() (data []byte, err error) {
@@ -1998,6 +2036,9 @@ type AppUpdateParamsBody struct {
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
 	// the application type matches this property exactly.
 	TrafficType param.Field[AppUpdateParamsBodyTrafficType] `json:"traffic_type"`
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
 func (r AppUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -2051,6 +2092,9 @@ type AppUpdateParamsBodySpectrumConfigAppConfig struct {
 	ProxyProtocol param.Field[AppUpdateParamsBodySpectrumConfigAppConfigProxyProtocol] `json:"proxy_protocol"`
 	// The type of TLS termination associated with the application.
 	TLS param.Field[AppUpdateParamsBodySpectrumConfigAppConfigTLS] `json:"tls"`
+	// Optional UUID of a virtual network for routing origin traffic through tunnel
+	// virtual networks.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
 func (r AppUpdateParamsBodySpectrumConfigAppConfig) MarshalJSON() (data []byte, err error) {
