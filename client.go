@@ -116,6 +116,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/zaraz"
 	"github.com/cloudflare/cloudflare-go/v7/zero_trust"
 	"github.com/cloudflare/cloudflare-go/v7/zones"
+	"github.com/cloudflare/cloudflare-go/v7/ai_security"
 )
 
 // Client creates a struct with services and top level methods that help with
@@ -227,6 +228,7 @@ type Client struct {
 	ResourceTagging             *resource_tagging.ResourceTaggingService
 	LeakedCredentialChecks      *leaked_credential_checks.LeakedCredentialCheckService
 	ContentScanning             *content_scanning.ContentScanningService
+	AISecurity                  *ai_security.AISecurityService
 	AbuseReports                *abuse_reports.AbuseReportService
 	AI                          *ai.AIService
 	AISearch                    *ai_search.AISearchService
@@ -368,6 +370,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.ResourceTagging = resource_tagging.NewResourceTaggingService(opts...)
 	r.LeakedCredentialChecks = leaked_credential_checks.NewLeakedCredentialCheckService(opts...)
 	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
+	r.AISecurity = ai_security.NewAISecurityService(opts...)
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 	r.AI = ai.NewAIService(opts...)
 	r.AISearch = ai_search.NewAISearchService(opts...)
