@@ -5167,6 +5167,9 @@ func (r NamespaceInstanceSearchResponseChunksScoringDetailsFusionMethod) IsKnown
 
 type NamespaceInstanceStatsResponse struct {
 	Completed int64 `json:"completed"`
+	// True when status counts are unavailable (e.g. legacy stats query exceeded D1
+	// statement-size limit). Counts are omitted in this case.
+	Degraded bool `json:"degraded"`
 	// Engine-specific metadata. Present only for managed (v3) instances.
 	Engine            NamespaceInstanceStatsResponseEngine `json:"engine"`
 	Error             int64                                `json:"error"`
@@ -5184,6 +5187,7 @@ type NamespaceInstanceStatsResponse struct {
 // [NamespaceInstanceStatsResponse]
 type namespaceInstanceStatsResponseJSON struct {
 	Completed         apijson.Field
+	Degraded          apijson.Field
 	Engine            apijson.Field
 	Error             apijson.Field
 	FileEmbedErrors   apijson.Field
