@@ -30,7 +30,9 @@ func (UnionString) ImplementsObservabilityTelemetryQueryResponseCalculationsSeri
 }
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseCompareAggregatesGroupsValueUnion() {}
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseCompareSeriesDataGroupsValueUnion() {}
+func (UnionString) ImplementsObservabilityTelemetryQueryResponseEventsEventsSourceUnion()           {}
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseEventsSeriesDataGroupsUnion()       {}
+func (UnionString) ImplementsObservabilityTelemetryQueryResponseInvocationsSourceUnion()            {}
 func (UnionString) ImplementsObservabilityTelemetryValuesResponseValueUnion()                       {}
 func (UnionString) ImplementsObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
