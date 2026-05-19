@@ -40,7 +40,7 @@ func NewMemberService(opts ...option.RequestOption) (r *MemberService) {
 }
 
 // Create a membership that grants access to a specific Organization. (Currently in
-// Closed Beta - see https://developers.cloudflare.com/fundamentals/organizations/)
+// Public Beta - see https://developers.cloudflare.com/fundamentals/organizations/)
 func (r *MemberService) New(ctx context.Context, organizationID string, body MemberNewParams, opts ...option.RequestOption) (res *OrganizationMember, err error) {
 	var env MemberNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +57,7 @@ func (r *MemberService) New(ctx context.Context, organizationID string, body Mem
 	return res, nil
 }
 
-// List memberships for an Organization. (Currently in Closed Beta - see
+// List memberships for an Organization. (Currently in Public Beta - see
 // https://developers.cloudflare.com/fundamentals/organizations/)
 func (r *MemberService) List(ctx context.Context, organizationID string, query MemberListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OrganizationMember], err error) {
 	var raw *http.Response
@@ -80,13 +80,13 @@ func (r *MemberService) List(ctx context.Context, organizationID string, query M
 	return res, nil
 }
 
-// List memberships for an Organization. (Currently in Closed Beta - see
+// List memberships for an Organization. (Currently in Public Beta - see
 // https://developers.cloudflare.com/fundamentals/organizations/)
 func (r *MemberService) ListAutoPaging(ctx context.Context, organizationID string, query MemberListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OrganizationMember] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, organizationID, query, opts...))
 }
 
-// Delete a membership to a particular Organization. (Currently in Closed Beta -
+// Delete a membership to a particular Organization. (Currently in Public Beta -
 // see https://developers.cloudflare.com/fundamentals/organizations/)
 func (r *MemberService) Delete(ctx context.Context, organizationID string, memberID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
@@ -104,7 +104,7 @@ func (r *MemberService) Delete(ctx context.Context, organizationID string, membe
 	return err
 }
 
-// Retrieve a single membership from an Organization. (Currently in Closed Beta -
+// Retrieve a single membership from an Organization. (Currently in Public Beta -
 // see https://developers.cloudflare.com/fundamentals/organizations/)
 func (r *MemberService) Get(ctx context.Context, organizationID string, memberID string, opts ...option.RequestOption) (res *OrganizationMember, err error) {
 	var env MemberGetResponseEnvelope
