@@ -240,7 +240,6 @@ TEST_PATHS=(
 	addressing/prefixdelegation_test.go
 	audit_logs/auditlog_test.go
 	billing/profile_test.go
-	billing/usage_test.go
 	brand_protection/brandprotection_test.go
 	brand_protection/query_test.go
 	brand_protection/match_test.go
