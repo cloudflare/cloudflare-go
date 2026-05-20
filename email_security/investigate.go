@@ -1093,8 +1093,6 @@ func (r InvestigateGetResponseValidationSPF) IsKnown() bool {
 type InvestigateListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Whether to include the message action log in the response.
-	ActionLog param.Field[bool]   `query:"action_log"`
 	AlertID   param.Field[string] `query:"alert_id"`
 	Cursor    param.Field[string] `query:"cursor"`
 	// Delivery status to filter by.
