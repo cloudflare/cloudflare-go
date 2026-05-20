@@ -231,6 +231,7 @@ type RulesetRuleActionParameters struct {
 	Content                  string                                            `json:"content,omitempty"`
 	ContentType              string                                            `json:"content_type,omitempty"`
 	StatusCode               uint16                                            `json:"status_code,omitempty"`
+	AssetName                string                                            `json:"asset_name,omitempty"`
 	RespectStrongETags       *bool                                             `json:"respect_strong_etags,omitempty"`
 	CacheKey                 *RulesetRuleActionParametersCacheKey              `json:"cache_key,omitempty"`
 	OriginCacheControl       *bool                                             `json:"origin_cache_control,omitempty"`
