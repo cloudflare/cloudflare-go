@@ -326,6 +326,9 @@ type AccessRule struct {
 	// This field can have the runtime type of [CertificateRuleCertificate].
 	Certificate interface{} `json:"certificate"`
 	// This field can have the runtime type of
+	// [AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMember].
+	CloudflareAccountMember interface{} `json:"cloudflare_account_member"`
+	// This field can have the runtime type of
 	// [AccessRuleAccessCommonNameRuleCommonName].
 	CommonName interface{} `json:"common_name"`
 	// This field can have the runtime type of [AccessDevicePostureRuleDevicePosture].
@@ -377,33 +380,34 @@ type AccessRule struct {
 
 // accessRuleJSON contains the JSON metadata for the struct [AccessRule]
 type accessRuleJSON struct {
-	AnyValidServiceToken apijson.Field
-	AuthContext          apijson.Field
-	AuthMethod           apijson.Field
-	AzureAD              apijson.Field
-	Certificate          apijson.Field
-	CommonName           apijson.Field
-	DevicePosture        apijson.Field
-	Email                apijson.Field
-	EmailDomain          apijson.Field
-	EmailList            apijson.Field
-	Everyone             apijson.Field
-	ExternalEvaluation   apijson.Field
-	Geo                  apijson.Field
-	GitHubOrganization   apijson.Field
-	Group                apijson.Field
-	GSuite               apijson.Field
-	IP                   apijson.Field
-	IPList               apijson.Field
-	LinkedAppToken       apijson.Field
-	LoginMethod          apijson.Field
-	OIDC                 apijson.Field
-	Okta                 apijson.Field
-	SAML                 apijson.Field
-	ServiceToken         apijson.Field
-	UserRiskScore        apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	AnyValidServiceToken    apijson.Field
+	AuthContext             apijson.Field
+	AuthMethod              apijson.Field
+	AzureAD                 apijson.Field
+	Certificate             apijson.Field
+	CloudflareAccountMember apijson.Field
+	CommonName              apijson.Field
+	DevicePosture           apijson.Field
+	Email                   apijson.Field
+	EmailDomain             apijson.Field
+	EmailList               apijson.Field
+	Everyone                apijson.Field
+	ExternalEvaluation      apijson.Field
+	Geo                     apijson.Field
+	GitHubOrganization      apijson.Field
+	Group                   apijson.Field
+	GSuite                  apijson.Field
+	IP                      apijson.Field
+	IPList                  apijson.Field
+	LinkedAppToken          apijson.Field
+	LoginMethod             apijson.Field
+	OIDC                    apijson.Field
+	Okta                    apijson.Field
+	SAML                    apijson.Field
+	ServiceToken            apijson.Field
+	UserRiskScore           apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r accessRuleJSON) RawJSON() string {
@@ -430,7 +434,8 @@ func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
 // [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
 // [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule],
 // [ServiceTokenRule], [AccessRuleAccessLinkedAppTokenRule],
-// [AccessRuleAccessUserRiskScoreRule].
+// [AccessRuleAccessUserRiskScoreRule],
+// [AccessRuleAccessCloudflareAccountMemberRule].
 func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
 }
@@ -444,8 +449,9 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
 // [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
 // [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule],
-// [ServiceTokenRule], [AccessRuleAccessLinkedAppTokenRule] or
-// [AccessRuleAccessUserRiskScoreRule].
+// [ServiceTokenRule], [AccessRuleAccessLinkedAppTokenRule],
+// [AccessRuleAccessUserRiskScoreRule] or
+// [AccessRuleAccessCloudflareAccountMemberRule].
 type AccessRuleUnion interface {
 	implementsAccessRule()
 }
@@ -553,6 +559,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessRuleAccessUserRiskScoreRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessRuleAccessCloudflareAccountMemberRule{}),
 		},
 	)
 }
@@ -864,33 +874,82 @@ func (r AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore) IsKnown() b
 	return false
 }
 
+// Matches users who are members of a specific Cloudflare account. Requires a
+// Cloudflare identity provider.
+type AccessRuleAccessCloudflareAccountMemberRule struct {
+	CloudflareAccountMember AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMember `json:"cloudflare_account_member" api:"required"`
+	JSON                    accessRuleAccessCloudflareAccountMemberRuleJSON                    `json:"-"`
+}
+
+// accessRuleAccessCloudflareAccountMemberRuleJSON contains the JSON metadata for
+// the struct [AccessRuleAccessCloudflareAccountMemberRule]
+type accessRuleAccessCloudflareAccountMemberRuleJSON struct {
+	CloudflareAccountMember apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessCloudflareAccountMemberRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessCloudflareAccountMemberRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessCloudflareAccountMemberRule) implementsAccessRule() {}
+
+type AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMember struct {
+	// Identifier.
+	AccountID string                                                                 `json:"account_id"`
+	JSON      accessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberJSON `json:"-"`
+}
+
+// accessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberJSON contains
+// the JSON metadata for the struct
+// [AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMember]
+type accessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberJSON struct {
+	AccountID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMember) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Access group.
 type AccessRuleParam struct {
-	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token"`
-	AuthContext          param.Field[interface{}] `json:"auth_context"`
-	AuthMethod           param.Field[interface{}] `json:"auth_method"`
-	AzureAD              param.Field[interface{}] `json:"azureAD"`
-	Certificate          param.Field[interface{}] `json:"certificate"`
-	CommonName           param.Field[interface{}] `json:"common_name"`
-	DevicePosture        param.Field[interface{}] `json:"device_posture"`
-	Email                param.Field[interface{}] `json:"email"`
-	EmailDomain          param.Field[interface{}] `json:"email_domain"`
-	EmailList            param.Field[interface{}] `json:"email_list"`
-	Everyone             param.Field[interface{}] `json:"everyone"`
-	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation"`
-	Geo                  param.Field[interface{}] `json:"geo"`
-	GitHubOrganization   param.Field[interface{}] `json:"github-organization"`
-	Group                param.Field[interface{}] `json:"group"`
-	GSuite               param.Field[interface{}] `json:"gsuite"`
-	IP                   param.Field[interface{}] `json:"ip"`
-	IPList               param.Field[interface{}] `json:"ip_list"`
-	LinkedAppToken       param.Field[interface{}] `json:"linked_app_token"`
-	LoginMethod          param.Field[interface{}] `json:"login_method"`
-	OIDC                 param.Field[interface{}] `json:"oidc"`
-	Okta                 param.Field[interface{}] `json:"okta"`
-	SAML                 param.Field[interface{}] `json:"saml"`
-	ServiceToken         param.Field[interface{}] `json:"service_token"`
-	UserRiskScore        param.Field[interface{}] `json:"user_risk_score"`
+	AnyValidServiceToken    param.Field[interface{}] `json:"any_valid_service_token"`
+	AuthContext             param.Field[interface{}] `json:"auth_context"`
+	AuthMethod              param.Field[interface{}] `json:"auth_method"`
+	AzureAD                 param.Field[interface{}] `json:"azureAD"`
+	Certificate             param.Field[interface{}] `json:"certificate"`
+	CloudflareAccountMember param.Field[interface{}] `json:"cloudflare_account_member"`
+	CommonName              param.Field[interface{}] `json:"common_name"`
+	DevicePosture           param.Field[interface{}] `json:"device_posture"`
+	Email                   param.Field[interface{}] `json:"email"`
+	EmailDomain             param.Field[interface{}] `json:"email_domain"`
+	EmailList               param.Field[interface{}] `json:"email_list"`
+	Everyone                param.Field[interface{}] `json:"everyone"`
+	ExternalEvaluation      param.Field[interface{}] `json:"external_evaluation"`
+	Geo                     param.Field[interface{}] `json:"geo"`
+	GitHubOrganization      param.Field[interface{}] `json:"github-organization"`
+	Group                   param.Field[interface{}] `json:"group"`
+	GSuite                  param.Field[interface{}] `json:"gsuite"`
+	IP                      param.Field[interface{}] `json:"ip"`
+	IPList                  param.Field[interface{}] `json:"ip_list"`
+	LinkedAppToken          param.Field[interface{}] `json:"linked_app_token"`
+	LoginMethod             param.Field[interface{}] `json:"login_method"`
+	OIDC                    param.Field[interface{}] `json:"oidc"`
+	Okta                    param.Field[interface{}] `json:"okta"`
+	SAML                    param.Field[interface{}] `json:"saml"`
+	ServiceToken            param.Field[interface{}] `json:"service_token"`
+	UserRiskScore           param.Field[interface{}] `json:"user_risk_score"`
 }
 
 func (r AccessRuleParam) MarshalJSON() (data []byte, err error) {
@@ -917,7 +976,9 @@ func (r AccessRuleParam) implementsAccessRuleUnionParam() {}
 // [zero_trust.AccessRuleAccessOIDCClaimRuleParam],
 // [zero_trust.ServiceTokenRuleParam],
 // [zero_trust.AccessRuleAccessLinkedAppTokenRuleParam],
-// [zero_trust.AccessRuleAccessUserRiskScoreRuleParam], [AccessRuleParam].
+// [zero_trust.AccessRuleAccessUserRiskScoreRuleParam],
+// [zero_trust.AccessRuleAccessCloudflareAccountMemberRuleParam],
+// [AccessRuleParam].
 type AccessRuleUnionParam interface {
 	implementsAccessRuleUnionParam()
 }
@@ -1049,6 +1110,27 @@ type AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam struct {
 }
 
 func (r AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches users who are members of a specific Cloudflare account. Requires a
+// Cloudflare identity provider.
+type AccessRuleAccessCloudflareAccountMemberRuleParam struct {
+	CloudflareAccountMember param.Field[AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberParam] `json:"cloudflare_account_member" api:"required"`
+}
+
+func (r AccessRuleAccessCloudflareAccountMemberRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessCloudflareAccountMemberRuleParam) implementsAccessRuleUnionParam() {}
+
+type AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberParam struct {
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
+}
+
+func (r AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
