@@ -31,7 +31,6 @@ func TestInvestigateListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.EmailSecurity.Investigate.List(context.TODO(), email_security.InvestigateListParams{
 		AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ActionLog:        cloudflare.F(true),
 		AlertID:          cloudflare.F("alert_id"),
 		Cursor:           cloudflare.F("cursor"),
 		DeliveryStatus:   cloudflare.F(email_security.InvestigateListParamsDeliveryStatusDelivered),
