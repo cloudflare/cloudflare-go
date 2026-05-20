@@ -559,7 +559,8 @@ type IdentityProvider struct {
 	// [IdentityProviderAccessGoogleConfig], [IdentityProviderAccessGoogleAppsConfig],
 	// [IdentityProviderAccessOIDCConfig], [IdentityProviderAccessOktaConfig],
 	// [IdentityProviderAccessOneloginConfig], [IdentityProviderAccessPingoneConfig],
-	// [IdentityProviderAccessSAMLConfig], [IdentityProviderAccessOnetimepinConfig].
+	// [IdentityProviderAccessSAMLConfig], [IdentityProviderAccessOnetimepinConfig],
+	// [IdentityProviderAccessCloudflareConfig].
 	Config interface{} `json:"config" api:"required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name" api:"required"`
@@ -582,7 +583,8 @@ type IdentityProvider struct {
 	// [IdentityProviderAccessPingoneSAMLCertificateSet],
 	// [IdentityProviderAccessSAMLSAMLCertificateSet],
 	// [IdentityProviderAccessYandexSAMLCertificateSet],
-	// [IdentityProviderAccessOnetimepinSAMLCertificateSet].
+	// [IdentityProviderAccessOnetimepinSAMLCertificateSet],
+	// [IdentityProviderAccessCloudflareSAMLCertificateSet].
 	SAMLCertificateSet interface{} `json:"saml_certificate_set"`
 	// The UID of the SAML encryption certificate set assigned to this Identity
 	// Provider. Only present for SAML identity providers with encryption configured.
@@ -633,7 +635,7 @@ func (r *IdentityProvider) UnmarshalJSON(data []byte) (err error) {
 // [IdentityProviderAccessOIDC], [IdentityProviderAccessOkta],
 // [IdentityProviderAccessOnelogin], [IdentityProviderAccessPingone],
 // [IdentityProviderAccessSAML], [IdentityProviderAccessYandex],
-// [IdentityProviderAccessOnetimepin].
+// [IdentityProviderAccessOnetimepin], [IdentityProviderAccessCloudflare].
 func (r IdentityProvider) AsUnion() IdentityProviderUnion {
 	return r.union
 }
@@ -644,7 +646,8 @@ func (r IdentityProvider) AsUnion() IdentityProviderUnion {
 // [IdentityProviderAccessLinkedin], [IdentityProviderAccessOIDC],
 // [IdentityProviderAccessOkta], [IdentityProviderAccessOnelogin],
 // [IdentityProviderAccessPingone], [IdentityProviderAccessSAML],
-// [IdentityProviderAccessYandex] or [IdentityProviderAccessOnetimepin].
+// [IdentityProviderAccessYandex], [IdentityProviderAccessOnetimepin] or
+// [IdentityProviderAccessCloudflare].
 type IdentityProviderUnion interface {
 	implementsIdentityProvider()
 }
@@ -708,6 +711,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(IdentityProviderAccessOnetimepin{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IdentityProviderAccessCloudflare{}),
 		},
 	)
 }
@@ -2720,6 +2727,160 @@ func (r identityProviderAccessOnetimepinSAMLCertificateSetCurrentCertificateJSON
 	return r.raw
 }
 
+type IdentityProviderAccessCloudflare struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config IdentityProviderAccessCloudflareConfig `json:"config" api:"required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name" api:"required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type IdentityProviderType `json:"type" api:"required"`
+	// UUID.
+	ID string `json:"id"`
+	// The SAML encryption certificate set details, including current and previous
+	// certificates. Only present for SAML identity providers with a certificate set
+	// assigned.
+	SAMLCertificateSet IdentityProviderAccessCloudflareSAMLCertificateSet `json:"saml_certificate_set"`
+	// The UID of the SAML encryption certificate set assigned to this Identity
+	// Provider. Only present for SAML identity providers with encryption configured.
+	// Create a certificate set via POST to
+	// `/identity_providers/{id}/saml_certificate`.
+	SAMLCertificateSetID string `json:"saml_certificate_set_id" format:"uuid"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	SCIMConfig IdentityProviderSCIMConfig           `json:"scim_config"`
+	JSON       identityProviderAccessCloudflareJSON `json:"-"`
+}
+
+// identityProviderAccessCloudflareJSON contains the JSON metadata for the struct
+// [IdentityProviderAccessCloudflare]
+type identityProviderAccessCloudflareJSON struct {
+	Config               apijson.Field
+	Name                 apijson.Field
+	Type                 apijson.Field
+	ID                   apijson.Field
+	SAMLCertificateSet   apijson.Field
+	SAMLCertificateSetID apijson.Field
+	SCIMConfig           apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *IdentityProviderAccessCloudflare) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderAccessCloudflareJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r IdentityProviderAccessCloudflare) implementsIdentityProvider() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessCloudflareConfig struct {
+	RedirectURL string `json:"redirect_url"`
+	// When enabled, only users who are members of your Cloudflare account can
+	// authenticate through this identity provider. When disabled, any user with a
+	// Cloudflare account can authenticate, subject to your Access policies.
+	RestrictToAccountMembers bool                                       `json:"restrict_to_account_members"`
+	JSON                     identityProviderAccessCloudflareConfigJSON `json:"-"`
+}
+
+// identityProviderAccessCloudflareConfigJSON contains the JSON metadata for the
+// struct [IdentityProviderAccessCloudflareConfig]
+type identityProviderAccessCloudflareConfigJSON struct {
+	RedirectURL              apijson.Field
+	RestrictToAccountMembers apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *IdentityProviderAccessCloudflareConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderAccessCloudflareConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// The SAML encryption certificate set details, including current and previous
+// certificates. Only present for SAML identity providers with a certificate set
+// assigned.
+type IdentityProviderAccessCloudflareSAMLCertificateSet struct {
+	// Timestamp when the certificate set was created
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Unique identifier for the certificate set
+	UID string `json:"uid" api:"required" format:"uuid"`
+	// Timestamp when the certificate set was last updated (e.g., during rotation)
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
+	// The currently active certificate used for encrypting SAML assertions
+	CurrentCertificate IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificate `json:"current_certificate"`
+	// The previous certificate, maintained during rotation to ensure continuity. Null
+	// if no rotation has occurred. Mirrors the structure of `saml_certificate`.
+	PreviousCertificate interface{}                                            `json:"previous_certificate" api:"nullable"`
+	JSON                identityProviderAccessCloudflareSAMLCertificateSetJSON `json:"-"`
+}
+
+// identityProviderAccessCloudflareSAMLCertificateSetJSON contains the JSON
+// metadata for the struct [IdentityProviderAccessCloudflareSAMLCertificateSet]
+type identityProviderAccessCloudflareSAMLCertificateSetJSON struct {
+	CreatedAt           apijson.Field
+	UID                 apijson.Field
+	UpdatedAt           apijson.Field
+	CurrentCertificate  apijson.Field
+	PreviousCertificate apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *IdentityProviderAccessCloudflareSAMLCertificateSet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderAccessCloudflareSAMLCertificateSetJSON) RawJSON() string {
+	return r.raw
+}
+
+// The currently active certificate used for encrypting SAML assertions
+type IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificate struct {
+	// Indicates whether this is the currently active certificate
+	IsCurrent bool `json:"is_current" api:"required"`
+	// Certificate expiration date. Certificates are automatically rotated 30 days
+	// before expiration.
+	NotAfter time.Time `json:"not_after" api:"required" format:"date-time"`
+	// PEM-encoded X.509 certificate containing the public key. Configure this
+	// certificate in your external SAML Identity Provider to enable encryption.
+	PublicCertificate string `json:"public_certificate" api:"required"`
+	// Unique identifier for the certificate
+	UID  string                                                                   `json:"uid" api:"required" format:"uuid"`
+	JSON identityProviderAccessCloudflareSAMLCertificateSetCurrentCertificateJSON `json:"-"`
+}
+
+// identityProviderAccessCloudflareSAMLCertificateSetCurrentCertificateJSON
+// contains the JSON metadata for the struct
+// [IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificate]
+type identityProviderAccessCloudflareSAMLCertificateSetCurrentCertificateJSON struct {
+	IsCurrent         apijson.Field
+	NotAfter          apijson.Field
+	PublicCertificate apijson.Field
+	UID               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderAccessCloudflareSAMLCertificateSetCurrentCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
 type IdentityProviderParam struct {
 	Config param.Field[interface{}] `json:"config" api:"required"`
 	// The name of the identity provider, shown to users on the login page.
@@ -2758,7 +2919,8 @@ func (r IdentityProviderParam) implementsIdentityProviderUnionParam() {}
 // [zero_trust.IdentityProviderAccessPingoneParam],
 // [zero_trust.IdentityProviderAccessSAMLParam],
 // [zero_trust.IdentityProviderAccessYandexParam],
-// [zero_trust.IdentityProviderAccessOnetimepinParam], [IdentityProviderParam].
+// [zero_trust.IdentityProviderAccessOnetimepinParam],
+// [zero_trust.IdentityProviderAccessCloudflareParam], [IdentityProviderParam].
 type IdentityProviderUnionParam interface {
 	implementsIdentityProviderUnionParam()
 }
@@ -3780,6 +3942,82 @@ func (r IdentityProviderAccessOnetimepinSAMLCertificateSetCurrentCertificatePara
 	return apijson.MarshalRoot(r)
 }
 
+type IdentityProviderAccessCloudflareParam struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[IdentityProviderAccessCloudflareConfigParam] `json:"config" api:"required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name" api:"required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[IdentityProviderType] `json:"type" api:"required"`
+	// The UID of the SAML encryption certificate set assigned to this Identity
+	// Provider. Only present for SAML identity providers with encryption configured.
+	// Create a certificate set via POST to
+	// `/identity_providers/{id}/saml_certificate`.
+	SAMLCertificateSetID param.Field[string] `json:"saml_certificate_set_id" format:"uuid"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
+}
+
+func (r IdentityProviderAccessCloudflareParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IdentityProviderAccessCloudflareParam) implementsIdentityProviderUnionParam() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessCloudflareConfigParam struct {
+	// When enabled, only users who are members of your Cloudflare account can
+	// authenticate through this identity provider. When disabled, any user with a
+	// Cloudflare account can authenticate, subject to your Access policies.
+	RestrictToAccountMembers param.Field[bool] `json:"restrict_to_account_members"`
+}
+
+func (r IdentityProviderAccessCloudflareConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The SAML encryption certificate set details, including current and previous
+// certificates. Only present for SAML identity providers with a certificate set
+// assigned.
+type IdentityProviderAccessCloudflareSAMLCertificateSetParam struct {
+	// Unique identifier for the certificate set
+	UID param.Field[string] `json:"uid" api:"required" format:"uuid"`
+	// The currently active certificate used for encrypting SAML assertions
+	CurrentCertificate param.Field[IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificateParam] `json:"current_certificate"`
+	// The previous certificate, maintained during rotation to ensure continuity. Null
+	// if no rotation has occurred. Mirrors the structure of `saml_certificate`.
+	PreviousCertificate param.Field[interface{}] `json:"previous_certificate"`
+}
+
+func (r IdentityProviderAccessCloudflareSAMLCertificateSetParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The currently active certificate used for encrypting SAML assertions
+type IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificateParam struct {
+	// Indicates whether this is the currently active certificate
+	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
+	// Certificate expiration date. Certificates are automatically rotated 30 days
+	// before expiration.
+	NotAfter param.Field[time.Time] `json:"not_after" api:"required" format:"date-time"`
+	// PEM-encoded X.509 certificate containing the public key. Configure this
+	// certificate in your external SAML Identity Provider to enable encryption.
+	PublicCertificate param.Field[string] `json:"public_certificate" api:"required"`
+	// Unique identifier for the certificate
+	UID param.Field[string] `json:"uid" api:"required" format:"uuid"`
+}
+
+func (r IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificateParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderSCIMConfig struct {
@@ -3899,11 +4137,12 @@ const (
 	IdentityProviderTypeOnelogin   IdentityProviderType = "onelogin"
 	IdentityProviderTypePingone    IdentityProviderType = "pingone"
 	IdentityProviderTypeYandex     IdentityProviderType = "yandex"
+	IdentityProviderTypeCloudflare IdentityProviderType = "cloudflare"
 )
 
 func (r IdentityProviderType) IsKnown() bool {
 	switch r {
-	case IdentityProviderTypeOnetimepin, IdentityProviderTypeAzureAD, IdentityProviderTypeSAML, IdentityProviderTypeCentrify, IdentityProviderTypeFacebook, IdentityProviderTypeGitHub, IdentityProviderTypeGoogleApps, IdentityProviderTypeGoogle, IdentityProviderTypeLinkedin, IdentityProviderTypeOIDC, IdentityProviderTypeOkta, IdentityProviderTypeOnelogin, IdentityProviderTypePingone, IdentityProviderTypeYandex:
+	case IdentityProviderTypeOnetimepin, IdentityProviderTypeAzureAD, IdentityProviderTypeSAML, IdentityProviderTypeCentrify, IdentityProviderTypeFacebook, IdentityProviderTypeGitHub, IdentityProviderTypeGoogleApps, IdentityProviderTypeGoogle, IdentityProviderTypeLinkedin, IdentityProviderTypeOIDC, IdentityProviderTypeOkta, IdentityProviderTypeOnelogin, IdentityProviderTypePingone, IdentityProviderTypeYandex, IdentityProviderTypeCloudflare:
 		return true
 	}
 	return false
@@ -3918,7 +4157,9 @@ type IdentityProviderListResponse struct {
 	// [IdentityProviderListResponseAccessOktaConfig],
 	// [IdentityProviderListResponseAccessOneloginConfig],
 	// [IdentityProviderListResponseAccessPingoneConfig],
-	// [IdentityProviderListResponseAccessSAMLConfig].
+	// [IdentityProviderListResponseAccessSAMLConfig],
+	// [IdentityProviderListResponseAccessOnetimepinConfig],
+	// [IdentityProviderListResponseAccessCloudflareConfig].
 	Config interface{} `json:"config" api:"required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name" api:"required"`
@@ -3940,7 +4181,9 @@ type IdentityProviderListResponse struct {
 	// [IdentityProviderListResponseAccessOneloginSAMLCertificateSet],
 	// [IdentityProviderListResponseAccessPingoneSAMLCertificateSet],
 	// [IdentityProviderListResponseAccessSAMLSAMLCertificateSet],
-	// [IdentityProviderListResponseAccessYandexSAMLCertificateSet].
+	// [IdentityProviderListResponseAccessYandexSAMLCertificateSet],
+	// [IdentityProviderListResponseAccessOnetimepinSAMLCertificateSet],
+	// [IdentityProviderListResponseAccessCloudflareSAMLCertificateSet].
 	SAMLCertificateSet interface{} `json:"saml_certificate_set"`
 	// The UID of the SAML encryption certificate set assigned to this Identity
 	// Provider. Only present for SAML identity providers with encryption configured.
@@ -3996,7 +4239,9 @@ func (r *IdentityProviderListResponse) UnmarshalJSON(data []byte) (err error) {
 // [IdentityProviderListResponseAccessOnelogin],
 // [IdentityProviderListResponseAccessPingone],
 // [IdentityProviderListResponseAccessSAML],
-// [IdentityProviderListResponseAccessYandex].
+// [IdentityProviderListResponseAccessYandex],
+// [IdentityProviderListResponseAccessOnetimepin],
+// [IdentityProviderListResponseAccessCloudflare].
 func (r IdentityProviderListResponse) AsUnion() IdentityProviderListResponseUnion {
 	return r.union
 }
@@ -4011,8 +4256,10 @@ func (r IdentityProviderListResponse) AsUnion() IdentityProviderListResponseUnio
 // [IdentityProviderListResponseAccessOkta],
 // [IdentityProviderListResponseAccessOnelogin],
 // [IdentityProviderListResponseAccessPingone],
-// [IdentityProviderListResponseAccessSAML] or
-// [IdentityProviderListResponseAccessYandex].
+// [IdentityProviderListResponseAccessSAML],
+// [IdentityProviderListResponseAccessYandex],
+// [IdentityProviderListResponseAccessOnetimepin] or
+// [IdentityProviderListResponseAccessCloudflare].
 type IdentityProviderListResponseUnion interface {
 	implementsIdentityProviderListResponse()
 }
@@ -4072,6 +4319,14 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(IdentityProviderListResponseAccessYandex{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IdentityProviderListResponseAccessOnetimepin{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IdentityProviderListResponseAccessCloudflare{}),
 		},
 	)
 }
@@ -5945,6 +6200,311 @@ func (r *IdentityProviderListResponseAccessYandexSAMLCertificateSetCurrentCertif
 }
 
 func (r identityProviderListResponseAccessYandexSAMLCertificateSetCurrentCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderListResponseAccessOnetimepin struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config IdentityProviderListResponseAccessOnetimepinConfig `json:"config" api:"required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name" api:"required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type IdentityProviderType `json:"type" api:"required"`
+	// UUID.
+	ID string `json:"id"`
+	// The SAML encryption certificate set details, including current and previous
+	// certificates. Only present for SAML identity providers with a certificate set
+	// assigned.
+	SAMLCertificateSet IdentityProviderListResponseAccessOnetimepinSAMLCertificateSet `json:"saml_certificate_set"`
+	// The UID of the SAML encryption certificate set assigned to this Identity
+	// Provider. Only present for SAML identity providers with encryption configured.
+	// Create a certificate set via POST to
+	// `/identity_providers/{id}/saml_certificate`.
+	SAMLCertificateSetID string `json:"saml_certificate_set_id" format:"uuid"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	SCIMConfig IdentityProviderSCIMConfig                       `json:"scim_config"`
+	JSON       identityProviderListResponseAccessOnetimepinJSON `json:"-"`
+}
+
+// identityProviderListResponseAccessOnetimepinJSON contains the JSON metadata for
+// the struct [IdentityProviderListResponseAccessOnetimepin]
+type identityProviderListResponseAccessOnetimepinJSON struct {
+	Config               apijson.Field
+	Name                 apijson.Field
+	Type                 apijson.Field
+	ID                   apijson.Field
+	SAMLCertificateSet   apijson.Field
+	SAMLCertificateSetID apijson.Field
+	SCIMConfig           apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *IdentityProviderListResponseAccessOnetimepin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderListResponseAccessOnetimepinJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r IdentityProviderListResponseAccessOnetimepin) implementsIdentityProviderListResponse() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderListResponseAccessOnetimepinConfig struct {
+	RedirectURL string                                                 `json:"redirect_url"`
+	JSON        identityProviderListResponseAccessOnetimepinConfigJSON `json:"-"`
+}
+
+// identityProviderListResponseAccessOnetimepinConfigJSON contains the JSON
+// metadata for the struct [IdentityProviderListResponseAccessOnetimepinConfig]
+type identityProviderListResponseAccessOnetimepinConfigJSON struct {
+	RedirectURL apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderListResponseAccessOnetimepinConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderListResponseAccessOnetimepinConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// The SAML encryption certificate set details, including current and previous
+// certificates. Only present for SAML identity providers with a certificate set
+// assigned.
+type IdentityProviderListResponseAccessOnetimepinSAMLCertificateSet struct {
+	// Timestamp when the certificate set was created
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Unique identifier for the certificate set
+	UID string `json:"uid" api:"required" format:"uuid"`
+	// Timestamp when the certificate set was last updated (e.g., during rotation)
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
+	// The currently active certificate used for encrypting SAML assertions
+	CurrentCertificate IdentityProviderListResponseAccessOnetimepinSAMLCertificateSetCurrentCertificate `json:"current_certificate"`
+	// The previous certificate, maintained during rotation to ensure continuity. Null
+	// if no rotation has occurred. Mirrors the structure of `saml_certificate`.
+	PreviousCertificate interface{}                                                        `json:"previous_certificate" api:"nullable"`
+	JSON                identityProviderListResponseAccessOnetimepinSAMLCertificateSetJSON `json:"-"`
+}
+
+// identityProviderListResponseAccessOnetimepinSAMLCertificateSetJSON contains the
+// JSON metadata for the struct
+// [IdentityProviderListResponseAccessOnetimepinSAMLCertificateSet]
+type identityProviderListResponseAccessOnetimepinSAMLCertificateSetJSON struct {
+	CreatedAt           apijson.Field
+	UID                 apijson.Field
+	UpdatedAt           apijson.Field
+	CurrentCertificate  apijson.Field
+	PreviousCertificate apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *IdentityProviderListResponseAccessOnetimepinSAMLCertificateSet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderListResponseAccessOnetimepinSAMLCertificateSetJSON) RawJSON() string {
+	return r.raw
+}
+
+// The currently active certificate used for encrypting SAML assertions
+type IdentityProviderListResponseAccessOnetimepinSAMLCertificateSetCurrentCertificate struct {
+	// Indicates whether this is the currently active certificate
+	IsCurrent bool `json:"is_current" api:"required"`
+	// Certificate expiration date. Certificates are automatically rotated 30 days
+	// before expiration.
+	NotAfter time.Time `json:"not_after" api:"required" format:"date-time"`
+	// PEM-encoded X.509 certificate containing the public key. Configure this
+	// certificate in your external SAML Identity Provider to enable encryption.
+	PublicCertificate string `json:"public_certificate" api:"required"`
+	// Unique identifier for the certificate
+	UID  string                                                                               `json:"uid" api:"required" format:"uuid"`
+	JSON identityProviderListResponseAccessOnetimepinSAMLCertificateSetCurrentCertificateJSON `json:"-"`
+}
+
+// identityProviderListResponseAccessOnetimepinSAMLCertificateSetCurrentCertificateJSON
+// contains the JSON metadata for the struct
+// [IdentityProviderListResponseAccessOnetimepinSAMLCertificateSetCurrentCertificate]
+type identityProviderListResponseAccessOnetimepinSAMLCertificateSetCurrentCertificateJSON struct {
+	IsCurrent         apijson.Field
+	NotAfter          apijson.Field
+	PublicCertificate apijson.Field
+	UID               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *IdentityProviderListResponseAccessOnetimepinSAMLCertificateSetCurrentCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderListResponseAccessOnetimepinSAMLCertificateSetCurrentCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityProviderListResponseAccessCloudflare struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config IdentityProviderListResponseAccessCloudflareConfig `json:"config" api:"required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name" api:"required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type IdentityProviderType `json:"type" api:"required"`
+	// UUID.
+	ID string `json:"id"`
+	// The SAML encryption certificate set details, including current and previous
+	// certificates. Only present for SAML identity providers with a certificate set
+	// assigned.
+	SAMLCertificateSet IdentityProviderListResponseAccessCloudflareSAMLCertificateSet `json:"saml_certificate_set"`
+	// The UID of the SAML encryption certificate set assigned to this Identity
+	// Provider. Only present for SAML identity providers with encryption configured.
+	// Create a certificate set via POST to
+	// `/identity_providers/{id}/saml_certificate`.
+	SAMLCertificateSetID string `json:"saml_certificate_set_id" format:"uuid"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	SCIMConfig IdentityProviderSCIMConfig                       `json:"scim_config"`
+	JSON       identityProviderListResponseAccessCloudflareJSON `json:"-"`
+}
+
+// identityProviderListResponseAccessCloudflareJSON contains the JSON metadata for
+// the struct [IdentityProviderListResponseAccessCloudflare]
+type identityProviderListResponseAccessCloudflareJSON struct {
+	Config               apijson.Field
+	Name                 apijson.Field
+	Type                 apijson.Field
+	ID                   apijson.Field
+	SAMLCertificateSet   apijson.Field
+	SAMLCertificateSetID apijson.Field
+	SCIMConfig           apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *IdentityProviderListResponseAccessCloudflare) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderListResponseAccessCloudflareJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r IdentityProviderListResponseAccessCloudflare) implementsIdentityProviderListResponse() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderListResponseAccessCloudflareConfig struct {
+	RedirectURL string `json:"redirect_url"`
+	// When enabled, only users who are members of your Cloudflare account can
+	// authenticate through this identity provider. When disabled, any user with a
+	// Cloudflare account can authenticate, subject to your Access policies.
+	RestrictToAccountMembers bool                                                   `json:"restrict_to_account_members"`
+	JSON                     identityProviderListResponseAccessCloudflareConfigJSON `json:"-"`
+}
+
+// identityProviderListResponseAccessCloudflareConfigJSON contains the JSON
+// metadata for the struct [IdentityProviderListResponseAccessCloudflareConfig]
+type identityProviderListResponseAccessCloudflareConfigJSON struct {
+	RedirectURL              apijson.Field
+	RestrictToAccountMembers apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *IdentityProviderListResponseAccessCloudflareConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderListResponseAccessCloudflareConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// The SAML encryption certificate set details, including current and previous
+// certificates. Only present for SAML identity providers with a certificate set
+// assigned.
+type IdentityProviderListResponseAccessCloudflareSAMLCertificateSet struct {
+	// Timestamp when the certificate set was created
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Unique identifier for the certificate set
+	UID string `json:"uid" api:"required" format:"uuid"`
+	// Timestamp when the certificate set was last updated (e.g., during rotation)
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
+	// The currently active certificate used for encrypting SAML assertions
+	CurrentCertificate IdentityProviderListResponseAccessCloudflareSAMLCertificateSetCurrentCertificate `json:"current_certificate"`
+	// The previous certificate, maintained during rotation to ensure continuity. Null
+	// if no rotation has occurred. Mirrors the structure of `saml_certificate`.
+	PreviousCertificate interface{}                                                        `json:"previous_certificate" api:"nullable"`
+	JSON                identityProviderListResponseAccessCloudflareSAMLCertificateSetJSON `json:"-"`
+}
+
+// identityProviderListResponseAccessCloudflareSAMLCertificateSetJSON contains the
+// JSON metadata for the struct
+// [IdentityProviderListResponseAccessCloudflareSAMLCertificateSet]
+type identityProviderListResponseAccessCloudflareSAMLCertificateSetJSON struct {
+	CreatedAt           apijson.Field
+	UID                 apijson.Field
+	UpdatedAt           apijson.Field
+	CurrentCertificate  apijson.Field
+	PreviousCertificate apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *IdentityProviderListResponseAccessCloudflareSAMLCertificateSet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderListResponseAccessCloudflareSAMLCertificateSetJSON) RawJSON() string {
+	return r.raw
+}
+
+// The currently active certificate used for encrypting SAML assertions
+type IdentityProviderListResponseAccessCloudflareSAMLCertificateSetCurrentCertificate struct {
+	// Indicates whether this is the currently active certificate
+	IsCurrent bool `json:"is_current" api:"required"`
+	// Certificate expiration date. Certificates are automatically rotated 30 days
+	// before expiration.
+	NotAfter time.Time `json:"not_after" api:"required" format:"date-time"`
+	// PEM-encoded X.509 certificate containing the public key. Configure this
+	// certificate in your external SAML Identity Provider to enable encryption.
+	PublicCertificate string `json:"public_certificate" api:"required"`
+	// Unique identifier for the certificate
+	UID  string                                                                               `json:"uid" api:"required" format:"uuid"`
+	JSON identityProviderListResponseAccessCloudflareSAMLCertificateSetCurrentCertificateJSON `json:"-"`
+}
+
+// identityProviderListResponseAccessCloudflareSAMLCertificateSetCurrentCertificateJSON
+// contains the JSON metadata for the struct
+// [IdentityProviderListResponseAccessCloudflareSAMLCertificateSetCurrentCertificate]
+type identityProviderListResponseAccessCloudflareSAMLCertificateSetCurrentCertificateJSON struct {
+	IsCurrent         apijson.Field
+	NotAfter          apijson.Field
+	PublicCertificate apijson.Field
+	UID               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *IdentityProviderListResponseAccessCloudflareSAMLCertificateSetCurrentCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderListResponseAccessCloudflareSAMLCertificateSetCurrentCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
