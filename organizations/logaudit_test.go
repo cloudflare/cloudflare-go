@@ -16,7 +16,7 @@ import (
 )
 
 func TestLogAuditListWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: required params 'since' and 'before' not populated by Prism mock")
+	t.Skip("TODO DS-16345: required params 'since' and 'before' not populated by Prism mock")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
