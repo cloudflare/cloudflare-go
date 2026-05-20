@@ -143,11 +143,13 @@ type EmailSendingSendParams struct {
 	Cc param.Field[EmailSendingSendParamsCcUnion] `json:"cc"`
 	// Custom email headers as key-value pairs.
 	Headers param.Field[map[string]string] `json:"headers"`
-	// HTML body of the email. At least one of text or html must be provided.
+	// HTML body of the email. At least one of text or html must be provided
+	// (non-empty).
 	HTML param.Field[string] `json:"html"`
 	// Reply-to address. Either a plain string or an object with address and name.
 	ReplyTo param.Field[EmailSendingSendParamsReplyToUnion] `json:"reply_to"`
-	// Plain text body of the email. At least one of text or html must be provided.
+	// Plain text body of the email. At least one of text or html must be provided
+	// (non-empty).
 	Text param.Field[string] `json:"text"`
 }
 
