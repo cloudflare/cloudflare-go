@@ -299,8 +299,10 @@ type UsagePaygoResponse struct {
 	// Specifies the pricing quantity for this charge period.
 	PricingQuantity int64 `json:"PricingQuantity" api:"required"`
 	// Identifies the Cloudflare service.
-	ServiceName string                 `json:"ServiceName" api:"required"`
-	JSON        usagePaygoResponseJSON `json:"-"`
+	ServiceName string `json:"ServiceName" api:"required"`
+	// Identifies the product family for the Cloudflare service.
+	ServiceFamilyName string                 `json:"ServiceFamilyName"`
+	JSON              usagePaygoResponseJSON `json:"-"`
 }
 
 // usagePaygoResponseJSON contains the JSON metadata for the struct
@@ -317,6 +319,7 @@ type usagePaygoResponseJSON struct {
 	CumulatedPricingQuantity apijson.Field
 	PricingQuantity          apijson.Field
 	ServiceName              apijson.Field
+	ServiceFamilyName        apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
