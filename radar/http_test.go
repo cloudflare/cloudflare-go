@@ -83,6 +83,7 @@ func TestHTTPTimeseriesWithOptionalParams(t *testing.T) {
 		ASN:           cloudflare.F([]string{"string"}),
 		BotClass:      cloudflare.F([]radar.HTTPTimeseriesParamsBotClass{radar.HTTPTimeseriesParamsBotClassLikelyAutomated}),
 		BrowserFamily: cloudflare.F([]radar.HTTPTimeseriesParamsBrowserFamily{radar.HTTPTimeseriesParamsBrowserFamilyChrome}),
+		ContentType:   cloudflare.F([]radar.HTTPTimeseriesParamsContentType{radar.HTTPTimeseriesParamsContentTypeHTML}),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),

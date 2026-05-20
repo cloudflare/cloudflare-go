@@ -1216,6 +1216,8 @@ type HTTPTimeseriesParams struct {
 	BotClass param.Field[[]HTTPTimeseriesParamsBotClass] `query:"botClass"`
 	// Filters results by browser family.
 	BrowserFamily param.Field[[]HTTPTimeseriesParamsBrowserFamily] `query:"browserFamily"`
+	// Filters results by content type category.
+	ContentType param.Field[[]HTTPTimeseriesParamsContentType] `query:"contentType"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -1328,6 +1330,35 @@ const (
 func (r HTTPTimeseriesParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesParamsBrowserFamilyChrome, HTTPTimeseriesParamsBrowserFamilyEdge, HTTPTimeseriesParamsBrowserFamilyFirefox, HTTPTimeseriesParamsBrowserFamilySafari:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesParamsContentType string
+
+const (
+	HTTPTimeseriesParamsContentTypeHTML          HTTPTimeseriesParamsContentType = "HTML"
+	HTTPTimeseriesParamsContentTypeImages        HTTPTimeseriesParamsContentType = "IMAGES"
+	HTTPTimeseriesParamsContentTypeJson          HTTPTimeseriesParamsContentType = "JSON"
+	HTTPTimeseriesParamsContentTypeJavascript    HTTPTimeseriesParamsContentType = "JAVASCRIPT"
+	HTTPTimeseriesParamsContentTypeCSS           HTTPTimeseriesParamsContentType = "CSS"
+	HTTPTimeseriesParamsContentTypePlainText     HTTPTimeseriesParamsContentType = "PLAIN_TEXT"
+	HTTPTimeseriesParamsContentTypeFonts         HTTPTimeseriesParamsContentType = "FONTS"
+	HTTPTimeseriesParamsContentTypeXml           HTTPTimeseriesParamsContentType = "XML"
+	HTTPTimeseriesParamsContentTypeYaml          HTTPTimeseriesParamsContentType = "YAML"
+	HTTPTimeseriesParamsContentTypeVideo         HTTPTimeseriesParamsContentType = "VIDEO"
+	HTTPTimeseriesParamsContentTypeAudio         HTTPTimeseriesParamsContentType = "AUDIO"
+	HTTPTimeseriesParamsContentTypeMarkdown      HTTPTimeseriesParamsContentType = "MARKDOWN"
+	HTTPTimeseriesParamsContentTypeDocuments     HTTPTimeseriesParamsContentType = "DOCUMENTS"
+	HTTPTimeseriesParamsContentTypeBinary        HTTPTimeseriesParamsContentType = "BINARY"
+	HTTPTimeseriesParamsContentTypeSerialization HTTPTimeseriesParamsContentType = "SERIALIZATION"
+	HTTPTimeseriesParamsContentTypeOther         HTTPTimeseriesParamsContentType = "OTHER"
+)
+
+func (r HTTPTimeseriesParamsContentType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsContentTypeHTML, HTTPTimeseriesParamsContentTypeImages, HTTPTimeseriesParamsContentTypeJson, HTTPTimeseriesParamsContentTypeJavascript, HTTPTimeseriesParamsContentTypeCSS, HTTPTimeseriesParamsContentTypePlainText, HTTPTimeseriesParamsContentTypeFonts, HTTPTimeseriesParamsContentTypeXml, HTTPTimeseriesParamsContentTypeYaml, HTTPTimeseriesParamsContentTypeVideo, HTTPTimeseriesParamsContentTypeAudio, HTTPTimeseriesParamsContentTypeMarkdown, HTTPTimeseriesParamsContentTypeDocuments, HTTPTimeseriesParamsContentTypeBinary, HTTPTimeseriesParamsContentTypeSerialization, HTTPTimeseriesParamsContentTypeOther:
 		return true
 	}
 	return false
