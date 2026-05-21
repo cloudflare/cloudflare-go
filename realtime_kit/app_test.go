@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/realtime_kit"
 )
 
-func TestAppGet(t *testing.T) {
+func TestAppGetWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: HTTP 401 from prism, support api tokens")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -31,6 +31,10 @@ func TestAppGet(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Apps.Get(context.TODO(), realtime_kit.AppGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		PageNo:    cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(1)),
+		Search:    cloudflare.F("search"),
+		SortOrder: cloudflare.F(realtime_kit.AppGetParamsSortOrderAsc),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -57,8 +61,8 @@ func TestAppPost(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.RealtimeKit.Apps.Post(context.TODO(), realtime_kit.AppPostParams{
-		AccountID: cloudflare.F("account_id"),
-		Name:      cloudflare.F("name"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("x"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -96,6 +96,7 @@ func TestMeetingNewWithOptionalParams(t *testing.T) {
 			SessionKeepAliveTimeInSecs: cloudflare.F(60.000000),
 			SummarizeOnEnd:             cloudflare.F(true),
 			Title:                      cloudflare.F("title"),
+			TranscribeOnEnd:            cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -237,6 +238,7 @@ func TestMeetingGetWithOptionalParams(t *testing.T) {
 			PerPage:   cloudflare.F(0.000000),
 			Search:    cloudflare.F("search"),
 			StartTime: cloudflare.F(time.Now()),
+			Status:    cloudflare.F(realtime_kit.MeetingGetParamsStatusActive),
 		},
 	)
 	if err != nil {
@@ -463,6 +465,7 @@ func TestMeetingReplaceMeetingByIDWithOptionalParams(t *testing.T) {
 			SessionKeepAliveTimeInSecs: cloudflare.F(60.000000),
 			SummarizeOnEnd:             cloudflare.F(true),
 			Title:                      cloudflare.F("title"),
+			TranscribeOnEnd:            cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -507,13 +510,57 @@ func TestMeetingUpdateMeetingByIDWithOptionalParams(t *testing.T) {
 					ProfanityFilter: cloudflare.F(true),
 				}),
 			}),
-			LiveStreamOnStart:          cloudflare.F(true),
-			PersistChat:                cloudflare.F(true),
-			RecordOnStart:              cloudflare.F(true),
+			LiveStreamOnStart: cloudflare.F(true),
+			PersistChat:       cloudflare.F(true),
+			RecordOnStart:     cloudflare.F(true),
+			RecordingConfig: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfig{
+				AudioConfig: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigAudioConfig{
+					Channel:    cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigAudioConfigChannelMono),
+					Codec:      cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigAudioConfigCodecMP3),
+					ExportFile: cloudflare.F(true),
+				}),
+				FileNamePrefix: cloudflare.F("file_name_prefix"),
+				LiveStreamingConfig: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigLiveStreamingConfig{
+					RtmpURL: cloudflare.F("rtmp://a.rtmp.youtube.com/live2"),
+				}),
+				MaxSeconds: cloudflare.F(60.000000),
+				RealtimekitBucketConfig: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigRealtimekitBucketConfig{
+					Enabled: cloudflare.F(true),
+				}),
+				StorageConfig: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfig{
+					Type:       cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeAws),
+					AccessKey:  cloudflare.F("access_key"),
+					AuthMethod: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigAuthMethodKey),
+					Bucket:     cloudflare.F("bucket"),
+					Host:       cloudflare.F("host"),
+					Password:   cloudflare.F("password"),
+					Path:       cloudflare.F("path"),
+					Port:       cloudflare.F(0.000000),
+					PrivateKey: cloudflare.F("private_key"),
+					Region:     cloudflare.F("us-east-1"),
+					Secret:     cloudflare.F("secret"),
+					Username:   cloudflare.F("username"),
+				}),
+				VideoConfig: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfig{
+					Codec:      cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodecH264),
+					ExportFile: cloudflare.F(true),
+					Height:     cloudflare.F(int64(720)),
+					Watermark: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigWatermark{
+						Position: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigWatermarkPositionLeftTop),
+						Size: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigWatermarkSize{
+							Height: cloudflare.F(int64(1)),
+							Width:  cloudflare.F(int64(1)),
+						}),
+						URL: cloudflare.F("https://example.com"),
+					}),
+					Width: cloudflare.F(int64(1280)),
+				}),
+			}),
 			SessionKeepAliveTimeInSecs: cloudflare.F(60.000000),
 			Status:                     cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsStatusInactive),
 			SummarizeOnEnd:             cloudflare.F(true),
 			Title:                      cloudflare.F("title"),
+			TranscribeOnEnd:            cloudflare.F(true),
 		},
 	)
 	if err != nil {

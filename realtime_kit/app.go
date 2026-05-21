@@ -7,9 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -35,14 +38,14 @@ func NewAppService(opts ...option.RequestOption) (r *AppService) {
 }
 
 // Fetch all apps for your account
-func (r *AppService) Get(ctx context.Context, query AppGetParams, opts ...option.RequestOption) (res *AppGetResponse, err error) {
+func (r *AppService) Get(ctx context.Context, params AppGetParams, opts ...option.RequestOption) (res *AppGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/realtime/kit/apps", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/realtime/kit/apps", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return res, err
 }
 
@@ -60,6 +63,7 @@ func (r *AppService) Post(ctx context.Context, params AppPostParams, opts ...opt
 
 type AppGetResponse struct {
 	Data    []AppGetResponseData `json:"data"`
+	Paging  AppGetResponsePaging `json:"paging"`
 	Success bool                 `json:"success"`
 	JSON    appGetResponseJSON   `json:"-"`
 }
@@ -67,6 +71,7 @@ type AppGetResponse struct {
 // appGetResponseJSON contains the JSON metadata for the struct [AppGetResponse]
 type appGetResponseJSON struct {
 	Data        apijson.Field
+	Paging      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -81,8 +86,8 @@ func (r appGetResponseJSON) RawJSON() string {
 }
 
 type AppGetResponseData struct {
-	ID        string                 `json:"id"`
-	CreatedAt string                 `json:"created_at"`
+	ID        string                 `json:"id" format:"uuid"`
+	CreatedAt time.Time              `json:"created_at" format:"date-time"`
 	Name      string                 `json:"name"`
 	JSON      appGetResponseDataJSON `json:"-"`
 }
@@ -102,6 +107,31 @@ func (r *AppGetResponseData) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r appGetResponseDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type AppGetResponsePaging struct {
+	EndOffset   float64                  `json:"end_offset"`
+	StartOffset float64                  `json:"start_offset"`
+	TotalCount  float64                  `json:"total_count"`
+	JSON        appGetResponsePagingJSON `json:"-"`
+}
+
+// appGetResponsePagingJSON contains the JSON metadata for the struct
+// [AppGetResponsePaging]
+type appGetResponsePagingJSON struct {
+	EndOffset   apijson.Field
+	StartOffset apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AppGetResponsePaging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r appGetResponsePagingJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -149,8 +179,8 @@ func (r appPostResponseDataJSON) RawJSON() string {
 }
 
 type AppPostResponseDataApp struct {
-	ID        string                     `json:"id"`
-	CreatedAt string                     `json:"created_at"`
+	ID        string                     `json:"id" format:"uuid"`
+	CreatedAt time.Time                  `json:"created_at" format:"date-time"`
 	Name      string                     `json:"name"`
 	JSON      appPostResponseDataAppJSON `json:"-"`
 }
@@ -176,9 +206,42 @@ func (r appPostResponseDataAppJSON) RawJSON() string {
 type AppGetParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The page number from which you want your page search results to be displayed.
+	PageNo param.Field[int64] `query:"page_no"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Search string that matches apps by name.
+	Search param.Field[string] `query:"search"`
+	// Sort order for apps by creation time.
+	SortOrder param.Field[AppGetParamsSortOrder] `query:"sort_order"`
+}
+
+// URLQuery serializes [AppGetParams]'s query parameters as `url.Values`.
+func (r AppGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Sort order for apps by creation time.
+type AppGetParamsSortOrder string
+
+const (
+	AppGetParamsSortOrderAsc  AppGetParamsSortOrder = "ASC"
+	AppGetParamsSortOrderDesc AppGetParamsSortOrder = "DESC"
+)
+
+func (r AppGetParamsSortOrder) IsKnown() bool {
+	switch r {
+	case AppGetParamsSortOrderAsc, AppGetParamsSortOrderDesc:
+		return true
+	}
+	return false
 }
 
 type AppPostParams struct {
+	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Name      param.Field[string] `json:"name" api:"required"`
 }

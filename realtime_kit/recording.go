@@ -759,6 +759,10 @@ type RecordingGetRecordingsResponseDataMeeting struct {
 	// Specifies if the meeting should start getting recorded as soon as someone joins
 	// the meeting.
 	RecordOnStart bool `json:"record_on_start"`
+	// Recording Configurations to be used for this meeting. This level of configs
+	// takes higher preference over App level configs on the RealtimeKit developer
+	// portal.
+	RecordingConfig RecordingGetRecordingsResponseDataMeetingRecordingConfig `json:"recording_config"`
 	// Time in seconds, for which a session remains active, after the last participant
 	// has left the meeting.
 	SessionKeepAliveTimeInSecs float64 `json:"session_keep_alive_time_in_secs"`
@@ -769,8 +773,10 @@ type RecordingGetRecordingsResponseDataMeeting struct {
 	// Transcriptions to be enabled, and can be retrieved via Webhooks or summary API.
 	SummarizeOnEnd bool `json:"summarize_on_end"`
 	// Title of the meeting.
-	Title string                                        `json:"title"`
-	JSON  recordingGetRecordingsResponseDataMeetingJSON `json:"-"`
+	Title string `json:"title"`
+	// Automatically generate transcripts when the meeting ends.
+	TranscribeOnEnd bool                                          `json:"transcribe_on_end"`
+	JSON            recordingGetRecordingsResponseDataMeetingJSON `json:"-"`
 }
 
 // recordingGetRecordingsResponseDataMeetingJSON contains the JSON metadata for the
@@ -782,10 +788,12 @@ type recordingGetRecordingsResponseDataMeetingJSON struct {
 	LiveStreamOnStart          apijson.Field
 	PersistChat                apijson.Field
 	RecordOnStart              apijson.Field
+	RecordingConfig            apijson.Field
 	SessionKeepAliveTimeInSecs apijson.Field
 	Status                     apijson.Field
 	SummarizeOnEnd             apijson.Field
 	Title                      apijson.Field
+	TranscribeOnEnd            apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field
 }
@@ -795,6 +803,379 @@ func (r *RecordingGetRecordingsResponseDataMeeting) UnmarshalJSON(data []byte) (
 }
 
 func (r recordingGetRecordingsResponseDataMeetingJSON) RawJSON() string {
+	return r.raw
+}
+
+// Recording Configurations to be used for this meeting. This level of configs
+// takes higher preference over App level configs on the RealtimeKit developer
+// portal.
+type RecordingGetRecordingsResponseDataMeetingRecordingConfig struct {
+	// Object containing configuration regarding the audio that is being recorded.
+	AudioConfig RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfig `json:"audio_config"`
+	// Adds a prefix to the beginning of the file name of the recording.
+	FileNamePrefix      string                                                                      `json:"file_name_prefix"`
+	LiveStreamingConfig RecordingGetRecordingsResponseDataMeetingRecordingConfigLiveStreamingConfig `json:"live_streaming_config"`
+	// Specifies the maximum duration for recording in seconds, ranging from a minimum
+	// of 60 seconds to a maximum of 24 hours.
+	MaxSeconds              float64                                                                         `json:"max_seconds"`
+	RealtimekitBucketConfig RecordingGetRecordingsResponseDataMeetingRecordingConfigRealtimekitBucketConfig `json:"realtimekit_bucket_config"`
+	StorageConfig           RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig           `json:"storage_config" api:"nullable"`
+	VideoConfig             RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfig             `json:"video_config"`
+	JSON                    recordingGetRecordingsResponseDataMeetingRecordingConfigJSON                    `json:"-"`
+}
+
+// recordingGetRecordingsResponseDataMeetingRecordingConfigJSON contains the JSON
+// metadata for the struct
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfig]
+type recordingGetRecordingsResponseDataMeetingRecordingConfigJSON struct {
+	AudioConfig             apijson.Field
+	FileNamePrefix          apijson.Field
+	LiveStreamingConfig     apijson.Field
+	MaxSeconds              apijson.Field
+	RealtimekitBucketConfig apijson.Field
+	StorageConfig           apijson.Field
+	VideoConfig             apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetRecordingsResponseDataMeetingRecordingConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Object containing configuration regarding the audio that is being recorded.
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfig struct {
+	// Audio signal pathway within an audio file that carries a specific sound source.
+	Channel RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigChannel `json:"channel"`
+	// Codec using which the recording will be encoded. If VP8/VP9 is selected for
+	// videoConfig, changing audioConfig is not allowed. In this case, the codec in the
+	// audioConfig is automatically set to vorbis.
+	Codec RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigCodec `json:"codec"`
+	// Controls whether to export audio file seperately
+	ExportFile bool                                                                    `json:"export_file"`
+	JSON       recordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigJSON `json:"-"`
+}
+
+// recordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigJSON contains
+// the JSON metadata for the struct
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfig]
+type recordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigJSON struct {
+	Channel     apijson.Field
+	Codec       apijson.Field
+	ExportFile  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Audio signal pathway within an audio file that carries a specific sound source.
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigChannel string
+
+const (
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigChannelMono   RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigChannel = "mono"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigChannelStereo RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigChannel = "stereo"
+)
+
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigChannel) IsKnown() bool {
+	switch r {
+	case RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigChannelMono, RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigChannelStereo:
+		return true
+	}
+	return false
+}
+
+// Codec using which the recording will be encoded. If VP8/VP9 is selected for
+// videoConfig, changing audioConfig is not allowed. In this case, the codec in the
+// audioConfig is automatically set to vorbis.
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigCodec string
+
+const (
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigCodecMP3 RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigCodec = "MP3"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigCodecAac RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigCodec = "AAC"
+)
+
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigCodec) IsKnown() bool {
+	switch r {
+	case RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigCodecMP3, RecordingGetRecordingsResponseDataMeetingRecordingConfigAudioConfigCodecAac:
+		return true
+	}
+	return false
+}
+
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigLiveStreamingConfig struct {
+	// RTMP URL to stream to
+	RtmpURL string                                                                          `json:"rtmp_url" format:"uri"`
+	JSON    recordingGetRecordingsResponseDataMeetingRecordingConfigLiveStreamingConfigJSON `json:"-"`
+}
+
+// recordingGetRecordingsResponseDataMeetingRecordingConfigLiveStreamingConfigJSON
+// contains the JSON metadata for the struct
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigLiveStreamingConfig]
+type recordingGetRecordingsResponseDataMeetingRecordingConfigLiveStreamingConfigJSON struct {
+	RtmpURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfigLiveStreamingConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetRecordingsResponseDataMeetingRecordingConfigLiveStreamingConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigRealtimekitBucketConfig struct {
+	// Controls whether recordings are uploaded to RealtimeKit's bucket. If set to
+	// false, `download_url`, `audio_download_url`, `download_url_expiry` won't be
+	// generated for a recording.
+	Enabled bool                                                                                `json:"enabled" api:"required"`
+	JSON    recordingGetRecordingsResponseDataMeetingRecordingConfigRealtimekitBucketConfigJSON `json:"-"`
+}
+
+// recordingGetRecordingsResponseDataMeetingRecordingConfigRealtimekitBucketConfigJSON
+// contains the JSON metadata for the struct
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigRealtimekitBucketConfig]
+type recordingGetRecordingsResponseDataMeetingRecordingConfigRealtimekitBucketConfigJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfigRealtimekitBucketConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetRecordingsResponseDataMeetingRecordingConfigRealtimekitBucketConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig struct {
+	// Type of storage media.
+	Type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType `json:"type" api:"required"`
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// SSH destination server password for SFTP type storage medium when auth_method is
+	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
+	// private key.
+	Password string `json:"password"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Private key used to login to destination SSH server for SFTP type storage
+	// medium, when auth_method used is "KEY"
+	PrivateKey string `json:"private_key"`
+	// Region of the storage medium.
+	Region string `json:"region"`
+	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
+	// by clients, not readable.
+	Secret string `json:"secret"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                                    `json:"username"`
+	JSON     recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigJSON `json:"-"`
+}
+
+// recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigJSON
+// contains the JSON metadata for the struct
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig]
+type recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigJSON struct {
+	Type        apijson.Field
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Password    apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	PrivateKey  apijson.Field
+	Region      apijson.Field
+	Secret      apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Type of storage media.
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType string
+
+const (
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAws          RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "aws"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAzure        RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "azure"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeDigitalocean RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "digitalocean"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeGcs          RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "gcs"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeSftp         RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "sftp"
+)
+
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType) IsKnown() bool {
+	switch r {
+	case RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAws, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAzure, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeDigitalocean, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeGcs, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeSftp:
+		return true
+	}
+	return false
+}
+
+// Authentication method used for "sftp" type storage medium
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethod string
+
+const (
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethodKey      RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethod = "KEY"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethodPassword RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethod = "PASSWORD"
+)
+
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethod) IsKnown() bool {
+	switch r {
+	case RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethodKey, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfig struct {
+	// Codec using which the recording will be encoded.
+	Codec RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodec `json:"codec"`
+	// Controls whether to export video file seperately
+	ExportFile bool `json:"export_file"`
+	// Height of the recording video in pixels
+	Height int64 `json:"height"`
+	// Watermark to be added to the recording
+	Watermark RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermark `json:"watermark"`
+	// Width of the recording video in pixels
+	Width int64                                                                   `json:"width"`
+	JSON  recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigJSON `json:"-"`
+}
+
+// recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigJSON contains
+// the JSON metadata for the struct
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfig]
+type recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigJSON struct {
+	Codec       apijson.Field
+	ExportFile  apijson.Field
+	Height      apijson.Field
+	Watermark   apijson.Field
+	Width       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Codec using which the recording will be encoded.
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodec string
+
+const (
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecH264 RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodec = "H264"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecVp8  RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodec = "VP8"
+)
+
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodec) IsKnown() bool {
+	switch r {
+	case RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecH264, RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecVp8:
+		return true
+	}
+	return false
+}
+
+// Watermark to be added to the recording
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermark struct {
+	// Position of the watermark
+	Position RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPosition `json:"position"`
+	// Size of the watermark
+	Size RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkSize `json:"size"`
+	// URL of the watermark image
+	URL  string                                                                           `json:"url" format:"uri"`
+	JSON recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkJSON `json:"-"`
+}
+
+// recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkJSON
+// contains the JSON metadata for the struct
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermark]
+type recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkJSON struct {
+	Position    apijson.Field
+	Size        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermark) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkJSON) RawJSON() string {
+	return r.raw
+}
+
+// Position of the watermark
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPosition string
+
+const (
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPositionLeftTop     RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPosition = "left top"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPositionRightTop    RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPosition = "right top"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPositionLeftBottom  RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPosition = "left bottom"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPositionRightBottom RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPosition = "right bottom"
+)
+
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPosition) IsKnown() bool {
+	switch r {
+	case RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPositionLeftTop, RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPositionRightTop, RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPositionLeftBottom, RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkPositionRightBottom:
+		return true
+	}
+	return false
+}
+
+// Size of the watermark
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkSize struct {
+	// Height of the watermark in px
+	Height int64 `json:"height"`
+	// Width of the watermark in px
+	Width int64                                                                                `json:"width"`
+	JSON  recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkSizeJSON `json:"-"`
+}
+
+// recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkSizeJSON
+// contains the JSON metadata for the struct
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkSize]
+type recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkSizeJSON struct {
+	Height      apijson.Field
+	Width       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkSize) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigWatermarkSizeJSON) RawJSON() string {
 	return r.raw
 }
 
