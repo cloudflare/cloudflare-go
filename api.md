@@ -121,6 +121,8 @@
 
 # [Addressing](addressing/api.md)
 
+# [DLS](dls/api.md)
+
 # [AuditLogs](audit_logs/api.md)
 
 # [Billing](billing/api.md)
