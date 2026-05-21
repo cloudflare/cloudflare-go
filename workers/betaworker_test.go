@@ -45,10 +45,11 @@ func TestBetaWorkerNewWithOptionalParams(t *testing.T) {
 					Persist:          cloudflare.F(true),
 				}),
 				Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
-					Destinations:     cloudflare.F([]string{"string"}),
-					Enabled:          cloudflare.F(true),
-					HeadSamplingRate: cloudflare.F(1.000000),
-					Persist:          cloudflare.F(true),
+					Destinations:      cloudflare.F([]string{"string"}),
+					Enabled:           cloudflare.F(true),
+					HeadSamplingRate:  cloudflare.F(1.000000),
+					Persist:           cloudflare.F(true),
+					PropagationPolicy: cloudflare.F(workers.WorkerObservabilityTracesPropagationPolicyAuthenticated),
 				}),
 			}),
 			Subdomain: cloudflare.F(workers.WorkerSubdomainParam{
@@ -104,10 +105,11 @@ func TestBetaWorkerUpdateWithOptionalParams(t *testing.T) {
 						Persist:          cloudflare.F(true),
 					}),
 					Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
-						Destinations:     cloudflare.F([]string{"string"}),
-						Enabled:          cloudflare.F(true),
-						HeadSamplingRate: cloudflare.F(1.000000),
-						Persist:          cloudflare.F(true),
+						Destinations:      cloudflare.F([]string{"string"}),
+						Enabled:           cloudflare.F(true),
+						HeadSamplingRate:  cloudflare.F(1.000000),
+						Persist:           cloudflare.F(true),
+						PropagationPolicy: cloudflare.F(workers.WorkerObservabilityTracesPropagationPolicyAuthenticated),
 					}),
 				}),
 				Subdomain: cloudflare.F(workers.WorkerSubdomainParam{
@@ -223,10 +225,11 @@ func TestBetaWorkerEditWithOptionalParams(t *testing.T) {
 						Persist:          cloudflare.F(true),
 					}),
 					Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
-						Destinations:     cloudflare.F([]string{"string"}),
-						Enabled:          cloudflare.F(true),
-						HeadSamplingRate: cloudflare.F(1.000000),
-						Persist:          cloudflare.F(true),
+						Destinations:      cloudflare.F([]string{"string"}),
+						Enabled:           cloudflare.F(true),
+						HeadSamplingRate:  cloudflare.F(1.000000),
+						Persist:           cloudflare.F(true),
+						PropagationPolicy: cloudflare.F(workers.WorkerObservabilityTracesPropagationPolicyAuthenticated),
 					}),
 				}),
 				Subdomain: cloudflare.F(workers.WorkerSubdomainParam{

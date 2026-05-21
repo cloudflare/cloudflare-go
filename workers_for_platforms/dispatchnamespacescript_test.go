@@ -94,10 +94,11 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						Persist:          cloudflare.F(true),
 					}),
 					Traces: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObservabilityTraces{
-						Destinations:     cloudflare.F([]string{"cloudflare"}),
-						Enabled:          cloudflare.F(true),
-						HeadSamplingRate: cloudflare.F(0.100000),
-						Persist:          cloudflare.F(true),
+						Destinations:      cloudflare.F([]string{"cloudflare"}),
+						Enabled:           cloudflare.F(true),
+						HeadSamplingRate:  cloudflare.F(0.100000),
+						Persist:           cloudflare.F(true),
+						PropagationPolicy: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicyAuthenticated),
 					}),
 				}),
 				Placement: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementUnion](workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementObject{
