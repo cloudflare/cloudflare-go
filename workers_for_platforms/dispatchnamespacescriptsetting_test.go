@@ -76,10 +76,11 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 						Persist:          cloudflare.F(true),
 					}),
 					Traces: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsObservabilityTraces{
-						Destinations:     cloudflare.F([]string{"cloudflare"}),
-						Enabled:          cloudflare.F(true),
-						HeadSamplingRate: cloudflare.F(0.100000),
-						Persist:          cloudflare.F(true),
+						Destinations:      cloudflare.F([]string{"cloudflare"}),
+						Enabled:           cloudflare.F(true),
+						HeadSamplingRate:  cloudflare.F(0.100000),
+						Persist:           cloudflare.F(true),
+						PropagationPolicy: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsObservabilityTracesPropagationPolicyAuthenticated),
 					}),
 				}),
 				Placement: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementUnion](workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsPlacementMode{

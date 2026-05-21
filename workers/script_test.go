@@ -96,10 +96,11 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						Persist:          cloudflare.F(true),
 					}),
 					Traces: cloudflare.F(workers.ScriptUpdateParamsMetadataObservabilityTraces{
-						Destinations:     cloudflare.F([]string{"cloudflare"}),
-						Enabled:          cloudflare.F(true),
-						HeadSamplingRate: cloudflare.F(0.100000),
-						Persist:          cloudflare.F(true),
+						Destinations:      cloudflare.F([]string{"cloudflare"}),
+						Enabled:           cloudflare.F(true),
+						HeadSamplingRate:  cloudflare.F(0.100000),
+						Persist:           cloudflare.F(true),
+						PropagationPolicy: cloudflare.F(workers.ScriptUpdateParamsMetadataObservabilityTracesPropagationPolicyAuthenticated),
 					}),
 				}),
 				Placement: cloudflare.F[workers.ScriptUpdateParamsMetadataPlacementUnion](workers.ScriptUpdateParamsMetadataPlacementObject{

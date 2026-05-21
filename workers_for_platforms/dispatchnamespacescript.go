@@ -362,20 +362,27 @@ type DispatchNamespaceScriptUpdateResponseObservabilityTraces struct {
 	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%). Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Whether trace persistence is enabled for the Worker.
-	Persist bool                                                         `json:"persist"`
-	JSON    dispatchNamespaceScriptUpdateResponseObservabilityTracesJSON `json:"-"`
+	Persist bool `json:"persist"`
+	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
+	// requests are handled. "authenticated" (default) honors inbound trace context
+	// only when accompanied by a valid trace auth token. "accept" unconditionally
+	// accepts inbound trace context. Requires the trace propagation feature to be
+	// enabled.
+	PropagationPolicy DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	JSON              dispatchNamespaceScriptUpdateResponseObservabilityTracesJSON              `json:"-"`
 }
 
 // dispatchNamespaceScriptUpdateResponseObservabilityTracesJSON contains the JSON
 // metadata for the struct
 // [DispatchNamespaceScriptUpdateResponseObservabilityTraces]
 type dispatchNamespaceScriptUpdateResponseObservabilityTracesJSON struct {
-	Destinations     apijson.Field
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Persist          apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Destinations      apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Persist           apijson.Field
+	PropagationPolicy apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceScriptUpdateResponseObservabilityTraces) UnmarshalJSON(data []byte) (err error) {
@@ -384,6 +391,26 @@ func (r *DispatchNamespaceScriptUpdateResponseObservabilityTraces) UnmarshalJSON
 
 func (r dispatchNamespaceScriptUpdateResponseObservabilityTracesJSON) RawJSON() string {
 	return r.raw
+}
+
+// Controls how inbound trace context (traceparent/tracestate) headers on incoming
+// requests are handled. "authenticated" (default) honors inbound trace context
+// only when accompanied by a valid trace auth token. "accept" unconditionally
+// accepts inbound trace context. Requires the trace propagation feature to be
+// enabled.
+type DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicy string
+
+const (
+	DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicyAuthenticated DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicy = "authenticated"
+	DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicyAccept        DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicy = "accept"
+)
+
+func (r DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicy) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicyAuthenticated, DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicyAccept:
+		return true
+	}
+	return false
 }
 
 // Configuration for
@@ -2417,10 +2444,36 @@ type DispatchNamespaceScriptUpdateParamsMetadataObservabilityTraces struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Whether trace persistence is enabled for the Worker.
 	Persist param.Field[bool] `json:"persist"`
+	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
+	// requests are handled. "authenticated" (default) honors inbound trace context
+	// only when accompanied by a valid trace auth token. "accept" unconditionally
+	// accepts inbound trace context. Requires the trace propagation feature to be
+	// enabled.
+	PropagationPolicy param.Field[DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicy] `json:"propagation_policy"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataObservabilityTraces) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Controls how inbound trace context (traceparent/tracestate) headers on incoming
+// requests are handled. "authenticated" (default) honors inbound trace context
+// only when accompanied by a valid trace auth token. "accept" unconditionally
+// accepts inbound trace context. Requires the trace propagation feature to be
+// enabled.
+type DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicy string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicyAuthenticated DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicy = "authenticated"
+	DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicyAccept        DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicy = "accept"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicy) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicyAuthenticated, DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicyAccept:
+		return true
+	}
+	return false
 }
 
 // Configuration for
