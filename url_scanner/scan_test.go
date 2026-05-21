@@ -5,6 +5,7 @@ package url_scanner_test
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
@@ -17,6 +18,41 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
 )
+
+func TestScanGetResponseTaskErrorsUnmarshal(t *testing.T) {
+	raw := []byte(`{
+		"task": {
+			"errors": [
+				{
+					"message": "DNS lookup failed",
+					"type": "dns"
+				}
+			]
+		}
+	}`)
+
+	var response url_scanner.ScanGetResponse
+	if err := json.Unmarshal(raw, &response); err != nil {
+		t.Fatalf("json.Unmarshal() error = %v", err)
+	}
+
+	if len(response.Task.Errors) != 1 {
+		t.Fatalf("expected one task error, got %d", len(response.Task.Errors))
+	}
+
+	taskError := response.Task.Errors[0]
+	if taskError.Message != "DNS lookup failed" {
+		t.Fatalf("expected task error message to be exposed, got %q", taskError.Message)
+	}
+
+	if _, ok := taskError.JSON.ExtraFields["type"]; !ok {
+		t.Fatalf("expected unknown task error fields to remain available")
+	}
+
+	if response.Task.JSON.Errors.IsMissing() {
+		t.Fatalf("expected task errors JSON metadata to be present")
+	}
+}
 
 func TestScanNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"

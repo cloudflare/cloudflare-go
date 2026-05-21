@@ -5262,6 +5262,7 @@ type ScanGetResponseTask struct {
 	ApexDomain    string                     `json:"apexDomain" api:"required"`
 	Domain        string                     `json:"domain" api:"required"`
 	DOMURL        string                     `json:"domURL" api:"required"`
+	Errors        []ScanGetResponseTaskError `json:"errors"`
 	Method        string                     `json:"method" api:"required"`
 	Options       ScanGetResponseTaskOptions `json:"options" api:"required"`
 	ReportURL     string                     `json:"reportURL" api:"required"`
@@ -5281,6 +5282,7 @@ type scanGetResponseTaskJSON struct {
 	ApexDomain    apijson.Field
 	Domain        apijson.Field
 	DOMURL        apijson.Field
+	Errors        apijson.Field
 	Method        apijson.Field
 	Options       apijson.Field
 	ReportURL     apijson.Field
@@ -5300,6 +5302,27 @@ func (r *ScanGetResponseTask) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scanGetResponseTaskJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseTaskError struct {
+	Message string                       `json:"message"`
+	JSON    scanGetResponseTaskErrorJSON `json:"-"`
+}
+
+// scanGetResponseTaskErrorJSON contains the JSON metadata for the struct
+// [ScanGetResponseTaskError]
+type scanGetResponseTaskErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseTaskError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseTaskErrorJSON) RawJSON() string {
 	return r.raw
 }
 
