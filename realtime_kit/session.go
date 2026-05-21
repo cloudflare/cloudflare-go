@@ -245,16 +245,51 @@ func (r sessionGetParticipantDataFromPeerIDResponseJSON) RawJSON() string {
 }
 
 type SessionGetParticipantDataFromPeerIDResponseData struct {
-	Participant SessionGetParticipantDataFromPeerIDResponseDataParticipant `json:"participant"`
-	JSON        sessionGetParticipantDataFromPeerIDResponseDataJSON        `json:"-"`
+	// Participant ID. This maps to the corresponding peerId.
+	ID string `json:"id"`
+	// timestamp when this participant was created.
+	CreatedAt string `json:"created_at"`
+	// ID passed by client to create this participant.
+	CustomParticipantID string `json:"custom_participant_id"`
+	// Display name of participant when joining the session.
+	DisplayName string `json:"display_name"`
+	// number of minutes for which the participant was in the session.
+	Duration float64 `json:"duration"`
+	// timestamp at which participant joined the session.
+	JoinedAt string `json:"joined_at"`
+	// timestamp at which participant left the session.
+	LeftAt     string                   `json:"left_at"`
+	PeerEvents []map[string]interface{} `json:"peer_events"`
+	// Peer call statistics report.
+	PeerReport SessionGetParticipantDataFromPeerIDResponseDataPeerReport `json:"peer_report"`
+	// Name of the preset associated with the participant.
+	PresetName string `json:"preset_name"`
+	SessionID  string `json:"session_id" format:"uuid"`
+	// timestamp when this participant's data was last updated.
+	UpdatedAt string `json:"updated_at"`
+	// User id for this participant.
+	UserID string                                              `json:"user_id"`
+	JSON   sessionGetParticipantDataFromPeerIDResponseDataJSON `json:"-"`
 }
 
 // sessionGetParticipantDataFromPeerIDResponseDataJSON contains the JSON metadata
 // for the struct [SessionGetParticipantDataFromPeerIDResponseData]
 type sessionGetParticipantDataFromPeerIDResponseDataJSON struct {
-	Participant apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                  apijson.Field
+	CreatedAt           apijson.Field
+	CustomParticipantID apijson.Field
+	DisplayName         apijson.Field
+	Duration            apijson.Field
+	JoinedAt            apijson.Field
+	LeftAt              apijson.Field
+	PeerEvents          apijson.Field
+	PeerReport          apijson.Field
+	PresetName          apijson.Field
+	SessionID           apijson.Field
+	UpdatedAt           apijson.Field
+	UserID              apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *SessionGetParticipantDataFromPeerIDResponseData) UnmarshalJSON(data []byte) (err error) {
@@ -265,1019 +300,29 @@ func (r sessionGetParticipantDataFromPeerIDResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
-type SessionGetParticipantDataFromPeerIDResponseDataParticipant struct {
-	ID                  string                                                                 `json:"id"`
-	CreatedAt           string                                                                 `json:"created_at"`
-	CustomParticipantID string                                                                 `json:"custom_participant_id"`
-	DisplayName         string                                                                 `json:"display_name"`
-	Duration            float64                                                                `json:"duration"`
-	JoinedAt            string                                                                 `json:"joined_at"`
-	LeftAt              string                                                                 `json:"left_at"`
-	PeerReport          SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReport   `json:"peer_report"`
-	PeerStats           SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStats    `json:"peer_stats"`
-	QualityStats        SessionGetParticipantDataFromPeerIDResponseDataParticipantQualityStats `json:"quality_stats"`
-	Role                string                                                                 `json:"role"`
-	UpdatedAt           string                                                                 `json:"updated_at"`
-	UserID              string                                                                 `json:"user_id"`
-	JSON                sessionGetParticipantDataFromPeerIDResponseDataParticipantJSON         `json:"-"`
+// Peer call statistics report.
+type SessionGetParticipantDataFromPeerIDResponseDataPeerReport struct {
+	Metadata    map[string]interface{}                                        `json:"metadata"`
+	Quality     map[string]interface{}                                        `json:"quality"`
+	ExtraFields map[string]interface{}                                        `json:"-" api:"extrafields"`
+	JSON        sessionGetParticipantDataFromPeerIDResponseDataPeerReportJSON `json:"-"`
 }
 
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantJSON contains the JSON
+// sessionGetParticipantDataFromPeerIDResponseDataPeerReportJSON contains the JSON
 // metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipant]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantJSON struct {
-	ID                  apijson.Field
-	CreatedAt           apijson.Field
-	CustomParticipantID apijson.Field
-	DisplayName         apijson.Field
-	Duration            apijson.Field
-	JoinedAt            apijson.Field
-	LeftAt              apijson.Field
-	PeerReport          apijson.Field
-	PeerStats           apijson.Field
-	QualityStats        apijson.Field
-	Role                apijson.Field
-	UpdatedAt           apijson.Field
-	UserID              apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipant) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReport struct {
-	Metadata SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadata `json:"metadata"`
-	Quality  SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQuality  `json:"quality"`
-	JSON     sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportJSON     `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReport]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportJSON struct {
+// [SessionGetParticipantDataFromPeerIDResponseDataPeerReport]
+type sessionGetParticipantDataFromPeerIDResponseDataPeerReportJSON struct {
 	Metadata    apijson.Field
 	Quality     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReport) UnmarshalJSON(data []byte) (err error) {
+func (r *SessionGetParticipantDataFromPeerIDResponseDataPeerReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadata struct {
-	AudioDevicesUpdates   []interface{}                                                                               `json:"audio_devices_updates"`
-	BrowserMetadata       SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataBrowserMetadata `json:"browser_metadata"`
-	CandidatePairs        SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairs  `json:"candidate_pairs"`
-	DeviceInfo            SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataDeviceInfo      `json:"device_info"`
-	Events                []SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEvent         `json:"events"`
-	IPInformation         SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformation   `json:"ip_information"`
-	PcMetadata            []SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataPcMetadata    `json:"pc_metadata"`
-	RoomViewType          string                                                                                      `json:"room_view_type"`
-	SDKName               string                                                                                      `json:"sdk_name"`
-	SDKVersion            string                                                                                      `json:"sdk_version"`
-	SelectedDeviceUpdates []interface{}                                                                               `json:"selected_device_updates"`
-	SpeakerDevicesUpdates []interface{}                                                                               `json:"speaker_devices_updates"`
-	VideoDevicesUpdates   []interface{}                                                                               `json:"video_devices_updates"`
-	JSON                  sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataJSON            `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadata]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataJSON struct {
-	AudioDevicesUpdates   apijson.Field
-	BrowserMetadata       apijson.Field
-	CandidatePairs        apijson.Field
-	DeviceInfo            apijson.Field
-	Events                apijson.Field
-	IPInformation         apijson.Field
-	PcMetadata            apijson.Field
-	RoomViewType          apijson.Field
-	SDKName               apijson.Field
-	SDKVersion            apijson.Field
-	SelectedDeviceUpdates apijson.Field
-	SpeakerDevicesUpdates apijson.Field
-	VideoDevicesUpdates   apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataBrowserMetadata struct {
-	Browser        string                                                                                          `json:"browser"`
-	BrowserVersion string                                                                                          `json:"browser_version"`
-	Engine         string                                                                                          `json:"engine"`
-	UserAgent      string                                                                                          `json:"user_agent"`
-	WebglSupport   string                                                                                          `json:"webgl_support"`
-	JSON           sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataBrowserMetadataJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataBrowserMetadataJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataBrowserMetadata]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataBrowserMetadataJSON struct {
-	Browser        apijson.Field
-	BrowserVersion apijson.Field
-	Engine         apijson.Field
-	UserAgent      apijson.Field
-	WebglSupport   apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataBrowserMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataBrowserMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairs struct {
-	ConsumingTransport []interface{}                                                                                                  `json:"consuming_transport"`
-	ProducingTransport []SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsProducingTransport `json:"producing_transport"`
-	JSON               sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsJSON                 `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairs]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsJSON struct {
-	ConsumingTransport apijson.Field
-	ProducingTransport apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairs) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsProducingTransport struct {
-	AvailableOutgoingBitrate     int64                                                                                                            `json:"available_outgoing_bitrate"`
-	BytesDiscardedOnSend         int64                                                                                                            `json:"bytes_discarded_on_send"`
-	BytesReceived                int64                                                                                                            `json:"bytes_received"`
-	BytesSent                    int64                                                                                                            `json:"bytes_sent"`
-	CurrentRoundTripTime         float64                                                                                                          `json:"current_round_trip_time"`
-	LastPacketReceivedTimestamp  int64                                                                                                            `json:"last_packet_received_timestamp"`
-	LastPacketSentTimestamp      int64                                                                                                            `json:"last_packet_sent_timestamp"`
-	LocalCandidateAddress        string                                                                                                           `json:"local_candidate_address"`
-	LocalCandidateID             string                                                                                                           `json:"local_candidate_id"`
-	LocalCandidateNetworkType    string                                                                                                           `json:"local_candidate_network_type"`
-	LocalCandidatePort           int64                                                                                                            `json:"local_candidate_port"`
-	LocalCandidateProtocol       string                                                                                                           `json:"local_candidate_protocol"`
-	LocalCandidateRelatedAddress string                                                                                                           `json:"local_candidate_related_address"`
-	LocalCandidateRelatedPort    int64                                                                                                            `json:"local_candidate_related_port"`
-	LocalCandidateType           string                                                                                                           `json:"local_candidate_type"`
-	Nominated                    bool                                                                                                             `json:"nominated"`
-	PacketsDiscardedOnSend       int64                                                                                                            `json:"packets_discarded_on_send"`
-	PacketsReceived              int64                                                                                                            `json:"packets_received"`
-	PacketsSent                  int64                                                                                                            `json:"packets_sent"`
-	RemoteCandidateAddress       string                                                                                                           `json:"remote_candidate_address"`
-	RemoteCandidateID            string                                                                                                           `json:"remote_candidate_id"`
-	RemoteCandidatePort          int64                                                                                                            `json:"remote_candidate_port"`
-	RemoteCandidateProtocol      string                                                                                                           `json:"remote_candidate_protocol"`
-	RemoteCandidateType          string                                                                                                           `json:"remote_candidate_type"`
-	TotalRoundTripTime           float64                                                                                                          `json:"total_round_trip_time"`
-	JSON                         sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsProducingTransportJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsProducingTransportJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsProducingTransport]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsProducingTransportJSON struct {
-	AvailableOutgoingBitrate     apijson.Field
-	BytesDiscardedOnSend         apijson.Field
-	BytesReceived                apijson.Field
-	BytesSent                    apijson.Field
-	CurrentRoundTripTime         apijson.Field
-	LastPacketReceivedTimestamp  apijson.Field
-	LastPacketSentTimestamp      apijson.Field
-	LocalCandidateAddress        apijson.Field
-	LocalCandidateID             apijson.Field
-	LocalCandidateNetworkType    apijson.Field
-	LocalCandidatePort           apijson.Field
-	LocalCandidateProtocol       apijson.Field
-	LocalCandidateRelatedAddress apijson.Field
-	LocalCandidateRelatedPort    apijson.Field
-	LocalCandidateType           apijson.Field
-	Nominated                    apijson.Field
-	PacketsDiscardedOnSend       apijson.Field
-	PacketsReceived              apijson.Field
-	PacketsSent                  apijson.Field
-	RemoteCandidateAddress       apijson.Field
-	RemoteCandidateID            apijson.Field
-	RemoteCandidatePort          apijson.Field
-	RemoteCandidateProtocol      apijson.Field
-	RemoteCandidateType          apijson.Field
-	TotalRoundTripTime           apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsProducingTransport) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataCandidatePairsProducingTransportJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataDeviceInfo struct {
-	CPUs      int64                                                                                      `json:"cpus"`
-	IsMobile  bool                                                                                       `json:"is_mobile"`
-	OS        string                                                                                     `json:"os"`
-	OSVersion string                                                                                     `json:"os_version"`
-	JSON      sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataDeviceInfoJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataDeviceInfoJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataDeviceInfo]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataDeviceInfoJSON struct {
-	CPUs        apijson.Field
-	IsMobile    apijson.Field
-	OS          apijson.Field
-	OSVersion   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataDeviceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataDeviceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEvent struct {
-	Name      string                                                                                `json:"name"`
-	Timestamp string                                                                                `json:"timestamp"`
-	JSON      sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEvent]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventJSON struct {
-	Name        apijson.Field
-	Timestamp   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEvent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformation struct {
-	ASN      SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationASN  `json:"asn"`
-	City     string                                                                                        `json:"city"`
-	Country  string                                                                                        `json:"country"`
-	IPV4     string                                                                                        `json:"ipv4"`
-	Region   string                                                                                        `json:"region"`
-	Timezone string                                                                                        `json:"timezone"`
-	JSON     sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformation]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationJSON struct {
-	ASN         apijson.Field
-	City        apijson.Field
-	Country     apijson.Field
-	IPV4        apijson.Field
-	Region      apijson.Field
-	Timezone    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationASN struct {
-	ASN  string                                                                                           `json:"asn"`
-	JSON sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationASNJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationASNJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationASN]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationASNJSON struct {
-	ASN         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationASN) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataIPInformationASNJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataPcMetadata struct {
-	EffectiveNetworkType  string                                                                                     `json:"effective_network_type"`
-	ReflexiveConnectivity bool                                                                                       `json:"reflexive_connectivity"`
-	RelayConnectivity     bool                                                                                       `json:"relay_connectivity"`
-	Timestamp             string                                                                                     `json:"timestamp"`
-	TURNConnectivity      bool                                                                                       `json:"turn_connectivity"`
-	JSON                  sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataPcMetadataJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataPcMetadataJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataPcMetadata]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataPcMetadataJSON struct {
-	EffectiveNetworkType  apijson.Field
-	ReflexiveConnectivity apijson.Field
-	RelayConnectivity     apijson.Field
-	Timestamp             apijson.Field
-	TURNConnectivity      apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataPcMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataPcMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQuality struct {
-	AudioConsumer                      []interface{}                                                                                      `json:"audio_consumer"`
-	AudioConsumerCumulative            interface{}                                                                                        `json:"audio_consumer_cumulative"`
-	AudioProducer                      []SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducer         `json:"audio_producer"`
-	AudioProducerCumulative            SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulative `json:"audio_producer_cumulative"`
-	ScreenshareAudioConsumer           []interface{}                                                                                      `json:"screenshare_audio_consumer"`
-	ScreenshareAudioConsumerCumulative interface{}                                                                                        `json:"screenshare_audio_consumer_cumulative"`
-	ScreenshareAudioProducer           []interface{}                                                                                      `json:"screenshare_audio_producer"`
-	ScreenshareAudioProducerCumulative interface{}                                                                                        `json:"screenshare_audio_producer_cumulative"`
-	ScreenshareVideoConsumer           []interface{}                                                                                      `json:"screenshare_video_consumer"`
-	ScreenshareVideoConsumerCumulative interface{}                                                                                        `json:"screenshare_video_consumer_cumulative"`
-	ScreenshareVideoProducer           []interface{}                                                                                      `json:"screenshare_video_producer"`
-	ScreenshareVideoProducerCumulative interface{}                                                                                        `json:"screenshare_video_producer_cumulative"`
-	VideoConsumer                      []interface{}                                                                                      `json:"video_consumer"`
-	VideoConsumerCumulative            interface{}                                                                                        `json:"video_consumer_cumulative"`
-	VideoProducer                      []interface{}                                                                                      `json:"video_producer"`
-	VideoProducerCumulative            interface{}                                                                                        `json:"video_producer_cumulative"`
-	JSON                               sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityJSON                    `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQuality]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityJSON struct {
-	AudioConsumer                      apijson.Field
-	AudioConsumerCumulative            apijson.Field
-	AudioProducer                      apijson.Field
-	AudioProducerCumulative            apijson.Field
-	ScreenshareAudioConsumer           apijson.Field
-	ScreenshareAudioConsumerCumulative apijson.Field
-	ScreenshareAudioProducer           apijson.Field
-	ScreenshareAudioProducerCumulative apijson.Field
-	ScreenshareVideoConsumer           apijson.Field
-	ScreenshareVideoConsumerCumulative apijson.Field
-	ScreenshareVideoProducer           apijson.Field
-	ScreenshareVideoProducerCumulative apijson.Field
-	VideoConsumer                      apijson.Field
-	VideoConsumerCumulative            apijson.Field
-	VideoProducer                      apijson.Field
-	VideoProducerCumulative            apijson.Field
-	raw                                string
-	ExtraFields                        map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQuality) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducer struct {
-	BytesSent   int64                                                                                        `json:"bytes_sent"`
-	Jitter      int64                                                                                        `json:"jitter"`
-	Mid         string                                                                                       `json:"mid"`
-	MosQuality  int64                                                                                        `json:"mos_quality"`
-	PacketsLost int64                                                                                        `json:"packets_lost"`
-	PacketsSent int64                                                                                        `json:"packets_sent"`
-	ProducerID  string                                                                                       `json:"producer_id"`
-	RTT         float64                                                                                      `json:"rtt"`
-	Ssrc        int64                                                                                        `json:"ssrc"`
-	Timestamp   string                                                                                       `json:"timestamp"`
-	JSON        sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducer]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerJSON struct {
-	BytesSent   apijson.Field
-	Jitter      apijson.Field
-	Mid         apijson.Field
-	MosQuality  apijson.Field
-	PacketsLost apijson.Field
-	PacketsSent apijson.Field
-	ProducerID  apijson.Field
-	RTT         apijson.Field
-	Ssrc        apijson.Field
-	Timestamp   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulative struct {
-	PacketLoss SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativePacketLoss `json:"packet_loss"`
-	QualityMos SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeQualityMos `json:"quality_mos"`
-	RTT        SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeRTT        `json:"rtt"`
-	JSON       sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeJSON       `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulative]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeJSON struct {
-	PacketLoss  apijson.Field
-	QualityMos  apijson.Field
-	RTT         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulative) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativePacketLoss struct {
-	Number10OrGreaterEventFraction int64                                                                                                            `json:"10_or_greater_event_fraction"`
-	Number25OrGreaterEventFraction int64                                                                                                            `json:"25_or_greater_event_fraction"`
-	Number5OrGreaterEventFraction  int64                                                                                                            `json:"5_or_greater_event_fraction"`
-	Number50OrGreaterEventFraction int64                                                                                                            `json:"50_or_greater_event_fraction"`
-	Avg                            int64                                                                                                            `json:"avg"`
-	JSON                           sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativePacketLossJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativePacketLossJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativePacketLoss]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativePacketLossJSON struct {
-	Number10OrGreaterEventFraction apijson.Field
-	Number25OrGreaterEventFraction apijson.Field
-	Number5OrGreaterEventFraction  apijson.Field
-	Number50OrGreaterEventFraction apijson.Field
-	Avg                            apijson.Field
-	raw                            string
-	ExtraFields                    map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativePacketLoss) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativePacketLossJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeQualityMos struct {
-	Avg  int64                                                                                                            `json:"avg"`
-	P50  int64                                                                                                            `json:"p50"`
-	P75  int64                                                                                                            `json:"p75"`
-	P90  int64                                                                                                            `json:"p90"`
-	JSON sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeQualityMosJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeQualityMosJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeQualityMos]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeQualityMosJSON struct {
-	Avg         apijson.Field
-	P50         apijson.Field
-	P75         apijson.Field
-	P90         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeQualityMos) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeQualityMosJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeRTT struct {
-	Number100msOrGreaterEventFraction float64                                                                                                   `json:"100ms_or_greater_event_fraction"`
-	Number250msOrGreaterEventFraction float64                                                                                                   `json:"250ms_or_greater_event_fraction"`
-	Number500msOrGreaterEventFraction float64                                                                                                   `json:"500ms_or_greater_event_fraction"`
-	Avg                               float64                                                                                                   `json:"avg"`
-	JSON                              sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeRTTJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeRTTJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeRTT]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeRTTJSON struct {
-	Number100msOrGreaterEventFraction apijson.Field
-	Number250msOrGreaterEventFraction apijson.Field
-	Number500msOrGreaterEventFraction apijson.Field
-	Avg                               apijson.Field
-	raw                               string
-	ExtraFields                       map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeRTT) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportQualityAudioProducerCumulativeRTTJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStats struct {
-	DeviceInfo                SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsDeviceInfo                `json:"device_info"`
-	Events                    []SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEvent                   `json:"events"`
-	IPInformation             SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformation             `json:"ip_information"`
-	PrecallNetworkInformation SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsPrecallNetworkInformation `json:"precall_network_information"`
-	JSON                      sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsJSON                      `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsJSON contains
-// the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStats]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsJSON struct {
-	DeviceInfo                apijson.Field
-	Events                    apijson.Field
-	IPInformation             apijson.Field
-	PrecallNetworkInformation apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStats) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsDeviceInfo struct {
-	Browser        string                                                                            `json:"browser"`
-	BrowserVersion string                                                                            `json:"browser_version"`
-	CPUs           int64                                                                             `json:"cpus"`
-	Engine         string                                                                            `json:"engine"`
-	IsMobile       bool                                                                              `json:"is_mobile"`
-	OS             string                                                                            `json:"os"`
-	OSVersion      string                                                                            `json:"os_version"`
-	SDKName        string                                                                            `json:"sdk_name"`
-	SDKVersion     string                                                                            `json:"sdk_version"`
-	UserAgent      string                                                                            `json:"user_agent"`
-	WebglSupport   string                                                                            `json:"webgl_support"`
-	JSON           sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsDeviceInfoJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsDeviceInfoJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsDeviceInfo]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsDeviceInfoJSON struct {
-	Browser        apijson.Field
-	BrowserVersion apijson.Field
-	CPUs           apijson.Field
-	Engine         apijson.Field
-	IsMobile       apijson.Field
-	OS             apijson.Field
-	OSVersion      apijson.Field
-	SDKName        apijson.Field
-	SDKVersion     apijson.Field
-	UserAgent      apijson.Field
-	WebglSupport   apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsDeviceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsDeviceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEvent struct {
-	Metadata  SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadata `json:"metadata"`
-	Timestamp string                                                                            `json:"timestamp"`
-	Type      string                                                                            `json:"type"`
-	JSON      sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventJSON      `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEvent]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventJSON struct {
-	Metadata    apijson.Field
-	Timestamp   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEvent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadata struct {
-	ConnectionInfo SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfo `json:"connection_info"`
-	JSON           sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataJSON           `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadata]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataJSON struct {
-	ConnectionInfo apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfo struct {
-	BackendRTT           float64                                                                                                     `json:"backend_r_t_t"`
-	Connectivity         SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoConnectivity `json:"connectivity"`
-	EffectiveNetworkType string                                                                                                      `json:"effective_network_type"`
-	FractionalLoss       int64                                                                                                       `json:"fractional_loss"`
-	IPDetails            SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetails    `json:"ip_details"`
-	Jitter               int64                                                                                                       `json:"jitter"`
-	Location             SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocation     `json:"location"`
-	RTT                  float64                                                                                                     `json:"r_t_t"`
-	Throughput           int64                                                                                                       `json:"throughput"`
-	TURNConnectivity     bool                                                                                                        `json:"turn_connectivity"`
-	JSON                 sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoJSON         `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfo]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoJSON struct {
-	BackendRTT           apijson.Field
-	Connectivity         apijson.Field
-	EffectiveNetworkType apijson.Field
-	FractionalLoss       apijson.Field
-	IPDetails            apijson.Field
-	Jitter               apijson.Field
-	Location             apijson.Field
-	RTT                  apijson.Field
-	Throughput           apijson.Field
-	TURNConnectivity     apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoConnectivity struct {
-	Host      bool                                                                                                            `json:"host"`
-	Reflexive bool                                                                                                            `json:"reflexive"`
-	Relay     bool                                                                                                            `json:"relay"`
-	JSON      sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoConnectivityJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoConnectivityJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoConnectivity]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoConnectivityJSON struct {
-	Host        apijson.Field
-	Reflexive   apijson.Field
-	Relay       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoConnectivity) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoConnectivityJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetails struct {
-	ASN      SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsASN  `json:"asn"`
-	City     string                                                                                                       `json:"city"`
-	Country  string                                                                                                       `json:"country"`
-	IP       string                                                                                                       `json:"ip"`
-	LOC      string                                                                                                       `json:"loc"`
-	Postal   string                                                                                                       `json:"postal"`
-	Region   string                                                                                                       `json:"region"`
-	Timezone string                                                                                                       `json:"timezone"`
-	JSON     sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetails]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsJSON struct {
-	ASN         apijson.Field
-	City        apijson.Field
-	Country     apijson.Field
-	IP          apijson.Field
-	LOC         apijson.Field
-	Postal      apijson.Field
-	Region      apijson.Field
-	Timezone    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetails) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsASN struct {
-	ASN  string                                                                                                          `json:"asn"`
-	JSON sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsASNJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsASNJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsASN]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsASNJSON struct {
-	ASN         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsASN) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoIPDetailsASNJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocation struct {
-	Coords SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationCoords `json:"coords"`
-	JSON   sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationJSON   `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocation]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationJSON struct {
-	Coords      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationCoords struct {
-	Latitude  float64                                                                                                           `json:"latitude"`
-	Longitude float64                                                                                                           `json:"longitude"`
-	JSON      sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationCoordsJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationCoordsJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationCoords]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationCoordsJSON struct {
-	Latitude    apijson.Field
-	Longitude   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationCoords) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsEventsMetadataConnectionInfoLocationCoordsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformation struct {
-	ASN        SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationASN  `json:"asn"`
-	City       string                                                                               `json:"city"`
-	Country    string                                                                               `json:"country"`
-	IPLocation string                                                                               `json:"ip_location"`
-	IPV4       string                                                                               `json:"ipv4"`
-	Org        string                                                                               `json:"org"`
-	Region     string                                                                               `json:"region"`
-	Timezone   string                                                                               `json:"timezone"`
-	JSON       sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformation]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationJSON struct {
-	ASN         apijson.Field
-	City        apijson.Field
-	Country     apijson.Field
-	IPLocation  apijson.Field
-	IPV4        apijson.Field
-	Org         apijson.Field
-	Region      apijson.Field
-	Timezone    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationASN struct {
-	ASN  string                                                                                  `json:"asn"`
-	JSON sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationASNJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationASNJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationASN]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationASNJSON struct {
-	ASN         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationASN) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsIPInformationASNJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsPrecallNetworkInformation struct {
-	BackendRTT            float64                                                                                          `json:"backend_rtt"`
-	EffectiveNetworktype  string                                                                                           `json:"effective_networktype"`
-	FractionalLoss        int64                                                                                            `json:"fractional_loss"`
-	Jitter                int64                                                                                            `json:"jitter"`
-	ReflexiveConnectivity bool                                                                                             `json:"reflexive_connectivity"`
-	RelayConnectivity     bool                                                                                             `json:"relay_connectivity"`
-	RTT                   float64                                                                                          `json:"rtt"`
-	Throughput            int64                                                                                            `json:"throughput"`
-	TURNConnectivity      bool                                                                                             `json:"turn_connectivity"`
-	JSON                  sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsPrecallNetworkInformationJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsPrecallNetworkInformationJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsPrecallNetworkInformation]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsPrecallNetworkInformationJSON struct {
-	BackendRTT            apijson.Field
-	EffectiveNetworktype  apijson.Field
-	FractionalLoss        apijson.Field
-	Jitter                apijson.Field
-	ReflexiveConnectivity apijson.Field
-	RelayConnectivity     apijson.Field
-	RTT                   apijson.Field
-	Throughput            apijson.Field
-	TURNConnectivity      apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsPrecallNetworkInformation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerStatsPrecallNetworkInformationJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetParticipantDataFromPeerIDResponseDataParticipantQualityStats struct {
-	AudioBandwidth           int64                                                                      `json:"audio_bandwidth"`
-	AudioStats               []interface{}                                                              `json:"audio_stats"`
-	AverageQuality           int64                                                                      `json:"average_quality"`
-	End                      string                                                                     `json:"end" api:"nullable"`
-	FirstAudioPacketReceived string                                                                     `json:"first_audio_packet_received"`
-	FirstVideoPacketReceived string                                                                     `json:"first_video_packet_received"`
-	LastAudioPacketReceived  string                                                                     `json:"last_audio_packet_received"`
-	LastVideoPacketReceived  string                                                                     `json:"last_video_packet_received"`
-	PeerIDs                  []string                                                                   `json:"peer_ids"`
-	Start                    string                                                                     `json:"start" api:"nullable"`
-	TotalAudioPackets        int64                                                                      `json:"total_audio_packets"`
-	TotalAudioPacketsLost    int64                                                                      `json:"total_audio_packets_lost"`
-	TotalVideoPackets        int64                                                                      `json:"total_video_packets"`
-	TotalVideoPacketsLost    int64                                                                      `json:"total_video_packets_lost"`
-	VideoBandwidth           int64                                                                      `json:"video_bandwidth"`
-	VideoStats               []interface{}                                                              `json:"video_stats"`
-	JSON                     sessionGetParticipantDataFromPeerIDResponseDataParticipantQualityStatsJSON `json:"-"`
-}
-
-// sessionGetParticipantDataFromPeerIDResponseDataParticipantQualityStatsJSON
-// contains the JSON metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataParticipantQualityStats]
-type sessionGetParticipantDataFromPeerIDResponseDataParticipantQualityStatsJSON struct {
-	AudioBandwidth           apijson.Field
-	AudioStats               apijson.Field
-	AverageQuality           apijson.Field
-	End                      apijson.Field
-	FirstAudioPacketReceived apijson.Field
-	FirstVideoPacketReceived apijson.Field
-	LastAudioPacketReceived  apijson.Field
-	LastVideoPacketReceived  apijson.Field
-	PeerIDs                  apijson.Field
-	Start                    apijson.Field
-	TotalAudioPackets        apijson.Field
-	TotalAudioPacketsLost    apijson.Field
-	TotalVideoPackets        apijson.Field
-	TotalVideoPacketsLost    apijson.Field
-	VideoBandwidth           apijson.Field
-	VideoStats               apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
-}
-
-func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantQualityStats) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantQualityStatsJSON) RawJSON() string {
+func (r sessionGetParticipantDataFromPeerIDResponseDataPeerReportJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1353,27 +398,6 @@ func (r sessionGetSessionDetailsResponseJSON) RawJSON() string {
 }
 
 type SessionGetSessionDetailsResponseData struct {
-	Session SessionGetSessionDetailsResponseDataSession `json:"session"`
-	JSON    sessionGetSessionDetailsResponseDataJSON    `json:"-"`
-}
-
-// sessionGetSessionDetailsResponseDataJSON contains the JSON metadata for the
-// struct [SessionGetSessionDetailsResponseData]
-type sessionGetSessionDetailsResponseDataJSON struct {
-	Session     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetSessionDetailsResponseData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetSessionDetailsResponseDataJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetSessionDetailsResponseDataSession struct {
 	// ID of the session
 	ID string `json:"id" api:"required"`
 	// ID of the meeting this session is associated with. In the case of V2 meetings,
@@ -1395,22 +419,22 @@ type SessionGetSessionDetailsResponseDataSession struct {
 	// timestamp when session started
 	StartedAt string `json:"started_at" api:"required"`
 	// current status of session
-	Status SessionGetSessionDetailsResponseDataSessionStatus `json:"status" api:"required"`
+	Status SessionGetSessionDetailsResponseDataStatus `json:"status" api:"required"`
 	// type of session
-	Type SessionGetSessionDetailsResponseDataSessionType `json:"type" api:"required"`
+	Type SessionGetSessionDetailsResponseDataType `json:"type" api:"required"`
 	// timestamp when session was last updated
 	UpdatedAt     string        `json:"updated_at" api:"required"`
 	BreakoutRooms []interface{} `json:"breakout_rooms"`
 	// timestamp when session ended
 	EndedAt string `json:"ended_at"`
 	// Any meta data about session.
-	Meta interface{}                                     `json:"meta"`
-	JSON sessionGetSessionDetailsResponseDataSessionJSON `json:"-"`
+	Meta interface{}                              `json:"meta"`
+	JSON sessionGetSessionDetailsResponseDataJSON `json:"-"`
 }
 
-// sessionGetSessionDetailsResponseDataSessionJSON contains the JSON metadata for
-// the struct [SessionGetSessionDetailsResponseDataSession]
-type sessionGetSessionDetailsResponseDataSessionJSON struct {
+// sessionGetSessionDetailsResponseDataJSON contains the JSON metadata for the
+// struct [SessionGetSessionDetailsResponseData]
+type sessionGetSessionDetailsResponseDataJSON struct {
 	ID                        apijson.Field
 	AssociatedID              apijson.Field
 	CreatedAt                 apijson.Field
@@ -1430,42 +454,42 @@ type sessionGetSessionDetailsResponseDataSessionJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *SessionGetSessionDetailsResponseDataSession) UnmarshalJSON(data []byte) (err error) {
+func (r *SessionGetSessionDetailsResponseData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sessionGetSessionDetailsResponseDataSessionJSON) RawJSON() string {
+func (r sessionGetSessionDetailsResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
 // current status of session
-type SessionGetSessionDetailsResponseDataSessionStatus string
+type SessionGetSessionDetailsResponseDataStatus string
 
 const (
-	SessionGetSessionDetailsResponseDataSessionStatusLive  SessionGetSessionDetailsResponseDataSessionStatus = "LIVE"
-	SessionGetSessionDetailsResponseDataSessionStatusEnded SessionGetSessionDetailsResponseDataSessionStatus = "ENDED"
+	SessionGetSessionDetailsResponseDataStatusLive  SessionGetSessionDetailsResponseDataStatus = "LIVE"
+	SessionGetSessionDetailsResponseDataStatusEnded SessionGetSessionDetailsResponseDataStatus = "ENDED"
 )
 
-func (r SessionGetSessionDetailsResponseDataSessionStatus) IsKnown() bool {
+func (r SessionGetSessionDetailsResponseDataStatus) IsKnown() bool {
 	switch r {
-	case SessionGetSessionDetailsResponseDataSessionStatusLive, SessionGetSessionDetailsResponseDataSessionStatusEnded:
+	case SessionGetSessionDetailsResponseDataStatusLive, SessionGetSessionDetailsResponseDataStatusEnded:
 		return true
 	}
 	return false
 }
 
 // type of session
-type SessionGetSessionDetailsResponseDataSessionType string
+type SessionGetSessionDetailsResponseDataType string
 
 const (
-	SessionGetSessionDetailsResponseDataSessionTypeMeeting     SessionGetSessionDetailsResponseDataSessionType = "meeting"
-	SessionGetSessionDetailsResponseDataSessionTypeLivestream  SessionGetSessionDetailsResponseDataSessionType = "livestream"
-	SessionGetSessionDetailsResponseDataSessionTypeParticipant SessionGetSessionDetailsResponseDataSessionType = "participant"
+	SessionGetSessionDetailsResponseDataTypeMeeting     SessionGetSessionDetailsResponseDataType = "meeting"
+	SessionGetSessionDetailsResponseDataTypeLivestream  SessionGetSessionDetailsResponseDataType = "livestream"
+	SessionGetSessionDetailsResponseDataTypeParticipant SessionGetSessionDetailsResponseDataType = "participant"
 )
 
-func (r SessionGetSessionDetailsResponseDataSessionType) IsKnown() bool {
+func (r SessionGetSessionDetailsResponseDataType) IsKnown() bool {
 	switch r {
-	case SessionGetSessionDetailsResponseDataSessionTypeMeeting, SessionGetSessionDetailsResponseDataSessionTypeLivestream, SessionGetSessionDetailsResponseDataSessionTypeParticipant:
+	case SessionGetSessionDetailsResponseDataTypeMeeting, SessionGetSessionDetailsResponseDataTypeLivestream, SessionGetSessionDetailsResponseDataTypeParticipant:
 		return true
 	}
 	return false
@@ -1529,11 +553,9 @@ type SessionGetSessionParticipantDetailsResponseDataParticipant struct {
 	// timestamp at which participant joined the session.
 	JoinedAt string `json:"joined_at"`
 	// timestamp at which participant left the session.
-	LeftAt    string                                                              `json:"left_at"`
-	PeerStats SessionGetSessionParticipantDetailsResponseDataParticipantPeerStats `json:"peer_stats"`
+	LeftAt string `json:"left_at"`
 	// Name of the preset associated with the participant.
-	PresetName   string                                                                  `json:"preset_name"`
-	QualityStats []SessionGetSessionParticipantDetailsResponseDataParticipantQualityStat `json:"quality_stats"`
+	PresetName string `json:"preset_name"`
 	// timestamp when this participant's data was last updated.
 	UpdatedAt string `json:"updated_at"`
 	// User id for this participant.
@@ -1552,9 +574,7 @@ type sessionGetSessionParticipantDetailsResponseDataParticipantJSON struct {
 	Duration            apijson.Field
 	JoinedAt            apijson.Field
 	LeftAt              apijson.Field
-	PeerStats           apijson.Field
 	PresetName          apijson.Field
-	QualityStats        apijson.Field
 	UpdatedAt           apijson.Field
 	UserID              apijson.Field
 	raw                 string
@@ -1566,286 +586,6 @@ func (r *SessionGetSessionParticipantDetailsResponseDataParticipant) UnmarshalJS
 }
 
 func (r sessionGetSessionParticipantDetailsResponseDataParticipantJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetSessionParticipantDetailsResponseDataParticipantPeerStats struct {
-	Config                    string                                                                                       `json:"config"`
-	DeviceInfo                SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsDeviceInfo                `json:"device_info"`
-	Events                    []SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsEvent                   `json:"events"`
-	IPInformation             SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsIPInformation             `json:"ip_information"`
-	PrecallNetworkInformation SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsPrecallNetworkInformation `json:"precall_network_information"`
-	Status                    string                                                                                       `json:"status"`
-	JSON                      sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsJSON                      `json:"-"`
-}
-
-// sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsJSON contains
-// the JSON metadata for the struct
-// [SessionGetSessionParticipantDetailsResponseDataParticipantPeerStats]
-type sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsJSON struct {
-	Config                    apijson.Field
-	DeviceInfo                apijson.Field
-	Events                    apijson.Field
-	IPInformation             apijson.Field
-	PrecallNetworkInformation apijson.Field
-	Status                    apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *SessionGetSessionParticipantDetailsResponseDataParticipantPeerStats) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsDeviceInfo struct {
-	Browser        string                                                                            `json:"browser"`
-	BrowserVersion string                                                                            `json:"browser_version"`
-	CPUs           float64                                                                           `json:"cpus"`
-	Engine         string                                                                            `json:"engine"`
-	IsMobile       bool                                                                              `json:"is_mobile"`
-	Memory         float64                                                                           `json:"memory"`
-	OS             string                                                                            `json:"os"`
-	OSVersion      string                                                                            `json:"os_version"`
-	SDKName        string                                                                            `json:"sdk_name"`
-	SDKVersion     string                                                                            `json:"sdk_version"`
-	UserAgent      string                                                                            `json:"user_agent"`
-	WebglSupport   string                                                                            `json:"webgl_support"`
-	JSON           sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsDeviceInfoJSON `json:"-"`
-}
-
-// sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsDeviceInfoJSON
-// contains the JSON metadata for the struct
-// [SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsDeviceInfo]
-type sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsDeviceInfoJSON struct {
-	Browser        apijson.Field
-	BrowserVersion apijson.Field
-	CPUs           apijson.Field
-	Engine         apijson.Field
-	IsMobile       apijson.Field
-	Memory         apijson.Field
-	OS             apijson.Field
-	OSVersion      apijson.Field
-	SDKName        apijson.Field
-	SDKVersion     apijson.Field
-	UserAgent      apijson.Field
-	WebglSupport   apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsDeviceInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsDeviceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsEvent struct {
-	Timestamp string                                                                       `json:"timestamp"`
-	Type      string                                                                       `json:"type"`
-	JSON      sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsEventJSON `json:"-"`
-}
-
-// sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsEventJSON
-// contains the JSON metadata for the struct
-// [SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsEvent]
-type sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsEventJSON struct {
-	Timestamp   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsEvent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsEventJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsIPInformation struct {
-	City       string                                                                               `json:"city"`
-	Country    string                                                                               `json:"country"`
-	IPLocation string                                                                               `json:"ip_location"`
-	IPV4       string                                                                               `json:"ipv4"`
-	Org        string                                                                               `json:"org"`
-	Portal     string                                                                               `json:"portal"`
-	Region     string                                                                               `json:"region"`
-	Timezone   string                                                                               `json:"timezone"`
-	JSON       sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsIPInformationJSON `json:"-"`
-}
-
-// sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsIPInformationJSON
-// contains the JSON metadata for the struct
-// [SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsIPInformation]
-type sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsIPInformationJSON struct {
-	City        apijson.Field
-	Country     apijson.Field
-	IPLocation  apijson.Field
-	IPV4        apijson.Field
-	Org         apijson.Field
-	Portal      apijson.Field
-	Region      apijson.Field
-	Timezone    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsIPInformation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsIPInformationJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsPrecallNetworkInformation struct {
-	BackendRTT            float64                                                                                          `json:"backend_rtt"`
-	EffectiveNetworktype  string                                                                                           `json:"effective_networktype"`
-	FractionalLoss        float64                                                                                          `json:"fractional_loss"`
-	Jitter                float64                                                                                          `json:"jitter"`
-	ReflexiveConnectivity bool                                                                                             `json:"reflexive_connectivity"`
-	RelayConnectivity     bool                                                                                             `json:"relay_connectivity"`
-	RTT                   float64                                                                                          `json:"rtt"`
-	Throughtput           float64                                                                                          `json:"throughtput"`
-	TURNConnectivity      bool                                                                                             `json:"turn_connectivity"`
-	JSON                  sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsPrecallNetworkInformationJSON `json:"-"`
-}
-
-// sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsPrecallNetworkInformationJSON
-// contains the JSON metadata for the struct
-// [SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsPrecallNetworkInformation]
-type sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsPrecallNetworkInformationJSON struct {
-	BackendRTT            apijson.Field
-	EffectiveNetworktype  apijson.Field
-	FractionalLoss        apijson.Field
-	Jitter                apijson.Field
-	ReflexiveConnectivity apijson.Field
-	RelayConnectivity     apijson.Field
-	RTT                   apijson.Field
-	Throughtput           apijson.Field
-	TURNConnectivity      apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *SessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsPrecallNetworkInformation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetSessionParticipantDetailsResponseDataParticipantPeerStatsPrecallNetworkInformationJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetSessionParticipantDetailsResponseDataParticipantQualityStat struct {
-	AudioBandwidth  float64                                                                           `json:"audio_bandwidth"`
-	AudioPacketLoss float64                                                                           `json:"audio_packet_loss"`
-	AudioStats      []SessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsAudioStat `json:"audio_stats"`
-	AverageQuality  float64                                                                           `json:"average_quality"`
-	End             string                                                                            `json:"end"`
-	PeerID          string                                                                            `json:"peer_id"`
-	Start           string                                                                            `json:"start"`
-	VideoBandwidth  float64                                                                           `json:"video_bandwidth"`
-	VideoPacketLoss float64                                                                           `json:"video_packet_loss"`
-	VideoStats      []SessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsVideoStat `json:"video_stats"`
-	JSON            sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatJSON         `json:"-"`
-}
-
-// sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatJSON
-// contains the JSON metadata for the struct
-// [SessionGetSessionParticipantDetailsResponseDataParticipantQualityStat]
-type sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatJSON struct {
-	AudioBandwidth  apijson.Field
-	AudioPacketLoss apijson.Field
-	AudioStats      apijson.Field
-	AverageQuality  apijson.Field
-	End             apijson.Field
-	PeerID          apijson.Field
-	Start           apijson.Field
-	VideoBandwidth  apijson.Field
-	VideoPacketLoss apijson.Field
-	VideoStats      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *SessionGetSessionParticipantDetailsResponseDataParticipantQualityStat) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsAudioStat struct {
-	ConcealmentEvents float64                                                                             `json:"concealment_events"`
-	Jitter            float64                                                                             `json:"jitter"`
-	PacketsLost       float64                                                                             `json:"packets_lost"`
-	Quality           float64                                                                             `json:"quality"`
-	Timestamp         string                                                                              `json:"timestamp"`
-	JSON              sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsAudioStatJSON `json:"-"`
-}
-
-// sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsAudioStatJSON
-// contains the JSON metadata for the struct
-// [SessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsAudioStat]
-type sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsAudioStatJSON struct {
-	ConcealmentEvents apijson.Field
-	Jitter            apijson.Field
-	PacketsLost       apijson.Field
-	Quality           apijson.Field
-	Timestamp         apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsAudioStat) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsAudioStatJSON) RawJSON() string {
-	return r.raw
-}
-
-type SessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsVideoStat struct {
-	FrameHeight     float64                                                                             `json:"frame_height"`
-	FrameWidth      float64                                                                             `json:"frame_width"`
-	FramesDropped   float64                                                                             `json:"frames_dropped"`
-	FramesPerSecond float64                                                                             `json:"frames_per_second"`
-	Jitter          float64                                                                             `json:"jitter"`
-	PacketsLost     float64                                                                             `json:"packets_lost"`
-	Quality         float64                                                                             `json:"quality"`
-	Timestamp       string                                                                              `json:"timestamp"`
-	JSON            sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsVideoStatJSON `json:"-"`
-}
-
-// sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsVideoStatJSON
-// contains the JSON metadata for the struct
-// [SessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsVideoStat]
-type sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsVideoStatJSON struct {
-	FrameHeight     apijson.Field
-	FrameWidth      apijson.Field
-	FramesDropped   apijson.Field
-	FramesPerSecond apijson.Field
-	Jitter          apijson.Field
-	PacketsLost     apijson.Field
-	Quality         apijson.Field
-	Timestamp       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *SessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsVideoStat) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sessionGetSessionParticipantDetailsResponseDataParticipantQualityStatsVideoStatJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2043,15 +783,17 @@ func (r sessionGetSessionTranscriptsResponseDataJSON) RawJSON() string {
 }
 
 type SessionGetSessionsResponse struct {
-	Data    SessionGetSessionsResponseData `json:"data"`
-	Success bool                           `json:"success"`
-	JSON    sessionGetSessionsResponseJSON `json:"-"`
+	Data    SessionGetSessionsResponseData   `json:"data"`
+	Paging  SessionGetSessionsResponsePaging `json:"paging"`
+	Success bool                             `json:"success"`
+	JSON    sessionGetSessionsResponseJSON   `json:"-"`
 }
 
 // sessionGetSessionsResponseJSON contains the JSON metadata for the struct
 // [SessionGetSessionsResponse]
 type sessionGetSessionsResponseJSON struct {
 	Data        apijson.Field
+	Paging      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2182,6 +924,31 @@ func (r SessionGetSessionsResponseDataSessionsType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type SessionGetSessionsResponsePaging struct {
+	EndOffset   float64                              `json:"end_offset"`
+	StartOffset float64                              `json:"start_offset"`
+	TotalCount  float64                              `json:"total_count"`
+	JSON        sessionGetSessionsResponsePagingJSON `json:"-"`
+}
+
+// sessionGetSessionsResponsePagingJSON contains the JSON metadata for the struct
+// [SessionGetSessionsResponsePaging]
+type sessionGetSessionsResponsePagingJSON struct {
+	EndOffset   apijson.Field
+	StartOffset apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SessionGetSessionsResponsePaging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sessionGetSessionsResponsePagingJSON) RawJSON() string {
+	return r.raw
 }
 
 type SessionGenerateSummaryOfTranscriptsParams struct {
@@ -2376,7 +1143,7 @@ type SessionGetSessionsParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ID of the meeting that sessions should be associated with
-	AssociatedID param.Field[string] `query:"associated_id"`
+	AssociatedID param.Field[string] `query:"associated_id" format:"uuid"`
 	// The end time range for which you want to retrieve the meetings. The time must be
 	// specified in ISO format.
 	EndTime param.Field[time.Time] `query:"end_time" format:"date-time"`

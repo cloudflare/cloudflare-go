@@ -112,6 +112,22 @@ func (r *LivestreamService) GetLivestreamAnalyticsComplete(ctx context.Context, 
 	return res, err
 }
 
+// Returns day-wise livestream analytics for the specified time range.
+func (r *LivestreamService) GetLivestreamAnalyticsDaywise(ctx context.Context, appID string, params LivestreamGetLivestreamAnalyticsDaywiseParams, opts ...option.RequestOption) (res *LivestreamGetLivestreamAnalyticsDaywiseResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/analytics/livestreams/daywise", params.AccountID, appID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	return res, err
+}
+
 // Returns livestream session details for the given livestream session ID. Retrieve
 // the `livestream_session_id`using the
 // `Fetch livestream session details using a session ID` API.
@@ -637,6 +653,60 @@ func (r *LivestreamGetLivestreamAnalyticsCompleteResponseData) UnmarshalJSON(dat
 }
 
 func (r livestreamGetLivestreamAnalyticsCompleteResponseDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type LivestreamGetLivestreamAnalyticsDaywiseResponse struct {
+	Data    []LivestreamGetLivestreamAnalyticsDaywiseResponseData `json:"data"`
+	Success bool                                                  `json:"success"`
+	JSON    livestreamGetLivestreamAnalyticsDaywiseResponseJSON   `json:"-"`
+}
+
+// livestreamGetLivestreamAnalyticsDaywiseResponseJSON contains the JSON metadata
+// for the struct [LivestreamGetLivestreamAnalyticsDaywiseResponse]
+type livestreamGetLivestreamAnalyticsDaywiseResponseJSON struct {
+	Data        apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LivestreamGetLivestreamAnalyticsDaywiseResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r livestreamGetLivestreamAnalyticsDaywiseResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type LivestreamGetLivestreamAnalyticsDaywiseResponseData struct {
+	// Count of total livestream sessions.
+	Count int64 `json:"count"`
+	// Analytics date.
+	Date string `json:"date" api:"nullable"`
+	// Total time duration for which the input was given or the meeting was streamed.
+	TotalIngestSeconds int64 `json:"total_ingest_seconds"`
+	// Total view time for which the viewers watched the stream.
+	TotalViewerSeconds int64                                                   `json:"total_viewer_seconds"`
+	JSON               livestreamGetLivestreamAnalyticsDaywiseResponseDataJSON `json:"-"`
+}
+
+// livestreamGetLivestreamAnalyticsDaywiseResponseDataJSON contains the JSON
+// metadata for the struct [LivestreamGetLivestreamAnalyticsDaywiseResponseData]
+type livestreamGetLivestreamAnalyticsDaywiseResponseDataJSON struct {
+	Count              apijson.Field
+	Date               apijson.Field
+	TotalIngestSeconds apijson.Field
+	TotalViewerSeconds apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *LivestreamGetLivestreamAnalyticsDaywiseResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r livestreamGetLivestreamAnalyticsDaywiseResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1346,15 +1416,41 @@ func (r LivestreamGetAllLivestreamsParamsStatus) IsKnown() bool {
 type LivestreamGetLivestreamAnalyticsCompleteParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Specify the end time range in ISO format to access the livestream analytics.
-	EndTime param.Field[time.Time] `query:"end_time" format:"date-time"`
-	// Specify the start time range in ISO format to access the livestream analytics.
-	StartTime param.Field[time.Time] `query:"start_time" format:"date-time"`
+	// Specify the end time as a Unix timestamp in seconds to access the livestream
+	// analytics.
+	EndTime param.Field[int64] `query:"end_time"`
+	// Optional filters for livestream analytics.
+	Filters param.Field[string] `query:"filters"`
+	// Specify the start time as a Unix timestamp in seconds to access the livestream
+	// analytics.
+	StartTime param.Field[int64] `query:"start_time"`
 }
 
 // URLQuery serializes [LivestreamGetLivestreamAnalyticsCompleteParams]'s query
 // parameters as `url.Values`.
 func (r LivestreamGetLivestreamAnalyticsCompleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LivestreamGetLivestreamAnalyticsDaywiseParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Specify the end time as a Unix timestamp in seconds to access the livestream
+	// analytics.
+	EndTime param.Field[int64] `query:"end_time"`
+	// Optional filters for livestream analytics.
+	Filters param.Field[string] `query:"filters"`
+	// Specify the start time as a Unix timestamp in seconds to access the livestream
+	// analytics.
+	StartTime param.Field[int64] `query:"start_time"`
+}
+
+// URLQuery serializes [LivestreamGetLivestreamAnalyticsDaywiseParams]'s query
+// parameters as `url.Values`.
+func (r LivestreamGetLivestreamAnalyticsDaywiseParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
