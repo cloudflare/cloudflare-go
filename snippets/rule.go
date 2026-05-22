@@ -85,11 +85,30 @@ func (r *RuleService) Delete(ctx context.Context, body RuleDeleteParams, opts ..
 	return res, nil
 }
 
+// Fetches all snippet rules belonging to the zone.
+func (r *RuleService) Get(ctx context.Context, query RuleGetParams, opts ...option.RequestOption) (res *RuleGetResponse, err error) {
+	var env RuleGetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 type RuleUpdateResponse = interface{}
 
 type RuleListResponse = interface{}
 
 type RuleDeleteResponse = interface{}
+
+type RuleGetResponse = interface{}
 
 type RuleUpdateParams struct {
 	// Use this field to specify the unique ID of the zone.
@@ -420,6 +439,110 @@ const (
 func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case RuleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RuleGetParams struct {
+	// Use this field to specify the unique ID of the zone.
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+}
+
+// Return all API responses using this object.
+type RuleGetResponseEnvelope struct {
+	// Lists error messages.
+	Errors []RuleGetResponseEnvelopeErrors `json:"errors" api:"required"`
+	// Contain warning messages.
+	Messages []RuleGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Contain the response result.
+	Result RuleGetResponse `json:"result" api:"required"`
+	// Indicate whether the API call was successful.
+	Success RuleGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// ruleGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RuleGetResponseEnvelope]
+type ruleGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Describes an API message.
+type RuleGetResponseEnvelopeErrors struct {
+	// Describes the message text.
+	Message string `json:"message" api:"required"`
+	// Identify the message code.
+	Code int64                             `json:"code"`
+	JSON ruleGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// ruleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RuleGetResponseEnvelopeErrors]
+type ruleGetResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Describes an API message.
+type RuleGetResponseEnvelopeMessages struct {
+	// Describes the message text.
+	Message string `json:"message" api:"required"`
+	// Identify the message code.
+	Code int64                               `json:"code"`
+	JSON ruleGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// ruleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RuleGetResponseEnvelopeMessages]
+type ruleGetResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicate whether the API call was successful.
+type RuleGetResponseEnvelopeSuccess bool
+
+const (
+	RuleGetResponseEnvelopeSuccessTrue RuleGetResponseEnvelopeSuccess = true
+)
+
+func (r RuleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
