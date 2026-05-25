@@ -1384,13 +1384,14 @@ func (r AIBotTimeseriesGroupsParamsFormat) IsKnown() bool {
 type AIBotTimeseriesGroupsParamsNormalization string
 
 const (
-	AIBotTimeseriesGroupsParamsNormalizationPercentage AIBotTimeseriesGroupsParamsNormalization = "PERCENTAGE"
-	AIBotTimeseriesGroupsParamsNormalizationMin0Max    AIBotTimeseriesGroupsParamsNormalization = "MIN0_MAX"
+	AIBotTimeseriesGroupsParamsNormalizationPercentage       AIBotTimeseriesGroupsParamsNormalization = "PERCENTAGE"
+	AIBotTimeseriesGroupsParamsNormalizationMin0Max          AIBotTimeseriesGroupsParamsNormalization = "MIN0_MAX"
+	AIBotTimeseriesGroupsParamsNormalizationPercentageChange AIBotTimeseriesGroupsParamsNormalization = "PERCENTAGE_CHANGE"
 )
 
 func (r AIBotTimeseriesGroupsParamsNormalization) IsKnown() bool {
 	switch r {
-	case AIBotTimeseriesGroupsParamsNormalizationPercentage, AIBotTimeseriesGroupsParamsNormalizationMin0Max:
+	case AIBotTimeseriesGroupsParamsNormalizationPercentage, AIBotTimeseriesGroupsParamsNormalizationMin0Max, AIBotTimeseriesGroupsParamsNormalizationPercentageChange:
 		return true
 	}
 	return false
