@@ -779,6 +779,9 @@ type BotWebCrawlerTimeseriesGroupsParams struct {
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of names used to label the series in the response.
 	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied to the results. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[BotWebCrawlerTimeseriesGroupsParamsNormalization] `query:"normalization"`
 	// Filters results by HTTP response status code (e.g. 200, 403, 404). Only
 	// [IANA-registered codes](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml)
 	// are accepted.
@@ -869,6 +872,24 @@ const (
 func (r BotWebCrawlerTimeseriesGroupsParamsFormat) IsKnown() bool {
 	switch r {
 	case BotWebCrawlerTimeseriesGroupsParamsFormatJson, BotWebCrawlerTimeseriesGroupsParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Normalization method applied to the results. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type BotWebCrawlerTimeseriesGroupsParamsNormalization string
+
+const (
+	BotWebCrawlerTimeseriesGroupsParamsNormalizationPercentage       BotWebCrawlerTimeseriesGroupsParamsNormalization = "PERCENTAGE"
+	BotWebCrawlerTimeseriesGroupsParamsNormalizationMin0Max          BotWebCrawlerTimeseriesGroupsParamsNormalization = "MIN0_MAX"
+	BotWebCrawlerTimeseriesGroupsParamsNormalizationPercentageChange BotWebCrawlerTimeseriesGroupsParamsNormalization = "PERCENTAGE_CHANGE"
+)
+
+func (r BotWebCrawlerTimeseriesGroupsParamsNormalization) IsKnown() bool {
+	switch r {
+	case BotWebCrawlerTimeseriesGroupsParamsNormalizationPercentage, BotWebCrawlerTimeseriesGroupsParamsNormalizationMin0Max, BotWebCrawlerTimeseriesGroupsParamsNormalizationPercentageChange:
 		return true
 	}
 	return false

@@ -1672,13 +1672,14 @@ func (r NetFlowsTimeseriesGroupsParamsFormat) IsKnown() bool {
 type NetFlowsTimeseriesGroupsParamsNormalization string
 
 const (
-	NetFlowsTimeseriesGroupsParamsNormalizationPercentage NetFlowsTimeseriesGroupsParamsNormalization = "PERCENTAGE"
-	NetFlowsTimeseriesGroupsParamsNormalizationMin0Max    NetFlowsTimeseriesGroupsParamsNormalization = "MIN0_MAX"
+	NetFlowsTimeseriesGroupsParamsNormalizationPercentage       NetFlowsTimeseriesGroupsParamsNormalization = "PERCENTAGE"
+	NetFlowsTimeseriesGroupsParamsNormalizationMin0Max          NetFlowsTimeseriesGroupsParamsNormalization = "MIN0_MAX"
+	NetFlowsTimeseriesGroupsParamsNormalizationPercentageChange NetFlowsTimeseriesGroupsParamsNormalization = "PERCENTAGE_CHANGE"
 )
 
 func (r NetFlowsTimeseriesGroupsParamsNormalization) IsKnown() bool {
 	switch r {
-	case NetFlowsTimeseriesGroupsParamsNormalizationPercentage, NetFlowsTimeseriesGroupsParamsNormalizationMin0Max:
+	case NetFlowsTimeseriesGroupsParamsNormalizationPercentage, NetFlowsTimeseriesGroupsParamsNormalizationMin0Max, NetFlowsTimeseriesGroupsParamsNormalizationPercentageChange:
 		return true
 	}
 	return false
