@@ -70,6 +70,7 @@ func (r threatEventCountryListResponseJSON) RawJSON() string {
 }
 
 type ThreatEventCountryListResponseResult struct {
+	Alpha2 string                                   `json:"alpha2" api:"required"`
 	Alpha3 string                                   `json:"alpha3" api:"required"`
 	Name   string                                   `json:"name" api:"required"`
 	JSON   threatEventCountryListResponseResultJSON `json:"-"`
@@ -78,6 +79,7 @@ type ThreatEventCountryListResponseResult struct {
 // threatEventCountryListResponseResultJSON contains the JSON metadata for the
 // struct [ThreatEventCountryListResponseResult]
 type threatEventCountryListResponseResultJSON struct {
+	Alpha2      apijson.Field
 	Alpha3      apijson.Field
 	Name        apijson.Field
 	raw         string
