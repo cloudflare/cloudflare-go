@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/ai"
 	"github.com/cloudflare/cloudflare-go/v7/ai_gateway"
 	"github.com/cloudflare/cloudflare-go/v7/ai_search"
+	"github.com/cloudflare/cloudflare-go/v7/ai_security"
 	"github.com/cloudflare/cloudflare-go/v7/alerting"
 	"github.com/cloudflare/cloudflare-go/v7/api_gateway"
 	"github.com/cloudflare/cloudflare-go/v7/argo"
@@ -117,7 +118,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/zaraz"
 	"github.com/cloudflare/cloudflare-go/v7/zero_trust"
 	"github.com/cloudflare/cloudflare-go/v7/zones"
-	"github.com/cloudflare/cloudflare-go/v7/ai_security"
 )
 
 // Client creates a struct with services and top level methods that help with
