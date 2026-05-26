@@ -5765,7 +5765,9 @@ func (r sinkNewResponseEnvelopeJSON) RawJSON() string {
 
 type SinkListParams struct {
 	// Specifies the public ID of the account.
-	AccountID  param.Field[string]  `path:"account_id" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filters sinks by name (case-insensitive substring).
+	Name       param.Field[string]  `query:"name"`
 	Page       param.Field[float64] `query:"page"`
 	PerPage    param.Field[float64] `query:"per_page"`
 	PipelineID param.Field[string]  `query:"pipeline_id"`
