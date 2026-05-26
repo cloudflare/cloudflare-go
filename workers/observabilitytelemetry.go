@@ -153,8 +153,8 @@ func (r ObservabilityTelemetryKeysResponseType) IsKnown() bool {
 // Complete results of a query run. The populated fields depend on the requested
 // view type (events, calculations, invocations, traces, or agents).
 type ObservabilityTelemetryQueryResponse struct {
-	// The query run metadata including the query definition, execution status, and
-	// timeframe.
+	// Represents a single execution of a query against Workers Observability data,
+	// including the query definition, execution status, and performance statistics.
 	Run ObservabilityTelemetryQueryResponseRun `json:"run" api:"required"`
 	// Query performance statistics from the database. Includes execution time, rows
 	// scanned, and bytes read. Does not include network latency.
@@ -206,8 +206,8 @@ func (r observabilityTelemetryQueryResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The query run metadata including the query definition, execution status, and
-// timeframe.
+// Represents a single execution of a query against Workers Observability data,
+// including the query definition, execution status, and performance statistics.
 type ObservabilityTelemetryQueryResponseRun struct {
 	// Unique identifier for this query run.
 	ID string `json:"id" api:"required"`
@@ -475,8 +475,8 @@ type ObservabilityTelemetryQueryResponseRunQueryParametersFilter struct {
 	Key  string                                                           `json:"key"`
 	Kind ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKind `json:"kind"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation `json:"operation"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -619,8 +619,8 @@ type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservab
 	// $metadata.trigger, $metadata.message, and $metadata.error.
 	Key string `json:"key" api:"required"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation `json:"operation" api:"required"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -661,14 +661,15 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObser
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "includes"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEndsWith            ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "ends_with"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "regex"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "exists"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "is_null"
@@ -694,11 +695,12 @@ const (
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "IN"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase   ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEndsWith, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -805,14 +807,15 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersKind) IsKnow
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation string
 
 const (
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationIncludes            ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "includes"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNotIncludes         ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "not_includes"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationStartsWith          ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "starts_with"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationEndsWith            ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "ends_with"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationRegex               ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "regex"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationExists              ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "exists"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationIsNull              ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "is_null"
@@ -838,11 +841,12 @@ const (
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationInUppercase         ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "IN"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNotInUppercase      ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "NOT_IN"
 	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationStartsWithUppercase ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "STARTS_WITH"
+	ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationEndsWithUppercase   ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationIncludes, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNotIncludes, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationStartsWith, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationRegex, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationExists, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationIsNull, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationIn, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNotIn, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationEq, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNeq, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationGt, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationGte, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationLt, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationLte, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNotEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationGreater, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationGreaterOrEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationLess, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationLessOrEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationIncludesUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationDoesNotInclude, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationMatchRegex, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationExistsUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationDoesNotExist, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationInUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNotInUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationStartsWithUppercase:
+	case ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationIncludes, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNotIncludes, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationStartsWith, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationEndsWith, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationRegex, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationExists, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationIsNull, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationIn, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNotIn, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationEq, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNeq, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationGt, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationGte, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationLt, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationLte, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNotEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationGreater, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationGreaterOrEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationLess, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationLessOrEquals, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationIncludesUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationDoesNotInclude, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationMatchRegex, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationExistsUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationDoesNotExist, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationInUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationNotInUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationStartsWithUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersFiltersOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -1678,12 +1682,12 @@ type ObservabilityTelemetryQueryResponseEventsEvent struct {
 	Dataset string `json:"dataset" api:"required"`
 	// Raw log payload. May be a string or a structured object depending on how the log
 	// was emitted.
-	Source interface{} `json:"source" api:"required"`
+	Source ObservabilityTelemetryQueryResponseEventsEventsSourceUnion `json:"source" api:"required"`
 	// Event timestamp as a Unix epoch in milliseconds.
 	Timestamp int64 `json:"timestamp" api:"required"`
 	// Cloudflare Containers event information that enriches your logs for identifying
 	// and debugging issues.
-	Containers interface{} `json:"$containers"`
+	Containers map[string]interface{} `json:"$containers"`
 	// Cloudflare Workers event information that enriches your logs for identifying and
 	// debugging issues.
 	Workers ObservabilityTelemetryQueryResponseEventsEventsWorkers `json:"$workers"`
@@ -1720,8 +1724,7 @@ type ObservabilityTelemetryQueryResponseEventsEventsMetadata struct {
 	Account string `json:"account"`
 	// Cloudflare product that generated this event (e.g. workers, pages).
 	CloudService string `json:"cloudService"`
-	// Whether this was a cold start (1) or warm invocation (0).
-	ColdStart int64 `json:"coldStart"`
+	ColdStart    int64  `json:"coldStart"`
 	// Estimated cost units for this invocation.
 	Cost int64 `json:"cost"`
 	// Span duration in milliseconds.
@@ -1826,6 +1829,35 @@ func (r observabilityTelemetryQueryResponseEventsEventsMetadataJSON) RawJSON() s
 	return r.raw
 }
 
+// Raw log payload. May be a string or a structured object depending on how the log
+// was emitted.
+//
+// Union satisfied by [shared.UnionString] or
+// [ObservabilityTelemetryQueryResponseEventsEventsSourceMap].
+type ObservabilityTelemetryQueryResponseEventsEventsSourceUnion interface {
+	ImplementsObservabilityTelemetryQueryResponseEventsEventsSourceUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilityTelemetryQueryResponseEventsEventsSourceUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseEventsEventsSourceMap{}),
+		},
+	)
+}
+
+type ObservabilityTelemetryQueryResponseEventsEventsSourceMap map[string]interface{}
+
+func (r ObservabilityTelemetryQueryResponseEventsEventsSourceMap) ImplementsObservabilityTelemetryQueryResponseEventsEventsSourceUnion() {
+}
+
 // Cloudflare Workers event information that enriches your logs for identifying and
 // debugging issues.
 type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
@@ -1843,6 +1875,9 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
 	Event          interface{}                                                          `json:"event"`
 	ExecutionModel ObservabilityTelemetryQueryResponseEventsEventsWorkersExecutionModel `json:"executionModel"`
 	Outcome        string                                                               `json:"outcome"`
+	// This field can have the runtime type of
+	// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectPreview].
+	Preview interface{} `json:"preview"`
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion].
 	ScriptVersion interface{}                                                `json:"scriptVersion"`
@@ -1868,6 +1903,7 @@ type observabilityTelemetryQueryResponseEventsEventsWorkersJSON struct {
 	Event                    apijson.Field
 	ExecutionModel           apijson.Field
 	Outcome                  apijson.Field
+	Preview                  apijson.Field
 	ScriptVersion            apijson.Field
 	SpanID                   apijson.Field
 	TraceID                  apijson.Field
@@ -1934,6 +1970,7 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkersObject struct {
 	Event           map[string]interface{}                                                     `json:"event"`
 	ExecutionModel  ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectExecutionModel `json:"executionModel"`
 	Outcome         string                                                                     `json:"outcome"`
+	Preview         ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectPreview        `json:"preview"`
 	ScriptVersion   ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion  `json:"scriptVersion"`
 	SpanID          string                                                                     `json:"spanId"`
 	TraceID         string                                                                     `json:"traceId"`
@@ -1953,6 +1990,7 @@ type observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON struct {
 	Event           apijson.Field
 	ExecutionModel  apijson.Field
 	Outcome         apijson.Field
+	Preview         apijson.Field
 	ScriptVersion   apijson.Field
 	SpanID          apijson.Field
 	TraceID         apijson.Field
@@ -2009,6 +2047,32 @@ func (r ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectExecutionMod
 		return true
 	}
 	return false
+}
+
+type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectPreview struct {
+	ID   string                                                                  `json:"id"`
+	Name string                                                                  `json:"name"`
+	Slug string                                                                  `json:"slug"`
+	JSON observabilityTelemetryQueryResponseEventsEventsWorkersObjectPreviewJSON `json:"-"`
+}
+
+// observabilityTelemetryQueryResponseEventsEventsWorkersObjectPreviewJSON contains
+// the JSON metadata for the struct
+// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectPreview]
+type observabilityTelemetryQueryResponseEventsEventsWorkersObjectPreviewJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	Slug        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectPreview) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilityTelemetryQueryResponseEventsEventsWorkersObjectPreviewJSON) RawJSON() string {
+	return r.raw
 }
 
 type ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion struct {
@@ -2230,12 +2294,12 @@ type ObservabilityTelemetryQueryResponseInvocation struct {
 	Dataset string `json:"dataset" api:"required"`
 	// Raw log payload. May be a string or a structured object depending on how the log
 	// was emitted.
-	Source interface{} `json:"source" api:"required"`
+	Source ObservabilityTelemetryQueryResponseInvocationsSourceUnion `json:"source" api:"required"`
 	// Event timestamp as a Unix epoch in milliseconds.
 	Timestamp int64 `json:"timestamp" api:"required"`
 	// Cloudflare Containers event information that enriches your logs for identifying
 	// and debugging issues.
-	Containers interface{} `json:"$containers"`
+	Containers map[string]interface{} `json:"$containers"`
 	// Cloudflare Workers event information that enriches your logs for identifying and
 	// debugging issues.
 	Workers ObservabilityTelemetryQueryResponseInvocationsWorkers `json:"$workers"`
@@ -2272,8 +2336,7 @@ type ObservabilityTelemetryQueryResponseInvocationsMetadata struct {
 	Account string `json:"account"`
 	// Cloudflare product that generated this event (e.g. workers, pages).
 	CloudService string `json:"cloudService"`
-	// Whether this was a cold start (1) or warm invocation (0).
-	ColdStart int64 `json:"coldStart"`
+	ColdStart    int64  `json:"coldStart"`
 	// Estimated cost units for this invocation.
 	Cost int64 `json:"cost"`
 	// Span duration in milliseconds.
@@ -2377,6 +2440,35 @@ func (r observabilityTelemetryQueryResponseInvocationsMetadataJSON) RawJSON() st
 	return r.raw
 }
 
+// Raw log payload. May be a string or a structured object depending on how the log
+// was emitted.
+//
+// Union satisfied by [shared.UnionString] or
+// [ObservabilityTelemetryQueryResponseInvocationsSourceMap].
+type ObservabilityTelemetryQueryResponseInvocationsSourceUnion interface {
+	ImplementsObservabilityTelemetryQueryResponseInvocationsSourceUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilityTelemetryQueryResponseInvocationsSourceUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ObservabilityTelemetryQueryResponseInvocationsSourceMap{}),
+		},
+	)
+}
+
+type ObservabilityTelemetryQueryResponseInvocationsSourceMap map[string]interface{}
+
+func (r ObservabilityTelemetryQueryResponseInvocationsSourceMap) ImplementsObservabilityTelemetryQueryResponseInvocationsSourceUnion() {
+}
+
 // Cloudflare Workers event information that enriches your logs for identifying and
 // debugging issues.
 type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
@@ -2394,6 +2486,9 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
 	Event          interface{}                                                         `json:"event"`
 	ExecutionModel ObservabilityTelemetryQueryResponseInvocationsWorkersExecutionModel `json:"executionModel"`
 	Outcome        string                                                              `json:"outcome"`
+	// This field can have the runtime type of
+	// [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectPreview].
+	Preview interface{} `json:"preview"`
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion].
 	ScriptVersion interface{}                                               `json:"scriptVersion"`
@@ -2419,6 +2514,7 @@ type observabilityTelemetryQueryResponseInvocationsWorkersJSON struct {
 	Event                    apijson.Field
 	ExecutionModel           apijson.Field
 	Outcome                  apijson.Field
+	Preview                  apijson.Field
 	ScriptVersion            apijson.Field
 	SpanID                   apijson.Field
 	TraceID                  apijson.Field
@@ -2484,6 +2580,7 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkersObject struct {
 	Event           map[string]interface{}                                                    `json:"event"`
 	ExecutionModel  ObservabilityTelemetryQueryResponseInvocationsWorkersObjectExecutionModel `json:"executionModel"`
 	Outcome         string                                                                    `json:"outcome"`
+	Preview         ObservabilityTelemetryQueryResponseInvocationsWorkersObjectPreview        `json:"preview"`
 	ScriptVersion   ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion  `json:"scriptVersion"`
 	SpanID          string                                                                    `json:"spanId"`
 	TraceID         string                                                                    `json:"traceId"`
@@ -2503,6 +2600,7 @@ type observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON struct {
 	Event           apijson.Field
 	ExecutionModel  apijson.Field
 	Outcome         apijson.Field
+	Preview         apijson.Field
 	ScriptVersion   apijson.Field
 	SpanID          apijson.Field
 	TraceID         apijson.Field
@@ -2559,6 +2657,32 @@ func (r ObservabilityTelemetryQueryResponseInvocationsWorkersObjectExecutionMode
 		return true
 	}
 	return false
+}
+
+type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectPreview struct {
+	ID   string                                                                 `json:"id"`
+	Name string                                                                 `json:"name"`
+	Slug string                                                                 `json:"slug"`
+	JSON observabilityTelemetryQueryResponseInvocationsWorkersObjectPreviewJSON `json:"-"`
+}
+
+// observabilityTelemetryQueryResponseInvocationsWorkersObjectPreviewJSON contains
+// the JSON metadata for the struct
+// [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectPreview]
+type observabilityTelemetryQueryResponseInvocationsWorkersObjectPreviewJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	Slug        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ObservabilityTelemetryQueryResponseInvocationsWorkersObjectPreview) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilityTelemetryQueryResponseInvocationsWorkersObjectPreviewJSON) RawJSON() string {
+	return r.raw
 }
 
 type ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion struct {
@@ -2777,8 +2901,8 @@ type ObservabilityTelemetryKeysParamsFilter struct {
 	Key  param.Field[string]                                      `json:"key"`
 	Kind param.Field[ObservabilityTelemetryKeysParamsFiltersKind] `json:"kind"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersOperation] `json:"operation"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -2842,8 +2966,8 @@ type ObservabilityTelemetryKeysParamsFiltersObjectFilter struct {
 	Key  param.Field[string]                                                   `json:"key"`
 	Kind param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersKind] `json:"kind"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation] `json:"operation"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -2920,8 +3044,8 @@ type ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFil
 	// $metadata.trigger, $metadata.message, and $metadata.error.
 	Key param.Field[string] `json:"key" api:"required"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -2944,14 +3068,15 @@ func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservability
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "includes"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWith            ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "ends_with"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "regex"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "exists"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "is_null"
@@ -2977,11 +3102,12 @@ const (
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "IN"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase   ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWith, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -3064,14 +3190,15 @@ func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersKind) IsKnown() bool
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation string
 
 const (
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIncludes            ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "includes"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotIncludes         ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "not_includes"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationStartsWith          ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "starts_with"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEndsWith            ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "ends_with"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationRegex               ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "regex"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationExists              ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "exists"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIsNull              ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "is_null"
@@ -3097,11 +3224,12 @@ const (
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationInUppercase         ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "IN"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotInUppercase      ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "NOT_IN"
 	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationStartsWithUppercase ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "STARTS_WITH"
+	ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEndsWithUppercase   ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationExists, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIsNull, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNeq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGreater, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLess, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationStartsWithUppercase:
+	case ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEndsWith, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationExists, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIsNull, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotIn, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNeq, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLt, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLte, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGreater, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLess, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationStartsWithUppercase, ObservabilityTelemetryKeysParamsFiltersObjectFiltersOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -3147,8 +3275,8 @@ type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf struc
 	// $metadata.trigger, $metadata.message, and $metadata.error.
 	Key param.Field[string] `json:"key" api:"required"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -3171,14 +3299,15 @@ func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeaf) i
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
 	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "includes"
 	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
 	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEndsWith            ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "ends_with"
 	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "regex"
 	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "exists"
 	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "is_null"
@@ -3204,11 +3333,12 @@ const (
 	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "IN"
 	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
 	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+	ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase   ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+	case ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEndsWith, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase, ObservabilityTelemetryKeysParamsFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -3291,14 +3421,15 @@ func (r ObservabilityTelemetryKeysParamsFiltersKind) IsKnown() bool {
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryKeysParamsFiltersOperation string
 
 const (
 	ObservabilityTelemetryKeysParamsFiltersOperationIncludes            ObservabilityTelemetryKeysParamsFiltersOperation = "includes"
 	ObservabilityTelemetryKeysParamsFiltersOperationNotIncludes         ObservabilityTelemetryKeysParamsFiltersOperation = "not_includes"
 	ObservabilityTelemetryKeysParamsFiltersOperationStartsWith          ObservabilityTelemetryKeysParamsFiltersOperation = "starts_with"
+	ObservabilityTelemetryKeysParamsFiltersOperationEndsWith            ObservabilityTelemetryKeysParamsFiltersOperation = "ends_with"
 	ObservabilityTelemetryKeysParamsFiltersOperationRegex               ObservabilityTelemetryKeysParamsFiltersOperation = "regex"
 	ObservabilityTelemetryKeysParamsFiltersOperationExists              ObservabilityTelemetryKeysParamsFiltersOperation = "exists"
 	ObservabilityTelemetryKeysParamsFiltersOperationIsNull              ObservabilityTelemetryKeysParamsFiltersOperation = "is_null"
@@ -3324,11 +3455,12 @@ const (
 	ObservabilityTelemetryKeysParamsFiltersOperationInUppercase         ObservabilityTelemetryKeysParamsFiltersOperation = "IN"
 	ObservabilityTelemetryKeysParamsFiltersOperationNotInUppercase      ObservabilityTelemetryKeysParamsFiltersOperation = "NOT_IN"
 	ObservabilityTelemetryKeysParamsFiltersOperationStartsWithUppercase ObservabilityTelemetryKeysParamsFiltersOperation = "STARTS_WITH"
+	ObservabilityTelemetryKeysParamsFiltersOperationEndsWithUppercase   ObservabilityTelemetryKeysParamsFiltersOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryKeysParamsFiltersOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryKeysParamsFiltersOperationIncludes, ObservabilityTelemetryKeysParamsFiltersOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersOperationRegex, ObservabilityTelemetryKeysParamsFiltersOperationExists, ObservabilityTelemetryKeysParamsFiltersOperationIsNull, ObservabilityTelemetryKeysParamsFiltersOperationIn, ObservabilityTelemetryKeysParamsFiltersOperationNotIn, ObservabilityTelemetryKeysParamsFiltersOperationEq, ObservabilityTelemetryKeysParamsFiltersOperationNeq, ObservabilityTelemetryKeysParamsFiltersOperationGt, ObservabilityTelemetryKeysParamsFiltersOperationGte, ObservabilityTelemetryKeysParamsFiltersOperationLt, ObservabilityTelemetryKeysParamsFiltersOperationLte, ObservabilityTelemetryKeysParamsFiltersOperationEquals, ObservabilityTelemetryKeysParamsFiltersOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersOperationGreater, ObservabilityTelemetryKeysParamsFiltersOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersOperationLess, ObservabilityTelemetryKeysParamsFiltersOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersOperationStartsWithUppercase:
+	case ObservabilityTelemetryKeysParamsFiltersOperationIncludes, ObservabilityTelemetryKeysParamsFiltersOperationNotIncludes, ObservabilityTelemetryKeysParamsFiltersOperationStartsWith, ObservabilityTelemetryKeysParamsFiltersOperationEndsWith, ObservabilityTelemetryKeysParamsFiltersOperationRegex, ObservabilityTelemetryKeysParamsFiltersOperationExists, ObservabilityTelemetryKeysParamsFiltersOperationIsNull, ObservabilityTelemetryKeysParamsFiltersOperationIn, ObservabilityTelemetryKeysParamsFiltersOperationNotIn, ObservabilityTelemetryKeysParamsFiltersOperationEq, ObservabilityTelemetryKeysParamsFiltersOperationNeq, ObservabilityTelemetryKeysParamsFiltersOperationGt, ObservabilityTelemetryKeysParamsFiltersOperationGte, ObservabilityTelemetryKeysParamsFiltersOperationLt, ObservabilityTelemetryKeysParamsFiltersOperationLte, ObservabilityTelemetryKeysParamsFiltersOperationEquals, ObservabilityTelemetryKeysParamsFiltersOperationNotEquals, ObservabilityTelemetryKeysParamsFiltersOperationGreater, ObservabilityTelemetryKeysParamsFiltersOperationGreaterOrEquals, ObservabilityTelemetryKeysParamsFiltersOperationLess, ObservabilityTelemetryKeysParamsFiltersOperationLessOrEquals, ObservabilityTelemetryKeysParamsFiltersOperationIncludesUppercase, ObservabilityTelemetryKeysParamsFiltersOperationDoesNotInclude, ObservabilityTelemetryKeysParamsFiltersOperationMatchRegex, ObservabilityTelemetryKeysParamsFiltersOperationExistsUppercase, ObservabilityTelemetryKeysParamsFiltersOperationDoesNotExist, ObservabilityTelemetryKeysParamsFiltersOperationInUppercase, ObservabilityTelemetryKeysParamsFiltersOperationNotInUppercase, ObservabilityTelemetryKeysParamsFiltersOperationStartsWithUppercase, ObservabilityTelemetryKeysParamsFiltersOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -3498,7 +3630,7 @@ func (r ObservabilityTelemetryQueryParamsParameters) MarshalJSON() (data []byte,
 }
 
 type ObservabilityTelemetryQueryParamsParametersCalculation struct {
-	// Aggregation operator to apply. Examples: count, avg, sum, min, max, p50, p90,
+	// Aggregation operator to apply. Examples: count, avg, sum, min, max, median, p90,
 	// p95, p99, uniq, stddev, variance.
 	Operator param.Field[ObservabilityTelemetryQueryParamsParametersCalculationsOperator] `json:"operator" api:"required"`
 	// Custom label for this calculation in the results. Useful for distinguishing
@@ -3516,7 +3648,7 @@ func (r ObservabilityTelemetryQueryParamsParametersCalculation) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-// Aggregation operator to apply. Examples: count, avg, sum, min, max, p50, p90,
+// Aggregation operator to apply. Examples: count, avg, sum, min, max, median, p90,
 // p95, p99, uniq, stddev, variance.
 type ObservabilityTelemetryQueryParamsParametersCalculationsOperator string
 
@@ -3616,8 +3748,8 @@ type ObservabilityTelemetryQueryParamsParametersFilter struct {
 	Key  param.Field[string]                                                 `json:"key"`
 	Kind param.Field[ObservabilityTelemetryQueryParamsParametersFiltersKind] `json:"kind"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersOperation] `json:"operation"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -3681,8 +3813,8 @@ type ObservabilityTelemetryQueryParamsParametersFiltersObjectFilter struct {
 	Key  param.Field[string]                                                              `json:"key"`
 	Kind param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKind] `json:"kind"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation] `json:"operation"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -3759,8 +3891,8 @@ type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObser
 	// $metadata.trigger, $metadata.message, and $metadata.error.
 	Key param.Field[string] `json:"key" api:"required"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -3783,14 +3915,15 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersOb
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "includes"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWith            ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "ends_with"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "regex"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "exists"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "is_null"
@@ -3816,11 +3949,12 @@ const (
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "IN"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase   ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWith, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -3903,14 +4037,15 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersKind) IsK
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation string
 
 const (
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIncludes            ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "includes"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotIncludes         ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "not_includes"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationStartsWith          ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "starts_with"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEndsWith            ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "ends_with"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationRegex               ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "regex"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationExists              ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "exists"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIsNull              ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "is_null"
@@ -3936,11 +4071,12 @@ const (
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationInUppercase         ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "IN"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotInUppercase      ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "NOT_IN"
 	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationStartsWithUppercase ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "STARTS_WITH"
+	ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEndsWithUppercase   ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationStartsWithUppercase:
+	case ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEndsWith, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationStartsWithUppercase, ObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -3986,8 +4122,8 @@ type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilte
 	// $metadata.trigger, $metadata.message, and $metadata.error.
 	Key param.Field[string] `json:"key" api:"required"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -4010,14 +4146,15 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFi
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
 	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "includes"
 	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
 	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEndsWith            ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "ends_with"
 	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "regex"
 	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "exists"
 	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "is_null"
@@ -4043,11 +4180,12 @@ const (
 	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "IN"
 	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
 	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+	ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase   ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+	case ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEndsWith, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase, ObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -4130,14 +4268,15 @@ func (r ObservabilityTelemetryQueryParamsParametersFiltersKind) IsKnown() bool {
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryQueryParamsParametersFiltersOperation string
 
 const (
 	ObservabilityTelemetryQueryParamsParametersFiltersOperationIncludes            ObservabilityTelemetryQueryParamsParametersFiltersOperation = "includes"
 	ObservabilityTelemetryQueryParamsParametersFiltersOperationNotIncludes         ObservabilityTelemetryQueryParamsParametersFiltersOperation = "not_includes"
 	ObservabilityTelemetryQueryParamsParametersFiltersOperationStartsWith          ObservabilityTelemetryQueryParamsParametersFiltersOperation = "starts_with"
+	ObservabilityTelemetryQueryParamsParametersFiltersOperationEndsWith            ObservabilityTelemetryQueryParamsParametersFiltersOperation = "ends_with"
 	ObservabilityTelemetryQueryParamsParametersFiltersOperationRegex               ObservabilityTelemetryQueryParamsParametersFiltersOperation = "regex"
 	ObservabilityTelemetryQueryParamsParametersFiltersOperationExists              ObservabilityTelemetryQueryParamsParametersFiltersOperation = "exists"
 	ObservabilityTelemetryQueryParamsParametersFiltersOperationIsNull              ObservabilityTelemetryQueryParamsParametersFiltersOperation = "is_null"
@@ -4163,11 +4302,12 @@ const (
 	ObservabilityTelemetryQueryParamsParametersFiltersOperationInUppercase         ObservabilityTelemetryQueryParamsParametersFiltersOperation = "IN"
 	ObservabilityTelemetryQueryParamsParametersFiltersOperationNotInUppercase      ObservabilityTelemetryQueryParamsParametersFiltersOperation = "NOT_IN"
 	ObservabilityTelemetryQueryParamsParametersFiltersOperationStartsWithUppercase ObservabilityTelemetryQueryParamsParametersFiltersOperation = "STARTS_WITH"
+	ObservabilityTelemetryQueryParamsParametersFiltersOperationEndsWithUppercase   ObservabilityTelemetryQueryParamsParametersFiltersOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryQueryParamsParametersFiltersOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryParamsParametersFiltersOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersOperationStartsWithUppercase:
+	case ObservabilityTelemetryQueryParamsParametersFiltersOperationIncludes, ObservabilityTelemetryQueryParamsParametersFiltersOperationNotIncludes, ObservabilityTelemetryQueryParamsParametersFiltersOperationStartsWith, ObservabilityTelemetryQueryParamsParametersFiltersOperationEndsWith, ObservabilityTelemetryQueryParamsParametersFiltersOperationRegex, ObservabilityTelemetryQueryParamsParametersFiltersOperationExists, ObservabilityTelemetryQueryParamsParametersFiltersOperationIsNull, ObservabilityTelemetryQueryParamsParametersFiltersOperationIn, ObservabilityTelemetryQueryParamsParametersFiltersOperationNotIn, ObservabilityTelemetryQueryParamsParametersFiltersOperationEq, ObservabilityTelemetryQueryParamsParametersFiltersOperationNeq, ObservabilityTelemetryQueryParamsParametersFiltersOperationGt, ObservabilityTelemetryQueryParamsParametersFiltersOperationGte, ObservabilityTelemetryQueryParamsParametersFiltersOperationLt, ObservabilityTelemetryQueryParamsParametersFiltersOperationLte, ObservabilityTelemetryQueryParamsParametersFiltersOperationEquals, ObservabilityTelemetryQueryParamsParametersFiltersOperationNotEquals, ObservabilityTelemetryQueryParamsParametersFiltersOperationGreater, ObservabilityTelemetryQueryParamsParametersFiltersOperationGreaterOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersOperationLess, ObservabilityTelemetryQueryParamsParametersFiltersOperationLessOrEquals, ObservabilityTelemetryQueryParamsParametersFiltersOperationIncludesUppercase, ObservabilityTelemetryQueryParamsParametersFiltersOperationDoesNotInclude, ObservabilityTelemetryQueryParamsParametersFiltersOperationMatchRegex, ObservabilityTelemetryQueryParamsParametersFiltersOperationExistsUppercase, ObservabilityTelemetryQueryParamsParametersFiltersOperationDoesNotExist, ObservabilityTelemetryQueryParamsParametersFiltersOperationInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersOperationNotInUppercase, ObservabilityTelemetryQueryParamsParametersFiltersOperationStartsWithUppercase, ObservabilityTelemetryQueryParamsParametersFiltersOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -4482,8 +4622,8 @@ type ObservabilityTelemetryValuesParamsFilter struct {
 	Key  param.Field[string]                                        `json:"key"`
 	Kind param.Field[ObservabilityTelemetryValuesParamsFiltersKind] `json:"kind"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersOperation] `json:"operation"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -4547,8 +4687,8 @@ type ObservabilityTelemetryValuesParamsFiltersObjectFilter struct {
 	Key  param.Field[string]                                                     `json:"key"`
 	Kind param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersKind] `json:"kind"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation] `json:"operation"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -4625,8 +4765,8 @@ type ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityF
 	// $metadata.trigger, $metadata.message, and $metadata.error.
 	Key param.Field[string] `json:"key" api:"required"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -4649,14 +4789,15 @@ func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabili
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "includes"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWith            ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "ends_with"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "regex"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "exists"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "is_null"
@@ -4682,11 +4823,12 @@ const (
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "IN"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase   ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWith, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -4769,14 +4911,15 @@ func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersKind) IsKnown() bo
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation string
 
 const (
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIncludes            ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "includes"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotIncludes         ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "not_includes"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationStartsWith          ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "starts_with"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEndsWith            ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "ends_with"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationRegex               ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "regex"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationExists              ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "exists"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIsNull              ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "is_null"
@@ -4802,11 +4945,12 @@ const (
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationInUppercase         ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "IN"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotInUppercase      ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "NOT_IN"
 	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationStartsWithUppercase ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "STARTS_WITH"
+	ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEndsWithUppercase   ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationExists, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIsNull, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNeq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGreater, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLess, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationStartsWithUppercase:
+	case ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEndsWith, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationExists, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIsNull, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotIn, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNeq, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLt, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLte, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGreater, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLess, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationStartsWithUppercase, ObservabilityTelemetryValuesParamsFiltersObjectFiltersOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -4852,8 +4996,8 @@ type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf str
 	// $metadata.trigger, $metadata.message, and $metadata.error.
 	Key param.Field[string] `json:"key" api:"required"`
 	// Comparison operator. String operators: includes, not_includes, starts_with,
-	// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-	// values). Numeric: eq, neq, gt, gte, lt, lte.
+	// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+	// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 	Operation param.Field[ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation] `json:"operation" api:"required"`
 	// Data type of the filter field. Must match the actual type of the key being
 	// filtered.
@@ -4876,14 +5020,15 @@ func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeaf)
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation string
 
 const (
 	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIncludes            ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "includes"
 	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotIncludes         ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "not_includes"
 	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationStartsWith          ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "starts_with"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEndsWith            ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "ends_with"
 	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationRegex               ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "regex"
 	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationExists              ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "exists"
 	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIsNull              ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "is_null"
@@ -4909,11 +5054,12 @@ const (
 	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationInUppercase         ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "IN"
 	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotInUppercase      ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "NOT_IN"
 	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "STARTS_WITH"
+	ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase   ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase:
+	case ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIncludes, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEndsWith, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationRegex, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationExists, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIsNull, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIn, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotIn, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEq, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNeq, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGt, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGte, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLt, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLte, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGreater, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLess, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationStartsWithUppercase, ObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafOperationEndsWithUppercase:
 		return true
 	}
 	return false
@@ -4996,14 +5142,15 @@ func (r ObservabilityTelemetryValuesParamsFiltersKind) IsKnown() bool {
 }
 
 // Comparison operator. String operators: includes, not_includes, starts_with,
-// regex. Existence: exists, is_null. Set membership: in, not_in (comma-separated
-// values). Numeric: eq, neq, gt, gte, lt, lte.
+// ends_with, regex. Existence: exists, is_null. Set membership: in, not_in
+// (comma-separated values). Numeric: eq, neq, gt, gte, lt, lte.
 type ObservabilityTelemetryValuesParamsFiltersOperation string
 
 const (
 	ObservabilityTelemetryValuesParamsFiltersOperationIncludes            ObservabilityTelemetryValuesParamsFiltersOperation = "includes"
 	ObservabilityTelemetryValuesParamsFiltersOperationNotIncludes         ObservabilityTelemetryValuesParamsFiltersOperation = "not_includes"
 	ObservabilityTelemetryValuesParamsFiltersOperationStartsWith          ObservabilityTelemetryValuesParamsFiltersOperation = "starts_with"
+	ObservabilityTelemetryValuesParamsFiltersOperationEndsWith            ObservabilityTelemetryValuesParamsFiltersOperation = "ends_with"
 	ObservabilityTelemetryValuesParamsFiltersOperationRegex               ObservabilityTelemetryValuesParamsFiltersOperation = "regex"
 	ObservabilityTelemetryValuesParamsFiltersOperationExists              ObservabilityTelemetryValuesParamsFiltersOperation = "exists"
 	ObservabilityTelemetryValuesParamsFiltersOperationIsNull              ObservabilityTelemetryValuesParamsFiltersOperation = "is_null"
@@ -5029,11 +5176,12 @@ const (
 	ObservabilityTelemetryValuesParamsFiltersOperationInUppercase         ObservabilityTelemetryValuesParamsFiltersOperation = "IN"
 	ObservabilityTelemetryValuesParamsFiltersOperationNotInUppercase      ObservabilityTelemetryValuesParamsFiltersOperation = "NOT_IN"
 	ObservabilityTelemetryValuesParamsFiltersOperationStartsWithUppercase ObservabilityTelemetryValuesParamsFiltersOperation = "STARTS_WITH"
+	ObservabilityTelemetryValuesParamsFiltersOperationEndsWithUppercase   ObservabilityTelemetryValuesParamsFiltersOperation = "ENDS_WITH"
 )
 
 func (r ObservabilityTelemetryValuesParamsFiltersOperation) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryValuesParamsFiltersOperationIncludes, ObservabilityTelemetryValuesParamsFiltersOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersOperationRegex, ObservabilityTelemetryValuesParamsFiltersOperationExists, ObservabilityTelemetryValuesParamsFiltersOperationIsNull, ObservabilityTelemetryValuesParamsFiltersOperationIn, ObservabilityTelemetryValuesParamsFiltersOperationNotIn, ObservabilityTelemetryValuesParamsFiltersOperationEq, ObservabilityTelemetryValuesParamsFiltersOperationNeq, ObservabilityTelemetryValuesParamsFiltersOperationGt, ObservabilityTelemetryValuesParamsFiltersOperationGte, ObservabilityTelemetryValuesParamsFiltersOperationLt, ObservabilityTelemetryValuesParamsFiltersOperationLte, ObservabilityTelemetryValuesParamsFiltersOperationEquals, ObservabilityTelemetryValuesParamsFiltersOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersOperationGreater, ObservabilityTelemetryValuesParamsFiltersOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersOperationLess, ObservabilityTelemetryValuesParamsFiltersOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersOperationStartsWithUppercase:
+	case ObservabilityTelemetryValuesParamsFiltersOperationIncludes, ObservabilityTelemetryValuesParamsFiltersOperationNotIncludes, ObservabilityTelemetryValuesParamsFiltersOperationStartsWith, ObservabilityTelemetryValuesParamsFiltersOperationEndsWith, ObservabilityTelemetryValuesParamsFiltersOperationRegex, ObservabilityTelemetryValuesParamsFiltersOperationExists, ObservabilityTelemetryValuesParamsFiltersOperationIsNull, ObservabilityTelemetryValuesParamsFiltersOperationIn, ObservabilityTelemetryValuesParamsFiltersOperationNotIn, ObservabilityTelemetryValuesParamsFiltersOperationEq, ObservabilityTelemetryValuesParamsFiltersOperationNeq, ObservabilityTelemetryValuesParamsFiltersOperationGt, ObservabilityTelemetryValuesParamsFiltersOperationGte, ObservabilityTelemetryValuesParamsFiltersOperationLt, ObservabilityTelemetryValuesParamsFiltersOperationLte, ObservabilityTelemetryValuesParamsFiltersOperationEquals, ObservabilityTelemetryValuesParamsFiltersOperationNotEquals, ObservabilityTelemetryValuesParamsFiltersOperationGreater, ObservabilityTelemetryValuesParamsFiltersOperationGreaterOrEquals, ObservabilityTelemetryValuesParamsFiltersOperationLess, ObservabilityTelemetryValuesParamsFiltersOperationLessOrEquals, ObservabilityTelemetryValuesParamsFiltersOperationIncludesUppercase, ObservabilityTelemetryValuesParamsFiltersOperationDoesNotInclude, ObservabilityTelemetryValuesParamsFiltersOperationMatchRegex, ObservabilityTelemetryValuesParamsFiltersOperationExistsUppercase, ObservabilityTelemetryValuesParamsFiltersOperationDoesNotExist, ObservabilityTelemetryValuesParamsFiltersOperationInUppercase, ObservabilityTelemetryValuesParamsFiltersOperationNotInUppercase, ObservabilityTelemetryValuesParamsFiltersOperationStartsWithUppercase, ObservabilityTelemetryValuesParamsFiltersOperationEndsWithUppercase:
 		return true
 	}
 	return false
