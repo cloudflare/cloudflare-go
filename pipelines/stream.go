@@ -5312,9 +5312,11 @@ func (r streamUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type StreamListParams struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string]  `path:"account_id" api:"required"`
-	Page      param.Field[float64] `query:"page"`
-	PerPage   param.Field[float64] `query:"per_page"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filters streams by name (case-insensitive substring).
+	Name    param.Field[string]  `query:"name"`
+	Page    param.Field[float64] `query:"page"`
+	PerPage param.Field[float64] `query:"per_page"`
 	// Specifies the public ID of the pipeline.
 	PipelineID param.Field[string] `query:"pipeline_id"`
 }

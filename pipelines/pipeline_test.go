@@ -327,6 +327,7 @@ func TestPipelineListV1WithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Pipelines.ListV1(context.TODO(), pipelines.PipelineListV1Params{
 		AccountID: cloudflare.F("0123105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("x"),
 		Page:      cloudflare.F(0.000000),
 		PerPage:   cloudflare.F(0.000000),
 	})
