@@ -191,52 +191,61 @@ func (r accessAIControlMcpPortalNewResponseJSON) RawJSON() string {
 
 type AccessAIControlMcpPortalNewResponseServer struct {
 	// server id
-	ID                 string                                                    `json:"id" api:"required"`
-	AuthType           AccessAIControlMcpPortalNewResponseServersAuthType        `json:"auth_type" api:"required"`
-	Hostname           string                                                    `json:"hostname" api:"required" format:"uri"`
-	Name               string                                                    `json:"name" api:"required"`
-	Prompts            []map[string]interface{}                                  `json:"prompts" api:"required"`
-	Tools              []map[string]interface{}                                  `json:"tools" api:"required"`
-	CreatedAt          time.Time                                                 `json:"created_at" format:"date-time"`
-	CreatedBy          string                                                    `json:"created_by"`
-	DefaultDisabled    bool                                                      `json:"default_disabled"`
-	Description        string                                                    `json:"description" api:"nullable"`
-	Error              string                                                    `json:"error"`
-	LastSuccessfulSync time.Time                                                 `json:"last_successful_sync" format:"date-time"`
-	LastSynced         time.Time                                                 `json:"last_synced" format:"date-time"`
-	ModifiedAt         time.Time                                                 `json:"modified_at" format:"date-time"`
-	ModifiedBy         string                                                    `json:"modified_by"`
-	OnBehalf           bool                                                      `json:"on_behalf"`
-	Status             string                                                    `json:"status"`
-	UpdatedPrompts     []AccessAIControlMcpPortalNewResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools       []AccessAIControlMcpPortalNewResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON               accessAIControlMcpPortalNewResponseServerJSON             `json:"-"`
+	ID              string                                                 `json:"id" api:"required"`
+	AuthType        AccessAIControlMcpPortalNewResponseServersAuthType     `json:"auth_type" api:"required"`
+	Hostname        string                                                 `json:"hostname" api:"required" format:"uri"`
+	Name            string                                                 `json:"name" api:"required"`
+	Prompts         []map[string]interface{}                               `json:"prompts" api:"required"`
+	Tools           []map[string]interface{}                               `json:"tools" api:"required"`
+	CreatedAt       time.Time                                              `json:"created_at" format:"date-time"`
+	CreatedBy       string                                                 `json:"created_by"`
+	DefaultDisabled bool                                                   `json:"default_disabled"`
+	Description     string                                                 `json:"description" api:"nullable"`
+	Error           string                                                 `json:"error"`
+	ErrorDetails    AccessAIControlMcpPortalNewResponseServersErrorDetails `json:"error_details"`
+	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
+	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
+	// customer portal hostname. New servers default to true; existing servers default
+	// to false. Effective behavior is gated by the gateway worker's per-env rollout
+	// mode KV key.
+	IsSharedOAuthCallbackEnabled bool                                                      `json:"is_shared_oauth_callback_enabled"`
+	LastSuccessfulSync           time.Time                                                 `json:"last_successful_sync" format:"date-time"`
+	LastSynced                   time.Time                                                 `json:"last_synced" format:"date-time"`
+	ModifiedAt                   time.Time                                                 `json:"modified_at" format:"date-time"`
+	ModifiedBy                   string                                                    `json:"modified_by"`
+	OnBehalf                     bool                                                      `json:"on_behalf"`
+	Status                       string                                                    `json:"status"`
+	UpdatedPrompts               []AccessAIControlMcpPortalNewResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools                 []AccessAIControlMcpPortalNewResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON                         accessAIControlMcpPortalNewResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalNewResponseServerJSON contains the JSON metadata for the
 // struct [AccessAIControlMcpPortalNewResponseServer]
 type accessAIControlMcpPortalNewResponseServerJSON struct {
-	ID                 apijson.Field
-	AuthType           apijson.Field
-	Hostname           apijson.Field
-	Name               apijson.Field
-	Prompts            apijson.Field
-	Tools              apijson.Field
-	CreatedAt          apijson.Field
-	CreatedBy          apijson.Field
-	DefaultDisabled    apijson.Field
-	Description        apijson.Field
-	Error              apijson.Field
-	LastSuccessfulSync apijson.Field
-	LastSynced         apijson.Field
-	ModifiedAt         apijson.Field
-	ModifiedBy         apijson.Field
-	OnBehalf           apijson.Field
-	Status             apijson.Field
-	UpdatedPrompts     apijson.Field
-	UpdatedTools       apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	ID                           apijson.Field
+	AuthType                     apijson.Field
+	Hostname                     apijson.Field
+	Name                         apijson.Field
+	Prompts                      apijson.Field
+	Tools                        apijson.Field
+	CreatedAt                    apijson.Field
+	CreatedBy                    apijson.Field
+	DefaultDisabled              apijson.Field
+	Description                  apijson.Field
+	Error                        apijson.Field
+	ErrorDetails                 apijson.Field
+	IsSharedOAuthCallbackEnabled apijson.Field
+	LastSuccessfulSync           apijson.Field
+	LastSynced                   apijson.Field
+	ModifiedAt                   apijson.Field
+	ModifiedBy                   apijson.Field
+	OnBehalf                     apijson.Field
+	Status                       apijson.Field
+	UpdatedPrompts               apijson.Field
+	UpdatedTools                 apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalNewResponseServer) UnmarshalJSON(data []byte) (err error) {
@@ -263,26 +272,69 @@ func (r AccessAIControlMcpPortalNewResponseServersAuthType) IsKnown() bool {
 	return false
 }
 
+type AccessAIControlMcpPortalNewResponseServersErrorDetails struct {
+	// Underlying error message
+	Cause string `json:"cause"`
+	// True = MCP server returned an error. False = couldn't reach the server
+	IsUpstream bool `json:"is_upstream"`
+	// MCP protocol error code
+	McpCode float64 `json:"mcp_code"`
+	// Whether the error is transient and worth retrying
+	Retryable bool `json:"retryable"`
+	// HTTP status code from the server
+	StatusCode float64                                                    `json:"status_code"`
+	JSON       accessAIControlMcpPortalNewResponseServersErrorDetailsJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalNewResponseServersErrorDetailsJSON contains the JSON
+// metadata for the struct [AccessAIControlMcpPortalNewResponseServersErrorDetails]
+type accessAIControlMcpPortalNewResponseServersErrorDetailsJSON struct {
+	Cause       apijson.Field
+	IsUpstream  apijson.Field
+	McpCode     apijson.Field
+	Retryable   apijson.Field
+	StatusCode  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalNewResponseServersErrorDetails) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalNewResponseServersErrorDetailsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpPortalNewResponseServersUpdatedPrompt struct {
-	Name        string                                                      `json:"name" api:"required"`
-	Description string                                                      `json:"description"`
-	Enabled     bool                                                        `json:"enabled"`
-	PortalAlias string                                                      `json:"portal_alias"`
-	ServerAlias string                                                      `json:"server_alias"`
-	JSON        accessAIControlMcpPortalNewResponseServersUpdatedPromptJSON `json:"-"`
+	Name string `json:"name" api:"required"`
+	// Deprecated: use `portal_description` or `server_description` instead. Populated
+	// for backward compatibility — portal-level wins when present, otherwise falls
+	// back to server-level. Will be removed after the deprecation window.
+	//
+	// Deprecated: deprecated
+	Description       string                                                      `json:"description"`
+	Enabled           bool                                                        `json:"enabled"`
+	PortalAlias       string                                                      `json:"portal_alias"`
+	PortalDescription string                                                      `json:"portal_description"`
+	ServerAlias       string                                                      `json:"server_alias"`
+	ServerDescription string                                                      `json:"server_description"`
+	JSON              accessAIControlMcpPortalNewResponseServersUpdatedPromptJSON `json:"-"`
 }
 
 // accessAIControlMcpPortalNewResponseServersUpdatedPromptJSON contains the JSON
 // metadata for the struct
 // [AccessAIControlMcpPortalNewResponseServersUpdatedPrompt]
 type accessAIControlMcpPortalNewResponseServersUpdatedPromptJSON struct {
-	Name        apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	PortalAlias apijson.Field
-	ServerAlias apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Description       apijson.Field
+	Enabled           apijson.Field
+	PortalAlias       apijson.Field
+	PortalDescription apijson.Field
+	ServerAlias       apijson.Field
+	ServerDescription apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalNewResponseServersUpdatedPrompt) UnmarshalJSON(data []byte) (err error) {
@@ -294,24 +346,33 @@ func (r accessAIControlMcpPortalNewResponseServersUpdatedPromptJSON) RawJSON() s
 }
 
 type AccessAIControlMcpPortalNewResponseServersUpdatedTool struct {
-	Name        string                                                    `json:"name" api:"required"`
-	Description string                                                    `json:"description"`
-	Enabled     bool                                                      `json:"enabled"`
-	PortalAlias string                                                    `json:"portal_alias"`
-	ServerAlias string                                                    `json:"server_alias"`
-	JSON        accessAIControlMcpPortalNewResponseServersUpdatedToolJSON `json:"-"`
+	Name string `json:"name" api:"required"`
+	// Deprecated: use `portal_description` or `server_description` instead. Populated
+	// for backward compatibility — portal-level wins when present, otherwise falls
+	// back to server-level. Will be removed after the deprecation window.
+	//
+	// Deprecated: deprecated
+	Description       string                                                    `json:"description"`
+	Enabled           bool                                                      `json:"enabled"`
+	PortalAlias       string                                                    `json:"portal_alias"`
+	PortalDescription string                                                    `json:"portal_description"`
+	ServerAlias       string                                                    `json:"server_alias"`
+	ServerDescription string                                                    `json:"server_description"`
+	JSON              accessAIControlMcpPortalNewResponseServersUpdatedToolJSON `json:"-"`
 }
 
 // accessAIControlMcpPortalNewResponseServersUpdatedToolJSON contains the JSON
 // metadata for the struct [AccessAIControlMcpPortalNewResponseServersUpdatedTool]
 type accessAIControlMcpPortalNewResponseServersUpdatedToolJSON struct {
-	Name        apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	PortalAlias apijson.Field
-	ServerAlias apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Description       apijson.Field
+	Enabled           apijson.Field
+	PortalAlias       apijson.Field
+	PortalDescription apijson.Field
+	ServerAlias       apijson.Field
+	ServerDescription apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalNewResponseServersUpdatedTool) UnmarshalJSON(data []byte) (err error) {
@@ -368,52 +429,61 @@ func (r accessAIControlMcpPortalUpdateResponseJSON) RawJSON() string {
 
 type AccessAIControlMcpPortalUpdateResponseServer struct {
 	// server id
-	ID                 string                                                       `json:"id" api:"required"`
-	AuthType           AccessAIControlMcpPortalUpdateResponseServersAuthType        `json:"auth_type" api:"required"`
-	Hostname           string                                                       `json:"hostname" api:"required" format:"uri"`
-	Name               string                                                       `json:"name" api:"required"`
-	Prompts            []map[string]interface{}                                     `json:"prompts" api:"required"`
-	Tools              []map[string]interface{}                                     `json:"tools" api:"required"`
-	CreatedAt          time.Time                                                    `json:"created_at" format:"date-time"`
-	CreatedBy          string                                                       `json:"created_by"`
-	DefaultDisabled    bool                                                         `json:"default_disabled"`
-	Description        string                                                       `json:"description" api:"nullable"`
-	Error              string                                                       `json:"error"`
-	LastSuccessfulSync time.Time                                                    `json:"last_successful_sync" format:"date-time"`
-	LastSynced         time.Time                                                    `json:"last_synced" format:"date-time"`
-	ModifiedAt         time.Time                                                    `json:"modified_at" format:"date-time"`
-	ModifiedBy         string                                                       `json:"modified_by"`
-	OnBehalf           bool                                                         `json:"on_behalf"`
-	Status             string                                                       `json:"status"`
-	UpdatedPrompts     []AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools       []AccessAIControlMcpPortalUpdateResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON               accessAIControlMcpPortalUpdateResponseServerJSON             `json:"-"`
+	ID              string                                                    `json:"id" api:"required"`
+	AuthType        AccessAIControlMcpPortalUpdateResponseServersAuthType     `json:"auth_type" api:"required"`
+	Hostname        string                                                    `json:"hostname" api:"required" format:"uri"`
+	Name            string                                                    `json:"name" api:"required"`
+	Prompts         []map[string]interface{}                                  `json:"prompts" api:"required"`
+	Tools           []map[string]interface{}                                  `json:"tools" api:"required"`
+	CreatedAt       time.Time                                                 `json:"created_at" format:"date-time"`
+	CreatedBy       string                                                    `json:"created_by"`
+	DefaultDisabled bool                                                      `json:"default_disabled"`
+	Description     string                                                    `json:"description" api:"nullable"`
+	Error           string                                                    `json:"error"`
+	ErrorDetails    AccessAIControlMcpPortalUpdateResponseServersErrorDetails `json:"error_details"`
+	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
+	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
+	// customer portal hostname. New servers default to true; existing servers default
+	// to false. Effective behavior is gated by the gateway worker's per-env rollout
+	// mode KV key.
+	IsSharedOAuthCallbackEnabled bool                                                         `json:"is_shared_oauth_callback_enabled"`
+	LastSuccessfulSync           time.Time                                                    `json:"last_successful_sync" format:"date-time"`
+	LastSynced                   time.Time                                                    `json:"last_synced" format:"date-time"`
+	ModifiedAt                   time.Time                                                    `json:"modified_at" format:"date-time"`
+	ModifiedBy                   string                                                       `json:"modified_by"`
+	OnBehalf                     bool                                                         `json:"on_behalf"`
+	Status                       string                                                       `json:"status"`
+	UpdatedPrompts               []AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools                 []AccessAIControlMcpPortalUpdateResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON                         accessAIControlMcpPortalUpdateResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalUpdateResponseServerJSON contains the JSON metadata for
 // the struct [AccessAIControlMcpPortalUpdateResponseServer]
 type accessAIControlMcpPortalUpdateResponseServerJSON struct {
-	ID                 apijson.Field
-	AuthType           apijson.Field
-	Hostname           apijson.Field
-	Name               apijson.Field
-	Prompts            apijson.Field
-	Tools              apijson.Field
-	CreatedAt          apijson.Field
-	CreatedBy          apijson.Field
-	DefaultDisabled    apijson.Field
-	Description        apijson.Field
-	Error              apijson.Field
-	LastSuccessfulSync apijson.Field
-	LastSynced         apijson.Field
-	ModifiedAt         apijson.Field
-	ModifiedBy         apijson.Field
-	OnBehalf           apijson.Field
-	Status             apijson.Field
-	UpdatedPrompts     apijson.Field
-	UpdatedTools       apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	ID                           apijson.Field
+	AuthType                     apijson.Field
+	Hostname                     apijson.Field
+	Name                         apijson.Field
+	Prompts                      apijson.Field
+	Tools                        apijson.Field
+	CreatedAt                    apijson.Field
+	CreatedBy                    apijson.Field
+	DefaultDisabled              apijson.Field
+	Description                  apijson.Field
+	Error                        apijson.Field
+	ErrorDetails                 apijson.Field
+	IsSharedOAuthCallbackEnabled apijson.Field
+	LastSuccessfulSync           apijson.Field
+	LastSynced                   apijson.Field
+	ModifiedAt                   apijson.Field
+	ModifiedBy                   apijson.Field
+	OnBehalf                     apijson.Field
+	Status                       apijson.Field
+	UpdatedPrompts               apijson.Field
+	UpdatedTools                 apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalUpdateResponseServer) UnmarshalJSON(data []byte) (err error) {
@@ -440,26 +510,70 @@ func (r AccessAIControlMcpPortalUpdateResponseServersAuthType) IsKnown() bool {
 	return false
 }
 
+type AccessAIControlMcpPortalUpdateResponseServersErrorDetails struct {
+	// Underlying error message
+	Cause string `json:"cause"`
+	// True = MCP server returned an error. False = couldn't reach the server
+	IsUpstream bool `json:"is_upstream"`
+	// MCP protocol error code
+	McpCode float64 `json:"mcp_code"`
+	// Whether the error is transient and worth retrying
+	Retryable bool `json:"retryable"`
+	// HTTP status code from the server
+	StatusCode float64                                                       `json:"status_code"`
+	JSON       accessAIControlMcpPortalUpdateResponseServersErrorDetailsJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalUpdateResponseServersErrorDetailsJSON contains the JSON
+// metadata for the struct
+// [AccessAIControlMcpPortalUpdateResponseServersErrorDetails]
+type accessAIControlMcpPortalUpdateResponseServersErrorDetailsJSON struct {
+	Cause       apijson.Field
+	IsUpstream  apijson.Field
+	McpCode     apijson.Field
+	Retryable   apijson.Field
+	StatusCode  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalUpdateResponseServersErrorDetails) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalUpdateResponseServersErrorDetailsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt struct {
-	Name        string                                                         `json:"name" api:"required"`
-	Description string                                                         `json:"description"`
-	Enabled     bool                                                           `json:"enabled"`
-	PortalAlias string                                                         `json:"portal_alias"`
-	ServerAlias string                                                         `json:"server_alias"`
-	JSON        accessAIControlMcpPortalUpdateResponseServersUpdatedPromptJSON `json:"-"`
+	Name string `json:"name" api:"required"`
+	// Deprecated: use `portal_description` or `server_description` instead. Populated
+	// for backward compatibility — portal-level wins when present, otherwise falls
+	// back to server-level. Will be removed after the deprecation window.
+	//
+	// Deprecated: deprecated
+	Description       string                                                         `json:"description"`
+	Enabled           bool                                                           `json:"enabled"`
+	PortalAlias       string                                                         `json:"portal_alias"`
+	PortalDescription string                                                         `json:"portal_description"`
+	ServerAlias       string                                                         `json:"server_alias"`
+	ServerDescription string                                                         `json:"server_description"`
+	JSON              accessAIControlMcpPortalUpdateResponseServersUpdatedPromptJSON `json:"-"`
 }
 
 // accessAIControlMcpPortalUpdateResponseServersUpdatedPromptJSON contains the JSON
 // metadata for the struct
 // [AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt]
 type accessAIControlMcpPortalUpdateResponseServersUpdatedPromptJSON struct {
-	Name        apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	PortalAlias apijson.Field
-	ServerAlias apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Description       apijson.Field
+	Enabled           apijson.Field
+	PortalAlias       apijson.Field
+	PortalDescription apijson.Field
+	ServerAlias       apijson.Field
+	ServerDescription apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt) UnmarshalJSON(data []byte) (err error) {
@@ -471,25 +585,34 @@ func (r accessAIControlMcpPortalUpdateResponseServersUpdatedPromptJSON) RawJSON(
 }
 
 type AccessAIControlMcpPortalUpdateResponseServersUpdatedTool struct {
-	Name        string                                                       `json:"name" api:"required"`
-	Description string                                                       `json:"description"`
-	Enabled     bool                                                         `json:"enabled"`
-	PortalAlias string                                                       `json:"portal_alias"`
-	ServerAlias string                                                       `json:"server_alias"`
-	JSON        accessAIControlMcpPortalUpdateResponseServersUpdatedToolJSON `json:"-"`
+	Name string `json:"name" api:"required"`
+	// Deprecated: use `portal_description` or `server_description` instead. Populated
+	// for backward compatibility — portal-level wins when present, otherwise falls
+	// back to server-level. Will be removed after the deprecation window.
+	//
+	// Deprecated: deprecated
+	Description       string                                                       `json:"description"`
+	Enabled           bool                                                         `json:"enabled"`
+	PortalAlias       string                                                       `json:"portal_alias"`
+	PortalDescription string                                                       `json:"portal_description"`
+	ServerAlias       string                                                       `json:"server_alias"`
+	ServerDescription string                                                       `json:"server_description"`
+	JSON              accessAIControlMcpPortalUpdateResponseServersUpdatedToolJSON `json:"-"`
 }
 
 // accessAIControlMcpPortalUpdateResponseServersUpdatedToolJSON contains the JSON
 // metadata for the struct
 // [AccessAIControlMcpPortalUpdateResponseServersUpdatedTool]
 type accessAIControlMcpPortalUpdateResponseServersUpdatedToolJSON struct {
-	Name        apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	PortalAlias apijson.Field
-	ServerAlias apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Description       apijson.Field
+	Enabled           apijson.Field
+	PortalAlias       apijson.Field
+	PortalDescription apijson.Field
+	ServerAlias       apijson.Field
+	ServerDescription apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalUpdateResponseServersUpdatedTool) UnmarshalJSON(data []byte) (err error) {
@@ -546,52 +669,61 @@ func (r accessAIControlMcpPortalListResponseJSON) RawJSON() string {
 
 type AccessAIControlMcpPortalListResponseServer struct {
 	// server id
-	ID                 string                                                     `json:"id" api:"required"`
-	AuthType           AccessAIControlMcpPortalListResponseServersAuthType        `json:"auth_type" api:"required"`
-	Hostname           string                                                     `json:"hostname" api:"required" format:"uri"`
-	Name               string                                                     `json:"name" api:"required"`
-	Prompts            []map[string]interface{}                                   `json:"prompts" api:"required"`
-	Tools              []map[string]interface{}                                   `json:"tools" api:"required"`
-	CreatedAt          time.Time                                                  `json:"created_at" format:"date-time"`
-	CreatedBy          string                                                     `json:"created_by"`
-	DefaultDisabled    bool                                                       `json:"default_disabled"`
-	Description        string                                                     `json:"description" api:"nullable"`
-	Error              string                                                     `json:"error"`
-	LastSuccessfulSync time.Time                                                  `json:"last_successful_sync" format:"date-time"`
-	LastSynced         time.Time                                                  `json:"last_synced" format:"date-time"`
-	ModifiedAt         time.Time                                                  `json:"modified_at" format:"date-time"`
-	ModifiedBy         string                                                     `json:"modified_by"`
-	OnBehalf           bool                                                       `json:"on_behalf"`
-	Status             string                                                     `json:"status"`
-	UpdatedPrompts     []AccessAIControlMcpPortalListResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools       []AccessAIControlMcpPortalListResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON               accessAIControlMcpPortalListResponseServerJSON             `json:"-"`
+	ID              string                                                  `json:"id" api:"required"`
+	AuthType        AccessAIControlMcpPortalListResponseServersAuthType     `json:"auth_type" api:"required"`
+	Hostname        string                                                  `json:"hostname" api:"required" format:"uri"`
+	Name            string                                                  `json:"name" api:"required"`
+	Prompts         []map[string]interface{}                                `json:"prompts" api:"required"`
+	Tools           []map[string]interface{}                                `json:"tools" api:"required"`
+	CreatedAt       time.Time                                               `json:"created_at" format:"date-time"`
+	CreatedBy       string                                                  `json:"created_by"`
+	DefaultDisabled bool                                                    `json:"default_disabled"`
+	Description     string                                                  `json:"description" api:"nullable"`
+	Error           string                                                  `json:"error"`
+	ErrorDetails    AccessAIControlMcpPortalListResponseServersErrorDetails `json:"error_details"`
+	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
+	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
+	// customer portal hostname. New servers default to true; existing servers default
+	// to false. Effective behavior is gated by the gateway worker's per-env rollout
+	// mode KV key.
+	IsSharedOAuthCallbackEnabled bool                                                       `json:"is_shared_oauth_callback_enabled"`
+	LastSuccessfulSync           time.Time                                                  `json:"last_successful_sync" format:"date-time"`
+	LastSynced                   time.Time                                                  `json:"last_synced" format:"date-time"`
+	ModifiedAt                   time.Time                                                  `json:"modified_at" format:"date-time"`
+	ModifiedBy                   string                                                     `json:"modified_by"`
+	OnBehalf                     bool                                                       `json:"on_behalf"`
+	Status                       string                                                     `json:"status"`
+	UpdatedPrompts               []AccessAIControlMcpPortalListResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools                 []AccessAIControlMcpPortalListResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON                         accessAIControlMcpPortalListResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalListResponseServerJSON contains the JSON metadata for
 // the struct [AccessAIControlMcpPortalListResponseServer]
 type accessAIControlMcpPortalListResponseServerJSON struct {
-	ID                 apijson.Field
-	AuthType           apijson.Field
-	Hostname           apijson.Field
-	Name               apijson.Field
-	Prompts            apijson.Field
-	Tools              apijson.Field
-	CreatedAt          apijson.Field
-	CreatedBy          apijson.Field
-	DefaultDisabled    apijson.Field
-	Description        apijson.Field
-	Error              apijson.Field
-	LastSuccessfulSync apijson.Field
-	LastSynced         apijson.Field
-	ModifiedAt         apijson.Field
-	ModifiedBy         apijson.Field
-	OnBehalf           apijson.Field
-	Status             apijson.Field
-	UpdatedPrompts     apijson.Field
-	UpdatedTools       apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	ID                           apijson.Field
+	AuthType                     apijson.Field
+	Hostname                     apijson.Field
+	Name                         apijson.Field
+	Prompts                      apijson.Field
+	Tools                        apijson.Field
+	CreatedAt                    apijson.Field
+	CreatedBy                    apijson.Field
+	DefaultDisabled              apijson.Field
+	Description                  apijson.Field
+	Error                        apijson.Field
+	ErrorDetails                 apijson.Field
+	IsSharedOAuthCallbackEnabled apijson.Field
+	LastSuccessfulSync           apijson.Field
+	LastSynced                   apijson.Field
+	ModifiedAt                   apijson.Field
+	ModifiedBy                   apijson.Field
+	OnBehalf                     apijson.Field
+	Status                       apijson.Field
+	UpdatedPrompts               apijson.Field
+	UpdatedTools                 apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalListResponseServer) UnmarshalJSON(data []byte) (err error) {
@@ -618,26 +750,70 @@ func (r AccessAIControlMcpPortalListResponseServersAuthType) IsKnown() bool {
 	return false
 }
 
+type AccessAIControlMcpPortalListResponseServersErrorDetails struct {
+	// Underlying error message
+	Cause string `json:"cause"`
+	// True = MCP server returned an error. False = couldn't reach the server
+	IsUpstream bool `json:"is_upstream"`
+	// MCP protocol error code
+	McpCode float64 `json:"mcp_code"`
+	// Whether the error is transient and worth retrying
+	Retryable bool `json:"retryable"`
+	// HTTP status code from the server
+	StatusCode float64                                                     `json:"status_code"`
+	JSON       accessAIControlMcpPortalListResponseServersErrorDetailsJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalListResponseServersErrorDetailsJSON contains the JSON
+// metadata for the struct
+// [AccessAIControlMcpPortalListResponseServersErrorDetails]
+type accessAIControlMcpPortalListResponseServersErrorDetailsJSON struct {
+	Cause       apijson.Field
+	IsUpstream  apijson.Field
+	McpCode     apijson.Field
+	Retryable   apijson.Field
+	StatusCode  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalListResponseServersErrorDetails) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalListResponseServersErrorDetailsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpPortalListResponseServersUpdatedPrompt struct {
-	Name        string                                                       `json:"name" api:"required"`
-	Description string                                                       `json:"description"`
-	Enabled     bool                                                         `json:"enabled"`
-	PortalAlias string                                                       `json:"portal_alias"`
-	ServerAlias string                                                       `json:"server_alias"`
-	JSON        accessAIControlMcpPortalListResponseServersUpdatedPromptJSON `json:"-"`
+	Name string `json:"name" api:"required"`
+	// Deprecated: use `portal_description` or `server_description` instead. Populated
+	// for backward compatibility — portal-level wins when present, otherwise falls
+	// back to server-level. Will be removed after the deprecation window.
+	//
+	// Deprecated: deprecated
+	Description       string                                                       `json:"description"`
+	Enabled           bool                                                         `json:"enabled"`
+	PortalAlias       string                                                       `json:"portal_alias"`
+	PortalDescription string                                                       `json:"portal_description"`
+	ServerAlias       string                                                       `json:"server_alias"`
+	ServerDescription string                                                       `json:"server_description"`
+	JSON              accessAIControlMcpPortalListResponseServersUpdatedPromptJSON `json:"-"`
 }
 
 // accessAIControlMcpPortalListResponseServersUpdatedPromptJSON contains the JSON
 // metadata for the struct
 // [AccessAIControlMcpPortalListResponseServersUpdatedPrompt]
 type accessAIControlMcpPortalListResponseServersUpdatedPromptJSON struct {
-	Name        apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	PortalAlias apijson.Field
-	ServerAlias apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Description       apijson.Field
+	Enabled           apijson.Field
+	PortalAlias       apijson.Field
+	PortalDescription apijson.Field
+	ServerAlias       apijson.Field
+	ServerDescription apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalListResponseServersUpdatedPrompt) UnmarshalJSON(data []byte) (err error) {
@@ -649,24 +825,33 @@ func (r accessAIControlMcpPortalListResponseServersUpdatedPromptJSON) RawJSON() 
 }
 
 type AccessAIControlMcpPortalListResponseServersUpdatedTool struct {
-	Name        string                                                     `json:"name" api:"required"`
-	Description string                                                     `json:"description"`
-	Enabled     bool                                                       `json:"enabled"`
-	PortalAlias string                                                     `json:"portal_alias"`
-	ServerAlias string                                                     `json:"server_alias"`
-	JSON        accessAIControlMcpPortalListResponseServersUpdatedToolJSON `json:"-"`
+	Name string `json:"name" api:"required"`
+	// Deprecated: use `portal_description` or `server_description` instead. Populated
+	// for backward compatibility — portal-level wins when present, otherwise falls
+	// back to server-level. Will be removed after the deprecation window.
+	//
+	// Deprecated: deprecated
+	Description       string                                                     `json:"description"`
+	Enabled           bool                                                       `json:"enabled"`
+	PortalAlias       string                                                     `json:"portal_alias"`
+	PortalDescription string                                                     `json:"portal_description"`
+	ServerAlias       string                                                     `json:"server_alias"`
+	ServerDescription string                                                     `json:"server_description"`
+	JSON              accessAIControlMcpPortalListResponseServersUpdatedToolJSON `json:"-"`
 }
 
 // accessAIControlMcpPortalListResponseServersUpdatedToolJSON contains the JSON
 // metadata for the struct [AccessAIControlMcpPortalListResponseServersUpdatedTool]
 type accessAIControlMcpPortalListResponseServersUpdatedToolJSON struct {
-	Name        apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	PortalAlias apijson.Field
-	ServerAlias apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Description       apijson.Field
+	Enabled           apijson.Field
+	PortalAlias       apijson.Field
+	PortalDescription apijson.Field
+	ServerAlias       apijson.Field
+	ServerDescription apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalListResponseServersUpdatedTool) UnmarshalJSON(data []byte) (err error) {
@@ -765,52 +950,61 @@ func (r accessAIControlMcpPortalReadResponseJSON) RawJSON() string {
 
 type AccessAIControlMcpPortalReadResponseServer struct {
 	// server id
-	ID                 string                                                     `json:"id" api:"required"`
-	AuthType           AccessAIControlMcpPortalReadResponseServersAuthType        `json:"auth_type" api:"required"`
-	Hostname           string                                                     `json:"hostname" api:"required" format:"uri"`
-	Name               string                                                     `json:"name" api:"required"`
-	Prompts            []map[string]interface{}                                   `json:"prompts" api:"required"`
-	Tools              []map[string]interface{}                                   `json:"tools" api:"required"`
-	CreatedAt          time.Time                                                  `json:"created_at" format:"date-time"`
-	CreatedBy          string                                                     `json:"created_by"`
-	DefaultDisabled    bool                                                       `json:"default_disabled"`
-	Description        string                                                     `json:"description" api:"nullable"`
-	Error              string                                                     `json:"error"`
-	LastSuccessfulSync time.Time                                                  `json:"last_successful_sync" format:"date-time"`
-	LastSynced         time.Time                                                  `json:"last_synced" format:"date-time"`
-	ModifiedAt         time.Time                                                  `json:"modified_at" format:"date-time"`
-	ModifiedBy         string                                                     `json:"modified_by"`
-	OnBehalf           bool                                                       `json:"on_behalf"`
-	Status             string                                                     `json:"status"`
-	UpdatedPrompts     []AccessAIControlMcpPortalReadResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools       []AccessAIControlMcpPortalReadResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON               accessAIControlMcpPortalReadResponseServerJSON             `json:"-"`
+	ID              string                                                  `json:"id" api:"required"`
+	AuthType        AccessAIControlMcpPortalReadResponseServersAuthType     `json:"auth_type" api:"required"`
+	Hostname        string                                                  `json:"hostname" api:"required" format:"uri"`
+	Name            string                                                  `json:"name" api:"required"`
+	Prompts         []map[string]interface{}                                `json:"prompts" api:"required"`
+	Tools           []map[string]interface{}                                `json:"tools" api:"required"`
+	CreatedAt       time.Time                                               `json:"created_at" format:"date-time"`
+	CreatedBy       string                                                  `json:"created_by"`
+	DefaultDisabled bool                                                    `json:"default_disabled"`
+	Description     string                                                  `json:"description" api:"nullable"`
+	Error           string                                                  `json:"error"`
+	ErrorDetails    AccessAIControlMcpPortalReadResponseServersErrorDetails `json:"error_details"`
+	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
+	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
+	// customer portal hostname. New servers default to true; existing servers default
+	// to false. Effective behavior is gated by the gateway worker's per-env rollout
+	// mode KV key.
+	IsSharedOAuthCallbackEnabled bool                                                       `json:"is_shared_oauth_callback_enabled"`
+	LastSuccessfulSync           time.Time                                                  `json:"last_successful_sync" format:"date-time"`
+	LastSynced                   time.Time                                                  `json:"last_synced" format:"date-time"`
+	ModifiedAt                   time.Time                                                  `json:"modified_at" format:"date-time"`
+	ModifiedBy                   string                                                     `json:"modified_by"`
+	OnBehalf                     bool                                                       `json:"on_behalf"`
+	Status                       string                                                     `json:"status"`
+	UpdatedPrompts               []AccessAIControlMcpPortalReadResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools                 []AccessAIControlMcpPortalReadResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON                         accessAIControlMcpPortalReadResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalReadResponseServerJSON contains the JSON metadata for
 // the struct [AccessAIControlMcpPortalReadResponseServer]
 type accessAIControlMcpPortalReadResponseServerJSON struct {
-	ID                 apijson.Field
-	AuthType           apijson.Field
-	Hostname           apijson.Field
-	Name               apijson.Field
-	Prompts            apijson.Field
-	Tools              apijson.Field
-	CreatedAt          apijson.Field
-	CreatedBy          apijson.Field
-	DefaultDisabled    apijson.Field
-	Description        apijson.Field
-	Error              apijson.Field
-	LastSuccessfulSync apijson.Field
-	LastSynced         apijson.Field
-	ModifiedAt         apijson.Field
-	ModifiedBy         apijson.Field
-	OnBehalf           apijson.Field
-	Status             apijson.Field
-	UpdatedPrompts     apijson.Field
-	UpdatedTools       apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	ID                           apijson.Field
+	AuthType                     apijson.Field
+	Hostname                     apijson.Field
+	Name                         apijson.Field
+	Prompts                      apijson.Field
+	Tools                        apijson.Field
+	CreatedAt                    apijson.Field
+	CreatedBy                    apijson.Field
+	DefaultDisabled              apijson.Field
+	Description                  apijson.Field
+	Error                        apijson.Field
+	ErrorDetails                 apijson.Field
+	IsSharedOAuthCallbackEnabled apijson.Field
+	LastSuccessfulSync           apijson.Field
+	LastSynced                   apijson.Field
+	ModifiedAt                   apijson.Field
+	ModifiedBy                   apijson.Field
+	OnBehalf                     apijson.Field
+	Status                       apijson.Field
+	UpdatedPrompts               apijson.Field
+	UpdatedTools                 apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalReadResponseServer) UnmarshalJSON(data []byte) (err error) {
@@ -837,26 +1031,70 @@ func (r AccessAIControlMcpPortalReadResponseServersAuthType) IsKnown() bool {
 	return false
 }
 
+type AccessAIControlMcpPortalReadResponseServersErrorDetails struct {
+	// Underlying error message
+	Cause string `json:"cause"`
+	// True = MCP server returned an error. False = couldn't reach the server
+	IsUpstream bool `json:"is_upstream"`
+	// MCP protocol error code
+	McpCode float64 `json:"mcp_code"`
+	// Whether the error is transient and worth retrying
+	Retryable bool `json:"retryable"`
+	// HTTP status code from the server
+	StatusCode float64                                                     `json:"status_code"`
+	JSON       accessAIControlMcpPortalReadResponseServersErrorDetailsJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalReadResponseServersErrorDetailsJSON contains the JSON
+// metadata for the struct
+// [AccessAIControlMcpPortalReadResponseServersErrorDetails]
+type accessAIControlMcpPortalReadResponseServersErrorDetailsJSON struct {
+	Cause       apijson.Field
+	IsUpstream  apijson.Field
+	McpCode     apijson.Field
+	Retryable   apijson.Field
+	StatusCode  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalReadResponseServersErrorDetails) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalReadResponseServersErrorDetailsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpPortalReadResponseServersUpdatedPrompt struct {
-	Name        string                                                       `json:"name" api:"required"`
-	Description string                                                       `json:"description"`
-	Enabled     bool                                                         `json:"enabled"`
-	PortalAlias string                                                       `json:"portal_alias"`
-	ServerAlias string                                                       `json:"server_alias"`
-	JSON        accessAIControlMcpPortalReadResponseServersUpdatedPromptJSON `json:"-"`
+	Name string `json:"name" api:"required"`
+	// Deprecated: use `portal_description` or `server_description` instead. Populated
+	// for backward compatibility — portal-level wins when present, otherwise falls
+	// back to server-level. Will be removed after the deprecation window.
+	//
+	// Deprecated: deprecated
+	Description       string                                                       `json:"description"`
+	Enabled           bool                                                         `json:"enabled"`
+	PortalAlias       string                                                       `json:"portal_alias"`
+	PortalDescription string                                                       `json:"portal_description"`
+	ServerAlias       string                                                       `json:"server_alias"`
+	ServerDescription string                                                       `json:"server_description"`
+	JSON              accessAIControlMcpPortalReadResponseServersUpdatedPromptJSON `json:"-"`
 }
 
 // accessAIControlMcpPortalReadResponseServersUpdatedPromptJSON contains the JSON
 // metadata for the struct
 // [AccessAIControlMcpPortalReadResponseServersUpdatedPrompt]
 type accessAIControlMcpPortalReadResponseServersUpdatedPromptJSON struct {
-	Name        apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	PortalAlias apijson.Field
-	ServerAlias apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Description       apijson.Field
+	Enabled           apijson.Field
+	PortalAlias       apijson.Field
+	PortalDescription apijson.Field
+	ServerAlias       apijson.Field
+	ServerDescription apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalReadResponseServersUpdatedPrompt) UnmarshalJSON(data []byte) (err error) {
@@ -868,24 +1106,33 @@ func (r accessAIControlMcpPortalReadResponseServersUpdatedPromptJSON) RawJSON() 
 }
 
 type AccessAIControlMcpPortalReadResponseServersUpdatedTool struct {
-	Name        string                                                     `json:"name" api:"required"`
-	Description string                                                     `json:"description"`
-	Enabled     bool                                                       `json:"enabled"`
-	PortalAlias string                                                     `json:"portal_alias"`
-	ServerAlias string                                                     `json:"server_alias"`
-	JSON        accessAIControlMcpPortalReadResponseServersUpdatedToolJSON `json:"-"`
+	Name string `json:"name" api:"required"`
+	// Deprecated: use `portal_description` or `server_description` instead. Populated
+	// for backward compatibility — portal-level wins when present, otherwise falls
+	// back to server-level. Will be removed after the deprecation window.
+	//
+	// Deprecated: deprecated
+	Description       string                                                     `json:"description"`
+	Enabled           bool                                                       `json:"enabled"`
+	PortalAlias       string                                                     `json:"portal_alias"`
+	PortalDescription string                                                     `json:"portal_description"`
+	ServerAlias       string                                                     `json:"server_alias"`
+	ServerDescription string                                                     `json:"server_description"`
+	JSON              accessAIControlMcpPortalReadResponseServersUpdatedToolJSON `json:"-"`
 }
 
 // accessAIControlMcpPortalReadResponseServersUpdatedToolJSON contains the JSON
 // metadata for the struct [AccessAIControlMcpPortalReadResponseServersUpdatedTool]
 type accessAIControlMcpPortalReadResponseServersUpdatedToolJSON struct {
-	Name        apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	PortalAlias apijson.Field
-	ServerAlias apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name              apijson.Field
+	Description       apijson.Field
+	Enabled           apijson.Field
+	PortalAlias       apijson.Field
+	PortalDescription apijson.Field
+	ServerAlias       apijson.Field
+	ServerDescription apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *AccessAIControlMcpPortalReadResponseServersUpdatedTool) UnmarshalJSON(data []byte) (err error) {
@@ -916,11 +1163,12 @@ func (r AccessAIControlMcpPortalNewParams) MarshalJSON() (data []byte, err error
 
 type AccessAIControlMcpPortalNewParamsServer struct {
 	// server id
-	ServerID        param.Field[string]                                                  `json:"server_id" api:"required"`
-	DefaultDisabled param.Field[bool]                                                    `json:"default_disabled"`
-	OnBehalf        param.Field[bool]                                                    `json:"on_behalf"`
-	UpdatedPrompts  param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedPrompt] `json:"updated_prompts"`
-	UpdatedTools    param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedTool]   `json:"updated_tools"`
+	ServerID                     param.Field[string]                                                  `json:"server_id" api:"required"`
+	DefaultDisabled              param.Field[bool]                                                    `json:"default_disabled"`
+	IsSharedOAuthCallbackEnabled param.Field[bool]                                                    `json:"is_shared_oauth_callback_enabled"`
+	OnBehalf                     param.Field[bool]                                                    `json:"on_behalf"`
+	UpdatedPrompts               param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedPrompt] `json:"updated_prompts"`
+	UpdatedTools                 param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedTool]   `json:"updated_tools"`
 }
 
 func (r AccessAIControlMcpPortalNewParamsServer) MarshalJSON() (data []byte, err error) {
@@ -990,11 +1238,12 @@ func (r AccessAIControlMcpPortalUpdateParams) MarshalJSON() (data []byte, err er
 
 type AccessAIControlMcpPortalUpdateParamsServer struct {
 	// server id
-	ServerID        param.Field[string]                                                     `json:"server_id" api:"required"`
-	DefaultDisabled param.Field[bool]                                                       `json:"default_disabled"`
-	OnBehalf        param.Field[bool]                                                       `json:"on_behalf"`
-	UpdatedPrompts  param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt] `json:"updated_prompts"`
-	UpdatedTools    param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedTool]   `json:"updated_tools"`
+	ServerID                     param.Field[string]                                                     `json:"server_id" api:"required"`
+	DefaultDisabled              param.Field[bool]                                                       `json:"default_disabled"`
+	IsSharedOAuthCallbackEnabled param.Field[bool]                                                       `json:"is_shared_oauth_callback_enabled"`
+	OnBehalf                     param.Field[bool]                                                       `json:"on_behalf"`
+	UpdatedPrompts               param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt] `json:"updated_prompts"`
+	UpdatedTools                 param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedTool]   `json:"updated_tools"`
 }
 
 func (r AccessAIControlMcpPortalUpdateParamsServer) MarshalJSON() (data []byte, err error) {

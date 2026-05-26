@@ -29,13 +29,14 @@ func TestAccessAIControlMcpServerNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.New(context.TODO(), zero_trust.AccessAIControlMcpServerNewParams{
-		AccountID:       cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
-		ID:              cloudflare.F("my-mcp-server"),
-		AuthType:        cloudflare.F(zero_trust.AccessAIControlMcpServerNewParamsAuthTypeUnauthenticated),
-		Hostname:        cloudflare.F("https://example.com/mcp"),
-		Name:            cloudflare.F("My MCP Server"),
-		AuthCredentials: cloudflare.F("auth_credentials"),
-		Description:     cloudflare.F("This is one remote mcp server"),
+		AccountID:                    cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
+		ID:                           cloudflare.F("my-mcp-server"),
+		AuthType:                     cloudflare.F(zero_trust.AccessAIControlMcpServerNewParamsAuthTypeUnauthenticated),
+		Hostname:                     cloudflare.F("https://example.com/mcp"),
+		Name:                         cloudflare.F("My MCP Server"),
+		AuthCredentials:              cloudflare.F("auth_credentials"),
+		Description:                  cloudflare.F("This is one remote mcp server"),
+		IsSharedOAuthCallbackEnabled: cloudflare.F(true),
 		UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpServerNewParamsUpdatedPrompt{{
 			Name:        cloudflare.F("name"),
 			Alias:       cloudflare.F("my-custom-alias"),
@@ -76,10 +77,11 @@ func TestAccessAIControlMcpServerUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"my-mcp-server",
 		zero_trust.AccessAIControlMcpServerUpdateParams{
-			AccountID:       cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
-			AuthCredentials: cloudflare.F("auth_credentials"),
-			Description:     cloudflare.F("This is one remote mcp server"),
-			Name:            cloudflare.F("My MCP Server"),
+			AccountID:                    cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
+			AuthCredentials:              cloudflare.F("auth_credentials"),
+			Description:                  cloudflare.F("This is one remote mcp server"),
+			IsSharedOAuthCallbackEnabled: cloudflare.F(true),
+			Name:                         cloudflare.F("My MCP Server"),
 			UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpServerUpdateParamsUpdatedPrompt{{
 				Name:        cloudflare.F("name"),
 				Alias:       cloudflare.F("my-custom-alias"),
