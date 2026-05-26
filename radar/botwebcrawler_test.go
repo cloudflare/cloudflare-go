@@ -84,6 +84,7 @@ func TestBotWebCrawlerTimeseriesGroupsWithOptionalParams(t *testing.T) {
 			Industry:               cloudflare.F([]string{"string"}),
 			LimitPerGroup:          cloudflare.F(int64(10)),
 			Name:                   cloudflare.F([]string{"main_series"}),
+			Normalization:          cloudflare.F(radar.BotWebCrawlerTimeseriesGroupsParamsNormalizationPercentage),
 			ResponseStatus:         cloudflare.F([]string{"string"}),
 			ResponseStatusCategory: cloudflare.F([]radar.BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategory{radar.BotWebCrawlerTimeseriesGroupsParamsResponseStatusCategoryInformational}),
 			Vertical:               cloudflare.F([]string{"string"}),

@@ -918,6 +918,8 @@ type HTTPSummaryV2Params struct {
 	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPSummaryV2ParamsBotClass] `query:"botClass"`
+	// Filters results by content type category.
+	ContentType param.Field[[]HTTPSummaryV2ParamsContentType] `query:"contentType"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -979,6 +981,7 @@ const (
 	HTTPSummaryV2ParamsDimensionBotClass      HTTPSummaryV2ParamsDimension = "BOT_CLASS"
 	HTTPSummaryV2ParamsDimensionBrowser       HTTPSummaryV2ParamsDimension = "BROWSER"
 	HTTPSummaryV2ParamsDimensionBrowserFamily HTTPSummaryV2ParamsDimension = "BROWSER_FAMILY"
+	HTTPSummaryV2ParamsDimensionContentType   HTTPSummaryV2ParamsDimension = "CONTENT_TYPE"
 	HTTPSummaryV2ParamsDimensionDeviceType    HTTPSummaryV2ParamsDimension = "DEVICE_TYPE"
 	HTTPSummaryV2ParamsDimensionHTTPProtocol  HTTPSummaryV2ParamsDimension = "HTTP_PROTOCOL"
 	HTTPSummaryV2ParamsDimensionHTTPVersion   HTTPSummaryV2ParamsDimension = "HTTP_VERSION"
@@ -991,7 +994,7 @@ const (
 
 func (r HTTPSummaryV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case HTTPSummaryV2ParamsDimensionAdm1, HTTPSummaryV2ParamsDimensionAPITraffic, HTTPSummaryV2ParamsDimensionAs, HTTPSummaryV2ParamsDimensionBotClass, HTTPSummaryV2ParamsDimensionBrowser, HTTPSummaryV2ParamsDimensionBrowserFamily, HTTPSummaryV2ParamsDimensionDeviceType, HTTPSummaryV2ParamsDimensionHTTPProtocol, HTTPSummaryV2ParamsDimensionHTTPVersion, HTTPSummaryV2ParamsDimensionIPVersion, HTTPSummaryV2ParamsDimensionLocation, HTTPSummaryV2ParamsDimensionOS, HTTPSummaryV2ParamsDimensionPostQuantum, HTTPSummaryV2ParamsDimensionTLSVersion:
+	case HTTPSummaryV2ParamsDimensionAdm1, HTTPSummaryV2ParamsDimensionAPITraffic, HTTPSummaryV2ParamsDimensionAs, HTTPSummaryV2ParamsDimensionBotClass, HTTPSummaryV2ParamsDimensionBrowser, HTTPSummaryV2ParamsDimensionBrowserFamily, HTTPSummaryV2ParamsDimensionContentType, HTTPSummaryV2ParamsDimensionDeviceType, HTTPSummaryV2ParamsDimensionHTTPProtocol, HTTPSummaryV2ParamsDimensionHTTPVersion, HTTPSummaryV2ParamsDimensionIPVersion, HTTPSummaryV2ParamsDimensionLocation, HTTPSummaryV2ParamsDimensionOS, HTTPSummaryV2ParamsDimensionPostQuantum, HTTPSummaryV2ParamsDimensionTLSVersion:
 		return true
 	}
 	return false
@@ -1022,6 +1025,35 @@ const (
 func (r HTTPSummaryV2ParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPSummaryV2ParamsBotClassLikelyAutomated, HTTPSummaryV2ParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPSummaryV2ParamsContentType string
+
+const (
+	HTTPSummaryV2ParamsContentTypeHTML          HTTPSummaryV2ParamsContentType = "HTML"
+	HTTPSummaryV2ParamsContentTypeImages        HTTPSummaryV2ParamsContentType = "IMAGES"
+	HTTPSummaryV2ParamsContentTypeJson          HTTPSummaryV2ParamsContentType = "JSON"
+	HTTPSummaryV2ParamsContentTypeJavascript    HTTPSummaryV2ParamsContentType = "JAVASCRIPT"
+	HTTPSummaryV2ParamsContentTypeCSS           HTTPSummaryV2ParamsContentType = "CSS"
+	HTTPSummaryV2ParamsContentTypePlainText     HTTPSummaryV2ParamsContentType = "PLAIN_TEXT"
+	HTTPSummaryV2ParamsContentTypeFonts         HTTPSummaryV2ParamsContentType = "FONTS"
+	HTTPSummaryV2ParamsContentTypeXml           HTTPSummaryV2ParamsContentType = "XML"
+	HTTPSummaryV2ParamsContentTypeYaml          HTTPSummaryV2ParamsContentType = "YAML"
+	HTTPSummaryV2ParamsContentTypeVideo         HTTPSummaryV2ParamsContentType = "VIDEO"
+	HTTPSummaryV2ParamsContentTypeAudio         HTTPSummaryV2ParamsContentType = "AUDIO"
+	HTTPSummaryV2ParamsContentTypeMarkdown      HTTPSummaryV2ParamsContentType = "MARKDOWN"
+	HTTPSummaryV2ParamsContentTypeDocuments     HTTPSummaryV2ParamsContentType = "DOCUMENTS"
+	HTTPSummaryV2ParamsContentTypeBinary        HTTPSummaryV2ParamsContentType = "BINARY"
+	HTTPSummaryV2ParamsContentTypeSerialization HTTPSummaryV2ParamsContentType = "SERIALIZATION"
+	HTTPSummaryV2ParamsContentTypeOther         HTTPSummaryV2ParamsContentType = "OTHER"
+)
+
+func (r HTTPSummaryV2ParamsContentType) IsKnown() bool {
+	switch r {
+	case HTTPSummaryV2ParamsContentTypeHTML, HTTPSummaryV2ParamsContentTypeImages, HTTPSummaryV2ParamsContentTypeJson, HTTPSummaryV2ParamsContentTypeJavascript, HTTPSummaryV2ParamsContentTypeCSS, HTTPSummaryV2ParamsContentTypePlainText, HTTPSummaryV2ParamsContentTypeFonts, HTTPSummaryV2ParamsContentTypeXml, HTTPSummaryV2ParamsContentTypeYaml, HTTPSummaryV2ParamsContentTypeVideo, HTTPSummaryV2ParamsContentTypeAudio, HTTPSummaryV2ParamsContentTypeMarkdown, HTTPSummaryV2ParamsContentTypeDocuments, HTTPSummaryV2ParamsContentTypeBinary, HTTPSummaryV2ParamsContentTypeSerialization, HTTPSummaryV2ParamsContentTypeOther:
 		return true
 	}
 	return false
@@ -1184,6 +1216,8 @@ type HTTPTimeseriesParams struct {
 	BotClass param.Field[[]HTTPTimeseriesParamsBotClass] `query:"botClass"`
 	// Filters results by browser family.
 	BrowserFamily param.Field[[]HTTPTimeseriesParamsBrowserFamily] `query:"browserFamily"`
+	// Filters results by content type category.
+	ContentType param.Field[[]HTTPTimeseriesParamsContentType] `query:"contentType"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -1296,6 +1330,35 @@ const (
 func (r HTTPTimeseriesParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesParamsBrowserFamilyChrome, HTTPTimeseriesParamsBrowserFamilyEdge, HTTPTimeseriesParamsBrowserFamilyFirefox, HTTPTimeseriesParamsBrowserFamilySafari:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesParamsContentType string
+
+const (
+	HTTPTimeseriesParamsContentTypeHTML          HTTPTimeseriesParamsContentType = "HTML"
+	HTTPTimeseriesParamsContentTypeImages        HTTPTimeseriesParamsContentType = "IMAGES"
+	HTTPTimeseriesParamsContentTypeJson          HTTPTimeseriesParamsContentType = "JSON"
+	HTTPTimeseriesParamsContentTypeJavascript    HTTPTimeseriesParamsContentType = "JAVASCRIPT"
+	HTTPTimeseriesParamsContentTypeCSS           HTTPTimeseriesParamsContentType = "CSS"
+	HTTPTimeseriesParamsContentTypePlainText     HTTPTimeseriesParamsContentType = "PLAIN_TEXT"
+	HTTPTimeseriesParamsContentTypeFonts         HTTPTimeseriesParamsContentType = "FONTS"
+	HTTPTimeseriesParamsContentTypeXml           HTTPTimeseriesParamsContentType = "XML"
+	HTTPTimeseriesParamsContentTypeYaml          HTTPTimeseriesParamsContentType = "YAML"
+	HTTPTimeseriesParamsContentTypeVideo         HTTPTimeseriesParamsContentType = "VIDEO"
+	HTTPTimeseriesParamsContentTypeAudio         HTTPTimeseriesParamsContentType = "AUDIO"
+	HTTPTimeseriesParamsContentTypeMarkdown      HTTPTimeseriesParamsContentType = "MARKDOWN"
+	HTTPTimeseriesParamsContentTypeDocuments     HTTPTimeseriesParamsContentType = "DOCUMENTS"
+	HTTPTimeseriesParamsContentTypeBinary        HTTPTimeseriesParamsContentType = "BINARY"
+	HTTPTimeseriesParamsContentTypeSerialization HTTPTimeseriesParamsContentType = "SERIALIZATION"
+	HTTPTimeseriesParamsContentTypeOther         HTTPTimeseriesParamsContentType = "OTHER"
+)
+
+func (r HTTPTimeseriesParamsContentType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsContentTypeHTML, HTTPTimeseriesParamsContentTypeImages, HTTPTimeseriesParamsContentTypeJson, HTTPTimeseriesParamsContentTypeJavascript, HTTPTimeseriesParamsContentTypeCSS, HTTPTimeseriesParamsContentTypePlainText, HTTPTimeseriesParamsContentTypeFonts, HTTPTimeseriesParamsContentTypeXml, HTTPTimeseriesParamsContentTypeYaml, HTTPTimeseriesParamsContentTypeVideo, HTTPTimeseriesParamsContentTypeAudio, HTTPTimeseriesParamsContentTypeMarkdown, HTTPTimeseriesParamsContentTypeDocuments, HTTPTimeseriesParamsContentTypeBinary, HTTPTimeseriesParamsContentTypeSerialization, HTTPTimeseriesParamsContentTypeOther:
 		return true
 	}
 	return false
@@ -1473,6 +1536,8 @@ type HTTPTimeseriesGroupsV2Params struct {
 	// Filters results by bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]HTTPTimeseriesGroupsV2ParamsBotClass] `query:"botClass"`
+	// Filters results by content type category.
+	ContentType param.Field[[]HTTPTimeseriesGroupsV2ParamsContentType] `query:"contentType"`
 	// Filters results by continent. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
@@ -1538,6 +1603,7 @@ const (
 	HTTPTimeseriesGroupsV2ParamsDimensionBotClass      HTTPTimeseriesGroupsV2ParamsDimension = "BOT_CLASS"
 	HTTPTimeseriesGroupsV2ParamsDimensionBrowser       HTTPTimeseriesGroupsV2ParamsDimension = "BROWSER"
 	HTTPTimeseriesGroupsV2ParamsDimensionBrowserFamily HTTPTimeseriesGroupsV2ParamsDimension = "BROWSER_FAMILY"
+	HTTPTimeseriesGroupsV2ParamsDimensionContentType   HTTPTimeseriesGroupsV2ParamsDimension = "CONTENT_TYPE"
 	HTTPTimeseriesGroupsV2ParamsDimensionDeviceType    HTTPTimeseriesGroupsV2ParamsDimension = "DEVICE_TYPE"
 	HTTPTimeseriesGroupsV2ParamsDimensionHTTPProtocol  HTTPTimeseriesGroupsV2ParamsDimension = "HTTP_PROTOCOL"
 	HTTPTimeseriesGroupsV2ParamsDimensionHTTPVersion   HTTPTimeseriesGroupsV2ParamsDimension = "HTTP_VERSION"
@@ -1550,7 +1616,7 @@ const (
 
 func (r HTTPTimeseriesGroupsV2ParamsDimension) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupsV2ParamsDimensionAdm1, HTTPTimeseriesGroupsV2ParamsDimensionAPITraffic, HTTPTimeseriesGroupsV2ParamsDimensionAs, HTTPTimeseriesGroupsV2ParamsDimensionBotClass, HTTPTimeseriesGroupsV2ParamsDimensionBrowser, HTTPTimeseriesGroupsV2ParamsDimensionBrowserFamily, HTTPTimeseriesGroupsV2ParamsDimensionDeviceType, HTTPTimeseriesGroupsV2ParamsDimensionHTTPProtocol, HTTPTimeseriesGroupsV2ParamsDimensionHTTPVersion, HTTPTimeseriesGroupsV2ParamsDimensionIPVersion, HTTPTimeseriesGroupsV2ParamsDimensionLocation, HTTPTimeseriesGroupsV2ParamsDimensionOS, HTTPTimeseriesGroupsV2ParamsDimensionPostQuantum, HTTPTimeseriesGroupsV2ParamsDimensionTLSVersion:
+	case HTTPTimeseriesGroupsV2ParamsDimensionAdm1, HTTPTimeseriesGroupsV2ParamsDimensionAPITraffic, HTTPTimeseriesGroupsV2ParamsDimensionAs, HTTPTimeseriesGroupsV2ParamsDimensionBotClass, HTTPTimeseriesGroupsV2ParamsDimensionBrowser, HTTPTimeseriesGroupsV2ParamsDimensionBrowserFamily, HTTPTimeseriesGroupsV2ParamsDimensionContentType, HTTPTimeseriesGroupsV2ParamsDimensionDeviceType, HTTPTimeseriesGroupsV2ParamsDimensionHTTPProtocol, HTTPTimeseriesGroupsV2ParamsDimensionHTTPVersion, HTTPTimeseriesGroupsV2ParamsDimensionIPVersion, HTTPTimeseriesGroupsV2ParamsDimensionLocation, HTTPTimeseriesGroupsV2ParamsDimensionOS, HTTPTimeseriesGroupsV2ParamsDimensionPostQuantum, HTTPTimeseriesGroupsV2ParamsDimensionTLSVersion:
 		return true
 	}
 	return false
@@ -1601,6 +1667,35 @@ const (
 func (r HTTPTimeseriesGroupsV2ParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupsV2ParamsBotClassLikelyAutomated, HTTPTimeseriesGroupsV2ParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
+type HTTPTimeseriesGroupsV2ParamsContentType string
+
+const (
+	HTTPTimeseriesGroupsV2ParamsContentTypeHTML          HTTPTimeseriesGroupsV2ParamsContentType = "HTML"
+	HTTPTimeseriesGroupsV2ParamsContentTypeImages        HTTPTimeseriesGroupsV2ParamsContentType = "IMAGES"
+	HTTPTimeseriesGroupsV2ParamsContentTypeJson          HTTPTimeseriesGroupsV2ParamsContentType = "JSON"
+	HTTPTimeseriesGroupsV2ParamsContentTypeJavascript    HTTPTimeseriesGroupsV2ParamsContentType = "JAVASCRIPT"
+	HTTPTimeseriesGroupsV2ParamsContentTypeCSS           HTTPTimeseriesGroupsV2ParamsContentType = "CSS"
+	HTTPTimeseriesGroupsV2ParamsContentTypePlainText     HTTPTimeseriesGroupsV2ParamsContentType = "PLAIN_TEXT"
+	HTTPTimeseriesGroupsV2ParamsContentTypeFonts         HTTPTimeseriesGroupsV2ParamsContentType = "FONTS"
+	HTTPTimeseriesGroupsV2ParamsContentTypeXml           HTTPTimeseriesGroupsV2ParamsContentType = "XML"
+	HTTPTimeseriesGroupsV2ParamsContentTypeYaml          HTTPTimeseriesGroupsV2ParamsContentType = "YAML"
+	HTTPTimeseriesGroupsV2ParamsContentTypeVideo         HTTPTimeseriesGroupsV2ParamsContentType = "VIDEO"
+	HTTPTimeseriesGroupsV2ParamsContentTypeAudio         HTTPTimeseriesGroupsV2ParamsContentType = "AUDIO"
+	HTTPTimeseriesGroupsV2ParamsContentTypeMarkdown      HTTPTimeseriesGroupsV2ParamsContentType = "MARKDOWN"
+	HTTPTimeseriesGroupsV2ParamsContentTypeDocuments     HTTPTimeseriesGroupsV2ParamsContentType = "DOCUMENTS"
+	HTTPTimeseriesGroupsV2ParamsContentTypeBinary        HTTPTimeseriesGroupsV2ParamsContentType = "BINARY"
+	HTTPTimeseriesGroupsV2ParamsContentTypeSerialization HTTPTimeseriesGroupsV2ParamsContentType = "SERIALIZATION"
+	HTTPTimeseriesGroupsV2ParamsContentTypeOther         HTTPTimeseriesGroupsV2ParamsContentType = "OTHER"
+)
+
+func (r HTTPTimeseriesGroupsV2ParamsContentType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupsV2ParamsContentTypeHTML, HTTPTimeseriesGroupsV2ParamsContentTypeImages, HTTPTimeseriesGroupsV2ParamsContentTypeJson, HTTPTimeseriesGroupsV2ParamsContentTypeJavascript, HTTPTimeseriesGroupsV2ParamsContentTypeCSS, HTTPTimeseriesGroupsV2ParamsContentTypePlainText, HTTPTimeseriesGroupsV2ParamsContentTypeFonts, HTTPTimeseriesGroupsV2ParamsContentTypeXml, HTTPTimeseriesGroupsV2ParamsContentTypeYaml, HTTPTimeseriesGroupsV2ParamsContentTypeVideo, HTTPTimeseriesGroupsV2ParamsContentTypeAudio, HTTPTimeseriesGroupsV2ParamsContentTypeMarkdown, HTTPTimeseriesGroupsV2ParamsContentTypeDocuments, HTTPTimeseriesGroupsV2ParamsContentTypeBinary, HTTPTimeseriesGroupsV2ParamsContentTypeSerialization, HTTPTimeseriesGroupsV2ParamsContentTypeOther:
 		return true
 	}
 	return false
