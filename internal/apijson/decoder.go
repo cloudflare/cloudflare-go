@@ -75,7 +75,7 @@ type decoderField struct {
 }
 
 type decoderEntry struct {
-	reflect.Type
+	typ        reflect.Type
 	dateFormat string
 	root       bool
 }
@@ -91,7 +91,7 @@ func (d *decoderBuilder) unmarshal(raw []byte, to any) error {
 
 func (d *decoderBuilder) typeDecoder(t reflect.Type) decoderFunc {
 	entry := decoderEntry{
-		Type:       t,
+		typ:        t,
 		dateFormat: d.dateFormat,
 		root:       d.root,
 	}
