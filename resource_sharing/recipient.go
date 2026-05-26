@@ -527,9 +527,12 @@ type RecipientListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Include resources in the response.
 	IncludeResources param.Field[bool] `query:"include_resources"`
-	// Page number.
+	// Page number. Defaults to `1` when `per_page` is supplied without `page`. May be
+	// omitted entirely along with `per_page` to receive a non-paginated response.
 	Page param.Field[int64] `query:"page"`
-	// Number of objects to return per page.
+	// Number of objects to return per page. Defaults to `20` when `page` is supplied
+	// without `per_page`. May be omitted entirely along with `page` to receive a
+	// non-paginated response.
 	PerPage param.Field[int64] `query:"per_page"`
 }
 

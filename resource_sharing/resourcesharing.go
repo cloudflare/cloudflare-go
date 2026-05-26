@@ -1264,9 +1264,12 @@ type ResourceSharingListParams struct {
 	Kind param.Field[ResourceSharingListParamsKind] `query:"kind"`
 	// Order shares by values in the given field.
 	Order param.Field[ResourceSharingListParamsOrder] `query:"order"`
-	// Page number.
+	// Page number. Defaults to `1` when `per_page` is supplied without `page`. May be
+	// omitted entirely along with `per_page` to receive a non-paginated response.
 	Page param.Field[int64] `query:"page"`
-	// Number of objects to return per page.
+	// Number of objects to return per page. Defaults to `20` when `page` is supplied
+	// without `per_page`. May be omitted entirely along with `page` to receive a
+	// non-paginated response.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Filter share resources by resource_types.
 	ResourceTypes param.Field[[]ResourceSharingListParamsResourceType] `query:"resource_types"`
