@@ -103,6 +103,7 @@ func TestSinkListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Pipelines.Sinks.List(context.TODO(), pipelines.SinkListParams{
 		AccountID:  cloudflare.F("0123105f4ecef8ad9ca31a8372d0c353"),
+		Name:       cloudflare.F("x"),
 		Page:       cloudflare.F(0.000000),
 		PerPage:    cloudflare.F(0.000000),
 		PipelineID: cloudflare.F("pipeline_id"),

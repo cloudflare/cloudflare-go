@@ -2917,9 +2917,11 @@ func (r pipelineGetV1ResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineListV1Params struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string]  `path:"account_id" api:"required"`
-	Page      param.Field[float64] `query:"page"`
-	PerPage   param.Field[float64] `query:"per_page"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filters pipelines by name (case-insensitive substring).
+	Name    param.Field[string]  `query:"name"`
+	Page    param.Field[float64] `query:"page"`
+	PerPage param.Field[float64] `query:"per_page"`
 }
 
 // URLQuery serializes [PipelineListV1Params]'s query parameters as `url.Values`.
