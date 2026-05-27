@@ -178,7 +178,7 @@ func (r auditLogResourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// The Certificate Authority that will issue the certificate
+// The Certificate Authority that will issue the certificate.
 type CertificateCA string
 
 const (
