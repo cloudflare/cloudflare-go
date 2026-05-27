@@ -724,12 +724,13 @@ func (r InstanceGetResponseStepsObjectConfigSensitive) IsKnown() bool {
 type InstanceGetResponseStepsObjectType string
 
 const (
-	InstanceGetResponseStepsObjectTypeStep InstanceGetResponseStepsObjectType = "step"
+	InstanceGetResponseStepsObjectTypeStep     InstanceGetResponseStepsObjectType = "step"
+	InstanceGetResponseStepsObjectTypeRollback InstanceGetResponseStepsObjectType = "rollback"
 )
 
 func (r InstanceGetResponseStepsObjectType) IsKnown() bool {
 	switch r {
-	case InstanceGetResponseStepsObjectTypeStep:
+	case InstanceGetResponseStepsObjectTypeStep, InstanceGetResponseStepsObjectTypeRollback:
 		return true
 	}
 	return false
@@ -739,6 +740,7 @@ type InstanceGetResponseStepsType string
 
 const (
 	InstanceGetResponseStepsTypeStep         InstanceGetResponseStepsType = "step"
+	InstanceGetResponseStepsTypeRollback     InstanceGetResponseStepsType = "rollback"
 	InstanceGetResponseStepsTypeSleep        InstanceGetResponseStepsType = "sleep"
 	InstanceGetResponseStepsTypeTermination  InstanceGetResponseStepsType = "termination"
 	InstanceGetResponseStepsTypeWaitForEvent InstanceGetResponseStepsType = "waitForEvent"
@@ -746,7 +748,7 @@ const (
 
 func (r InstanceGetResponseStepsType) IsKnown() bool {
 	switch r {
-	case InstanceGetResponseStepsTypeStep, InstanceGetResponseStepsTypeSleep, InstanceGetResponseStepsTypeTermination, InstanceGetResponseStepsTypeWaitForEvent:
+	case InstanceGetResponseStepsTypeStep, InstanceGetResponseStepsTypeRollback, InstanceGetResponseStepsTypeSleep, InstanceGetResponseStepsTypeTermination, InstanceGetResponseStepsTypeWaitForEvent:
 		return true
 	}
 	return false
