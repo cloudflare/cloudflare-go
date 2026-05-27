@@ -766,9 +766,9 @@ func (r NamespaceInstanceNewResponseRerankingModel) IsKnown() bool {
 
 type NamespaceInstanceNewResponseRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
-	// field and an optional direction. Direction defaults to 'asc' for numeric fields
-	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
-	// custom_metadata field.
+	// field and an optional direction. Direction defaults to 'asc' for
+	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
+	// 'timestamp' or a defined custom_metadata field.
 	BoostBy []NamespaceInstanceNewResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
@@ -796,12 +796,13 @@ func (r namespaceInstanceNewResponseRetrievalOptionsJSON) RawJSON() string {
 
 type NamespaceInstanceNewResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction NamespaceInstanceNewResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      namespaceInstanceNewResponseRetrievalOptionsBoostByJSON      `json:"-"`
@@ -826,7 +827,7 @@ func (r namespaceInstanceNewResponseRetrievalOptionsBoostByJSON) RawJSON() strin
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceInstanceNewResponseRetrievalOptionsBoostByDirection string
 
@@ -1686,9 +1687,9 @@ func (r NamespaceInstanceUpdateResponseRerankingModel) IsKnown() bool {
 
 type NamespaceInstanceUpdateResponseRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
-	// field and an optional direction. Direction defaults to 'asc' for numeric fields
-	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
-	// custom_metadata field.
+	// field and an optional direction. Direction defaults to 'asc' for
+	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
+	// 'timestamp' or a defined custom_metadata field.
 	BoostBy []NamespaceInstanceUpdateResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
@@ -1716,12 +1717,13 @@ func (r namespaceInstanceUpdateResponseRetrievalOptionsJSON) RawJSON() string {
 
 type NamespaceInstanceUpdateResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction NamespaceInstanceUpdateResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      namespaceInstanceUpdateResponseRetrievalOptionsBoostByJSON      `json:"-"`
@@ -1746,7 +1748,7 @@ func (r namespaceInstanceUpdateResponseRetrievalOptionsBoostByJSON) RawJSON() st
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceInstanceUpdateResponseRetrievalOptionsBoostByDirection string
 
@@ -2606,9 +2608,9 @@ func (r NamespaceInstanceListResponseRerankingModel) IsKnown() bool {
 
 type NamespaceInstanceListResponseRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
-	// field and an optional direction. Direction defaults to 'asc' for numeric fields
-	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
-	// custom_metadata field.
+	// field and an optional direction. Direction defaults to 'asc' for
+	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
+	// 'timestamp' or a defined custom_metadata field.
 	BoostBy []NamespaceInstanceListResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
@@ -2636,12 +2638,13 @@ func (r namespaceInstanceListResponseRetrievalOptionsJSON) RawJSON() string {
 
 type NamespaceInstanceListResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction NamespaceInstanceListResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      namespaceInstanceListResponseRetrievalOptionsBoostByJSON      `json:"-"`
@@ -2666,7 +2669,7 @@ func (r namespaceInstanceListResponseRetrievalOptionsBoostByJSON) RawJSON() stri
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceInstanceListResponseRetrievalOptionsBoostByDirection string
 
@@ -3526,9 +3529,9 @@ func (r NamespaceInstanceDeleteResponseRerankingModel) IsKnown() bool {
 
 type NamespaceInstanceDeleteResponseRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
-	// field and an optional direction. Direction defaults to 'asc' for numeric fields
-	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
-	// custom_metadata field.
+	// field and an optional direction. Direction defaults to 'asc' for
+	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
+	// 'timestamp' or a defined custom_metadata field.
 	BoostBy []NamespaceInstanceDeleteResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
@@ -3556,12 +3559,13 @@ func (r namespaceInstanceDeleteResponseRetrievalOptionsJSON) RawJSON() string {
 
 type NamespaceInstanceDeleteResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction NamespaceInstanceDeleteResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      namespaceInstanceDeleteResponseRetrievalOptionsBoostByJSON      `json:"-"`
@@ -3586,7 +3590,7 @@ func (r namespaceInstanceDeleteResponseRetrievalOptionsBoostByJSON) RawJSON() st
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceInstanceDeleteResponseRetrievalOptionsBoostByDirection string
 
@@ -4644,9 +4648,9 @@ func (r NamespaceInstanceReadResponseRerankingModel) IsKnown() bool {
 
 type NamespaceInstanceReadResponseRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
-	// field and an optional direction. Direction defaults to 'asc' for numeric fields
-	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
-	// custom_metadata field.
+	// field and an optional direction. Direction defaults to 'asc' for
+	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
+	// 'timestamp' or a defined custom_metadata field.
 	BoostBy []NamespaceInstanceReadResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
@@ -4674,12 +4678,13 @@ func (r namespaceInstanceReadResponseRetrievalOptionsJSON) RawJSON() string {
 
 type NamespaceInstanceReadResponseRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field string `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction NamespaceInstanceReadResponseRetrievalOptionsBoostByDirection `json:"direction"`
 	JSON      namespaceInstanceReadResponseRetrievalOptionsBoostByJSON      `json:"-"`
@@ -4704,7 +4709,7 @@ func (r namespaceInstanceReadResponseRetrievalOptionsBoostByJSON) RawJSON() stri
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceInstanceReadResponseRetrievalOptionsBoostByDirection string
 
@@ -5616,9 +5621,9 @@ func (r NamespaceInstanceNewParamsRerankingModel) IsKnown() bool {
 
 type NamespaceInstanceNewParamsRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
-	// field and an optional direction. Direction defaults to 'asc' for numeric fields
-	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
-	// custom_metadata field.
+	// field and an optional direction. Direction defaults to 'asc' for
+	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
+	// 'timestamp' or a defined custom_metadata field.
 	BoostBy param.Field[[]NamespaceInstanceNewParamsRetrievalOptionsBoostBy] `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
@@ -5632,12 +5637,13 @@ func (r NamespaceInstanceNewParamsRetrievalOptions) MarshalJSON() (data []byte, 
 
 type NamespaceInstanceNewParamsRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[NamespaceInstanceNewParamsRetrievalOptionsBoostByDirection] `json:"direction"`
 }
@@ -5648,7 +5654,7 @@ func (r NamespaceInstanceNewParamsRetrievalOptionsBoostBy) MarshalJSON() (data [
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceInstanceNewParamsRetrievalOptionsBoostByDirection string
 
@@ -6238,9 +6244,9 @@ func (r NamespaceInstanceUpdateParamsRerankingModel) IsKnown() bool {
 
 type NamespaceInstanceUpdateParamsRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
-	// field and an optional direction. Direction defaults to 'asc' for numeric fields
-	// and 'exists' for text/boolean fields. Fields must match 'timestamp' or a defined
-	// custom_metadata field.
+	// field and an optional direction. Direction defaults to 'asc' for
+	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
+	// 'timestamp' or a defined custom_metadata field.
 	BoostBy param.Field[[]NamespaceInstanceUpdateParamsRetrievalOptionsBoostBy] `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
@@ -6254,12 +6260,13 @@ func (r NamespaceInstanceUpdateParamsRetrievalOptions) MarshalJSON() (data []byt
 
 type NamespaceInstanceUpdateParamsRetrievalOptionsBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[NamespaceInstanceUpdateParamsRetrievalOptionsBoostByDirection] `json:"direction"`
 }
@@ -6270,7 +6277,7 @@ func (r NamespaceInstanceUpdateParamsRetrievalOptionsBoostBy) MarshalJSON() (dat
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceInstanceUpdateParamsRetrievalOptionsBoostByDirection string
 
@@ -6820,12 +6827,13 @@ func (r NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJ
 
 type NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrievalBoostByDirection] `json:"direction"`
 }
@@ -6836,7 +6844,7 @@ func (r NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy) M
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrievalBoostByDirection string
 
@@ -7127,12 +7135,13 @@ func (r NamespaceInstanceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (da
 
 type NamespaceInstanceSearchParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[NamespaceInstanceSearchParamsAISearchOptionsRetrievalBoostByDirection] `json:"direction"`
 }
@@ -7143,7 +7152,7 @@ func (r NamespaceInstanceSearchParamsAISearchOptionsRetrievalBoostBy) MarshalJSO
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceInstanceSearchParamsAISearchOptionsRetrievalBoostByDirection string
 
