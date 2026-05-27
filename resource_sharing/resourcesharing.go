@@ -1141,12 +1141,25 @@ func (r ResourceSharingNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Account or organization ID must be provided.
+// Optionally specify `recipient_account_id` to target a specific account, or
+// `organization_id` to target the caller's whole organization. If neither is
+// provided, the caller's organization is used. The legacy field `account_id` is
+// accepted as a synonym for `recipient_account_id` during the deprecation period
+// (see `x-sunset` on that field).
 type ResourceSharingNewParamsRecipient struct {
-	// Account identifier.
+	// Deprecated alias for `recipient_account_id`. Use `recipient_account_id` instead.
+	// The body field collided with the URL path parameter of the same name, which
+	// prevented SDK generators from distinguishing the source account (in the URL)
+	// from the recipient account (in the body). Both names will continue to be
+	// accepted until 2027-05-26 (see `x-sunset`).
+	//
+	// Deprecated: This field has been renamed to `recipient_account_id`. Both names
+	// are accepted during the deprecation period.
 	AccountID param.Field[string] `json:"account_id"`
 	// Organization identifier.
 	OrganizationID param.Field[string] `json:"organization_id"`
+	// The account that will receive the share.
+	RecipientAccountID param.Field[string] `json:"recipient_account_id"`
 }
 
 func (r ResourceSharingNewParamsRecipient) MarshalJSON() (data []byte, err error) {

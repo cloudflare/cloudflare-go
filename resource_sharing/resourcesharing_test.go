@@ -31,8 +31,9 @@ func TestResourceSharingNew(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("My Shared WAF Managed Rule"),
 		Recipients: cloudflare.F([]resource_sharing.ResourceSharingNewParamsRecipient{{
-			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			OrganizationID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			OrganizationID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			RecipientAccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}}),
 		Resources: cloudflare.F([]resource_sharing.ResourceSharingNewParamsResource{{
 			Meta:              cloudflare.F[any](map[string]interface{}{}),

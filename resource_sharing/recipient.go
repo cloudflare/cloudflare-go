@@ -486,10 +486,16 @@ func (r recipientGetResponseResourceJSON) RawJSON() string {
 type RecipientNewParams struct {
 	// Account identifier.
 	PathAccountID param.Field[string] `path:"account_id" api:"required"`
-	// Account identifier.
+	// Deprecated alias for `recipient_account_id`. Use `recipient_account_id` instead.
+	// The body field collided with the URL path parameter of the same name, which
+	// prevented SDK generators from distinguishing the source account (in the URL)
+	// from the recipient account (in the body). Both names will continue to be
+	// accepted until 2027-05-26 (see `x-sunset`).
 	BodyAccountID param.Field[string] `json:"account_id"`
 	// Organization identifier.
 	OrganizationID param.Field[string] `json:"organization_id"`
+	// The account that will receive the share.
+	RecipientAccountID param.Field[string] `json:"recipient_account_id"`
 }
 
 func (r RecipientNewParams) MarshalJSON() (data []byte, err error) {

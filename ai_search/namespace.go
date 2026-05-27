@@ -975,12 +975,13 @@ func (r NamespaceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJSON() (d
 
 type NamespaceChatCompletionsParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrievalBoostByDirection] `json:"direction"`
 }
@@ -991,7 +992,7 @@ func (r NamespaceChatCompletionsParamsAISearchOptionsRetrievalBoostBy) MarshalJS
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceChatCompletionsParamsAISearchOptionsRetrievalBoostByDirection string
 
@@ -1325,12 +1326,13 @@ func (r NamespaceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (data []byt
 
 type NamespaceSearchParamsAISearchOptionsRetrievalBoostBy struct {
 	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support asc/desc directions;
-	// text/boolean fields support exists/not_exists.
+	// custom_metadata field. Numeric and datetime fields support all four directions
+	// (asc, desc, exists, not_exists); text/boolean fields only support
+	// exists/not_exists.
 	Field param.Field[string] `json:"field" api:"required"`
 	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 	// for numeric/datetime fields, 'exists' for text/boolean fields.
 	Direction param.Field[NamespaceSearchParamsAISearchOptionsRetrievalBoostByDirection] `json:"direction"`
 }
@@ -1341,7 +1343,7 @@ func (r NamespaceSearchParamsAISearchOptionsRetrievalBoostBy) MarshalJSON() (dat
 
 // Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
 // 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional ��� defaults to 'asc'
+// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
 // for numeric/datetime fields, 'exists' for text/boolean fields.
 type NamespaceSearchParamsAISearchOptionsRetrievalBoostByDirection string
 
