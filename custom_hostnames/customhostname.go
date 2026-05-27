@@ -353,7 +353,7 @@ type CustomHostnameNewResponseSSL struct {
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
+	// The Certificate Authority that will issue the certificate.
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
@@ -847,7 +847,7 @@ type CustomHostnameListResponseSSL struct {
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
+	// The Certificate Authority that will issue the certificate.
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
@@ -1363,7 +1363,7 @@ type CustomHostnameEditResponseSSL struct {
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
+	// The Certificate Authority that will issue the certificate.
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
@@ -1857,7 +1857,7 @@ type CustomHostnameGetResponseSSL struct {
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
+	// The Certificate Authority that will issue the certificate.
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`
@@ -2236,12 +2236,12 @@ type CustomHostnameNewParamsSSL struct {
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
+	// The Certificate Authority that will issue the certificate.
 	CertificateAuthority param.Field[shared.CertificateCA] `json:"certificate_authority"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
-	// subdomain of sni.cloudflaressl.com as the Common Name if set to true
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
-	// Array of custom certificate and key pairs (1 or 2 pairs allowed)
+	// Array of custom certificate and key pairs (1 or 2 pairs allowed).
 	CustomCERTBundle param.Field[[]CustomHostnameNewParamsSSLCustomCERTBundle] `json:"custom_cert_bundle"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
@@ -2633,7 +2633,7 @@ func (r CustomHostnameListParamsOrder) IsKnown() bool {
 }
 
 // Whether to filter hostnames based on if they have SSL enabled.
-type CustomHostnameListParamsSSL float64
+type CustomHostnameListParamsSSL int64
 
 const (
 	CustomHostnameListParamsSSL0 CustomHostnameListParamsSSL = 0
@@ -2718,12 +2718,12 @@ type CustomHostnameEditParamsSSL struct {
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
+	// The Certificate Authority that will issue the certificate.
 	CertificateAuthority param.Field[shared.CertificateCA] `json:"certificate_authority"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
-	// subdomain of sni.cloudflaressl.com as the Common Name if set to true
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
-	// Array of custom certificate and key pairs (1 or 2 pairs allowed)
+	// Array of custom certificate and key pairs (1 or 2 pairs allowed).
 	CustomCERTBundle param.Field[[]CustomHostnameEditParamsSSLCustomCERTBundle] `json:"custom_cert_bundle"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`

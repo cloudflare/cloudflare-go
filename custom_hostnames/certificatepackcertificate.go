@@ -235,7 +235,7 @@ type CertificatePackCertificateUpdateResponseSSL struct {
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
 	BundleMethod BundleMethod `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
+	// The Certificate Authority that will issue the certificate.
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate string `json:"custom_certificate"`

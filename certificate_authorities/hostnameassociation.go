@@ -36,7 +36,7 @@ func NewHostnameAssociationService(opts ...option.RequestOption) (r *HostnameAss
 	return
 }
 
-// Replace Hostname Associations
+// Replace Hostname Associations.
 func (r *HostnameAssociationService) Update(ctx context.Context, params HostnameAssociationUpdateParams, opts ...option.RequestOption) (res *HostnameAssociationUpdateResponse, err error) {
 	var env HostnameAssociationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +53,7 @@ func (r *HostnameAssociationService) Update(ctx context.Context, params Hostname
 	return res, nil
 }
 
-// List Hostname Associations
+// List Hostname Associations.
 func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAssociationGetParams, opts ...option.RequestOption) (res *HostnameAssociationGetResponse, err error) {
 	var env HostnameAssociationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

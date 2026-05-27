@@ -168,7 +168,7 @@ type KeylessCertificate struct {
 	Port float64 `json:"port" api:"required"`
 	// Status of the Keyless SSL.
 	Status KeylessCertificateStatus `json:"status" api:"required"`
-	// Configuration for using Keyless SSL through a Cloudflare Tunnel
+	// Configuration for using Keyless SSL through a Cloudflare Tunnel.
 	Tunnel Tunnel                 `json:"tunnel"`
 	JSON   keylessCertificateJSON `json:"-"`
 }
@@ -214,11 +214,11 @@ func (r KeylessCertificateStatus) IsKnown() bool {
 	return false
 }
 
-// Configuration for using Keyless SSL through a Cloudflare Tunnel
+// Configuration for using Keyless SSL through a Cloudflare Tunnel.
 type Tunnel struct {
-	// Private IP of the Key Server Host
+	// Private IP of the Key Server Host.
 	PrivateIP string `json:"private_ip" api:"required"`
-	// Cloudflare Tunnel Virtual Network ID
+	// Cloudflare Tunnel Virtual Network ID.
 	VnetID string     `json:"vnet_id" api:"required"`
 	JSON   tunnelJSON `json:"-"`
 }
@@ -239,11 +239,11 @@ func (r tunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configuration for using Keyless SSL through a Cloudflare Tunnel
+// Configuration for using Keyless SSL through a Cloudflare Tunnel.
 type TunnelParam struct {
-	// Private IP of the Key Server Host
+	// Private IP of the Key Server Host.
 	PrivateIP param.Field[string] `json:"private_ip" api:"required"`
-	// Cloudflare Tunnel Virtual Network ID
+	// Cloudflare Tunnel Virtual Network ID.
 	VnetID param.Field[string] `json:"vnet_id" api:"required"`
 }
 
@@ -290,7 +290,7 @@ type KeylessCertificateNewParams struct {
 	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
 	// The keyless SSL name.
 	Name param.Field[string] `json:"name"`
-	// Configuration for using Keyless SSL through a Cloudflare Tunnel
+	// Configuration for using Keyless SSL through a Cloudflare Tunnel.
 	Tunnel param.Field[TunnelParam] `json:"tunnel"`
 }
 
@@ -598,7 +598,7 @@ type KeylessCertificateEditParams struct {
 	// The keyless SSL port used to communicate between Cloudflare and the client's
 	// Keyless SSL server.
 	Port param.Field[float64] `json:"port"`
-	// Configuration for using Keyless SSL through a Cloudflare Tunnel
+	// Configuration for using Keyless SSL through a Cloudflare Tunnel.
 	Tunnel param.Field[TunnelParam] `json:"tunnel"`
 }
 

@@ -38,7 +38,7 @@ func NewClientCertificateService(opts ...option.RequestOption) (r *ClientCertifi
 	return
 }
 
-// Create a new API Shield mTLS Client Certificate
+// Create a new API Shield mTLS Client Certificate.
 func (r *ClientCertificateService) New(ctx context.Context, params ClientCertificateNewParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	var env ClientCertificateNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +56,7 @@ func (r *ClientCertificateService) New(ctx context.Context, params ClientCertifi
 }
 
 // List all of your Zone's API Shield mTLS Client Certificates by Status and/or
-// using Pagination
+// using Pagination.
 func (r *ClientCertificateService) List(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ClientCertificate], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -79,7 +79,7 @@ func (r *ClientCertificateService) List(ctx context.Context, params ClientCertif
 }
 
 // List all of your Zone's API Shield mTLS Client Certificates by Status and/or
-// using Pagination
+// using Pagination.
 func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ClientCertificate] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -128,7 +128,7 @@ func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID
 	return res, nil
 }
 
-// Get Details for a single mTLS API Shield Client Certificate
+// Get Details for a single mTLS API Shield Client Certificate.
 func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID string, query ClientCertificateGetParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	var env ClientCertificateGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -152,40 +152,41 @@ func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID 
 type ClientCertificate struct {
 	// Identifier.
 	ID string `json:"id"`
-	// The Client Certificate PEM
+	// The Client Certificate PEM.
 	Certificate string `json:"certificate"`
-	// Certificate Authority used to issue the Client Certificate
+	// Certificate Authority used to issue the Client Certificate.
 	CertificateAuthority ClientCertificateCertificateAuthority `json:"certificate_authority"`
-	// Common Name of the Client Certificate
+	// Common Name of the Client Certificate.
 	CommonName string `json:"common_name"`
-	// Country, provided by the CSR
+	// Country, provided by the CSR.
 	Country string `json:"country"`
 	// The Certificate Signing Request (CSR). Must be newline-encoded.
 	Csr string `json:"csr"`
-	// Date that the Client Certificate expires
+	// Date that the Client Certificate expires.
 	ExpiresOn string `json:"expires_on"`
-	// Unique identifier of the Client Certificate
+	// Unique identifier of the Client Certificate.
 	FingerprintSha256 string `json:"fingerprint_sha256"`
-	// Date that the Client Certificate was issued by the Certificate Authority
+	// Date that the Client Certificate was issued by the Certificate Authority.
 	IssuedOn string `json:"issued_on"`
-	// Location, provided by the CSR
+	// Location, provided by the CSR.
 	Location string `json:"location"`
-	// Organization, provided by the CSR
+	// Organization, provided by the CSR.
 	Organization string `json:"organization"`
-	// Organizational Unit, provided by the CSR
+	// Organizational Unit, provided by the CSR.
 	OrganizationalUnit string `json:"organizational_unit"`
 	// The serial number on the created Client Certificate.
 	SerialNumber string `json:"serial_number"`
 	// The type of hash used for the Client Certificate..
 	Signature string `json:"signature"`
-	// Subject Key Identifier
+	// Subject Key Identifier.
 	Ski string `json:"ski"`
-	// State, provided by the CSR
+	// State, provided by the CSR.
 	State string `json:"state"`
 	// Client Certificates may be active or revoked, and the pending_reactivation or
-	// pending_revocation represent in-progress asynchronous transitions
+	// pending_revocation represent in-progress asynchronous transitions.
 	Status custom_certificates.Status `json:"status"`
-	// The number of days the Client Certificate will be valid after the issued_on date
+	// The number of days the Client Certificate will be valid after the issued_on
+	// date.
 	ValidityDays int64                 `json:"validity_days"`
 	JSON         clientCertificateJSON `json:"-"`
 }
@@ -223,7 +224,7 @@ func (r clientCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-// Certificate Authority used to issue the Client Certificate
+// Certificate Authority used to issue the Client Certificate.
 type ClientCertificateCertificateAuthority struct {
 	ID   string                                    `json:"id"`
 	Name string                                    `json:"name"`
@@ -252,7 +253,8 @@ type ClientCertificateNewParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The Certificate Signing Request (CSR). Must be newline-encoded.
 	Csr param.Field[string] `json:"csr" api:"required"`
-	// The number of days the Client Certificate will be valid after the issued_on date
+	// The number of days the Client Certificate will be valid after the issued_on
+	// date.
 	ValidityDays param.Field[int64] `json:"validity_days" api:"required"`
 }
 
@@ -404,7 +406,7 @@ type ClientCertificateListParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Limit to the number of records returned.
 	Limit param.Field[int64] `query:"limit"`
-	// Offset the results
+	// Offset the results.
 	Offset param.Field[int64] `query:"offset"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`

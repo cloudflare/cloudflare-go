@@ -241,7 +241,7 @@ type CertificatePackNewResponse struct {
 	Type CertificatePackNewResponseType `json:"type" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
-	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	// [see this page for more details](https://developers.cloudflare.com/ssl/reference/certificate-authorities).
 	CertificateAuthority CertificatePackNewResponseCertificateAuthority `json:"certificate_authority"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
@@ -408,7 +408,7 @@ func (r CertificatePackNewResponseType) IsKnown() bool {
 
 // Certificate Authority selected for the order. For information on any certificate
 // authority specific details or restrictions
-// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+// [see this page for more details](https://developers.cloudflare.com/ssl/reference/certificate-authorities).
 type CertificatePackNewResponseCertificateAuthority string
 
 const (
@@ -593,7 +593,7 @@ type CertificatePackListResponse struct {
 	Type CertificatePackListResponseType `json:"type" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
-	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	// [see this page for more details](https://developers.cloudflare.com/ssl/reference/certificate-authorities).
 	CertificateAuthority CertificatePackListResponseCertificateAuthority `json:"certificate_authority"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
@@ -760,7 +760,7 @@ func (r CertificatePackListResponseType) IsKnown() bool {
 
 // Certificate Authority selected for the order. For information on any certificate
 // authority specific details or restrictions
-// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+// [see this page for more details](https://developers.cloudflare.com/ssl/reference/certificate-authorities).
 type CertificatePackListResponseCertificateAuthority string
 
 const (
@@ -967,7 +967,7 @@ type CertificatePackEditResponse struct {
 	Type CertificatePackEditResponseType `json:"type" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
-	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	// [see this page for more details](https://developers.cloudflare.com/ssl/reference/certificate-authorities).
 	CertificateAuthority CertificatePackEditResponseCertificateAuthority `json:"certificate_authority"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
@@ -1134,7 +1134,7 @@ func (r CertificatePackEditResponseType) IsKnown() bool {
 
 // Certificate Authority selected for the order. For information on any certificate
 // authority specific details or restrictions
-// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+// [see this page for more details](https://developers.cloudflare.com/ssl/reference/certificate-authorities).
 type CertificatePackEditResponseCertificateAuthority string
 
 const (
@@ -1319,7 +1319,7 @@ type CertificatePackGetResponse struct {
 	Type CertificatePackGetResponseType `json:"type" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
-	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	// [see this page for more details](https://developers.cloudflare.com/ssl/reference/certificate-authorities).
 	CertificateAuthority CertificatePackGetResponseCertificateAuthority `json:"certificate_authority"`
 	// Whether or not to add Cloudflare Branding for the order. This will add a
 	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
@@ -1486,7 +1486,7 @@ func (r CertificatePackGetResponseType) IsKnown() bool {
 
 // Certificate Authority selected for the order. For information on any certificate
 // authority specific details or restrictions
-// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+// [see this page for more details](https://developers.cloudflare.com/ssl/reference/certificate-authorities).
 type CertificatePackGetResponseCertificateAuthority string
 
 const (
@@ -1661,7 +1661,7 @@ type CertificatePackNewParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
-	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	// [see this page for more details](https://developers.cloudflare.com/ssl/reference/certificate-authorities).
 	CertificateAuthority param.Field[CertificatePackNewParamsCertificateAuthority] `json:"certificate_authority" api:"required"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
@@ -1683,7 +1683,7 @@ func (r CertificatePackNewParams) MarshalJSON() (data []byte, err error) {
 
 // Certificate Authority selected for the order. For information on any certificate
 // authority specific details or restrictions
-// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+// [see this page for more details](https://developers.cloudflare.com/ssl/reference/certificate-authorities).
 type CertificatePackNewParamsCertificateAuthority string
 
 const (
