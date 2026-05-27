@@ -359,7 +359,7 @@ type OriginCACertificateListParams struct {
 	ZoneID param.Field[string] `query:"zone_id" api:"required"`
 	// Limit to the number of records returned.
 	Limit param.Field[int64] `query:"limit"`
-	// Offset the results
+	// Offset the results.
 	Offset param.Field[int64] `query:"offset"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`

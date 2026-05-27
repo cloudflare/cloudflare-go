@@ -44,7 +44,7 @@ type AuditLogOwner = shared.AuditLogOwner
 // This is an alias to an internal type.
 type AuditLogResource = shared.AuditLogResource
 
-// The Certificate Authority that will issue the certificate
+// The Certificate Authority that will issue the certificate.
 //
 // This is an alias to an internal type.
 type CertificateCA = shared.CertificateCA

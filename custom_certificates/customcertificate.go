@@ -315,7 +315,7 @@ func (r GeoRestrictionsParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Client Certificates may be active or revoked, and the pending_reactivation or
-// pending_revocation represent in-progress asynchronous transitions
+// pending_revocation represent in-progress asynchronous transitions.
 type Status string
 
 const (
@@ -367,7 +367,7 @@ type CustomCertificateNewParams struct {
 	BundleMethod param.Field[custom_hostnames.BundleMethod] `json:"bundle_method"`
 	// The identifier for the Custom CSR that was used.
 	CustomCsrID param.Field[string] `json:"custom_csr_id"`
-	// The environment to deploy the certificate to, defaults to production
+	// The environment to deploy the certificate to, defaults to production.
 	Deploy param.Field[CustomCertificateNewParamsDeploy] `json:"deploy"`
 	// Specify the region where your private key can be held locally for optimal TLS
 	// performance. HTTPS connections to any excluded data center will still be fully
@@ -401,7 +401,7 @@ func (r CustomCertificateNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The environment to deploy the certificate to, defaults to production
+// The environment to deploy the certificate to, defaults to production.
 type CustomCertificateNewParamsDeploy string
 
 const (
@@ -786,7 +786,7 @@ type CustomCertificateEditParams struct {
 	Certificate param.Field[string] `json:"certificate"`
 	// The identifier for the Custom CSR that was used.
 	CustomCsrID param.Field[string] `json:"custom_csr_id"`
-	// The environment to deploy the certificate to, defaults to production
+	// The environment to deploy the certificate to, defaults to production.
 	Deploy param.Field[CustomCertificateEditParamsDeploy] `json:"deploy"`
 	// Specify the region where your private key can be held locally for optimal TLS
 	// performance. HTTPS connections to any excluded data center will still be fully
@@ -817,7 +817,7 @@ func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The environment to deploy the certificate to, defaults to production
+// The environment to deploy the certificate to, defaults to production.
 type CustomCertificateEditParamsDeploy string
 
 const (
