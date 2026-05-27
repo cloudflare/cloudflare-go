@@ -58,3 +58,15 @@ Response Types:
 Methods:
 
 - <code title="get /organizations/{organization_id}/logs/audit">client.Organizations.Logs.Audit.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#LogAuditService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#LogAuditListParams">LogAuditListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#CursorPaginationAfter">CursorPaginationAfter</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#LogAuditListResponse">LogAuditListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Billing
+
+### Usage
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#BillingUsageGetResponse">BillingUsageGetResponse</a>
+
+Methods:
+
+- <code title="get /organizations/{organization_id}/billable/usage">client.Organizations.Billing.Usage.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#BillingUsageService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#BillingUsageGetParams">BillingUsageGetParams</a>) (\*[]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#BillingUsageGetResponse">BillingUsageGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
