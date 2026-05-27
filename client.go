@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/acm"
 	"github.com/cloudflare/cloudflare-go/v7/addressing"
 	"github.com/cloudflare/cloudflare-go/v7/ai"
+	"github.com/cloudflare/cloudflare-go/v7/ai_audit"
 	"github.com/cloudflare/cloudflare-go/v7/ai_gateway"
 	"github.com/cloudflare/cloudflare-go/v7/ai_search"
 	"github.com/cloudflare/cloudflare-go/v7/ai_security"
@@ -236,6 +237,7 @@ type Client struct {
 	AISecurity                  *ai_security.AISecurityService
 	AbuseReports                *abuse_reports.AbuseReportService
 	AI                          *ai.AIService
+	AIAudit                     *ai_audit.AIAuditService
 	AISearch                    *ai_search.AISearchService
 	SecurityCenter              *security_center.SecurityCenterService
 	BrowserRendering            *browser_rendering.BrowserRenderingService
@@ -388,6 +390,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.AISecurity = ai_security.NewAISecurityService(opts...)
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 	r.AI = ai.NewAIService(opts...)
+	r.AIAudit = ai_audit.NewAIAuditService(opts...)
 	r.AISearch = ai_search.NewAISearchService(opts...)
 	r.SecurityCenter = security_center.NewSecurityCenterService(opts...)
 	r.BrowserRendering = browser_rendering.NewBrowserRenderingService(opts...)

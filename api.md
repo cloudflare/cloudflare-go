@@ -235,6 +235,8 @@
 
 # [AI](ai/api.md)
 
+# [AIAudit](ai_audit/api.md)
+
 # [AISearch](ai_search/api.md)
 
 # [SecurityCenter](security_center/api.md)
