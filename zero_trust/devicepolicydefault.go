@@ -95,6 +95,9 @@ type DevicePolicyDefaultEditResponse struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback bool `json:"disable_auto_fallback"`
+	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
+	// order. Use an empty array to clear.
+	DNSSearchSuffixes []DevicePolicyDefaultEditResponseDNSSearchSuffix `json:"dns_search_suffixes"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel.
@@ -134,6 +137,7 @@ type devicePolicyDefaultEditResponseJSON struct {
 	CaptivePortal              apijson.Field
 	Default                    apijson.Field
 	DisableAutoFallback        apijson.Field
+	DNSSearchSuffixes          apijson.Field
 	Enabled                    apijson.Field
 	Exclude                    apijson.Field
 	ExcludeOfficeIPs           apijson.Field
@@ -157,6 +161,31 @@ func (r *DevicePolicyDefaultEditResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r devicePolicyDefaultEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type DevicePolicyDefaultEditResponseDNSSearchSuffix struct {
+	// The DNS search suffix to append when resolving short hostnames.
+	Suffix string `json:"suffix" api:"required"`
+	// A description of the DNS search suffix.
+	Description string                                             `json:"description"`
+	JSON        devicePolicyDefaultEditResponseDNSSearchSuffixJSON `json:"-"`
+}
+
+// devicePolicyDefaultEditResponseDNSSearchSuffixJSON contains the JSON metadata
+// for the struct [DevicePolicyDefaultEditResponseDNSSearchSuffix]
+type devicePolicyDefaultEditResponseDNSSearchSuffixJSON struct {
+	Suffix      apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyDefaultEditResponseDNSSearchSuffix) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePolicyDefaultEditResponseDNSSearchSuffixJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -230,6 +259,9 @@ type DevicePolicyDefaultGetResponse struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback bool `json:"disable_auto_fallback"`
+	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
+	// order. Use an empty array to clear.
+	DNSSearchSuffixes []DevicePolicyDefaultGetResponseDNSSearchSuffix `json:"dns_search_suffixes"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel.
@@ -269,6 +301,7 @@ type devicePolicyDefaultGetResponseJSON struct {
 	CaptivePortal              apijson.Field
 	Default                    apijson.Field
 	DisableAutoFallback        apijson.Field
+	DNSSearchSuffixes          apijson.Field
 	Enabled                    apijson.Field
 	Exclude                    apijson.Field
 	ExcludeOfficeIPs           apijson.Field
@@ -292,6 +325,31 @@ func (r *DevicePolicyDefaultGetResponse) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r devicePolicyDefaultGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type DevicePolicyDefaultGetResponseDNSSearchSuffix struct {
+	// The DNS search suffix to append when resolving short hostnames.
+	Suffix string `json:"suffix" api:"required"`
+	// A description of the DNS search suffix.
+	Description string                                            `json:"description"`
+	JSON        devicePolicyDefaultGetResponseDNSSearchSuffixJSON `json:"-"`
+}
+
+// devicePolicyDefaultGetResponseDNSSearchSuffixJSON contains the JSON metadata for
+// the struct [DevicePolicyDefaultGetResponseDNSSearchSuffix]
+type devicePolicyDefaultGetResponseDNSSearchSuffixJSON struct {
+	Suffix      apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyDefaultGetResponseDNSSearchSuffix) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r devicePolicyDefaultGetResponseDNSSearchSuffixJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -364,6 +422,9 @@ type DevicePolicyDefaultEditParams struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
+	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
+	// order. Use an empty array to clear.
+	DNSSearchSuffixes param.Field[[]DevicePolicyDefaultEditParamsDNSSearchSuffix] `json:"dns_search_suffixes"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
 	Exclude param.Field[[]SplitTunnelExcludeUnionParam] `json:"exclude"`
@@ -398,6 +459,17 @@ type DevicePolicyDefaultEditParams struct {
 }
 
 func (r DevicePolicyDefaultEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DevicePolicyDefaultEditParamsDNSSearchSuffix struct {
+	// The DNS search suffix to append when resolving short hostnames.
+	Suffix param.Field[string] `json:"suffix" api:"required"`
+	// A description of the DNS search suffix.
+	Description param.Field[string] `json:"description"`
+}
+
+func (r DevicePolicyDefaultEditParamsDNSSearchSuffix) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

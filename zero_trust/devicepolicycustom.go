@@ -191,6 +191,9 @@ type DevicePolicyCustomNewParams struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
+	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
+	// order. Use an empty array to clear.
+	DNSSearchSuffixes param.Field[[]DevicePolicyCustomNewParamsDNSSearchSuffix] `json:"dns_search_suffixes"`
 	// Whether the policy will be applied to matching devices.
 	Enabled param.Field[bool] `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
@@ -227,6 +230,17 @@ type DevicePolicyCustomNewParams struct {
 }
 
 func (r DevicePolicyCustomNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DevicePolicyCustomNewParamsDNSSearchSuffix struct {
+	// The DNS search suffix to append when resolving short hostnames.
+	Suffix param.Field[string] `json:"suffix" api:"required"`
+	// A description of the DNS search suffix.
+	Description param.Field[string] `json:"description"`
+}
+
+func (r DevicePolicyCustomNewParamsDNSSearchSuffix) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -324,6 +338,9 @@ type DevicePolicyCustomEditParams struct {
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
 	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
+	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
+	// order. Use an empty array to clear.
+	DNSSearchSuffixes param.Field[[]DevicePolicyCustomEditParamsDNSSearchSuffix] `json:"dns_search_suffixes"`
 	// Whether the policy will be applied to matching devices.
 	Enabled param.Field[bool] `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
@@ -370,6 +387,17 @@ type DevicePolicyCustomEditParams struct {
 }
 
 func (r DevicePolicyCustomEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DevicePolicyCustomEditParamsDNSSearchSuffix struct {
+	// The DNS search suffix to append when resolving short hostnames.
+	Suffix param.Field[string] `json:"suffix" api:"required"`
+	// A description of the DNS search suffix.
+	Description param.Field[string] `json:"description"`
+}
+
+func (r DevicePolicyCustomEditParamsDNSSearchSuffix) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
