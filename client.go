@@ -43,6 +43,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/dcv_delegation"
 	"github.com/cloudflare/cloudflare-go/v7/ddos_protection"
 	"github.com/cloudflare/cloudflare-go/v7/diagnostics"
+	"github.com/cloudflare/cloudflare-go/v7/dls"
 	"github.com/cloudflare/cloudflare-go/v7/dns"
 	"github.com/cloudflare/cloudflare-go/v7/dns_firewall"
 	"github.com/cloudflare/cloudflare-go/v7/durable_objects"
@@ -179,6 +180,7 @@ type Client struct {
 	URLNormalization            *url_normalization.URLNormalizationService
 	Spectrum                    *spectrum.SpectrumService
 	Addressing                  *addressing.AddressingService
+	DLS                         *dls.DLSService
 	AuditLogs                   *audit_logs.AuditLogService
 	Billing                     *billing.BillingService
 	BrandProtection             *brand_protection.BrandProtectionService
@@ -331,6 +333,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.URLNormalization = url_normalization.NewURLNormalizationService(opts...)
 	r.Spectrum = spectrum.NewSpectrumService(opts...)
 	r.Addressing = addressing.NewAddressingService(opts...)
+	r.DLS = dls.NewDLSService(opts...)
 	r.AuditLogs = audit_logs.NewAuditLogService(opts...)
 	r.Billing = billing.NewBillingService(opts...)
 	r.BrandProtection = brand_protection.NewBrandProtectionService(opts...)
