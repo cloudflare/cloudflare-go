@@ -40,6 +40,10 @@ func (UnionString) ImplementsObservabilityTelemetryKeysParamsFiltersWorkersObser
 }
 func (UnionString) ImplementsObservabilityTelemetryKeysParamsKeyNeedleValueUnion() {}
 func (UnionString) ImplementsObservabilityTelemetryKeysParamsNeedleValueUnion()    {}
+func (UnionString) ImplementsObservabilityTelemetryLiveTailParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
+func (UnionString) ImplementsObservabilityTelemetryLiveTailParamsFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionString) ImplementsObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
@@ -198,6 +202,10 @@ func (UnionBool) ImplementsObservabilityTelemetryKeysParamsFiltersWorkersObserva
 }
 func (UnionBool) ImplementsObservabilityTelemetryKeysParamsKeyNeedleValueUnion() {}
 func (UnionBool) ImplementsObservabilityTelemetryKeysParamsNeedleValueUnion()    {}
+func (UnionBool) ImplementsObservabilityTelemetryLiveTailParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
+func (UnionBool) ImplementsObservabilityTelemetryLiveTailParamsFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionBool) ImplementsObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionBool) ImplementsObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
@@ -283,6 +291,10 @@ func (UnionFloat) ImplementsObservabilityTelemetryKeysParamsFiltersWorkersObserv
 }
 func (UnionFloat) ImplementsObservabilityTelemetryKeysParamsKeyNeedleValueUnion() {}
 func (UnionFloat) ImplementsObservabilityTelemetryKeysParamsNeedleValueUnion()    {}
+func (UnionFloat) ImplementsObservabilityTelemetryLiveTailParamsFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
+func (UnionFloat) ImplementsObservabilityTelemetryLiveTailParamsFiltersWorkersObservabilityFilterLeafValueUnion() {
+}
 func (UnionFloat) ImplementsObservabilityTelemetryQueryParamsParametersFiltersObjectFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionFloat) ImplementsObservabilityTelemetryQueryParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion() {

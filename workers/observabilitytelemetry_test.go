@@ -64,6 +64,70 @@ func TestObservabilityTelemetryKeysWithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestObservabilityTelemetryLiveTailWithOptionalParams(t *testing.T) {
+	t.Skip("HTTP 400 error from prism")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Workers.Observability.Telemetry.LiveTail(context.TODO(), workers.ObservabilityTelemetryLiveTailParams{
+		AccountID:         cloudflare.F("account_id"),
+		FilterCombination: cloudflare.F(workers.ObservabilityTelemetryLiveTailParamsFilterCombinationAnd),
+		Filters: cloudflare.F([]workers.ObservabilityTelemetryLiveTailParamsFilterUnion{workers.ObservabilityTelemetryLiveTailParamsFiltersObject{
+			FilterCombination: cloudflare.F(workers.ObservabilityTelemetryLiveTailParamsFiltersObjectFilterCombinationAnd),
+			Filters: cloudflare.F([]workers.ObservabilityTelemetryLiveTailParamsFiltersObjectFilterUnion{workers.ObservabilityTelemetryLiveTailParamsFiltersObjectFiltersObject{
+				FilterCombination: cloudflare.F(workers.ObservabilityTelemetryLiveTailParamsFiltersObjectFiltersObjectFilterCombinationAnd),
+				Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
+				Kind:              cloudflare.F(workers.ObservabilityTelemetryLiveTailParamsFiltersObjectFiltersObjectKindGroup),
+			}}),
+			Kind: cloudflare.F(workers.ObservabilityTelemetryLiveTailParamsFiltersObjectKindGroup),
+		}}),
+		ScriptID: cloudflare.F("scriptId"),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestObservabilityTelemetryLiveTailHeartbeatWithOptionalParams(t *testing.T) {
+	t.Skip("HTTP 400 error from prism")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Workers.Observability.Telemetry.LiveTailHeartbeat(context.TODO(), workers.ObservabilityTelemetryLiveTailHeartbeatParams{
+		AccountID: cloudflare.F("account_id"),
+		ScriptID:  cloudflare.F("scriptId"),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
 	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
