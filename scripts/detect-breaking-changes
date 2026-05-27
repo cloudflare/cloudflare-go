@@ -23,6 +23,7 @@ TEST_PATHS=(
 	organizations/organizationprofile_test.go
 	organizations/member_test.go
 	organizations/logaudit_test.go
+	organizations/billingusage_test.go
 	origin_ca_certificates/origincacertificate_test.go
 	ips/ip_test.go
 	memberships/membership_test.go
@@ -238,6 +239,8 @@ TEST_PATHS=(
 	addressing/prefixbgpprefix_test.go
 	addressing/prefixadvertisementstatus_test.go
 	addressing/prefixdelegation_test.go
+	dls/region_test.go
+	dls/regionalserviceprefixbinding_test.go
 	audit_logs/auditlog_test.go
 	billing/profile_test.go
 	billing/usage_test.go
