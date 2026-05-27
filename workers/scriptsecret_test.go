@@ -112,6 +112,7 @@ func TestScriptSecretDeleteWithOptionalParams(t *testing.T) {
 }
 
 func TestScriptSecretBulkUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("prism returns HTTP 422 for bulk secret update request shape")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
