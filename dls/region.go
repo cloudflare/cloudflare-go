@@ -44,11 +44,11 @@ func (r *RegionService) List(ctx context.Context, params RegionListParams, opts 
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%v/dls/regions", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/dls/regions", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (r *RegionService) ListAutoPaging(ctx context.Context, params RegionListPar
 func (r *RegionService) Get(ctx context.Context, regionID string, query RegionGetParams, opts ...option.RequestOption) (res *RegionGetResponse, err error) {
 	var env RegionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (r *RegionService) Get(ctx context.Context, regionID string, query RegionGe
 		err = errors.New("missing required region_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%v/dls/regions/%s", query.AccountID, regionID)
+	path := fmt.Sprintf("accounts/%s/dls/regions/%s", query.AccountID, regionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -154,7 +154,8 @@ func (r regionGetResponseJSON) RawJSON() string {
 }
 
 type RegionListParams struct {
-	AccountID param.Field[int64] `path:"account_id" api:"required"`
+	// Identifier of a Cloudflare account.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Opaque token for cursor-based pagination. Omit for the first page. Pass the
 	// value from a previous response to fetch the next page.
 	Cursor  param.Field[string] `query:"cursor"`
@@ -188,7 +189,8 @@ func (r RegionListParamsType) IsKnown() bool {
 }
 
 type RegionGetParams struct {
-	AccountID param.Field[int64] `path:"account_id" api:"required"`
+	// Identifier of a Cloudflare account.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RegionGetResponseEnvelope struct {
