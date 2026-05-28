@@ -29,7 +29,7 @@ func TestRegionListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DLS.Regions.List(context.TODO(), dls.RegionListParams{
-		AccountID: cloudflare.F(int64(0)),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Cursor:    cloudflare.F("cursor"),
 		PerPage:   cloudflare.F(int64(1)),
 		Type:      cloudflare.F(dls.RegionListParamsTypeManaged),
@@ -61,7 +61,7 @@ func TestRegionGet(t *testing.T) {
 		context.TODO(),
 		"a1b2c3d4-e5f6-7890-abcd-ef1234567890",
 		dls.RegionGetParams{
-			AccountID: cloudflare.F(int64(0)),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

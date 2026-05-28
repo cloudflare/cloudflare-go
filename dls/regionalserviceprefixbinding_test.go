@@ -29,7 +29,7 @@ func TestRegionalServicePrefixBindingNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DLS.RegionalServices.PrefixBindings.New(context.TODO(), dls.RegionalServicePrefixBindingNewParams{
-		AccountID: cloudflare.F(int64(0)),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		CIDR:      cloudflare.F("10.0.1.0/24"),
 		PrefixID:  cloudflare.F("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
 		RegionKey: cloudflare.F("eu"),
@@ -58,7 +58,7 @@ func TestRegionalServicePrefixBindingListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DLS.RegionalServices.PrefixBindings.List(context.TODO(), dls.RegionalServicePrefixBindingListParams{
-		AccountID: cloudflare.F(int64(0)),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Cursor:    cloudflare.F("cursor"),
 		PerPage:   cloudflare.F(int64(1)),
 	})
@@ -89,7 +89,7 @@ func TestRegionalServicePrefixBindingDelete(t *testing.T) {
 		context.TODO(),
 		"a1b2c3d4-e5f6-7890-abcd-ef1234567890",
 		dls.RegionalServicePrefixBindingDeleteParams{
-			AccountID: cloudflare.F(int64(0)),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -119,7 +119,7 @@ func TestRegionalServicePrefixBindingEdit(t *testing.T) {
 		context.TODO(),
 		"a1b2c3d4-e5f6-7890-abcd-ef1234567890",
 		dls.RegionalServicePrefixBindingEditParams{
-			AccountID: cloudflare.F(int64(0)),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			RegionKey: cloudflare.F("eu"),
 		},
 	)
@@ -150,7 +150,7 @@ func TestRegionalServicePrefixBindingGet(t *testing.T) {
 		context.TODO(),
 		"a1b2c3d4-e5f6-7890-abcd-ef1234567890",
 		dls.RegionalServicePrefixBindingGetParams{
-			AccountID: cloudflare.F(int64(0)),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

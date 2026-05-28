@@ -42,11 +42,11 @@ func NewRegionalServicePrefixBindingService(opts ...option.RequestOption) (r *Re
 func (r *RegionalServicePrefixBindingService) New(ctx context.Context, params RegionalServicePrefixBindingNewParams, opts ...option.RequestOption) (res *RegionalServicePrefixBindingNewResponse, err error) {
 	var env RegionalServicePrefixBindingNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%v/dls/regional_services/prefix_bindings", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/dls/regional_services/prefix_bindings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -60,11 +60,11 @@ func (r *RegionalServicePrefixBindingService) List(ctx context.Context, params R
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%v/dls/regional_services/prefix_bindings", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/dls/regional_services/prefix_bindings", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (r *RegionalServicePrefixBindingService) ListAutoPaging(ctx context.Context
 // Delete a DLS prefix binding
 func (r *RegionalServicePrefixBindingService) Delete(ctx context.Context, bindingID string, body RegionalServicePrefixBindingDeleteParams, opts ...option.RequestOption) (res *RegionalServicePrefixBindingDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if !body.AccountID.Present {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func (r *RegionalServicePrefixBindingService) Delete(ctx context.Context, bindin
 		err = errors.New("missing required binding_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%v/dls/regional_services/prefix_bindings/%s", body.AccountID, bindingID)
+	path := fmt.Sprintf("accounts/%s/dls/regional_services/prefix_bindings/%s", body.AccountID, bindingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return res, err
 }
@@ -102,7 +102,7 @@ func (r *RegionalServicePrefixBindingService) Delete(ctx context.Context, bindin
 func (r *RegionalServicePrefixBindingService) Edit(ctx context.Context, bindingID string, params RegionalServicePrefixBindingEditParams, opts ...option.RequestOption) (res *RegionalServicePrefixBindingEditResponse, err error) {
 	var env RegionalServicePrefixBindingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if !params.AccountID.Present {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -110,7 +110,7 @@ func (r *RegionalServicePrefixBindingService) Edit(ctx context.Context, bindingI
 		err = errors.New("missing required binding_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%v/dls/regional_services/prefix_bindings/%s", params.AccountID, bindingID)
+	path := fmt.Sprintf("accounts/%s/dls/regional_services/prefix_bindings/%s", params.AccountID, bindingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -123,7 +123,7 @@ func (r *RegionalServicePrefixBindingService) Edit(ctx context.Context, bindingI
 func (r *RegionalServicePrefixBindingService) Get(ctx context.Context, bindingID string, query RegionalServicePrefixBindingGetParams, opts ...option.RequestOption) (res *RegionalServicePrefixBindingGetResponse, err error) {
 	var env RegionalServicePrefixBindingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if !query.AccountID.Present {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -131,7 +131,7 @@ func (r *RegionalServicePrefixBindingService) Get(ctx context.Context, bindingID
 		err = errors.New("missing required binding_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%v/dls/regional_services/prefix_bindings/%s", query.AccountID, bindingID)
+	path := fmt.Sprintf("accounts/%s/dls/regional_services/prefix_bindings/%s", query.AccountID, bindingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -290,7 +290,8 @@ func (r regionalServicePrefixBindingGetResponseJSON) RawJSON() string {
 }
 
 type RegionalServicePrefixBindingNewParams struct {
-	AccountID param.Field[int64] `path:"account_id" api:"required"`
+	// Identifier of a Cloudflare account.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// IP prefix in CIDR notation to bind.
 	CIDR param.Field[string] `json:"cidr" api:"required"`
 	// The ID of the parent IP prefix that contains the CIDR.
@@ -331,7 +332,8 @@ func (r regionalServicePrefixBindingNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RegionalServicePrefixBindingListParams struct {
-	AccountID param.Field[int64] `path:"account_id" api:"required"`
+	// Identifier of a Cloudflare account.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Opaque token for cursor-based pagination. Omit for the first page. Pass the
 	// value from a previous response to fetch the next page.
 	Cursor  param.Field[string] `query:"cursor"`
@@ -348,11 +350,13 @@ func (r RegionalServicePrefixBindingListParams) URLQuery() (v url.Values) {
 }
 
 type RegionalServicePrefixBindingDeleteParams struct {
-	AccountID param.Field[int64] `path:"account_id" api:"required"`
+	// Identifier of a Cloudflare account.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RegionalServicePrefixBindingEditParams struct {
-	AccountID param.Field[int64] `path:"account_id" api:"required"`
+	// Identifier of a Cloudflare account.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// New region key to assign (e.g., "us", "eu", "cfcanary").
 	RegionKey param.Field[string] `json:"region_key" api:"required"`
 }
@@ -389,7 +393,8 @@ func (r regionalServicePrefixBindingEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type RegionalServicePrefixBindingGetParams struct {
-	AccountID param.Field[int64] `path:"account_id" api:"required"`
+	// Identifier of a Cloudflare account.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RegionalServicePrefixBindingGetResponseEnvelope struct {
