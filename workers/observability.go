@@ -13,10 +13,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewObservabilityService] method instead.
 type ObservabilityService struct {
-	Options      []option.RequestOption
-	Telemetry    *ObservabilityTelemetryService
-	Destinations *ObservabilityDestinationService
-	Queries      *ObservabilityQueryService
+	Options       []option.RequestOption
+	Telemetry     *ObservabilityTelemetryService
+	Destinations  *ObservabilityDestinationService
+	Queries       *ObservabilityQueryService
+	SharedQueries *ObservabilitySharedQueryService
 }
 
 // NewObservabilityService generates a new service that applies the given options
@@ -28,5 +29,6 @@ func NewObservabilityService(opts ...option.RequestOption) (r *ObservabilityServ
 	r.Telemetry = NewObservabilityTelemetryService(opts...)
 	r.Destinations = NewObservabilityDestinationService(opts...)
 	r.Queries = NewObservabilityQueryService(opts...)
+	r.SharedQueries = NewObservabilitySharedQueryService(opts...)
 	return
 }
