@@ -38,7 +38,7 @@ func NewHoldService(opts ...option.RequestOption) (r *HoldService) {
 }
 
 // Enforce a zone hold on the zone, blocking the creation and activation of zones
-// with this zone's hostname.
+// with this zone's hostname. Zone holds cannot be enabled on CDN-only zones.
 func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
 	var env HoldNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -57,6 +57,9 @@ func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...opt
 
 // Stop enforcement of a zone hold on the zone, permanently or temporarily,
 // allowing the creation and activation of zones with this zone's hostname.
+// Existing zone holds can be removed from CDN-only zones when `hold_after` is not
+// provided. Active holds are automatically disabled when a zone transitions to
+// CDN-only mode.
 func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
 	var env HoldDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -75,6 +78,9 @@ func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts 
 
 // Update the `hold_after` and/or `include_subdomains` values on an existing zone
 // hold. The hold is enabled if the `hold_after` date-time value is in the past.
+// Existing zone holds can be removed from CDN-only zones by setting `hold_after`
+// to `null`. Other zone hold updates cannot be made on CDN-only zones. Active
+// holds are automatically disabled when a zone transitions to CDN-only mode.
 func (r *HoldService) Edit(ctx context.Context, params HoldEditParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
 	var env HoldEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -200,6 +206,7 @@ type HoldDeleteParams struct {
 	// If `hold_after` is provided, the hold will be temporarily disabled, then
 	// automatically re-enabled by the system at the time specified in this
 	// RFC3339-formatted timestamp. Otherwise, the hold will be disabled indefinitely.
+	// `hold_after` cannot be provided for CDN-only zones.
 	HoldAfter param.Field[string] `query:"hold_after"`
 }
 
@@ -261,7 +268,7 @@ type HoldEditParams struct {
 	// disabled, then automatically re-enabled by the system at the time specified in
 	// this RFC3339-formatted timestamp. A past-dated `hold_after` value will have no
 	// effect on an existing, enabled hold. Providing an empty string will set its
-	// value to the current time.
+	// value to the current time. Providing `null` will disable the hold indefinitely.
 	HoldAfter param.Field[string] `json:"hold_after"`
 	// If `true`, the zone hold will extend to block any subdomain of the given zone,
 	// as well as SSL4SaaS Custom Hostnames. For example, a zone hold on a zone with
