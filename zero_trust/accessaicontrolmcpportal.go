@@ -307,13 +307,7 @@ func (r accessAIControlMcpPortalNewResponseServersErrorDetailsJSON) RawJSON() st
 }
 
 type AccessAIControlMcpPortalNewResponseServersUpdatedPrompt struct {
-	Name string `json:"name" api:"required"`
-	// Deprecated: use `portal_description` or `server_description` instead. Populated
-	// for backward compatibility — portal-level wins when present, otherwise falls
-	// back to server-level. Will be removed after the deprecation window.
-	//
-	// Deprecated: deprecated
-	Description       string                                                      `json:"description"`
+	Name              string                                                      `json:"name" api:"required"`
 	Enabled           bool                                                        `json:"enabled"`
 	PortalAlias       string                                                      `json:"portal_alias"`
 	PortalDescription string                                                      `json:"portal_description"`
@@ -327,7 +321,6 @@ type AccessAIControlMcpPortalNewResponseServersUpdatedPrompt struct {
 // [AccessAIControlMcpPortalNewResponseServersUpdatedPrompt]
 type accessAIControlMcpPortalNewResponseServersUpdatedPromptJSON struct {
 	Name              apijson.Field
-	Description       apijson.Field
 	Enabled           apijson.Field
 	PortalAlias       apijson.Field
 	PortalDescription apijson.Field
@@ -346,13 +339,7 @@ func (r accessAIControlMcpPortalNewResponseServersUpdatedPromptJSON) RawJSON() s
 }
 
 type AccessAIControlMcpPortalNewResponseServersUpdatedTool struct {
-	Name string `json:"name" api:"required"`
-	// Deprecated: use `portal_description` or `server_description` instead. Populated
-	// for backward compatibility — portal-level wins when present, otherwise falls
-	// back to server-level. Will be removed after the deprecation window.
-	//
-	// Deprecated: deprecated
-	Description       string                                                    `json:"description"`
+	Name              string                                                    `json:"name" api:"required"`
 	Enabled           bool                                                      `json:"enabled"`
 	PortalAlias       string                                                    `json:"portal_alias"`
 	PortalDescription string                                                    `json:"portal_description"`
@@ -365,7 +352,6 @@ type AccessAIControlMcpPortalNewResponseServersUpdatedTool struct {
 // metadata for the struct [AccessAIControlMcpPortalNewResponseServersUpdatedTool]
 type accessAIControlMcpPortalNewResponseServersUpdatedToolJSON struct {
 	Name              apijson.Field
-	Description       apijson.Field
 	Enabled           apijson.Field
 	PortalAlias       apijson.Field
 	PortalDescription apijson.Field
@@ -546,13 +532,7 @@ func (r accessAIControlMcpPortalUpdateResponseServersErrorDetailsJSON) RawJSON()
 }
 
 type AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt struct {
-	Name string `json:"name" api:"required"`
-	// Deprecated: use `portal_description` or `server_description` instead. Populated
-	// for backward compatibility — portal-level wins when present, otherwise falls
-	// back to server-level. Will be removed after the deprecation window.
-	//
-	// Deprecated: deprecated
-	Description       string                                                         `json:"description"`
+	Name              string                                                         `json:"name" api:"required"`
 	Enabled           bool                                                           `json:"enabled"`
 	PortalAlias       string                                                         `json:"portal_alias"`
 	PortalDescription string                                                         `json:"portal_description"`
@@ -566,7 +546,6 @@ type AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt struct {
 // [AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt]
 type accessAIControlMcpPortalUpdateResponseServersUpdatedPromptJSON struct {
 	Name              apijson.Field
-	Description       apijson.Field
 	Enabled           apijson.Field
 	PortalAlias       apijson.Field
 	PortalDescription apijson.Field
@@ -585,13 +564,7 @@ func (r accessAIControlMcpPortalUpdateResponseServersUpdatedPromptJSON) RawJSON(
 }
 
 type AccessAIControlMcpPortalUpdateResponseServersUpdatedTool struct {
-	Name string `json:"name" api:"required"`
-	// Deprecated: use `portal_description` or `server_description` instead. Populated
-	// for backward compatibility — portal-level wins when present, otherwise falls
-	// back to server-level. Will be removed after the deprecation window.
-	//
-	// Deprecated: deprecated
-	Description       string                                                       `json:"description"`
+	Name              string                                                       `json:"name" api:"required"`
 	Enabled           bool                                                         `json:"enabled"`
 	PortalAlias       string                                                       `json:"portal_alias"`
 	PortalDescription string                                                       `json:"portal_description"`
@@ -605,7 +578,6 @@ type AccessAIControlMcpPortalUpdateResponseServersUpdatedTool struct {
 // [AccessAIControlMcpPortalUpdateResponseServersUpdatedTool]
 type accessAIControlMcpPortalUpdateResponseServersUpdatedToolJSON struct {
 	Name              apijson.Field
-	Description       apijson.Field
 	Enabled           apijson.Field
 	PortalAlias       apijson.Field
 	PortalDescription apijson.Field
@@ -786,13 +758,7 @@ func (r accessAIControlMcpPortalListResponseServersErrorDetailsJSON) RawJSON() s
 }
 
 type AccessAIControlMcpPortalListResponseServersUpdatedPrompt struct {
-	Name string `json:"name" api:"required"`
-	// Deprecated: use `portal_description` or `server_description` instead. Populated
-	// for backward compatibility — portal-level wins when present, otherwise falls
-	// back to server-level. Will be removed after the deprecation window.
-	//
-	// Deprecated: deprecated
-	Description       string                                                       `json:"description"`
+	Name              string                                                       `json:"name" api:"required"`
 	Enabled           bool                                                         `json:"enabled"`
 	PortalAlias       string                                                       `json:"portal_alias"`
 	PortalDescription string                                                       `json:"portal_description"`
@@ -806,7 +772,6 @@ type AccessAIControlMcpPortalListResponseServersUpdatedPrompt struct {
 // [AccessAIControlMcpPortalListResponseServersUpdatedPrompt]
 type accessAIControlMcpPortalListResponseServersUpdatedPromptJSON struct {
 	Name              apijson.Field
-	Description       apijson.Field
 	Enabled           apijson.Field
 	PortalAlias       apijson.Field
 	PortalDescription apijson.Field
@@ -825,13 +790,7 @@ func (r accessAIControlMcpPortalListResponseServersUpdatedPromptJSON) RawJSON() 
 }
 
 type AccessAIControlMcpPortalListResponseServersUpdatedTool struct {
-	Name string `json:"name" api:"required"`
-	// Deprecated: use `portal_description` or `server_description` instead. Populated
-	// for backward compatibility — portal-level wins when present, otherwise falls
-	// back to server-level. Will be removed after the deprecation window.
-	//
-	// Deprecated: deprecated
-	Description       string                                                     `json:"description"`
+	Name              string                                                     `json:"name" api:"required"`
 	Enabled           bool                                                       `json:"enabled"`
 	PortalAlias       string                                                     `json:"portal_alias"`
 	PortalDescription string                                                     `json:"portal_description"`
@@ -844,7 +803,6 @@ type AccessAIControlMcpPortalListResponseServersUpdatedTool struct {
 // metadata for the struct [AccessAIControlMcpPortalListResponseServersUpdatedTool]
 type accessAIControlMcpPortalListResponseServersUpdatedToolJSON struct {
 	Name              apijson.Field
-	Description       apijson.Field
 	Enabled           apijson.Field
 	PortalAlias       apijson.Field
 	PortalDescription apijson.Field
@@ -1067,13 +1025,7 @@ func (r accessAIControlMcpPortalReadResponseServersErrorDetailsJSON) RawJSON() s
 }
 
 type AccessAIControlMcpPortalReadResponseServersUpdatedPrompt struct {
-	Name string `json:"name" api:"required"`
-	// Deprecated: use `portal_description` or `server_description` instead. Populated
-	// for backward compatibility — portal-level wins when present, otherwise falls
-	// back to server-level. Will be removed after the deprecation window.
-	//
-	// Deprecated: deprecated
-	Description       string                                                       `json:"description"`
+	Name              string                                                       `json:"name" api:"required"`
 	Enabled           bool                                                         `json:"enabled"`
 	PortalAlias       string                                                       `json:"portal_alias"`
 	PortalDescription string                                                       `json:"portal_description"`
@@ -1087,7 +1039,6 @@ type AccessAIControlMcpPortalReadResponseServersUpdatedPrompt struct {
 // [AccessAIControlMcpPortalReadResponseServersUpdatedPrompt]
 type accessAIControlMcpPortalReadResponseServersUpdatedPromptJSON struct {
 	Name              apijson.Field
-	Description       apijson.Field
 	Enabled           apijson.Field
 	PortalAlias       apijson.Field
 	PortalDescription apijson.Field
@@ -1106,13 +1057,7 @@ func (r accessAIControlMcpPortalReadResponseServersUpdatedPromptJSON) RawJSON() 
 }
 
 type AccessAIControlMcpPortalReadResponseServersUpdatedTool struct {
-	Name string `json:"name" api:"required"`
-	// Deprecated: use `portal_description` or `server_description` instead. Populated
-	// for backward compatibility — portal-level wins when present, otherwise falls
-	// back to server-level. Will be removed after the deprecation window.
-	//
-	// Deprecated: deprecated
-	Description       string                                                     `json:"description"`
+	Name              string                                                     `json:"name" api:"required"`
 	Enabled           bool                                                       `json:"enabled"`
 	PortalAlias       string                                                     `json:"portal_alias"`
 	PortalDescription string                                                     `json:"portal_description"`
@@ -1125,7 +1070,6 @@ type AccessAIControlMcpPortalReadResponseServersUpdatedTool struct {
 // metadata for the struct [AccessAIControlMcpPortalReadResponseServersUpdatedTool]
 type accessAIControlMcpPortalReadResponseServersUpdatedToolJSON struct {
 	Name              apijson.Field
-	Description       apijson.Field
 	Enabled           apijson.Field
 	PortalAlias       apijson.Field
 	PortalDescription apijson.Field
