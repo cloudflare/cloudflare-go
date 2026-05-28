@@ -78,6 +78,7 @@ TEST_PATHS=(
 	client_certificates/clientcertificate_test.go
 	custom_certificates/customcertificate_test.go
 	custom_certificates/prioritize_test.go
+	custom_csrs/customcsr_test.go
 	custom_hostnames/customhostname_test.go
 	custom_hostnames/fallbackorigin_test.go
 	custom_hostnames/certificatepackcertificate_test.go

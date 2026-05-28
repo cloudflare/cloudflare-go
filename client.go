@@ -36,6 +36,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/connectivity"
 	"github.com/cloudflare/cloudflare-go/v7/content_scanning"
 	"github.com/cloudflare/cloudflare-go/v7/custom_certificates"
+	"github.com/cloudflare/cloudflare-go/v7/custom_csrs"
 	"github.com/cloudflare/cloudflare-go/v7/custom_hostnames"
 	"github.com/cloudflare/cloudflare-go/v7/custom_nameservers"
 	"github.com/cloudflare/cloudflare-go/v7/custom_pages"
@@ -143,6 +144,7 @@ type Client struct {
 	CertificateAuthorities *certificate_authorities.CertificateAuthorityService
 	ClientCertificates     *client_certificates.ClientCertificateService
 	CustomCertificates     *custom_certificates.CustomCertificateService
+	CustomCsrs             *custom_csrs.CustomCsrService
 	CustomHostnames        *custom_hostnames.CustomHostnameService
 	CustomNameservers      *custom_nameservers.CustomNameserverService
 	DNSFirewall            *dns_firewall.DNSFirewallService
@@ -304,6 +306,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CertificateAuthorities = certificate_authorities.NewCertificateAuthorityService(opts...)
 	r.ClientCertificates = client_certificates.NewClientCertificateService(opts...)
 	r.CustomCertificates = custom_certificates.NewCustomCertificateService(opts...)
+	r.CustomCsrs = custom_csrs.NewCustomCsrService(opts...)
 	r.CustomHostnames = custom_hostnames.NewCustomHostnameService(opts...)
 	r.CustomNameservers = custom_nameservers.NewCustomNameserverService(opts...)
 	r.DNSFirewall = dns_firewall.NewDNSFirewallService(opts...)
