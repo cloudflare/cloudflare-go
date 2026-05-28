@@ -63,6 +63,8 @@
 
 # [CustomCertificates](custom_certificates/api.md)
 
+# [CustomCsrs](custom_csrs/api.md)
+
 # [CustomHostnames](custom_hostnames/api.md)
 
 # [CustomNameservers](custom_nameservers/api.md)
