@@ -4,20 +4,243 @@
 
 Full Changelog: [v7.3.0...v7.4.0](https://github.com/cloudflare/cloudflare-go/compare/v7.3.0...v7.4.0)
 
+This release includes breaking changes in a few services alongside new features and SDK-level improvements. Please ensure you read through the list of changes below before upgrading.
+
+---
+
+## General Changes
+
+### Default HTTP Client with Response Header Timeout
+
+The SDK now creates a default `http.Client` with a 10-minute `ResponseHeaderTimeout` on the transport. This prevents stuck connections from hanging indefinitely when a server accepts a connection but never responds. If `http.DefaultTransport` has been wrapped (e.g. by otelhttp for tracing), the wrapping is preserved and the timeout is skipped. You can still supply your own client via `option.WithHTTPClient()`.
+
+### Custom Headers via Environment Variable
+
+A new `CLOUDFLARE_CUSTOM_HEADERS` environment variable is now supported. Set it to a newline-separated list of `Header-Name: value` pairs to inject custom headers into every request:
+
+```bash
+export CLOUDFLARE_CUSTOM_HEADERS="X-Custom-Header: my-value
+X-Another: other-value"
+```
+
+### Debug Logging Redacts Sensitive Headers
+
+`option.WithDebugLog()` now redacts sensitive headers (Authorization, API keys, cookies, auth email/key) in both request and response dumps, preventing accidental credential exposure in debug output.
+
+---
+
+## Breaking Changes
+
+See the [v7.4.0 Migration Guide](./docs/migration-guides/v7.4.0-migration-guide.md) for before/after code examples and actions needed for each change.
+
+### Email Security - ActionLog Parameter Removed
+
+The `ActionLog` field has been removed from `InvestigateListParams`. Remove the field from your list calls.
+
+### Realtime Kit - Livestream Time Fields Changed to int64
+
+The `StartTime` and `EndTime` fields in `LivestreamGetLivestreamAnalyticsCompleteParams` changed from `time.Time` to `int64` (unix epoch seconds). Use `.Unix()` to convert.
+
+### Realtime Kit - Multiple Session Response Types Restructured
+
+Several session response types were flattened, removing a layer of nesting:
+
+- **`SessionGetParticipantDataFromPeerIDResponseData`**: The `.Participant` field was removed; its children (`PeerReport`, `PeerStats`, `QualityStats`) promoted to the top level. `SessionID` field added. All `...DataParticipant*` sub-types removed and replaced with `...Data*` equivalents.
+- **`SessionGetSessionDetailsResponseData`**: The `.Session` field was removed; its fields promoted to the top level. `SessionGetSessionDetailsResponseDataSession` type removed; enum types renamed (`...DataSessionStatus` -> `...DataStatus`, `...DataSessionType` -> `...DataType`).
+- **`SessionGetSessionParticipantDetailsResponseDataParticipant`**: The `.PeerStats` and `.QualityStats` nested sub-types removed (`...DataParticipantPeerStats*`, `...DataParticipantQualityStat*` -- 8 types total).
+
+### Resource Sharing - Resources Service Methods Removed
+
+The `Update`, `Delete`, and `Get` methods on `ResourceSharing.Resources` have been removed along with their associated types (`ResourceUpdateResponse`, `ResourceDeleteResponse`, `ResourceGetResponse`). Only `New` and `List` remain.
+
+### Billing - Paygo Endpoint Path Changed
+
+The `Paygo` method endpoint changed from `/accounts/{account_id}/billing/usage/paygo` to `/accounts/{account_id}/paygo-usage`. The method signature is unchanged.
+
+### Workers - Observability Telemetry Response Type Changes
+
+The `Source` field on `ObservabilityTelemetryQueryResponse` events and invocations changed from `interface{}` to discriminated union interfaces (`ObservabilityTelemetryQueryResponseEventsEventsSourceUnion`, `ObservabilityTelemetryQueryResponseInvocationsSourceUnion`). Code that type-asserted `Source` as `map[string]interface{}` should use the new union's `.AsUnion()` method or match on the concrete variants.
+
+The `Containers` field on `ObservabilityTelemetryQueryResponseEventsEventsWorkersObject` changed from `interface{}` to `map[string]interface{}`.
+
+### Custom Hostnames - SSL Parameter Type Changed
+
+The `CustomHostnameListParamsSSL` type changed from `float64` to `int64`. Code that passes this parameter explicitly with a `float64` literal or variable will need updating.
+
+### Zero Trust - MCP Server Sync Response Type Changed
+
+`AccessAIControlMcpServerSyncResponse` changed from `interface{}` to a concrete struct with typed fields (`ErrorDetails`, etc.). Code that type-asserted on the empty interface will need updating.
+
+### Zero Trust - Gateway List Item Pagination Type Changed
+
+The `GatewayListItemService.List()` return type changed from `SinglePage[[]GatewayItem]` (page of slices) to `SinglePage[GatewayItem]` (page of items). This removes the extra nesting layer when iterating results:
+
+```go
+// Before: page.Body was [][]GatewayItem
+// After:  page.Body is []GatewayItem
+```
+
+---
+
+## Features
+
+### CustomCsrs (client.CustomCsrs)
+
+- **NEW SERVICE**: Custom Certificate Signing Requests (zone + account scoped)
+  - `client.CustomCsrs.New()` - Create a custom CSR
+  - `client.CustomCsrs.List()` - List custom CSRs
+  - `client.CustomCsrs.Delete()` - Delete a custom CSR
+  - `client.CustomCsrs.Get()` - Get a custom CSR
+
+### DLS (client.DLS)
+
+- **NEW SERVICE**: Data Localization Suite regional services
+  - `client.DLS.Regions.List()` - List available DLS regions
+  - `client.DLS.Regions.Get()` - Get a specific DLS region
+  - `client.DLS.RegionalServices.PrefixBindings.New()` - Create a prefix binding
+  - `client.DLS.RegionalServices.PrefixBindings.List()` - List prefix bindings
+  - `client.DLS.RegionalServices.PrefixBindings.Delete()` - Delete a prefix binding
+  - `client.DLS.RegionalServices.PrefixBindings.Edit()` - Edit a prefix binding
+  - `client.DLS.RegionalServices.PrefixBindings.Get()` - Get a prefix binding
+
+### AIAudit (client.AIAudit)
+
+- **NEW SERVICE**: AI Audit robots route mappings
+  - `client.AIAudit.Robots` - Manage AI audit robot configurations
+
+### Email Security (client.EmailSecurity)
+
+- `client.EmailSecurity.Settings.URLIgnorePatterns.New()` - Create a URL ignore pattern
+- `client.EmailSecurity.Settings.URLIgnorePatterns.List()` - List URL ignore patterns
+- `client.EmailSecurity.Settings.URLIgnorePatterns.Delete()` - Delete a URL ignore pattern
+- `client.EmailSecurity.Settings.URLIgnorePatterns.Edit()` - Edit a URL ignore pattern
+- `client.EmailSecurity.Settings.URLIgnorePatterns.Get()` - Get a URL ignore pattern
+- `client.EmailSecurity.Settings.SendingDomainRestrictions.New()` - Create a sending domain restriction
+- `client.EmailSecurity.Settings.SendingDomainRestrictions.List()` - List sending domain restrictions
+- `client.EmailSecurity.Settings.SendingDomainRestrictions.Delete()` - Delete a sending domain restriction
+- `client.EmailSecurity.Settings.SendingDomainRestrictions.Edit()` - Edit a sending domain restriction
+- `client.EmailSecurity.Settings.SendingDomainRestrictions.Get()` - Get a sending domain restriction
+
+### Billing (client.Billing)
+
+- `client.Billing.Usage.Get()` - New billable usage endpoint at `/accounts/{account_id}/billable/usage`
+
+### Organizations (client.Organizations)
+
+- `client.Organizations.Billing.Usage.Get()` - New organization-level billable usage endpoint
+
+### Workers (client.Workers)
+
+- `client.Workers.Observability.Telemetry.LiveTail()` - Start a live tail session for real-time telemetry
+- `client.Workers.Observability.Telemetry.LiveTailHeartbeat()` - Send heartbeat to keep live tail session alive
+- `client.Workers.Observability.SharedQueries.New()` - Create a shared observability query
+- `client.Workers.Observability.SharedQueries.Get()` - Get a shared observability query by ID
+- New `PropagationPolicy` field on observability traces configuration across Script, DispatchNamespaceScript, and settings types
+- New `opentelemetry-metrics` enum value on `ObservabilityDestination` logpush dataset types
+
+### Workflows (client.Workflows)
+
+- New `rollback` enum value on `InstanceGetResponseStepsObjectType`
+
+### Pipelines (client.Pipelines)
+
+- New `Name` filter parameter on `PipelineListParams`, `StreamListParams`, and `SinkListParams`
+
+### Realtime Kit (client.RealtimeKit)
+
+- `client.RealtimeKit.Livestreams.GetLivestreamAnalyticsDaywise()` - Day-wise livestream analytics
+- New meeting recording configuration types added to `MeetingGetResponse` and `MeetingUpdateMeetingByIDParams`
+- New recording config types on `RecordingGetRecordingsResponse`
+- New `PageNo`, `PerPage`, `Search`, `SortOrder` query params on `AppGetParams`
+- New `SessionGetSessionsResponsePaging` type and `Paging` field on sessions list response
+
+### Snippets (client.Snippets)
+
+- `client.Snippets.Rules.Get()` - Get snippet rules for a zone
+
+### Radar (radar)
+
+- New `Normalization` parameter on `BotWebCrawlerTimeseriesGroupsParams`
+- New `ContentType` filter parameter on `HTTPSummaryV2Params` and `HTTPTimeseriesParams`
+
+### Zero Trust (client.ZeroTrust)
+
+- `client.ZeroTrust.Organizations.DOH.Update()` - Update DoH settings for Access organization
+- `client.ZeroTrust.Organizations.DOH.Get()` - Get DoH settings for Access organization
+- `client.ZeroTrust.Devices.Policies.Default.Edit()` - Edit default device policy
+- `client.ZeroTrust.Devices.Policies.Default.Get()` - Get default device policy
+- `client.ZeroTrust.Devices.Policies.Default.Excludes.Update()` - Update default policy split tunnel excludes
+- `client.ZeroTrust.Devices.Policies.Default.Excludes.Get()` - Get default policy split tunnel excludes
+- `client.ZeroTrust.Devices.Policies.Default.Includes.Update()` - Update default policy split tunnel includes
+- `client.ZeroTrust.Devices.Policies.Default.Includes.Get()` - Get default policy split tunnel includes
+- New `IdentityProviderAccessCloudflare` identity provider type for Cloudflare authentication
+- New `AccessRuleAccessCloudflareAccountMemberRule` access rule type
+- New `DNSSearchSuffix` field on device policy custom create/edit params
+- New `MaxTTLSecs` field on gateway location responses and params
+- New `ErrorDetails` types on MCP Portal and MCP Server responses
+
+---
+
+## Deprecations
+
+_None in this release._
+
+## Bug Fixes
+
+- **Billing**: The `Paygo` endpoint path was corrected to `/accounts/{account_id}/paygo-usage`
+- **Zones**: Updated zone hold documentation to clarify CDN-only zone behavior
+
+## 7.3.0 (2026-05-20)
+
+Full Changelog: [v7.2.0...v7.3.0](https://github.com/cloudflare/cloudflare-go/compare/v7.2.0...v7.3.0)
+
 ### ⚠ BREAKING CHANGES
 
-* InvestigateListParams.ActionLog field removed. The upstream API no longer accepts this query parameter.
+* module path changed from github.com/cloudflare/cloudflare-go/v6 to github.com/cloudflare/cloudflare-go/v7.
 
 ### Features
 
-* add custom_csrs Stainless config (zone + account) ([#4328](https://github.com/cloudflare/cloudflare-go/issues/4328)) ([be53b38](https://github.com/cloudflare/cloudflare-go/commit/be53b385bea2dd09b80016f41e9fad1145bf4437))
-* feat(email_security): add url_ignore_patterns and sending_domain_restrictions endpoints ([#4330](https://github.com/cloudflare/cloudflare-go/issues/4330)) ([408b887](https://github.com/cloudflare/cloudflare-go/commit/408b887d14b7fa96635d3b5a91dd5f79c13e91ac))
-* sync breaking changes for email_security and realtime_kit ([#4321](https://github.com/cloudflare/cloudflare-go/issues/4321)) ([007e274](https://github.com/cloudflare/cloudflare-go/commit/007e274673665651f75a3c908fbb410a5f8823a7))
+* **ai_security:** add ai_security resource ([f15b95b](https://github.com/cloudflare/cloudflare-go/commit/f15b95bfd2bfbfd9d65ecf8014416ea48050c114))
+* bump module path from v6 to v7 ([732afc8](https://github.com/cloudflare/cloudflare-go/commit/732afc80b228dfc6689e990e15bbc3d4c6eeff29))
+* chore: skip 25 failing TypeScript SDK tests from prism ([5552f6c](https://github.com/cloudflare/cloudflare-go/commit/5552f6c4ae6436de2394145beb16bed50b304565))
+* chore: skip failing tests from CI run 26052878605 ([51bc545](https://github.com/cloudflare/cloudflare-go/commit/51bc5451da33e69e2471238c303545c5ad34ea11))
+* **ddos_protection:** add ddos_protection resource ([17954ba](https://github.com/cloudflare/cloudflare-go/commit/17954badef01759fafdc95ab7e62cadfbc4a3070))
+* feat: WAD-244 Onboard AI Security for Apps api ([53cd2bd](https://github.com/cloudflare/cloudflare-go/commit/53cd2bd6c19eee3ba1c1038608380f4ccb19a855))
+* feat(api): add advanced_tcp_protection endpoint mappings ([5174326](https://github.com/cloudflare/cloudflare-go/commit/51743266c7686868054074f2670121ffafad4d42))
+* feat(api): WC-5056: add Workers .../secrets-bulk endpoints ([a85fd4b](https://github.com/cloudflare/cloudflare-go/commit/a85fd4bdcee6832f5732cc70518e6d2317094c31))
+* feat(config): AUTH-8373 Make SAML certificate endpoints available in public docs ([4ac8fcc](https://github.com/cloudflare/cloudflare-go/commit/4ac8fcc379d5f4dc73164637db4ba6115311b96d))
+* feat(observability): adds Workers > Observability > Queries ([fb2dddb](https://github.com/cloudflare/cloudflare-go/commit/fb2dddbc94718f43cb5f4f658751dbd28ba4872f))
+* feat(r2): add R2 bucket objects resource mapping (APIX-674) ([9a00856](https://github.com/cloudflare/cloudflare-go/commit/9a00856ac0965e3fbac64a9c72fc13427c9489fc))
+* feat(secrets_store): add Terraform configuration for secrets_store resources ([effe30c](https://github.com/cloudflare/cloudflare-go/commit/effe30c9650c338900799580adad50c5c0a54997))
+* **zero_trust:** update generated types and methods ([0fe3c11](https://github.com/cloudflare/cloudflare-go/commit/0fe3c112248785b1eecac8cc802417f13186e991))
 
 
 ### Chores
 
-* pin CI actions to commit SHAs, update scripts ([#4322](https://github.com/cloudflare/cloudflare-go/issues/4322)) ([16be5ce](https://github.com/cloudflare/cloudflare-go/commit/16be5ce7ebc11bc7690bb4af8493c0084a787853))
+* **acm:** update generated types and methods ([7087016](https://github.com/cloudflare/cloudflare-go/commit/7087016f3a2ec722fe93a0391f37c99009e77964))
+* **ai_gateway:** update generated types and methods ([9a2e1a3](https://github.com/cloudflare/cloudflare-go/commit/9a2e1a35f62867ebdf35a9c001c26f10dc6f29b0))
+* **ai_gateway:** update generated types and methods ([4a0250a](https://github.com/cloudflare/cloudflare-go/commit/4a0250a73a308ee0c2567dda9c32b67f4a70c136))
+* **api_gateway:** update generated types and methods ([d1e6f79](https://github.com/cloudflare/cloudflare-go/commit/d1e6f79e995ef89cff1282fdcb9d05b28a81d8c5))
+* **api:** update composite API spec ([5461f50](https://github.com/cloudflare/cloudflare-go/commit/5461f5020046e563acf80c1b7d229f8ee9fb53dd))
+* **api:** update composite API spec ([b7647ec](https://github.com/cloudflare/cloudflare-go/commit/b7647ecf646b02bea640368e270689d8a08cbc51))
+* **api:** update composite API spec ([b90d890](https://github.com/cloudflare/cloudflare-go/commit/b90d890791658f96ad5a85f8679b672b4b21b26e))
+* **api:** update composite API spec ([fa2f591](https://github.com/cloudflare/cloudflare-go/commit/fa2f591dc08691b67ddbf57ec090e67b93b9d8dd))
+* **api:** update composite API spec ([9bcf356](https://github.com/cloudflare/cloudflare-go/commit/9bcf356154c80c8d29b81a8107252539bf2f29d8))
+* **api:** update composite API spec ([c9f9943](https://github.com/cloudflare/cloudflare-go/commit/c9f99439ca3be18f562b777757b26a4c297b92be))
+* **api:** update composite API spec ([8983e63](https://github.com/cloudflare/cloudflare-go/commit/8983e63e93ef2e314965efa92afa0c20a544479c))
+* **api:** update composite API spec ([bf7f054](https://github.com/cloudflare/cloudflare-go/commit/bf7f054726520f50f887c867cf5356fbbf64b82d))
+* **api:** update composite API spec ([11227a3](https://github.com/cloudflare/cloudflare-go/commit/11227a3a0a9a318b6754c7c6c33de9f1aaca2943))
+* **internal:** codegen related update ([3012e61](https://github.com/cloudflare/cloudflare-go/commit/3012e6129e2f4a0db458b57307aad31a7dbff5b1))
+* **internal:** codegen related update ([84d2b95](https://github.com/cloudflare/cloudflare-go/commit/84d2b953ffb29b3e56f6f94ddf7b965a9f11ac1b))
+* **internal:** codegen related update ([6dbbf74](https://github.com/cloudflare/cloudflare-go/commit/6dbbf74e17fb0e2a31f54f26280fec6dbed6a398))
+* **internal:** codegen related update ([65bfb2b](https://github.com/cloudflare/cloudflare-go/commit/65bfb2b50e5b2eabd23f2e4b9d21d2f33a3e8204))
+* **internal:** codegen related update ([ea2b86b](https://github.com/cloudflare/cloudflare-go/commit/ea2b86bc56b4c22e5f88ccd3bb1e28e29f1cdce1))
+* **internal:** codegen related update ([d96a1e5](https://github.com/cloudflare/cloudflare-go/commit/d96a1e5a4aa38dc3bbb84e6f8e08f4a8d2fa3da3))
+* **internal:** update bootstrapped detect-breaking-changes ([e2f9076](https://github.com/cloudflare/cloudflare-go/commit/e2f9076835e21da268f96c43ff1e25e5e47e5b36))
+* **workers_for_platforms:** update generated types and methods ([fbaae59](https://github.com/cloudflare/cloudflare-go/commit/fbaae5981df37ace6c4b11df9f75e13e8ebd7d65))
+* **workers:** update generated types and methods ([c1e2fb2](https://github.com/cloudflare/cloudflare-go/commit/c1e2fb2b5e42da956e516fe3feae1c3f57b7f85b))
+* **workflows:** update generated types and methods ([7f3a9ba](https://github.com/cloudflare/cloudflare-go/commit/7f3a9ba0692b4d820c082c2ba401b1be162d2313))
+* **zones:** update generated types and methods ([343acae](https://github.com/cloudflare/cloudflare-go/commit/343acaeecb199a05f97b852977e1f6e120628f90))
 
 ## 6.9.0 (2026-04-01)
 
