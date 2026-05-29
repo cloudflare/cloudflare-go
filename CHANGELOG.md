@@ -4,191 +4,20 @@
 
 Full Changelog: [v7.3.0...v7.4.0](https://github.com/cloudflare/cloudflare-go/compare/v7.3.0...v7.4.0)
 
-This release includes breaking changes in a few services alongside new features and SDK-level improvements. Please ensure you read through the list of changes below before upgrading.
+### ⚠ BREAKING CHANGES
 
----
+* InvestigateListParams.ActionLog field removed. The upstream API no longer accepts this query parameter.
 
-## General Changes
+### Features
 
-### Default HTTP Client with Response Header Timeout
+* add custom_csrs Stainless config (zone + account) ([#4328](https://github.com/cloudflare/cloudflare-go/issues/4328)) ([be53b38](https://github.com/cloudflare/cloudflare-go/commit/be53b385bea2dd09b80016f41e9fad1145bf4437))
+* feat(email_security): add url_ignore_patterns and sending_domain_restrictions endpoints ([#4330](https://github.com/cloudflare/cloudflare-go/issues/4330)) ([408b887](https://github.com/cloudflare/cloudflare-go/commit/408b887d14b7fa96635d3b5a91dd5f79c13e91ac))
+* sync breaking changes for email_security and realtime_kit ([#4321](https://github.com/cloudflare/cloudflare-go/issues/4321)) ([007e274](https://github.com/cloudflare/cloudflare-go/commit/007e274673665651f75a3c908fbb410a5f8823a7))
 
-The SDK now creates a default `http.Client` with a 10-minute `ResponseHeaderTimeout` on the transport. This prevents stuck connections from hanging indefinitely when a server accepts a connection but never responds. If `http.DefaultTransport` has been wrapped (e.g. by otelhttp for tracing), the wrapping is preserved and the timeout is skipped. You can still supply your own client via `option.WithHTTPClient()`.
 
-### Custom Headers via Environment Variable
+### Chores
 
-A new `CLOUDFLARE_CUSTOM_HEADERS` environment variable is now supported. Set it to a newline-separated list of `Header-Name: value` pairs to inject custom headers into every request:
-
-```bash
-export CLOUDFLARE_CUSTOM_HEADERS="X-Custom-Header: my-value
-X-Another: other-value"
-```
-
-### Debug Logging Redacts Sensitive Headers
-
-`option.WithDebugLog()` now redacts sensitive headers (Authorization, API keys, cookies, auth email/key) in both request and response dumps, preventing accidental credential exposure in debug output.
-
----
-
-## Breaking Changes
-
-See the [v7.4.0 Migration Guide](./docs/migration-guides/v7.4.0-migration-guide.md) for before/after code examples and actions needed for each change.
-
-### Email Security - ActionLog Parameter Removed
-
-The `ActionLog` field has been removed from `InvestigateListParams`. Remove the field from your list calls.
-
-### Realtime Kit - Livestream Time Fields Changed to int64
-
-The `StartTime` and `EndTime` fields in `LivestreamGetLivestreamAnalyticsCompleteParams` changed from `time.Time` to `int64` (unix epoch seconds). Use `.Unix()` to convert.
-
-### Realtime Kit - Multiple Session Response Types Restructured
-
-Several session response types were flattened, removing a layer of nesting:
-
-- **`SessionGetParticipantDataFromPeerIDResponseData`**: The `.Participant` field was removed; its children (`PeerReport`, `PeerStats`, `QualityStats`) promoted to the top level. `SessionID` field added. All `...DataParticipant*` sub-types removed and replaced with `...Data*` equivalents.
-- **`SessionGetSessionDetailsResponseData`**: The `.Session` field was removed; its fields promoted to the top level. `SessionGetSessionDetailsResponseDataSession` type removed; enum types renamed (`...DataSessionStatus` -> `...DataStatus`, `...DataSessionType` -> `...DataType`).
-- **`SessionGetSessionParticipantDetailsResponseDataParticipant`**: The `.PeerStats` and `.QualityStats` nested sub-types removed (`...DataParticipantPeerStats*`, `...DataParticipantQualityStat*` -- 8 types total).
-
-### Resource Sharing - Resources Service Methods Removed
-
-The `Update`, `Delete`, and `Get` methods on `ResourceSharing.Resources` have been removed along with their associated types (`ResourceUpdateResponse`, `ResourceDeleteResponse`, `ResourceGetResponse`). Only `New` and `List` remain.
-
-### Billing - Paygo Endpoint Path Changed
-
-The `Paygo` method endpoint changed from `/accounts/{account_id}/billing/usage/paygo` to `/accounts/{account_id}/paygo-usage`. The method signature is unchanged.
-
-### Workers - Observability Telemetry Response Type Changes
-
-The `Source` field on `ObservabilityTelemetryQueryResponse` events and invocations changed from `interface{}` to discriminated union interfaces (`ObservabilityTelemetryQueryResponseEventsEventsSourceUnion`, `ObservabilityTelemetryQueryResponseInvocationsSourceUnion`). Code that type-asserted `Source` as `map[string]interface{}` should use the new union's `.AsUnion()` method or match on the concrete variants.
-
-The `Containers` field on `ObservabilityTelemetryQueryResponseEventsEventsWorkersObject` changed from `interface{}` to `map[string]interface{}`.
-
-### Custom Hostnames - SSL Parameter Type Changed
-
-The `CustomHostnameListParamsSSL` type changed from `float64` to `int64`. Code that passes this parameter explicitly with a `float64` literal or variable will need updating.
-
-### Zero Trust - MCP Server Sync Response Type Changed
-
-`AccessAIControlMcpServerSyncResponse` changed from `interface{}` to a concrete struct with typed fields (`ErrorDetails`, etc.). Code that type-asserted on the empty interface will need updating.
-
-### Zero Trust - Gateway List Item Pagination Type Changed
-
-The `GatewayListItemService.List()` return type changed from `SinglePage[[]GatewayItem]` (page of slices) to `SinglePage[GatewayItem]` (page of items). This removes the extra nesting layer when iterating results:
-
-```go
-// Before: page.Body was [][]GatewayItem
-// After:  page.Body is []GatewayItem
-```
-
----
-
-## Features
-
-### CustomCsrs (client.CustomCsrs)
-
-- **NEW SERVICE**: Custom Certificate Signing Requests (zone + account scoped)
-  - `client.CustomCsrs.New()` - Create a custom CSR
-  - `client.CustomCsrs.List()` - List custom CSRs
-  - `client.CustomCsrs.Delete()` - Delete a custom CSR
-  - `client.CustomCsrs.Get()` - Get a custom CSR
-
-### DLS (client.DLS)
-
-- **NEW SERVICE**: Data Localization Suite regional services
-  - `client.DLS.Regions.List()` - List available DLS regions
-  - `client.DLS.Regions.Get()` - Get a specific DLS region
-  - `client.DLS.RegionalServices.PrefixBindings.New()` - Create a prefix binding
-  - `client.DLS.RegionalServices.PrefixBindings.List()` - List prefix bindings
-  - `client.DLS.RegionalServices.PrefixBindings.Delete()` - Delete a prefix binding
-  - `client.DLS.RegionalServices.PrefixBindings.Edit()` - Edit a prefix binding
-  - `client.DLS.RegionalServices.PrefixBindings.Get()` - Get a prefix binding
-
-### AIAudit (client.AIAudit)
-
-- **NEW SERVICE**: AI Audit robots route mappings
-  - `client.AIAudit.Robots` - Manage AI audit robot configurations
-
-### Email Security (client.EmailSecurity)
-
-- `client.EmailSecurity.Settings.URLIgnorePatterns.New()` - Create a URL ignore pattern
-- `client.EmailSecurity.Settings.URLIgnorePatterns.List()` - List URL ignore patterns
-- `client.EmailSecurity.Settings.URLIgnorePatterns.Delete()` - Delete a URL ignore pattern
-- `client.EmailSecurity.Settings.URLIgnorePatterns.Edit()` - Edit a URL ignore pattern
-- `client.EmailSecurity.Settings.URLIgnorePatterns.Get()` - Get a URL ignore pattern
-- `client.EmailSecurity.Settings.SendingDomainRestrictions.New()` - Create a sending domain restriction
-- `client.EmailSecurity.Settings.SendingDomainRestrictions.List()` - List sending domain restrictions
-- `client.EmailSecurity.Settings.SendingDomainRestrictions.Delete()` - Delete a sending domain restriction
-- `client.EmailSecurity.Settings.SendingDomainRestrictions.Edit()` - Edit a sending domain restriction
-- `client.EmailSecurity.Settings.SendingDomainRestrictions.Get()` - Get a sending domain restriction
-
-### Billing (client.Billing)
-
-- `client.Billing.Usage.Get()` - New billable usage endpoint at `/accounts/{account_id}/billable/usage`
-
-### Organizations (client.Organizations)
-
-- `client.Organizations.Billing.Usage.Get()` - New organization-level billable usage endpoint
-
-### Workers (client.Workers)
-
-- `client.Workers.Observability.Telemetry.LiveTail()` - Start a live tail session for real-time telemetry
-- `client.Workers.Observability.Telemetry.LiveTailHeartbeat()` - Send heartbeat to keep live tail session alive
-- `client.Workers.Observability.SharedQueries.New()` - Create a shared observability query
-- `client.Workers.Observability.SharedQueries.Get()` - Get a shared observability query by ID
-- New `PropagationPolicy` field on observability traces configuration across Script, DispatchNamespaceScript, and settings types
-- New `opentelemetry-metrics` enum value on `ObservabilityDestination` logpush dataset types
-
-### Workflows (client.Workflows)
-
-- New `rollback` enum value on `InstanceGetResponseStepsObjectType`
-
-### Pipelines (client.Pipelines)
-
-- New `Name` filter parameter on `PipelineListParams`, `StreamListParams`, and `SinkListParams`
-
-### Realtime Kit (client.RealtimeKit)
-
-- `client.RealtimeKit.Livestreams.GetLivestreamAnalyticsDaywise()` - Day-wise livestream analytics
-- New meeting recording configuration types added to `MeetingGetResponse` and `MeetingUpdateMeetingByIDParams`
-- New recording config types on `RecordingGetRecordingsResponse`
-- New `PageNo`, `PerPage`, `Search`, `SortOrder` query params on `AppGetParams`
-- New `SessionGetSessionsResponsePaging` type and `Paging` field on sessions list response
-
-### Snippets (client.Snippets)
-
-- `client.Snippets.Rules.Get()` - Get snippet rules for a zone
-
-### Radar (radar)
-
-- New `Normalization` parameter on `BotWebCrawlerTimeseriesGroupsParams`
-- New `ContentType` filter parameter on `HTTPSummaryV2Params` and `HTTPTimeseriesParams`
-
-### Zero Trust (client.ZeroTrust)
-
-- `client.ZeroTrust.Organizations.DOH.Update()` - Update DoH settings for Access organization
-- `client.ZeroTrust.Organizations.DOH.Get()` - Get DoH settings for Access organization
-- `client.ZeroTrust.Devices.Policies.Default.Edit()` - Edit default device policy
-- `client.ZeroTrust.Devices.Policies.Default.Get()` - Get default device policy
-- `client.ZeroTrust.Devices.Policies.Default.Excludes.Update()` - Update default policy split tunnel excludes
-- `client.ZeroTrust.Devices.Policies.Default.Excludes.Get()` - Get default policy split tunnel excludes
-- `client.ZeroTrust.Devices.Policies.Default.Includes.Update()` - Update default policy split tunnel includes
-- `client.ZeroTrust.Devices.Policies.Default.Includes.Get()` - Get default policy split tunnel includes
-- New `IdentityProviderAccessCloudflare` identity provider type for Cloudflare authentication
-- New `AccessRuleAccessCloudflareAccountMemberRule` access rule type
-- New `DNSSearchSuffix` field on device policy custom create/edit params
-- New `MaxTTLSecs` field on gateway location responses and params
-- New `ErrorDetails` types on MCP Portal and MCP Server responses
-
----
-
-## Deprecations
-
-_None in this release._
-
-## Bug Fixes
-
-- **Billing**: The `Paygo` endpoint path was corrected to `/accounts/{account_id}/paygo-usage`
-- **Zones**: Updated zone hold documentation to clarify CDN-only zone behavior
+* pin CI actions to commit SHAs, update scripts ([#4322](https://github.com/cloudflare/cloudflare-go/issues/4322)) ([16be5ce](https://github.com/cloudflare/cloudflare-go/commit/16be5ce7ebc11bc7690bb4af8493c0084a787853))
 
 ## 6.9.0 (2026-04-01)
 
