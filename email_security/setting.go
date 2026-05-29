@@ -13,12 +13,14 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewSettingService] method instead.
 type SettingService struct {
-	Options               []option.RequestOption
-	AllowPolicies         *SettingAllowPolicyService
-	BlockSenders          *SettingBlockSenderService
-	Domains               *SettingDomainService
-	ImpersonationRegistry *SettingImpersonationRegistryService
-	TrustedDomains        *SettingTrustedDomainService
+	Options                   []option.RequestOption
+	AllowPolicies             *SettingAllowPolicyService
+	BlockSenders              *SettingBlockSenderService
+	Domains                   *SettingDomainService
+	ImpersonationRegistry     *SettingImpersonationRegistryService
+	SendingDomainRestrictions *SettingSendingDomainRestrictionService
+	TrustedDomains            *SettingTrustedDomainService
+	URLIgnorePatterns         *SettingURLIgnorePatternService
 }
 
 // NewSettingService generates a new service that applies the given options to each
@@ -31,6 +33,8 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r.BlockSenders = NewSettingBlockSenderService(opts...)
 	r.Domains = NewSettingDomainService(opts...)
 	r.ImpersonationRegistry = NewSettingImpersonationRegistryService(opts...)
+	r.SendingDomainRestrictions = NewSettingSendingDomainRestrictionService(opts...)
 	r.TrustedDomains = NewSettingTrustedDomainService(opts...)
+	r.URLIgnorePatterns = NewSettingURLIgnorePatternService(opts...)
 	return
 }
