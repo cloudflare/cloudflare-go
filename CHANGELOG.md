@@ -1,5 +1,24 @@
 # Changelog
 
+## 7.4.0 (2026-05-29)
+
+Full Changelog: [v7.3.0...v7.4.0](https://github.com/cloudflare/cloudflare-go/compare/v7.3.0...v7.4.0)
+
+### ⚠ BREAKING CHANGES
+
+* InvestigateListParams.ActionLog field removed. The upstream API no longer accepts this query parameter.
+
+### Features
+
+* add custom_csrs Stainless config (zone + account) ([#4328](https://github.com/cloudflare/cloudflare-go/issues/4328)) ([be53b38](https://github.com/cloudflare/cloudflare-go/commit/be53b385bea2dd09b80016f41e9fad1145bf4437))
+* feat(email_security): add url_ignore_patterns and sending_domain_restrictions endpoints ([#4330](https://github.com/cloudflare/cloudflare-go/issues/4330)) ([408b887](https://github.com/cloudflare/cloudflare-go/commit/408b887d14b7fa96635d3b5a91dd5f79c13e91ac))
+* sync breaking changes for email_security and realtime_kit ([#4321](https://github.com/cloudflare/cloudflare-go/issues/4321)) ([007e274](https://github.com/cloudflare/cloudflare-go/commit/007e274673665651f75a3c908fbb410a5f8823a7))
+
+
+### Chores
+
+* pin CI actions to commit SHAs, update scripts ([#4322](https://github.com/cloudflare/cloudflare-go/issues/4322)) ([16be5ce](https://github.com/cloudflare/cloudflare-go/commit/16be5ce7ebc11bc7690bb4af8493c0084a787853))
+
 ## 6.9.0 (2026-04-01)
 
 Full Changelog: [v6.8.0...v6.9.0](https://github.com/cloudflare/cloudflare-go/compare/v6.8.0...v6.9.0)
