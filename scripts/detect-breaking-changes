@@ -114,7 +114,9 @@ TEST_PATHS=(
 	email_security/settingblocksender_test.go
 	email_security/settingdomain_test.go
 	email_security/settingimpersonationregistry_test.go
+	email_security/settingsendingdomainrestriction_test.go
 	email_security/settingtrusteddomain_test.go
+	email_security/settingurlignorepattern_test.go
 	email_security/submission_test.go
 	email_routing/emailrouting_test.go
 	email_routing/dns_test.go
