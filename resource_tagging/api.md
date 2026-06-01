@@ -45,3 +45,5 @@ Methods:
 Methods:
 
 - <code title="get /accounts/{account_id}/tags/values/{tag_key}">client.ResourceTagging.Values.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/resource_tagging#ValueService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tagKey <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/resource_tagging">resource_tagging</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/resource_tagging#ValueListParams">ValueListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#CursorPaginationAfter">CursorPaginationAfter</a>[<a href="https://pkg.go.dev/builtin#string">string</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Summary
