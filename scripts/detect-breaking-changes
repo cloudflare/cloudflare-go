@@ -83,6 +83,7 @@ TEST_PATHS=(
 	custom_hostnames/fallbackorigin_test.go
 	custom_hostnames/certificatepackcertificate_test.go
 	custom_nameservers/customnameserver_test.go
+	tenant_custom_nameservers/tenantcustomnameserver_test.go
 	dns_firewall/dnsfirewall_test.go
 	dns_firewall/analyticsreport_test.go
 	dns_firewall/analyticsreportbytime_test.go

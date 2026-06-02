@@ -107,6 +107,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/speed"
 	"github.com/cloudflare/cloudflare-go/v7/ssl"
 	"github.com/cloudflare/cloudflare-go/v7/stream"
+	"github.com/cloudflare/cloudflare-go/v7/tenant_custom_nameservers"
 	"github.com/cloudflare/cloudflare-go/v7/token_validation"
 	"github.com/cloudflare/cloudflare-go/v7/turnstile"
 	"github.com/cloudflare/cloudflare-go/v7/url_normalization"
@@ -128,30 +129,31 @@ import (
 // interacting with the cloudflare API. You should not instantiate this client
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
-	Options                []option.RequestOption
-	Accounts               *accounts.AccountService
-	Organizations          *organizations.OrganizationService
-	OriginCACertificates   *origin_ca_certificates.OriginCACertificateService
-	IPs                    *ips.IPService
-	Memberships            *memberships.MembershipService
-	User                   *user.UserService
-	Zones                  *zones.ZoneService
-	LoadBalancers          *load_balancers.LoadBalancerService
-	Cache                  *cache.CacheService
-	SSL                    *ssl.SSLService
-	ACM                    *acm.ACMService
-	Argo                   *argo.ArgoService
-	CertificateAuthorities *certificate_authorities.CertificateAuthorityService
-	ClientCertificates     *client_certificates.ClientCertificateService
-	CustomCertificates     *custom_certificates.CustomCertificateService
-	CustomCsrs             *custom_csrs.CustomCsrService
-	CustomHostnames        *custom_hostnames.CustomHostnameService
-	CustomNameservers      *custom_nameservers.CustomNameserverService
-	DNSFirewall            *dns_firewall.DNSFirewallService
-	DNS                    *dns.DNSService
-	EmailSecurity          *email_security.EmailSecurityService
-	EmailRouting           *email_routing.EmailRoutingService
-	EmailSending           *email_sending.EmailSendingService
+	Options                 []option.RequestOption
+	Accounts                *accounts.AccountService
+	Organizations           *organizations.OrganizationService
+	OriginCACertificates    *origin_ca_certificates.OriginCACertificateService
+	IPs                     *ips.IPService
+	Memberships             *memberships.MembershipService
+	User                    *user.UserService
+	Zones                   *zones.ZoneService
+	LoadBalancers           *load_balancers.LoadBalancerService
+	Cache                   *cache.CacheService
+	SSL                     *ssl.SSLService
+	ACM                     *acm.ACMService
+	Argo                    *argo.ArgoService
+	CertificateAuthorities  *certificate_authorities.CertificateAuthorityService
+	ClientCertificates      *client_certificates.ClientCertificateService
+	CustomCertificates      *custom_certificates.CustomCertificateService
+	CustomCsrs              *custom_csrs.CustomCsrService
+	CustomHostnames         *custom_hostnames.CustomHostnameService
+	CustomNameservers       *custom_nameservers.CustomNameserverService
+	TenantCustomNameservers *tenant_custom_nameservers.TenantCustomNameserverService
+	DNSFirewall             *dns_firewall.DNSFirewallService
+	DNS                     *dns.DNSService
+	EmailSecurity           *email_security.EmailSecurityService
+	EmailRouting            *email_routing.EmailRoutingService
+	EmailSending            *email_sending.EmailSendingService
 	// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
 	// See
 	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
@@ -309,6 +311,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CustomCsrs = custom_csrs.NewCustomCsrService(opts...)
 	r.CustomHostnames = custom_hostnames.NewCustomHostnameService(opts...)
 	r.CustomNameservers = custom_nameservers.NewCustomNameserverService(opts...)
+	r.TenantCustomNameservers = tenant_custom_nameservers.NewTenantCustomNameserverService(opts...)
 	r.DNSFirewall = dns_firewall.NewDNSFirewallService(opts...)
 	r.DNS = dns.NewDNSService(opts...)
 	r.EmailSecurity = email_security.NewEmailSecurityService(opts...)
