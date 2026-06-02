@@ -126,12 +126,12 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			Logpush:               cloudflare.F(true),
 			LogpushPublicKey:      cloudflare.F("xxxxxxxxxxxxxxxx"),
 			Otel: cloudflare.F([]ai_gateway.AIGatewayUpdateParamsOtel{{
-				Authorization: cloudflare.F("authorization"),
 				Headers: cloudflare.F(map[string]string{
 					"foo": "string",
 				}),
-				URL:         cloudflare.F("https://example.com"),
-				ContentType: cloudflare.F(ai_gateway.AIGatewayUpdateParamsOtelContentTypeJson),
+				URL:           cloudflare.F("https://example.com"),
+				Authorization: cloudflare.F("authorization"),
+				ContentType:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsOtelContentTypeJson),
 			}}),
 			RateLimitingTechnique: cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
 			RetryBackoff:          cloudflare.F(ai_gateway.AIGatewayUpdateParamsRetryBackoffConstant),

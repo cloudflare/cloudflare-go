@@ -158,6 +158,8 @@ type HostnameRoute struct {
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// The hostname of the route.
 	Hostname string `json:"hostname"`
+	// The type of tunnel.
+	TunType HostnameRouteTunType `json:"tun_type"`
 	// UUID of the tunnel.
 	TunnelID string `json:"tunnel_id" format:"uuid"`
 	// A user-friendly name for a tunnel.
@@ -172,6 +174,7 @@ type hostnameRouteJSON struct {
 	CreatedAt   apijson.Field
 	DeletedAt   apijson.Field
 	Hostname    apijson.Field
+	TunType     apijson.Field
 	TunnelID    apijson.Field
 	TunnelName  apijson.Field
 	raw         string
@@ -184,6 +187,27 @@ func (r *HostnameRoute) UnmarshalJSON(data []byte) (err error) {
 
 func (r hostnameRouteJSON) RawJSON() string {
 	return r.raw
+}
+
+// The type of tunnel.
+type HostnameRouteTunType string
+
+const (
+	HostnameRouteTunTypeCfdTunnel     HostnameRouteTunType = "cfd_tunnel"
+	HostnameRouteTunTypeWARPConnector HostnameRouteTunType = "warp_connector"
+	HostnameRouteTunTypeWARP          HostnameRouteTunType = "warp"
+	HostnameRouteTunTypeMagic         HostnameRouteTunType = "magic"
+	HostnameRouteTunTypeIPSec         HostnameRouteTunType = "ip_sec"
+	HostnameRouteTunTypeGRE           HostnameRouteTunType = "gre"
+	HostnameRouteTunTypeCNI           HostnameRouteTunType = "cni"
+)
+
+func (r HostnameRouteTunType) IsKnown() bool {
+	switch r {
+	case HostnameRouteTunTypeCfdTunnel, HostnameRouteTunTypeWARPConnector, HostnameRouteTunTypeWARP, HostnameRouteTunTypeMagic, HostnameRouteTunTypeIPSec, HostnameRouteTunTypeGRE, HostnameRouteTunTypeCNI:
+		return true
+	}
+	return false
 }
 
 type NetworkHostnameRouteNewParams struct {

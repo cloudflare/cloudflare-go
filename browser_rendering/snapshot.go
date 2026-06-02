@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
@@ -15,6 +16,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
+	"github.com/tidwall/gjson"
 )
 
 // SnapshotService contains methods and other services that help with interacting
@@ -56,20 +59,26 @@ func (r *SnapshotService) New(ctx context.Context, params SnapshotNewParams, opt
 }
 
 type SnapshotNewResponse struct {
+	// Accessibility tree node
+	AccessibilityTree SnapshotNewResponseAccessibilityTree `json:"accessibilityTree"`
 	// HTML content.
-	Content string `json:"content" api:"required"`
+	Content string `json:"content"`
+	// Markdown content.
+	Markdown string `json:"markdown"`
 	// Base64 encoded image.
-	Screenshot string                  `json:"screenshot" api:"required"`
+	Screenshot string                  `json:"screenshot"`
 	JSON       snapshotNewResponseJSON `json:"-"`
 }
 
 // snapshotNewResponseJSON contains the JSON metadata for the struct
 // [SnapshotNewResponse]
 type snapshotNewResponseJSON struct {
-	Content     apijson.Field
-	Screenshot  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	AccessibilityTree apijson.Field
+	Content           apijson.Field
+	Markdown          apijson.Field
+	Screenshot        apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *SnapshotNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -78,6 +87,182 @@ func (r *SnapshotNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r snapshotNewResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Accessibility tree node
+type SnapshotNewResponseAccessibilityTree struct {
+	Role            string                                           `json:"role" api:"required"`
+	Autocomplete    string                                           `json:"autocomplete"`
+	Checked         SnapshotNewResponseAccessibilityTreeCheckedUnion `json:"checked"`
+	Children        []interface{}                                    `json:"children"`
+	Description     string                                           `json:"description"`
+	Disabled        bool                                             `json:"disabled"`
+	Expanded        bool                                             `json:"expanded"`
+	Focused         bool                                             `json:"focused"`
+	Haspopup        string                                           `json:"haspopup"`
+	Invalid         string                                           `json:"invalid"`
+	Keyshortcuts    string                                           `json:"keyshortcuts"`
+	Level           float64                                          `json:"level"`
+	Modal           bool                                             `json:"modal"`
+	Multiline       bool                                             `json:"multiline"`
+	Multiselectable bool                                             `json:"multiselectable"`
+	Name            string                                           `json:"name"`
+	Orientation     string                                           `json:"orientation"`
+	Pressed         SnapshotNewResponseAccessibilityTreePressedUnion `json:"pressed"`
+	Readonly        bool                                             `json:"readonly"`
+	Required        bool                                             `json:"required"`
+	Roledescription string                                           `json:"roledescription"`
+	Selected        bool                                             `json:"selected"`
+	Value           SnapshotNewResponseAccessibilityTreeValueUnion   `json:"value"`
+	Valuemax        float64                                          `json:"valuemax"`
+	Valuemin        float64                                          `json:"valuemin"`
+	Valuetext       string                                           `json:"valuetext"`
+	JSON            snapshotNewResponseAccessibilityTreeJSON         `json:"-"`
+}
+
+// snapshotNewResponseAccessibilityTreeJSON contains the JSON metadata for the
+// struct [SnapshotNewResponseAccessibilityTree]
+type snapshotNewResponseAccessibilityTreeJSON struct {
+	Role            apijson.Field
+	Autocomplete    apijson.Field
+	Checked         apijson.Field
+	Children        apijson.Field
+	Description     apijson.Field
+	Disabled        apijson.Field
+	Expanded        apijson.Field
+	Focused         apijson.Field
+	Haspopup        apijson.Field
+	Invalid         apijson.Field
+	Keyshortcuts    apijson.Field
+	Level           apijson.Field
+	Modal           apijson.Field
+	Multiline       apijson.Field
+	Multiselectable apijson.Field
+	Name            apijson.Field
+	Orientation     apijson.Field
+	Pressed         apijson.Field
+	Readonly        apijson.Field
+	Required        apijson.Field
+	Roledescription apijson.Field
+	Selected        apijson.Field
+	Value           apijson.Field
+	Valuemax        apijson.Field
+	Valuemin        apijson.Field
+	Valuetext       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *SnapshotNewResponseAccessibilityTree) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r snapshotNewResponseAccessibilityTreeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Union satisfied by [shared.UnionBool] or
+// [SnapshotNewResponseAccessibilityTreeCheckedString].
+type SnapshotNewResponseAccessibilityTreeCheckedUnion interface {
+	ImplementsSnapshotNewResponseAccessibilityTreeCheckedUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SnapshotNewResponseAccessibilityTreeCheckedUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(SnapshotNewResponseAccessibilityTreeCheckedString("")),
+		},
+	)
+}
+
+type SnapshotNewResponseAccessibilityTreeCheckedString string
+
+const (
+	SnapshotNewResponseAccessibilityTreeCheckedStringMixed SnapshotNewResponseAccessibilityTreeCheckedString = "mixed"
+)
+
+func (r SnapshotNewResponseAccessibilityTreeCheckedString) IsKnown() bool {
+	switch r {
+	case SnapshotNewResponseAccessibilityTreeCheckedStringMixed:
+		return true
+	}
+	return false
+}
+
+func (r SnapshotNewResponseAccessibilityTreeCheckedString) ImplementsSnapshotNewResponseAccessibilityTreeCheckedUnion() {
+}
+
+// Union satisfied by [shared.UnionBool] or
+// [SnapshotNewResponseAccessibilityTreePressedString].
+type SnapshotNewResponseAccessibilityTreePressedUnion interface {
+	ImplementsSnapshotNewResponseAccessibilityTreePressedUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SnapshotNewResponseAccessibilityTreePressedUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(SnapshotNewResponseAccessibilityTreePressedString("")),
+		},
+	)
+}
+
+type SnapshotNewResponseAccessibilityTreePressedString string
+
+const (
+	SnapshotNewResponseAccessibilityTreePressedStringMixed SnapshotNewResponseAccessibilityTreePressedString = "mixed"
+)
+
+func (r SnapshotNewResponseAccessibilityTreePressedString) IsKnown() bool {
+	switch r {
+	case SnapshotNewResponseAccessibilityTreePressedStringMixed:
+		return true
+	}
+	return false
+}
+
+func (r SnapshotNewResponseAccessibilityTreePressedString) ImplementsSnapshotNewResponseAccessibilityTreePressedUnion() {
+}
+
+// Union satisfied by [shared.UnionString] or [shared.UnionFloat].
+type SnapshotNewResponseAccessibilityTreeValueUnion interface {
+	ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SnapshotNewResponseAccessibilityTreeValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+	)
 }
 
 type SnapshotNewParams struct {
@@ -114,6 +299,7 @@ type SnapshotNewParamsBody struct {
 	BestAttempt      param.Field[bool]        `json:"bestAttempt"`
 	Cookies          param.Field[interface{}] `json:"cookies"`
 	EmulateMediaType param.Field[string]      `json:"emulateMediaType"`
+	Formats          param.Field[interface{}] `json:"formats"`
 	GotoOptions      param.Field[interface{}] `json:"gotoOptions"`
 	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
 	// `url` must be set.
@@ -169,6 +355,7 @@ type SnapshotNewParamsBodyObject struct {
 	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
 	Cookies          param.Field[[]SnapshotNewParamsBodyObjectCookie] `json:"cookies"`
 	EmulateMediaType param.Field[string]                              `json:"emulateMediaType"`
+	Formats          param.Field[[]SnapshotNewParamsBodyObjectFormat] `json:"formats"`
 	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
 	GotoOptions param.Field[SnapshotNewParamsBodyObjectGotoOptions] `json:"gotoOptions"`
 	// Block undesired requests that match the provided regex patterns, eg.
@@ -200,7 +387,7 @@ type SnapshotNewParamsBodyObjectAddScriptTag struct {
 	ID      param.Field[string] `json:"id"`
 	Content param.Field[string] `json:"content"`
 	Type    param.Field[string] `json:"type"`
-	URL     param.Field[string] `json:"url"`
+	URL     param.Field[string] `json:"url" format:"uri"`
 }
 
 func (r SnapshotNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err error) {
@@ -209,7 +396,7 @@ func (r SnapshotNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err
 
 type SnapshotNewParamsBodyObjectAddStyleTag struct {
 	Content param.Field[string] `json:"content"`
-	URL     param.Field[string] `json:"url"`
+	URL     param.Field[string] `json:"url" format:"uri"`
 }
 
 func (r SnapshotNewParamsBodyObjectAddStyleTag) MarshalJSON() (data []byte, err error) {
@@ -322,6 +509,23 @@ const (
 func (r SnapshotNewParamsBodyObjectCookiesSourceScheme) IsKnown() bool {
 	switch r {
 	case SnapshotNewParamsBodyObjectCookiesSourceSchemeUnset, SnapshotNewParamsBodyObjectCookiesSourceSchemeNonSecure, SnapshotNewParamsBodyObjectCookiesSourceSchemeSecure:
+		return true
+	}
+	return false
+}
+
+type SnapshotNewParamsBodyObjectFormat string
+
+const (
+	SnapshotNewParamsBodyObjectFormatContent           SnapshotNewParamsBodyObjectFormat = "content"
+	SnapshotNewParamsBodyObjectFormatScreenshot        SnapshotNewParamsBodyObjectFormat = "screenshot"
+	SnapshotNewParamsBodyObjectFormatMarkdown          SnapshotNewParamsBodyObjectFormat = "markdown"
+	SnapshotNewParamsBodyObjectFormatAccessibilityTree SnapshotNewParamsBodyObjectFormat = "accessibilityTree"
+)
+
+func (r SnapshotNewParamsBodyObjectFormat) IsKnown() bool {
+	switch r {
+	case SnapshotNewParamsBodyObjectFormatContent, SnapshotNewParamsBodyObjectFormatScreenshot, SnapshotNewParamsBodyObjectFormatMarkdown, SnapshotNewParamsBodyObjectFormatAccessibilityTree:
 		return true
 	}
 	return false

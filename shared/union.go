@@ -195,6 +195,7 @@ func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()  
 func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginRightUnion()                 {}
 func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginTopUnion()                   {}
 func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsWidthUnion()                       {}
+func (UnionString) ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()                   {}
 func (UnionString) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion()             {}
 func (UnionString) ImplementsCrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion() {}
 
@@ -284,6 +285,8 @@ func (UnionBool) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()     
 func (UnionBool) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()                  {}
 func (UnionBool) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                {}
 func (UnionBool) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                   {}
+func (UnionBool) ImplementsSnapshotNewResponseAccessibilityTreeCheckedUnion()                 {}
+func (UnionBool) ImplementsSnapshotNewResponseAccessibilityTreePressedUnion()                 {}
 func (UnionBool) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion()             {}
 func (UnionBool) ImplementsCrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion() {}
 
@@ -392,5 +395,6 @@ func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()   
 func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginRightUnion()                 {}
 func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginTopUnion()                   {}
 func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsWidthUnion()                       {}
+func (UnionFloat) ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()                   {}
 func (UnionFloat) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnion()             {}
 func (UnionFloat) ImplementsCrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion() {}

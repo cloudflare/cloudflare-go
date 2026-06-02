@@ -212,6 +212,7 @@ type WorkflowListResponseInstances struct {
 	Errored         float64                           `json:"errored"`
 	Paused          float64                           `json:"paused"`
 	Queued          float64                           `json:"queued"`
+	RollingBack     float64                           `json:"rollingBack"`
 	Running         float64                           `json:"running"`
 	Terminated      float64                           `json:"terminated"`
 	Waiting         float64                           `json:"waiting"`
@@ -226,6 +227,7 @@ type workflowListResponseInstancesJSON struct {
 	Errored         apijson.Field
 	Paused          apijson.Field
 	Queued          apijson.Field
+	RollingBack     apijson.Field
 	Running         apijson.Field
 	Terminated      apijson.Field
 	Waiting         apijson.Field
@@ -319,6 +321,7 @@ type WorkflowGetResponseInstances struct {
 	Errored         float64                          `json:"errored"`
 	Paused          float64                          `json:"paused"`
 	Queued          float64                          `json:"queued"`
+	RollingBack     float64                          `json:"rollingBack"`
 	Running         float64                          `json:"running"`
 	Terminated      float64                          `json:"terminated"`
 	Waiting         float64                          `json:"waiting"`
@@ -333,6 +336,7 @@ type workflowGetResponseInstancesJSON struct {
 	Errored         apijson.Field
 	Paused          apijson.Field
 	Queued          apijson.Field
+	RollingBack     apijson.Field
 	Running         apijson.Field
 	Terminated      apijson.Field
 	Waiting         apijson.Field

@@ -178,10 +178,10 @@ func (r *IPSECTunnelService) Get(ctx context.Context, ipsecTunnelID string, para
 	return res, nil
 }
 
-// Generates a Pre Shared Key for a specific IPsec tunnel used in the IKE session.
+// Generates a Pre-Shared Key for a specific IPsec tunnel used in the IKE session.
 // Use `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes. After a PSK is generated, the PSK is immediately
-// persisted to Cloudflare's edge and cannot be retrieved later. Note the PSK in a
+// persisted to Cloudflare's edge and cannot be retrieved later. Store the PSK in a
 // safe place.
 func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, ipsecTunnelID string, params IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
 	var env IPSECTunnelPSKGenerateResponseEnvelope

@@ -58,7 +58,6 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 				}}),
 			}),
 		}),
-		MaxTTLSecs: cloudflare.F(int64(3600)),
 		Networks: cloudflare.F([]zero_trust.GatewayLocationNewParamsNetwork{{
 			Network: cloudflare.F("192.0.2.1/32"),
 		}}),
@@ -119,7 +118,6 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 					}}),
 				}),
 			}),
-			MaxTTLSecs: cloudflare.F(int64(3600)),
 			Networks: cloudflare.F([]zero_trust.GatewayLocationUpdateParamsNetwork{{
 				Network: cloudflare.F("192.0.2.1/32"),
 			}}),
