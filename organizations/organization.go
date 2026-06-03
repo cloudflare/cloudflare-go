@@ -111,8 +111,7 @@ func (r *OrganizationService) ListAutoPaging(ctx context.Context, query Organiza
 // not contain any sub-organizations, accounts, members or users. (Currently in
 // Public Beta - see https://developers.cloudflare.com/fundamentals/organizations/)
 //
-// **Access Control:** Restricted to enterprise organizations. Non-admin callers
-// also require the `account_deletion` tenant flag.
+// **Access Control:** Restricted to enterprise organizations.
 func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
 	var env OrganizationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
