@@ -38,6 +38,7 @@ func TestDNSFirewallNewWithOptionalParams(t *testing.T) {
 			OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
 		}),
 		DeprecateAnyRequests: cloudflare.F(true),
+		DNSFirewallIPCount:   cloudflare.F(int64(2)),
 		ECSFallback:          cloudflare.F(false),
 		MaximumCacheTTL:      cloudflare.F(900.000000),
 		MinimumCacheTTL:      cloudflare.F(60.000000),

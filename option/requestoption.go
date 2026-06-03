@@ -19,18 +19,8 @@ import (
 // which can be supplied to clients, services, and methods. You can read more about this functional
 // options pattern in our [README].
 //
-// [README]: https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4#readme-requestoptions
+// [README]: https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#readme-requestoptions
 type RequestOption = requestconfig.RequestOption
-
-// WithAPIVersion returns a RequestOption that defines the API version the client is attempting
-// to use. While any value can be set here, invalid values are ignored and will recieve the
-// default value of today.
-func WithAPIVersion(value string) RequestOption {
-	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
-		r.Request.Header.Set("api-version", value)
-		return nil
-	})
-}
 
 // WithBaseURL returns a RequestOption that sets the BaseURL for the client.
 //

@@ -32,15 +32,11 @@ func TestDEXCommandNew(t *testing.T) {
 	_, err := client.ZeroTrust.DEX.Commands.New(context.TODO(), zero_trust.DEXCommandNewParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		Commands: cloudflare.F([]zero_trust.DEXCommandNewParamsCommand{{
-			CommandType: cloudflare.F(zero_trust.DEXCommandNewParamsCommandsCommandTypePCAP),
-			DeviceID:    cloudflare.F("device_id"),
-			UserEmail:   cloudflare.F("user_email"),
-			CommandArgs: cloudflare.F(zero_trust.DEXCommandNewParamsCommandsCommandArgs{
-				Interfaces:      cloudflare.F([]zero_trust.DEXCommandNewParamsCommandsCommandArgsInterface{zero_trust.DEXCommandNewParamsCommandsCommandArgsInterfaceDefault}),
-				MaxFileSizeMB:   cloudflare.F(1.000000),
-				PacketSizeBytes: cloudflare.F(1.000000),
-				TestAllRoutes:   cloudflare.F(true),
-				TimeLimitMin:    cloudflare.F(1.000000),
+			DeviceID:  cloudflare.F("device_id"),
+			Type:      cloudflare.F(zero_trust.DEXCommandNewParamsCommandsTypePCAP),
+			UserEmail: cloudflare.F("user_email"),
+			Args: cloudflare.F[zero_trust.DEXCommandNewParamsCommandsArgsUnion](zero_trust.DEXCommandNewParamsCommandsArgsWARPDiagArgs{
+				TestAllRoutes: cloudflare.F(true),
 			}),
 			RegistrationID: cloudflare.F("registration_id"),
 		}}),
@@ -72,7 +68,7 @@ func TestDEXCommandListWithOptionalParams(t *testing.T) {
 		AccountID:   cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		Page:        cloudflare.F(1.000000),
 		PerPage:     cloudflare.F(50.000000),
-		CommandType: cloudflare.F("command_type"),
+		CommandType: cloudflare.F(zero_trust.DEXCommandListParamsCommandTypePCAP),
 		DeviceID:    cloudflare.F("device_id"),
 		From:        cloudflare.F(time.Now()),
 		Status:      cloudflare.F(zero_trust.DEXCommandListParamsStatusPendingExec),

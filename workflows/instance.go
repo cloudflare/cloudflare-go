@@ -191,11 +191,12 @@ const (
 	InstanceNewResponseStatusComplete        InstanceNewResponseStatus = "complete"
 	InstanceNewResponseStatusWaitingForPause InstanceNewResponseStatus = "waitingForPause"
 	InstanceNewResponseStatusWaiting         InstanceNewResponseStatus = "waiting"
+	InstanceNewResponseStatusRollingBack     InstanceNewResponseStatus = "rollingBack"
 )
 
 func (r InstanceNewResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseStatusQueued, InstanceNewResponseStatusRunning, InstanceNewResponseStatusPaused, InstanceNewResponseStatusErrored, InstanceNewResponseStatusTerminated, InstanceNewResponseStatusComplete, InstanceNewResponseStatusWaitingForPause, InstanceNewResponseStatusWaiting:
+	case InstanceNewResponseStatusQueued, InstanceNewResponseStatusRunning, InstanceNewResponseStatusPaused, InstanceNewResponseStatusErrored, InstanceNewResponseStatusTerminated, InstanceNewResponseStatusComplete, InstanceNewResponseStatusWaitingForPause, InstanceNewResponseStatusWaiting, InstanceNewResponseStatusRollingBack:
 		return true
 	}
 	return false
@@ -247,11 +248,12 @@ const (
 	InstanceListResponseStatusComplete        InstanceListResponseStatus = "complete"
 	InstanceListResponseStatusWaitingForPause InstanceListResponseStatus = "waitingForPause"
 	InstanceListResponseStatusWaiting         InstanceListResponseStatus = "waiting"
+	InstanceListResponseStatusRollingBack     InstanceListResponseStatus = "rollingBack"
 )
 
 func (r InstanceListResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceListResponseStatusQueued, InstanceListResponseStatusRunning, InstanceListResponseStatusPaused, InstanceListResponseStatusErrored, InstanceListResponseStatusTerminated, InstanceListResponseStatusComplete, InstanceListResponseStatusWaitingForPause, InstanceListResponseStatusWaiting:
+	case InstanceListResponseStatusQueued, InstanceListResponseStatusRunning, InstanceListResponseStatusPaused, InstanceListResponseStatusErrored, InstanceListResponseStatusTerminated, InstanceListResponseStatusComplete, InstanceListResponseStatusWaitingForPause, InstanceListResponseStatusWaiting, InstanceListResponseStatusRollingBack:
 		return true
 	}
 	return false
@@ -295,11 +297,12 @@ const (
 	InstanceBulkResponseStatusComplete        InstanceBulkResponseStatus = "complete"
 	InstanceBulkResponseStatusWaitingForPause InstanceBulkResponseStatus = "waitingForPause"
 	InstanceBulkResponseStatusWaiting         InstanceBulkResponseStatus = "waiting"
+	InstanceBulkResponseStatusRollingBack     InstanceBulkResponseStatus = "rollingBack"
 )
 
 func (r InstanceBulkResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceBulkResponseStatusQueued, InstanceBulkResponseStatusRunning, InstanceBulkResponseStatusPaused, InstanceBulkResponseStatusErrored, InstanceBulkResponseStatusTerminated, InstanceBulkResponseStatusComplete, InstanceBulkResponseStatusWaitingForPause, InstanceBulkResponseStatusWaiting:
+	case InstanceBulkResponseStatusQueued, InstanceBulkResponseStatusRunning, InstanceBulkResponseStatusPaused, InstanceBulkResponseStatusErrored, InstanceBulkResponseStatusTerminated, InstanceBulkResponseStatusComplete, InstanceBulkResponseStatusWaitingForPause, InstanceBulkResponseStatusWaiting, InstanceBulkResponseStatusRollingBack:
 		return true
 	}
 	return false
@@ -311,6 +314,7 @@ type InstanceGetResponse struct {
 	Output    InstanceGetResponseOutputUnion `json:"output" api:"required"`
 	Params    interface{}                    `json:"params" api:"required"`
 	Queued    time.Time                      `json:"queued" api:"required" format:"date-time"`
+	Rollback  InstanceGetResponseRollback    `json:"rollback" api:"required,nullable"`
 	Start     time.Time                      `json:"start" api:"required,nullable" format:"date-time"`
 	Status    InstanceGetResponseStatus      `json:"status" api:"required"`
 	StepCount int64                          `json:"step_count" api:"required"`
@@ -329,6 +333,7 @@ type instanceGetResponseJSON struct {
 	Output      apijson.Field
 	Params      apijson.Field
 	Queued      apijson.Field
+	Rollback    apijson.Field
 	Start       apijson.Field
 	Status      apijson.Field
 	StepCount   apijson.Field
@@ -391,6 +396,67 @@ func init() {
 	)
 }
 
+type InstanceGetResponseRollback struct {
+	Error   InstanceGetResponseRollbackError   `json:"error" api:"required,nullable"`
+	Outcome InstanceGetResponseRollbackOutcome `json:"outcome" api:"required"`
+	JSON    instanceGetResponseRollbackJSON    `json:"-"`
+}
+
+// instanceGetResponseRollbackJSON contains the JSON metadata for the struct
+// [InstanceGetResponseRollback]
+type instanceGetResponseRollbackJSON struct {
+	Error       apijson.Field
+	Outcome     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceGetResponseRollback) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceGetResponseRollbackJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceGetResponseRollbackError struct {
+	Message string                               `json:"message" api:"required"`
+	Name    string                               `json:"name" api:"required"`
+	JSON    instanceGetResponseRollbackErrorJSON `json:"-"`
+}
+
+// instanceGetResponseRollbackErrorJSON contains the JSON metadata for the struct
+// [InstanceGetResponseRollbackError]
+type instanceGetResponseRollbackErrorJSON struct {
+	Message     apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceGetResponseRollbackError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceGetResponseRollbackErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceGetResponseRollbackOutcome string
+
+const (
+	InstanceGetResponseRollbackOutcomeComplete InstanceGetResponseRollbackOutcome = "complete"
+	InstanceGetResponseRollbackOutcomeFailed   InstanceGetResponseRollbackOutcome = "failed"
+)
+
+func (r InstanceGetResponseRollbackOutcome) IsKnown() bool {
+	switch r {
+	case InstanceGetResponseRollbackOutcomeComplete, InstanceGetResponseRollbackOutcomeFailed:
+		return true
+	}
+	return false
+}
+
 type InstanceGetResponseStatus string
 
 const (
@@ -402,11 +468,12 @@ const (
 	InstanceGetResponseStatusComplete        InstanceGetResponseStatus = "complete"
 	InstanceGetResponseStatusWaitingForPause InstanceGetResponseStatus = "waitingForPause"
 	InstanceGetResponseStatusWaiting         InstanceGetResponseStatus = "waiting"
+	InstanceGetResponseStatusRollingBack     InstanceGetResponseStatus = "rollingBack"
 )
 
 func (r InstanceGetResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceGetResponseStatusQueued, InstanceGetResponseStatusRunning, InstanceGetResponseStatusPaused, InstanceGetResponseStatusErrored, InstanceGetResponseStatusTerminated, InstanceGetResponseStatusComplete, InstanceGetResponseStatusWaitingForPause, InstanceGetResponseStatusWaiting:
+	case InstanceGetResponseStatusQueued, InstanceGetResponseStatusRunning, InstanceGetResponseStatusPaused, InstanceGetResponseStatusErrored, InstanceGetResponseStatusTerminated, InstanceGetResponseStatusComplete, InstanceGetResponseStatusWaitingForPause, InstanceGetResponseStatusWaiting, InstanceGetResponseStatusRollingBack:
 		return true
 	}
 	return false
@@ -1000,11 +1067,12 @@ const (
 	InstanceListParamsStatusComplete        InstanceListParamsStatus = "complete"
 	InstanceListParamsStatusWaitingForPause InstanceListParamsStatus = "waitingForPause"
 	InstanceListParamsStatusWaiting         InstanceListParamsStatus = "waiting"
+	InstanceListParamsStatusRollingBack     InstanceListParamsStatus = "rollingBack"
 )
 
 func (r InstanceListParamsStatus) IsKnown() bool {
 	switch r {
-	case InstanceListParamsStatusQueued, InstanceListParamsStatusRunning, InstanceListParamsStatusPaused, InstanceListParamsStatusErrored, InstanceListParamsStatusTerminated, InstanceListParamsStatusComplete, InstanceListParamsStatusWaitingForPause, InstanceListParamsStatusWaiting:
+	case InstanceListParamsStatusQueued, InstanceListParamsStatusRunning, InstanceListParamsStatusPaused, InstanceListParamsStatusErrored, InstanceListParamsStatusTerminated, InstanceListParamsStatusComplete, InstanceListParamsStatusWaitingForPause, InstanceListParamsStatusWaiting, InstanceListParamsStatusRollingBack:
 		return true
 	}
 	return false

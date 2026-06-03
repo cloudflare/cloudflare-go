@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/realtime_kit"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 func TestPresetNewWithOptionalParams(t *testing.T) {
@@ -36,60 +35,30 @@ func TestPresetNewWithOptionalParams(t *testing.T) {
 		realtime_kit.PresetNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Config: cloudflare.F(realtime_kit.PresetNewParamsConfig{
-				MaxScreenshareCount: cloudflare.F(int64(0)),
+				MaxScreenshareCount: cloudflare.F(0.000000),
 				MaxVideoStreams: cloudflare.F(realtime_kit.PresetNewParamsConfigMaxVideoStreams{
-					Desktop: cloudflare.F(int64(0)),
-					Mobile:  cloudflare.F(int64(0)),
+					Desktop: cloudflare.F(0.000000),
+					Mobile:  cloudflare.F(0.000000),
 				}),
 				Media: cloudflare.F(realtime_kit.PresetNewParamsConfigMedia{
 					Screenshare: cloudflare.F(realtime_kit.PresetNewParamsConfigMediaScreenshare{
-						FrameRate: cloudflare.F(int64(0)),
+						FrameRate: cloudflare.F(0.000000),
 						Quality:   cloudflare.F(realtime_kit.PresetNewParamsConfigMediaScreenshareQualityHD),
 					}),
 					Video: cloudflare.F(realtime_kit.PresetNewParamsConfigMediaVideo{
-						FrameRate: cloudflare.F(int64(30)),
+						FrameRate: cloudflare.F(30.000000),
 						Quality:   cloudflare.F(realtime_kit.PresetNewParamsConfigMediaVideoQualityHD),
+						Simulcast: cloudflare.F(true),
 					}),
 					Audio: cloudflare.F(realtime_kit.PresetNewParamsConfigMediaAudio{
 						EnableHighBitrate: cloudflare.F(true),
 						EnableStereo:      cloudflare.F(true),
 					}),
 				}),
-				ViewType: cloudflare.F(realtime_kit.PresetNewParamsConfigViewTypeGroupCall),
+				ViewType:                  cloudflare.F(realtime_kit.PresetNewParamsConfigViewTypeGroupCall),
+				LivestreamViewerQualities: cloudflare.F([]int64{int64(0)}),
 			}),
 			Name: cloudflare.F("name"),
-			UI: cloudflare.F(realtime_kit.PresetNewParamsUI{
-				DesignTokens: cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokens{
-					BorderRadius: cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensBorderRadiusRounded),
-					BorderWidth:  cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensBorderWidthThin),
-					Colors: cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensColors{
-						Background: cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensColorsBackground{
-							Number600:  cloudflare.F("600"),
-							Number700:  cloudflare.F("700"),
-							Number800:  cloudflare.F("800"),
-							Number900:  cloudflare.F("900"),
-							Number1000: cloudflare.F("1000"),
-						}),
-						Brand: cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensColorsBrand{
-							Number300: cloudflare.F("300"),
-							Number400: cloudflare.F("400"),
-							Number500: cloudflare.F("500"),
-							Number600: cloudflare.F("600"),
-							Number700: cloudflare.F("700"),
-						}),
-						Danger:      cloudflare.F("danger"),
-						Success:     cloudflare.F("success"),
-						Text:        cloudflare.F("text"),
-						TextOnBrand: cloudflare.F("text_on_brand"),
-						VideoBg:     cloudflare.F("video_bg"),
-						Warning:     cloudflare.F("warning"),
-					}),
-					Logo:        cloudflare.F("logo"),
-					SpacingBase: cloudflare.F(0.000000),
-					Theme:       cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensThemeDark),
-				}),
-				ConfigDiff: cloudflare.F[any](map[string]interface{}{}),
-			}),
 			Permissions: cloudflare.F(realtime_kit.PresetNewParamsPermissions{
 				AcceptWaitingRequests:           cloudflare.F(true),
 				CanAcceptProductionRequests:     cloudflare.F(true),
@@ -137,17 +106,59 @@ func TestPresetNewWithOptionalParams(t *testing.T) {
 					CanClose:      cloudflare.F(true),
 					CanEditConfig: cloudflare.F(true),
 					CanStart:      cloudflare.F(true),
-					Config:        cloudflare.F[realtime_kit.PresetNewParamsPermissionsPluginsConfigUnion](shared.UnionString("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")),
+					Config: cloudflare.F(map[string]realtime_kit.PresetNewParamsPermissionsPluginsConfig{
+						"foo": {
+							AccessControl:   cloudflare.F(realtime_kit.PresetNewParamsPermissionsPluginsConfigAccessControlFullAccess),
+							HandlesViewOnly: cloudflare.F(true),
+						},
+					}),
 				}),
 				Polls: cloudflare.F(realtime_kit.PresetNewParamsPermissionsPolls{
 					CanCreate: cloudflare.F(true),
 					CanView:   cloudflare.F(true),
 					CanVote:   cloudflare.F(true),
 				}),
-				RecorderType:        cloudflare.F(realtime_kit.PresetNewParamsPermissionsRecorderTypeRecorder),
-				ShowParticipantList: cloudflare.F(true),
-				WaitingRoomType:     cloudflare.F(realtime_kit.PresetNewParamsPermissionsWaitingRoomTypeSkip),
-				IsRecorder:          cloudflare.F(true),
+				RecorderType:         cloudflare.F(realtime_kit.PresetNewParamsPermissionsRecorderTypeRecorder),
+				ShowParticipantList:  cloudflare.F(true),
+				WaitingRoomType:      cloudflare.F(realtime_kit.PresetNewParamsPermissionsWaitingRoomTypeSkip),
+				AcceptStageRequests:  cloudflare.F(true),
+				IsRecorder:           cloudflare.F(true),
+				StageAccess:          cloudflare.F(realtime_kit.PresetNewParamsPermissionsStageAccessAllowed),
+				StageEnabled:         cloudflare.F(true),
+				TranscriptionEnabled: cloudflare.F(true),
+			}),
+			UI: cloudflare.F(realtime_kit.PresetNewParamsUI{
+				DesignTokens: cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokens{
+					BorderRadius: cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensBorderRadiusSharp),
+					BorderWidth:  cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensBorderWidthNone),
+					Colors: cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensColors{
+						Background: cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensColorsBackground{
+							Number600:  cloudflare.F("600"),
+							Number700:  cloudflare.F("700"),
+							Number800:  cloudflare.F("800"),
+							Number900:  cloudflare.F("900"),
+							Number1000: cloudflare.F("1000"),
+						}),
+						Brand: cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensColorsBrand{
+							Number300: cloudflare.F("300"),
+							Number400: cloudflare.F("400"),
+							Number500: cloudflare.F("500"),
+							Number600: cloudflare.F("600"),
+							Number700: cloudflare.F("700"),
+						}),
+						Danger:      cloudflare.F("danger"),
+						Success:     cloudflare.F("success"),
+						Text:        cloudflare.F("text"),
+						TextOnBrand: cloudflare.F("text_on_brand"),
+						VideoBg:     cloudflare.F("video_bg"),
+						Warning:     cloudflare.F("warning"),
+					}),
+					SpacingBase: cloudflare.F(0.000000),
+					Theme:       cloudflare.F(realtime_kit.PresetNewParamsUIDesignTokensThemeDarkest),
+					FontFamily:  cloudflare.F("font_family"),
+					GoogleFont:  cloudflare.F("google_font"),
+					Logo:        cloudflare.F("https://example.com"),
+				}),
 			}),
 		},
 	)
@@ -178,29 +189,36 @@ func TestPresetUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.RealtimeKit.Presets.Update(
 		context.TODO(),
 		"app_id",
-		"preset_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.PresetUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Config: cloudflare.F(realtime_kit.PresetUpdateParamsConfig{
-				MaxScreenshareCount: cloudflare.F(int64(0)),
+				LivestreamViewerQualities: cloudflare.F([]int64{int64(0)}),
+				MaxScreenshareCount:       cloudflare.F(0.000000),
 				MaxVideoStreams: cloudflare.F(realtime_kit.PresetUpdateParamsConfigMaxVideoStreams{
-					Desktop: cloudflare.F(int64(0)),
-					Mobile:  cloudflare.F(int64(0)),
+					Desktop: cloudflare.F(0.000000),
+					Mobile:  cloudflare.F(0.000000),
 				}),
 				Media: cloudflare.F(realtime_kit.PresetUpdateParamsConfigMedia{
+					Audio: cloudflare.F(realtime_kit.PresetUpdateParamsConfigMediaAudio{
+						EnableHighBitrate: cloudflare.F(true),
+						EnableStereo:      cloudflare.F(true),
+					}),
 					Screenshare: cloudflare.F(realtime_kit.PresetUpdateParamsConfigMediaScreenshare{
-						FrameRate: cloudflare.F(int64(0)),
+						FrameRate: cloudflare.F(0.000000),
 						Quality:   cloudflare.F(realtime_kit.PresetUpdateParamsConfigMediaScreenshareQualityHD),
 					}),
 					Video: cloudflare.F(realtime_kit.PresetUpdateParamsConfigMediaVideo{
-						FrameRate: cloudflare.F(int64(30)),
+						FrameRate: cloudflare.F(30.000000),
 						Quality:   cloudflare.F(realtime_kit.PresetUpdateParamsConfigMediaVideoQualityHD),
+						Simulcast: cloudflare.F(true),
 					}),
 				}),
 				ViewType: cloudflare.F(realtime_kit.PresetUpdateParamsConfigViewTypeGroupCall),
 			}),
 			Name: cloudflare.F("name"),
 			Permissions: cloudflare.F(realtime_kit.PresetUpdateParamsPermissions{
+				AcceptStageRequests:             cloudflare.F(true),
 				AcceptWaitingRequests:           cloudflare.F(true),
 				CanAcceptProductionRequests:     cloudflare.F(true),
 				CanChangeParticipantPermissions: cloudflare.F(true),
@@ -248,22 +266,29 @@ func TestPresetUpdateWithOptionalParams(t *testing.T) {
 					CanClose:      cloudflare.F(true),
 					CanEditConfig: cloudflare.F(true),
 					CanStart:      cloudflare.F(true),
-					Config:        cloudflare.F[realtime_kit.PresetUpdateParamsPermissionsPluginsConfigUnion](shared.UnionString("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")),
+					Config: cloudflare.F(map[string]realtime_kit.PresetUpdateParamsPermissionsPluginsConfig{
+						"foo": {
+							AccessControl:   cloudflare.F(realtime_kit.PresetUpdateParamsPermissionsPluginsConfigAccessControlFullAccess),
+							HandlesViewOnly: cloudflare.F(true),
+						},
+					}),
 				}),
 				Polls: cloudflare.F(realtime_kit.PresetUpdateParamsPermissionsPolls{
 					CanCreate: cloudflare.F(true),
 					CanView:   cloudflare.F(true),
 					CanVote:   cloudflare.F(true),
 				}),
-				RecorderType:        cloudflare.F(realtime_kit.PresetUpdateParamsPermissionsRecorderTypeRecorder),
-				ShowParticipantList: cloudflare.F(true),
-				WaitingRoomType:     cloudflare.F(realtime_kit.PresetUpdateParamsPermissionsWaitingRoomTypeSkip),
+				RecorderType:         cloudflare.F(realtime_kit.PresetUpdateParamsPermissionsRecorderTypeRecorder),
+				ShowParticipantList:  cloudflare.F(true),
+				StageAccess:          cloudflare.F(realtime_kit.PresetUpdateParamsPermissionsStageAccessAllowed),
+				StageEnabled:         cloudflare.F(true),
+				TranscriptionEnabled: cloudflare.F(true),
+				WaitingRoomType:      cloudflare.F(realtime_kit.PresetUpdateParamsPermissionsWaitingRoomTypeSkip),
 			}),
 			UI: cloudflare.F(realtime_kit.PresetUpdateParamsUI{
-				ConfigDiff: cloudflare.F[any](map[string]interface{}{}),
 				DesignTokens: cloudflare.F(realtime_kit.PresetUpdateParamsUIDesignTokens{
-					BorderRadius: cloudflare.F(realtime_kit.PresetUpdateParamsUIDesignTokensBorderRadiusRounded),
-					BorderWidth:  cloudflare.F(realtime_kit.PresetUpdateParamsUIDesignTokensBorderWidthThin),
+					BorderRadius: cloudflare.F(realtime_kit.PresetUpdateParamsUIDesignTokensBorderRadiusSharp),
+					BorderWidth:  cloudflare.F(realtime_kit.PresetUpdateParamsUIDesignTokensBorderWidthNone),
 					Colors: cloudflare.F(realtime_kit.PresetUpdateParamsUIDesignTokensColors{
 						Background: cloudflare.F(realtime_kit.PresetUpdateParamsUIDesignTokensColorsBackground{
 							Number600:  cloudflare.F("600"),
@@ -286,9 +311,11 @@ func TestPresetUpdateWithOptionalParams(t *testing.T) {
 						VideoBg:     cloudflare.F("video_bg"),
 						Warning:     cloudflare.F("warning"),
 					}),
-					Logo:        cloudflare.F("logo"),
+					FontFamily:  cloudflare.F("font_family"),
+					GoogleFont:  cloudflare.F("google_font"),
+					Logo:        cloudflare.F("https://example.com"),
 					SpacingBase: cloudflare.F(0.000000),
-					Theme:       cloudflare.F(realtime_kit.PresetUpdateParamsUIDesignTokensThemeDark),
+					Theme:       cloudflare.F(realtime_kit.PresetUpdateParamsUIDesignTokensThemeDarkest),
 				}),
 			}),
 		},
@@ -320,7 +347,7 @@ func TestPresetDelete(t *testing.T) {
 	_, err := client.RealtimeKit.Presets.Delete(
 		context.TODO(),
 		"app_id",
-		"preset_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.PresetDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -356,6 +383,7 @@ func TestPresetGetWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			PageNo:    cloudflare.F(0.000000),
 			PerPage:   cloudflare.F(0.000000),
+			Search:    cloudflare.F("search"),
 		},
 	)
 	if err != nil {
@@ -385,7 +413,7 @@ func TestPresetGetPresetByID(t *testing.T) {
 	_, err := client.RealtimeKit.Presets.GetPresetByID(
 		context.TODO(),
 		"app_id",
-		"preset_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.PresetGetPresetByIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

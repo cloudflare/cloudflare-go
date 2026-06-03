@@ -418,7 +418,7 @@ type CrawlNewParamsBodyObjectAddScriptTag struct {
 	ID      param.Field[string] `json:"id"`
 	Content param.Field[string] `json:"content"`
 	Type    param.Field[string] `json:"type"`
-	URL     param.Field[string] `json:"url"`
+	URL     param.Field[string] `json:"url" format:"uri"`
 }
 
 func (r CrawlNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err error) {
@@ -427,7 +427,7 @@ func (r CrawlNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err er
 
 type CrawlNewParamsBodyObjectAddStyleTag struct {
 	Content param.Field[string] `json:"content"`
-	URL     param.Field[string] `json:"url"`
+	URL     param.Field[string] `json:"url" format:"uri"`
 }
 
 func (r CrawlNewParamsBodyObjectAddStyleTag) MarshalJSON() (data []byte, err error) {
