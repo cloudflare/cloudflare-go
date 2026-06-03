@@ -235,6 +235,8 @@
 
 # [AISecurity](ai_security/api.md)
 
+# [CsamScanner](csam_scanner/api.md)
+
 # [AbuseReports](abuse_reports/api.md)
 
 # [AI](ai/api.md)

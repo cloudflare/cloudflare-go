@@ -35,6 +35,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v7/connectivity"
 	"github.com/cloudflare/cloudflare-go/v7/content_scanning"
+	"github.com/cloudflare/cloudflare-go/v7/csam_scanner"
 	"github.com/cloudflare/cloudflare-go/v7/custom_certificates"
 	"github.com/cloudflare/cloudflare-go/v7/custom_csrs"
 	"github.com/cloudflare/cloudflare-go/v7/custom_hostnames"
@@ -239,6 +240,7 @@ type Client struct {
 	LeakedCredentialChecks      *leaked_credential_checks.LeakedCredentialCheckService
 	ContentScanning             *content_scanning.ContentScanningService
 	AISecurity                  *ai_security.AISecurityService
+	CsamScanner                 *csam_scanner.CsamScannerService
 	AbuseReports                *abuse_reports.AbuseReportService
 	AI                          *ai.AIService
 	AIAudit                     *ai_audit.AIAuditService
@@ -394,6 +396,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.LeakedCredentialChecks = leaked_credential_checks.NewLeakedCredentialCheckService(opts...)
 	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
 	r.AISecurity = ai_security.NewAISecurityService(opts...)
+	r.CsamScanner = csam_scanner.NewCsamScannerService(opts...)
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 	r.AI = ai.NewAIService(opts...)
 	r.AIAudit = ai_audit.NewAIAuditService(opts...)

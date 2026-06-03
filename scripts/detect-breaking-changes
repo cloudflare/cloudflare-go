@@ -735,6 +735,7 @@ TEST_PATHS=(
 	content_scanning/setting_test.go
 	ai_security/aisecurity_test.go
 	ai_security/customtopic_test.go
+	csam_scanner/csamscanner_test.go
 	abuse_reports/abusereport_test.go
 	abuse_reports/mitigation_test.go
 	ai/ai_test.go
