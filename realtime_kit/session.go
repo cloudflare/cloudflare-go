@@ -38,24 +38,23 @@ func NewSessionService(opts ...option.RequestOption) (r *SessionService) {
 }
 
 // Trigger Summary generation of Transcripts for the session ID.
-func (r *SessionService) GenerateSummaryOfTranscripts(ctx context.Context, appID string, sessionID string, body SessionGenerateSummaryOfTranscriptsParams, opts ...option.RequestOption) (err error) {
+func (r *SessionService) GenerateSummaryOfTranscripts(ctx context.Context, appID string, sessionID string, body SessionGenerateSummaryOfTranscriptsParams, opts ...option.RequestOption) (res *SessionGenerateSummaryOfTranscriptsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return err
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return err
+		return nil, err
 	}
 	if sessionID == "" {
 		err = errors.New("missing required session_id parameter")
-		return err
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/%s/summary", body.AccountID, appID, sessionID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, nil, opts...)
-	return err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	return res, err
 }
 
 // Returns details of the given peer ID along with call statistics for the given
@@ -186,9 +185,9 @@ func (r *SessionService) GetSessionSummary(ctx context.Context, appID string, se
 }
 
 // Returns a URL to download the transcript for the session ID in CSV format.
-func (r *SessionService) GetSessionTranscripts(ctx context.Context, appID string, sessionID string, query SessionGetSessionTranscriptsParams, opts ...option.RequestOption) (res *SessionGetSessionTranscriptsResponse, err error) {
+func (r *SessionService) GetSessionTranscripts(ctx context.Context, appID string, sessionID string, params SessionGetSessionTranscriptsParams, opts ...option.RequestOption) (res *SessionGetSessionTranscriptsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -200,8 +199,8 @@ func (r *SessionService) GetSessionTranscripts(ctx context.Context, appID string
 		err = errors.New("missing required session_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/%s/transcript", query.AccountID, appID, sessionID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions/%s/transcript", params.AccountID, appID, sessionID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return res, err
 }
 
@@ -219,6 +218,52 @@ func (r *SessionService) GetSessions(ctx context.Context, appID string, params S
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/sessions", params.AccountID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return res, err
+}
+
+type SessionGenerateSummaryOfTranscriptsResponse struct {
+	Data    SessionGenerateSummaryOfTranscriptsResponseData `json:"data"`
+	Success bool                                            `json:"success"`
+	JSON    sessionGenerateSummaryOfTranscriptsResponseJSON `json:"-"`
+}
+
+// sessionGenerateSummaryOfTranscriptsResponseJSON contains the JSON metadata for
+// the struct [SessionGenerateSummaryOfTranscriptsResponse]
+type sessionGenerateSummaryOfTranscriptsResponseJSON struct {
+	Data        apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SessionGenerateSummaryOfTranscriptsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sessionGenerateSummaryOfTranscriptsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type SessionGenerateSummaryOfTranscriptsResponseData struct {
+	SessionID string                                              `json:"session_id" format:"uuid"`
+	Status    string                                              `json:"status"`
+	JSON      sessionGenerateSummaryOfTranscriptsResponseDataJSON `json:"-"`
+}
+
+// sessionGenerateSummaryOfTranscriptsResponseDataJSON contains the JSON metadata
+// for the struct [SessionGenerateSummaryOfTranscriptsResponseData]
+type sessionGenerateSummaryOfTranscriptsResponseDataJSON struct {
+	SessionID   apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SessionGenerateSummaryOfTranscriptsResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sessionGenerateSummaryOfTranscriptsResponseDataJSON) RawJSON() string {
+	return r.raw
 }
 
 type SessionGetParticipantDataFromPeerIDResponse struct {
@@ -962,6 +1007,8 @@ type SessionGetParticipantDataFromPeerIDParams struct {
 	// Comma separated list of filters to apply. Note that there must be no spaces
 	// between the filters.
 	Filters param.Field[SessionGetParticipantDataFromPeerIDParamsFilters] `query:"filters"`
+	// if true, response includes all the peer events of participant.
+	IncludePeerEvents param.Field[bool] `query:"include_peer_events"`
 }
 
 // URLQuery serializes [SessionGetParticipantDataFromPeerIDParams]'s query
@@ -1062,7 +1109,8 @@ type SessionGetSessionParticipantsParams struct {
 	PageNo param.Field[float64] `query:"page_no"`
 	// Number of results per page
 	PerPage param.Field[float64] `query:"per_page"`
-	// The search query string. You can search using the meeting ID or title.
+	// The search query string. You can search using participant ID, custom participant
+	// ID, or display name.
 	Search    param.Field[string]                                       `query:"search"`
 	SortBy    param.Field[SessionGetSessionParticipantsParamsSortBy]    `query:"sort_by"`
 	SortOrder param.Field[SessionGetSessionParticipantsParamsSortOrder] `query:"sort_order"`
@@ -1137,6 +1185,35 @@ type SessionGetSessionSummaryParams struct {
 type SessionGetSessionTranscriptsParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Transcript file format to fetch.
+	Format param.Field[SessionGetSessionTranscriptsParamsFormat] `query:"format"`
+}
+
+// URLQuery serializes [SessionGetSessionTranscriptsParams]'s query parameters as
+// `url.Values`.
+func (r SessionGetSessionTranscriptsParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Transcript file format to fetch.
+type SessionGetSessionTranscriptsParamsFormat string
+
+const (
+	SessionGetSessionTranscriptsParamsFormatSrt  SessionGetSessionTranscriptsParamsFormat = "SRT"
+	SessionGetSessionTranscriptsParamsFormatVtt  SessionGetSessionTranscriptsParamsFormat = "VTT"
+	SessionGetSessionTranscriptsParamsFormatJson SessionGetSessionTranscriptsParamsFormat = "JSON"
+	SessionGetSessionTranscriptsParamsFormatCsv  SessionGetSessionTranscriptsParamsFormat = "CSV"
+)
+
+func (r SessionGetSessionTranscriptsParamsFormat) IsKnown() bool {
+	switch r {
+	case SessionGetSessionTranscriptsParamsFormatSrt, SessionGetSessionTranscriptsParamsFormatVtt, SessionGetSessionTranscriptsParamsFormatJson, SessionGetSessionTranscriptsParamsFormatCsv:
+		return true
+	}
+	return false
 }
 
 type SessionGetSessionsParams struct {

@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"slices"
 	"time"
 
@@ -17,8 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
-	"github.com/tidwall/gjson"
 )
 
 // PresetService contains methods and other services that help with interacting
@@ -162,11 +159,15 @@ type PresetNewResponseData struct {
 	// ID of the preset
 	ID     string                      `json:"id" api:"required" format:"uuid"`
 	Config PresetNewResponseDataConfig `json:"config" api:"required"`
+	// Timestamp this preset was created at
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Name of the preset
 	Name        string                           `json:"name" api:"required"`
+	Permissions PresetNewResponseDataPermissions `json:"permissions" api:"required"`
 	UI          PresetNewResponseDataUI          `json:"ui" api:"required"`
-	Permissions PresetNewResponseDataPermissions `json:"permissions"`
-	JSON        presetNewResponseDataJSON        `json:"-"`
+	// Timestamp this preset was last updated
+	UpdatedAt time.Time                 `json:"updated_at" api:"required" format:"date-time"`
+	JSON      presetNewResponseDataJSON `json:"-"`
 }
 
 // presetNewResponseDataJSON contains the JSON metadata for the struct
@@ -174,9 +175,11 @@ type PresetNewResponseData struct {
 type presetNewResponseDataJSON struct {
 	ID          apijson.Field
 	Config      apijson.Field
+	CreatedAt   apijson.Field
 	Name        apijson.Field
-	UI          apijson.Field
 	Permissions apijson.Field
+	UI          apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -191,25 +194,28 @@ func (r presetNewResponseDataJSON) RawJSON() string {
 
 type PresetNewResponseDataConfig struct {
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount int64 `json:"max_screenshare_count" api:"required"`
+	MaxScreenshareCount float64 `json:"max_screenshare_count" api:"required"`
 	// Maximum number of streams that are visible on a device
 	MaxVideoStreams PresetNewResponseDataConfigMaxVideoStreams `json:"max_video_streams" api:"required"`
 	// Media configuration options. eg: Video quality
 	Media PresetNewResponseDataConfigMedia `json:"media" api:"required"`
 	// Type of the meeting
 	ViewType PresetNewResponseDataConfigViewType `json:"view_type" api:"required"`
-	JSON     presetNewResponseDataConfigJSON     `json:"-"`
+	// Livestream viewer quality levels.
+	LivestreamViewerQualities []int64                         `json:"livestream_viewer_qualities" api:"nullable"`
+	JSON                      presetNewResponseDataConfigJSON `json:"-"`
 }
 
 // presetNewResponseDataConfigJSON contains the JSON metadata for the struct
 // [PresetNewResponseDataConfig]
 type presetNewResponseDataConfigJSON struct {
-	MaxScreenshareCount apijson.Field
-	MaxVideoStreams     apijson.Field
-	Media               apijson.Field
-	ViewType            apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+	MaxScreenshareCount       apijson.Field
+	MaxVideoStreams           apijson.Field
+	Media                     apijson.Field
+	ViewType                  apijson.Field
+	LivestreamViewerQualities apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *PresetNewResponseDataConfig) UnmarshalJSON(data []byte) (err error) {
@@ -223,9 +229,9 @@ func (r presetNewResponseDataConfigJSON) RawJSON() string {
 // Maximum number of streams that are visible on a device
 type PresetNewResponseDataConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop int64 `json:"desktop" api:"required"`
+	Desktop float64 `json:"desktop" api:"required"`
 	// Maximum number of streams visible on mobile devices
-	Mobile int64                                          `json:"mobile" api:"required"`
+	Mobile float64                                        `json:"mobile" api:"required"`
 	JSON   presetNewResponseDataConfigMaxVideoStreamsJSON `json:"-"`
 }
 
@@ -278,7 +284,7 @@ func (r presetNewResponseDataConfigMediaJSON) RawJSON() string {
 // Configuration options for participant screen shares
 type PresetNewResponseDataConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate int64 `json:"frame_rate" api:"required"`
+	FrameRate float64 `json:"frame_rate" api:"required"`
 	// Quality of screen share
 	Quality PresetNewResponseDataConfigMediaScreenshareQuality `json:"quality" api:"required"`
 	JSON    presetNewResponseDataConfigMediaScreenshareJSON    `json:"-"`
@@ -308,11 +314,13 @@ const (
 	PresetNewResponseDataConfigMediaScreenshareQualityHD   PresetNewResponseDataConfigMediaScreenshareQuality = "hd"
 	PresetNewResponseDataConfigMediaScreenshareQualityVga  PresetNewResponseDataConfigMediaScreenshareQuality = "vga"
 	PresetNewResponseDataConfigMediaScreenshareQualityQvga PresetNewResponseDataConfigMediaScreenshareQuality = "qvga"
+	PresetNewResponseDataConfigMediaScreenshareQualityFhd  PresetNewResponseDataConfigMediaScreenshareQuality = "fhd"
+	PresetNewResponseDataConfigMediaScreenshareQualityUhd  PresetNewResponseDataConfigMediaScreenshareQuality = "uhd"
 )
 
 func (r PresetNewResponseDataConfigMediaScreenshareQuality) IsKnown() bool {
 	switch r {
-	case PresetNewResponseDataConfigMediaScreenshareQualityHD, PresetNewResponseDataConfigMediaScreenshareQualityVga, PresetNewResponseDataConfigMediaScreenshareQualityQvga:
+	case PresetNewResponseDataConfigMediaScreenshareQualityHD, PresetNewResponseDataConfigMediaScreenshareQualityVga, PresetNewResponseDataConfigMediaScreenshareQualityQvga, PresetNewResponseDataConfigMediaScreenshareQualityFhd, PresetNewResponseDataConfigMediaScreenshareQualityUhd:
 		return true
 	}
 	return false
@@ -321,10 +329,12 @@ func (r PresetNewResponseDataConfigMediaScreenshareQuality) IsKnown() bool {
 // Configuration options for participant videos
 type PresetNewResponseDataConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate int64 `json:"frame_rate" api:"required"`
+	FrameRate float64 `json:"frame_rate" api:"required"`
 	// Video quality of participants
 	Quality PresetNewResponseDataConfigMediaVideoQuality `json:"quality" api:"required"`
-	JSON    presetNewResponseDataConfigMediaVideoJSON    `json:"-"`
+	// Enable simulcast for participant videos.
+	Simulcast bool                                      `json:"simulcast"`
+	JSON      presetNewResponseDataConfigMediaVideoJSON `json:"-"`
 }
 
 // presetNewResponseDataConfigMediaVideoJSON contains the JSON metadata for the
@@ -332,6 +342,7 @@ type PresetNewResponseDataConfigMediaVideo struct {
 type presetNewResponseDataConfigMediaVideoJSON struct {
 	FrameRate   apijson.Field
 	Quality     apijson.Field
+	Simulcast   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -351,11 +362,13 @@ const (
 	PresetNewResponseDataConfigMediaVideoQualityHD   PresetNewResponseDataConfigMediaVideoQuality = "hd"
 	PresetNewResponseDataConfigMediaVideoQualityVga  PresetNewResponseDataConfigMediaVideoQuality = "vga"
 	PresetNewResponseDataConfigMediaVideoQualityQvga PresetNewResponseDataConfigMediaVideoQuality = "qvga"
+	PresetNewResponseDataConfigMediaVideoQualityFhd  PresetNewResponseDataConfigMediaVideoQuality = "fhd"
+	PresetNewResponseDataConfigMediaVideoQualityUhd  PresetNewResponseDataConfigMediaVideoQuality = "uhd"
 )
 
 func (r PresetNewResponseDataConfigMediaVideoQuality) IsKnown() bool {
 	switch r {
-	case PresetNewResponseDataConfigMediaVideoQualityHD, PresetNewResponseDataConfigMediaVideoQualityVga, PresetNewResponseDataConfigMediaVideoQualityQvga:
+	case PresetNewResponseDataConfigMediaVideoQualityHD, PresetNewResponseDataConfigMediaVideoQualityVga, PresetNewResponseDataConfigMediaVideoQualityQvga, PresetNewResponseDataConfigMediaVideoQualityFhd, PresetNewResponseDataConfigMediaVideoQualityUhd:
 		return true
 	}
 	return false
@@ -391,203 +404,15 @@ func (r presetNewResponseDataConfigMediaAudioJSON) RawJSON() string {
 type PresetNewResponseDataConfigViewType string
 
 const (
-	PresetNewResponseDataConfigViewTypeGroupCall PresetNewResponseDataConfigViewType = "GROUP_CALL"
-	PresetNewResponseDataConfigViewTypeWebinar   PresetNewResponseDataConfigViewType = "WEBINAR"
-	PresetNewResponseDataConfigViewTypeAudioRoom PresetNewResponseDataConfigViewType = "AUDIO_ROOM"
+	PresetNewResponseDataConfigViewTypeGroupCall  PresetNewResponseDataConfigViewType = "GROUP_CALL"
+	PresetNewResponseDataConfigViewTypeWebinar    PresetNewResponseDataConfigViewType = "WEBINAR"
+	PresetNewResponseDataConfigViewTypeAudioRoom  PresetNewResponseDataConfigViewType = "AUDIO_ROOM"
+	PresetNewResponseDataConfigViewTypeLivestream PresetNewResponseDataConfigViewType = "LIVESTREAM"
 )
 
 func (r PresetNewResponseDataConfigViewType) IsKnown() bool {
 	switch r {
-	case PresetNewResponseDataConfigViewTypeGroupCall, PresetNewResponseDataConfigViewTypeWebinar, PresetNewResponseDataConfigViewTypeAudioRoom:
-		return true
-	}
-	return false
-}
-
-type PresetNewResponseDataUI struct {
-	DesignTokens PresetNewResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
-	ConfigDiff   interface{}                         `json:"config_diff"`
-	JSON         presetNewResponseDataUIJSON         `json:"-"`
-}
-
-// presetNewResponseDataUIJSON contains the JSON metadata for the struct
-// [PresetNewResponseDataUI]
-type presetNewResponseDataUIJSON struct {
-	DesignTokens apijson.Field
-	ConfigDiff   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *PresetNewResponseDataUI) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetNewResponseDataUIJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetNewResponseDataUIDesignTokens struct {
-	BorderRadius PresetNewResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
-	BorderWidth  PresetNewResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
-	Colors       PresetNewResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
-	Logo         string                                          `json:"logo" api:"required"`
-	SpacingBase  float64                                         `json:"spacing_base" api:"required"`
-	Theme        PresetNewResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
-	JSON         presetNewResponseDataUIDesignTokensJSON         `json:"-"`
-}
-
-// presetNewResponseDataUIDesignTokensJSON contains the JSON metadata for the
-// struct [PresetNewResponseDataUIDesignTokens]
-type presetNewResponseDataUIDesignTokensJSON struct {
-	BorderRadius apijson.Field
-	BorderWidth  apijson.Field
-	Colors       apijson.Field
-	Logo         apijson.Field
-	SpacingBase  apijson.Field
-	Theme        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *PresetNewResponseDataUIDesignTokens) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetNewResponseDataUIDesignTokensJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetNewResponseDataUIDesignTokensBorderRadius string
-
-const (
-	PresetNewResponseDataUIDesignTokensBorderRadiusRounded PresetNewResponseDataUIDesignTokensBorderRadius = "rounded"
-)
-
-func (r PresetNewResponseDataUIDesignTokensBorderRadius) IsKnown() bool {
-	switch r {
-	case PresetNewResponseDataUIDesignTokensBorderRadiusRounded:
-		return true
-	}
-	return false
-}
-
-type PresetNewResponseDataUIDesignTokensBorderWidth string
-
-const (
-	PresetNewResponseDataUIDesignTokensBorderWidthThin PresetNewResponseDataUIDesignTokensBorderWidth = "thin"
-)
-
-func (r PresetNewResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
-	switch r {
-	case PresetNewResponseDataUIDesignTokensBorderWidthThin:
-		return true
-	}
-	return false
-}
-
-type PresetNewResponseDataUIDesignTokensColors struct {
-	Background  PresetNewResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
-	Brand       PresetNewResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
-	Danger      string                                              `json:"danger" api:"required"`
-	Success     string                                              `json:"success" api:"required"`
-	Text        string                                              `json:"text" api:"required"`
-	TextOnBrand string                                              `json:"text_on_brand" api:"required"`
-	VideoBg     string                                              `json:"video_bg" api:"required"`
-	Warning     string                                              `json:"warning" api:"required"`
-	JSON        presetNewResponseDataUIDesignTokensColorsJSON       `json:"-"`
-}
-
-// presetNewResponseDataUIDesignTokensColorsJSON contains the JSON metadata for the
-// struct [PresetNewResponseDataUIDesignTokensColors]
-type presetNewResponseDataUIDesignTokensColorsJSON struct {
-	Background  apijson.Field
-	Brand       apijson.Field
-	Danger      apijson.Field
-	Success     apijson.Field
-	Text        apijson.Field
-	TextOnBrand apijson.Field
-	VideoBg     apijson.Field
-	Warning     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetNewResponseDataUIDesignTokensColors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetNewResponseDataUIDesignTokensColorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetNewResponseDataUIDesignTokensColorsBackground struct {
-	Number1000 string                                                  `json:"1000" api:"required"`
-	Number600  string                                                  `json:"600" api:"required"`
-	Number700  string                                                  `json:"700" api:"required"`
-	Number800  string                                                  `json:"800" api:"required"`
-	Number900  string                                                  `json:"900" api:"required"`
-	JSON       presetNewResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
-}
-
-// presetNewResponseDataUIDesignTokensColorsBackgroundJSON contains the JSON
-// metadata for the struct [PresetNewResponseDataUIDesignTokensColorsBackground]
-type presetNewResponseDataUIDesignTokensColorsBackgroundJSON struct {
-	Number1000  apijson.Field
-	Number600   apijson.Field
-	Number700   apijson.Field
-	Number800   apijson.Field
-	Number900   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetNewResponseDataUIDesignTokensColorsBackground) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetNewResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetNewResponseDataUIDesignTokensColorsBrand struct {
-	Number300 string                                             `json:"300" api:"required"`
-	Number400 string                                             `json:"400" api:"required"`
-	Number500 string                                             `json:"500" api:"required"`
-	Number600 string                                             `json:"600" api:"required"`
-	Number700 string                                             `json:"700" api:"required"`
-	JSON      presetNewResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
-}
-
-// presetNewResponseDataUIDesignTokensColorsBrandJSON contains the JSON metadata
-// for the struct [PresetNewResponseDataUIDesignTokensColorsBrand]
-type presetNewResponseDataUIDesignTokensColorsBrandJSON struct {
-	Number300   apijson.Field
-	Number400   apijson.Field
-	Number500   apijson.Field
-	Number600   apijson.Field
-	Number700   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetNewResponseDataUIDesignTokensColorsBrand) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetNewResponseDataUIDesignTokensColorsBrandJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetNewResponseDataUIDesignTokensTheme string
-
-const (
-	PresetNewResponseDataUIDesignTokensThemeDark PresetNewResponseDataUIDesignTokensTheme = "dark"
-)
-
-func (r PresetNewResponseDataUIDesignTokensTheme) IsKnown() bool {
-	switch r {
-	case PresetNewResponseDataUIDesignTokensThemeDark:
+	case PresetNewResponseDataConfigViewTypeGroupCall, PresetNewResponseDataConfigViewTypeWebinar, PresetNewResponseDataConfigViewTypeAudioRoom, PresetNewResponseDataConfigViewTypeLivestream:
 		return true
 	}
 	return false
@@ -595,14 +420,13 @@ func (r PresetNewResponseDataUIDesignTokensTheme) IsKnown() bool {
 
 type PresetNewResponseDataPermissions struct {
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           bool `json:"accept_waiting_requests" api:"required"`
-	CanAcceptProductionRequests     bool `json:"can_accept_production_requests" api:"required"`
-	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions" api:"required"`
-	CanEditDisplayName              bool `json:"can_edit_display_name" api:"required"`
-	CanLivestream                   bool `json:"can_livestream" api:"required"`
-	CanRecord                       bool `json:"can_record" api:"required"`
-	CanSpotlight                    bool `json:"can_spotlight" api:"required"`
-	// Chat permissions
+	AcceptWaitingRequests           bool                                              `json:"accept_waiting_requests" api:"required"`
+	CanAcceptProductionRequests     bool                                              `json:"can_accept_production_requests" api:"required"`
+	CanChangeParticipantPermissions bool                                              `json:"can_change_participant_permissions" api:"required"`
+	CanEditDisplayName              bool                                              `json:"can_edit_display_name" api:"required"`
+	CanLivestream                   bool                                              `json:"can_livestream" api:"required"`
+	CanRecord                       bool                                              `json:"can_record" api:"required"`
+	CanSpotlight                    bool                                              `json:"can_spotlight" api:"required"`
 	Chat                            PresetNewResponseDataPermissionsChat              `json:"chat" api:"required"`
 	ConnectedMeetings               PresetNewResponseDataPermissionsConnectedMeetings `json:"connected_meetings" api:"required"`
 	DisableParticipantAudio         bool                                              `json:"disable_participant_audio" api:"required"`
@@ -622,9 +446,13 @@ type PresetNewResponseDataPermissions struct {
 	RecorderType        PresetNewResponseDataPermissionsRecorderType `json:"recorder_type" api:"required"`
 	ShowParticipantList bool                                         `json:"show_participant_list" api:"required"`
 	// Waiting room type
-	WaitingRoomType PresetNewResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
-	IsRecorder      bool                                            `json:"is_recorder"`
-	JSON            presetNewResponseDataPermissionsJSON            `json:"-"`
+	WaitingRoomType      PresetNewResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
+	AcceptStageRequests  bool                                            `json:"accept_stage_requests"`
+	IsRecorder           bool                                            `json:"is_recorder"`
+	StageAccess          PresetNewResponseDataPermissionsStageAccess     `json:"stage_access"`
+	StageEnabled         bool                                            `json:"stage_enabled"`
+	TranscriptionEnabled bool                                            `json:"transcription_enabled"`
+	JSON                 presetNewResponseDataPermissionsJSON            `json:"-"`
 }
 
 // presetNewResponseDataPermissionsJSON contains the JSON metadata for the struct
@@ -651,7 +479,11 @@ type presetNewResponseDataPermissionsJSON struct {
 	RecorderType                    apijson.Field
 	ShowParticipantList             apijson.Field
 	WaitingRoomType                 apijson.Field
+	AcceptStageRequests             apijson.Field
 	IsRecorder                      apijson.Field
+	StageAccess                     apijson.Field
+	StageEnabled                    apijson.Field
+	TranscriptionEnabled            apijson.Field
 	raw                             string
 	ExtraFields                     map[string]apijson.Field
 }
@@ -664,7 +496,6 @@ func (r presetNewResponseDataPermissionsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Chat permissions
 type PresetNewResponseDataPermissionsChat struct {
 	Private PresetNewResponseDataPermissionsChatPrivate `json:"private" api:"required"`
 	Public  PresetNewResponseDataPermissionsChatPublic  `json:"public" api:"required"`
@@ -924,9 +755,10 @@ type PresetNewResponseDataPermissionsPlugins struct {
 	// Can edit plugin config
 	CanEditConfig bool `json:"can_edit_config" api:"required"`
 	// Can start plugins
-	CanStart bool                                               `json:"can_start" api:"required"`
-	Config   PresetNewResponseDataPermissionsPluginsConfigUnion `json:"config" api:"required" format:"uuid"`
-	JSON     presetNewResponseDataPermissionsPluginsJSON        `json:"-"`
+	CanStart bool `json:"can_start" api:"required"`
+	// Plugin configuration keyed by plugin UUID.
+	Config map[string]PresetNewResponseDataPermissionsPluginsConfig `json:"config" api:"required"`
+	JSON   presetNewResponseDataPermissionsPluginsJSON              `json:"-"`
 }
 
 // presetNewResponseDataPermissionsPluginsJSON contains the JSON metadata for the
@@ -948,63 +780,40 @@ func (r presetNewResponseDataPermissionsPluginsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [shared.UnionString] or
-// [PresetNewResponseDataPermissionsPluginsConfigObject].
-type PresetNewResponseDataPermissionsPluginsConfigUnion interface {
-	ImplementsPresetNewResponseDataPermissionsPluginsConfigUnion()
+type PresetNewResponseDataPermissionsPluginsConfig struct {
+	AccessControl   PresetNewResponseDataPermissionsPluginsConfigAccessControl `json:"access_control"`
+	HandlesViewOnly bool                                                       `json:"handles_view_only"`
+	ExtraFields     map[string]interface{}                                     `json:"-" api:"extrafields"`
+	JSON            presetNewResponseDataPermissionsPluginsConfigJSON          `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PresetNewResponseDataPermissionsPluginsConfigUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PresetNewResponseDataPermissionsPluginsConfigObject{}),
-		},
-	)
-}
-
-type PresetNewResponseDataPermissionsPluginsConfigObject struct {
-	AccessControl   PresetNewResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control" api:"required"`
-	HandlesViewOnly bool                                                             `json:"handles_view_only" api:"required"`
-	JSON            presetNewResponseDataPermissionsPluginsConfigObjectJSON          `json:"-"`
-}
-
-// presetNewResponseDataPermissionsPluginsConfigObjectJSON contains the JSON
-// metadata for the struct [PresetNewResponseDataPermissionsPluginsConfigObject]
-type presetNewResponseDataPermissionsPluginsConfigObjectJSON struct {
+// presetNewResponseDataPermissionsPluginsConfigJSON contains the JSON metadata for
+// the struct [PresetNewResponseDataPermissionsPluginsConfig]
+type presetNewResponseDataPermissionsPluginsConfigJSON struct {
 	AccessControl   apijson.Field
 	HandlesViewOnly apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PresetNewResponseDataPermissionsPluginsConfigObject) UnmarshalJSON(data []byte) (err error) {
+func (r *PresetNewResponseDataPermissionsPluginsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r presetNewResponseDataPermissionsPluginsConfigObjectJSON) RawJSON() string {
+func (r presetNewResponseDataPermissionsPluginsConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PresetNewResponseDataPermissionsPluginsConfigObject) ImplementsPresetNewResponseDataPermissionsPluginsConfigUnion() {
-}
-
-type PresetNewResponseDataPermissionsPluginsConfigObjectAccessControl string
+type PresetNewResponseDataPermissionsPluginsConfigAccessControl string
 
 const (
-	PresetNewResponseDataPermissionsPluginsConfigObjectAccessControlFullAccess PresetNewResponseDataPermissionsPluginsConfigObjectAccessControl = "FULL_ACCESS"
-	PresetNewResponseDataPermissionsPluginsConfigObjectAccessControlViewOnly   PresetNewResponseDataPermissionsPluginsConfigObjectAccessControl = "VIEW_ONLY"
+	PresetNewResponseDataPermissionsPluginsConfigAccessControlFullAccess PresetNewResponseDataPermissionsPluginsConfigAccessControl = "FULL_ACCESS"
+	PresetNewResponseDataPermissionsPluginsConfigAccessControlViewOnly   PresetNewResponseDataPermissionsPluginsConfigAccessControl = "VIEW_ONLY"
 )
 
-func (r PresetNewResponseDataPermissionsPluginsConfigObjectAccessControl) IsKnown() bool {
+func (r PresetNewResponseDataPermissionsPluginsConfigAccessControl) IsKnown() bool {
 	switch r {
-	case PresetNewResponseDataPermissionsPluginsConfigObjectAccessControlFullAccess, PresetNewResponseDataPermissionsPluginsConfigObjectAccessControlViewOnly:
+	case PresetNewResponseDataPermissionsPluginsConfigAccessControlFullAccess, PresetNewResponseDataPermissionsPluginsConfigAccessControlViewOnly:
 		return true
 	}
 	return false
@@ -1073,6 +882,220 @@ func (r PresetNewResponseDataPermissionsWaitingRoomType) IsKnown() bool {
 	return false
 }
 
+type PresetNewResponseDataPermissionsStageAccess string
+
+const (
+	PresetNewResponseDataPermissionsStageAccessAllowed    PresetNewResponseDataPermissionsStageAccess = "ALLOWED"
+	PresetNewResponseDataPermissionsStageAccessNotAllowed PresetNewResponseDataPermissionsStageAccess = "NOT_ALLOWED"
+	PresetNewResponseDataPermissionsStageAccessCanRequest PresetNewResponseDataPermissionsStageAccess = "CAN_REQUEST"
+)
+
+func (r PresetNewResponseDataPermissionsStageAccess) IsKnown() bool {
+	switch r {
+	case PresetNewResponseDataPermissionsStageAccessAllowed, PresetNewResponseDataPermissionsStageAccessNotAllowed, PresetNewResponseDataPermissionsStageAccessCanRequest:
+		return true
+	}
+	return false
+}
+
+type PresetNewResponseDataUI struct {
+	DesignTokens PresetNewResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
+	JSON         presetNewResponseDataUIJSON         `json:"-"`
+}
+
+// presetNewResponseDataUIJSON contains the JSON metadata for the struct
+// [PresetNewResponseDataUI]
+type presetNewResponseDataUIJSON struct {
+	DesignTokens apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *PresetNewResponseDataUI) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetNewResponseDataUIJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetNewResponseDataUIDesignTokens struct {
+	BorderRadius PresetNewResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
+	BorderWidth  PresetNewResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
+	Colors       PresetNewResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
+	SpacingBase  float64                                         `json:"spacing_base" api:"required"`
+	Theme        PresetNewResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
+	FontFamily   string                                          `json:"font_family"`
+	GoogleFont   string                                          `json:"google_font"`
+	Logo         string                                          `json:"logo" format:"uri"`
+	JSON         presetNewResponseDataUIDesignTokensJSON         `json:"-"`
+}
+
+// presetNewResponseDataUIDesignTokensJSON contains the JSON metadata for the
+// struct [PresetNewResponseDataUIDesignTokens]
+type presetNewResponseDataUIDesignTokensJSON struct {
+	BorderRadius apijson.Field
+	BorderWidth  apijson.Field
+	Colors       apijson.Field
+	SpacingBase  apijson.Field
+	Theme        apijson.Field
+	FontFamily   apijson.Field
+	GoogleFont   apijson.Field
+	Logo         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *PresetNewResponseDataUIDesignTokens) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetNewResponseDataUIDesignTokensJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetNewResponseDataUIDesignTokensBorderRadius string
+
+const (
+	PresetNewResponseDataUIDesignTokensBorderRadiusSharp        PresetNewResponseDataUIDesignTokensBorderRadius = "sharp"
+	PresetNewResponseDataUIDesignTokensBorderRadiusRounded      PresetNewResponseDataUIDesignTokensBorderRadius = "rounded"
+	PresetNewResponseDataUIDesignTokensBorderRadiusExtraRounded PresetNewResponseDataUIDesignTokensBorderRadius = "extra-rounded"
+	PresetNewResponseDataUIDesignTokensBorderRadiusCircular     PresetNewResponseDataUIDesignTokensBorderRadius = "circular"
+)
+
+func (r PresetNewResponseDataUIDesignTokensBorderRadius) IsKnown() bool {
+	switch r {
+	case PresetNewResponseDataUIDesignTokensBorderRadiusSharp, PresetNewResponseDataUIDesignTokensBorderRadiusRounded, PresetNewResponseDataUIDesignTokensBorderRadiusExtraRounded, PresetNewResponseDataUIDesignTokensBorderRadiusCircular:
+		return true
+	}
+	return false
+}
+
+type PresetNewResponseDataUIDesignTokensBorderWidth string
+
+const (
+	PresetNewResponseDataUIDesignTokensBorderWidthNone PresetNewResponseDataUIDesignTokensBorderWidth = "none"
+	PresetNewResponseDataUIDesignTokensBorderWidthThin PresetNewResponseDataUIDesignTokensBorderWidth = "thin"
+	PresetNewResponseDataUIDesignTokensBorderWidthFat  PresetNewResponseDataUIDesignTokensBorderWidth = "fat"
+)
+
+func (r PresetNewResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
+	switch r {
+	case PresetNewResponseDataUIDesignTokensBorderWidthNone, PresetNewResponseDataUIDesignTokensBorderWidthThin, PresetNewResponseDataUIDesignTokensBorderWidthFat:
+		return true
+	}
+	return false
+}
+
+type PresetNewResponseDataUIDesignTokensColors struct {
+	Background  PresetNewResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
+	Brand       PresetNewResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
+	Danger      string                                              `json:"danger" api:"required"`
+	Success     string                                              `json:"success" api:"required"`
+	Text        string                                              `json:"text" api:"required"`
+	TextOnBrand string                                              `json:"text_on_brand" api:"required"`
+	VideoBg     string                                              `json:"video_bg" api:"required"`
+	Warning     string                                              `json:"warning" api:"required"`
+	JSON        presetNewResponseDataUIDesignTokensColorsJSON       `json:"-"`
+}
+
+// presetNewResponseDataUIDesignTokensColorsJSON contains the JSON metadata for the
+// struct [PresetNewResponseDataUIDesignTokensColors]
+type presetNewResponseDataUIDesignTokensColorsJSON struct {
+	Background  apijson.Field
+	Brand       apijson.Field
+	Danger      apijson.Field
+	Success     apijson.Field
+	Text        apijson.Field
+	TextOnBrand apijson.Field
+	VideoBg     apijson.Field
+	Warning     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetNewResponseDataUIDesignTokensColors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetNewResponseDataUIDesignTokensColorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetNewResponseDataUIDesignTokensColorsBackground struct {
+	Number1000 string                                                  `json:"1000" api:"required"`
+	Number600  string                                                  `json:"600" api:"required"`
+	Number700  string                                                  `json:"700" api:"required"`
+	Number800  string                                                  `json:"800" api:"required"`
+	Number900  string                                                  `json:"900" api:"required"`
+	JSON       presetNewResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
+}
+
+// presetNewResponseDataUIDesignTokensColorsBackgroundJSON contains the JSON
+// metadata for the struct [PresetNewResponseDataUIDesignTokensColorsBackground]
+type presetNewResponseDataUIDesignTokensColorsBackgroundJSON struct {
+	Number1000  apijson.Field
+	Number600   apijson.Field
+	Number700   apijson.Field
+	Number800   apijson.Field
+	Number900   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetNewResponseDataUIDesignTokensColorsBackground) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetNewResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetNewResponseDataUIDesignTokensColorsBrand struct {
+	Number300 string                                             `json:"300" api:"required"`
+	Number400 string                                             `json:"400" api:"required"`
+	Number500 string                                             `json:"500" api:"required"`
+	Number600 string                                             `json:"600" api:"required"`
+	Number700 string                                             `json:"700" api:"required"`
+	JSON      presetNewResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
+}
+
+// presetNewResponseDataUIDesignTokensColorsBrandJSON contains the JSON metadata
+// for the struct [PresetNewResponseDataUIDesignTokensColorsBrand]
+type presetNewResponseDataUIDesignTokensColorsBrandJSON struct {
+	Number300   apijson.Field
+	Number400   apijson.Field
+	Number500   apijson.Field
+	Number600   apijson.Field
+	Number700   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetNewResponseDataUIDesignTokensColorsBrand) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetNewResponseDataUIDesignTokensColorsBrandJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetNewResponseDataUIDesignTokensTheme string
+
+const (
+	PresetNewResponseDataUIDesignTokensThemeDarkest PresetNewResponseDataUIDesignTokensTheme = "darkest"
+	PresetNewResponseDataUIDesignTokensThemeDark    PresetNewResponseDataUIDesignTokensTheme = "dark"
+	PresetNewResponseDataUIDesignTokensThemeLight   PresetNewResponseDataUIDesignTokensTheme = "light"
+)
+
+func (r PresetNewResponseDataUIDesignTokensTheme) IsKnown() bool {
+	switch r {
+	case PresetNewResponseDataUIDesignTokensThemeDarkest, PresetNewResponseDataUIDesignTokensThemeDark, PresetNewResponseDataUIDesignTokensThemeLight:
+		return true
+	}
+	return false
+}
+
 type PresetUpdateResponse struct {
 	// Data returned by the operation
 	Data PresetUpdateResponseData `json:"data" api:"required"`
@@ -1103,11 +1126,15 @@ type PresetUpdateResponseData struct {
 	// ID of the preset
 	ID     string                         `json:"id" api:"required" format:"uuid"`
 	Config PresetUpdateResponseDataConfig `json:"config" api:"required"`
+	// Timestamp this preset was created at
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Name of the preset
 	Name        string                              `json:"name" api:"required"`
+	Permissions PresetUpdateResponseDataPermissions `json:"permissions" api:"required"`
 	UI          PresetUpdateResponseDataUI          `json:"ui" api:"required"`
-	Permissions PresetUpdateResponseDataPermissions `json:"permissions"`
-	JSON        presetUpdateResponseDataJSON        `json:"-"`
+	// Timestamp this preset was last updated
+	UpdatedAt time.Time                    `json:"updated_at" api:"required" format:"date-time"`
+	JSON      presetUpdateResponseDataJSON `json:"-"`
 }
 
 // presetUpdateResponseDataJSON contains the JSON metadata for the struct
@@ -1115,9 +1142,11 @@ type PresetUpdateResponseData struct {
 type presetUpdateResponseDataJSON struct {
 	ID          apijson.Field
 	Config      apijson.Field
+	CreatedAt   apijson.Field
 	Name        apijson.Field
-	UI          apijson.Field
 	Permissions apijson.Field
+	UI          apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1132,25 +1161,28 @@ func (r presetUpdateResponseDataJSON) RawJSON() string {
 
 type PresetUpdateResponseDataConfig struct {
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount int64 `json:"max_screenshare_count" api:"required"`
+	MaxScreenshareCount float64 `json:"max_screenshare_count" api:"required"`
 	// Maximum number of streams that are visible on a device
 	MaxVideoStreams PresetUpdateResponseDataConfigMaxVideoStreams `json:"max_video_streams" api:"required"`
 	// Media configuration options. eg: Video quality
 	Media PresetUpdateResponseDataConfigMedia `json:"media" api:"required"`
 	// Type of the meeting
 	ViewType PresetUpdateResponseDataConfigViewType `json:"view_type" api:"required"`
-	JSON     presetUpdateResponseDataConfigJSON     `json:"-"`
+	// Livestream viewer quality levels.
+	LivestreamViewerQualities []int64                            `json:"livestream_viewer_qualities" api:"nullable"`
+	JSON                      presetUpdateResponseDataConfigJSON `json:"-"`
 }
 
 // presetUpdateResponseDataConfigJSON contains the JSON metadata for the struct
 // [PresetUpdateResponseDataConfig]
 type presetUpdateResponseDataConfigJSON struct {
-	MaxScreenshareCount apijson.Field
-	MaxVideoStreams     apijson.Field
-	Media               apijson.Field
-	ViewType            apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+	MaxScreenshareCount       apijson.Field
+	MaxVideoStreams           apijson.Field
+	Media                     apijson.Field
+	ViewType                  apijson.Field
+	LivestreamViewerQualities apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *PresetUpdateResponseDataConfig) UnmarshalJSON(data []byte) (err error) {
@@ -1164,9 +1196,9 @@ func (r presetUpdateResponseDataConfigJSON) RawJSON() string {
 // Maximum number of streams that are visible on a device
 type PresetUpdateResponseDataConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop int64 `json:"desktop" api:"required"`
+	Desktop float64 `json:"desktop" api:"required"`
 	// Maximum number of streams visible on mobile devices
-	Mobile int64                                             `json:"mobile" api:"required"`
+	Mobile float64                                           `json:"mobile" api:"required"`
 	JSON   presetUpdateResponseDataConfigMaxVideoStreamsJSON `json:"-"`
 }
 
@@ -1219,7 +1251,7 @@ func (r presetUpdateResponseDataConfigMediaJSON) RawJSON() string {
 // Configuration options for participant screen shares
 type PresetUpdateResponseDataConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate int64 `json:"frame_rate" api:"required"`
+	FrameRate float64 `json:"frame_rate" api:"required"`
 	// Quality of screen share
 	Quality PresetUpdateResponseDataConfigMediaScreenshareQuality `json:"quality" api:"required"`
 	JSON    presetUpdateResponseDataConfigMediaScreenshareJSON    `json:"-"`
@@ -1249,11 +1281,13 @@ const (
 	PresetUpdateResponseDataConfigMediaScreenshareQualityHD   PresetUpdateResponseDataConfigMediaScreenshareQuality = "hd"
 	PresetUpdateResponseDataConfigMediaScreenshareQualityVga  PresetUpdateResponseDataConfigMediaScreenshareQuality = "vga"
 	PresetUpdateResponseDataConfigMediaScreenshareQualityQvga PresetUpdateResponseDataConfigMediaScreenshareQuality = "qvga"
+	PresetUpdateResponseDataConfigMediaScreenshareQualityFhd  PresetUpdateResponseDataConfigMediaScreenshareQuality = "fhd"
+	PresetUpdateResponseDataConfigMediaScreenshareQualityUhd  PresetUpdateResponseDataConfigMediaScreenshareQuality = "uhd"
 )
 
 func (r PresetUpdateResponseDataConfigMediaScreenshareQuality) IsKnown() bool {
 	switch r {
-	case PresetUpdateResponseDataConfigMediaScreenshareQualityHD, PresetUpdateResponseDataConfigMediaScreenshareQualityVga, PresetUpdateResponseDataConfigMediaScreenshareQualityQvga:
+	case PresetUpdateResponseDataConfigMediaScreenshareQualityHD, PresetUpdateResponseDataConfigMediaScreenshareQualityVga, PresetUpdateResponseDataConfigMediaScreenshareQualityQvga, PresetUpdateResponseDataConfigMediaScreenshareQualityFhd, PresetUpdateResponseDataConfigMediaScreenshareQualityUhd:
 		return true
 	}
 	return false
@@ -1262,10 +1296,12 @@ func (r PresetUpdateResponseDataConfigMediaScreenshareQuality) IsKnown() bool {
 // Configuration options for participant videos
 type PresetUpdateResponseDataConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate int64 `json:"frame_rate" api:"required"`
+	FrameRate float64 `json:"frame_rate" api:"required"`
 	// Video quality of participants
 	Quality PresetUpdateResponseDataConfigMediaVideoQuality `json:"quality" api:"required"`
-	JSON    presetUpdateResponseDataConfigMediaVideoJSON    `json:"-"`
+	// Enable simulcast for participant videos.
+	Simulcast bool                                         `json:"simulcast"`
+	JSON      presetUpdateResponseDataConfigMediaVideoJSON `json:"-"`
 }
 
 // presetUpdateResponseDataConfigMediaVideoJSON contains the JSON metadata for the
@@ -1273,6 +1309,7 @@ type PresetUpdateResponseDataConfigMediaVideo struct {
 type presetUpdateResponseDataConfigMediaVideoJSON struct {
 	FrameRate   apijson.Field
 	Quality     apijson.Field
+	Simulcast   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1292,11 +1329,13 @@ const (
 	PresetUpdateResponseDataConfigMediaVideoQualityHD   PresetUpdateResponseDataConfigMediaVideoQuality = "hd"
 	PresetUpdateResponseDataConfigMediaVideoQualityVga  PresetUpdateResponseDataConfigMediaVideoQuality = "vga"
 	PresetUpdateResponseDataConfigMediaVideoQualityQvga PresetUpdateResponseDataConfigMediaVideoQuality = "qvga"
+	PresetUpdateResponseDataConfigMediaVideoQualityFhd  PresetUpdateResponseDataConfigMediaVideoQuality = "fhd"
+	PresetUpdateResponseDataConfigMediaVideoQualityUhd  PresetUpdateResponseDataConfigMediaVideoQuality = "uhd"
 )
 
 func (r PresetUpdateResponseDataConfigMediaVideoQuality) IsKnown() bool {
 	switch r {
-	case PresetUpdateResponseDataConfigMediaVideoQualityHD, PresetUpdateResponseDataConfigMediaVideoQualityVga, PresetUpdateResponseDataConfigMediaVideoQualityQvga:
+	case PresetUpdateResponseDataConfigMediaVideoQualityHD, PresetUpdateResponseDataConfigMediaVideoQualityVga, PresetUpdateResponseDataConfigMediaVideoQualityQvga, PresetUpdateResponseDataConfigMediaVideoQualityFhd, PresetUpdateResponseDataConfigMediaVideoQualityUhd:
 		return true
 	}
 	return false
@@ -1332,203 +1371,15 @@ func (r presetUpdateResponseDataConfigMediaAudioJSON) RawJSON() string {
 type PresetUpdateResponseDataConfigViewType string
 
 const (
-	PresetUpdateResponseDataConfigViewTypeGroupCall PresetUpdateResponseDataConfigViewType = "GROUP_CALL"
-	PresetUpdateResponseDataConfigViewTypeWebinar   PresetUpdateResponseDataConfigViewType = "WEBINAR"
-	PresetUpdateResponseDataConfigViewTypeAudioRoom PresetUpdateResponseDataConfigViewType = "AUDIO_ROOM"
+	PresetUpdateResponseDataConfigViewTypeGroupCall  PresetUpdateResponseDataConfigViewType = "GROUP_CALL"
+	PresetUpdateResponseDataConfigViewTypeWebinar    PresetUpdateResponseDataConfigViewType = "WEBINAR"
+	PresetUpdateResponseDataConfigViewTypeAudioRoom  PresetUpdateResponseDataConfigViewType = "AUDIO_ROOM"
+	PresetUpdateResponseDataConfigViewTypeLivestream PresetUpdateResponseDataConfigViewType = "LIVESTREAM"
 )
 
 func (r PresetUpdateResponseDataConfigViewType) IsKnown() bool {
 	switch r {
-	case PresetUpdateResponseDataConfigViewTypeGroupCall, PresetUpdateResponseDataConfigViewTypeWebinar, PresetUpdateResponseDataConfigViewTypeAudioRoom:
-		return true
-	}
-	return false
-}
-
-type PresetUpdateResponseDataUI struct {
-	DesignTokens PresetUpdateResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
-	ConfigDiff   interface{}                            `json:"config_diff"`
-	JSON         presetUpdateResponseDataUIJSON         `json:"-"`
-}
-
-// presetUpdateResponseDataUIJSON contains the JSON metadata for the struct
-// [PresetUpdateResponseDataUI]
-type presetUpdateResponseDataUIJSON struct {
-	DesignTokens apijson.Field
-	ConfigDiff   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *PresetUpdateResponseDataUI) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetUpdateResponseDataUIJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetUpdateResponseDataUIDesignTokens struct {
-	BorderRadius PresetUpdateResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
-	BorderWidth  PresetUpdateResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
-	Colors       PresetUpdateResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
-	Logo         string                                             `json:"logo" api:"required"`
-	SpacingBase  float64                                            `json:"spacing_base" api:"required"`
-	Theme        PresetUpdateResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
-	JSON         presetUpdateResponseDataUIDesignTokensJSON         `json:"-"`
-}
-
-// presetUpdateResponseDataUIDesignTokensJSON contains the JSON metadata for the
-// struct [PresetUpdateResponseDataUIDesignTokens]
-type presetUpdateResponseDataUIDesignTokensJSON struct {
-	BorderRadius apijson.Field
-	BorderWidth  apijson.Field
-	Colors       apijson.Field
-	Logo         apijson.Field
-	SpacingBase  apijson.Field
-	Theme        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *PresetUpdateResponseDataUIDesignTokens) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetUpdateResponseDataUIDesignTokensJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetUpdateResponseDataUIDesignTokensBorderRadius string
-
-const (
-	PresetUpdateResponseDataUIDesignTokensBorderRadiusRounded PresetUpdateResponseDataUIDesignTokensBorderRadius = "rounded"
-)
-
-func (r PresetUpdateResponseDataUIDesignTokensBorderRadius) IsKnown() bool {
-	switch r {
-	case PresetUpdateResponseDataUIDesignTokensBorderRadiusRounded:
-		return true
-	}
-	return false
-}
-
-type PresetUpdateResponseDataUIDesignTokensBorderWidth string
-
-const (
-	PresetUpdateResponseDataUIDesignTokensBorderWidthThin PresetUpdateResponseDataUIDesignTokensBorderWidth = "thin"
-)
-
-func (r PresetUpdateResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
-	switch r {
-	case PresetUpdateResponseDataUIDesignTokensBorderWidthThin:
-		return true
-	}
-	return false
-}
-
-type PresetUpdateResponseDataUIDesignTokensColors struct {
-	Background  PresetUpdateResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
-	Brand       PresetUpdateResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
-	Danger      string                                                 `json:"danger" api:"required"`
-	Success     string                                                 `json:"success" api:"required"`
-	Text        string                                                 `json:"text" api:"required"`
-	TextOnBrand string                                                 `json:"text_on_brand" api:"required"`
-	VideoBg     string                                                 `json:"video_bg" api:"required"`
-	Warning     string                                                 `json:"warning" api:"required"`
-	JSON        presetUpdateResponseDataUIDesignTokensColorsJSON       `json:"-"`
-}
-
-// presetUpdateResponseDataUIDesignTokensColorsJSON contains the JSON metadata for
-// the struct [PresetUpdateResponseDataUIDesignTokensColors]
-type presetUpdateResponseDataUIDesignTokensColorsJSON struct {
-	Background  apijson.Field
-	Brand       apijson.Field
-	Danger      apijson.Field
-	Success     apijson.Field
-	Text        apijson.Field
-	TextOnBrand apijson.Field
-	VideoBg     apijson.Field
-	Warning     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetUpdateResponseDataUIDesignTokensColors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetUpdateResponseDataUIDesignTokensColorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetUpdateResponseDataUIDesignTokensColorsBackground struct {
-	Number1000 string                                                     `json:"1000" api:"required"`
-	Number600  string                                                     `json:"600" api:"required"`
-	Number700  string                                                     `json:"700" api:"required"`
-	Number800  string                                                     `json:"800" api:"required"`
-	Number900  string                                                     `json:"900" api:"required"`
-	JSON       presetUpdateResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
-}
-
-// presetUpdateResponseDataUIDesignTokensColorsBackgroundJSON contains the JSON
-// metadata for the struct [PresetUpdateResponseDataUIDesignTokensColorsBackground]
-type presetUpdateResponseDataUIDesignTokensColorsBackgroundJSON struct {
-	Number1000  apijson.Field
-	Number600   apijson.Field
-	Number700   apijson.Field
-	Number800   apijson.Field
-	Number900   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetUpdateResponseDataUIDesignTokensColorsBackground) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetUpdateResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetUpdateResponseDataUIDesignTokensColorsBrand struct {
-	Number300 string                                                `json:"300" api:"required"`
-	Number400 string                                                `json:"400" api:"required"`
-	Number500 string                                                `json:"500" api:"required"`
-	Number600 string                                                `json:"600" api:"required"`
-	Number700 string                                                `json:"700" api:"required"`
-	JSON      presetUpdateResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
-}
-
-// presetUpdateResponseDataUIDesignTokensColorsBrandJSON contains the JSON metadata
-// for the struct [PresetUpdateResponseDataUIDesignTokensColorsBrand]
-type presetUpdateResponseDataUIDesignTokensColorsBrandJSON struct {
-	Number300   apijson.Field
-	Number400   apijson.Field
-	Number500   apijson.Field
-	Number600   apijson.Field
-	Number700   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetUpdateResponseDataUIDesignTokensColorsBrand) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetUpdateResponseDataUIDesignTokensColorsBrandJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetUpdateResponseDataUIDesignTokensTheme string
-
-const (
-	PresetUpdateResponseDataUIDesignTokensThemeDark PresetUpdateResponseDataUIDesignTokensTheme = "dark"
-)
-
-func (r PresetUpdateResponseDataUIDesignTokensTheme) IsKnown() bool {
-	switch r {
-	case PresetUpdateResponseDataUIDesignTokensThemeDark:
+	case PresetUpdateResponseDataConfigViewTypeGroupCall, PresetUpdateResponseDataConfigViewTypeWebinar, PresetUpdateResponseDataConfigViewTypeAudioRoom, PresetUpdateResponseDataConfigViewTypeLivestream:
 		return true
 	}
 	return false
@@ -1536,14 +1387,13 @@ func (r PresetUpdateResponseDataUIDesignTokensTheme) IsKnown() bool {
 
 type PresetUpdateResponseDataPermissions struct {
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           bool `json:"accept_waiting_requests" api:"required"`
-	CanAcceptProductionRequests     bool `json:"can_accept_production_requests" api:"required"`
-	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions" api:"required"`
-	CanEditDisplayName              bool `json:"can_edit_display_name" api:"required"`
-	CanLivestream                   bool `json:"can_livestream" api:"required"`
-	CanRecord                       bool `json:"can_record" api:"required"`
-	CanSpotlight                    bool `json:"can_spotlight" api:"required"`
-	// Chat permissions
+	AcceptWaitingRequests           bool                                                 `json:"accept_waiting_requests" api:"required"`
+	CanAcceptProductionRequests     bool                                                 `json:"can_accept_production_requests" api:"required"`
+	CanChangeParticipantPermissions bool                                                 `json:"can_change_participant_permissions" api:"required"`
+	CanEditDisplayName              bool                                                 `json:"can_edit_display_name" api:"required"`
+	CanLivestream                   bool                                                 `json:"can_livestream" api:"required"`
+	CanRecord                       bool                                                 `json:"can_record" api:"required"`
+	CanSpotlight                    bool                                                 `json:"can_spotlight" api:"required"`
 	Chat                            PresetUpdateResponseDataPermissionsChat              `json:"chat" api:"required"`
 	ConnectedMeetings               PresetUpdateResponseDataPermissionsConnectedMeetings `json:"connected_meetings" api:"required"`
 	DisableParticipantAudio         bool                                                 `json:"disable_participant_audio" api:"required"`
@@ -1563,9 +1413,13 @@ type PresetUpdateResponseDataPermissions struct {
 	RecorderType        PresetUpdateResponseDataPermissionsRecorderType `json:"recorder_type" api:"required"`
 	ShowParticipantList bool                                            `json:"show_participant_list" api:"required"`
 	// Waiting room type
-	WaitingRoomType PresetUpdateResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
-	IsRecorder      bool                                               `json:"is_recorder"`
-	JSON            presetUpdateResponseDataPermissionsJSON            `json:"-"`
+	WaitingRoomType      PresetUpdateResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
+	AcceptStageRequests  bool                                               `json:"accept_stage_requests"`
+	IsRecorder           bool                                               `json:"is_recorder"`
+	StageAccess          PresetUpdateResponseDataPermissionsStageAccess     `json:"stage_access"`
+	StageEnabled         bool                                               `json:"stage_enabled"`
+	TranscriptionEnabled bool                                               `json:"transcription_enabled"`
+	JSON                 presetUpdateResponseDataPermissionsJSON            `json:"-"`
 }
 
 // presetUpdateResponseDataPermissionsJSON contains the JSON metadata for the
@@ -1592,7 +1446,11 @@ type presetUpdateResponseDataPermissionsJSON struct {
 	RecorderType                    apijson.Field
 	ShowParticipantList             apijson.Field
 	WaitingRoomType                 apijson.Field
+	AcceptStageRequests             apijson.Field
 	IsRecorder                      apijson.Field
+	StageAccess                     apijson.Field
+	StageEnabled                    apijson.Field
+	TranscriptionEnabled            apijson.Field
 	raw                             string
 	ExtraFields                     map[string]apijson.Field
 }
@@ -1605,7 +1463,6 @@ func (r presetUpdateResponseDataPermissionsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Chat permissions
 type PresetUpdateResponseDataPermissionsChat struct {
 	Private PresetUpdateResponseDataPermissionsChatPrivate `json:"private" api:"required"`
 	Public  PresetUpdateResponseDataPermissionsChatPublic  `json:"public" api:"required"`
@@ -1865,9 +1722,10 @@ type PresetUpdateResponseDataPermissionsPlugins struct {
 	// Can edit plugin config
 	CanEditConfig bool `json:"can_edit_config" api:"required"`
 	// Can start plugins
-	CanStart bool                                                  `json:"can_start" api:"required"`
-	Config   PresetUpdateResponseDataPermissionsPluginsConfigUnion `json:"config" api:"required" format:"uuid"`
-	JSON     presetUpdateResponseDataPermissionsPluginsJSON        `json:"-"`
+	CanStart bool `json:"can_start" api:"required"`
+	// Plugin configuration keyed by plugin UUID.
+	Config map[string]PresetUpdateResponseDataPermissionsPluginsConfig `json:"config" api:"required"`
+	JSON   presetUpdateResponseDataPermissionsPluginsJSON              `json:"-"`
 }
 
 // presetUpdateResponseDataPermissionsPluginsJSON contains the JSON metadata for
@@ -1889,63 +1747,40 @@ func (r presetUpdateResponseDataPermissionsPluginsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [shared.UnionString] or
-// [PresetUpdateResponseDataPermissionsPluginsConfigObject].
-type PresetUpdateResponseDataPermissionsPluginsConfigUnion interface {
-	ImplementsPresetUpdateResponseDataPermissionsPluginsConfigUnion()
+type PresetUpdateResponseDataPermissionsPluginsConfig struct {
+	AccessControl   PresetUpdateResponseDataPermissionsPluginsConfigAccessControl `json:"access_control"`
+	HandlesViewOnly bool                                                          `json:"handles_view_only"`
+	ExtraFields     map[string]interface{}                                        `json:"-" api:"extrafields"`
+	JSON            presetUpdateResponseDataPermissionsPluginsConfigJSON          `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PresetUpdateResponseDataPermissionsPluginsConfigUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PresetUpdateResponseDataPermissionsPluginsConfigObject{}),
-		},
-	)
-}
-
-type PresetUpdateResponseDataPermissionsPluginsConfigObject struct {
-	AccessControl   PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control" api:"required"`
-	HandlesViewOnly bool                                                                `json:"handles_view_only" api:"required"`
-	JSON            presetUpdateResponseDataPermissionsPluginsConfigObjectJSON          `json:"-"`
-}
-
-// presetUpdateResponseDataPermissionsPluginsConfigObjectJSON contains the JSON
-// metadata for the struct [PresetUpdateResponseDataPermissionsPluginsConfigObject]
-type presetUpdateResponseDataPermissionsPluginsConfigObjectJSON struct {
+// presetUpdateResponseDataPermissionsPluginsConfigJSON contains the JSON metadata
+// for the struct [PresetUpdateResponseDataPermissionsPluginsConfig]
+type presetUpdateResponseDataPermissionsPluginsConfigJSON struct {
 	AccessControl   apijson.Field
 	HandlesViewOnly apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PresetUpdateResponseDataPermissionsPluginsConfigObject) UnmarshalJSON(data []byte) (err error) {
+func (r *PresetUpdateResponseDataPermissionsPluginsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r presetUpdateResponseDataPermissionsPluginsConfigObjectJSON) RawJSON() string {
+func (r presetUpdateResponseDataPermissionsPluginsConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PresetUpdateResponseDataPermissionsPluginsConfigObject) ImplementsPresetUpdateResponseDataPermissionsPluginsConfigUnion() {
-}
-
-type PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControl string
+type PresetUpdateResponseDataPermissionsPluginsConfigAccessControl string
 
 const (
-	PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControlFullAccess PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControl = "FULL_ACCESS"
-	PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControlViewOnly   PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControl = "VIEW_ONLY"
+	PresetUpdateResponseDataPermissionsPluginsConfigAccessControlFullAccess PresetUpdateResponseDataPermissionsPluginsConfigAccessControl = "FULL_ACCESS"
+	PresetUpdateResponseDataPermissionsPluginsConfigAccessControlViewOnly   PresetUpdateResponseDataPermissionsPluginsConfigAccessControl = "VIEW_ONLY"
 )
 
-func (r PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControl) IsKnown() bool {
+func (r PresetUpdateResponseDataPermissionsPluginsConfigAccessControl) IsKnown() bool {
 	switch r {
-	case PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControlFullAccess, PresetUpdateResponseDataPermissionsPluginsConfigObjectAccessControlViewOnly:
+	case PresetUpdateResponseDataPermissionsPluginsConfigAccessControlFullAccess, PresetUpdateResponseDataPermissionsPluginsConfigAccessControlViewOnly:
 		return true
 	}
 	return false
@@ -2014,6 +1849,220 @@ func (r PresetUpdateResponseDataPermissionsWaitingRoomType) IsKnown() bool {
 	return false
 }
 
+type PresetUpdateResponseDataPermissionsStageAccess string
+
+const (
+	PresetUpdateResponseDataPermissionsStageAccessAllowed    PresetUpdateResponseDataPermissionsStageAccess = "ALLOWED"
+	PresetUpdateResponseDataPermissionsStageAccessNotAllowed PresetUpdateResponseDataPermissionsStageAccess = "NOT_ALLOWED"
+	PresetUpdateResponseDataPermissionsStageAccessCanRequest PresetUpdateResponseDataPermissionsStageAccess = "CAN_REQUEST"
+)
+
+func (r PresetUpdateResponseDataPermissionsStageAccess) IsKnown() bool {
+	switch r {
+	case PresetUpdateResponseDataPermissionsStageAccessAllowed, PresetUpdateResponseDataPermissionsStageAccessNotAllowed, PresetUpdateResponseDataPermissionsStageAccessCanRequest:
+		return true
+	}
+	return false
+}
+
+type PresetUpdateResponseDataUI struct {
+	DesignTokens PresetUpdateResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
+	JSON         presetUpdateResponseDataUIJSON         `json:"-"`
+}
+
+// presetUpdateResponseDataUIJSON contains the JSON metadata for the struct
+// [PresetUpdateResponseDataUI]
+type presetUpdateResponseDataUIJSON struct {
+	DesignTokens apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *PresetUpdateResponseDataUI) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetUpdateResponseDataUIJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetUpdateResponseDataUIDesignTokens struct {
+	BorderRadius PresetUpdateResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
+	BorderWidth  PresetUpdateResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
+	Colors       PresetUpdateResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
+	SpacingBase  float64                                            `json:"spacing_base" api:"required"`
+	Theme        PresetUpdateResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
+	FontFamily   string                                             `json:"font_family"`
+	GoogleFont   string                                             `json:"google_font"`
+	Logo         string                                             `json:"logo" format:"uri"`
+	JSON         presetUpdateResponseDataUIDesignTokensJSON         `json:"-"`
+}
+
+// presetUpdateResponseDataUIDesignTokensJSON contains the JSON metadata for the
+// struct [PresetUpdateResponseDataUIDesignTokens]
+type presetUpdateResponseDataUIDesignTokensJSON struct {
+	BorderRadius apijson.Field
+	BorderWidth  apijson.Field
+	Colors       apijson.Field
+	SpacingBase  apijson.Field
+	Theme        apijson.Field
+	FontFamily   apijson.Field
+	GoogleFont   apijson.Field
+	Logo         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *PresetUpdateResponseDataUIDesignTokens) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetUpdateResponseDataUIDesignTokensJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetUpdateResponseDataUIDesignTokensBorderRadius string
+
+const (
+	PresetUpdateResponseDataUIDesignTokensBorderRadiusSharp        PresetUpdateResponseDataUIDesignTokensBorderRadius = "sharp"
+	PresetUpdateResponseDataUIDesignTokensBorderRadiusRounded      PresetUpdateResponseDataUIDesignTokensBorderRadius = "rounded"
+	PresetUpdateResponseDataUIDesignTokensBorderRadiusExtraRounded PresetUpdateResponseDataUIDesignTokensBorderRadius = "extra-rounded"
+	PresetUpdateResponseDataUIDesignTokensBorderRadiusCircular     PresetUpdateResponseDataUIDesignTokensBorderRadius = "circular"
+)
+
+func (r PresetUpdateResponseDataUIDesignTokensBorderRadius) IsKnown() bool {
+	switch r {
+	case PresetUpdateResponseDataUIDesignTokensBorderRadiusSharp, PresetUpdateResponseDataUIDesignTokensBorderRadiusRounded, PresetUpdateResponseDataUIDesignTokensBorderRadiusExtraRounded, PresetUpdateResponseDataUIDesignTokensBorderRadiusCircular:
+		return true
+	}
+	return false
+}
+
+type PresetUpdateResponseDataUIDesignTokensBorderWidth string
+
+const (
+	PresetUpdateResponseDataUIDesignTokensBorderWidthNone PresetUpdateResponseDataUIDesignTokensBorderWidth = "none"
+	PresetUpdateResponseDataUIDesignTokensBorderWidthThin PresetUpdateResponseDataUIDesignTokensBorderWidth = "thin"
+	PresetUpdateResponseDataUIDesignTokensBorderWidthFat  PresetUpdateResponseDataUIDesignTokensBorderWidth = "fat"
+)
+
+func (r PresetUpdateResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
+	switch r {
+	case PresetUpdateResponseDataUIDesignTokensBorderWidthNone, PresetUpdateResponseDataUIDesignTokensBorderWidthThin, PresetUpdateResponseDataUIDesignTokensBorderWidthFat:
+		return true
+	}
+	return false
+}
+
+type PresetUpdateResponseDataUIDesignTokensColors struct {
+	Background  PresetUpdateResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
+	Brand       PresetUpdateResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
+	Danger      string                                                 `json:"danger" api:"required"`
+	Success     string                                                 `json:"success" api:"required"`
+	Text        string                                                 `json:"text" api:"required"`
+	TextOnBrand string                                                 `json:"text_on_brand" api:"required"`
+	VideoBg     string                                                 `json:"video_bg" api:"required"`
+	Warning     string                                                 `json:"warning" api:"required"`
+	JSON        presetUpdateResponseDataUIDesignTokensColorsJSON       `json:"-"`
+}
+
+// presetUpdateResponseDataUIDesignTokensColorsJSON contains the JSON metadata for
+// the struct [PresetUpdateResponseDataUIDesignTokensColors]
+type presetUpdateResponseDataUIDesignTokensColorsJSON struct {
+	Background  apijson.Field
+	Brand       apijson.Field
+	Danger      apijson.Field
+	Success     apijson.Field
+	Text        apijson.Field
+	TextOnBrand apijson.Field
+	VideoBg     apijson.Field
+	Warning     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetUpdateResponseDataUIDesignTokensColors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetUpdateResponseDataUIDesignTokensColorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetUpdateResponseDataUIDesignTokensColorsBackground struct {
+	Number1000 string                                                     `json:"1000" api:"required"`
+	Number600  string                                                     `json:"600" api:"required"`
+	Number700  string                                                     `json:"700" api:"required"`
+	Number800  string                                                     `json:"800" api:"required"`
+	Number900  string                                                     `json:"900" api:"required"`
+	JSON       presetUpdateResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
+}
+
+// presetUpdateResponseDataUIDesignTokensColorsBackgroundJSON contains the JSON
+// metadata for the struct [PresetUpdateResponseDataUIDesignTokensColorsBackground]
+type presetUpdateResponseDataUIDesignTokensColorsBackgroundJSON struct {
+	Number1000  apijson.Field
+	Number600   apijson.Field
+	Number700   apijson.Field
+	Number800   apijson.Field
+	Number900   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetUpdateResponseDataUIDesignTokensColorsBackground) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetUpdateResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetUpdateResponseDataUIDesignTokensColorsBrand struct {
+	Number300 string                                                `json:"300" api:"required"`
+	Number400 string                                                `json:"400" api:"required"`
+	Number500 string                                                `json:"500" api:"required"`
+	Number600 string                                                `json:"600" api:"required"`
+	Number700 string                                                `json:"700" api:"required"`
+	JSON      presetUpdateResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
+}
+
+// presetUpdateResponseDataUIDesignTokensColorsBrandJSON contains the JSON metadata
+// for the struct [PresetUpdateResponseDataUIDesignTokensColorsBrand]
+type presetUpdateResponseDataUIDesignTokensColorsBrandJSON struct {
+	Number300   apijson.Field
+	Number400   apijson.Field
+	Number500   apijson.Field
+	Number600   apijson.Field
+	Number700   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetUpdateResponseDataUIDesignTokensColorsBrand) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetUpdateResponseDataUIDesignTokensColorsBrandJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetUpdateResponseDataUIDesignTokensTheme string
+
+const (
+	PresetUpdateResponseDataUIDesignTokensThemeDarkest PresetUpdateResponseDataUIDesignTokensTheme = "darkest"
+	PresetUpdateResponseDataUIDesignTokensThemeDark    PresetUpdateResponseDataUIDesignTokensTheme = "dark"
+	PresetUpdateResponseDataUIDesignTokensThemeLight   PresetUpdateResponseDataUIDesignTokensTheme = "light"
+)
+
+func (r PresetUpdateResponseDataUIDesignTokensTheme) IsKnown() bool {
+	switch r {
+	case PresetUpdateResponseDataUIDesignTokensThemeDarkest, PresetUpdateResponseDataUIDesignTokensThemeDark, PresetUpdateResponseDataUIDesignTokensThemeLight:
+		return true
+	}
+	return false
+}
+
 type PresetDeleteResponse struct {
 	// Data returned by the operation
 	Data PresetDeleteResponseData `json:"data" api:"required"`
@@ -2044,11 +2093,15 @@ type PresetDeleteResponseData struct {
 	// ID of the preset
 	ID     string                         `json:"id" api:"required" format:"uuid"`
 	Config PresetDeleteResponseDataConfig `json:"config" api:"required"`
+	// Timestamp this preset was created at
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Name of the preset
 	Name        string                              `json:"name" api:"required"`
+	Permissions PresetDeleteResponseDataPermissions `json:"permissions" api:"required"`
 	UI          PresetDeleteResponseDataUI          `json:"ui" api:"required"`
-	Permissions PresetDeleteResponseDataPermissions `json:"permissions"`
-	JSON        presetDeleteResponseDataJSON        `json:"-"`
+	// Timestamp this preset was last updated
+	UpdatedAt time.Time                    `json:"updated_at" api:"required" format:"date-time"`
+	JSON      presetDeleteResponseDataJSON `json:"-"`
 }
 
 // presetDeleteResponseDataJSON contains the JSON metadata for the struct
@@ -2056,9 +2109,11 @@ type PresetDeleteResponseData struct {
 type presetDeleteResponseDataJSON struct {
 	ID          apijson.Field
 	Config      apijson.Field
+	CreatedAt   apijson.Field
 	Name        apijson.Field
-	UI          apijson.Field
 	Permissions apijson.Field
+	UI          apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2073,25 +2128,28 @@ func (r presetDeleteResponseDataJSON) RawJSON() string {
 
 type PresetDeleteResponseDataConfig struct {
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount int64 `json:"max_screenshare_count" api:"required"`
+	MaxScreenshareCount float64 `json:"max_screenshare_count" api:"required"`
 	// Maximum number of streams that are visible on a device
 	MaxVideoStreams PresetDeleteResponseDataConfigMaxVideoStreams `json:"max_video_streams" api:"required"`
 	// Media configuration options. eg: Video quality
 	Media PresetDeleteResponseDataConfigMedia `json:"media" api:"required"`
 	// Type of the meeting
 	ViewType PresetDeleteResponseDataConfigViewType `json:"view_type" api:"required"`
-	JSON     presetDeleteResponseDataConfigJSON     `json:"-"`
+	// Livestream viewer quality levels.
+	LivestreamViewerQualities []int64                            `json:"livestream_viewer_qualities" api:"nullable"`
+	JSON                      presetDeleteResponseDataConfigJSON `json:"-"`
 }
 
 // presetDeleteResponseDataConfigJSON contains the JSON metadata for the struct
 // [PresetDeleteResponseDataConfig]
 type presetDeleteResponseDataConfigJSON struct {
-	MaxScreenshareCount apijson.Field
-	MaxVideoStreams     apijson.Field
-	Media               apijson.Field
-	ViewType            apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+	MaxScreenshareCount       apijson.Field
+	MaxVideoStreams           apijson.Field
+	Media                     apijson.Field
+	ViewType                  apijson.Field
+	LivestreamViewerQualities apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *PresetDeleteResponseDataConfig) UnmarshalJSON(data []byte) (err error) {
@@ -2105,9 +2163,9 @@ func (r presetDeleteResponseDataConfigJSON) RawJSON() string {
 // Maximum number of streams that are visible on a device
 type PresetDeleteResponseDataConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop int64 `json:"desktop" api:"required"`
+	Desktop float64 `json:"desktop" api:"required"`
 	// Maximum number of streams visible on mobile devices
-	Mobile int64                                             `json:"mobile" api:"required"`
+	Mobile float64                                           `json:"mobile" api:"required"`
 	JSON   presetDeleteResponseDataConfigMaxVideoStreamsJSON `json:"-"`
 }
 
@@ -2160,7 +2218,7 @@ func (r presetDeleteResponseDataConfigMediaJSON) RawJSON() string {
 // Configuration options for participant screen shares
 type PresetDeleteResponseDataConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate int64 `json:"frame_rate" api:"required"`
+	FrameRate float64 `json:"frame_rate" api:"required"`
 	// Quality of screen share
 	Quality PresetDeleteResponseDataConfigMediaScreenshareQuality `json:"quality" api:"required"`
 	JSON    presetDeleteResponseDataConfigMediaScreenshareJSON    `json:"-"`
@@ -2190,11 +2248,13 @@ const (
 	PresetDeleteResponseDataConfigMediaScreenshareQualityHD   PresetDeleteResponseDataConfigMediaScreenshareQuality = "hd"
 	PresetDeleteResponseDataConfigMediaScreenshareQualityVga  PresetDeleteResponseDataConfigMediaScreenshareQuality = "vga"
 	PresetDeleteResponseDataConfigMediaScreenshareQualityQvga PresetDeleteResponseDataConfigMediaScreenshareQuality = "qvga"
+	PresetDeleteResponseDataConfigMediaScreenshareQualityFhd  PresetDeleteResponseDataConfigMediaScreenshareQuality = "fhd"
+	PresetDeleteResponseDataConfigMediaScreenshareQualityUhd  PresetDeleteResponseDataConfigMediaScreenshareQuality = "uhd"
 )
 
 func (r PresetDeleteResponseDataConfigMediaScreenshareQuality) IsKnown() bool {
 	switch r {
-	case PresetDeleteResponseDataConfigMediaScreenshareQualityHD, PresetDeleteResponseDataConfigMediaScreenshareQualityVga, PresetDeleteResponseDataConfigMediaScreenshareQualityQvga:
+	case PresetDeleteResponseDataConfigMediaScreenshareQualityHD, PresetDeleteResponseDataConfigMediaScreenshareQualityVga, PresetDeleteResponseDataConfigMediaScreenshareQualityQvga, PresetDeleteResponseDataConfigMediaScreenshareQualityFhd, PresetDeleteResponseDataConfigMediaScreenshareQualityUhd:
 		return true
 	}
 	return false
@@ -2203,10 +2263,12 @@ func (r PresetDeleteResponseDataConfigMediaScreenshareQuality) IsKnown() bool {
 // Configuration options for participant videos
 type PresetDeleteResponseDataConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate int64 `json:"frame_rate" api:"required"`
+	FrameRate float64 `json:"frame_rate" api:"required"`
 	// Video quality of participants
 	Quality PresetDeleteResponseDataConfigMediaVideoQuality `json:"quality" api:"required"`
-	JSON    presetDeleteResponseDataConfigMediaVideoJSON    `json:"-"`
+	// Enable simulcast for participant videos.
+	Simulcast bool                                         `json:"simulcast"`
+	JSON      presetDeleteResponseDataConfigMediaVideoJSON `json:"-"`
 }
 
 // presetDeleteResponseDataConfigMediaVideoJSON contains the JSON metadata for the
@@ -2214,6 +2276,7 @@ type PresetDeleteResponseDataConfigMediaVideo struct {
 type presetDeleteResponseDataConfigMediaVideoJSON struct {
 	FrameRate   apijson.Field
 	Quality     apijson.Field
+	Simulcast   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2233,11 +2296,13 @@ const (
 	PresetDeleteResponseDataConfigMediaVideoQualityHD   PresetDeleteResponseDataConfigMediaVideoQuality = "hd"
 	PresetDeleteResponseDataConfigMediaVideoQualityVga  PresetDeleteResponseDataConfigMediaVideoQuality = "vga"
 	PresetDeleteResponseDataConfigMediaVideoQualityQvga PresetDeleteResponseDataConfigMediaVideoQuality = "qvga"
+	PresetDeleteResponseDataConfigMediaVideoQualityFhd  PresetDeleteResponseDataConfigMediaVideoQuality = "fhd"
+	PresetDeleteResponseDataConfigMediaVideoQualityUhd  PresetDeleteResponseDataConfigMediaVideoQuality = "uhd"
 )
 
 func (r PresetDeleteResponseDataConfigMediaVideoQuality) IsKnown() bool {
 	switch r {
-	case PresetDeleteResponseDataConfigMediaVideoQualityHD, PresetDeleteResponseDataConfigMediaVideoQualityVga, PresetDeleteResponseDataConfigMediaVideoQualityQvga:
+	case PresetDeleteResponseDataConfigMediaVideoQualityHD, PresetDeleteResponseDataConfigMediaVideoQualityVga, PresetDeleteResponseDataConfigMediaVideoQualityQvga, PresetDeleteResponseDataConfigMediaVideoQualityFhd, PresetDeleteResponseDataConfigMediaVideoQualityUhd:
 		return true
 	}
 	return false
@@ -2273,203 +2338,15 @@ func (r presetDeleteResponseDataConfigMediaAudioJSON) RawJSON() string {
 type PresetDeleteResponseDataConfigViewType string
 
 const (
-	PresetDeleteResponseDataConfigViewTypeGroupCall PresetDeleteResponseDataConfigViewType = "GROUP_CALL"
-	PresetDeleteResponseDataConfigViewTypeWebinar   PresetDeleteResponseDataConfigViewType = "WEBINAR"
-	PresetDeleteResponseDataConfigViewTypeAudioRoom PresetDeleteResponseDataConfigViewType = "AUDIO_ROOM"
+	PresetDeleteResponseDataConfigViewTypeGroupCall  PresetDeleteResponseDataConfigViewType = "GROUP_CALL"
+	PresetDeleteResponseDataConfigViewTypeWebinar    PresetDeleteResponseDataConfigViewType = "WEBINAR"
+	PresetDeleteResponseDataConfigViewTypeAudioRoom  PresetDeleteResponseDataConfigViewType = "AUDIO_ROOM"
+	PresetDeleteResponseDataConfigViewTypeLivestream PresetDeleteResponseDataConfigViewType = "LIVESTREAM"
 )
 
 func (r PresetDeleteResponseDataConfigViewType) IsKnown() bool {
 	switch r {
-	case PresetDeleteResponseDataConfigViewTypeGroupCall, PresetDeleteResponseDataConfigViewTypeWebinar, PresetDeleteResponseDataConfigViewTypeAudioRoom:
-		return true
-	}
-	return false
-}
-
-type PresetDeleteResponseDataUI struct {
-	DesignTokens PresetDeleteResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
-	ConfigDiff   interface{}                            `json:"config_diff"`
-	JSON         presetDeleteResponseDataUIJSON         `json:"-"`
-}
-
-// presetDeleteResponseDataUIJSON contains the JSON metadata for the struct
-// [PresetDeleteResponseDataUI]
-type presetDeleteResponseDataUIJSON struct {
-	DesignTokens apijson.Field
-	ConfigDiff   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *PresetDeleteResponseDataUI) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetDeleteResponseDataUIJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetDeleteResponseDataUIDesignTokens struct {
-	BorderRadius PresetDeleteResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
-	BorderWidth  PresetDeleteResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
-	Colors       PresetDeleteResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
-	Logo         string                                             `json:"logo" api:"required"`
-	SpacingBase  float64                                            `json:"spacing_base" api:"required"`
-	Theme        PresetDeleteResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
-	JSON         presetDeleteResponseDataUIDesignTokensJSON         `json:"-"`
-}
-
-// presetDeleteResponseDataUIDesignTokensJSON contains the JSON metadata for the
-// struct [PresetDeleteResponseDataUIDesignTokens]
-type presetDeleteResponseDataUIDesignTokensJSON struct {
-	BorderRadius apijson.Field
-	BorderWidth  apijson.Field
-	Colors       apijson.Field
-	Logo         apijson.Field
-	SpacingBase  apijson.Field
-	Theme        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *PresetDeleteResponseDataUIDesignTokens) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetDeleteResponseDataUIDesignTokensJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetDeleteResponseDataUIDesignTokensBorderRadius string
-
-const (
-	PresetDeleteResponseDataUIDesignTokensBorderRadiusRounded PresetDeleteResponseDataUIDesignTokensBorderRadius = "rounded"
-)
-
-func (r PresetDeleteResponseDataUIDesignTokensBorderRadius) IsKnown() bool {
-	switch r {
-	case PresetDeleteResponseDataUIDesignTokensBorderRadiusRounded:
-		return true
-	}
-	return false
-}
-
-type PresetDeleteResponseDataUIDesignTokensBorderWidth string
-
-const (
-	PresetDeleteResponseDataUIDesignTokensBorderWidthThin PresetDeleteResponseDataUIDesignTokensBorderWidth = "thin"
-)
-
-func (r PresetDeleteResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
-	switch r {
-	case PresetDeleteResponseDataUIDesignTokensBorderWidthThin:
-		return true
-	}
-	return false
-}
-
-type PresetDeleteResponseDataUIDesignTokensColors struct {
-	Background  PresetDeleteResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
-	Brand       PresetDeleteResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
-	Danger      string                                                 `json:"danger" api:"required"`
-	Success     string                                                 `json:"success" api:"required"`
-	Text        string                                                 `json:"text" api:"required"`
-	TextOnBrand string                                                 `json:"text_on_brand" api:"required"`
-	VideoBg     string                                                 `json:"video_bg" api:"required"`
-	Warning     string                                                 `json:"warning" api:"required"`
-	JSON        presetDeleteResponseDataUIDesignTokensColorsJSON       `json:"-"`
-}
-
-// presetDeleteResponseDataUIDesignTokensColorsJSON contains the JSON metadata for
-// the struct [PresetDeleteResponseDataUIDesignTokensColors]
-type presetDeleteResponseDataUIDesignTokensColorsJSON struct {
-	Background  apijson.Field
-	Brand       apijson.Field
-	Danger      apijson.Field
-	Success     apijson.Field
-	Text        apijson.Field
-	TextOnBrand apijson.Field
-	VideoBg     apijson.Field
-	Warning     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetDeleteResponseDataUIDesignTokensColors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetDeleteResponseDataUIDesignTokensColorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetDeleteResponseDataUIDesignTokensColorsBackground struct {
-	Number1000 string                                                     `json:"1000" api:"required"`
-	Number600  string                                                     `json:"600" api:"required"`
-	Number700  string                                                     `json:"700" api:"required"`
-	Number800  string                                                     `json:"800" api:"required"`
-	Number900  string                                                     `json:"900" api:"required"`
-	JSON       presetDeleteResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
-}
-
-// presetDeleteResponseDataUIDesignTokensColorsBackgroundJSON contains the JSON
-// metadata for the struct [PresetDeleteResponseDataUIDesignTokensColorsBackground]
-type presetDeleteResponseDataUIDesignTokensColorsBackgroundJSON struct {
-	Number1000  apijson.Field
-	Number600   apijson.Field
-	Number700   apijson.Field
-	Number800   apijson.Field
-	Number900   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetDeleteResponseDataUIDesignTokensColorsBackground) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetDeleteResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetDeleteResponseDataUIDesignTokensColorsBrand struct {
-	Number300 string                                                `json:"300" api:"required"`
-	Number400 string                                                `json:"400" api:"required"`
-	Number500 string                                                `json:"500" api:"required"`
-	Number600 string                                                `json:"600" api:"required"`
-	Number700 string                                                `json:"700" api:"required"`
-	JSON      presetDeleteResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
-}
-
-// presetDeleteResponseDataUIDesignTokensColorsBrandJSON contains the JSON metadata
-// for the struct [PresetDeleteResponseDataUIDesignTokensColorsBrand]
-type presetDeleteResponseDataUIDesignTokensColorsBrandJSON struct {
-	Number300   apijson.Field
-	Number400   apijson.Field
-	Number500   apijson.Field
-	Number600   apijson.Field
-	Number700   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetDeleteResponseDataUIDesignTokensColorsBrand) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetDeleteResponseDataUIDesignTokensColorsBrandJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetDeleteResponseDataUIDesignTokensTheme string
-
-const (
-	PresetDeleteResponseDataUIDesignTokensThemeDark PresetDeleteResponseDataUIDesignTokensTheme = "dark"
-)
-
-func (r PresetDeleteResponseDataUIDesignTokensTheme) IsKnown() bool {
-	switch r {
-	case PresetDeleteResponseDataUIDesignTokensThemeDark:
+	case PresetDeleteResponseDataConfigViewTypeGroupCall, PresetDeleteResponseDataConfigViewTypeWebinar, PresetDeleteResponseDataConfigViewTypeAudioRoom, PresetDeleteResponseDataConfigViewTypeLivestream:
 		return true
 	}
 	return false
@@ -2477,14 +2354,13 @@ func (r PresetDeleteResponseDataUIDesignTokensTheme) IsKnown() bool {
 
 type PresetDeleteResponseDataPermissions struct {
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           bool `json:"accept_waiting_requests" api:"required"`
-	CanAcceptProductionRequests     bool `json:"can_accept_production_requests" api:"required"`
-	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions" api:"required"`
-	CanEditDisplayName              bool `json:"can_edit_display_name" api:"required"`
-	CanLivestream                   bool `json:"can_livestream" api:"required"`
-	CanRecord                       bool `json:"can_record" api:"required"`
-	CanSpotlight                    bool `json:"can_spotlight" api:"required"`
-	// Chat permissions
+	AcceptWaitingRequests           bool                                                 `json:"accept_waiting_requests" api:"required"`
+	CanAcceptProductionRequests     bool                                                 `json:"can_accept_production_requests" api:"required"`
+	CanChangeParticipantPermissions bool                                                 `json:"can_change_participant_permissions" api:"required"`
+	CanEditDisplayName              bool                                                 `json:"can_edit_display_name" api:"required"`
+	CanLivestream                   bool                                                 `json:"can_livestream" api:"required"`
+	CanRecord                       bool                                                 `json:"can_record" api:"required"`
+	CanSpotlight                    bool                                                 `json:"can_spotlight" api:"required"`
 	Chat                            PresetDeleteResponseDataPermissionsChat              `json:"chat" api:"required"`
 	ConnectedMeetings               PresetDeleteResponseDataPermissionsConnectedMeetings `json:"connected_meetings" api:"required"`
 	DisableParticipantAudio         bool                                                 `json:"disable_participant_audio" api:"required"`
@@ -2504,9 +2380,13 @@ type PresetDeleteResponseDataPermissions struct {
 	RecorderType        PresetDeleteResponseDataPermissionsRecorderType `json:"recorder_type" api:"required"`
 	ShowParticipantList bool                                            `json:"show_participant_list" api:"required"`
 	// Waiting room type
-	WaitingRoomType PresetDeleteResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
-	IsRecorder      bool                                               `json:"is_recorder"`
-	JSON            presetDeleteResponseDataPermissionsJSON            `json:"-"`
+	WaitingRoomType      PresetDeleteResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
+	AcceptStageRequests  bool                                               `json:"accept_stage_requests"`
+	IsRecorder           bool                                               `json:"is_recorder"`
+	StageAccess          PresetDeleteResponseDataPermissionsStageAccess     `json:"stage_access"`
+	StageEnabled         bool                                               `json:"stage_enabled"`
+	TranscriptionEnabled bool                                               `json:"transcription_enabled"`
+	JSON                 presetDeleteResponseDataPermissionsJSON            `json:"-"`
 }
 
 // presetDeleteResponseDataPermissionsJSON contains the JSON metadata for the
@@ -2533,7 +2413,11 @@ type presetDeleteResponseDataPermissionsJSON struct {
 	RecorderType                    apijson.Field
 	ShowParticipantList             apijson.Field
 	WaitingRoomType                 apijson.Field
+	AcceptStageRequests             apijson.Field
 	IsRecorder                      apijson.Field
+	StageAccess                     apijson.Field
+	StageEnabled                    apijson.Field
+	TranscriptionEnabled            apijson.Field
 	raw                             string
 	ExtraFields                     map[string]apijson.Field
 }
@@ -2546,7 +2430,6 @@ func (r presetDeleteResponseDataPermissionsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Chat permissions
 type PresetDeleteResponseDataPermissionsChat struct {
 	Private PresetDeleteResponseDataPermissionsChatPrivate `json:"private" api:"required"`
 	Public  PresetDeleteResponseDataPermissionsChatPublic  `json:"public" api:"required"`
@@ -2806,9 +2689,10 @@ type PresetDeleteResponseDataPermissionsPlugins struct {
 	// Can edit plugin config
 	CanEditConfig bool `json:"can_edit_config" api:"required"`
 	// Can start plugins
-	CanStart bool                                                  `json:"can_start" api:"required"`
-	Config   PresetDeleteResponseDataPermissionsPluginsConfigUnion `json:"config" api:"required" format:"uuid"`
-	JSON     presetDeleteResponseDataPermissionsPluginsJSON        `json:"-"`
+	CanStart bool `json:"can_start" api:"required"`
+	// Plugin configuration keyed by plugin UUID.
+	Config map[string]PresetDeleteResponseDataPermissionsPluginsConfig `json:"config" api:"required"`
+	JSON   presetDeleteResponseDataPermissionsPluginsJSON              `json:"-"`
 }
 
 // presetDeleteResponseDataPermissionsPluginsJSON contains the JSON metadata for
@@ -2830,63 +2714,40 @@ func (r presetDeleteResponseDataPermissionsPluginsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [shared.UnionString] or
-// [PresetDeleteResponseDataPermissionsPluginsConfigObject].
-type PresetDeleteResponseDataPermissionsPluginsConfigUnion interface {
-	ImplementsPresetDeleteResponseDataPermissionsPluginsConfigUnion()
+type PresetDeleteResponseDataPermissionsPluginsConfig struct {
+	AccessControl   PresetDeleteResponseDataPermissionsPluginsConfigAccessControl `json:"access_control"`
+	HandlesViewOnly bool                                                          `json:"handles_view_only"`
+	ExtraFields     map[string]interface{}                                        `json:"-" api:"extrafields"`
+	JSON            presetDeleteResponseDataPermissionsPluginsConfigJSON          `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PresetDeleteResponseDataPermissionsPluginsConfigUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PresetDeleteResponseDataPermissionsPluginsConfigObject{}),
-		},
-	)
-}
-
-type PresetDeleteResponseDataPermissionsPluginsConfigObject struct {
-	AccessControl   PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control" api:"required"`
-	HandlesViewOnly bool                                                                `json:"handles_view_only" api:"required"`
-	JSON            presetDeleteResponseDataPermissionsPluginsConfigObjectJSON          `json:"-"`
-}
-
-// presetDeleteResponseDataPermissionsPluginsConfigObjectJSON contains the JSON
-// metadata for the struct [PresetDeleteResponseDataPermissionsPluginsConfigObject]
-type presetDeleteResponseDataPermissionsPluginsConfigObjectJSON struct {
+// presetDeleteResponseDataPermissionsPluginsConfigJSON contains the JSON metadata
+// for the struct [PresetDeleteResponseDataPermissionsPluginsConfig]
+type presetDeleteResponseDataPermissionsPluginsConfigJSON struct {
 	AccessControl   apijson.Field
 	HandlesViewOnly apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PresetDeleteResponseDataPermissionsPluginsConfigObject) UnmarshalJSON(data []byte) (err error) {
+func (r *PresetDeleteResponseDataPermissionsPluginsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r presetDeleteResponseDataPermissionsPluginsConfigObjectJSON) RawJSON() string {
+func (r presetDeleteResponseDataPermissionsPluginsConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PresetDeleteResponseDataPermissionsPluginsConfigObject) ImplementsPresetDeleteResponseDataPermissionsPluginsConfigUnion() {
-}
-
-type PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControl string
+type PresetDeleteResponseDataPermissionsPluginsConfigAccessControl string
 
 const (
-	PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControlFullAccess PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControl = "FULL_ACCESS"
-	PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControlViewOnly   PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControl = "VIEW_ONLY"
+	PresetDeleteResponseDataPermissionsPluginsConfigAccessControlFullAccess PresetDeleteResponseDataPermissionsPluginsConfigAccessControl = "FULL_ACCESS"
+	PresetDeleteResponseDataPermissionsPluginsConfigAccessControlViewOnly   PresetDeleteResponseDataPermissionsPluginsConfigAccessControl = "VIEW_ONLY"
 )
 
-func (r PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControl) IsKnown() bool {
+func (r PresetDeleteResponseDataPermissionsPluginsConfigAccessControl) IsKnown() bool {
 	switch r {
-	case PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControlFullAccess, PresetDeleteResponseDataPermissionsPluginsConfigObjectAccessControlViewOnly:
+	case PresetDeleteResponseDataPermissionsPluginsConfigAccessControlFullAccess, PresetDeleteResponseDataPermissionsPluginsConfigAccessControlViewOnly:
 		return true
 	}
 	return false
@@ -2950,6 +2811,220 @@ const (
 func (r PresetDeleteResponseDataPermissionsWaitingRoomType) IsKnown() bool {
 	switch r {
 	case PresetDeleteResponseDataPermissionsWaitingRoomTypeSkip, PresetDeleteResponseDataPermissionsWaitingRoomTypeOnPrivilegedUserEntry, PresetDeleteResponseDataPermissionsWaitingRoomTypeSkipOnAccept:
+		return true
+	}
+	return false
+}
+
+type PresetDeleteResponseDataPermissionsStageAccess string
+
+const (
+	PresetDeleteResponseDataPermissionsStageAccessAllowed    PresetDeleteResponseDataPermissionsStageAccess = "ALLOWED"
+	PresetDeleteResponseDataPermissionsStageAccessNotAllowed PresetDeleteResponseDataPermissionsStageAccess = "NOT_ALLOWED"
+	PresetDeleteResponseDataPermissionsStageAccessCanRequest PresetDeleteResponseDataPermissionsStageAccess = "CAN_REQUEST"
+)
+
+func (r PresetDeleteResponseDataPermissionsStageAccess) IsKnown() bool {
+	switch r {
+	case PresetDeleteResponseDataPermissionsStageAccessAllowed, PresetDeleteResponseDataPermissionsStageAccessNotAllowed, PresetDeleteResponseDataPermissionsStageAccessCanRequest:
+		return true
+	}
+	return false
+}
+
+type PresetDeleteResponseDataUI struct {
+	DesignTokens PresetDeleteResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
+	JSON         presetDeleteResponseDataUIJSON         `json:"-"`
+}
+
+// presetDeleteResponseDataUIJSON contains the JSON metadata for the struct
+// [PresetDeleteResponseDataUI]
+type presetDeleteResponseDataUIJSON struct {
+	DesignTokens apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *PresetDeleteResponseDataUI) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetDeleteResponseDataUIJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetDeleteResponseDataUIDesignTokens struct {
+	BorderRadius PresetDeleteResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
+	BorderWidth  PresetDeleteResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
+	Colors       PresetDeleteResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
+	SpacingBase  float64                                            `json:"spacing_base" api:"required"`
+	Theme        PresetDeleteResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
+	FontFamily   string                                             `json:"font_family"`
+	GoogleFont   string                                             `json:"google_font"`
+	Logo         string                                             `json:"logo" format:"uri"`
+	JSON         presetDeleteResponseDataUIDesignTokensJSON         `json:"-"`
+}
+
+// presetDeleteResponseDataUIDesignTokensJSON contains the JSON metadata for the
+// struct [PresetDeleteResponseDataUIDesignTokens]
+type presetDeleteResponseDataUIDesignTokensJSON struct {
+	BorderRadius apijson.Field
+	BorderWidth  apijson.Field
+	Colors       apijson.Field
+	SpacingBase  apijson.Field
+	Theme        apijson.Field
+	FontFamily   apijson.Field
+	GoogleFont   apijson.Field
+	Logo         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *PresetDeleteResponseDataUIDesignTokens) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetDeleteResponseDataUIDesignTokensJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetDeleteResponseDataUIDesignTokensBorderRadius string
+
+const (
+	PresetDeleteResponseDataUIDesignTokensBorderRadiusSharp        PresetDeleteResponseDataUIDesignTokensBorderRadius = "sharp"
+	PresetDeleteResponseDataUIDesignTokensBorderRadiusRounded      PresetDeleteResponseDataUIDesignTokensBorderRadius = "rounded"
+	PresetDeleteResponseDataUIDesignTokensBorderRadiusExtraRounded PresetDeleteResponseDataUIDesignTokensBorderRadius = "extra-rounded"
+	PresetDeleteResponseDataUIDesignTokensBorderRadiusCircular     PresetDeleteResponseDataUIDesignTokensBorderRadius = "circular"
+)
+
+func (r PresetDeleteResponseDataUIDesignTokensBorderRadius) IsKnown() bool {
+	switch r {
+	case PresetDeleteResponseDataUIDesignTokensBorderRadiusSharp, PresetDeleteResponseDataUIDesignTokensBorderRadiusRounded, PresetDeleteResponseDataUIDesignTokensBorderRadiusExtraRounded, PresetDeleteResponseDataUIDesignTokensBorderRadiusCircular:
+		return true
+	}
+	return false
+}
+
+type PresetDeleteResponseDataUIDesignTokensBorderWidth string
+
+const (
+	PresetDeleteResponseDataUIDesignTokensBorderWidthNone PresetDeleteResponseDataUIDesignTokensBorderWidth = "none"
+	PresetDeleteResponseDataUIDesignTokensBorderWidthThin PresetDeleteResponseDataUIDesignTokensBorderWidth = "thin"
+	PresetDeleteResponseDataUIDesignTokensBorderWidthFat  PresetDeleteResponseDataUIDesignTokensBorderWidth = "fat"
+)
+
+func (r PresetDeleteResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
+	switch r {
+	case PresetDeleteResponseDataUIDesignTokensBorderWidthNone, PresetDeleteResponseDataUIDesignTokensBorderWidthThin, PresetDeleteResponseDataUIDesignTokensBorderWidthFat:
+		return true
+	}
+	return false
+}
+
+type PresetDeleteResponseDataUIDesignTokensColors struct {
+	Background  PresetDeleteResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
+	Brand       PresetDeleteResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
+	Danger      string                                                 `json:"danger" api:"required"`
+	Success     string                                                 `json:"success" api:"required"`
+	Text        string                                                 `json:"text" api:"required"`
+	TextOnBrand string                                                 `json:"text_on_brand" api:"required"`
+	VideoBg     string                                                 `json:"video_bg" api:"required"`
+	Warning     string                                                 `json:"warning" api:"required"`
+	JSON        presetDeleteResponseDataUIDesignTokensColorsJSON       `json:"-"`
+}
+
+// presetDeleteResponseDataUIDesignTokensColorsJSON contains the JSON metadata for
+// the struct [PresetDeleteResponseDataUIDesignTokensColors]
+type presetDeleteResponseDataUIDesignTokensColorsJSON struct {
+	Background  apijson.Field
+	Brand       apijson.Field
+	Danger      apijson.Field
+	Success     apijson.Field
+	Text        apijson.Field
+	TextOnBrand apijson.Field
+	VideoBg     apijson.Field
+	Warning     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetDeleteResponseDataUIDesignTokensColors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetDeleteResponseDataUIDesignTokensColorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetDeleteResponseDataUIDesignTokensColorsBackground struct {
+	Number1000 string                                                     `json:"1000" api:"required"`
+	Number600  string                                                     `json:"600" api:"required"`
+	Number700  string                                                     `json:"700" api:"required"`
+	Number800  string                                                     `json:"800" api:"required"`
+	Number900  string                                                     `json:"900" api:"required"`
+	JSON       presetDeleteResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
+}
+
+// presetDeleteResponseDataUIDesignTokensColorsBackgroundJSON contains the JSON
+// metadata for the struct [PresetDeleteResponseDataUIDesignTokensColorsBackground]
+type presetDeleteResponseDataUIDesignTokensColorsBackgroundJSON struct {
+	Number1000  apijson.Field
+	Number600   apijson.Field
+	Number700   apijson.Field
+	Number800   apijson.Field
+	Number900   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetDeleteResponseDataUIDesignTokensColorsBackground) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetDeleteResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetDeleteResponseDataUIDesignTokensColorsBrand struct {
+	Number300 string                                                `json:"300" api:"required"`
+	Number400 string                                                `json:"400" api:"required"`
+	Number500 string                                                `json:"500" api:"required"`
+	Number600 string                                                `json:"600" api:"required"`
+	Number700 string                                                `json:"700" api:"required"`
+	JSON      presetDeleteResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
+}
+
+// presetDeleteResponseDataUIDesignTokensColorsBrandJSON contains the JSON metadata
+// for the struct [PresetDeleteResponseDataUIDesignTokensColorsBrand]
+type presetDeleteResponseDataUIDesignTokensColorsBrandJSON struct {
+	Number300   apijson.Field
+	Number400   apijson.Field
+	Number500   apijson.Field
+	Number600   apijson.Field
+	Number700   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetDeleteResponseDataUIDesignTokensColorsBrand) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetDeleteResponseDataUIDesignTokensColorsBrandJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetDeleteResponseDataUIDesignTokensTheme string
+
+const (
+	PresetDeleteResponseDataUIDesignTokensThemeDarkest PresetDeleteResponseDataUIDesignTokensTheme = "darkest"
+	PresetDeleteResponseDataUIDesignTokensThemeDark    PresetDeleteResponseDataUIDesignTokensTheme = "dark"
+	PresetDeleteResponseDataUIDesignTokensThemeLight   PresetDeleteResponseDataUIDesignTokensTheme = "light"
+)
+
+func (r PresetDeleteResponseDataUIDesignTokensTheme) IsKnown() bool {
+	switch r {
+	case PresetDeleteResponseDataUIDesignTokensThemeDarkest, PresetDeleteResponseDataUIDesignTokensThemeDark, PresetDeleteResponseDataUIDesignTokensThemeLight:
 		return true
 	}
 	return false
@@ -3067,11 +3142,15 @@ type PresetGetPresetByIDResponseData struct {
 	// ID of the preset
 	ID     string                                `json:"id" api:"required" format:"uuid"`
 	Config PresetGetPresetByIDResponseDataConfig `json:"config" api:"required"`
+	// Timestamp this preset was created at
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Name of the preset
 	Name        string                                     `json:"name" api:"required"`
+	Permissions PresetGetPresetByIDResponseDataPermissions `json:"permissions" api:"required"`
 	UI          PresetGetPresetByIDResponseDataUI          `json:"ui" api:"required"`
-	Permissions PresetGetPresetByIDResponseDataPermissions `json:"permissions"`
-	JSON        presetGetPresetByIDResponseDataJSON        `json:"-"`
+	// Timestamp this preset was last updated
+	UpdatedAt time.Time                           `json:"updated_at" api:"required" format:"date-time"`
+	JSON      presetGetPresetByIDResponseDataJSON `json:"-"`
 }
 
 // presetGetPresetByIDResponseDataJSON contains the JSON metadata for the struct
@@ -3079,9 +3158,11 @@ type PresetGetPresetByIDResponseData struct {
 type presetGetPresetByIDResponseDataJSON struct {
 	ID          apijson.Field
 	Config      apijson.Field
+	CreatedAt   apijson.Field
 	Name        apijson.Field
-	UI          apijson.Field
 	Permissions apijson.Field
+	UI          apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3096,25 +3177,28 @@ func (r presetGetPresetByIDResponseDataJSON) RawJSON() string {
 
 type PresetGetPresetByIDResponseDataConfig struct {
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount int64 `json:"max_screenshare_count" api:"required"`
+	MaxScreenshareCount float64 `json:"max_screenshare_count" api:"required"`
 	// Maximum number of streams that are visible on a device
 	MaxVideoStreams PresetGetPresetByIDResponseDataConfigMaxVideoStreams `json:"max_video_streams" api:"required"`
 	// Media configuration options. eg: Video quality
 	Media PresetGetPresetByIDResponseDataConfigMedia `json:"media" api:"required"`
 	// Type of the meeting
 	ViewType PresetGetPresetByIDResponseDataConfigViewType `json:"view_type" api:"required"`
-	JSON     presetGetPresetByIDResponseDataConfigJSON     `json:"-"`
+	// Livestream viewer quality levels.
+	LivestreamViewerQualities []int64                                   `json:"livestream_viewer_qualities" api:"nullable"`
+	JSON                      presetGetPresetByIDResponseDataConfigJSON `json:"-"`
 }
 
 // presetGetPresetByIDResponseDataConfigJSON contains the JSON metadata for the
 // struct [PresetGetPresetByIDResponseDataConfig]
 type presetGetPresetByIDResponseDataConfigJSON struct {
-	MaxScreenshareCount apijson.Field
-	MaxVideoStreams     apijson.Field
-	Media               apijson.Field
-	ViewType            apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+	MaxScreenshareCount       apijson.Field
+	MaxVideoStreams           apijson.Field
+	Media                     apijson.Field
+	ViewType                  apijson.Field
+	LivestreamViewerQualities apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *PresetGetPresetByIDResponseDataConfig) UnmarshalJSON(data []byte) (err error) {
@@ -3128,9 +3212,9 @@ func (r presetGetPresetByIDResponseDataConfigJSON) RawJSON() string {
 // Maximum number of streams that are visible on a device
 type PresetGetPresetByIDResponseDataConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop int64 `json:"desktop" api:"required"`
+	Desktop float64 `json:"desktop" api:"required"`
 	// Maximum number of streams visible on mobile devices
-	Mobile int64                                                    `json:"mobile" api:"required"`
+	Mobile float64                                                  `json:"mobile" api:"required"`
 	JSON   presetGetPresetByIDResponseDataConfigMaxVideoStreamsJSON `json:"-"`
 }
 
@@ -3183,7 +3267,7 @@ func (r presetGetPresetByIDResponseDataConfigMediaJSON) RawJSON() string {
 // Configuration options for participant screen shares
 type PresetGetPresetByIDResponseDataConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate int64 `json:"frame_rate" api:"required"`
+	FrameRate float64 `json:"frame_rate" api:"required"`
 	// Quality of screen share
 	Quality PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality `json:"quality" api:"required"`
 	JSON    presetGetPresetByIDResponseDataConfigMediaScreenshareJSON    `json:"-"`
@@ -3213,11 +3297,13 @@ const (
 	PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityHD   PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality = "hd"
 	PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityVga  PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality = "vga"
 	PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityQvga PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality = "qvga"
+	PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityFhd  PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality = "fhd"
+	PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityUhd  PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality = "uhd"
 )
 
 func (r PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality) IsKnown() bool {
 	switch r {
-	case PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityHD, PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityVga, PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityQvga:
+	case PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityHD, PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityVga, PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityQvga, PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityFhd, PresetGetPresetByIDResponseDataConfigMediaScreenshareQualityUhd:
 		return true
 	}
 	return false
@@ -3226,10 +3312,12 @@ func (r PresetGetPresetByIDResponseDataConfigMediaScreenshareQuality) IsKnown() 
 // Configuration options for participant videos
 type PresetGetPresetByIDResponseDataConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate int64 `json:"frame_rate" api:"required"`
+	FrameRate float64 `json:"frame_rate" api:"required"`
 	// Video quality of participants
 	Quality PresetGetPresetByIDResponseDataConfigMediaVideoQuality `json:"quality" api:"required"`
-	JSON    presetGetPresetByIDResponseDataConfigMediaVideoJSON    `json:"-"`
+	// Enable simulcast for participant videos.
+	Simulcast bool                                                `json:"simulcast"`
+	JSON      presetGetPresetByIDResponseDataConfigMediaVideoJSON `json:"-"`
 }
 
 // presetGetPresetByIDResponseDataConfigMediaVideoJSON contains the JSON metadata
@@ -3237,6 +3325,7 @@ type PresetGetPresetByIDResponseDataConfigMediaVideo struct {
 type presetGetPresetByIDResponseDataConfigMediaVideoJSON struct {
 	FrameRate   apijson.Field
 	Quality     apijson.Field
+	Simulcast   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3256,11 +3345,13 @@ const (
 	PresetGetPresetByIDResponseDataConfigMediaVideoQualityHD   PresetGetPresetByIDResponseDataConfigMediaVideoQuality = "hd"
 	PresetGetPresetByIDResponseDataConfigMediaVideoQualityVga  PresetGetPresetByIDResponseDataConfigMediaVideoQuality = "vga"
 	PresetGetPresetByIDResponseDataConfigMediaVideoQualityQvga PresetGetPresetByIDResponseDataConfigMediaVideoQuality = "qvga"
+	PresetGetPresetByIDResponseDataConfigMediaVideoQualityFhd  PresetGetPresetByIDResponseDataConfigMediaVideoQuality = "fhd"
+	PresetGetPresetByIDResponseDataConfigMediaVideoQualityUhd  PresetGetPresetByIDResponseDataConfigMediaVideoQuality = "uhd"
 )
 
 func (r PresetGetPresetByIDResponseDataConfigMediaVideoQuality) IsKnown() bool {
 	switch r {
-	case PresetGetPresetByIDResponseDataConfigMediaVideoQualityHD, PresetGetPresetByIDResponseDataConfigMediaVideoQualityVga, PresetGetPresetByIDResponseDataConfigMediaVideoQualityQvga:
+	case PresetGetPresetByIDResponseDataConfigMediaVideoQualityHD, PresetGetPresetByIDResponseDataConfigMediaVideoQualityVga, PresetGetPresetByIDResponseDataConfigMediaVideoQualityQvga, PresetGetPresetByIDResponseDataConfigMediaVideoQualityFhd, PresetGetPresetByIDResponseDataConfigMediaVideoQualityUhd:
 		return true
 	}
 	return false
@@ -3296,205 +3387,15 @@ func (r presetGetPresetByIDResponseDataConfigMediaAudioJSON) RawJSON() string {
 type PresetGetPresetByIDResponseDataConfigViewType string
 
 const (
-	PresetGetPresetByIDResponseDataConfigViewTypeGroupCall PresetGetPresetByIDResponseDataConfigViewType = "GROUP_CALL"
-	PresetGetPresetByIDResponseDataConfigViewTypeWebinar   PresetGetPresetByIDResponseDataConfigViewType = "WEBINAR"
-	PresetGetPresetByIDResponseDataConfigViewTypeAudioRoom PresetGetPresetByIDResponseDataConfigViewType = "AUDIO_ROOM"
+	PresetGetPresetByIDResponseDataConfigViewTypeGroupCall  PresetGetPresetByIDResponseDataConfigViewType = "GROUP_CALL"
+	PresetGetPresetByIDResponseDataConfigViewTypeWebinar    PresetGetPresetByIDResponseDataConfigViewType = "WEBINAR"
+	PresetGetPresetByIDResponseDataConfigViewTypeAudioRoom  PresetGetPresetByIDResponseDataConfigViewType = "AUDIO_ROOM"
+	PresetGetPresetByIDResponseDataConfigViewTypeLivestream PresetGetPresetByIDResponseDataConfigViewType = "LIVESTREAM"
 )
 
 func (r PresetGetPresetByIDResponseDataConfigViewType) IsKnown() bool {
 	switch r {
-	case PresetGetPresetByIDResponseDataConfigViewTypeGroupCall, PresetGetPresetByIDResponseDataConfigViewTypeWebinar, PresetGetPresetByIDResponseDataConfigViewTypeAudioRoom:
-		return true
-	}
-	return false
-}
-
-type PresetGetPresetByIDResponseDataUI struct {
-	DesignTokens PresetGetPresetByIDResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
-	ConfigDiff   interface{}                                   `json:"config_diff"`
-	JSON         presetGetPresetByIDResponseDataUIJSON         `json:"-"`
-}
-
-// presetGetPresetByIDResponseDataUIJSON contains the JSON metadata for the struct
-// [PresetGetPresetByIDResponseDataUI]
-type presetGetPresetByIDResponseDataUIJSON struct {
-	DesignTokens apijson.Field
-	ConfigDiff   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *PresetGetPresetByIDResponseDataUI) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetGetPresetByIDResponseDataUIJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetGetPresetByIDResponseDataUIDesignTokens struct {
-	BorderRadius PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
-	BorderWidth  PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
-	Colors       PresetGetPresetByIDResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
-	Logo         string                                                    `json:"logo" api:"required"`
-	SpacingBase  float64                                                   `json:"spacing_base" api:"required"`
-	Theme        PresetGetPresetByIDResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
-	JSON         presetGetPresetByIDResponseDataUIDesignTokensJSON         `json:"-"`
-}
-
-// presetGetPresetByIDResponseDataUIDesignTokensJSON contains the JSON metadata for
-// the struct [PresetGetPresetByIDResponseDataUIDesignTokens]
-type presetGetPresetByIDResponseDataUIDesignTokensJSON struct {
-	BorderRadius apijson.Field
-	BorderWidth  apijson.Field
-	Colors       apijson.Field
-	Logo         apijson.Field
-	SpacingBase  apijson.Field
-	Theme        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *PresetGetPresetByIDResponseDataUIDesignTokens) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetGetPresetByIDResponseDataUIDesignTokensJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius string
-
-const (
-	PresetGetPresetByIDResponseDataUIDesignTokensBorderRadiusRounded PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius = "rounded"
-)
-
-func (r PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius) IsKnown() bool {
-	switch r {
-	case PresetGetPresetByIDResponseDataUIDesignTokensBorderRadiusRounded:
-		return true
-	}
-	return false
-}
-
-type PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth string
-
-const (
-	PresetGetPresetByIDResponseDataUIDesignTokensBorderWidthThin PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth = "thin"
-)
-
-func (r PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
-	switch r {
-	case PresetGetPresetByIDResponseDataUIDesignTokensBorderWidthThin:
-		return true
-	}
-	return false
-}
-
-type PresetGetPresetByIDResponseDataUIDesignTokensColors struct {
-	Background  PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
-	Brand       PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
-	Danger      string                                                        `json:"danger" api:"required"`
-	Success     string                                                        `json:"success" api:"required"`
-	Text        string                                                        `json:"text" api:"required"`
-	TextOnBrand string                                                        `json:"text_on_brand" api:"required"`
-	VideoBg     string                                                        `json:"video_bg" api:"required"`
-	Warning     string                                                        `json:"warning" api:"required"`
-	JSON        presetGetPresetByIDResponseDataUIDesignTokensColorsJSON       `json:"-"`
-}
-
-// presetGetPresetByIDResponseDataUIDesignTokensColorsJSON contains the JSON
-// metadata for the struct [PresetGetPresetByIDResponseDataUIDesignTokensColors]
-type presetGetPresetByIDResponseDataUIDesignTokensColorsJSON struct {
-	Background  apijson.Field
-	Brand       apijson.Field
-	Danger      apijson.Field
-	Success     apijson.Field
-	Text        apijson.Field
-	TextOnBrand apijson.Field
-	VideoBg     apijson.Field
-	Warning     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetGetPresetByIDResponseDataUIDesignTokensColors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetGetPresetByIDResponseDataUIDesignTokensColorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground struct {
-	Number1000 string                                                            `json:"1000" api:"required"`
-	Number600  string                                                            `json:"600" api:"required"`
-	Number700  string                                                            `json:"700" api:"required"`
-	Number800  string                                                            `json:"800" api:"required"`
-	Number900  string                                                            `json:"900" api:"required"`
-	JSON       presetGetPresetByIDResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
-}
-
-// presetGetPresetByIDResponseDataUIDesignTokensColorsBackgroundJSON contains the
-// JSON metadata for the struct
-// [PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground]
-type presetGetPresetByIDResponseDataUIDesignTokensColorsBackgroundJSON struct {
-	Number1000  apijson.Field
-	Number600   apijson.Field
-	Number700   apijson.Field
-	Number800   apijson.Field
-	Number900   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetGetPresetByIDResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand struct {
-	Number300 string                                                       `json:"300" api:"required"`
-	Number400 string                                                       `json:"400" api:"required"`
-	Number500 string                                                       `json:"500" api:"required"`
-	Number600 string                                                       `json:"600" api:"required"`
-	Number700 string                                                       `json:"700" api:"required"`
-	JSON      presetGetPresetByIDResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
-}
-
-// presetGetPresetByIDResponseDataUIDesignTokensColorsBrandJSON contains the JSON
-// metadata for the struct
-// [PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand]
-type presetGetPresetByIDResponseDataUIDesignTokensColorsBrandJSON struct {
-	Number300   apijson.Field
-	Number400   apijson.Field
-	Number500   apijson.Field
-	Number600   apijson.Field
-	Number700   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r presetGetPresetByIDResponseDataUIDesignTokensColorsBrandJSON) RawJSON() string {
-	return r.raw
-}
-
-type PresetGetPresetByIDResponseDataUIDesignTokensTheme string
-
-const (
-	PresetGetPresetByIDResponseDataUIDesignTokensThemeDark PresetGetPresetByIDResponseDataUIDesignTokensTheme = "dark"
-)
-
-func (r PresetGetPresetByIDResponseDataUIDesignTokensTheme) IsKnown() bool {
-	switch r {
-	case PresetGetPresetByIDResponseDataUIDesignTokensThemeDark:
+	case PresetGetPresetByIDResponseDataConfigViewTypeGroupCall, PresetGetPresetByIDResponseDataConfigViewTypeWebinar, PresetGetPresetByIDResponseDataConfigViewTypeAudioRoom, PresetGetPresetByIDResponseDataConfigViewTypeLivestream:
 		return true
 	}
 	return false
@@ -3502,14 +3403,13 @@ func (r PresetGetPresetByIDResponseDataUIDesignTokensTheme) IsKnown() bool {
 
 type PresetGetPresetByIDResponseDataPermissions struct {
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           bool `json:"accept_waiting_requests" api:"required"`
-	CanAcceptProductionRequests     bool `json:"can_accept_production_requests" api:"required"`
-	CanChangeParticipantPermissions bool `json:"can_change_participant_permissions" api:"required"`
-	CanEditDisplayName              bool `json:"can_edit_display_name" api:"required"`
-	CanLivestream                   bool `json:"can_livestream" api:"required"`
-	CanRecord                       bool `json:"can_record" api:"required"`
-	CanSpotlight                    bool `json:"can_spotlight" api:"required"`
-	// Chat permissions
+	AcceptWaitingRequests           bool                                                        `json:"accept_waiting_requests" api:"required"`
+	CanAcceptProductionRequests     bool                                                        `json:"can_accept_production_requests" api:"required"`
+	CanChangeParticipantPermissions bool                                                        `json:"can_change_participant_permissions" api:"required"`
+	CanEditDisplayName              bool                                                        `json:"can_edit_display_name" api:"required"`
+	CanLivestream                   bool                                                        `json:"can_livestream" api:"required"`
+	CanRecord                       bool                                                        `json:"can_record" api:"required"`
+	CanSpotlight                    bool                                                        `json:"can_spotlight" api:"required"`
 	Chat                            PresetGetPresetByIDResponseDataPermissionsChat              `json:"chat" api:"required"`
 	ConnectedMeetings               PresetGetPresetByIDResponseDataPermissionsConnectedMeetings `json:"connected_meetings" api:"required"`
 	DisableParticipantAudio         bool                                                        `json:"disable_participant_audio" api:"required"`
@@ -3529,9 +3429,13 @@ type PresetGetPresetByIDResponseDataPermissions struct {
 	RecorderType        PresetGetPresetByIDResponseDataPermissionsRecorderType `json:"recorder_type" api:"required"`
 	ShowParticipantList bool                                                   `json:"show_participant_list" api:"required"`
 	// Waiting room type
-	WaitingRoomType PresetGetPresetByIDResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
-	IsRecorder      bool                                                      `json:"is_recorder"`
-	JSON            presetGetPresetByIDResponseDataPermissionsJSON            `json:"-"`
+	WaitingRoomType      PresetGetPresetByIDResponseDataPermissionsWaitingRoomType `json:"waiting_room_type" api:"required"`
+	AcceptStageRequests  bool                                                      `json:"accept_stage_requests"`
+	IsRecorder           bool                                                      `json:"is_recorder"`
+	StageAccess          PresetGetPresetByIDResponseDataPermissionsStageAccess     `json:"stage_access"`
+	StageEnabled         bool                                                      `json:"stage_enabled"`
+	TranscriptionEnabled bool                                                      `json:"transcription_enabled"`
+	JSON                 presetGetPresetByIDResponseDataPermissionsJSON            `json:"-"`
 }
 
 // presetGetPresetByIDResponseDataPermissionsJSON contains the JSON metadata for
@@ -3558,7 +3462,11 @@ type presetGetPresetByIDResponseDataPermissionsJSON struct {
 	RecorderType                    apijson.Field
 	ShowParticipantList             apijson.Field
 	WaitingRoomType                 apijson.Field
+	AcceptStageRequests             apijson.Field
 	IsRecorder                      apijson.Field
+	StageAccess                     apijson.Field
+	StageEnabled                    apijson.Field
+	TranscriptionEnabled            apijson.Field
 	raw                             string
 	ExtraFields                     map[string]apijson.Field
 }
@@ -3571,7 +3479,6 @@ func (r presetGetPresetByIDResponseDataPermissionsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Chat permissions
 type PresetGetPresetByIDResponseDataPermissionsChat struct {
 	Private PresetGetPresetByIDResponseDataPermissionsChatPrivate `json:"private" api:"required"`
 	Public  PresetGetPresetByIDResponseDataPermissionsChatPublic  `json:"public" api:"required"`
@@ -3833,9 +3740,10 @@ type PresetGetPresetByIDResponseDataPermissionsPlugins struct {
 	// Can edit plugin config
 	CanEditConfig bool `json:"can_edit_config" api:"required"`
 	// Can start plugins
-	CanStart bool                                                         `json:"can_start" api:"required"`
-	Config   PresetGetPresetByIDResponseDataPermissionsPluginsConfigUnion `json:"config" api:"required" format:"uuid"`
-	JSON     presetGetPresetByIDResponseDataPermissionsPluginsJSON        `json:"-"`
+	CanStart bool `json:"can_start" api:"required"`
+	// Plugin configuration keyed by plugin UUID.
+	Config map[string]PresetGetPresetByIDResponseDataPermissionsPluginsConfig `json:"config" api:"required"`
+	JSON   presetGetPresetByIDResponseDataPermissionsPluginsJSON              `json:"-"`
 }
 
 // presetGetPresetByIDResponseDataPermissionsPluginsJSON contains the JSON metadata
@@ -3857,64 +3765,41 @@ func (r presetGetPresetByIDResponseDataPermissionsPluginsJSON) RawJSON() string 
 	return r.raw
 }
 
-// Union satisfied by [shared.UnionString] or
-// [PresetGetPresetByIDResponseDataPermissionsPluginsConfigObject].
-type PresetGetPresetByIDResponseDataPermissionsPluginsConfigUnion interface {
-	ImplementsPresetGetPresetByIDResponseDataPermissionsPluginsConfigUnion()
+type PresetGetPresetByIDResponseDataPermissionsPluginsConfig struct {
+	AccessControl   PresetGetPresetByIDResponseDataPermissionsPluginsConfigAccessControl `json:"access_control"`
+	HandlesViewOnly bool                                                                 `json:"handles_view_only"`
+	ExtraFields     map[string]interface{}                                               `json:"-" api:"extrafields"`
+	JSON            presetGetPresetByIDResponseDataPermissionsPluginsConfigJSON          `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PresetGetPresetByIDResponseDataPermissionsPluginsConfigUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PresetGetPresetByIDResponseDataPermissionsPluginsConfigObject{}),
-		},
-	)
-}
-
-type PresetGetPresetByIDResponseDataPermissionsPluginsConfigObject struct {
-	AccessControl   PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControl `json:"access_control" api:"required"`
-	HandlesViewOnly bool                                                                       `json:"handles_view_only" api:"required"`
-	JSON            presetGetPresetByIDResponseDataPermissionsPluginsConfigObjectJSON          `json:"-"`
-}
-
-// presetGetPresetByIDResponseDataPermissionsPluginsConfigObjectJSON contains the
-// JSON metadata for the struct
-// [PresetGetPresetByIDResponseDataPermissionsPluginsConfigObject]
-type presetGetPresetByIDResponseDataPermissionsPluginsConfigObjectJSON struct {
+// presetGetPresetByIDResponseDataPermissionsPluginsConfigJSON contains the JSON
+// metadata for the struct
+// [PresetGetPresetByIDResponseDataPermissionsPluginsConfig]
+type presetGetPresetByIDResponseDataPermissionsPluginsConfigJSON struct {
 	AccessControl   apijson.Field
 	HandlesViewOnly apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PresetGetPresetByIDResponseDataPermissionsPluginsConfigObject) UnmarshalJSON(data []byte) (err error) {
+func (r *PresetGetPresetByIDResponseDataPermissionsPluginsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r presetGetPresetByIDResponseDataPermissionsPluginsConfigObjectJSON) RawJSON() string {
+func (r presetGetPresetByIDResponseDataPermissionsPluginsConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PresetGetPresetByIDResponseDataPermissionsPluginsConfigObject) ImplementsPresetGetPresetByIDResponseDataPermissionsPluginsConfigUnion() {
-}
-
-type PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControl string
+type PresetGetPresetByIDResponseDataPermissionsPluginsConfigAccessControl string
 
 const (
-	PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControlFullAccess PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControl = "FULL_ACCESS"
-	PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControlViewOnly   PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControl = "VIEW_ONLY"
+	PresetGetPresetByIDResponseDataPermissionsPluginsConfigAccessControlFullAccess PresetGetPresetByIDResponseDataPermissionsPluginsConfigAccessControl = "FULL_ACCESS"
+	PresetGetPresetByIDResponseDataPermissionsPluginsConfigAccessControlViewOnly   PresetGetPresetByIDResponseDataPermissionsPluginsConfigAccessControl = "VIEW_ONLY"
 )
 
-func (r PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControl) IsKnown() bool {
+func (r PresetGetPresetByIDResponseDataPermissionsPluginsConfigAccessControl) IsKnown() bool {
 	switch r {
-	case PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControlFullAccess, PresetGetPresetByIDResponseDataPermissionsPluginsConfigObjectAccessControlViewOnly:
+	case PresetGetPresetByIDResponseDataPermissionsPluginsConfigAccessControlFullAccess, PresetGetPresetByIDResponseDataPermissionsPluginsConfigAccessControlViewOnly:
 		return true
 	}
 	return false
@@ -3983,14 +3868,230 @@ func (r PresetGetPresetByIDResponseDataPermissionsWaitingRoomType) IsKnown() boo
 	return false
 }
 
+type PresetGetPresetByIDResponseDataPermissionsStageAccess string
+
+const (
+	PresetGetPresetByIDResponseDataPermissionsStageAccessAllowed    PresetGetPresetByIDResponseDataPermissionsStageAccess = "ALLOWED"
+	PresetGetPresetByIDResponseDataPermissionsStageAccessNotAllowed PresetGetPresetByIDResponseDataPermissionsStageAccess = "NOT_ALLOWED"
+	PresetGetPresetByIDResponseDataPermissionsStageAccessCanRequest PresetGetPresetByIDResponseDataPermissionsStageAccess = "CAN_REQUEST"
+)
+
+func (r PresetGetPresetByIDResponseDataPermissionsStageAccess) IsKnown() bool {
+	switch r {
+	case PresetGetPresetByIDResponseDataPermissionsStageAccessAllowed, PresetGetPresetByIDResponseDataPermissionsStageAccessNotAllowed, PresetGetPresetByIDResponseDataPermissionsStageAccessCanRequest:
+		return true
+	}
+	return false
+}
+
+type PresetGetPresetByIDResponseDataUI struct {
+	DesignTokens PresetGetPresetByIDResponseDataUIDesignTokens `json:"design_tokens" api:"required"`
+	JSON         presetGetPresetByIDResponseDataUIJSON         `json:"-"`
+}
+
+// presetGetPresetByIDResponseDataUIJSON contains the JSON metadata for the struct
+// [PresetGetPresetByIDResponseDataUI]
+type presetGetPresetByIDResponseDataUIJSON struct {
+	DesignTokens apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *PresetGetPresetByIDResponseDataUI) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetGetPresetByIDResponseDataUIJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetGetPresetByIDResponseDataUIDesignTokens struct {
+	BorderRadius PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius `json:"border_radius" api:"required"`
+	BorderWidth  PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth  `json:"border_width" api:"required"`
+	Colors       PresetGetPresetByIDResponseDataUIDesignTokensColors       `json:"colors" api:"required"`
+	SpacingBase  float64                                                   `json:"spacing_base" api:"required"`
+	Theme        PresetGetPresetByIDResponseDataUIDesignTokensTheme        `json:"theme" api:"required"`
+	FontFamily   string                                                    `json:"font_family"`
+	GoogleFont   string                                                    `json:"google_font"`
+	Logo         string                                                    `json:"logo" format:"uri"`
+	JSON         presetGetPresetByIDResponseDataUIDesignTokensJSON         `json:"-"`
+}
+
+// presetGetPresetByIDResponseDataUIDesignTokensJSON contains the JSON metadata for
+// the struct [PresetGetPresetByIDResponseDataUIDesignTokens]
+type presetGetPresetByIDResponseDataUIDesignTokensJSON struct {
+	BorderRadius apijson.Field
+	BorderWidth  apijson.Field
+	Colors       apijson.Field
+	SpacingBase  apijson.Field
+	Theme        apijson.Field
+	FontFamily   apijson.Field
+	GoogleFont   apijson.Field
+	Logo         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *PresetGetPresetByIDResponseDataUIDesignTokens) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetGetPresetByIDResponseDataUIDesignTokensJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius string
+
+const (
+	PresetGetPresetByIDResponseDataUIDesignTokensBorderRadiusSharp        PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius = "sharp"
+	PresetGetPresetByIDResponseDataUIDesignTokensBorderRadiusRounded      PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius = "rounded"
+	PresetGetPresetByIDResponseDataUIDesignTokensBorderRadiusExtraRounded PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius = "extra-rounded"
+	PresetGetPresetByIDResponseDataUIDesignTokensBorderRadiusCircular     PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius = "circular"
+)
+
+func (r PresetGetPresetByIDResponseDataUIDesignTokensBorderRadius) IsKnown() bool {
+	switch r {
+	case PresetGetPresetByIDResponseDataUIDesignTokensBorderRadiusSharp, PresetGetPresetByIDResponseDataUIDesignTokensBorderRadiusRounded, PresetGetPresetByIDResponseDataUIDesignTokensBorderRadiusExtraRounded, PresetGetPresetByIDResponseDataUIDesignTokensBorderRadiusCircular:
+		return true
+	}
+	return false
+}
+
+type PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth string
+
+const (
+	PresetGetPresetByIDResponseDataUIDesignTokensBorderWidthNone PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth = "none"
+	PresetGetPresetByIDResponseDataUIDesignTokensBorderWidthThin PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth = "thin"
+	PresetGetPresetByIDResponseDataUIDesignTokensBorderWidthFat  PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth = "fat"
+)
+
+func (r PresetGetPresetByIDResponseDataUIDesignTokensBorderWidth) IsKnown() bool {
+	switch r {
+	case PresetGetPresetByIDResponseDataUIDesignTokensBorderWidthNone, PresetGetPresetByIDResponseDataUIDesignTokensBorderWidthThin, PresetGetPresetByIDResponseDataUIDesignTokensBorderWidthFat:
+		return true
+	}
+	return false
+}
+
+type PresetGetPresetByIDResponseDataUIDesignTokensColors struct {
+	Background  PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground `json:"background" api:"required"`
+	Brand       PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand      `json:"brand" api:"required"`
+	Danger      string                                                        `json:"danger" api:"required"`
+	Success     string                                                        `json:"success" api:"required"`
+	Text        string                                                        `json:"text" api:"required"`
+	TextOnBrand string                                                        `json:"text_on_brand" api:"required"`
+	VideoBg     string                                                        `json:"video_bg" api:"required"`
+	Warning     string                                                        `json:"warning" api:"required"`
+	JSON        presetGetPresetByIDResponseDataUIDesignTokensColorsJSON       `json:"-"`
+}
+
+// presetGetPresetByIDResponseDataUIDesignTokensColorsJSON contains the JSON
+// metadata for the struct [PresetGetPresetByIDResponseDataUIDesignTokensColors]
+type presetGetPresetByIDResponseDataUIDesignTokensColorsJSON struct {
+	Background  apijson.Field
+	Brand       apijson.Field
+	Danger      apijson.Field
+	Success     apijson.Field
+	Text        apijson.Field
+	TextOnBrand apijson.Field
+	VideoBg     apijson.Field
+	Warning     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetGetPresetByIDResponseDataUIDesignTokensColors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetGetPresetByIDResponseDataUIDesignTokensColorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground struct {
+	Number1000 string                                                            `json:"1000" api:"required"`
+	Number600  string                                                            `json:"600" api:"required"`
+	Number700  string                                                            `json:"700" api:"required"`
+	Number800  string                                                            `json:"800" api:"required"`
+	Number900  string                                                            `json:"900" api:"required"`
+	JSON       presetGetPresetByIDResponseDataUIDesignTokensColorsBackgroundJSON `json:"-"`
+}
+
+// presetGetPresetByIDResponseDataUIDesignTokensColorsBackgroundJSON contains the
+// JSON metadata for the struct
+// [PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground]
+type presetGetPresetByIDResponseDataUIDesignTokensColorsBackgroundJSON struct {
+	Number1000  apijson.Field
+	Number600   apijson.Field
+	Number700   apijson.Field
+	Number800   apijson.Field
+	Number900   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetGetPresetByIDResponseDataUIDesignTokensColorsBackground) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetGetPresetByIDResponseDataUIDesignTokensColorsBackgroundJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand struct {
+	Number300 string                                                       `json:"300" api:"required"`
+	Number400 string                                                       `json:"400" api:"required"`
+	Number500 string                                                       `json:"500" api:"required"`
+	Number600 string                                                       `json:"600" api:"required"`
+	Number700 string                                                       `json:"700" api:"required"`
+	JSON      presetGetPresetByIDResponseDataUIDesignTokensColorsBrandJSON `json:"-"`
+}
+
+// presetGetPresetByIDResponseDataUIDesignTokensColorsBrandJSON contains the JSON
+// metadata for the struct
+// [PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand]
+type presetGetPresetByIDResponseDataUIDesignTokensColorsBrandJSON struct {
+	Number300   apijson.Field
+	Number400   apijson.Field
+	Number500   apijson.Field
+	Number600   apijson.Field
+	Number700   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PresetGetPresetByIDResponseDataUIDesignTokensColorsBrand) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r presetGetPresetByIDResponseDataUIDesignTokensColorsBrandJSON) RawJSON() string {
+	return r.raw
+}
+
+type PresetGetPresetByIDResponseDataUIDesignTokensTheme string
+
+const (
+	PresetGetPresetByIDResponseDataUIDesignTokensThemeDarkest PresetGetPresetByIDResponseDataUIDesignTokensTheme = "darkest"
+	PresetGetPresetByIDResponseDataUIDesignTokensThemeDark    PresetGetPresetByIDResponseDataUIDesignTokensTheme = "dark"
+	PresetGetPresetByIDResponseDataUIDesignTokensThemeLight   PresetGetPresetByIDResponseDataUIDesignTokensTheme = "light"
+)
+
+func (r PresetGetPresetByIDResponseDataUIDesignTokensTheme) IsKnown() bool {
+	switch r {
+	case PresetGetPresetByIDResponseDataUIDesignTokensThemeDarkest, PresetGetPresetByIDResponseDataUIDesignTokensThemeDark, PresetGetPresetByIDResponseDataUIDesignTokensThemeLight:
+		return true
+	}
+	return false
+}
+
 type PresetNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string]                `path:"account_id" api:"required"`
 	Config    param.Field[PresetNewParamsConfig] `json:"config" api:"required"`
 	// Name of the preset
 	Name        param.Field[string]                     `json:"name" api:"required"`
+	Permissions param.Field[PresetNewParamsPermissions] `json:"permissions" api:"required"`
 	UI          param.Field[PresetNewParamsUI]          `json:"ui" api:"required"`
-	Permissions param.Field[PresetNewParamsPermissions] `json:"permissions"`
 }
 
 func (r PresetNewParams) MarshalJSON() (data []byte, err error) {
@@ -3999,13 +4100,15 @@ func (r PresetNewParams) MarshalJSON() (data []byte, err error) {
 
 type PresetNewParamsConfig struct {
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount param.Field[int64] `json:"max_screenshare_count" api:"required"`
+	MaxScreenshareCount param.Field[float64] `json:"max_screenshare_count" api:"required"`
 	// Maximum number of streams that are visible on a device
 	MaxVideoStreams param.Field[PresetNewParamsConfigMaxVideoStreams] `json:"max_video_streams" api:"required"`
 	// Media configuration options. eg: Video quality
 	Media param.Field[PresetNewParamsConfigMedia] `json:"media" api:"required"`
 	// Type of the meeting
 	ViewType param.Field[PresetNewParamsConfigViewType] `json:"view_type" api:"required"`
+	// Livestream viewer quality levels.
+	LivestreamViewerQualities param.Field[[]int64] `json:"livestream_viewer_qualities"`
 }
 
 func (r PresetNewParamsConfig) MarshalJSON() (data []byte, err error) {
@@ -4015,9 +4118,9 @@ func (r PresetNewParamsConfig) MarshalJSON() (data []byte, err error) {
 // Maximum number of streams that are visible on a device
 type PresetNewParamsConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop param.Field[int64] `json:"desktop" api:"required"`
+	Desktop param.Field[float64] `json:"desktop" api:"required"`
 	// Maximum number of streams visible on mobile devices
-	Mobile param.Field[int64] `json:"mobile" api:"required"`
+	Mobile param.Field[float64] `json:"mobile" api:"required"`
 }
 
 func (r PresetNewParamsConfigMaxVideoStreams) MarshalJSON() (data []byte, err error) {
@@ -4041,7 +4144,7 @@ func (r PresetNewParamsConfigMedia) MarshalJSON() (data []byte, err error) {
 // Configuration options for participant screen shares
 type PresetNewParamsConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate param.Field[int64] `json:"frame_rate" api:"required"`
+	FrameRate param.Field[float64] `json:"frame_rate" api:"required"`
 	// Quality of screen share
 	Quality param.Field[PresetNewParamsConfigMediaScreenshareQuality] `json:"quality" api:"required"`
 }
@@ -4057,11 +4160,13 @@ const (
 	PresetNewParamsConfigMediaScreenshareQualityHD   PresetNewParamsConfigMediaScreenshareQuality = "hd"
 	PresetNewParamsConfigMediaScreenshareQualityVga  PresetNewParamsConfigMediaScreenshareQuality = "vga"
 	PresetNewParamsConfigMediaScreenshareQualityQvga PresetNewParamsConfigMediaScreenshareQuality = "qvga"
+	PresetNewParamsConfigMediaScreenshareQualityFhd  PresetNewParamsConfigMediaScreenshareQuality = "fhd"
+	PresetNewParamsConfigMediaScreenshareQualityUhd  PresetNewParamsConfigMediaScreenshareQuality = "uhd"
 )
 
 func (r PresetNewParamsConfigMediaScreenshareQuality) IsKnown() bool {
 	switch r {
-	case PresetNewParamsConfigMediaScreenshareQualityHD, PresetNewParamsConfigMediaScreenshareQualityVga, PresetNewParamsConfigMediaScreenshareQualityQvga:
+	case PresetNewParamsConfigMediaScreenshareQualityHD, PresetNewParamsConfigMediaScreenshareQualityVga, PresetNewParamsConfigMediaScreenshareQualityQvga, PresetNewParamsConfigMediaScreenshareQualityFhd, PresetNewParamsConfigMediaScreenshareQualityUhd:
 		return true
 	}
 	return false
@@ -4070,9 +4175,11 @@ func (r PresetNewParamsConfigMediaScreenshareQuality) IsKnown() bool {
 // Configuration options for participant videos
 type PresetNewParamsConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate param.Field[int64] `json:"frame_rate" api:"required"`
+	FrameRate param.Field[float64] `json:"frame_rate" api:"required"`
 	// Video quality of participants
 	Quality param.Field[PresetNewParamsConfigMediaVideoQuality] `json:"quality" api:"required"`
+	// Enable simulcast for participant videos.
+	Simulcast param.Field[bool] `json:"simulcast"`
 }
 
 func (r PresetNewParamsConfigMediaVideo) MarshalJSON() (data []byte, err error) {
@@ -4086,11 +4193,13 @@ const (
 	PresetNewParamsConfigMediaVideoQualityHD   PresetNewParamsConfigMediaVideoQuality = "hd"
 	PresetNewParamsConfigMediaVideoQualityVga  PresetNewParamsConfigMediaVideoQuality = "vga"
 	PresetNewParamsConfigMediaVideoQualityQvga PresetNewParamsConfigMediaVideoQuality = "qvga"
+	PresetNewParamsConfigMediaVideoQualityFhd  PresetNewParamsConfigMediaVideoQuality = "fhd"
+	PresetNewParamsConfigMediaVideoQualityUhd  PresetNewParamsConfigMediaVideoQuality = "uhd"
 )
 
 func (r PresetNewParamsConfigMediaVideoQuality) IsKnown() bool {
 	switch r {
-	case PresetNewParamsConfigMediaVideoQualityHD, PresetNewParamsConfigMediaVideoQualityVga, PresetNewParamsConfigMediaVideoQualityQvga:
+	case PresetNewParamsConfigMediaVideoQualityHD, PresetNewParamsConfigMediaVideoQualityVga, PresetNewParamsConfigMediaVideoQualityQvga, PresetNewParamsConfigMediaVideoQualityFhd, PresetNewParamsConfigMediaVideoQualityUhd:
 		return true
 	}
 	return false
@@ -4112,117 +4221,15 @@ func (r PresetNewParamsConfigMediaAudio) MarshalJSON() (data []byte, err error) 
 type PresetNewParamsConfigViewType string
 
 const (
-	PresetNewParamsConfigViewTypeGroupCall PresetNewParamsConfigViewType = "GROUP_CALL"
-	PresetNewParamsConfigViewTypeWebinar   PresetNewParamsConfigViewType = "WEBINAR"
-	PresetNewParamsConfigViewTypeAudioRoom PresetNewParamsConfigViewType = "AUDIO_ROOM"
+	PresetNewParamsConfigViewTypeGroupCall  PresetNewParamsConfigViewType = "GROUP_CALL"
+	PresetNewParamsConfigViewTypeWebinar    PresetNewParamsConfigViewType = "WEBINAR"
+	PresetNewParamsConfigViewTypeAudioRoom  PresetNewParamsConfigViewType = "AUDIO_ROOM"
+	PresetNewParamsConfigViewTypeLivestream PresetNewParamsConfigViewType = "LIVESTREAM"
 )
 
 func (r PresetNewParamsConfigViewType) IsKnown() bool {
 	switch r {
-	case PresetNewParamsConfigViewTypeGroupCall, PresetNewParamsConfigViewTypeWebinar, PresetNewParamsConfigViewTypeAudioRoom:
-		return true
-	}
-	return false
-}
-
-type PresetNewParamsUI struct {
-	DesignTokens param.Field[PresetNewParamsUIDesignTokens] `json:"design_tokens" api:"required"`
-	ConfigDiff   param.Field[interface{}]                   `json:"config_diff"`
-}
-
-func (r PresetNewParamsUI) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type PresetNewParamsUIDesignTokens struct {
-	BorderRadius param.Field[PresetNewParamsUIDesignTokensBorderRadius] `json:"border_radius" api:"required"`
-	BorderWidth  param.Field[PresetNewParamsUIDesignTokensBorderWidth]  `json:"border_width" api:"required"`
-	Colors       param.Field[PresetNewParamsUIDesignTokensColors]       `json:"colors" api:"required"`
-	Logo         param.Field[string]                                    `json:"logo" api:"required"`
-	SpacingBase  param.Field[float64]                                   `json:"spacing_base" api:"required"`
-	Theme        param.Field[PresetNewParamsUIDesignTokensTheme]        `json:"theme" api:"required"`
-}
-
-func (r PresetNewParamsUIDesignTokens) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type PresetNewParamsUIDesignTokensBorderRadius string
-
-const (
-	PresetNewParamsUIDesignTokensBorderRadiusRounded PresetNewParamsUIDesignTokensBorderRadius = "rounded"
-)
-
-func (r PresetNewParamsUIDesignTokensBorderRadius) IsKnown() bool {
-	switch r {
-	case PresetNewParamsUIDesignTokensBorderRadiusRounded:
-		return true
-	}
-	return false
-}
-
-type PresetNewParamsUIDesignTokensBorderWidth string
-
-const (
-	PresetNewParamsUIDesignTokensBorderWidthThin PresetNewParamsUIDesignTokensBorderWidth = "thin"
-)
-
-func (r PresetNewParamsUIDesignTokensBorderWidth) IsKnown() bool {
-	switch r {
-	case PresetNewParamsUIDesignTokensBorderWidthThin:
-		return true
-	}
-	return false
-}
-
-type PresetNewParamsUIDesignTokensColors struct {
-	Background  param.Field[PresetNewParamsUIDesignTokensColorsBackground] `json:"background" api:"required"`
-	Brand       param.Field[PresetNewParamsUIDesignTokensColorsBrand]      `json:"brand" api:"required"`
-	Danger      param.Field[string]                                        `json:"danger" api:"required"`
-	Success     param.Field[string]                                        `json:"success" api:"required"`
-	Text        param.Field[string]                                        `json:"text" api:"required"`
-	TextOnBrand param.Field[string]                                        `json:"text_on_brand" api:"required"`
-	VideoBg     param.Field[string]                                        `json:"video_bg" api:"required"`
-	Warning     param.Field[string]                                        `json:"warning" api:"required"`
-}
-
-func (r PresetNewParamsUIDesignTokensColors) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type PresetNewParamsUIDesignTokensColorsBackground struct {
-	Number1000 param.Field[string] `json:"1000" api:"required"`
-	Number600  param.Field[string] `json:"600" api:"required"`
-	Number700  param.Field[string] `json:"700" api:"required"`
-	Number800  param.Field[string] `json:"800" api:"required"`
-	Number900  param.Field[string] `json:"900" api:"required"`
-}
-
-func (r PresetNewParamsUIDesignTokensColorsBackground) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type PresetNewParamsUIDesignTokensColorsBrand struct {
-	Number300 param.Field[string] `json:"300" api:"required"`
-	Number400 param.Field[string] `json:"400" api:"required"`
-	Number500 param.Field[string] `json:"500" api:"required"`
-	Number600 param.Field[string] `json:"600" api:"required"`
-	Number700 param.Field[string] `json:"700" api:"required"`
-}
-
-func (r PresetNewParamsUIDesignTokensColorsBrand) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type PresetNewParamsUIDesignTokensTheme string
-
-const (
-	PresetNewParamsUIDesignTokensThemeDark PresetNewParamsUIDesignTokensTheme = "dark"
-)
-
-func (r PresetNewParamsUIDesignTokensTheme) IsKnown() bool {
-	switch r {
-	case PresetNewParamsUIDesignTokensThemeDark:
+	case PresetNewParamsConfigViewTypeGroupCall, PresetNewParamsConfigViewTypeWebinar, PresetNewParamsConfigViewTypeAudioRoom, PresetNewParamsConfigViewTypeLivestream:
 		return true
 	}
 	return false
@@ -4230,14 +4237,13 @@ func (r PresetNewParamsUIDesignTokensTheme) IsKnown() bool {
 
 type PresetNewParamsPermissions struct {
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           param.Field[bool] `json:"accept_waiting_requests" api:"required"`
-	CanAcceptProductionRequests     param.Field[bool] `json:"can_accept_production_requests" api:"required"`
-	CanChangeParticipantPermissions param.Field[bool] `json:"can_change_participant_permissions" api:"required"`
-	CanEditDisplayName              param.Field[bool] `json:"can_edit_display_name" api:"required"`
-	CanLivestream                   param.Field[bool] `json:"can_livestream" api:"required"`
-	CanRecord                       param.Field[bool] `json:"can_record" api:"required"`
-	CanSpotlight                    param.Field[bool] `json:"can_spotlight" api:"required"`
-	// Chat permissions
+	AcceptWaitingRequests           param.Field[bool]                                        `json:"accept_waiting_requests" api:"required"`
+	CanAcceptProductionRequests     param.Field[bool]                                        `json:"can_accept_production_requests" api:"required"`
+	CanChangeParticipantPermissions param.Field[bool]                                        `json:"can_change_participant_permissions" api:"required"`
+	CanEditDisplayName              param.Field[bool]                                        `json:"can_edit_display_name" api:"required"`
+	CanLivestream                   param.Field[bool]                                        `json:"can_livestream" api:"required"`
+	CanRecord                       param.Field[bool]                                        `json:"can_record" api:"required"`
+	CanSpotlight                    param.Field[bool]                                        `json:"can_spotlight" api:"required"`
 	Chat                            param.Field[PresetNewParamsPermissionsChat]              `json:"chat" api:"required"`
 	ConnectedMeetings               param.Field[PresetNewParamsPermissionsConnectedMeetings] `json:"connected_meetings" api:"required"`
 	DisableParticipantAudio         param.Field[bool]                                        `json:"disable_participant_audio" api:"required"`
@@ -4257,15 +4263,18 @@ type PresetNewParamsPermissions struct {
 	RecorderType        param.Field[PresetNewParamsPermissionsRecorderType] `json:"recorder_type" api:"required"`
 	ShowParticipantList param.Field[bool]                                   `json:"show_participant_list" api:"required"`
 	// Waiting room type
-	WaitingRoomType param.Field[PresetNewParamsPermissionsWaitingRoomType] `json:"waiting_room_type" api:"required"`
-	IsRecorder      param.Field[bool]                                      `json:"is_recorder"`
+	WaitingRoomType      param.Field[PresetNewParamsPermissionsWaitingRoomType] `json:"waiting_room_type" api:"required"`
+	AcceptStageRequests  param.Field[bool]                                      `json:"accept_stage_requests"`
+	IsRecorder           param.Field[bool]                                      `json:"is_recorder"`
+	StageAccess          param.Field[PresetNewParamsPermissionsStageAccess]     `json:"stage_access"`
+	StageEnabled         param.Field[bool]                                      `json:"stage_enabled"`
+	TranscriptionEnabled param.Field[bool]                                      `json:"transcription_enabled"`
 }
 
 func (r PresetNewParamsPermissions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Chat permissions
 type PresetNewParamsPermissionsChat struct {
 	Private param.Field[PresetNewParamsPermissionsChatPrivate] `json:"private" api:"required"`
 	Public  param.Field[PresetNewParamsPermissionsChatPublic]  `json:"public" api:"required"`
@@ -4411,42 +4420,35 @@ type PresetNewParamsPermissionsPlugins struct {
 	// Can edit plugin config
 	CanEditConfig param.Field[bool] `json:"can_edit_config" api:"required"`
 	// Can start plugins
-	CanStart param.Field[bool]                                         `json:"can_start" api:"required"`
-	Config   param.Field[PresetNewParamsPermissionsPluginsConfigUnion] `json:"config" api:"required" format:"uuid"`
+	CanStart param.Field[bool] `json:"can_start" api:"required"`
+	// Plugin configuration keyed by plugin UUID.
+	Config param.Field[map[string]PresetNewParamsPermissionsPluginsConfig] `json:"config" api:"required"`
 }
 
 func (r PresetNewParamsPermissionsPlugins) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by [shared.UnionString],
-// [realtime_kit.PresetNewParamsPermissionsPluginsConfigObject].
-type PresetNewParamsPermissionsPluginsConfigUnion interface {
-	ImplementsPresetNewParamsPermissionsPluginsConfigUnion()
+type PresetNewParamsPermissionsPluginsConfig struct {
+	AccessControl   param.Field[PresetNewParamsPermissionsPluginsConfigAccessControl] `json:"access_control"`
+	HandlesViewOnly param.Field[bool]                                                 `json:"handles_view_only"`
+	ExtraFields     map[string]interface{}                                            `json:"-,extras"`
 }
 
-type PresetNewParamsPermissionsPluginsConfigObject struct {
-	AccessControl   param.Field[PresetNewParamsPermissionsPluginsConfigObjectAccessControl] `json:"access_control" api:"required"`
-	HandlesViewOnly param.Field[bool]                                                       `json:"handles_view_only" api:"required"`
-}
-
-func (r PresetNewParamsPermissionsPluginsConfigObject) MarshalJSON() (data []byte, err error) {
+func (r PresetNewParamsPermissionsPluginsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PresetNewParamsPermissionsPluginsConfigObject) ImplementsPresetNewParamsPermissionsPluginsConfigUnion() {
-}
-
-type PresetNewParamsPermissionsPluginsConfigObjectAccessControl string
+type PresetNewParamsPermissionsPluginsConfigAccessControl string
 
 const (
-	PresetNewParamsPermissionsPluginsConfigObjectAccessControlFullAccess PresetNewParamsPermissionsPluginsConfigObjectAccessControl = "FULL_ACCESS"
-	PresetNewParamsPermissionsPluginsConfigObjectAccessControlViewOnly   PresetNewParamsPermissionsPluginsConfigObjectAccessControl = "VIEW_ONLY"
+	PresetNewParamsPermissionsPluginsConfigAccessControlFullAccess PresetNewParamsPermissionsPluginsConfigAccessControl = "FULL_ACCESS"
+	PresetNewParamsPermissionsPluginsConfigAccessControlViewOnly   PresetNewParamsPermissionsPluginsConfigAccessControl = "VIEW_ONLY"
 )
 
-func (r PresetNewParamsPermissionsPluginsConfigObjectAccessControl) IsKnown() bool {
+func (r PresetNewParamsPermissionsPluginsConfigAccessControl) IsKnown() bool {
 	switch r {
-	case PresetNewParamsPermissionsPluginsConfigObjectAccessControlFullAccess, PresetNewParamsPermissionsPluginsConfigObjectAccessControlViewOnly:
+	case PresetNewParamsPermissionsPluginsConfigAccessControlFullAccess, PresetNewParamsPermissionsPluginsConfigAccessControlViewOnly:
 		return true
 	}
 	return false
@@ -4500,6 +4502,133 @@ func (r PresetNewParamsPermissionsWaitingRoomType) IsKnown() bool {
 	return false
 }
 
+type PresetNewParamsPermissionsStageAccess string
+
+const (
+	PresetNewParamsPermissionsStageAccessAllowed    PresetNewParamsPermissionsStageAccess = "ALLOWED"
+	PresetNewParamsPermissionsStageAccessNotAllowed PresetNewParamsPermissionsStageAccess = "NOT_ALLOWED"
+	PresetNewParamsPermissionsStageAccessCanRequest PresetNewParamsPermissionsStageAccess = "CAN_REQUEST"
+)
+
+func (r PresetNewParamsPermissionsStageAccess) IsKnown() bool {
+	switch r {
+	case PresetNewParamsPermissionsStageAccessAllowed, PresetNewParamsPermissionsStageAccessNotAllowed, PresetNewParamsPermissionsStageAccessCanRequest:
+		return true
+	}
+	return false
+}
+
+type PresetNewParamsUI struct {
+	DesignTokens param.Field[PresetNewParamsUIDesignTokens] `json:"design_tokens" api:"required"`
+}
+
+func (r PresetNewParamsUI) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PresetNewParamsUIDesignTokens struct {
+	BorderRadius param.Field[PresetNewParamsUIDesignTokensBorderRadius] `json:"border_radius" api:"required"`
+	BorderWidth  param.Field[PresetNewParamsUIDesignTokensBorderWidth]  `json:"border_width" api:"required"`
+	Colors       param.Field[PresetNewParamsUIDesignTokensColors]       `json:"colors" api:"required"`
+	SpacingBase  param.Field[float64]                                   `json:"spacing_base" api:"required"`
+	Theme        param.Field[PresetNewParamsUIDesignTokensTheme]        `json:"theme" api:"required"`
+	FontFamily   param.Field[string]                                    `json:"font_family"`
+	GoogleFont   param.Field[string]                                    `json:"google_font"`
+	Logo         param.Field[string]                                    `json:"logo" format:"uri"`
+}
+
+func (r PresetNewParamsUIDesignTokens) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PresetNewParamsUIDesignTokensBorderRadius string
+
+const (
+	PresetNewParamsUIDesignTokensBorderRadiusSharp        PresetNewParamsUIDesignTokensBorderRadius = "sharp"
+	PresetNewParamsUIDesignTokensBorderRadiusRounded      PresetNewParamsUIDesignTokensBorderRadius = "rounded"
+	PresetNewParamsUIDesignTokensBorderRadiusExtraRounded PresetNewParamsUIDesignTokensBorderRadius = "extra-rounded"
+	PresetNewParamsUIDesignTokensBorderRadiusCircular     PresetNewParamsUIDesignTokensBorderRadius = "circular"
+)
+
+func (r PresetNewParamsUIDesignTokensBorderRadius) IsKnown() bool {
+	switch r {
+	case PresetNewParamsUIDesignTokensBorderRadiusSharp, PresetNewParamsUIDesignTokensBorderRadiusRounded, PresetNewParamsUIDesignTokensBorderRadiusExtraRounded, PresetNewParamsUIDesignTokensBorderRadiusCircular:
+		return true
+	}
+	return false
+}
+
+type PresetNewParamsUIDesignTokensBorderWidth string
+
+const (
+	PresetNewParamsUIDesignTokensBorderWidthNone PresetNewParamsUIDesignTokensBorderWidth = "none"
+	PresetNewParamsUIDesignTokensBorderWidthThin PresetNewParamsUIDesignTokensBorderWidth = "thin"
+	PresetNewParamsUIDesignTokensBorderWidthFat  PresetNewParamsUIDesignTokensBorderWidth = "fat"
+)
+
+func (r PresetNewParamsUIDesignTokensBorderWidth) IsKnown() bool {
+	switch r {
+	case PresetNewParamsUIDesignTokensBorderWidthNone, PresetNewParamsUIDesignTokensBorderWidthThin, PresetNewParamsUIDesignTokensBorderWidthFat:
+		return true
+	}
+	return false
+}
+
+type PresetNewParamsUIDesignTokensColors struct {
+	Background  param.Field[PresetNewParamsUIDesignTokensColorsBackground] `json:"background" api:"required"`
+	Brand       param.Field[PresetNewParamsUIDesignTokensColorsBrand]      `json:"brand" api:"required"`
+	Danger      param.Field[string]                                        `json:"danger" api:"required"`
+	Success     param.Field[string]                                        `json:"success" api:"required"`
+	Text        param.Field[string]                                        `json:"text" api:"required"`
+	TextOnBrand param.Field[string]                                        `json:"text_on_brand" api:"required"`
+	VideoBg     param.Field[string]                                        `json:"video_bg" api:"required"`
+	Warning     param.Field[string]                                        `json:"warning" api:"required"`
+}
+
+func (r PresetNewParamsUIDesignTokensColors) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PresetNewParamsUIDesignTokensColorsBackground struct {
+	Number1000 param.Field[string] `json:"1000" api:"required"`
+	Number600  param.Field[string] `json:"600" api:"required"`
+	Number700  param.Field[string] `json:"700" api:"required"`
+	Number800  param.Field[string] `json:"800" api:"required"`
+	Number900  param.Field[string] `json:"900" api:"required"`
+}
+
+func (r PresetNewParamsUIDesignTokensColorsBackground) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PresetNewParamsUIDesignTokensColorsBrand struct {
+	Number300 param.Field[string] `json:"300" api:"required"`
+	Number400 param.Field[string] `json:"400" api:"required"`
+	Number500 param.Field[string] `json:"500" api:"required"`
+	Number600 param.Field[string] `json:"600" api:"required"`
+	Number700 param.Field[string] `json:"700" api:"required"`
+}
+
+func (r PresetNewParamsUIDesignTokensColorsBrand) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PresetNewParamsUIDesignTokensTheme string
+
+const (
+	PresetNewParamsUIDesignTokensThemeDarkest PresetNewParamsUIDesignTokensTheme = "darkest"
+	PresetNewParamsUIDesignTokensThemeDark    PresetNewParamsUIDesignTokensTheme = "dark"
+	PresetNewParamsUIDesignTokensThemeLight   PresetNewParamsUIDesignTokensTheme = "light"
+)
+
+func (r PresetNewParamsUIDesignTokensTheme) IsKnown() bool {
+	switch r {
+	case PresetNewParamsUIDesignTokensThemeDarkest, PresetNewParamsUIDesignTokensThemeDark, PresetNewParamsUIDesignTokensThemeLight:
+		return true
+	}
+	return false
+}
+
 type PresetUpdateParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string]                   `path:"account_id" api:"required"`
@@ -4515,8 +4644,10 @@ func (r PresetUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PresetUpdateParamsConfig struct {
+	// Livestream viewer quality levels.
+	LivestreamViewerQualities param.Field[[]int64] `json:"livestream_viewer_qualities"`
 	// Maximum number of screen shares that can be active at a given time
-	MaxScreenshareCount param.Field[int64] `json:"max_screenshare_count"`
+	MaxScreenshareCount param.Field[float64] `json:"max_screenshare_count"`
 	// Maximum number of streams that are visible on a device
 	MaxVideoStreams param.Field[PresetUpdateParamsConfigMaxVideoStreams] `json:"max_video_streams"`
 	// Media configuration options. eg: Video quality
@@ -4532,9 +4663,9 @@ func (r PresetUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
 // Maximum number of streams that are visible on a device
 type PresetUpdateParamsConfigMaxVideoStreams struct {
 	// Maximum number of video streams visible on desktop devices
-	Desktop param.Field[int64] `json:"desktop"`
+	Desktop param.Field[float64] `json:"desktop"`
 	// Maximum number of streams visible on mobile devices
-	Mobile param.Field[int64] `json:"mobile"`
+	Mobile param.Field[float64] `json:"mobile"`
 }
 
 func (r PresetUpdateParamsConfigMaxVideoStreams) MarshalJSON() (data []byte, err error) {
@@ -4543,6 +4674,8 @@ func (r PresetUpdateParamsConfigMaxVideoStreams) MarshalJSON() (data []byte, err
 
 // Media configuration options. eg: Video quality
 type PresetUpdateParamsConfigMedia struct {
+	// Control options for Audio quality.
+	Audio param.Field[PresetUpdateParamsConfigMediaAudio] `json:"audio"`
 	// Configuration options for participant screen shares
 	Screenshare param.Field[PresetUpdateParamsConfigMediaScreenshare] `json:"screenshare"`
 	// Configuration options for participant videos
@@ -4553,10 +4686,22 @@ func (r PresetUpdateParamsConfigMedia) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Control options for Audio quality.
+type PresetUpdateParamsConfigMediaAudio struct {
+	// Enable High Quality Audio for your meetings
+	EnableHighBitrate param.Field[bool] `json:"enable_high_bitrate"`
+	// Enable Stereo for your meetings
+	EnableStereo param.Field[bool] `json:"enable_stereo"`
+}
+
+func (r PresetUpdateParamsConfigMediaAudio) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // Configuration options for participant screen shares
 type PresetUpdateParamsConfigMediaScreenshare struct {
 	// Frame rate of screen share
-	FrameRate param.Field[int64] `json:"frame_rate"`
+	FrameRate param.Field[float64] `json:"frame_rate"`
 	// Quality of screen share
 	Quality param.Field[PresetUpdateParamsConfigMediaScreenshareQuality] `json:"quality"`
 }
@@ -4572,11 +4717,13 @@ const (
 	PresetUpdateParamsConfigMediaScreenshareQualityHD   PresetUpdateParamsConfigMediaScreenshareQuality = "hd"
 	PresetUpdateParamsConfigMediaScreenshareQualityVga  PresetUpdateParamsConfigMediaScreenshareQuality = "vga"
 	PresetUpdateParamsConfigMediaScreenshareQualityQvga PresetUpdateParamsConfigMediaScreenshareQuality = "qvga"
+	PresetUpdateParamsConfigMediaScreenshareQualityFhd  PresetUpdateParamsConfigMediaScreenshareQuality = "fhd"
+	PresetUpdateParamsConfigMediaScreenshareQualityUhd  PresetUpdateParamsConfigMediaScreenshareQuality = "uhd"
 )
 
 func (r PresetUpdateParamsConfigMediaScreenshareQuality) IsKnown() bool {
 	switch r {
-	case PresetUpdateParamsConfigMediaScreenshareQualityHD, PresetUpdateParamsConfigMediaScreenshareQualityVga, PresetUpdateParamsConfigMediaScreenshareQualityQvga:
+	case PresetUpdateParamsConfigMediaScreenshareQualityHD, PresetUpdateParamsConfigMediaScreenshareQualityVga, PresetUpdateParamsConfigMediaScreenshareQualityQvga, PresetUpdateParamsConfigMediaScreenshareQualityFhd, PresetUpdateParamsConfigMediaScreenshareQualityUhd:
 		return true
 	}
 	return false
@@ -4585,9 +4732,11 @@ func (r PresetUpdateParamsConfigMediaScreenshareQuality) IsKnown() bool {
 // Configuration options for participant videos
 type PresetUpdateParamsConfigMediaVideo struct {
 	// Frame rate of participants' video
-	FrameRate param.Field[int64] `json:"frame_rate"`
+	FrameRate param.Field[float64] `json:"frame_rate"`
 	// Video quality of participants
 	Quality param.Field[PresetUpdateParamsConfigMediaVideoQuality] `json:"quality"`
+	// Enable simulcast for participant videos.
+	Simulcast param.Field[bool] `json:"simulcast"`
 }
 
 func (r PresetUpdateParamsConfigMediaVideo) MarshalJSON() (data []byte, err error) {
@@ -4601,11 +4750,13 @@ const (
 	PresetUpdateParamsConfigMediaVideoQualityHD   PresetUpdateParamsConfigMediaVideoQuality = "hd"
 	PresetUpdateParamsConfigMediaVideoQualityVga  PresetUpdateParamsConfigMediaVideoQuality = "vga"
 	PresetUpdateParamsConfigMediaVideoQualityQvga PresetUpdateParamsConfigMediaVideoQuality = "qvga"
+	PresetUpdateParamsConfigMediaVideoQualityFhd  PresetUpdateParamsConfigMediaVideoQuality = "fhd"
+	PresetUpdateParamsConfigMediaVideoQualityUhd  PresetUpdateParamsConfigMediaVideoQuality = "uhd"
 )
 
 func (r PresetUpdateParamsConfigMediaVideoQuality) IsKnown() bool {
 	switch r {
-	case PresetUpdateParamsConfigMediaVideoQualityHD, PresetUpdateParamsConfigMediaVideoQualityVga, PresetUpdateParamsConfigMediaVideoQualityQvga:
+	case PresetUpdateParamsConfigMediaVideoQualityHD, PresetUpdateParamsConfigMediaVideoQualityVga, PresetUpdateParamsConfigMediaVideoQualityQvga, PresetUpdateParamsConfigMediaVideoQualityFhd, PresetUpdateParamsConfigMediaVideoQualityUhd:
 		return true
 	}
 	return false
@@ -4615,29 +4766,30 @@ func (r PresetUpdateParamsConfigMediaVideoQuality) IsKnown() bool {
 type PresetUpdateParamsConfigViewType string
 
 const (
-	PresetUpdateParamsConfigViewTypeGroupCall PresetUpdateParamsConfigViewType = "GROUP_CALL"
-	PresetUpdateParamsConfigViewTypeWebinar   PresetUpdateParamsConfigViewType = "WEBINAR"
-	PresetUpdateParamsConfigViewTypeAudioRoom PresetUpdateParamsConfigViewType = "AUDIO_ROOM"
+	PresetUpdateParamsConfigViewTypeGroupCall  PresetUpdateParamsConfigViewType = "GROUP_CALL"
+	PresetUpdateParamsConfigViewTypeWebinar    PresetUpdateParamsConfigViewType = "WEBINAR"
+	PresetUpdateParamsConfigViewTypeAudioRoom  PresetUpdateParamsConfigViewType = "AUDIO_ROOM"
+	PresetUpdateParamsConfigViewTypeLivestream PresetUpdateParamsConfigViewType = "LIVESTREAM"
 )
 
 func (r PresetUpdateParamsConfigViewType) IsKnown() bool {
 	switch r {
-	case PresetUpdateParamsConfigViewTypeGroupCall, PresetUpdateParamsConfigViewTypeWebinar, PresetUpdateParamsConfigViewTypeAudioRoom:
+	case PresetUpdateParamsConfigViewTypeGroupCall, PresetUpdateParamsConfigViewTypeWebinar, PresetUpdateParamsConfigViewTypeAudioRoom, PresetUpdateParamsConfigViewTypeLivestream:
 		return true
 	}
 	return false
 }
 
 type PresetUpdateParamsPermissions struct {
+	AcceptStageRequests param.Field[bool] `json:"accept_stage_requests"`
 	// Whether this participant can accept waiting requests
-	AcceptWaitingRequests           param.Field[bool] `json:"accept_waiting_requests"`
-	CanAcceptProductionRequests     param.Field[bool] `json:"can_accept_production_requests"`
-	CanChangeParticipantPermissions param.Field[bool] `json:"can_change_participant_permissions"`
-	CanEditDisplayName              param.Field[bool] `json:"can_edit_display_name"`
-	CanLivestream                   param.Field[bool] `json:"can_livestream"`
-	CanRecord                       param.Field[bool] `json:"can_record"`
-	CanSpotlight                    param.Field[bool] `json:"can_spotlight"`
-	// Chat permissions
+	AcceptWaitingRequests           param.Field[bool]                                           `json:"accept_waiting_requests"`
+	CanAcceptProductionRequests     param.Field[bool]                                           `json:"can_accept_production_requests"`
+	CanChangeParticipantPermissions param.Field[bool]                                           `json:"can_change_participant_permissions"`
+	CanEditDisplayName              param.Field[bool]                                           `json:"can_edit_display_name"`
+	CanLivestream                   param.Field[bool]                                           `json:"can_livestream"`
+	CanRecord                       param.Field[bool]                                           `json:"can_record"`
+	CanSpotlight                    param.Field[bool]                                           `json:"can_spotlight"`
 	Chat                            param.Field[PresetUpdateParamsPermissionsChat]              `json:"chat"`
 	ConnectedMeetings               param.Field[PresetUpdateParamsPermissionsConnectedMeetings] `json:"connected_meetings"`
 	DisableParticipantAudio         param.Field[bool]                                           `json:"disable_participant_audio"`
@@ -4655,8 +4807,11 @@ type PresetUpdateParamsPermissions struct {
 	// Poll permissions
 	Polls param.Field[PresetUpdateParamsPermissionsPolls] `json:"polls"`
 	// Type of the recording peer
-	RecorderType        param.Field[PresetUpdateParamsPermissionsRecorderType] `json:"recorder_type"`
-	ShowParticipantList param.Field[bool]                                      `json:"show_participant_list"`
+	RecorderType         param.Field[PresetUpdateParamsPermissionsRecorderType] `json:"recorder_type"`
+	ShowParticipantList  param.Field[bool]                                      `json:"show_participant_list"`
+	StageAccess          param.Field[PresetUpdateParamsPermissionsStageAccess]  `json:"stage_access"`
+	StageEnabled         param.Field[bool]                                      `json:"stage_enabled"`
+	TranscriptionEnabled param.Field[bool]                                      `json:"transcription_enabled"`
 	// Waiting room type
 	WaitingRoomType param.Field[PresetUpdateParamsPermissionsWaitingRoomType] `json:"waiting_room_type"`
 }
@@ -4665,7 +4820,6 @@ func (r PresetUpdateParamsPermissions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Chat permissions
 type PresetUpdateParamsPermissionsChat struct {
 	Private param.Field[PresetUpdateParamsPermissionsChatPrivate] `json:"private"`
 	Public  param.Field[PresetUpdateParamsPermissionsChatPublic]  `json:"public"`
@@ -4811,42 +4965,35 @@ type PresetUpdateParamsPermissionsPlugins struct {
 	// Can edit plugin config
 	CanEditConfig param.Field[bool] `json:"can_edit_config"`
 	// Can start plugins
-	CanStart param.Field[bool]                                            `json:"can_start"`
-	Config   param.Field[PresetUpdateParamsPermissionsPluginsConfigUnion] `json:"config" format:"uuid"`
+	CanStart param.Field[bool] `json:"can_start"`
+	// Plugin configuration keyed by plugin UUID.
+	Config param.Field[map[string]PresetUpdateParamsPermissionsPluginsConfig] `json:"config"`
 }
 
 func (r PresetUpdateParamsPermissionsPlugins) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by [shared.UnionString],
-// [realtime_kit.PresetUpdateParamsPermissionsPluginsConfigObject].
-type PresetUpdateParamsPermissionsPluginsConfigUnion interface {
-	ImplementsPresetUpdateParamsPermissionsPluginsConfigUnion()
+type PresetUpdateParamsPermissionsPluginsConfig struct {
+	AccessControl   param.Field[PresetUpdateParamsPermissionsPluginsConfigAccessControl] `json:"access_control"`
+	HandlesViewOnly param.Field[bool]                                                    `json:"handles_view_only"`
+	ExtraFields     map[string]interface{}                                               `json:"-,extras"`
 }
 
-type PresetUpdateParamsPermissionsPluginsConfigObject struct {
-	AccessControl   param.Field[PresetUpdateParamsPermissionsPluginsConfigObjectAccessControl] `json:"access_control"`
-	HandlesViewOnly param.Field[bool]                                                          `json:"handles_view_only"`
-}
-
-func (r PresetUpdateParamsPermissionsPluginsConfigObject) MarshalJSON() (data []byte, err error) {
+func (r PresetUpdateParamsPermissionsPluginsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PresetUpdateParamsPermissionsPluginsConfigObject) ImplementsPresetUpdateParamsPermissionsPluginsConfigUnion() {
-}
-
-type PresetUpdateParamsPermissionsPluginsConfigObjectAccessControl string
+type PresetUpdateParamsPermissionsPluginsConfigAccessControl string
 
 const (
-	PresetUpdateParamsPermissionsPluginsConfigObjectAccessControlFullAccess PresetUpdateParamsPermissionsPluginsConfigObjectAccessControl = "FULL_ACCESS"
-	PresetUpdateParamsPermissionsPluginsConfigObjectAccessControlViewOnly   PresetUpdateParamsPermissionsPluginsConfigObjectAccessControl = "VIEW_ONLY"
+	PresetUpdateParamsPermissionsPluginsConfigAccessControlFullAccess PresetUpdateParamsPermissionsPluginsConfigAccessControl = "FULL_ACCESS"
+	PresetUpdateParamsPermissionsPluginsConfigAccessControlViewOnly   PresetUpdateParamsPermissionsPluginsConfigAccessControl = "VIEW_ONLY"
 )
 
-func (r PresetUpdateParamsPermissionsPluginsConfigObjectAccessControl) IsKnown() bool {
+func (r PresetUpdateParamsPermissionsPluginsConfigAccessControl) IsKnown() bool {
 	switch r {
-	case PresetUpdateParamsPermissionsPluginsConfigObjectAccessControlFullAccess, PresetUpdateParamsPermissionsPluginsConfigObjectAccessControlViewOnly:
+	case PresetUpdateParamsPermissionsPluginsConfigAccessControlFullAccess, PresetUpdateParamsPermissionsPluginsConfigAccessControlViewOnly:
 		return true
 	}
 	return false
@@ -4883,6 +5030,22 @@ func (r PresetUpdateParamsPermissionsRecorderType) IsKnown() bool {
 	return false
 }
 
+type PresetUpdateParamsPermissionsStageAccess string
+
+const (
+	PresetUpdateParamsPermissionsStageAccessAllowed    PresetUpdateParamsPermissionsStageAccess = "ALLOWED"
+	PresetUpdateParamsPermissionsStageAccessNotAllowed PresetUpdateParamsPermissionsStageAccess = "NOT_ALLOWED"
+	PresetUpdateParamsPermissionsStageAccessCanRequest PresetUpdateParamsPermissionsStageAccess = "CAN_REQUEST"
+)
+
+func (r PresetUpdateParamsPermissionsStageAccess) IsKnown() bool {
+	switch r {
+	case PresetUpdateParamsPermissionsStageAccessAllowed, PresetUpdateParamsPermissionsStageAccessNotAllowed, PresetUpdateParamsPermissionsStageAccessCanRequest:
+		return true
+	}
+	return false
+}
+
 // Waiting room type
 type PresetUpdateParamsPermissionsWaitingRoomType string
 
@@ -4901,7 +5064,6 @@ func (r PresetUpdateParamsPermissionsWaitingRoomType) IsKnown() bool {
 }
 
 type PresetUpdateParamsUI struct {
-	ConfigDiff   param.Field[interface{}]                      `json:"config_diff"`
 	DesignTokens param.Field[PresetUpdateParamsUIDesignTokens] `json:"design_tokens"`
 }
 
@@ -4913,7 +5075,9 @@ type PresetUpdateParamsUIDesignTokens struct {
 	BorderRadius param.Field[PresetUpdateParamsUIDesignTokensBorderRadius] `json:"border_radius"`
 	BorderWidth  param.Field[PresetUpdateParamsUIDesignTokensBorderWidth]  `json:"border_width"`
 	Colors       param.Field[PresetUpdateParamsUIDesignTokensColors]       `json:"colors"`
-	Logo         param.Field[string]                                       `json:"logo"`
+	FontFamily   param.Field[string]                                       `json:"font_family"`
+	GoogleFont   param.Field[string]                                       `json:"google_font"`
+	Logo         param.Field[string]                                       `json:"logo" format:"uri"`
 	SpacingBase  param.Field[float64]                                      `json:"spacing_base"`
 	Theme        param.Field[PresetUpdateParamsUIDesignTokensTheme]        `json:"theme"`
 }
@@ -4925,12 +5089,15 @@ func (r PresetUpdateParamsUIDesignTokens) MarshalJSON() (data []byte, err error)
 type PresetUpdateParamsUIDesignTokensBorderRadius string
 
 const (
-	PresetUpdateParamsUIDesignTokensBorderRadiusRounded PresetUpdateParamsUIDesignTokensBorderRadius = "rounded"
+	PresetUpdateParamsUIDesignTokensBorderRadiusSharp        PresetUpdateParamsUIDesignTokensBorderRadius = "sharp"
+	PresetUpdateParamsUIDesignTokensBorderRadiusRounded      PresetUpdateParamsUIDesignTokensBorderRadius = "rounded"
+	PresetUpdateParamsUIDesignTokensBorderRadiusExtraRounded PresetUpdateParamsUIDesignTokensBorderRadius = "extra-rounded"
+	PresetUpdateParamsUIDesignTokensBorderRadiusCircular     PresetUpdateParamsUIDesignTokensBorderRadius = "circular"
 )
 
 func (r PresetUpdateParamsUIDesignTokensBorderRadius) IsKnown() bool {
 	switch r {
-	case PresetUpdateParamsUIDesignTokensBorderRadiusRounded:
+	case PresetUpdateParamsUIDesignTokensBorderRadiusSharp, PresetUpdateParamsUIDesignTokensBorderRadiusRounded, PresetUpdateParamsUIDesignTokensBorderRadiusExtraRounded, PresetUpdateParamsUIDesignTokensBorderRadiusCircular:
 		return true
 	}
 	return false
@@ -4939,12 +5106,14 @@ func (r PresetUpdateParamsUIDesignTokensBorderRadius) IsKnown() bool {
 type PresetUpdateParamsUIDesignTokensBorderWidth string
 
 const (
+	PresetUpdateParamsUIDesignTokensBorderWidthNone PresetUpdateParamsUIDesignTokensBorderWidth = "none"
 	PresetUpdateParamsUIDesignTokensBorderWidthThin PresetUpdateParamsUIDesignTokensBorderWidth = "thin"
+	PresetUpdateParamsUIDesignTokensBorderWidthFat  PresetUpdateParamsUIDesignTokensBorderWidth = "fat"
 )
 
 func (r PresetUpdateParamsUIDesignTokensBorderWidth) IsKnown() bool {
 	switch r {
-	case PresetUpdateParamsUIDesignTokensBorderWidthThin:
+	case PresetUpdateParamsUIDesignTokensBorderWidthNone, PresetUpdateParamsUIDesignTokensBorderWidthThin, PresetUpdateParamsUIDesignTokensBorderWidthFat:
 		return true
 	}
 	return false
@@ -4992,12 +5161,14 @@ func (r PresetUpdateParamsUIDesignTokensColorsBrand) MarshalJSON() (data []byte,
 type PresetUpdateParamsUIDesignTokensTheme string
 
 const (
-	PresetUpdateParamsUIDesignTokensThemeDark PresetUpdateParamsUIDesignTokensTheme = "dark"
+	PresetUpdateParamsUIDesignTokensThemeDarkest PresetUpdateParamsUIDesignTokensTheme = "darkest"
+	PresetUpdateParamsUIDesignTokensThemeDark    PresetUpdateParamsUIDesignTokensTheme = "dark"
+	PresetUpdateParamsUIDesignTokensThemeLight   PresetUpdateParamsUIDesignTokensTheme = "light"
 )
 
 func (r PresetUpdateParamsUIDesignTokensTheme) IsKnown() bool {
 	switch r {
-	case PresetUpdateParamsUIDesignTokensThemeDark:
+	case PresetUpdateParamsUIDesignTokensThemeDarkest, PresetUpdateParamsUIDesignTokensThemeDark, PresetUpdateParamsUIDesignTokensThemeLight:
 		return true
 	}
 	return false
@@ -5015,6 +5186,8 @@ type PresetGetParams struct {
 	PageNo param.Field[float64] `query:"page_no"`
 	// Number of results per page
 	PerPage param.Field[float64] `query:"per_page"`
+	// Search presets by name.
+	Search param.Field[string] `query:"search"`
 }
 
 // URLQuery serializes [PresetGetParams]'s query parameters as `url.Values`.

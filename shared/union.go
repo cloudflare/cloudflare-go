@@ -155,12 +155,6 @@ func (UnionString) ImplementsConfigUpdateParamsToolsZarazManagedComponentDefault
 func (UnionString) ImplementsConfigUpdateParamsToolsZarazManagedComponentSettingsUnion()        {}
 func (UnionString) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()                  {}
 func (UnionString) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                       {}
-func (UnionString) ImplementsPresetNewResponseDataPermissionsPluginsConfigUnion()               {}
-func (UnionString) ImplementsPresetUpdateResponseDataPermissionsPluginsConfigUnion()            {}
-func (UnionString) ImplementsPresetDeleteResponseDataPermissionsPluginsConfigUnion()            {}
-func (UnionString) ImplementsPresetGetPresetByIDResponseDataPermissionsPluginsConfigUnion()     {}
-func (UnionString) ImplementsPresetNewParamsPermissionsPluginsConfigUnion()                     {}
-func (UnionString) ImplementsPresetUpdateParamsPermissionsPluginsConfigUnion()                  {}
 func (UnionString) ImplementsThreatEventListParamsSearchValueUnion()                            {}
 func (UnionString) ImplementsThreatEventListParamsSearchValueArrayItemUnion()                   {}
 func (UnionString) ImplementsLogListParamsFiltersValueUnion()                                   {}
