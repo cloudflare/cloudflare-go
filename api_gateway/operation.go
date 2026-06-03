@@ -31,7 +31,7 @@ type OperationService struct {
 	Options []option.RequestOption
 	Labels  *OperationLabelService
 	// Deprecated: Use the
-	// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SettingOperationService]
+	// [github.com/cloudflare/cloudflare-go/v7/schema_validation.SettingOperationService]
 	// service instead
 	SchemaValidation *OperationSchemaValidationService
 }

@@ -34,9 +34,12 @@ func TestInstanceStatusEditWithOptionalParams(t *testing.T) {
 		"x",
 		workflows.InstanceStatusEditParams{
 			AccountID: cloudflare.F("account_id"),
-			Body: workflows.InstanceStatusEditParamsBodyStatus{
-				Status: cloudflare.F(workflows.InstanceStatusEditParamsBodyStatusStatusPause),
-			},
+			Status:    cloudflare.F(workflows.InstanceStatusEditParamsStatusResume),
+			From: cloudflare.F(workflows.InstanceStatusEditParamsFrom{
+				Name:  cloudflare.F("x"),
+				Count: cloudflare.F(int64(1)),
+				Type:  cloudflare.F(workflows.InstanceStatusEditParamsFromTypeDo),
+			}),
 		},
 	)
 	if err != nil {

@@ -423,6 +423,10 @@ type Location struct {
 	// Show the backup destination IPv4 address from the pair identified
 	// dns_destination_ips_id. This field read-only.
 	IPV4DestinationBackup string `json:"ipv4_destination_backup"`
+	// Specify the maximum TTL, in seconds, applied to DNS response records. Records
+	// whose upstream TTL exceeds this value are served with the capped value. When
+	// null or absent, no cap is applied at this tier.
+	MaxTTLSecs int64 `json:"max_ttl_secs" api:"nullable"`
 	// Specify the location name.
 	Name string `json:"name"`
 	// Specify the list of network ranges from which requests at this location
@@ -446,6 +450,7 @@ type locationJSON struct {
 	IP                        apijson.Field
 	IPV4Destination           apijson.Field
 	IPV4DestinationBackup     apijson.Field
+	MaxTTLSecs                apijson.Field
 	Name                      apijson.Field
 	Networks                  apijson.Field
 	UpdatedAt                 apijson.Field
@@ -500,6 +505,10 @@ type GatewayLocationNewParams struct {
 	ECSSupport param.Field[bool] `json:"ecs_support"`
 	// Configure the destination endpoints for this location.
 	Endpoints param.Field[EndpointParam] `json:"endpoints"`
+	// Specify the maximum TTL, in seconds, applied to DNS response records. Records
+	// whose upstream TTL exceeds this value are served with the capped value. When
+	// null or absent, no cap is applied at this tier.
+	MaxTTLSecs param.Field[int64] `json:"max_ttl_secs"`
 	// Specify the list of network ranges from which requests at this location
 	// originate. The list takes effect only if it is non-empty and the IPv4 endpoint
 	// is enabled for this location.
@@ -578,6 +587,10 @@ type GatewayLocationUpdateParams struct {
 	ECSSupport param.Field[bool] `json:"ecs_support"`
 	// Configure the destination endpoints for this location.
 	Endpoints param.Field[EndpointParam] `json:"endpoints"`
+	// Specify the maximum TTL, in seconds, applied to DNS response records. Records
+	// whose upstream TTL exceeds this value are served with the capped value. When
+	// null or absent, no cap is applied at this tier.
+	MaxTTLSecs param.Field[int64] `json:"max_ttl_secs"`
 	// Specify the list of network ranges from which requests at this location
 	// originate. The list takes effect only if it is non-empty and the IPv4 endpoint
 	// is enabled for this location.

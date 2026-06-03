@@ -31,17 +31,17 @@ func TestSnapshotNewWithOptionalParams(t *testing.T) {
 	_, err := client.BrowserRendering.Snapshot.New(context.TODO(), browser_rendering.SnapshotNewParams{
 		AccountID: cloudflare.F("account_id"),
 		Body: browser_rendering.SnapshotNewParamsBodyObject{
-			URL:           cloudflare.F("https://www.example.com/"),
+			HTML:          cloudflare.F("x"),
 			ActionTimeout: cloudflare.F(120000.000000),
 			AddScriptTag: cloudflare.F([]browser_rendering.SnapshotNewParamsBodyObjectAddScriptTag{{
 				ID:      cloudflare.F("id"),
 				Content: cloudflare.F("content"),
 				Type:    cloudflare.F("type"),
-				URL:     cloudflare.F("https://example.com"),
+				URL:     cloudflare.F("url"),
 			}}),
 			AddStyleTag: cloudflare.F([]browser_rendering.SnapshotNewParamsBodyObjectAddStyleTag{{
 				Content: cloudflare.F("content"),
-				URL:     cloudflare.F("https://example.com"),
+				URL:     cloudflare.F("url"),
 			}}),
 			AllowRequestPattern: cloudflare.F([]string{"string"}),
 			AllowResourceTypes:  cloudflare.F([]browser_rendering.SnapshotNewParamsBodyObjectAllowResourceType{browser_rendering.SnapshotNewParamsBodyObjectAllowResourceTypeDocument}),
@@ -67,7 +67,6 @@ func TestSnapshotNewWithOptionalParams(t *testing.T) {
 				URL:          cloudflare.F("url"),
 			}}),
 			EmulateMediaType: cloudflare.F("emulateMediaType"),
-			Formats:          cloudflare.F([]browser_rendering.SnapshotNewParamsBodyObjectFormat{browser_rendering.SnapshotNewParamsBodyObjectFormatContent, browser_rendering.SnapshotNewParamsBodyObjectFormatScreenshot}),
 			GotoOptions: cloudflare.F(browser_rendering.SnapshotNewParamsBodyObjectGotoOptions{
 				Referer:        cloudflare.F("referer"),
 				ReferrerPolicy: cloudflare.F("referrerPolicy"),

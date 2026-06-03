@@ -533,9 +533,7 @@ type ProfileCustomProfileEntriesCustomPromptTopicEntry struct {
 	Name      string                                                `json:"name" api:"required"`
 	Type      ProfileCustomProfileEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                             `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the custom prompt topic entry.
-	Description string                                                `json:"description" api:"nullable"`
-	JSON        profileCustomProfileEntriesCustomPromptTopicEntryJSON `json:"-"`
+	JSON      profileCustomProfileEntriesCustomPromptTopicEntryJSON `json:"-"`
 }
 
 // profileCustomProfileEntriesCustomPromptTopicEntryJSON contains the JSON metadata
@@ -547,7 +545,6 @@ type profileCustomProfileEntriesCustomPromptTopicEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -871,9 +868,7 @@ type ProfileCustomProfileEntriesExactDataEntry struct {
 	Secret        bool                                          `json:"secret" api:"required"`
 	Type          ProfileCustomProfileEntriesExactDataEntryType `json:"type" api:"required"`
 	UpdatedAt     time.Time                                     `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the exact data entry.
-	Description string                                        `json:"description" api:"nullable"`
-	JSON        profileCustomProfileEntriesExactDataEntryJSON `json:"-"`
+	JSON          profileCustomProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
 // profileCustomProfileEntriesExactDataEntryJSON contains the JSON metadata for the
@@ -887,7 +882,6 @@ type profileCustomProfileEntriesExactDataEntryJSON struct {
 	Secret        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
-	Description   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -923,9 +917,7 @@ type ProfileCustomProfileEntriesDocumentFingerprintEntry struct {
 	Name      string                                                  `json:"name" api:"required"`
 	Type      ProfileCustomProfileEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                               `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the document fingerprint entry.
-	Description string                                                  `json:"description" api:"nullable"`
-	JSON        profileCustomProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
+	JSON      profileCustomProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
 // profileCustomProfileEntriesDocumentFingerprintEntryJSON contains the JSON
@@ -937,7 +929,6 @@ type profileCustomProfileEntriesDocumentFingerprintEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1247,9 +1238,7 @@ type ProfileCustomProfileSharedEntriesCustomPromptTopicEntry struct {
 	Name      string                                                      `json:"name" api:"required"`
 	Type      ProfileCustomProfileSharedEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                                   `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the custom prompt topic entry.
-	Description string                                                      `json:"description" api:"nullable"`
-	JSON        profileCustomProfileSharedEntriesCustomPromptTopicEntryJSON `json:"-"`
+	JSON      profileCustomProfileSharedEntriesCustomPromptTopicEntryJSON `json:"-"`
 }
 
 // profileCustomProfileSharedEntriesCustomPromptTopicEntryJSON contains the JSON
@@ -1262,7 +1251,6 @@ type profileCustomProfileSharedEntriesCustomPromptTopicEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1592,9 +1580,7 @@ type ProfileCustomProfileSharedEntriesExactDataEntry struct {
 	Secret        bool                                                `json:"secret" api:"required"`
 	Type          ProfileCustomProfileSharedEntriesExactDataEntryType `json:"type" api:"required"`
 	UpdatedAt     time.Time                                           `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the exact data entry.
-	Description string                                              `json:"description" api:"nullable"`
-	JSON        profileCustomProfileSharedEntriesExactDataEntryJSON `json:"-"`
+	JSON          profileCustomProfileSharedEntriesExactDataEntryJSON `json:"-"`
 }
 
 // profileCustomProfileSharedEntriesExactDataEntryJSON contains the JSON metadata
@@ -1608,7 +1594,6 @@ type profileCustomProfileSharedEntriesExactDataEntryJSON struct {
 	Secret        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
-	Description   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -1645,9 +1630,7 @@ type ProfileCustomProfileSharedEntriesDocumentFingerprintEntry struct {
 	Name      string                                                        `json:"name" api:"required"`
 	Type      ProfileCustomProfileSharedEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                                     `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the document fingerprint entry.
-	Description string                                                        `json:"description" api:"nullable"`
-	JSON        profileCustomProfileSharedEntriesDocumentFingerprintEntryJSON `json:"-"`
+	JSON      profileCustomProfileSharedEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
 // profileCustomProfileSharedEntriesDocumentFingerprintEntryJSON contains the JSON
@@ -1660,7 +1643,6 @@ type profileCustomProfileSharedEntriesDocumentFingerprintEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1996,9 +1978,7 @@ type ProfilePredefinedProfileEntriesCustomPromptTopicEntry struct {
 	Name      string                                                    `json:"name" api:"required"`
 	Type      ProfilePredefinedProfileEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                                 `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the custom prompt topic entry.
-	Description string                                                    `json:"description" api:"nullable"`
-	JSON        profilePredefinedProfileEntriesCustomPromptTopicEntryJSON `json:"-"`
+	JSON      profilePredefinedProfileEntriesCustomPromptTopicEntryJSON `json:"-"`
 }
 
 // profilePredefinedProfileEntriesCustomPromptTopicEntryJSON contains the JSON
@@ -2010,7 +1990,6 @@ type profilePredefinedProfileEntriesCustomPromptTopicEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2336,9 +2315,7 @@ type ProfilePredefinedProfileEntriesExactDataEntry struct {
 	Secret        bool                                              `json:"secret" api:"required"`
 	Type          ProfilePredefinedProfileEntriesExactDataEntryType `json:"type" api:"required"`
 	UpdatedAt     time.Time                                         `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the exact data entry.
-	Description string                                            `json:"description" api:"nullable"`
-	JSON        profilePredefinedProfileEntriesExactDataEntryJSON `json:"-"`
+	JSON          profilePredefinedProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
 // profilePredefinedProfileEntriesExactDataEntryJSON contains the JSON metadata for
@@ -2352,7 +2329,6 @@ type profilePredefinedProfileEntriesExactDataEntryJSON struct {
 	Secret        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
-	Description   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -2388,9 +2364,7 @@ type ProfilePredefinedProfileEntriesDocumentFingerprintEntry struct {
 	Name      string                                                      `json:"name" api:"required"`
 	Type      ProfilePredefinedProfileEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                                   `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the document fingerprint entry.
-	Description string                                                      `json:"description" api:"nullable"`
-	JSON        profilePredefinedProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
+	JSON      profilePredefinedProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
 // profilePredefinedProfileEntriesDocumentFingerprintEntryJSON contains the JSON
@@ -2403,7 +2377,6 @@ type profilePredefinedProfileEntriesDocumentFingerprintEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2760,9 +2733,7 @@ type ProfileIntegrationProfileEntriesCustomPromptTopicEntry struct {
 	Name      string                                                     `json:"name" api:"required"`
 	Type      ProfileIntegrationProfileEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                                  `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the custom prompt topic entry.
-	Description string                                                     `json:"description" api:"nullable"`
-	JSON        profileIntegrationProfileEntriesCustomPromptTopicEntryJSON `json:"-"`
+	JSON      profileIntegrationProfileEntriesCustomPromptTopicEntryJSON `json:"-"`
 }
 
 // profileIntegrationProfileEntriesCustomPromptTopicEntryJSON contains the JSON
@@ -2774,7 +2745,6 @@ type profileIntegrationProfileEntriesCustomPromptTopicEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3102,9 +3072,7 @@ type ProfileIntegrationProfileEntriesExactDataEntry struct {
 	Secret        bool                                               `json:"secret" api:"required"`
 	Type          ProfileIntegrationProfileEntriesExactDataEntryType `json:"type" api:"required"`
 	UpdatedAt     time.Time                                          `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the exact data entry.
-	Description string                                             `json:"description" api:"nullable"`
-	JSON        profileIntegrationProfileEntriesExactDataEntryJSON `json:"-"`
+	JSON          profileIntegrationProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
 // profileIntegrationProfileEntriesExactDataEntryJSON contains the JSON metadata
@@ -3118,7 +3086,6 @@ type profileIntegrationProfileEntriesExactDataEntryJSON struct {
 	Secret        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
-	Description   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -3154,9 +3121,7 @@ type ProfileIntegrationProfileEntriesDocumentFingerprintEntry struct {
 	Name      string                                                       `json:"name" api:"required"`
 	Type      ProfileIntegrationProfileEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                                    `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the document fingerprint entry.
-	Description string                                                       `json:"description" api:"nullable"`
-	JSON        profileIntegrationProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
+	JSON      profileIntegrationProfileEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
 // profileIntegrationProfileEntriesDocumentFingerprintEntryJSON contains the JSON
@@ -3169,7 +3134,6 @@ type profileIntegrationProfileEntriesDocumentFingerprintEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3457,9 +3421,7 @@ type ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntry struct {
 	Name      string                                                           `json:"name" api:"required"`
 	Type      ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                                        `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the custom prompt topic entry.
-	Description string                                                           `json:"description" api:"nullable"`
-	JSON        profileIntegrationProfileSharedEntriesCustomPromptTopicEntryJSON `json:"-"`
+	JSON      profileIntegrationProfileSharedEntriesCustomPromptTopicEntryJSON `json:"-"`
 }
 
 // profileIntegrationProfileSharedEntriesCustomPromptTopicEntryJSON contains the
@@ -3472,7 +3434,6 @@ type profileIntegrationProfileSharedEntriesCustomPromptTopicEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3803,9 +3764,7 @@ type ProfileIntegrationProfileSharedEntriesExactDataEntry struct {
 	Secret        bool                                                     `json:"secret" api:"required"`
 	Type          ProfileIntegrationProfileSharedEntriesExactDataEntryType `json:"type" api:"required"`
 	UpdatedAt     time.Time                                                `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the exact data entry.
-	Description string                                                   `json:"description" api:"nullable"`
-	JSON        profileIntegrationProfileSharedEntriesExactDataEntryJSON `json:"-"`
+	JSON          profileIntegrationProfileSharedEntriesExactDataEntryJSON `json:"-"`
 }
 
 // profileIntegrationProfileSharedEntriesExactDataEntryJSON contains the JSON
@@ -3819,7 +3778,6 @@ type profileIntegrationProfileSharedEntriesExactDataEntryJSON struct {
 	Secret        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
-	Description   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -3856,9 +3814,7 @@ type ProfileIntegrationProfileSharedEntriesDocumentFingerprintEntry struct {
 	Name      string                                                             `json:"name" api:"required"`
 	Type      ProfileIntegrationProfileSharedEntriesDocumentFingerprintEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                                          `json:"updated_at" api:"required" format:"date-time"`
-	// The optional description of the document fingerprint entry.
-	Description string                                                             `json:"description" api:"nullable"`
-	JSON        profileIntegrationProfileSharedEntriesDocumentFingerprintEntryJSON `json:"-"`
+	JSON      profileIntegrationProfileSharedEntriesDocumentFingerprintEntryJSON `json:"-"`
 }
 
 // profileIntegrationProfileSharedEntriesDocumentFingerprintEntryJSON contains the
@@ -3871,7 +3827,6 @@ type profileIntegrationProfileSharedEntriesDocumentFingerprintEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

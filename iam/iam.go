@@ -18,8 +18,6 @@ type IAMService struct {
 	ResourceGroups   *ResourceGroupService
 	UserGroups       *UserGroupService
 	SSO              *SSOService
-	OAuthClients     *OAuthClientService
-	OAuthScopes      *OAuthScopeService
 }
 
 // NewIAMService generates a new service that applies the given options to each
@@ -32,7 +30,5 @@ func NewIAMService(opts ...option.RequestOption) (r *IAMService) {
 	r.ResourceGroups = NewResourceGroupService(opts...)
 	r.UserGroups = NewUserGroupService(opts...)
 	r.SSO = NewSSOService(opts...)
-	r.OAuthClients = NewOAuthClientService(opts...)
-	r.OAuthScopes = NewOAuthScopeService(opts...)
 	return
 }

@@ -31,17 +31,17 @@ func TestScreenshotNewWithOptionalParams(t *testing.T) {
 	_, err := client.BrowserRendering.Screenshot.New(context.TODO(), browser_rendering.ScreenshotNewParams{
 		AccountID: cloudflare.F("account_id"),
 		Body: browser_rendering.ScreenshotNewParamsBodyObject{
-			URL:           cloudflare.F("https://www.example.com/"),
+			HTML:          cloudflare.F("x"),
 			ActionTimeout: cloudflare.F(120000.000000),
 			AddScriptTag: cloudflare.F([]browser_rendering.ScreenshotNewParamsBodyObjectAddScriptTag{{
 				ID:      cloudflare.F("id"),
 				Content: cloudflare.F("content"),
 				Type:    cloudflare.F("type"),
-				URL:     cloudflare.F("https://example.com"),
+				URL:     cloudflare.F("url"),
 			}}),
 			AddStyleTag: cloudflare.F([]browser_rendering.ScreenshotNewParamsBodyObjectAddStyleTag{{
 				Content: cloudflare.F("content"),
-				URL:     cloudflare.F("https://example.com"),
+				URL:     cloudflare.F("url"),
 			}}),
 			AllowRequestPattern: cloudflare.F([]string{"string"}),
 			AllowResourceTypes:  cloudflare.F([]browser_rendering.ScreenshotNewParamsBodyObjectAllowResourceType{browser_rendering.ScreenshotNewParamsBodyObjectAllowResourceTypeDocument}),

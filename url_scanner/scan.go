@@ -4623,7 +4623,7 @@ func (r scanGetResponseMetaProcessorsRobotsTXTDataJSON) RawJSON() string {
 }
 
 type ScanGetResponseMetaProcessorsRobotsTXTDataRules struct {
-	Star ScanGetResponseMetaProcessorsRobotsTXTDataRules     `json:"*" api:"required"`
+	Star *ScanGetResponseMetaProcessorsRobotsTXTDataRules    `json:"*" api:"required"`
 	JSON scanGetResponseMetaProcessorsRobotsTXTDataRulesJSON `json:"-"`
 }
 

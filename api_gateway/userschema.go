@@ -31,7 +31,7 @@ import (
 // the [NewUserSchemaService] method instead.
 //
 // Deprecated: Use the
-// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SchemaService] service
+// [github.com/cloudflare/cloudflare-go/v7/schema_validation.SchemaService] service
 // instead
 type UserSchemaService struct {
 	Options    []option.RequestOption

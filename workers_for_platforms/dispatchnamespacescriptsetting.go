@@ -2824,7 +2824,7 @@ type DispatchNamespaceScriptSettingEditResponsePlacement struct {
 	Hostname string `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode DispatchNamespaceScriptSettingEditResponsePlacementMode `json:"mode"`
+	Mode DispatchNamespaceScriptSettingEditResponsePlacementModeMode `json:"mode"`
 	// Cloud region for targeted placement in format 'provider:region'.
 	Region string `json:"region"`
 	// This field can have the runtime type of
@@ -5845,7 +5845,7 @@ type DispatchNamespaceScriptSettingGetResponsePlacement struct {
 	Hostname string `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode DispatchNamespaceScriptSettingGetResponsePlacementMode `json:"mode"`
+	Mode DispatchNamespaceScriptSettingGetResponsePlacementModeMode `json:"mode"`
 	// Cloud region for targeted placement in format 'provider:region'.
 	Region string `json:"region"`
 	// This field can have the runtime type of
@@ -6143,7 +6143,7 @@ type DispatchNamespaceScriptSettingEditParams struct {
 func (r DispatchNamespaceScriptSettingEditParams) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
+	err = apiform.MarshalRootWithJSON(r, writer)
 	if err != nil {
 		writer.Close()
 		return nil, "", err

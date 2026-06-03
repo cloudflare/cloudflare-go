@@ -37,11 +37,11 @@ func TestMarkdownNewWithOptionalParams(t *testing.T) {
 				ID:      cloudflare.F("id"),
 				Content: cloudflare.F("content"),
 				Type:    cloudflare.F("type"),
-				URL:     cloudflare.F("https://example.com"),
+				URL:     cloudflare.F("url"),
 			}}),
 			AddStyleTag: cloudflare.F([]browser_rendering.MarkdownNewParamsBodyObjectAddStyleTag{{
 				Content: cloudflare.F("content"),
-				URL:     cloudflare.F("https://example.com"),
+				URL:     cloudflare.F("url"),
 			}}),
 			AllowRequestPattern: cloudflare.F([]string{"string"}),
 			AllowResourceTypes:  cloudflare.F([]browser_rendering.MarkdownNewParamsBodyObjectAllowResourceType{browser_rendering.MarkdownNewParamsBodyObjectAllowResourceTypeDocument}),

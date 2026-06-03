@@ -32,7 +32,6 @@ type ResourceTaggingService struct {
 	ZoneTags    *ZoneTagService
 	Keys        *KeyService
 	Values      *ValueService
-	Summary     *SummaryService
 }
 
 // NewResourceTaggingService generates a new service that applies the given options
@@ -45,7 +44,6 @@ func NewResourceTaggingService(opts ...option.RequestOption) (r *ResourceTagging
 	r.ZoneTags = NewZoneTagService(opts...)
 	r.Keys = NewKeyService(opts...)
 	r.Values = NewValueService(opts...)
-	r.Summary = NewSummaryService(opts...)
 	return
 }
 

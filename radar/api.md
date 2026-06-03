@@ -266,6 +266,16 @@ Methods:
 
 - <code title="get /radar/bgp/ips/top/ases">client.Radar.BGP.IPs.Top.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPIPTopService.Ases">Ases</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPIPTopAsesParams">BGPIPTopAsesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BgpipTopAsesResponse">BgpipTopAsesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+#### Top
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BgpipTopAsesResponse">BgpipTopAsesResponse</a>
+
+Methods:
+
+- <code title="get /radar/bgp/ips/top/ases">client.Radar.BGP.IPs.Top.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPIPTopService.Ases">Ases</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPIPTopAsesParams">BGPIPTopAsesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BgpipTopAsesResponse">BgpipTopAsesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### RPKI
 
 #### ASPA
@@ -281,6 +291,16 @@ Methods:
 - <code title="get /radar/bgp/rpki/aspa/changes">client.Radar.BGP.RPKI.ASPA.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRPKIASPAService.Changes">Changes</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRPKIASPAChangesParams">BGPRPKIASPAChangesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BgprpkiaspaChangesResponse">BgprpkiaspaChangesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/bgp/rpki/aspa/snapshot">client.Radar.BGP.RPKI.ASPA.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRPKIASPAService.Snapshot">Snapshot</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRPKIASPASnapshotParams">BGPRPKIASPASnapshotParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BgprpkiaspaSnapshotResponse">BgprpkiaspaSnapshotResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/bgp/rpki/aspa/timeseries">client.Radar.BGP.RPKI.ASPA.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRPKIASPAService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRPKIASPATimeseriesParams">BGPRPKIASPATimeseriesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BgprpkiaspaTimeseriesResponse">BgprpkiaspaTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+#### Roas
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BgprpkiRoaTimeseriesResponse">BgprpkiRoaTimeseriesResponse</a>
+
+Methods:
+
+- <code title="get /radar/bgp/rpki/roas/timeseries">client.Radar.BGP.RPKI.Roas.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRPKIRoaService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRPKIRoaTimeseriesParams">BGPRPKIRoaTimeseriesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BgprpkiRoaTimeseriesResponse">BgprpkiRoaTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 #### Roas
 

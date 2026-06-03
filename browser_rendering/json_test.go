@@ -32,17 +32,17 @@ func TestJsonNewWithOptionalParams(t *testing.T) {
 	_, err := client.BrowserRendering.Json.New(context.TODO(), browser_rendering.JsonNewParams{
 		AccountID: cloudflare.F("account_id"),
 		Body: browser_rendering.JsonNewParamsBodyObject{
-			URL:           cloudflare.F("https://www.example.com/"),
+			HTML:          cloudflare.F("x"),
 			ActionTimeout: cloudflare.F(120000.000000),
 			AddScriptTag: cloudflare.F([]browser_rendering.JsonNewParamsBodyObjectAddScriptTag{{
 				ID:      cloudflare.F("id"),
 				Content: cloudflare.F("content"),
 				Type:    cloudflare.F("type"),
-				URL:     cloudflare.F("https://example.com"),
+				URL:     cloudflare.F("url"),
 			}}),
 			AddStyleTag: cloudflare.F([]browser_rendering.JsonNewParamsBodyObjectAddStyleTag{{
 				Content: cloudflare.F("content"),
-				URL:     cloudflare.F("https://example.com"),
+				URL:     cloudflare.F("url"),
 			}}),
 			AllowRequestPattern: cloudflare.F([]string{"string"}),
 			AllowResourceTypes:  cloudflare.F([]browser_rendering.JsonNewParamsBodyObjectAllowResourceType{browser_rendering.JsonNewParamsBodyObjectAllowResourceTypeDocument}),
