@@ -96,68 +96,92 @@ const (
 	InstanceStatusEditResponseStatusComplete        InstanceStatusEditResponseStatus = "complete"
 	InstanceStatusEditResponseStatusWaitingForPause InstanceStatusEditResponseStatus = "waitingForPause"
 	InstanceStatusEditResponseStatusWaiting         InstanceStatusEditResponseStatus = "waiting"
+	InstanceStatusEditResponseStatusRollingBack     InstanceStatusEditResponseStatus = "rollingBack"
 )
 
 func (r InstanceStatusEditResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceStatusEditResponseStatusQueued, InstanceStatusEditResponseStatusRunning, InstanceStatusEditResponseStatusPaused, InstanceStatusEditResponseStatusErrored, InstanceStatusEditResponseStatusTerminated, InstanceStatusEditResponseStatusComplete, InstanceStatusEditResponseStatusWaitingForPause, InstanceStatusEditResponseStatusWaiting:
+	case InstanceStatusEditResponseStatusQueued, InstanceStatusEditResponseStatusRunning, InstanceStatusEditResponseStatusPaused, InstanceStatusEditResponseStatusErrored, InstanceStatusEditResponseStatusTerminated, InstanceStatusEditResponseStatusComplete, InstanceStatusEditResponseStatusWaitingForPause, InstanceStatusEditResponseStatusWaiting, InstanceStatusEditResponseStatusRollingBack:
 		return true
 	}
 	return false
 }
 
 type InstanceStatusEditParams struct {
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Apply action to instance.
-	Status param.Field[InstanceStatusEditParamsStatus] `json:"status" api:"required"`
-	// Step to restart from. Only applicable when status is "restart".
-	From param.Field[InstanceStatusEditParamsFrom] `json:"from"`
+	AccountID param.Field[string]               `path:"account_id" api:"required"`
+	Body      InstanceStatusEditParamsBodyUnion `json:"body"`
 }
 
 func (r InstanceStatusEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type InstanceStatusEditParamsBody struct {
+	Status param.Field[InstanceStatusEditParamsBodyStatus] `json:"status" api:"required"`
+	From   param.Field[interface{}]                        `json:"from"`
+	// Run rollback before terminating.
+	Rollback param.Field[bool] `json:"rollback"`
+}
+
+func (r InstanceStatusEditParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Apply action to instance.
-type InstanceStatusEditParamsStatus string
+func (r InstanceStatusEditParamsBody) implementsInstanceStatusEditParamsBodyUnion() {}
+
+// Satisfied by [workflows.InstanceStatusEditParamsBodyStatus],
+// [workflows.InstanceStatusEditParamsBodyStatus],
+// [workflows.InstanceStatusEditParamsBodyObject],
+// [workflows.InstanceStatusEditParamsBodyObject], [InstanceStatusEditParamsBody].
+type InstanceStatusEditParamsBodyUnion interface {
+	implementsInstanceStatusEditParamsBodyUnion()
+}
+
+type InstanceStatusEditParamsBodyStatus struct {
+	Status param.Field[InstanceStatusEditParamsBodyStatusStatus] `json:"status" api:"required"`
+}
+
+func (r InstanceStatusEditParamsBodyStatus) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r InstanceStatusEditParamsBodyStatus) implementsInstanceStatusEditParamsBodyUnion() {}
+
+type InstanceStatusEditParamsBodyStatusStatus string
 
 const (
-	InstanceStatusEditParamsStatusResume    InstanceStatusEditParamsStatus = "resume"
-	InstanceStatusEditParamsStatusPause     InstanceStatusEditParamsStatus = "pause"
-	InstanceStatusEditParamsStatusTerminate InstanceStatusEditParamsStatus = "terminate"
-	InstanceStatusEditParamsStatusRestart   InstanceStatusEditParamsStatus = "restart"
+	InstanceStatusEditParamsBodyStatusStatusPause InstanceStatusEditParamsBodyStatusStatus = "pause"
 )
 
-func (r InstanceStatusEditParamsStatus) IsKnown() bool {
+func (r InstanceStatusEditParamsBodyStatusStatus) IsKnown() bool {
 	switch r {
-	case InstanceStatusEditParamsStatusResume, InstanceStatusEditParamsStatusPause, InstanceStatusEditParamsStatusTerminate, InstanceStatusEditParamsStatusRestart:
+	case InstanceStatusEditParamsBodyStatusStatusPause:
 		return true
 	}
 	return false
 }
 
-// Step to restart from. Only applicable when status is "restart".
-type InstanceStatusEditParamsFrom struct {
-	Name  param.Field[string]                           `json:"name" api:"required"`
-	Count param.Field[int64]                            `json:"count"`
-	Type  param.Field[InstanceStatusEditParamsFromType] `json:"type"`
+type InstanceStatusEditParamsBodyObject struct {
+	Status param.Field[InstanceStatusEditParamsBodyObjectStatus] `json:"status" api:"required"`
+	// Run rollback before terminating.
+	Rollback param.Field[bool] `json:"rollback"`
 }
 
-func (r InstanceStatusEditParamsFrom) MarshalJSON() (data []byte, err error) {
+func (r InstanceStatusEditParamsBodyObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type InstanceStatusEditParamsFromType string
+func (r InstanceStatusEditParamsBodyObject) implementsInstanceStatusEditParamsBodyUnion() {}
+
+type InstanceStatusEditParamsBodyObjectStatus string
 
 const (
-	InstanceStatusEditParamsFromTypeDo           InstanceStatusEditParamsFromType = "do"
-	InstanceStatusEditParamsFromTypeSleep        InstanceStatusEditParamsFromType = "sleep"
-	InstanceStatusEditParamsFromTypeWaitForEvent InstanceStatusEditParamsFromType = "waitForEvent"
+	InstanceStatusEditParamsBodyObjectStatusTerminate InstanceStatusEditParamsBodyObjectStatus = "terminate"
 )
 
-func (r InstanceStatusEditParamsFromType) IsKnown() bool {
+func (r InstanceStatusEditParamsBodyObjectStatus) IsKnown() bool {
 	switch r {
-	case InstanceStatusEditParamsFromTypeDo, InstanceStatusEditParamsFromTypeSleep, InstanceStatusEditParamsFromTypeWaitForEvent:
+	case InstanceStatusEditParamsBodyObjectStatusTerminate:
 		return true
 	}
 	return false

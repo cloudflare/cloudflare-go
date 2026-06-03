@@ -205,9 +205,9 @@ type AccessAIControlMcpPortalNewResponseServer struct {
 	ErrorDetails    AccessAIControlMcpPortalNewResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. New servers default to true; existing servers default
-	// to false. Effective behavior is gated by the gateway worker's per-env rollout
-	// mode KV key.
+	// customer portal hostname. Operators manage this internal rollout flag through
+	// admin endpoints. Effective behavior is gated by the gateway worker's per-env
+	// rollout mode KV key.
 	IsSharedOAuthCallbackEnabled bool                                                      `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time                                                 `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time                                                 `json:"last_synced" format:"date-time"`
@@ -429,9 +429,9 @@ type AccessAIControlMcpPortalUpdateResponseServer struct {
 	ErrorDetails    AccessAIControlMcpPortalUpdateResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. New servers default to true; existing servers default
-	// to false. Effective behavior is gated by the gateway worker's per-env rollout
-	// mode KV key.
+	// customer portal hostname. Operators manage this internal rollout flag through
+	// admin endpoints. Effective behavior is gated by the gateway worker's per-env
+	// rollout mode KV key.
 	IsSharedOAuthCallbackEnabled bool                                                         `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time                                                    `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time                                                    `json:"last_synced" format:"date-time"`
@@ -655,9 +655,9 @@ type AccessAIControlMcpPortalListResponseServer struct {
 	ErrorDetails    AccessAIControlMcpPortalListResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. New servers default to true; existing servers default
-	// to false. Effective behavior is gated by the gateway worker's per-env rollout
-	// mode KV key.
+	// customer portal hostname. Operators manage this internal rollout flag through
+	// admin endpoints. Effective behavior is gated by the gateway worker's per-env
+	// rollout mode KV key.
 	IsSharedOAuthCallbackEnabled bool                                                       `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time                                                  `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time                                                  `json:"last_synced" format:"date-time"`
@@ -922,9 +922,9 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	ErrorDetails    AccessAIControlMcpPortalReadResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. New servers default to true; existing servers default
-	// to false. Effective behavior is gated by the gateway worker's per-env rollout
-	// mode KV key.
+	// customer portal hostname. Operators manage this internal rollout flag through
+	// admin endpoints. Effective behavior is gated by the gateway worker's per-env
+	// rollout mode KV key.
 	IsSharedOAuthCallbackEnabled bool                                                       `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time                                                  `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time                                                  `json:"last_synced" format:"date-time"`
@@ -1107,12 +1107,11 @@ func (r AccessAIControlMcpPortalNewParams) MarshalJSON() (data []byte, err error
 
 type AccessAIControlMcpPortalNewParamsServer struct {
 	// server id
-	ServerID                     param.Field[string]                                                  `json:"server_id" api:"required"`
-	DefaultDisabled              param.Field[bool]                                                    `json:"default_disabled"`
-	IsSharedOAuthCallbackEnabled param.Field[bool]                                                    `json:"is_shared_oauth_callback_enabled"`
-	OnBehalf                     param.Field[bool]                                                    `json:"on_behalf"`
-	UpdatedPrompts               param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedPrompt] `json:"updated_prompts"`
-	UpdatedTools                 param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedTool]   `json:"updated_tools"`
+	ServerID        param.Field[string]                                                  `json:"server_id" api:"required"`
+	DefaultDisabled param.Field[bool]                                                    `json:"default_disabled"`
+	OnBehalf        param.Field[bool]                                                    `json:"on_behalf"`
+	UpdatedPrompts  param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedPrompt] `json:"updated_prompts"`
+	UpdatedTools    param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedTool]   `json:"updated_tools"`
 }
 
 func (r AccessAIControlMcpPortalNewParamsServer) MarshalJSON() (data []byte, err error) {
@@ -1182,12 +1181,11 @@ func (r AccessAIControlMcpPortalUpdateParams) MarshalJSON() (data []byte, err er
 
 type AccessAIControlMcpPortalUpdateParamsServer struct {
 	// server id
-	ServerID                     param.Field[string]                                                     `json:"server_id" api:"required"`
-	DefaultDisabled              param.Field[bool]                                                       `json:"default_disabled"`
-	IsSharedOAuthCallbackEnabled param.Field[bool]                                                       `json:"is_shared_oauth_callback_enabled"`
-	OnBehalf                     param.Field[bool]                                                       `json:"on_behalf"`
-	UpdatedPrompts               param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt] `json:"updated_prompts"`
-	UpdatedTools                 param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedTool]   `json:"updated_tools"`
+	ServerID        param.Field[string]                                                     `json:"server_id" api:"required"`
+	DefaultDisabled param.Field[bool]                                                       `json:"default_disabled"`
+	OnBehalf        param.Field[bool]                                                       `json:"on_behalf"`
+	UpdatedPrompts  param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt] `json:"updated_prompts"`
+	UpdatedTools    param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedTool]   `json:"updated_tools"`
 }
 
 func (r AccessAIControlMcpPortalUpdateParamsServer) MarshalJSON() (data []byte, err error) {

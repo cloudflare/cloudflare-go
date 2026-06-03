@@ -418,223 +418,6 @@ func init() {
 	)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DynamicRoutingUpdateResponseRouteElementsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
-		},
-	)
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DynamicRoutingListResponseDataRoutesElementsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
-		},
-	)
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DynamicRoutingDeleteResponseElementsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
-		},
-	)
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DynamicRoutingNewDeploymentResponseElementsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
-		},
-	)
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DynamicRoutingNewVersionResponseElementsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
-		},
-	)
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DynamicRoutingGetResponseElementsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
-		},
-	)
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DynamicRoutingGetVersionResponseElementsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
-		},
-	)
-}
-
 type DynamicRoutingNewResponseElementsObject struct {
 	ID      string                                         `json:"id" api:"required"`
 	Outputs DynamicRoutingNewResponseElementsObjectOutputs `json:"outputs" api:"required"`
@@ -926,6 +709,37 @@ func (r DynamicRoutingUpdateResponseRouteElement) AsUnion() DynamicRoutingUpdate
 // [DynamicRoutingUpdateResponseRouteElementsObject].
 type DynamicRoutingUpdateResponseRouteElementsUnion interface {
 	implementsDynamicRoutingUpdateResponseRouteElement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DynamicRoutingUpdateResponseRouteElementsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingUpdateResponseRouteElementsObject{}),
+		},
+	)
 }
 
 type DynamicRoutingUpdateResponseRouteElementsObject struct {
@@ -1252,6 +1066,37 @@ type DynamicRoutingListResponseDataRoutesElementsUnion interface {
 	implementsDynamicRoutingListResponseDataRoutesElement()
 }
 
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DynamicRoutingListResponseDataRoutesElementsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingListResponseDataRoutesElementsObject{}),
+		},
+	)
+}
+
 type DynamicRoutingListResponseDataRoutesElementsObject struct {
 	ID      string                                                    `json:"id" api:"required"`
 	Outputs DynamicRoutingListResponseDataRoutesElementsObjectOutputs `json:"outputs" api:"required"`
@@ -1494,6 +1339,37 @@ type DynamicRoutingDeleteResponseElementsUnion interface {
 	implementsDynamicRoutingDeleteResponseElement()
 }
 
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DynamicRoutingDeleteResponseElementsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingDeleteResponseElementsObject{}),
+		},
+	)
+}
+
 type DynamicRoutingDeleteResponseElementsObject struct {
 	ID      string                                            `json:"id" api:"required"`
 	Outputs DynamicRoutingDeleteResponseElementsObjectOutputs `json:"outputs" api:"required"`
@@ -1687,6 +1563,37 @@ func (r DynamicRoutingNewDeploymentResponseElement) AsUnion() DynamicRoutingNewD
 // [DynamicRoutingNewDeploymentResponseElementsObject].
 type DynamicRoutingNewDeploymentResponseElementsUnion interface {
 	implementsDynamicRoutingNewDeploymentResponseElement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DynamicRoutingNewDeploymentResponseElementsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewDeploymentResponseElementsObject{}),
+		},
+	)
 }
 
 type DynamicRoutingNewDeploymentResponseElementsObject struct {
@@ -1885,6 +1792,37 @@ func (r DynamicRoutingNewVersionResponseElement) AsUnion() DynamicRoutingNewVers
 // [DynamicRoutingNewVersionResponseElementsObject].
 type DynamicRoutingNewVersionResponseElementsUnion interface {
 	implementsDynamicRoutingNewVersionResponseElement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DynamicRoutingNewVersionResponseElementsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingNewVersionResponseElementsObject{}),
+		},
+	)
 }
 
 type DynamicRoutingNewVersionResponseElementsObject struct {
@@ -2111,6 +2049,37 @@ func (r DynamicRoutingGetResponseElement) AsUnion() DynamicRoutingGetResponseEle
 // [DynamicRoutingGetResponseElementsObject].
 type DynamicRoutingGetResponseElementsUnion interface {
 	implementsDynamicRoutingGetResponseElement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DynamicRoutingGetResponseElementsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetResponseElementsObject{}),
+		},
+	)
 }
 
 type DynamicRoutingGetResponseElementsObject struct {
@@ -2373,6 +2342,37 @@ func (r DynamicRoutingGetVersionResponseElement) AsUnion() DynamicRoutingGetVers
 // [DynamicRoutingGetVersionResponseElementsObject].
 type DynamicRoutingGetVersionResponseElementsUnion interface {
 	implementsDynamicRoutingGetVersionResponseElement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DynamicRoutingGetVersionResponseElementsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DynamicRoutingGetVersionResponseElementsObject{}),
+		},
+	)
 }
 
 type DynamicRoutingGetVersionResponseElementsObject struct {

@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -168,8 +167,7 @@ func NewRequestConfig(ctx context.Context, method string, u string, body interfa
 		req.Header.Add(k, v)
 	}
 	cfg := RequestConfig{
-		// Increased from 2 to 10 for better rate limit handling
-		MaxRetries: 10,
+		MaxRetries: 2,
 		Context:    ctx,
 		Request:    req,
 		HTTPClient: http.DefaultClient,
@@ -252,18 +250,7 @@ func applyMiddleware(middleware middleware, next middlewareNext) middlewareNext 
 	}
 }
 
-func shouldRetry(req *http.Request, res *http.Response, err error) bool {
-	// Retry on transport-level errors (unexpected EOF, connection drops, etc.)
-	// These errors occur during network I/O and should be retried automatically.
-	if err != nil {
-		// Don't retry on intentional cancellations or deadline exceeded
-		if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
-			return false
-		}
-		// Retry on any other error (connection errors, EOF, network issues)
-		return true
-	}
-
+func shouldRetry(req *http.Request, res *http.Response) bool {
 	// If there is no way to recover the Body, then we shouldn't retry.
 	if req.Body != nil && req.GetBody == nil {
 		return false
@@ -386,11 +373,8 @@ func retryDelay(res *http.Response, retryCount int) time.Duration {
 		return max(0, retryAfterDelay)
 	}
 
-	// Increased for better rate limit handling:
-	// - maxDelay increased from 8s to 30s to match common rate limit windows
-	// - base multiplier increased from 0.5 to 2.0 for longer waits
-	maxDelay := 30 * time.Second
-	delay := time.Duration(2.0 * float64(time.Second) * math.Pow(2, float64(retryCount)))
+	maxDelay := 8 * time.Second
+	delay := time.Duration(0.5 * float64(time.Second) * math.Pow(2, float64(retryCount)))
 	if delay > maxDelay {
 		delay = maxDelay
 	}
@@ -471,7 +455,7 @@ func (cfg *RequestConfig) Execute() (err error) {
 		if ctx != nil && ctx.Err() != nil {
 			return ctx.Err()
 		}
-		if !shouldRetry(cfg.Request, res, err) || retryCount >= cfg.MaxRetries {
+		if !shouldRetry(cfg.Request, res) || retryCount >= cfg.MaxRetries {
 			break
 		}
 

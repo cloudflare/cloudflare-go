@@ -436,8 +436,6 @@ func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
 type RouteUpdateParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	// Identifier.
-	ID param.Field[string] `json:"id,required"`
 	// Pattern to match incoming requests against.
 	// [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
 	Pattern param.Field[string] `json:"pattern" api:"required"`

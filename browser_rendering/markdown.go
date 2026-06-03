@@ -171,7 +171,7 @@ type MarkdownNewParamsBodyObjectAddScriptTag struct {
 	ID      param.Field[string] `json:"id"`
 	Content param.Field[string] `json:"content"`
 	Type    param.Field[string] `json:"type"`
-	URL     param.Field[string] `json:"url"`
+	URL     param.Field[string] `json:"url" format:"uri"`
 }
 
 func (r MarkdownNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err error) {
@@ -180,7 +180,7 @@ func (r MarkdownNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err
 
 type MarkdownNewParamsBodyObjectAddStyleTag struct {
 	Content param.Field[string] `json:"content"`
-	URL     param.Field[string] `json:"url"`
+	URL     param.Field[string] `json:"url" format:"uri"`
 }
 
 func (r MarkdownNewParamsBodyObjectAddStyleTag) MarshalJSON() (data []byte, err error) {

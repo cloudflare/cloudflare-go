@@ -37,10 +37,9 @@ func TestAccessAIControlMcpPortalNewWithOptionalParams(t *testing.T) {
 		Description:      cloudflare.F("This is my custom MCP Portal"),
 		SecureWebGateway: cloudflare.F(false),
 		Servers: cloudflare.F([]zero_trust.AccessAIControlMcpPortalNewParamsServer{{
-			ServerID:                     cloudflare.F("my-mcp-server"),
-			DefaultDisabled:              cloudflare.F(true),
-			IsSharedOAuthCallbackEnabled: cloudflare.F(true),
-			OnBehalf:                     cloudflare.F(true),
+			ServerID:        cloudflare.F("my-mcp-server"),
+			DefaultDisabled: cloudflare.F(true),
+			OnBehalf:        cloudflare.F(true),
 			UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpPortalNewParamsServersUpdatedPrompt{{
 				Name:        cloudflare.F("name"),
 				Alias:       cloudflare.F("my-custom-alias"),
@@ -89,10 +88,9 @@ func TestAccessAIControlMcpPortalUpdateWithOptionalParams(t *testing.T) {
 			Name:             cloudflare.F("My MCP Portal"),
 			SecureWebGateway: cloudflare.F(false),
 			Servers: cloudflare.F([]zero_trust.AccessAIControlMcpPortalUpdateParamsServer{{
-				ServerID:                     cloudflare.F("my-mcp-server"),
-				DefaultDisabled:              cloudflare.F(true),
-				IsSharedOAuthCallbackEnabled: cloudflare.F(true),
-				OnBehalf:                     cloudflare.F(true),
+				ServerID:        cloudflare.F("my-mcp-server"),
+				DefaultDisabled: cloudflare.F(true),
+				OnBehalf:        cloudflare.F(true),
 				UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt{{
 					Name:        cloudflare.F("name"),
 					Alias:       cloudflare.F("my-custom-alias"),

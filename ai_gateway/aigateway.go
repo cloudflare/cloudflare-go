@@ -913,9 +913,9 @@ func (r AIGatewayNewResponseLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayNewResponseOtel struct {
-	Authorization string                              `json:"authorization" api:"required"`
 	Headers       map[string]string                   `json:"headers" api:"required"`
 	URL           string                              `json:"url" api:"required" format:"uri"`
+	Authorization string                              `json:"authorization"`
 	ContentType   AIGatewayNewResponseOtelContentType `json:"content_type"`
 	JSON          aiGatewayNewResponseOtelJSON        `json:"-"`
 }
@@ -923,9 +923,9 @@ type AIGatewayNewResponseOtel struct {
 // aiGatewayNewResponseOtelJSON contains the JSON metadata for the struct
 // [AIGatewayNewResponseOtel]
 type aiGatewayNewResponseOtelJSON struct {
-	Authorization apijson.Field
 	Headers       apijson.Field
 	URL           apijson.Field
+	Authorization apijson.Field
 	ContentType   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -1797,9 +1797,9 @@ func (r AIGatewayUpdateResponseLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayUpdateResponseOtel struct {
-	Authorization string                                 `json:"authorization" api:"required"`
 	Headers       map[string]string                      `json:"headers" api:"required"`
 	URL           string                                 `json:"url" api:"required" format:"uri"`
+	Authorization string                                 `json:"authorization"`
 	ContentType   AIGatewayUpdateResponseOtelContentType `json:"content_type"`
 	JSON          aiGatewayUpdateResponseOtelJSON        `json:"-"`
 }
@@ -1807,9 +1807,9 @@ type AIGatewayUpdateResponseOtel struct {
 // aiGatewayUpdateResponseOtelJSON contains the JSON metadata for the struct
 // [AIGatewayUpdateResponseOtel]
 type aiGatewayUpdateResponseOtelJSON struct {
-	Authorization apijson.Field
 	Headers       apijson.Field
 	URL           apijson.Field
+	Authorization apijson.Field
 	ContentType   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -2681,9 +2681,9 @@ func (r AIGatewayListResponseLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayListResponseOtel struct {
-	Authorization string                               `json:"authorization" api:"required"`
 	Headers       map[string]string                    `json:"headers" api:"required"`
 	URL           string                               `json:"url" api:"required" format:"uri"`
+	Authorization string                               `json:"authorization"`
 	ContentType   AIGatewayListResponseOtelContentType `json:"content_type"`
 	JSON          aiGatewayListResponseOtelJSON        `json:"-"`
 }
@@ -2691,9 +2691,9 @@ type AIGatewayListResponseOtel struct {
 // aiGatewayListResponseOtelJSON contains the JSON metadata for the struct
 // [AIGatewayListResponseOtel]
 type aiGatewayListResponseOtelJSON struct {
-	Authorization apijson.Field
 	Headers       apijson.Field
 	URL           apijson.Field
+	Authorization apijson.Field
 	ContentType   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -3565,9 +3565,9 @@ func (r AIGatewayDeleteResponseLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayDeleteResponseOtel struct {
-	Authorization string                                 `json:"authorization" api:"required"`
 	Headers       map[string]string                      `json:"headers" api:"required"`
 	URL           string                                 `json:"url" api:"required" format:"uri"`
+	Authorization string                                 `json:"authorization"`
 	ContentType   AIGatewayDeleteResponseOtelContentType `json:"content_type"`
 	JSON          aiGatewayDeleteResponseOtelJSON        `json:"-"`
 }
@@ -3575,9 +3575,9 @@ type AIGatewayDeleteResponseOtel struct {
 // aiGatewayDeleteResponseOtelJSON contains the JSON metadata for the struct
 // [AIGatewayDeleteResponseOtel]
 type aiGatewayDeleteResponseOtelJSON struct {
-	Authorization apijson.Field
 	Headers       apijson.Field
 	URL           apijson.Field
+	Authorization apijson.Field
 	ContentType   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -4448,9 +4448,9 @@ func (r AIGatewayGetResponseLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayGetResponseOtel struct {
-	Authorization string                              `json:"authorization" api:"required"`
 	Headers       map[string]string                   `json:"headers" api:"required"`
 	URL           string                              `json:"url" api:"required" format:"uri"`
+	Authorization string                              `json:"authorization"`
 	ContentType   AIGatewayGetResponseOtelContentType `json:"content_type"`
 	JSON          aiGatewayGetResponseOtelJSON        `json:"-"`
 }
@@ -4458,9 +4458,9 @@ type AIGatewayGetResponseOtel struct {
 // aiGatewayGetResponseOtelJSON contains the JSON metadata for the struct
 // [AIGatewayGetResponseOtel]
 type aiGatewayGetResponseOtelJSON struct {
-	Authorization apijson.Field
 	Headers       apijson.Field
 	URL           apijson.Field
+	Authorization apijson.Field
 	ContentType   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -5280,9 +5280,9 @@ func (r AIGatewayUpdateParamsLogManagementStrategy) IsKnown() bool {
 }
 
 type AIGatewayUpdateParamsOtel struct {
-	Authorization param.Field[string]                               `json:"authorization" api:"required"`
 	Headers       param.Field[map[string]string]                    `json:"headers" api:"required"`
 	URL           param.Field[string]                               `json:"url" api:"required" format:"uri"`
+	Authorization param.Field[string]                               `json:"authorization"`
 	ContentType   param.Field[AIGatewayUpdateParamsOtelContentType] `json:"content_type"`
 }
 

@@ -271,7 +271,7 @@ func (r superSlurperJobListResponseJSON) RawJSON() string {
 
 type SuperSlurperJobListResponseSource struct {
 	Bucket       string                                        `json:"bucket"`
-	Endpoint     string                                        `json:"endpoint" api:"nullable"`
+	Endpoint     string                                        `json:"endpoint" api:"nullable" format:"uri"`
 	Jurisdiction SuperSlurperJobListResponseSourceJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [[]string].
 	Keys       interface{}                             `json:"keys"`
@@ -346,7 +346,7 @@ func init() {
 
 type SuperSlurperJobListResponseSourceS3SourceResponseSchema struct {
 	Bucket     string                                                        `json:"bucket"`
-	Endpoint   string                                                        `json:"endpoint" api:"nullable"`
+	Endpoint   string                                                        `json:"endpoint" api:"nullable" format:"uri"`
 	Keys       []string                                                      `json:"keys" api:"nullable"`
 	PathPrefix string                                                        `json:"pathPrefix" api:"nullable"`
 	Vendor     SuperSlurperJobListResponseSourceS3SourceResponseSchemaVendor `json:"vendor"`
@@ -610,7 +610,7 @@ func (r superSlurperJobGetResponseJSON) RawJSON() string {
 
 type SuperSlurperJobGetResponseSource struct {
 	Bucket       string                                       `json:"bucket"`
-	Endpoint     string                                       `json:"endpoint" api:"nullable"`
+	Endpoint     string                                       `json:"endpoint" api:"nullable" format:"uri"`
 	Jurisdiction SuperSlurperJobGetResponseSourceJurisdiction `json:"jurisdiction"`
 	// This field can have the runtime type of [[]string].
 	Keys       interface{}                            `json:"keys"`
@@ -685,7 +685,7 @@ func init() {
 
 type SuperSlurperJobGetResponseSourceS3SourceResponseSchema struct {
 	Bucket     string                                                       `json:"bucket"`
-	Endpoint   string                                                       `json:"endpoint" api:"nullable"`
+	Endpoint   string                                                       `json:"endpoint" api:"nullable" format:"uri"`
 	Keys       []string                                                     `json:"keys" api:"nullable"`
 	PathPrefix string                                                       `json:"pathPrefix" api:"nullable"`
 	Vendor     SuperSlurperJobGetResponseSourceS3SourceResponseSchemaVendor `json:"vendor"`
@@ -974,10 +974,11 @@ func (r SuperSlurperJobNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SuperSlurperJobNewParamsSource struct {
-	Bucket       param.Field[string]                                     `json:"bucket" api:"required"`
-	Secret       param.Field[interface{}]                                `json:"secret" api:"required"`
-	Vendor       param.Field[SuperSlurperJobNewParamsSourceVendor]       `json:"vendor" api:"required"`
-	Endpoint     param.Field[string]                                     `json:"endpoint"`
+	Bucket param.Field[string]                               `json:"bucket" api:"required"`
+	Secret param.Field[interface{}]                          `json:"secret" api:"required"`
+	Vendor param.Field[SuperSlurperJobNewParamsSourceVendor] `json:"vendor" api:"required"`
+	// Custom S3-compatible endpoint that must use https://.
+	Endpoint     param.Field[string]                                     `json:"endpoint" format:"uri"`
 	Jurisdiction param.Field[SuperSlurperJobNewParamsSourceJurisdiction] `json:"jurisdiction"`
 	Keys         param.Field[interface{}]                                `json:"keys"`
 	PathPrefix   param.Field[string]                                     `json:"pathPrefix"`
@@ -999,13 +1000,14 @@ type SuperSlurperJobNewParamsSourceUnion interface {
 }
 
 type SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchema struct {
-	Bucket     param.Field[string]                                                      `json:"bucket" api:"required"`
-	Secret     param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret] `json:"secret" api:"required"`
-	Vendor     param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendor] `json:"vendor" api:"required"`
-	Endpoint   param.Field[string]                                                      `json:"endpoint"`
-	Keys       param.Field[[]string]                                                    `json:"keys"`
-	PathPrefix param.Field[string]                                                      `json:"pathPrefix"`
-	Region     param.Field[string]                                                      `json:"region"`
+	Bucket param.Field[string]                                                      `json:"bucket" api:"required"`
+	Secret param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaSecret] `json:"secret" api:"required"`
+	Vendor param.Field[SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchemaVendor] `json:"vendor" api:"required"`
+	// Custom S3-compatible endpoint that must use https://.
+	Endpoint   param.Field[string]   `json:"endpoint" format:"uri"`
+	Keys       param.Field[[]string] `json:"keys"`
+	PathPrefix param.Field[string]   `json:"pathPrefix"`
+	Region     param.Field[string]   `json:"region"`
 }
 
 func (r SuperSlurperJobNewParamsSourceR2SlurperS3SourceSchema) MarshalJSON() (data []byte, err error) {

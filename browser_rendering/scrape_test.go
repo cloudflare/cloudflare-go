@@ -34,17 +34,17 @@ func TestScrapeNewWithOptionalParams(t *testing.T) {
 			Elements: cloudflare.F([]browser_rendering.ScrapeNewParamsBodyObjectElement{{
 				Selector: cloudflare.F("h1"),
 			}}),
-			HTML:          cloudflare.F("x"),
+			URL:           cloudflare.F("https://www.example.com/"),
 			ActionTimeout: cloudflare.F(120000.000000),
 			AddScriptTag: cloudflare.F([]browser_rendering.ScrapeNewParamsBodyObjectAddScriptTag{{
 				ID:      cloudflare.F("id"),
 				Content: cloudflare.F("content"),
 				Type:    cloudflare.F("type"),
-				URL:     cloudflare.F("url"),
+				URL:     cloudflare.F("https://example.com"),
 			}}),
 			AddStyleTag: cloudflare.F([]browser_rendering.ScrapeNewParamsBodyObjectAddStyleTag{{
 				Content: cloudflare.F("content"),
-				URL:     cloudflare.F("url"),
+				URL:     cloudflare.F("https://example.com"),
 			}}),
 			AllowRequestPattern: cloudflare.F([]string{"string"}),
 			AllowResourceTypes:  cloudflare.F([]browser_rendering.ScrapeNewParamsBodyObjectAllowResourceType{browser_rendering.ScrapeNewParamsBodyObjectAllowResourceTypeDocument}),

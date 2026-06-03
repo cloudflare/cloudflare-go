@@ -373,7 +373,9 @@ type DLPEntryUpdateResponseCustomPromptTopicEntry struct {
 	Name      string                                           `json:"name" api:"required"`
 	Type      DLPEntryUpdateResponseCustomPromptTopicEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                        `json:"updated_at" api:"required" format:"date-time"`
-	JSON      dlpEntryUpdateResponseCustomPromptTopicEntryJSON `json:"-"`
+	// The optional description of the custom prompt topic entry.
+	Description string                                           `json:"description" api:"nullable"`
+	JSON        dlpEntryUpdateResponseCustomPromptTopicEntryJSON `json:"-"`
 }
 
 // dlpEntryUpdateResponseCustomPromptTopicEntryJSON contains the JSON metadata for
@@ -385,6 +387,7 @@ type dlpEntryUpdateResponseCustomPromptTopicEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -707,7 +710,9 @@ type DLPEntryUpdateResponseExactDataEntry struct {
 	Secret        bool                                     `json:"secret" api:"required"`
 	Type          DLPEntryUpdateResponseExactDataEntryType `json:"type" api:"required"`
 	UpdatedAt     time.Time                                `json:"updated_at" api:"required" format:"date-time"`
-	JSON          dlpEntryUpdateResponseExactDataEntryJSON `json:"-"`
+	// The optional description of the exact data entry.
+	Description string                                   `json:"description" api:"nullable"`
+	JSON        dlpEntryUpdateResponseExactDataEntryJSON `json:"-"`
 }
 
 // dlpEntryUpdateResponseExactDataEntryJSON contains the JSON metadata for the
@@ -721,6 +726,7 @@ type dlpEntryUpdateResponseExactDataEntryJSON struct {
 	Secret        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
+	Description   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -756,7 +762,9 @@ type DLPEntryUpdateResponseDocumentFingerprintEntry struct {
 	Name      string                                             `json:"name" api:"required"`
 	Type      DLPEntryUpdateResponseDocumentFingerprintEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                          `json:"updated_at" api:"required" format:"date-time"`
-	JSON      dlpEntryUpdateResponseDocumentFingerprintEntryJSON `json:"-"`
+	// The optional description of the document fingerprint entry.
+	Description string                                             `json:"description" api:"nullable"`
+	JSON        dlpEntryUpdateResponseDocumentFingerprintEntryJSON `json:"-"`
 }
 
 // dlpEntryUpdateResponseDocumentFingerprintEntryJSON contains the JSON metadata
@@ -768,6 +776,7 @@ type dlpEntryUpdateResponseDocumentFingerprintEntryJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	UpdatedAt   apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

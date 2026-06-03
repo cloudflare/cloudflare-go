@@ -30,7 +30,7 @@ func TestSessionGenerateSummaryOfTranscripts(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.RealtimeKit.Sessions.GenerateSummaryOfTranscripts(
+	_, err := client.RealtimeKit.Sessions.GenerateSummaryOfTranscripts(
 		context.TODO(),
 		"app_id",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
@@ -67,8 +67,9 @@ func TestSessionGetParticipantDataFromPeerIDWithOptionalParams(t *testing.T) {
 		"app_id",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGetParticipantDataFromPeerIDParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Filters:   cloudflare.F(realtime_kit.SessionGetParticipantDataFromPeerIDParamsFiltersDeviceInfo),
+			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Filters:           cloudflare.F(realtime_kit.SessionGetParticipantDataFromPeerIDParamsFiltersDeviceInfo),
+			IncludePeerEvents: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -251,7 +252,7 @@ func TestSessionGetSessionSummary(t *testing.T) {
 	}
 }
 
-func TestSessionGetSessionTranscripts(t *testing.T) {
+func TestSessionGetSessionTranscriptsWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: HTTP 401 from prism, support api tokens")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -272,6 +273,7 @@ func TestSessionGetSessionTranscripts(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGetSessionTranscriptsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Format:    cloudflare.F(realtime_kit.SessionGetSessionTranscriptsParamsFormatSrt),
 		},
 	)
 	if err != nil {
