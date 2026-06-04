@@ -188,9 +188,10 @@ type AIGatewayNewResponse struct {
 	// Delay between retry attempts in milliseconds (0-5000)
 	RetryDelay int64 `json:"retry_delay" api:"nullable"`
 	// Maximum number of retry attempts for failed requests (1-5)
-	RetryMaxAttempts int64                      `json:"retry_max_attempts" api:"nullable"`
-	StoreID          string                     `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayNewResponseStripe `json:"stripe" api:"nullable"`
+	RetryMaxAttempts int64                           `json:"retry_max_attempts" api:"nullable"`
+	SpendLimits      AIGatewayNewResponseSpendLimits `json:"spend_limits" api:"nullable"`
+	StoreID          string                          `json:"store_id" api:"nullable"`
+	Stripe           AIGatewayNewResponseStripe      `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayNewResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
@@ -222,6 +223,7 @@ type aiGatewayNewResponseJSON struct {
 	RetryBackoff            apijson.Field
 	RetryDelay              apijson.Field
 	RetryMaxAttempts        apijson.Field
+	SpendLimits             apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -986,6 +988,357 @@ func (r AIGatewayNewResponseRetryBackoff) IsKnown() bool {
 	return false
 }
 
+type AIGatewayNewResponseSpendLimits struct {
+	Enabled bool                                  `json:"enabled"`
+	Rules   []AIGatewayNewResponseSpendLimitsRule `json:"rules"`
+	JSON    aiGatewayNewResponseSpendLimitsJSON   `json:"-"`
+}
+
+// aiGatewayNewResponseSpendLimitsJSON contains the JSON metadata for the struct
+// [AIGatewayNewResponseSpendLimits]
+type aiGatewayNewResponseSpendLimitsJSON struct {
+	Enabled     apijson.Field
+	Rules       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseSpendLimits) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseSpendLimitsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayNewResponseSpendLimitsRule struct {
+	ID        string                                                  `json:"id" api:"required"`
+	Limit     float64                                                 `json:"limit" api:"required"`
+	LimitType AIGatewayNewResponseSpendLimitsRulesLimitType           `json:"limitType" api:"required"`
+	Window    int64                                                   `json:"window" api:"required"`
+	Enabled   bool                                                    `json:"enabled"`
+	Metadata  map[string]AIGatewayNewResponseSpendLimitsRulesMetadata `json:"metadata"`
+	Model     AIGatewayNewResponseSpendLimitsRulesModelUnion          `json:"model"`
+	Provider  AIGatewayNewResponseSpendLimitsRulesProviderUnion       `json:"provider"`
+	Technique AIGatewayNewResponseSpendLimitsRulesTechnique           `json:"technique"`
+	JSON      aiGatewayNewResponseSpendLimitsRuleJSON                 `json:"-"`
+}
+
+// aiGatewayNewResponseSpendLimitsRuleJSON contains the JSON metadata for the
+// struct [AIGatewayNewResponseSpendLimitsRule]
+type aiGatewayNewResponseSpendLimitsRuleJSON struct {
+	ID          apijson.Field
+	Limit       apijson.Field
+	LimitType   apijson.Field
+	Window      apijson.Field
+	Enabled     apijson.Field
+	Metadata    apijson.Field
+	Model       apijson.Field
+	Provider    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseSpendLimitsRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseSpendLimitsRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayNewResponseSpendLimitsRulesLimitType string
+
+const (
+	AIGatewayNewResponseSpendLimitsRulesLimitTypeCost AIGatewayNewResponseSpendLimitsRulesLimitType = "cost"
+)
+
+func (r AIGatewayNewResponseSpendLimitsRulesLimitType) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseSpendLimitsRulesLimitTypeCost:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewResponseSpendLimitsRulesMetadata struct {
+	Mode  AIGatewayNewResponseSpendLimitsRulesMetadataMode `json:"mode" api:"required"`
+	Value string                                           `json:"value"`
+	JSON  aiGatewayNewResponseSpendLimitsRulesMetadataJSON `json:"-"`
+	union AIGatewayNewResponseSpendLimitsRulesMetadataUnion
+}
+
+// aiGatewayNewResponseSpendLimitsRulesMetadataJSON contains the JSON metadata for
+// the struct [AIGatewayNewResponseSpendLimitsRulesMetadata]
+type aiGatewayNewResponseSpendLimitsRulesMetadataJSON struct {
+	Mode        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r aiGatewayNewResponseSpendLimitsRulesMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AIGatewayNewResponseSpendLimitsRulesMetadata) UnmarshalJSON(data []byte) (err error) {
+	*r = AIGatewayNewResponseSpendLimitsRulesMetadata{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [AIGatewayNewResponseSpendLimitsRulesMetadataUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [AIGatewayNewResponseSpendLimitsRulesMetadataMode],
+// [AIGatewayNewResponseSpendLimitsRulesMetadataObject].
+func (r AIGatewayNewResponseSpendLimitsRulesMetadata) AsUnion() AIGatewayNewResponseSpendLimitsRulesMetadataUnion {
+	return r.union
+}
+
+// Union satisfied by [AIGatewayNewResponseSpendLimitsRulesMetadataMode] or
+// [AIGatewayNewResponseSpendLimitsRulesMetadataObject].
+type AIGatewayNewResponseSpendLimitsRulesMetadataUnion interface {
+	implementsAIGatewayNewResponseSpendLimitsRulesMetadata()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayNewResponseSpendLimitsRulesMetadataUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayNewResponseSpendLimitsRulesMetadataMode{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayNewResponseSpendLimitsRulesMetadataObject{}),
+		},
+	)
+}
+
+type AIGatewayNewResponseSpendLimitsRulesMetadataMode struct {
+	Mode AIGatewayNewResponseSpendLimitsRulesMetadataModeMode `json:"mode" api:"required"`
+	JSON aiGatewayNewResponseSpendLimitsRulesMetadataModeJSON `json:"-"`
+}
+
+// aiGatewayNewResponseSpendLimitsRulesMetadataModeJSON contains the JSON metadata
+// for the struct [AIGatewayNewResponseSpendLimitsRulesMetadataMode]
+type aiGatewayNewResponseSpendLimitsRulesMetadataModeJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseSpendLimitsRulesMetadataMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseSpendLimitsRulesMetadataModeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayNewResponseSpendLimitsRulesMetadataMode) implementsAIGatewayNewResponseSpendLimitsRulesMetadata() {
+}
+
+type AIGatewayNewResponseSpendLimitsRulesMetadataModeMode string
+
+const (
+	AIGatewayNewResponseSpendLimitsRulesMetadataModeModePartition AIGatewayNewResponseSpendLimitsRulesMetadataModeMode = "partition"
+)
+
+func (r AIGatewayNewResponseSpendLimitsRulesMetadataModeMode) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseSpendLimitsRulesMetadataModeModePartition:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewResponseSpendLimitsRulesMetadataObject struct {
+	Mode  AIGatewayNewResponseSpendLimitsRulesMetadataObjectMode `json:"mode" api:"required"`
+	Value string                                                 `json:"value" api:"required"`
+	JSON  aiGatewayNewResponseSpendLimitsRulesMetadataObjectJSON `json:"-"`
+}
+
+// aiGatewayNewResponseSpendLimitsRulesMetadataObjectJSON contains the JSON
+// metadata for the struct [AIGatewayNewResponseSpendLimitsRulesMetadataObject]
+type aiGatewayNewResponseSpendLimitsRulesMetadataObjectJSON struct {
+	Mode        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseSpendLimitsRulesMetadataObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseSpendLimitsRulesMetadataObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayNewResponseSpendLimitsRulesMetadataObject) implementsAIGatewayNewResponseSpendLimitsRulesMetadata() {
+}
+
+type AIGatewayNewResponseSpendLimitsRulesMetadataObjectMode string
+
+const (
+	AIGatewayNewResponseSpendLimitsRulesMetadataObjectModeMatch AIGatewayNewResponseSpendLimitsRulesMetadataObjectMode = "match"
+)
+
+func (r AIGatewayNewResponseSpendLimitsRulesMetadataObjectMode) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseSpendLimitsRulesMetadataObjectModeMatch:
+		return true
+	}
+	return false
+}
+
+// Union satisfied by [AIGatewayNewResponseSpendLimitsRulesModelString] or
+// [AIGatewayNewResponseSpendLimitsRulesModelMatch].
+type AIGatewayNewResponseSpendLimitsRulesModelUnion interface {
+	implementsAIGatewayNewResponseSpendLimitsRulesModelUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayNewResponseSpendLimitsRulesModelUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(AIGatewayNewResponseSpendLimitsRulesModelString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayNewResponseSpendLimitsRulesModelMatch{}),
+		},
+	)
+}
+
+type AIGatewayNewResponseSpendLimitsRulesModelString string
+
+const (
+	AIGatewayNewResponseSpendLimitsRulesModelStringPartition AIGatewayNewResponseSpendLimitsRulesModelString = "partition"
+)
+
+func (r AIGatewayNewResponseSpendLimitsRulesModelString) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseSpendLimitsRulesModelStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayNewResponseSpendLimitsRulesModelString) implementsAIGatewayNewResponseSpendLimitsRulesModelUnion() {
+}
+
+type AIGatewayNewResponseSpendLimitsRulesModelMatch struct {
+	Match string                                             `json:"match" api:"required"`
+	JSON  aiGatewayNewResponseSpendLimitsRulesModelMatchJSON `json:"-"`
+}
+
+// aiGatewayNewResponseSpendLimitsRulesModelMatchJSON contains the JSON metadata
+// for the struct [AIGatewayNewResponseSpendLimitsRulesModelMatch]
+type aiGatewayNewResponseSpendLimitsRulesModelMatchJSON struct {
+	Match       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseSpendLimitsRulesModelMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseSpendLimitsRulesModelMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayNewResponseSpendLimitsRulesModelMatch) implementsAIGatewayNewResponseSpendLimitsRulesModelUnion() {
+}
+
+// Union satisfied by [AIGatewayNewResponseSpendLimitsRulesProviderString] or
+// [AIGatewayNewResponseSpendLimitsRulesProviderMatch].
+type AIGatewayNewResponseSpendLimitsRulesProviderUnion interface {
+	implementsAIGatewayNewResponseSpendLimitsRulesProviderUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayNewResponseSpendLimitsRulesProviderUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(AIGatewayNewResponseSpendLimitsRulesProviderString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayNewResponseSpendLimitsRulesProviderMatch{}),
+		},
+	)
+}
+
+type AIGatewayNewResponseSpendLimitsRulesProviderString string
+
+const (
+	AIGatewayNewResponseSpendLimitsRulesProviderStringPartition AIGatewayNewResponseSpendLimitsRulesProviderString = "partition"
+)
+
+func (r AIGatewayNewResponseSpendLimitsRulesProviderString) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseSpendLimitsRulesProviderStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayNewResponseSpendLimitsRulesProviderString) implementsAIGatewayNewResponseSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayNewResponseSpendLimitsRulesProviderMatch struct {
+	Match string                                                `json:"match" api:"required"`
+	JSON  aiGatewayNewResponseSpendLimitsRulesProviderMatchJSON `json:"-"`
+}
+
+// aiGatewayNewResponseSpendLimitsRulesProviderMatchJSON contains the JSON metadata
+// for the struct [AIGatewayNewResponseSpendLimitsRulesProviderMatch]
+type aiGatewayNewResponseSpendLimitsRulesProviderMatchJSON struct {
+	Match       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayNewResponseSpendLimitsRulesProviderMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayNewResponseSpendLimitsRulesProviderMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayNewResponseSpendLimitsRulesProviderMatch) implementsAIGatewayNewResponseSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayNewResponseSpendLimitsRulesTechnique string
+
+const (
+	AIGatewayNewResponseSpendLimitsRulesTechniqueFixed   AIGatewayNewResponseSpendLimitsRulesTechnique = "fixed"
+	AIGatewayNewResponseSpendLimitsRulesTechniqueSliding AIGatewayNewResponseSpendLimitsRulesTechnique = "sliding"
+)
+
+func (r AIGatewayNewResponseSpendLimitsRulesTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseSpendLimitsRulesTechniqueFixed, AIGatewayNewResponseSpendLimitsRulesTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayNewResponseStripe struct {
 	Authorization string                                 `json:"authorization" api:"required"`
 	UsageEvents   []AIGatewayNewResponseStripeUsageEvent `json:"usage_events" api:"required"`
@@ -1071,9 +1424,10 @@ type AIGatewayUpdateResponse struct {
 	// Delay between retry attempts in milliseconds (0-5000)
 	RetryDelay int64 `json:"retry_delay" api:"nullable"`
 	// Maximum number of retry attempts for failed requests (1-5)
-	RetryMaxAttempts int64                         `json:"retry_max_attempts" api:"nullable"`
-	StoreID          string                        `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayUpdateResponseStripe `json:"stripe" api:"nullable"`
+	RetryMaxAttempts int64                              `json:"retry_max_attempts" api:"nullable"`
+	SpendLimits      AIGatewayUpdateResponseSpendLimits `json:"spend_limits" api:"nullable"`
+	StoreID          string                             `json:"store_id" api:"nullable"`
+	Stripe           AIGatewayUpdateResponseStripe      `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayUpdateResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
@@ -1105,6 +1459,7 @@ type aiGatewayUpdateResponseJSON struct {
 	RetryBackoff            apijson.Field
 	RetryDelay              apijson.Field
 	RetryMaxAttempts        apijson.Field
+	SpendLimits             apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -1870,6 +2225,357 @@ func (r AIGatewayUpdateResponseRetryBackoff) IsKnown() bool {
 	return false
 }
 
+type AIGatewayUpdateResponseSpendLimits struct {
+	Enabled bool                                     `json:"enabled"`
+	Rules   []AIGatewayUpdateResponseSpendLimitsRule `json:"rules"`
+	JSON    aiGatewayUpdateResponseSpendLimitsJSON   `json:"-"`
+}
+
+// aiGatewayUpdateResponseSpendLimitsJSON contains the JSON metadata for the struct
+// [AIGatewayUpdateResponseSpendLimits]
+type aiGatewayUpdateResponseSpendLimitsJSON struct {
+	Enabled     apijson.Field
+	Rules       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseSpendLimits) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseSpendLimitsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayUpdateResponseSpendLimitsRule struct {
+	ID        string                                                     `json:"id" api:"required"`
+	Limit     float64                                                    `json:"limit" api:"required"`
+	LimitType AIGatewayUpdateResponseSpendLimitsRulesLimitType           `json:"limitType" api:"required"`
+	Window    int64                                                      `json:"window" api:"required"`
+	Enabled   bool                                                       `json:"enabled"`
+	Metadata  map[string]AIGatewayUpdateResponseSpendLimitsRulesMetadata `json:"metadata"`
+	Model     AIGatewayUpdateResponseSpendLimitsRulesModelUnion          `json:"model"`
+	Provider  AIGatewayUpdateResponseSpendLimitsRulesProviderUnion       `json:"provider"`
+	Technique AIGatewayUpdateResponseSpendLimitsRulesTechnique           `json:"technique"`
+	JSON      aiGatewayUpdateResponseSpendLimitsRuleJSON                 `json:"-"`
+}
+
+// aiGatewayUpdateResponseSpendLimitsRuleJSON contains the JSON metadata for the
+// struct [AIGatewayUpdateResponseSpendLimitsRule]
+type aiGatewayUpdateResponseSpendLimitsRuleJSON struct {
+	ID          apijson.Field
+	Limit       apijson.Field
+	LimitType   apijson.Field
+	Window      apijson.Field
+	Enabled     apijson.Field
+	Metadata    apijson.Field
+	Model       apijson.Field
+	Provider    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseSpendLimitsRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseSpendLimitsRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesLimitType string
+
+const (
+	AIGatewayUpdateResponseSpendLimitsRulesLimitTypeCost AIGatewayUpdateResponseSpendLimitsRulesLimitType = "cost"
+)
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesLimitType) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseSpendLimitsRulesLimitTypeCost:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesMetadata struct {
+	Mode  AIGatewayUpdateResponseSpendLimitsRulesMetadataMode `json:"mode" api:"required"`
+	Value string                                              `json:"value"`
+	JSON  aiGatewayUpdateResponseSpendLimitsRulesMetadataJSON `json:"-"`
+	union AIGatewayUpdateResponseSpendLimitsRulesMetadataUnion
+}
+
+// aiGatewayUpdateResponseSpendLimitsRulesMetadataJSON contains the JSON metadata
+// for the struct [AIGatewayUpdateResponseSpendLimitsRulesMetadata]
+type aiGatewayUpdateResponseSpendLimitsRulesMetadataJSON struct {
+	Mode        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r aiGatewayUpdateResponseSpendLimitsRulesMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AIGatewayUpdateResponseSpendLimitsRulesMetadata) UnmarshalJSON(data []byte) (err error) {
+	*r = AIGatewayUpdateResponseSpendLimitsRulesMetadata{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [AIGatewayUpdateResponseSpendLimitsRulesMetadataUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [AIGatewayUpdateResponseSpendLimitsRulesMetadataMode],
+// [AIGatewayUpdateResponseSpendLimitsRulesMetadataObject].
+func (r AIGatewayUpdateResponseSpendLimitsRulesMetadata) AsUnion() AIGatewayUpdateResponseSpendLimitsRulesMetadataUnion {
+	return r.union
+}
+
+// Union satisfied by [AIGatewayUpdateResponseSpendLimitsRulesMetadataMode] or
+// [AIGatewayUpdateResponseSpendLimitsRulesMetadataObject].
+type AIGatewayUpdateResponseSpendLimitsRulesMetadataUnion interface {
+	implementsAIGatewayUpdateResponseSpendLimitsRulesMetadata()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayUpdateResponseSpendLimitsRulesMetadataUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayUpdateResponseSpendLimitsRulesMetadataMode{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayUpdateResponseSpendLimitsRulesMetadataObject{}),
+		},
+	)
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesMetadataMode struct {
+	Mode AIGatewayUpdateResponseSpendLimitsRulesMetadataModeMode `json:"mode" api:"required"`
+	JSON aiGatewayUpdateResponseSpendLimitsRulesMetadataModeJSON `json:"-"`
+}
+
+// aiGatewayUpdateResponseSpendLimitsRulesMetadataModeJSON contains the JSON
+// metadata for the struct [AIGatewayUpdateResponseSpendLimitsRulesMetadataMode]
+type aiGatewayUpdateResponseSpendLimitsRulesMetadataModeJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseSpendLimitsRulesMetadataMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseSpendLimitsRulesMetadataModeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesMetadataMode) implementsAIGatewayUpdateResponseSpendLimitsRulesMetadata() {
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesMetadataModeMode string
+
+const (
+	AIGatewayUpdateResponseSpendLimitsRulesMetadataModeModePartition AIGatewayUpdateResponseSpendLimitsRulesMetadataModeMode = "partition"
+)
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesMetadataModeMode) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseSpendLimitsRulesMetadataModeModePartition:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesMetadataObject struct {
+	Mode  AIGatewayUpdateResponseSpendLimitsRulesMetadataObjectMode `json:"mode" api:"required"`
+	Value string                                                    `json:"value" api:"required"`
+	JSON  aiGatewayUpdateResponseSpendLimitsRulesMetadataObjectJSON `json:"-"`
+}
+
+// aiGatewayUpdateResponseSpendLimitsRulesMetadataObjectJSON contains the JSON
+// metadata for the struct [AIGatewayUpdateResponseSpendLimitsRulesMetadataObject]
+type aiGatewayUpdateResponseSpendLimitsRulesMetadataObjectJSON struct {
+	Mode        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseSpendLimitsRulesMetadataObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseSpendLimitsRulesMetadataObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesMetadataObject) implementsAIGatewayUpdateResponseSpendLimitsRulesMetadata() {
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesMetadataObjectMode string
+
+const (
+	AIGatewayUpdateResponseSpendLimitsRulesMetadataObjectModeMatch AIGatewayUpdateResponseSpendLimitsRulesMetadataObjectMode = "match"
+)
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesMetadataObjectMode) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseSpendLimitsRulesMetadataObjectModeMatch:
+		return true
+	}
+	return false
+}
+
+// Union satisfied by [AIGatewayUpdateResponseSpendLimitsRulesModelString] or
+// [AIGatewayUpdateResponseSpendLimitsRulesModelMatch].
+type AIGatewayUpdateResponseSpendLimitsRulesModelUnion interface {
+	implementsAIGatewayUpdateResponseSpendLimitsRulesModelUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayUpdateResponseSpendLimitsRulesModelUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(AIGatewayUpdateResponseSpendLimitsRulesModelString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayUpdateResponseSpendLimitsRulesModelMatch{}),
+		},
+	)
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesModelString string
+
+const (
+	AIGatewayUpdateResponseSpendLimitsRulesModelStringPartition AIGatewayUpdateResponseSpendLimitsRulesModelString = "partition"
+)
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesModelString) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseSpendLimitsRulesModelStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesModelString) implementsAIGatewayUpdateResponseSpendLimitsRulesModelUnion() {
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesModelMatch struct {
+	Match string                                                `json:"match" api:"required"`
+	JSON  aiGatewayUpdateResponseSpendLimitsRulesModelMatchJSON `json:"-"`
+}
+
+// aiGatewayUpdateResponseSpendLimitsRulesModelMatchJSON contains the JSON metadata
+// for the struct [AIGatewayUpdateResponseSpendLimitsRulesModelMatch]
+type aiGatewayUpdateResponseSpendLimitsRulesModelMatchJSON struct {
+	Match       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseSpendLimitsRulesModelMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseSpendLimitsRulesModelMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesModelMatch) implementsAIGatewayUpdateResponseSpendLimitsRulesModelUnion() {
+}
+
+// Union satisfied by [AIGatewayUpdateResponseSpendLimitsRulesProviderString] or
+// [AIGatewayUpdateResponseSpendLimitsRulesProviderMatch].
+type AIGatewayUpdateResponseSpendLimitsRulesProviderUnion interface {
+	implementsAIGatewayUpdateResponseSpendLimitsRulesProviderUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayUpdateResponseSpendLimitsRulesProviderUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(AIGatewayUpdateResponseSpendLimitsRulesProviderString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayUpdateResponseSpendLimitsRulesProviderMatch{}),
+		},
+	)
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesProviderString string
+
+const (
+	AIGatewayUpdateResponseSpendLimitsRulesProviderStringPartition AIGatewayUpdateResponseSpendLimitsRulesProviderString = "partition"
+)
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesProviderString) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseSpendLimitsRulesProviderStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesProviderString) implementsAIGatewayUpdateResponseSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesProviderMatch struct {
+	Match string                                                   `json:"match" api:"required"`
+	JSON  aiGatewayUpdateResponseSpendLimitsRulesProviderMatchJSON `json:"-"`
+}
+
+// aiGatewayUpdateResponseSpendLimitsRulesProviderMatchJSON contains the JSON
+// metadata for the struct [AIGatewayUpdateResponseSpendLimitsRulesProviderMatch]
+type aiGatewayUpdateResponseSpendLimitsRulesProviderMatchJSON struct {
+	Match       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayUpdateResponseSpendLimitsRulesProviderMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayUpdateResponseSpendLimitsRulesProviderMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesProviderMatch) implementsAIGatewayUpdateResponseSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayUpdateResponseSpendLimitsRulesTechnique string
+
+const (
+	AIGatewayUpdateResponseSpendLimitsRulesTechniqueFixed   AIGatewayUpdateResponseSpendLimitsRulesTechnique = "fixed"
+	AIGatewayUpdateResponseSpendLimitsRulesTechniqueSliding AIGatewayUpdateResponseSpendLimitsRulesTechnique = "sliding"
+)
+
+func (r AIGatewayUpdateResponseSpendLimitsRulesTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseSpendLimitsRulesTechniqueFixed, AIGatewayUpdateResponseSpendLimitsRulesTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayUpdateResponseStripe struct {
 	Authorization string                                    `json:"authorization" api:"required"`
 	UsageEvents   []AIGatewayUpdateResponseStripeUsageEvent `json:"usage_events" api:"required"`
@@ -1955,9 +2661,10 @@ type AIGatewayListResponse struct {
 	// Delay between retry attempts in milliseconds (0-5000)
 	RetryDelay int64 `json:"retry_delay" api:"nullable"`
 	// Maximum number of retry attempts for failed requests (1-5)
-	RetryMaxAttempts int64                       `json:"retry_max_attempts" api:"nullable"`
-	StoreID          string                      `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayListResponseStripe `json:"stripe" api:"nullable"`
+	RetryMaxAttempts int64                            `json:"retry_max_attempts" api:"nullable"`
+	SpendLimits      AIGatewayListResponseSpendLimits `json:"spend_limits" api:"nullable"`
+	StoreID          string                           `json:"store_id" api:"nullable"`
+	Stripe           AIGatewayListResponseStripe      `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayListResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
@@ -1989,6 +2696,7 @@ type aiGatewayListResponseJSON struct {
 	RetryBackoff            apijson.Field
 	RetryDelay              apijson.Field
 	RetryMaxAttempts        apijson.Field
+	SpendLimits             apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -2754,6 +3462,357 @@ func (r AIGatewayListResponseRetryBackoff) IsKnown() bool {
 	return false
 }
 
+type AIGatewayListResponseSpendLimits struct {
+	Enabled bool                                   `json:"enabled"`
+	Rules   []AIGatewayListResponseSpendLimitsRule `json:"rules"`
+	JSON    aiGatewayListResponseSpendLimitsJSON   `json:"-"`
+}
+
+// aiGatewayListResponseSpendLimitsJSON contains the JSON metadata for the struct
+// [AIGatewayListResponseSpendLimits]
+type aiGatewayListResponseSpendLimitsJSON struct {
+	Enabled     apijson.Field
+	Rules       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseSpendLimits) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseSpendLimitsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayListResponseSpendLimitsRule struct {
+	ID        string                                                   `json:"id" api:"required"`
+	Limit     float64                                                  `json:"limit" api:"required"`
+	LimitType AIGatewayListResponseSpendLimitsRulesLimitType           `json:"limitType" api:"required"`
+	Window    int64                                                    `json:"window" api:"required"`
+	Enabled   bool                                                     `json:"enabled"`
+	Metadata  map[string]AIGatewayListResponseSpendLimitsRulesMetadata `json:"metadata"`
+	Model     AIGatewayListResponseSpendLimitsRulesModelUnion          `json:"model"`
+	Provider  AIGatewayListResponseSpendLimitsRulesProviderUnion       `json:"provider"`
+	Technique AIGatewayListResponseSpendLimitsRulesTechnique           `json:"technique"`
+	JSON      aiGatewayListResponseSpendLimitsRuleJSON                 `json:"-"`
+}
+
+// aiGatewayListResponseSpendLimitsRuleJSON contains the JSON metadata for the
+// struct [AIGatewayListResponseSpendLimitsRule]
+type aiGatewayListResponseSpendLimitsRuleJSON struct {
+	ID          apijson.Field
+	Limit       apijson.Field
+	LimitType   apijson.Field
+	Window      apijson.Field
+	Enabled     apijson.Field
+	Metadata    apijson.Field
+	Model       apijson.Field
+	Provider    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseSpendLimitsRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseSpendLimitsRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayListResponseSpendLimitsRulesLimitType string
+
+const (
+	AIGatewayListResponseSpendLimitsRulesLimitTypeCost AIGatewayListResponseSpendLimitsRulesLimitType = "cost"
+)
+
+func (r AIGatewayListResponseSpendLimitsRulesLimitType) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseSpendLimitsRulesLimitTypeCost:
+		return true
+	}
+	return false
+}
+
+type AIGatewayListResponseSpendLimitsRulesMetadata struct {
+	Mode  AIGatewayListResponseSpendLimitsRulesMetadataMode `json:"mode" api:"required"`
+	Value string                                            `json:"value"`
+	JSON  aiGatewayListResponseSpendLimitsRulesMetadataJSON `json:"-"`
+	union AIGatewayListResponseSpendLimitsRulesMetadataUnion
+}
+
+// aiGatewayListResponseSpendLimitsRulesMetadataJSON contains the JSON metadata for
+// the struct [AIGatewayListResponseSpendLimitsRulesMetadata]
+type aiGatewayListResponseSpendLimitsRulesMetadataJSON struct {
+	Mode        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r aiGatewayListResponseSpendLimitsRulesMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AIGatewayListResponseSpendLimitsRulesMetadata) UnmarshalJSON(data []byte) (err error) {
+	*r = AIGatewayListResponseSpendLimitsRulesMetadata{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [AIGatewayListResponseSpendLimitsRulesMetadataUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [AIGatewayListResponseSpendLimitsRulesMetadataMode],
+// [AIGatewayListResponseSpendLimitsRulesMetadataObject].
+func (r AIGatewayListResponseSpendLimitsRulesMetadata) AsUnion() AIGatewayListResponseSpendLimitsRulesMetadataUnion {
+	return r.union
+}
+
+// Union satisfied by [AIGatewayListResponseSpendLimitsRulesMetadataMode] or
+// [AIGatewayListResponseSpendLimitsRulesMetadataObject].
+type AIGatewayListResponseSpendLimitsRulesMetadataUnion interface {
+	implementsAIGatewayListResponseSpendLimitsRulesMetadata()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayListResponseSpendLimitsRulesMetadataUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayListResponseSpendLimitsRulesMetadataMode{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayListResponseSpendLimitsRulesMetadataObject{}),
+		},
+	)
+}
+
+type AIGatewayListResponseSpendLimitsRulesMetadataMode struct {
+	Mode AIGatewayListResponseSpendLimitsRulesMetadataModeMode `json:"mode" api:"required"`
+	JSON aiGatewayListResponseSpendLimitsRulesMetadataModeJSON `json:"-"`
+}
+
+// aiGatewayListResponseSpendLimitsRulesMetadataModeJSON contains the JSON metadata
+// for the struct [AIGatewayListResponseSpendLimitsRulesMetadataMode]
+type aiGatewayListResponseSpendLimitsRulesMetadataModeJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseSpendLimitsRulesMetadataMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseSpendLimitsRulesMetadataModeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayListResponseSpendLimitsRulesMetadataMode) implementsAIGatewayListResponseSpendLimitsRulesMetadata() {
+}
+
+type AIGatewayListResponseSpendLimitsRulesMetadataModeMode string
+
+const (
+	AIGatewayListResponseSpendLimitsRulesMetadataModeModePartition AIGatewayListResponseSpendLimitsRulesMetadataModeMode = "partition"
+)
+
+func (r AIGatewayListResponseSpendLimitsRulesMetadataModeMode) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseSpendLimitsRulesMetadataModeModePartition:
+		return true
+	}
+	return false
+}
+
+type AIGatewayListResponseSpendLimitsRulesMetadataObject struct {
+	Mode  AIGatewayListResponseSpendLimitsRulesMetadataObjectMode `json:"mode" api:"required"`
+	Value string                                                  `json:"value" api:"required"`
+	JSON  aiGatewayListResponseSpendLimitsRulesMetadataObjectJSON `json:"-"`
+}
+
+// aiGatewayListResponseSpendLimitsRulesMetadataObjectJSON contains the JSON
+// metadata for the struct [AIGatewayListResponseSpendLimitsRulesMetadataObject]
+type aiGatewayListResponseSpendLimitsRulesMetadataObjectJSON struct {
+	Mode        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseSpendLimitsRulesMetadataObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseSpendLimitsRulesMetadataObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayListResponseSpendLimitsRulesMetadataObject) implementsAIGatewayListResponseSpendLimitsRulesMetadata() {
+}
+
+type AIGatewayListResponseSpendLimitsRulesMetadataObjectMode string
+
+const (
+	AIGatewayListResponseSpendLimitsRulesMetadataObjectModeMatch AIGatewayListResponseSpendLimitsRulesMetadataObjectMode = "match"
+)
+
+func (r AIGatewayListResponseSpendLimitsRulesMetadataObjectMode) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseSpendLimitsRulesMetadataObjectModeMatch:
+		return true
+	}
+	return false
+}
+
+// Union satisfied by [AIGatewayListResponseSpendLimitsRulesModelString] or
+// [AIGatewayListResponseSpendLimitsRulesModelMatch].
+type AIGatewayListResponseSpendLimitsRulesModelUnion interface {
+	implementsAIGatewayListResponseSpendLimitsRulesModelUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayListResponseSpendLimitsRulesModelUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(AIGatewayListResponseSpendLimitsRulesModelString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayListResponseSpendLimitsRulesModelMatch{}),
+		},
+	)
+}
+
+type AIGatewayListResponseSpendLimitsRulesModelString string
+
+const (
+	AIGatewayListResponseSpendLimitsRulesModelStringPartition AIGatewayListResponseSpendLimitsRulesModelString = "partition"
+)
+
+func (r AIGatewayListResponseSpendLimitsRulesModelString) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseSpendLimitsRulesModelStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayListResponseSpendLimitsRulesModelString) implementsAIGatewayListResponseSpendLimitsRulesModelUnion() {
+}
+
+type AIGatewayListResponseSpendLimitsRulesModelMatch struct {
+	Match string                                              `json:"match" api:"required"`
+	JSON  aiGatewayListResponseSpendLimitsRulesModelMatchJSON `json:"-"`
+}
+
+// aiGatewayListResponseSpendLimitsRulesModelMatchJSON contains the JSON metadata
+// for the struct [AIGatewayListResponseSpendLimitsRulesModelMatch]
+type aiGatewayListResponseSpendLimitsRulesModelMatchJSON struct {
+	Match       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseSpendLimitsRulesModelMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseSpendLimitsRulesModelMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayListResponseSpendLimitsRulesModelMatch) implementsAIGatewayListResponseSpendLimitsRulesModelUnion() {
+}
+
+// Union satisfied by [AIGatewayListResponseSpendLimitsRulesProviderString] or
+// [AIGatewayListResponseSpendLimitsRulesProviderMatch].
+type AIGatewayListResponseSpendLimitsRulesProviderUnion interface {
+	implementsAIGatewayListResponseSpendLimitsRulesProviderUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayListResponseSpendLimitsRulesProviderUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(AIGatewayListResponseSpendLimitsRulesProviderString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayListResponseSpendLimitsRulesProviderMatch{}),
+		},
+	)
+}
+
+type AIGatewayListResponseSpendLimitsRulesProviderString string
+
+const (
+	AIGatewayListResponseSpendLimitsRulesProviderStringPartition AIGatewayListResponseSpendLimitsRulesProviderString = "partition"
+)
+
+func (r AIGatewayListResponseSpendLimitsRulesProviderString) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseSpendLimitsRulesProviderStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayListResponseSpendLimitsRulesProviderString) implementsAIGatewayListResponseSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayListResponseSpendLimitsRulesProviderMatch struct {
+	Match string                                                 `json:"match" api:"required"`
+	JSON  aiGatewayListResponseSpendLimitsRulesProviderMatchJSON `json:"-"`
+}
+
+// aiGatewayListResponseSpendLimitsRulesProviderMatchJSON contains the JSON
+// metadata for the struct [AIGatewayListResponseSpendLimitsRulesProviderMatch]
+type aiGatewayListResponseSpendLimitsRulesProviderMatchJSON struct {
+	Match       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayListResponseSpendLimitsRulesProviderMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayListResponseSpendLimitsRulesProviderMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayListResponseSpendLimitsRulesProviderMatch) implementsAIGatewayListResponseSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayListResponseSpendLimitsRulesTechnique string
+
+const (
+	AIGatewayListResponseSpendLimitsRulesTechniqueFixed   AIGatewayListResponseSpendLimitsRulesTechnique = "fixed"
+	AIGatewayListResponseSpendLimitsRulesTechniqueSliding AIGatewayListResponseSpendLimitsRulesTechnique = "sliding"
+)
+
+func (r AIGatewayListResponseSpendLimitsRulesTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseSpendLimitsRulesTechniqueFixed, AIGatewayListResponseSpendLimitsRulesTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayListResponseStripe struct {
 	Authorization string                                  `json:"authorization" api:"required"`
 	UsageEvents   []AIGatewayListResponseStripeUsageEvent `json:"usage_events" api:"required"`
@@ -2839,9 +3898,10 @@ type AIGatewayDeleteResponse struct {
 	// Delay between retry attempts in milliseconds (0-5000)
 	RetryDelay int64 `json:"retry_delay" api:"nullable"`
 	// Maximum number of retry attempts for failed requests (1-5)
-	RetryMaxAttempts int64                         `json:"retry_max_attempts" api:"nullable"`
-	StoreID          string                        `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayDeleteResponseStripe `json:"stripe" api:"nullable"`
+	RetryMaxAttempts int64                              `json:"retry_max_attempts" api:"nullable"`
+	SpendLimits      AIGatewayDeleteResponseSpendLimits `json:"spend_limits" api:"nullable"`
+	StoreID          string                             `json:"store_id" api:"nullable"`
+	Stripe           AIGatewayDeleteResponseStripe      `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayDeleteResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
@@ -2873,6 +3933,7 @@ type aiGatewayDeleteResponseJSON struct {
 	RetryBackoff            apijson.Field
 	RetryDelay              apijson.Field
 	RetryMaxAttempts        apijson.Field
+	SpendLimits             apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -3638,6 +4699,357 @@ func (r AIGatewayDeleteResponseRetryBackoff) IsKnown() bool {
 	return false
 }
 
+type AIGatewayDeleteResponseSpendLimits struct {
+	Enabled bool                                     `json:"enabled"`
+	Rules   []AIGatewayDeleteResponseSpendLimitsRule `json:"rules"`
+	JSON    aiGatewayDeleteResponseSpendLimitsJSON   `json:"-"`
+}
+
+// aiGatewayDeleteResponseSpendLimitsJSON contains the JSON metadata for the struct
+// [AIGatewayDeleteResponseSpendLimits]
+type aiGatewayDeleteResponseSpendLimitsJSON struct {
+	Enabled     apijson.Field
+	Rules       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseSpendLimits) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseSpendLimitsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayDeleteResponseSpendLimitsRule struct {
+	ID        string                                                     `json:"id" api:"required"`
+	Limit     float64                                                    `json:"limit" api:"required"`
+	LimitType AIGatewayDeleteResponseSpendLimitsRulesLimitType           `json:"limitType" api:"required"`
+	Window    int64                                                      `json:"window" api:"required"`
+	Enabled   bool                                                       `json:"enabled"`
+	Metadata  map[string]AIGatewayDeleteResponseSpendLimitsRulesMetadata `json:"metadata"`
+	Model     AIGatewayDeleteResponseSpendLimitsRulesModelUnion          `json:"model"`
+	Provider  AIGatewayDeleteResponseSpendLimitsRulesProviderUnion       `json:"provider"`
+	Technique AIGatewayDeleteResponseSpendLimitsRulesTechnique           `json:"technique"`
+	JSON      aiGatewayDeleteResponseSpendLimitsRuleJSON                 `json:"-"`
+}
+
+// aiGatewayDeleteResponseSpendLimitsRuleJSON contains the JSON metadata for the
+// struct [AIGatewayDeleteResponseSpendLimitsRule]
+type aiGatewayDeleteResponseSpendLimitsRuleJSON struct {
+	ID          apijson.Field
+	Limit       apijson.Field
+	LimitType   apijson.Field
+	Window      apijson.Field
+	Enabled     apijson.Field
+	Metadata    apijson.Field
+	Model       apijson.Field
+	Provider    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseSpendLimitsRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseSpendLimitsRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesLimitType string
+
+const (
+	AIGatewayDeleteResponseSpendLimitsRulesLimitTypeCost AIGatewayDeleteResponseSpendLimitsRulesLimitType = "cost"
+)
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesLimitType) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseSpendLimitsRulesLimitTypeCost:
+		return true
+	}
+	return false
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesMetadata struct {
+	Mode  AIGatewayDeleteResponseSpendLimitsRulesMetadataMode `json:"mode" api:"required"`
+	Value string                                              `json:"value"`
+	JSON  aiGatewayDeleteResponseSpendLimitsRulesMetadataJSON `json:"-"`
+	union AIGatewayDeleteResponseSpendLimitsRulesMetadataUnion
+}
+
+// aiGatewayDeleteResponseSpendLimitsRulesMetadataJSON contains the JSON metadata
+// for the struct [AIGatewayDeleteResponseSpendLimitsRulesMetadata]
+type aiGatewayDeleteResponseSpendLimitsRulesMetadataJSON struct {
+	Mode        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r aiGatewayDeleteResponseSpendLimitsRulesMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AIGatewayDeleteResponseSpendLimitsRulesMetadata) UnmarshalJSON(data []byte) (err error) {
+	*r = AIGatewayDeleteResponseSpendLimitsRulesMetadata{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [AIGatewayDeleteResponseSpendLimitsRulesMetadataUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [AIGatewayDeleteResponseSpendLimitsRulesMetadataMode],
+// [AIGatewayDeleteResponseSpendLimitsRulesMetadataObject].
+func (r AIGatewayDeleteResponseSpendLimitsRulesMetadata) AsUnion() AIGatewayDeleteResponseSpendLimitsRulesMetadataUnion {
+	return r.union
+}
+
+// Union satisfied by [AIGatewayDeleteResponseSpendLimitsRulesMetadataMode] or
+// [AIGatewayDeleteResponseSpendLimitsRulesMetadataObject].
+type AIGatewayDeleteResponseSpendLimitsRulesMetadataUnion interface {
+	implementsAIGatewayDeleteResponseSpendLimitsRulesMetadata()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayDeleteResponseSpendLimitsRulesMetadataUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayDeleteResponseSpendLimitsRulesMetadataMode{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayDeleteResponseSpendLimitsRulesMetadataObject{}),
+		},
+	)
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesMetadataMode struct {
+	Mode AIGatewayDeleteResponseSpendLimitsRulesMetadataModeMode `json:"mode" api:"required"`
+	JSON aiGatewayDeleteResponseSpendLimitsRulesMetadataModeJSON `json:"-"`
+}
+
+// aiGatewayDeleteResponseSpendLimitsRulesMetadataModeJSON contains the JSON
+// metadata for the struct [AIGatewayDeleteResponseSpendLimitsRulesMetadataMode]
+type aiGatewayDeleteResponseSpendLimitsRulesMetadataModeJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseSpendLimitsRulesMetadataMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseSpendLimitsRulesMetadataModeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesMetadataMode) implementsAIGatewayDeleteResponseSpendLimitsRulesMetadata() {
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesMetadataModeMode string
+
+const (
+	AIGatewayDeleteResponseSpendLimitsRulesMetadataModeModePartition AIGatewayDeleteResponseSpendLimitsRulesMetadataModeMode = "partition"
+)
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesMetadataModeMode) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseSpendLimitsRulesMetadataModeModePartition:
+		return true
+	}
+	return false
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesMetadataObject struct {
+	Mode  AIGatewayDeleteResponseSpendLimitsRulesMetadataObjectMode `json:"mode" api:"required"`
+	Value string                                                    `json:"value" api:"required"`
+	JSON  aiGatewayDeleteResponseSpendLimitsRulesMetadataObjectJSON `json:"-"`
+}
+
+// aiGatewayDeleteResponseSpendLimitsRulesMetadataObjectJSON contains the JSON
+// metadata for the struct [AIGatewayDeleteResponseSpendLimitsRulesMetadataObject]
+type aiGatewayDeleteResponseSpendLimitsRulesMetadataObjectJSON struct {
+	Mode        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseSpendLimitsRulesMetadataObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseSpendLimitsRulesMetadataObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesMetadataObject) implementsAIGatewayDeleteResponseSpendLimitsRulesMetadata() {
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesMetadataObjectMode string
+
+const (
+	AIGatewayDeleteResponseSpendLimitsRulesMetadataObjectModeMatch AIGatewayDeleteResponseSpendLimitsRulesMetadataObjectMode = "match"
+)
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesMetadataObjectMode) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseSpendLimitsRulesMetadataObjectModeMatch:
+		return true
+	}
+	return false
+}
+
+// Union satisfied by [AIGatewayDeleteResponseSpendLimitsRulesModelString] or
+// [AIGatewayDeleteResponseSpendLimitsRulesModelMatch].
+type AIGatewayDeleteResponseSpendLimitsRulesModelUnion interface {
+	implementsAIGatewayDeleteResponseSpendLimitsRulesModelUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayDeleteResponseSpendLimitsRulesModelUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(AIGatewayDeleteResponseSpendLimitsRulesModelString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayDeleteResponseSpendLimitsRulesModelMatch{}),
+		},
+	)
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesModelString string
+
+const (
+	AIGatewayDeleteResponseSpendLimitsRulesModelStringPartition AIGatewayDeleteResponseSpendLimitsRulesModelString = "partition"
+)
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesModelString) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseSpendLimitsRulesModelStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesModelString) implementsAIGatewayDeleteResponseSpendLimitsRulesModelUnion() {
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesModelMatch struct {
+	Match string                                                `json:"match" api:"required"`
+	JSON  aiGatewayDeleteResponseSpendLimitsRulesModelMatchJSON `json:"-"`
+}
+
+// aiGatewayDeleteResponseSpendLimitsRulesModelMatchJSON contains the JSON metadata
+// for the struct [AIGatewayDeleteResponseSpendLimitsRulesModelMatch]
+type aiGatewayDeleteResponseSpendLimitsRulesModelMatchJSON struct {
+	Match       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseSpendLimitsRulesModelMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseSpendLimitsRulesModelMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesModelMatch) implementsAIGatewayDeleteResponseSpendLimitsRulesModelUnion() {
+}
+
+// Union satisfied by [AIGatewayDeleteResponseSpendLimitsRulesProviderString] or
+// [AIGatewayDeleteResponseSpendLimitsRulesProviderMatch].
+type AIGatewayDeleteResponseSpendLimitsRulesProviderUnion interface {
+	implementsAIGatewayDeleteResponseSpendLimitsRulesProviderUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayDeleteResponseSpendLimitsRulesProviderUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(AIGatewayDeleteResponseSpendLimitsRulesProviderString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayDeleteResponseSpendLimitsRulesProviderMatch{}),
+		},
+	)
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesProviderString string
+
+const (
+	AIGatewayDeleteResponseSpendLimitsRulesProviderStringPartition AIGatewayDeleteResponseSpendLimitsRulesProviderString = "partition"
+)
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesProviderString) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseSpendLimitsRulesProviderStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesProviderString) implementsAIGatewayDeleteResponseSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesProviderMatch struct {
+	Match string                                                   `json:"match" api:"required"`
+	JSON  aiGatewayDeleteResponseSpendLimitsRulesProviderMatchJSON `json:"-"`
+}
+
+// aiGatewayDeleteResponseSpendLimitsRulesProviderMatchJSON contains the JSON
+// metadata for the struct [AIGatewayDeleteResponseSpendLimitsRulesProviderMatch]
+type aiGatewayDeleteResponseSpendLimitsRulesProviderMatchJSON struct {
+	Match       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayDeleteResponseSpendLimitsRulesProviderMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayDeleteResponseSpendLimitsRulesProviderMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesProviderMatch) implementsAIGatewayDeleteResponseSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayDeleteResponseSpendLimitsRulesTechnique string
+
+const (
+	AIGatewayDeleteResponseSpendLimitsRulesTechniqueFixed   AIGatewayDeleteResponseSpendLimitsRulesTechnique = "fixed"
+	AIGatewayDeleteResponseSpendLimitsRulesTechniqueSliding AIGatewayDeleteResponseSpendLimitsRulesTechnique = "sliding"
+)
+
+func (r AIGatewayDeleteResponseSpendLimitsRulesTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseSpendLimitsRulesTechniqueFixed, AIGatewayDeleteResponseSpendLimitsRulesTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayDeleteResponseStripe struct {
 	Authorization string                                    `json:"authorization" api:"required"`
 	UsageEvents   []AIGatewayDeleteResponseStripeUsageEvent `json:"usage_events" api:"required"`
@@ -3723,9 +5135,10 @@ type AIGatewayGetResponse struct {
 	// Delay between retry attempts in milliseconds (0-5000)
 	RetryDelay int64 `json:"retry_delay" api:"nullable"`
 	// Maximum number of retry attempts for failed requests (1-5)
-	RetryMaxAttempts int64                      `json:"retry_max_attempts" api:"nullable"`
-	StoreID          string                     `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayGetResponseStripe `json:"stripe" api:"nullable"`
+	RetryMaxAttempts int64                           `json:"retry_max_attempts" api:"nullable"`
+	SpendLimits      AIGatewayGetResponseSpendLimits `json:"spend_limits" api:"nullable"`
+	StoreID          string                          `json:"store_id" api:"nullable"`
+	Stripe           AIGatewayGetResponseStripe      `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode AIGatewayGetResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
@@ -3757,6 +5170,7 @@ type aiGatewayGetResponseJSON struct {
 	RetryBackoff            apijson.Field
 	RetryDelay              apijson.Field
 	RetryMaxAttempts        apijson.Field
+	SpendLimits             apijson.Field
 	StoreID                 apijson.Field
 	Stripe                  apijson.Field
 	WorkersAIBillingMode    apijson.Field
@@ -4521,6 +5935,357 @@ func (r AIGatewayGetResponseRetryBackoff) IsKnown() bool {
 	return false
 }
 
+type AIGatewayGetResponseSpendLimits struct {
+	Enabled bool                                  `json:"enabled"`
+	Rules   []AIGatewayGetResponseSpendLimitsRule `json:"rules"`
+	JSON    aiGatewayGetResponseSpendLimitsJSON   `json:"-"`
+}
+
+// aiGatewayGetResponseSpendLimitsJSON contains the JSON metadata for the struct
+// [AIGatewayGetResponseSpendLimits]
+type aiGatewayGetResponseSpendLimitsJSON struct {
+	Enabled     apijson.Field
+	Rules       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseSpendLimits) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseSpendLimitsJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayGetResponseSpendLimitsRule struct {
+	ID        string                                                  `json:"id" api:"required"`
+	Limit     float64                                                 `json:"limit" api:"required"`
+	LimitType AIGatewayGetResponseSpendLimitsRulesLimitType           `json:"limitType" api:"required"`
+	Window    int64                                                   `json:"window" api:"required"`
+	Enabled   bool                                                    `json:"enabled"`
+	Metadata  map[string]AIGatewayGetResponseSpendLimitsRulesMetadata `json:"metadata"`
+	Model     AIGatewayGetResponseSpendLimitsRulesModelUnion          `json:"model"`
+	Provider  AIGatewayGetResponseSpendLimitsRulesProviderUnion       `json:"provider"`
+	Technique AIGatewayGetResponseSpendLimitsRulesTechnique           `json:"technique"`
+	JSON      aiGatewayGetResponseSpendLimitsRuleJSON                 `json:"-"`
+}
+
+// aiGatewayGetResponseSpendLimitsRuleJSON contains the JSON metadata for the
+// struct [AIGatewayGetResponseSpendLimitsRule]
+type aiGatewayGetResponseSpendLimitsRuleJSON struct {
+	ID          apijson.Field
+	Limit       apijson.Field
+	LimitType   apijson.Field
+	Window      apijson.Field
+	Enabled     apijson.Field
+	Metadata    apijson.Field
+	Model       apijson.Field
+	Provider    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseSpendLimitsRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseSpendLimitsRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIGatewayGetResponseSpendLimitsRulesLimitType string
+
+const (
+	AIGatewayGetResponseSpendLimitsRulesLimitTypeCost AIGatewayGetResponseSpendLimitsRulesLimitType = "cost"
+)
+
+func (r AIGatewayGetResponseSpendLimitsRulesLimitType) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseSpendLimitsRulesLimitTypeCost:
+		return true
+	}
+	return false
+}
+
+type AIGatewayGetResponseSpendLimitsRulesMetadata struct {
+	Mode  AIGatewayGetResponseSpendLimitsRulesMetadataMode `json:"mode" api:"required"`
+	Value string                                           `json:"value"`
+	JSON  aiGatewayGetResponseSpendLimitsRulesMetadataJSON `json:"-"`
+	union AIGatewayGetResponseSpendLimitsRulesMetadataUnion
+}
+
+// aiGatewayGetResponseSpendLimitsRulesMetadataJSON contains the JSON metadata for
+// the struct [AIGatewayGetResponseSpendLimitsRulesMetadata]
+type aiGatewayGetResponseSpendLimitsRulesMetadataJSON struct {
+	Mode        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r aiGatewayGetResponseSpendLimitsRulesMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AIGatewayGetResponseSpendLimitsRulesMetadata) UnmarshalJSON(data []byte) (err error) {
+	*r = AIGatewayGetResponseSpendLimitsRulesMetadata{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [AIGatewayGetResponseSpendLimitsRulesMetadataUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [AIGatewayGetResponseSpendLimitsRulesMetadataMode],
+// [AIGatewayGetResponseSpendLimitsRulesMetadataObject].
+func (r AIGatewayGetResponseSpendLimitsRulesMetadata) AsUnion() AIGatewayGetResponseSpendLimitsRulesMetadataUnion {
+	return r.union
+}
+
+// Union satisfied by [AIGatewayGetResponseSpendLimitsRulesMetadataMode] or
+// [AIGatewayGetResponseSpendLimitsRulesMetadataObject].
+type AIGatewayGetResponseSpendLimitsRulesMetadataUnion interface {
+	implementsAIGatewayGetResponseSpendLimitsRulesMetadata()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayGetResponseSpendLimitsRulesMetadataUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayGetResponseSpendLimitsRulesMetadataMode{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayGetResponseSpendLimitsRulesMetadataObject{}),
+		},
+	)
+}
+
+type AIGatewayGetResponseSpendLimitsRulesMetadataMode struct {
+	Mode AIGatewayGetResponseSpendLimitsRulesMetadataModeMode `json:"mode" api:"required"`
+	JSON aiGatewayGetResponseSpendLimitsRulesMetadataModeJSON `json:"-"`
+}
+
+// aiGatewayGetResponseSpendLimitsRulesMetadataModeJSON contains the JSON metadata
+// for the struct [AIGatewayGetResponseSpendLimitsRulesMetadataMode]
+type aiGatewayGetResponseSpendLimitsRulesMetadataModeJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseSpendLimitsRulesMetadataMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseSpendLimitsRulesMetadataModeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayGetResponseSpendLimitsRulesMetadataMode) implementsAIGatewayGetResponseSpendLimitsRulesMetadata() {
+}
+
+type AIGatewayGetResponseSpendLimitsRulesMetadataModeMode string
+
+const (
+	AIGatewayGetResponseSpendLimitsRulesMetadataModeModePartition AIGatewayGetResponseSpendLimitsRulesMetadataModeMode = "partition"
+)
+
+func (r AIGatewayGetResponseSpendLimitsRulesMetadataModeMode) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseSpendLimitsRulesMetadataModeModePartition:
+		return true
+	}
+	return false
+}
+
+type AIGatewayGetResponseSpendLimitsRulesMetadataObject struct {
+	Mode  AIGatewayGetResponseSpendLimitsRulesMetadataObjectMode `json:"mode" api:"required"`
+	Value string                                                 `json:"value" api:"required"`
+	JSON  aiGatewayGetResponseSpendLimitsRulesMetadataObjectJSON `json:"-"`
+}
+
+// aiGatewayGetResponseSpendLimitsRulesMetadataObjectJSON contains the JSON
+// metadata for the struct [AIGatewayGetResponseSpendLimitsRulesMetadataObject]
+type aiGatewayGetResponseSpendLimitsRulesMetadataObjectJSON struct {
+	Mode        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseSpendLimitsRulesMetadataObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseSpendLimitsRulesMetadataObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayGetResponseSpendLimitsRulesMetadataObject) implementsAIGatewayGetResponseSpendLimitsRulesMetadata() {
+}
+
+type AIGatewayGetResponseSpendLimitsRulesMetadataObjectMode string
+
+const (
+	AIGatewayGetResponseSpendLimitsRulesMetadataObjectModeMatch AIGatewayGetResponseSpendLimitsRulesMetadataObjectMode = "match"
+)
+
+func (r AIGatewayGetResponseSpendLimitsRulesMetadataObjectMode) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseSpendLimitsRulesMetadataObjectModeMatch:
+		return true
+	}
+	return false
+}
+
+// Union satisfied by [AIGatewayGetResponseSpendLimitsRulesModelString] or
+// [AIGatewayGetResponseSpendLimitsRulesModelMatch].
+type AIGatewayGetResponseSpendLimitsRulesModelUnion interface {
+	implementsAIGatewayGetResponseSpendLimitsRulesModelUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayGetResponseSpendLimitsRulesModelUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(AIGatewayGetResponseSpendLimitsRulesModelString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayGetResponseSpendLimitsRulesModelMatch{}),
+		},
+	)
+}
+
+type AIGatewayGetResponseSpendLimitsRulesModelString string
+
+const (
+	AIGatewayGetResponseSpendLimitsRulesModelStringPartition AIGatewayGetResponseSpendLimitsRulesModelString = "partition"
+)
+
+func (r AIGatewayGetResponseSpendLimitsRulesModelString) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseSpendLimitsRulesModelStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayGetResponseSpendLimitsRulesModelString) implementsAIGatewayGetResponseSpendLimitsRulesModelUnion() {
+}
+
+type AIGatewayGetResponseSpendLimitsRulesModelMatch struct {
+	Match string                                             `json:"match" api:"required"`
+	JSON  aiGatewayGetResponseSpendLimitsRulesModelMatchJSON `json:"-"`
+}
+
+// aiGatewayGetResponseSpendLimitsRulesModelMatchJSON contains the JSON metadata
+// for the struct [AIGatewayGetResponseSpendLimitsRulesModelMatch]
+type aiGatewayGetResponseSpendLimitsRulesModelMatchJSON struct {
+	Match       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseSpendLimitsRulesModelMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseSpendLimitsRulesModelMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayGetResponseSpendLimitsRulesModelMatch) implementsAIGatewayGetResponseSpendLimitsRulesModelUnion() {
+}
+
+// Union satisfied by [AIGatewayGetResponseSpendLimitsRulesProviderString] or
+// [AIGatewayGetResponseSpendLimitsRulesProviderMatch].
+type AIGatewayGetResponseSpendLimitsRulesProviderUnion interface {
+	implementsAIGatewayGetResponseSpendLimitsRulesProviderUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AIGatewayGetResponseSpendLimitsRulesProviderUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(AIGatewayGetResponseSpendLimitsRulesProviderString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIGatewayGetResponseSpendLimitsRulesProviderMatch{}),
+		},
+	)
+}
+
+type AIGatewayGetResponseSpendLimitsRulesProviderString string
+
+const (
+	AIGatewayGetResponseSpendLimitsRulesProviderStringPartition AIGatewayGetResponseSpendLimitsRulesProviderString = "partition"
+)
+
+func (r AIGatewayGetResponseSpendLimitsRulesProviderString) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseSpendLimitsRulesProviderStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayGetResponseSpendLimitsRulesProviderString) implementsAIGatewayGetResponseSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayGetResponseSpendLimitsRulesProviderMatch struct {
+	Match string                                                `json:"match" api:"required"`
+	JSON  aiGatewayGetResponseSpendLimitsRulesProviderMatchJSON `json:"-"`
+}
+
+// aiGatewayGetResponseSpendLimitsRulesProviderMatchJSON contains the JSON metadata
+// for the struct [AIGatewayGetResponseSpendLimitsRulesProviderMatch]
+type aiGatewayGetResponseSpendLimitsRulesProviderMatchJSON struct {
+	Match       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIGatewayGetResponseSpendLimitsRulesProviderMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiGatewayGetResponseSpendLimitsRulesProviderMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIGatewayGetResponseSpendLimitsRulesProviderMatch) implementsAIGatewayGetResponseSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayGetResponseSpendLimitsRulesTechnique string
+
+const (
+	AIGatewayGetResponseSpendLimitsRulesTechniqueFixed   AIGatewayGetResponseSpendLimitsRulesTechnique = "fixed"
+	AIGatewayGetResponseSpendLimitsRulesTechniqueSliding AIGatewayGetResponseSpendLimitsRulesTechnique = "sliding"
+)
+
+func (r AIGatewayGetResponseSpendLimitsRulesTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseSpendLimitsRulesTechniqueFixed, AIGatewayGetResponseSpendLimitsRulesTechniqueSliding:
+		return true
+	}
+	return false
+}
+
 type AIGatewayGetResponseStripe struct {
 	Authorization string                                 `json:"authorization" api:"required"`
 	UsageEvents   []AIGatewayGetResponseStripeUsageEvent `json:"usage_events" api:"required"`
@@ -4719,9 +6484,10 @@ type AIGatewayUpdateParams struct {
 	// Delay between retry attempts in milliseconds (0-5000)
 	RetryDelay param.Field[int64] `json:"retry_delay"`
 	// Maximum number of retry attempts for failed requests (1-5)
-	RetryMaxAttempts param.Field[int64]                       `json:"retry_max_attempts"`
-	StoreID          param.Field[string]                      `json:"store_id"`
-	Stripe           param.Field[AIGatewayUpdateParamsStripe] `json:"stripe"`
+	RetryMaxAttempts param.Field[int64]                            `json:"retry_max_attempts"`
+	SpendLimits      param.Field[AIGatewayUpdateParamsSpendLimits] `json:"spend_limits"`
+	StoreID          param.Field[string]                           `json:"store_id"`
+	Stripe           param.Field[AIGatewayUpdateParamsStripe]      `json:"stripe"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// Only 'postpaid' is currently supported.
 	WorkersAIBillingMode param.Field[AIGatewayUpdateParamsWorkersAIBillingMode] `json:"workers_ai_billing_mode"`
@@ -5332,6 +7098,198 @@ const (
 func (r AIGatewayUpdateParamsRetryBackoff) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateParamsRetryBackoffConstant, AIGatewayUpdateParamsRetryBackoffLinear, AIGatewayUpdateParamsRetryBackoffExponential:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateParamsSpendLimits struct {
+	Enabled param.Field[bool]                                   `json:"enabled"`
+	Rules   param.Field[[]AIGatewayUpdateParamsSpendLimitsRule] `json:"rules"`
+}
+
+func (r AIGatewayUpdateParamsSpendLimits) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayUpdateParamsSpendLimitsRule struct {
+	ID        param.Field[string]                                                        `json:"id" api:"required"`
+	Limit     param.Field[float64]                                                       `json:"limit" api:"required"`
+	LimitType param.Field[AIGatewayUpdateParamsSpendLimitsRulesLimitType]                `json:"limitType" api:"required"`
+	Window    param.Field[int64]                                                         `json:"window" api:"required"`
+	Enabled   param.Field[bool]                                                          `json:"enabled"`
+	Metadata  param.Field[map[string]AIGatewayUpdateParamsSpendLimitsRulesMetadataUnion] `json:"metadata"`
+	Model     param.Field[AIGatewayUpdateParamsSpendLimitsRulesModelUnion]               `json:"model"`
+	Provider  param.Field[AIGatewayUpdateParamsSpendLimitsRulesProviderUnion]            `json:"provider"`
+	Technique param.Field[AIGatewayUpdateParamsSpendLimitsRulesTechnique]                `json:"technique"`
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesLimitType string
+
+const (
+	AIGatewayUpdateParamsSpendLimitsRulesLimitTypeCost AIGatewayUpdateParamsSpendLimitsRulesLimitType = "cost"
+)
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesLimitType) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsSpendLimitsRulesLimitTypeCost:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesMetadata struct {
+	Mode  param.Field[AIGatewayUpdateParamsSpendLimitsRulesMetadataMode] `json:"mode" api:"required"`
+	Value param.Field[string]                                            `json:"value"`
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesMetadata) implementsAIGatewayUpdateParamsSpendLimitsRulesMetadataUnion() {
+}
+
+// Satisfied by [ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesMetadataMode],
+// [ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesMetadataObject],
+// [AIGatewayUpdateParamsSpendLimitsRulesMetadata].
+type AIGatewayUpdateParamsSpendLimitsRulesMetadataUnion interface {
+	implementsAIGatewayUpdateParamsSpendLimitsRulesMetadataUnion()
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesMetadataMode struct {
+	Mode param.Field[AIGatewayUpdateParamsSpendLimitsRulesMetadataModeMode] `json:"mode" api:"required"`
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesMetadataMode) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesMetadataMode) implementsAIGatewayUpdateParamsSpendLimitsRulesMetadataUnion() {
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesMetadataModeMode string
+
+const (
+	AIGatewayUpdateParamsSpendLimitsRulesMetadataModeModePartition AIGatewayUpdateParamsSpendLimitsRulesMetadataModeMode = "partition"
+)
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesMetadataModeMode) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsSpendLimitsRulesMetadataModeModePartition:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesMetadataObject struct {
+	Mode  param.Field[AIGatewayUpdateParamsSpendLimitsRulesMetadataObjectMode] `json:"mode" api:"required"`
+	Value param.Field[string]                                                  `json:"value" api:"required"`
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesMetadataObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesMetadataObject) implementsAIGatewayUpdateParamsSpendLimitsRulesMetadataUnion() {
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesMetadataObjectMode string
+
+const (
+	AIGatewayUpdateParamsSpendLimitsRulesMetadataObjectModeMatch AIGatewayUpdateParamsSpendLimitsRulesMetadataObjectMode = "match"
+)
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesMetadataObjectMode) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsSpendLimitsRulesMetadataObjectModeMatch:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesModelString],
+// [ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesModelMatch].
+type AIGatewayUpdateParamsSpendLimitsRulesModelUnion interface {
+	implementsAIGatewayUpdateParamsSpendLimitsRulesModelUnion()
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesModelString string
+
+const (
+	AIGatewayUpdateParamsSpendLimitsRulesModelStringPartition AIGatewayUpdateParamsSpendLimitsRulesModelString = "partition"
+)
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesModelString) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsSpendLimitsRulesModelStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesModelString) implementsAIGatewayUpdateParamsSpendLimitsRulesModelUnion() {
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesModelMatch struct {
+	Match param.Field[string] `json:"match" api:"required"`
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesModelMatch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesModelMatch) implementsAIGatewayUpdateParamsSpendLimitsRulesModelUnion() {
+}
+
+// Satisfied by [ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesProviderString],
+// [ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesProviderMatch].
+type AIGatewayUpdateParamsSpendLimitsRulesProviderUnion interface {
+	implementsAIGatewayUpdateParamsSpendLimitsRulesProviderUnion()
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesProviderString string
+
+const (
+	AIGatewayUpdateParamsSpendLimitsRulesProviderStringPartition AIGatewayUpdateParamsSpendLimitsRulesProviderString = "partition"
+)
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesProviderString) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsSpendLimitsRulesProviderStringPartition:
+		return true
+	}
+	return false
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesProviderString) implementsAIGatewayUpdateParamsSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesProviderMatch struct {
+	Match param.Field[string] `json:"match" api:"required"`
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesProviderMatch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesProviderMatch) implementsAIGatewayUpdateParamsSpendLimitsRulesProviderUnion() {
+}
+
+type AIGatewayUpdateParamsSpendLimitsRulesTechnique string
+
+const (
+	AIGatewayUpdateParamsSpendLimitsRulesTechniqueFixed   AIGatewayUpdateParamsSpendLimitsRulesTechnique = "fixed"
+	AIGatewayUpdateParamsSpendLimitsRulesTechniqueSliding AIGatewayUpdateParamsSpendLimitsRulesTechnique = "sliding"
+)
+
+func (r AIGatewayUpdateParamsSpendLimitsRulesTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsSpendLimitsRulesTechniqueFixed, AIGatewayUpdateParamsSpendLimitsRulesTechniqueSliding:
 		return true
 	}
 	return false
