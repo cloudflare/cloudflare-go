@@ -432,6 +432,7 @@ TEST_PATHS=(
 	zero_trust/accessaicontrolmcpportal_test.go
 	zero_trust/accessaicontrolmcpserver_test.go
 	zero_trust/accessgatewayca_test.go
+	zero_trust/accessidpfederationgrant_test.go
 	zero_trust/accesssamlcertificate_test.go
 	zero_trust/accessinfrastructuretarget_test.go
 	zero_trust/accessapplication_test.go
