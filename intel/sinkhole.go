@@ -65,7 +65,7 @@ func (r *SinkholeService) ListAutoPaging(ctx context.Context, query SinkholeList
 
 type Sinkhole struct {
 	// The unique identifier for the sinkhole.
-	ID int64 `json:"id"`
+	ID string `json:"id"`
 	// The account tag that owns this sinkhole.
 	AccountTag string `json:"account_tag"`
 	// The date and time when the sinkhole was created.
