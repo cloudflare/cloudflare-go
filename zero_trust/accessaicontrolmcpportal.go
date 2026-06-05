@@ -205,9 +205,9 @@ type AccessAIControlMcpPortalNewResponseServer struct {
 	ErrorDetails    AccessAIControlMcpPortalNewResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. Operators manage this internal rollout flag through
-	// admin endpoints. Effective behavior is gated by the gateway worker's per-env
-	// rollout mode KV key.
+	// customer portal hostname. New public server creates default to true; existing
+	// servers default to false from migration until explicitly updated. Effective
+	// behavior is gated by the gateway worker's per-env rollout mode KV key.
 	IsSharedOAuthCallbackEnabled bool                                                      `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time                                                 `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time                                                 `json:"last_synced" format:"date-time"`
@@ -429,9 +429,9 @@ type AccessAIControlMcpPortalUpdateResponseServer struct {
 	ErrorDetails    AccessAIControlMcpPortalUpdateResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. Operators manage this internal rollout flag through
-	// admin endpoints. Effective behavior is gated by the gateway worker's per-env
-	// rollout mode KV key.
+	// customer portal hostname. New public server creates default to true; existing
+	// servers default to false from migration until explicitly updated. Effective
+	// behavior is gated by the gateway worker's per-env rollout mode KV key.
 	IsSharedOAuthCallbackEnabled bool                                                         `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time                                                    `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time                                                    `json:"last_synced" format:"date-time"`
@@ -655,9 +655,9 @@ type AccessAIControlMcpPortalListResponseServer struct {
 	ErrorDetails    AccessAIControlMcpPortalListResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. Operators manage this internal rollout flag through
-	// admin endpoints. Effective behavior is gated by the gateway worker's per-env
-	// rollout mode KV key.
+	// customer portal hostname. New public server creates default to true; existing
+	// servers default to false from migration until explicitly updated. Effective
+	// behavior is gated by the gateway worker's per-env rollout mode KV key.
 	IsSharedOAuthCallbackEnabled bool                                                       `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time                                                  `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time                                                  `json:"last_synced" format:"date-time"`
@@ -922,9 +922,9 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	ErrorDetails    AccessAIControlMcpPortalReadResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. Operators manage this internal rollout flag through
-	// admin endpoints. Effective behavior is gated by the gateway worker's per-env
-	// rollout mode KV key.
+	// customer portal hostname. New public server creates default to true; existing
+	// servers default to false from migration until explicitly updated. Effective
+	// behavior is gated by the gateway worker's per-env rollout mode KV key.
 	IsSharedOAuthCallbackEnabled bool                                                       `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time                                                  `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time                                                  `json:"last_synced" format:"date-time"`

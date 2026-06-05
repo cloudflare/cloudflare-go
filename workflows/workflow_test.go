@@ -38,6 +38,9 @@ func TestWorkflowUpdateWithOptionalParams(t *testing.T) {
 			Limits: cloudflare.F(workflows.WorkflowUpdateParamsLimits{
 				Steps: cloudflare.F(int64(1)),
 			}),
+			Schedules: cloudflare.F([]workflows.WorkflowUpdateParamsSchedule{{
+				Cron: cloudflare.F("x"),
+			}}),
 		},
 	)
 	if err != nil {

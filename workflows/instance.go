@@ -154,22 +154,24 @@ func (r *InstanceService) Get(ctx context.Context, workflowName string, instance
 }
 
 type InstanceNewResponse struct {
-	ID         string                    `json:"id" api:"required"`
-	Status     InstanceNewResponseStatus `json:"status" api:"required"`
-	VersionID  string                    `json:"version_id" api:"required" format:"uuid"`
-	WorkflowID string                    `json:"workflow_id" api:"required" format:"uuid"`
-	JSON       instanceNewResponseJSON   `json:"-"`
+	ID            string                           `json:"id" api:"required"`
+	Status        InstanceNewResponseStatus        `json:"status" api:"required"`
+	VersionID     string                           `json:"version_id" api:"required" format:"uuid"`
+	WorkflowID    string                           `json:"workflow_id" api:"required" format:"uuid"`
+	TriggerSource InstanceNewResponseTriggerSource `json:"trigger_source"`
+	JSON          instanceNewResponseJSON          `json:"-"`
 }
 
 // instanceNewResponseJSON contains the JSON metadata for the struct
 // [InstanceNewResponse]
 type instanceNewResponseJSON struct {
-	ID          apijson.Field
-	Status      apijson.Field
-	VersionID   apijson.Field
-	WorkflowID  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Status        apijson.Field
+	VersionID     apijson.Field
+	WorkflowID    apijson.Field
+	TriggerSource apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *InstanceNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -202,31 +204,51 @@ func (r InstanceNewResponseStatus) IsKnown() bool {
 	return false
 }
 
+type InstanceNewResponseTriggerSource string
+
+const (
+	InstanceNewResponseTriggerSourceUnknown InstanceNewResponseTriggerSource = "unknown"
+	InstanceNewResponseTriggerSourceAPI     InstanceNewResponseTriggerSource = "api"
+	InstanceNewResponseTriggerSourceBinding InstanceNewResponseTriggerSource = "binding"
+	InstanceNewResponseTriggerSourceEvent   InstanceNewResponseTriggerSource = "event"
+	InstanceNewResponseTriggerSourceCron    InstanceNewResponseTriggerSource = "cron"
+)
+
+func (r InstanceNewResponseTriggerSource) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseTriggerSourceUnknown, InstanceNewResponseTriggerSourceAPI, InstanceNewResponseTriggerSourceBinding, InstanceNewResponseTriggerSourceEvent, InstanceNewResponseTriggerSourceCron:
+		return true
+	}
+	return false
+}
+
 type InstanceListResponse struct {
-	ID         string                     `json:"id" api:"required"`
-	CreatedOn  time.Time                  `json:"created_on" api:"required" format:"date-time"`
-	EndedOn    time.Time                  `json:"ended_on" api:"required,nullable" format:"date-time"`
-	ModifiedOn time.Time                  `json:"modified_on" api:"required" format:"date-time"`
-	StartedOn  time.Time                  `json:"started_on" api:"required,nullable" format:"date-time"`
-	Status     InstanceListResponseStatus `json:"status" api:"required"`
-	VersionID  string                     `json:"version_id" api:"required" format:"uuid"`
-	WorkflowID string                     `json:"workflow_id" api:"required" format:"uuid"`
-	JSON       instanceListResponseJSON   `json:"-"`
+	ID            string                            `json:"id" api:"required"`
+	CreatedOn     time.Time                         `json:"created_on" api:"required" format:"date-time"`
+	EndedOn       time.Time                         `json:"ended_on" api:"required,nullable" format:"date-time"`
+	ModifiedOn    time.Time                         `json:"modified_on" api:"required" format:"date-time"`
+	StartedOn     time.Time                         `json:"started_on" api:"required,nullable" format:"date-time"`
+	Status        InstanceListResponseStatus        `json:"status" api:"required"`
+	VersionID     string                            `json:"version_id" api:"required" format:"uuid"`
+	WorkflowID    string                            `json:"workflow_id" api:"required" format:"uuid"`
+	TriggerSource InstanceListResponseTriggerSource `json:"trigger_source"`
+	JSON          instanceListResponseJSON          `json:"-"`
 }
 
 // instanceListResponseJSON contains the JSON metadata for the struct
 // [InstanceListResponse]
 type instanceListResponseJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	EndedOn     apijson.Field
-	ModifiedOn  apijson.Field
-	StartedOn   apijson.Field
-	Status      apijson.Field
-	VersionID   apijson.Field
-	WorkflowID  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	CreatedOn     apijson.Field
+	EndedOn       apijson.Field
+	ModifiedOn    apijson.Field
+	StartedOn     apijson.Field
+	Status        apijson.Field
+	VersionID     apijson.Field
+	WorkflowID    apijson.Field
+	TriggerSource apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *InstanceListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -259,23 +281,43 @@ func (r InstanceListResponseStatus) IsKnown() bool {
 	return false
 }
 
+type InstanceListResponseTriggerSource string
+
+const (
+	InstanceListResponseTriggerSourceUnknown InstanceListResponseTriggerSource = "unknown"
+	InstanceListResponseTriggerSourceAPI     InstanceListResponseTriggerSource = "api"
+	InstanceListResponseTriggerSourceBinding InstanceListResponseTriggerSource = "binding"
+	InstanceListResponseTriggerSourceEvent   InstanceListResponseTriggerSource = "event"
+	InstanceListResponseTriggerSourceCron    InstanceListResponseTriggerSource = "cron"
+)
+
+func (r InstanceListResponseTriggerSource) IsKnown() bool {
+	switch r {
+	case InstanceListResponseTriggerSourceUnknown, InstanceListResponseTriggerSourceAPI, InstanceListResponseTriggerSourceBinding, InstanceListResponseTriggerSourceEvent, InstanceListResponseTriggerSourceCron:
+		return true
+	}
+	return false
+}
+
 type InstanceBulkResponse struct {
-	ID         string                     `json:"id" api:"required"`
-	Status     InstanceBulkResponseStatus `json:"status" api:"required"`
-	VersionID  string                     `json:"version_id" api:"required" format:"uuid"`
-	WorkflowID string                     `json:"workflow_id" api:"required" format:"uuid"`
-	JSON       instanceBulkResponseJSON   `json:"-"`
+	ID            string                            `json:"id" api:"required"`
+	Status        InstanceBulkResponseStatus        `json:"status" api:"required"`
+	VersionID     string                            `json:"version_id" api:"required" format:"uuid"`
+	WorkflowID    string                            `json:"workflow_id" api:"required" format:"uuid"`
+	TriggerSource InstanceBulkResponseTriggerSource `json:"trigger_source"`
+	JSON          instanceBulkResponseJSON          `json:"-"`
 }
 
 // instanceBulkResponseJSON contains the JSON metadata for the struct
 // [InstanceBulkResponse]
 type instanceBulkResponseJSON struct {
-	ID          apijson.Field
-	Status      apijson.Field
-	VersionID   apijson.Field
-	WorkflowID  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Status        apijson.Field
+	VersionID     apijson.Field
+	WorkflowID    apijson.Field
+	TriggerSource apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *InstanceBulkResponse) UnmarshalJSON(data []byte) (err error) {
@@ -308,6 +350,24 @@ func (r InstanceBulkResponseStatus) IsKnown() bool {
 	return false
 }
 
+type InstanceBulkResponseTriggerSource string
+
+const (
+	InstanceBulkResponseTriggerSourceUnknown InstanceBulkResponseTriggerSource = "unknown"
+	InstanceBulkResponseTriggerSourceAPI     InstanceBulkResponseTriggerSource = "api"
+	InstanceBulkResponseTriggerSourceBinding InstanceBulkResponseTriggerSource = "binding"
+	InstanceBulkResponseTriggerSourceEvent   InstanceBulkResponseTriggerSource = "event"
+	InstanceBulkResponseTriggerSourceCron    InstanceBulkResponseTriggerSource = "cron"
+)
+
+func (r InstanceBulkResponseTriggerSource) IsKnown() bool {
+	switch r {
+	case InstanceBulkResponseTriggerSourceUnknown, InstanceBulkResponseTriggerSourceAPI, InstanceBulkResponseTriggerSourceBinding, InstanceBulkResponseTriggerSourceEvent, InstanceBulkResponseTriggerSourceCron:
+		return true
+	}
+	return false
+}
+
 type InstanceGetResponse struct {
 	End       time.Time                      `json:"end" api:"required,nullable" format:"date-time"`
 	Error     InstanceGetResponseError       `json:"error" api:"required,nullable"`
@@ -322,6 +382,7 @@ type InstanceGetResponse struct {
 	Success   bool                           `json:"success" api:"required,nullable"`
 	Trigger   InstanceGetResponseTrigger     `json:"trigger" api:"required"`
 	VersionID string                         `json:"versionId" api:"required" format:"uuid"`
+	Schedule  InstanceGetResponseSchedule    `json:"schedule"`
 	JSON      instanceGetResponseJSON        `json:"-"`
 }
 
@@ -341,6 +402,7 @@ type instanceGetResponseJSON struct {
 	Success     apijson.Field
 	Trigger     apijson.Field
 	VersionID   apijson.Field
+	Schedule    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -858,6 +920,29 @@ func (r InstanceGetResponseTriggerSource) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type InstanceGetResponseSchedule struct {
+	Cron          string                          `json:"cron" api:"required"`
+	ScheduledTime float64                         `json:"scheduledTime" api:"required"`
+	JSON          instanceGetResponseScheduleJSON `json:"-"`
+}
+
+// instanceGetResponseScheduleJSON contains the JSON metadata for the struct
+// [InstanceGetResponseSchedule]
+type instanceGetResponseScheduleJSON struct {
+	Cron          apijson.Field
+	ScheduledTime apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *InstanceGetResponseSchedule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceGetResponseScheduleJSON) RawJSON() string {
+	return r.raw
 }
 
 type InstanceNewParams struct {
