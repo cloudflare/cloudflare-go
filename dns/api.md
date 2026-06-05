@@ -93,7 +93,23 @@ Methods:
 
 ### Zone
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#UsageZoneGetResponse">UsageZoneGetResponse</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/dns_records/usage">client.DNS.Usage.Zone.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#UsageZoneService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#UsageZoneGetParams">UsageZoneGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#UsageZoneGetResponse">UsageZoneGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Account
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#UsageAccountGetResponse">UsageAccountGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/dns_records/usage">client.DNS.Usage.Account.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#UsageAccountService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#UsageAccountGetParams">UsageAccountGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#UsageAccountGetResponse">UsageAccountGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Settings
 

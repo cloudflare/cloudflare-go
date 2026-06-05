@@ -90,6 +90,8 @@ TEST_PATHS=(
 	dns_firewall/reversedns_test.go
 	dns/dnssec_test.go
 	dns/record_test.go
+	dns/usagezone_test.go
+	dns/usageaccount_test.go
 	dns/settingzone_test.go
 	dns/settingaccount_test.go
 	dns/settingaccountview_test.go
