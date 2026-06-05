@@ -125,12 +125,13 @@ type MitigationListResponseMitigation struct {
 	ID string `json:"id" api:"required"`
 	// Date when the mitigation will become active. Time in RFC 3339 format
 	// (https://www.rfc-editor.org/rfc/rfc3339.html)
-	EffectiveDate string                                      `json:"effective_date" api:"required"`
-	EntityID      string                                      `json:"entity_id" api:"required"`
-	EntityType    MitigationListResponseMitigationsEntityType `json:"entity_type" api:"required"`
+	EffectiveDate string `json:"effective_date" api:"required"`
+	EntityID      string `json:"entity_id" api:"required"`
+	// The type of entity targeted by a mitigation.
+	EntityType MitigationListResponseMitigationsEntityType `json:"entity_type" api:"required"`
 	// The status of a mitigation
 	Status MitigationListResponseMitigationsStatus `json:"status" api:"required"`
-	// The type of mitigation
+	// The type of mitigation applied to a reported entity.
 	Type MitigationListResponseMitigationsType `json:"type" api:"required"`
 	JSON mitigationListResponseMitigationJSON  `json:"-"`
 }
@@ -156,6 +157,7 @@ func (r mitigationListResponseMitigationJSON) RawJSON() string {
 	return r.raw
 }
 
+// The type of entity targeted by a mitigation.
 type MitigationListResponseMitigationsEntityType string
 
 const (
@@ -191,22 +193,34 @@ func (r MitigationListResponseMitigationsStatus) IsKnown() bool {
 	return false
 }
 
-// The type of mitigation
+// The type of mitigation applied to a reported entity.
 type MitigationListResponseMitigationsType string
 
 const (
-	MitigationListResponseMitigationsTypeLegalBlock             MitigationListResponseMitigationsType = "legal_block"
-	MitigationListResponseMitigationsTypeMisleadingInterstitial MitigationListResponseMitigationsType = "misleading_interstitial"
-	MitigationListResponseMitigationsTypePhishingInterstitial   MitigationListResponseMitigationsType = "phishing_interstitial"
-	MitigationListResponseMitigationsTypeNetworkBlock           MitigationListResponseMitigationsType = "network_block"
-	MitigationListResponseMitigationsTypeRateLimitCache         MitigationListResponseMitigationsType = "rate_limit_cache"
-	MitigationListResponseMitigationsTypeAccountSuspend         MitigationListResponseMitigationsType = "account_suspend"
-	MitigationListResponseMitigationsTypeRedirectVideoStream    MitigationListResponseMitigationsType = "redirect_video_stream"
+	MitigationListResponseMitigationsTypeAccountSuspend          MitigationListResponseMitigationsType = "account_suspend"
+	MitigationListResponseMitigationsTypeCopyrightInterstitial   MitigationListResponseMitigationsType = "copyright_interstitial"
+	MitigationListResponseMitigationsTypeGeoBlock                MitigationListResponseMitigationsType = "geo_block"
+	MitigationListResponseMitigationsTypeLegalBlock              MitigationListResponseMitigationsType = "legal_block"
+	MitigationListResponseMitigationsTypeMalwareInterstitial     MitigationListResponseMitigationsType = "malware_interstitial"
+	MitigationListResponseMitigationsTypeMisleadingInterstitial  MitigationListResponseMitigationsType = "misleading_interstitial"
+	MitigationListResponseMitigationsTypeNetworkBlock            MitigationListResponseMitigationsType = "network_block"
+	MitigationListResponseMitigationsTypePhishingInterstitial    MitigationListResponseMitigationsType = "phishing_interstitial"
+	MitigationListResponseMitigationsTypePlayfairiteEnforce      MitigationListResponseMitigationsType = "playfairite_enforce"
+	MitigationListResponseMitigationsTypeR2TakedownAccount       MitigationListResponseMitigationsType = "r2_takedown_account"
+	MitigationListResponseMitigationsTypeR2TakedownBucket        MitigationListResponseMitigationsType = "r2_takedown_bucket"
+	MitigationListResponseMitigationsTypeR2TakedownObject        MitigationListResponseMitigationsType = "r2_takedown_object"
+	MitigationListResponseMitigationsTypeRateLimitCache          MitigationListResponseMitigationsType = "rate_limit_cache"
+	MitigationListResponseMitigationsTypeRedirectVideoStream     MitigationListResponseMitigationsType = "redirect_video_stream"
+	MitigationListResponseMitigationsTypeRegistrarFreeze         MitigationListResponseMitigationsType = "registrar_freeze"
+	MitigationListResponseMitigationsTypeRegistrarParking        MitigationListResponseMitigationsType = "registrar_parking"
+	MitigationListResponseMitigationsTypeStreamBlockAccount      MitigationListResponseMitigationsType = "stream_block_account"
+	MitigationListResponseMitigationsTypeUserSuspend             MitigationListResponseMitigationsType = "user_suspend"
+	MitigationListResponseMitigationsTypeWorkersTakedownByZoneID MitigationListResponseMitigationsType = "workers_takedown_by_zone_id"
 )
 
 func (r MitigationListResponseMitigationsType) IsKnown() bool {
 	switch r {
-	case MitigationListResponseMitigationsTypeLegalBlock, MitigationListResponseMitigationsTypeMisleadingInterstitial, MitigationListResponseMitigationsTypePhishingInterstitial, MitigationListResponseMitigationsTypeNetworkBlock, MitigationListResponseMitigationsTypeRateLimitCache, MitigationListResponseMitigationsTypeAccountSuspend, MitigationListResponseMitigationsTypeRedirectVideoStream:
+	case MitigationListResponseMitigationsTypeAccountSuspend, MitigationListResponseMitigationsTypeCopyrightInterstitial, MitigationListResponseMitigationsTypeGeoBlock, MitigationListResponseMitigationsTypeLegalBlock, MitigationListResponseMitigationsTypeMalwareInterstitial, MitigationListResponseMitigationsTypeMisleadingInterstitial, MitigationListResponseMitigationsTypeNetworkBlock, MitigationListResponseMitigationsTypePhishingInterstitial, MitigationListResponseMitigationsTypePlayfairiteEnforce, MitigationListResponseMitigationsTypeR2TakedownAccount, MitigationListResponseMitigationsTypeR2TakedownBucket, MitigationListResponseMitigationsTypeR2TakedownObject, MitigationListResponseMitigationsTypeRateLimitCache, MitigationListResponseMitigationsTypeRedirectVideoStream, MitigationListResponseMitigationsTypeRegistrarFreeze, MitigationListResponseMitigationsTypeRegistrarParking, MitigationListResponseMitigationsTypeStreamBlockAccount, MitigationListResponseMitigationsTypeUserSuspend, MitigationListResponseMitigationsTypeWorkersTakedownByZoneID:
 		return true
 	}
 	return false
@@ -217,12 +231,13 @@ type MitigationReviewResponse struct {
 	ID string `json:"id" api:"required"`
 	// Date when the mitigation will become active. Time in RFC 3339 format
 	// (https://www.rfc-editor.org/rfc/rfc3339.html)
-	EffectiveDate string                             `json:"effective_date" api:"required"`
-	EntityID      string                             `json:"entity_id" api:"required"`
-	EntityType    MitigationReviewResponseEntityType `json:"entity_type" api:"required"`
+	EffectiveDate string `json:"effective_date" api:"required"`
+	EntityID      string `json:"entity_id" api:"required"`
+	// The type of entity targeted by a mitigation.
+	EntityType MitigationReviewResponseEntityType `json:"entity_type" api:"required"`
 	// The status of a mitigation
 	Status MitigationReviewResponseStatus `json:"status" api:"required"`
-	// The type of mitigation
+	// The type of mitigation applied to a reported entity.
 	Type MitigationReviewResponseType `json:"type" api:"required"`
 	JSON mitigationReviewResponseJSON `json:"-"`
 }
@@ -248,6 +263,7 @@ func (r mitigationReviewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// The type of entity targeted by a mitigation.
 type MitigationReviewResponseEntityType string
 
 const (
@@ -283,22 +299,34 @@ func (r MitigationReviewResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of mitigation
+// The type of mitigation applied to a reported entity.
 type MitigationReviewResponseType string
 
 const (
-	MitigationReviewResponseTypeLegalBlock             MitigationReviewResponseType = "legal_block"
-	MitigationReviewResponseTypeMisleadingInterstitial MitigationReviewResponseType = "misleading_interstitial"
-	MitigationReviewResponseTypePhishingInterstitial   MitigationReviewResponseType = "phishing_interstitial"
-	MitigationReviewResponseTypeNetworkBlock           MitigationReviewResponseType = "network_block"
-	MitigationReviewResponseTypeRateLimitCache         MitigationReviewResponseType = "rate_limit_cache"
-	MitigationReviewResponseTypeAccountSuspend         MitigationReviewResponseType = "account_suspend"
-	MitigationReviewResponseTypeRedirectVideoStream    MitigationReviewResponseType = "redirect_video_stream"
+	MitigationReviewResponseTypeAccountSuspend          MitigationReviewResponseType = "account_suspend"
+	MitigationReviewResponseTypeCopyrightInterstitial   MitigationReviewResponseType = "copyright_interstitial"
+	MitigationReviewResponseTypeGeoBlock                MitigationReviewResponseType = "geo_block"
+	MitigationReviewResponseTypeLegalBlock              MitigationReviewResponseType = "legal_block"
+	MitigationReviewResponseTypeMalwareInterstitial     MitigationReviewResponseType = "malware_interstitial"
+	MitigationReviewResponseTypeMisleadingInterstitial  MitigationReviewResponseType = "misleading_interstitial"
+	MitigationReviewResponseTypeNetworkBlock            MitigationReviewResponseType = "network_block"
+	MitigationReviewResponseTypePhishingInterstitial    MitigationReviewResponseType = "phishing_interstitial"
+	MitigationReviewResponseTypePlayfairiteEnforce      MitigationReviewResponseType = "playfairite_enforce"
+	MitigationReviewResponseTypeR2TakedownAccount       MitigationReviewResponseType = "r2_takedown_account"
+	MitigationReviewResponseTypeR2TakedownBucket        MitigationReviewResponseType = "r2_takedown_bucket"
+	MitigationReviewResponseTypeR2TakedownObject        MitigationReviewResponseType = "r2_takedown_object"
+	MitigationReviewResponseTypeRateLimitCache          MitigationReviewResponseType = "rate_limit_cache"
+	MitigationReviewResponseTypeRedirectVideoStream     MitigationReviewResponseType = "redirect_video_stream"
+	MitigationReviewResponseTypeRegistrarFreeze         MitigationReviewResponseType = "registrar_freeze"
+	MitigationReviewResponseTypeRegistrarParking        MitigationReviewResponseType = "registrar_parking"
+	MitigationReviewResponseTypeStreamBlockAccount      MitigationReviewResponseType = "stream_block_account"
+	MitigationReviewResponseTypeUserSuspend             MitigationReviewResponseType = "user_suspend"
+	MitigationReviewResponseTypeWorkersTakedownByZoneID MitigationReviewResponseType = "workers_takedown_by_zone_id"
 )
 
 func (r MitigationReviewResponseType) IsKnown() bool {
 	switch r {
-	case MitigationReviewResponseTypeLegalBlock, MitigationReviewResponseTypeMisleadingInterstitial, MitigationReviewResponseTypePhishingInterstitial, MitigationReviewResponseTypeNetworkBlock, MitigationReviewResponseTypeRateLimitCache, MitigationReviewResponseTypeAccountSuspend, MitigationReviewResponseTypeRedirectVideoStream:
+	case MitigationReviewResponseTypeAccountSuspend, MitigationReviewResponseTypeCopyrightInterstitial, MitigationReviewResponseTypeGeoBlock, MitigationReviewResponseTypeLegalBlock, MitigationReviewResponseTypeMalwareInterstitial, MitigationReviewResponseTypeMisleadingInterstitial, MitigationReviewResponseTypeNetworkBlock, MitigationReviewResponseTypePhishingInterstitial, MitigationReviewResponseTypePlayfairiteEnforce, MitigationReviewResponseTypeR2TakedownAccount, MitigationReviewResponseTypeR2TakedownBucket, MitigationReviewResponseTypeR2TakedownObject, MitigationReviewResponseTypeRateLimitCache, MitigationReviewResponseTypeRedirectVideoStream, MitigationReviewResponseTypeRegistrarFreeze, MitigationReviewResponseTypeRegistrarParking, MitigationReviewResponseTypeStreamBlockAccount, MitigationReviewResponseTypeUserSuspend, MitigationReviewResponseTypeWorkersTakedownByZoneID:
 		return true
 	}
 	return false
@@ -398,18 +426,30 @@ func (r MitigationListParamsStatus) IsKnown() bool {
 type MitigationListParamsType string
 
 const (
-	MitigationListParamsTypeLegalBlock             MitigationListParamsType = "legal_block"
-	MitigationListParamsTypeMisleadingInterstitial MitigationListParamsType = "misleading_interstitial"
-	MitigationListParamsTypePhishingInterstitial   MitigationListParamsType = "phishing_interstitial"
-	MitigationListParamsTypeNetworkBlock           MitigationListParamsType = "network_block"
-	MitigationListParamsTypeRateLimitCache         MitigationListParamsType = "rate_limit_cache"
-	MitigationListParamsTypeAccountSuspend         MitigationListParamsType = "account_suspend"
-	MitigationListParamsTypeRedirectVideoStream    MitigationListParamsType = "redirect_video_stream"
+	MitigationListParamsTypeAccountSuspend          MitigationListParamsType = "account_suspend"
+	MitigationListParamsTypeCopyrightInterstitial   MitigationListParamsType = "copyright_interstitial"
+	MitigationListParamsTypeGeoBlock                MitigationListParamsType = "geo_block"
+	MitigationListParamsTypeLegalBlock              MitigationListParamsType = "legal_block"
+	MitigationListParamsTypeMalwareInterstitial     MitigationListParamsType = "malware_interstitial"
+	MitigationListParamsTypeMisleadingInterstitial  MitigationListParamsType = "misleading_interstitial"
+	MitigationListParamsTypeNetworkBlock            MitigationListParamsType = "network_block"
+	MitigationListParamsTypePhishingInterstitial    MitigationListParamsType = "phishing_interstitial"
+	MitigationListParamsTypePlayfairiteEnforce      MitigationListParamsType = "playfairite_enforce"
+	MitigationListParamsTypeR2TakedownAccount       MitigationListParamsType = "r2_takedown_account"
+	MitigationListParamsTypeR2TakedownBucket        MitigationListParamsType = "r2_takedown_bucket"
+	MitigationListParamsTypeR2TakedownObject        MitigationListParamsType = "r2_takedown_object"
+	MitigationListParamsTypeRateLimitCache          MitigationListParamsType = "rate_limit_cache"
+	MitigationListParamsTypeRedirectVideoStream     MitigationListParamsType = "redirect_video_stream"
+	MitigationListParamsTypeRegistrarFreeze         MitigationListParamsType = "registrar_freeze"
+	MitigationListParamsTypeRegistrarParking        MitigationListParamsType = "registrar_parking"
+	MitigationListParamsTypeStreamBlockAccount      MitigationListParamsType = "stream_block_account"
+	MitigationListParamsTypeUserSuspend             MitigationListParamsType = "user_suspend"
+	MitigationListParamsTypeWorkersTakedownByZoneID MitigationListParamsType = "workers_takedown_by_zone_id"
 )
 
 func (r MitigationListParamsType) IsKnown() bool {
 	switch r {
-	case MitigationListParamsTypeLegalBlock, MitigationListParamsTypeMisleadingInterstitial, MitigationListParamsTypePhishingInterstitial, MitigationListParamsTypeNetworkBlock, MitigationListParamsTypeRateLimitCache, MitigationListParamsTypeAccountSuspend, MitigationListParamsTypeRedirectVideoStream:
+	case MitigationListParamsTypeAccountSuspend, MitigationListParamsTypeCopyrightInterstitial, MitigationListParamsTypeGeoBlock, MitigationListParamsTypeLegalBlock, MitigationListParamsTypeMalwareInterstitial, MitigationListParamsTypeMisleadingInterstitial, MitigationListParamsTypeNetworkBlock, MitigationListParamsTypePhishingInterstitial, MitigationListParamsTypePlayfairiteEnforce, MitigationListParamsTypeR2TakedownAccount, MitigationListParamsTypeR2TakedownBucket, MitigationListParamsTypeR2TakedownObject, MitigationListParamsTypeRateLimitCache, MitigationListParamsTypeRedirectVideoStream, MitigationListParamsTypeRegistrarFreeze, MitigationListParamsTypeRegistrarParking, MitigationListParamsTypeStreamBlockAccount, MitigationListParamsTypeUserSuspend, MitigationListParamsTypeWorkersTakedownByZoneID:
 		return true
 	}
 	return false

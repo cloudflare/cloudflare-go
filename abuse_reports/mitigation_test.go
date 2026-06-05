@@ -41,7 +41,7 @@ func TestMitigationListWithOptionalParams(t *testing.T) {
 			PerPage:         cloudflare.F(int64(0)),
 			Sort:            cloudflare.F(abuse_reports.MitigationListParamsSortTypeAsc),
 			Status:          cloudflare.F(abuse_reports.MitigationListParamsStatusPending),
-			Type:            cloudflare.F(abuse_reports.MitigationListParamsTypeLegalBlock),
+			Type:            cloudflare.F(abuse_reports.MitigationListParamsTypeAccountSuspend),
 		},
 	)
 	if err != nil {

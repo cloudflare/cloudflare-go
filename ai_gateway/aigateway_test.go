@@ -140,18 +140,24 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			SpendLimits: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimits{
 				Enabled: cloudflare.F(true),
 				Rules: cloudflare.F([]ai_gateway.AIGatewayUpdateParamsSpendLimitsRule{{
-					ID:        cloudflare.F("x"),
 					Limit:     cloudflare.F(1.000000),
 					LimitType: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesLimitTypeCost),
 					Window:    cloudflare.F(int64(1)),
+					ID:        cloudflare.F("x"),
 					Enabled:   cloudflare.F(true),
 					Metadata: cloudflare.F(map[string]ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesMetadataUnion{
 						"foo": ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesMetadataMode{
 							Mode: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesMetadataModeModePartition),
 						},
 					}),
-					Model:     cloudflare.F[ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesModelUnion](ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesModelString(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesModelStringPartition)),
-					Provider:  cloudflare.F[ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesProviderUnion](ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesProviderString(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesProviderStringPartition)),
+					Model: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesModel{
+						Mode:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesModelModeFilter),
+						Values: cloudflare.F([]string{"string"}),
+					}),
+					Provider: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesProvider{
+						Mode:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesProviderModeFilter),
+						Values: cloudflare.F([]string{"string"}),
+					}),
 					Technique: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesTechniqueFixed),
 				}}),
 			}),
