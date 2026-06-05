@@ -57,8 +57,7 @@ func (r *SessionService) GenerateSummaryOfTranscripts(ctx context.Context, appID
 	return res, err
 }
 
-// Returns details of the given peer ID along with call statistics for the given
-// session ID.
+// Returns participant details for the given peer ID along with call statistics.
 func (r *SessionService) GetParticipantDataFromPeerID(ctx context.Context, appID string, peerID string, params SessionGetParticipantDataFromPeerIDParams, opts ...option.RequestOption) (res *SessionGetParticipantDataFromPeerIDResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -290,8 +289,29 @@ func (r sessionGetParticipantDataFromPeerIDResponseJSON) RawJSON() string {
 }
 
 type SessionGetParticipantDataFromPeerIDResponseData struct {
-	// Participant ID. This maps to the corresponding peerId.
-	ID string `json:"id"`
+	Participant SessionGetParticipantDataFromPeerIDResponseDataParticipant `json:"participant"`
+	JSON        sessionGetParticipantDataFromPeerIDResponseDataJSON        `json:"-"`
+}
+
+// sessionGetParticipantDataFromPeerIDResponseDataJSON contains the JSON metadata
+// for the struct [SessionGetParticipantDataFromPeerIDResponseData]
+type sessionGetParticipantDataFromPeerIDResponseDataJSON struct {
+	Participant apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SessionGetParticipantDataFromPeerIDResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sessionGetParticipantDataFromPeerIDResponseDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type SessionGetParticipantDataFromPeerIDResponseDataParticipant struct {
+	// ID of the participant.
+	ID string `json:"id" format:"uuid"`
 	// timestamp when this participant was created.
 	CreatedAt string `json:"created_at"`
 	// ID passed by client to create this participant.
@@ -306,20 +326,21 @@ type SessionGetParticipantDataFromPeerIDResponseData struct {
 	LeftAt     string                   `json:"left_at"`
 	PeerEvents []map[string]interface{} `json:"peer_events"`
 	// Peer call statistics report.
-	PeerReport SessionGetParticipantDataFromPeerIDResponseDataPeerReport `json:"peer_report"`
+	PeerReport SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReport `json:"peer_report"`
 	// Name of the preset associated with the participant.
-	PresetName string `json:"preset_name"`
-	SessionID  string `json:"session_id" format:"uuid"`
+	Role      string `json:"role"`
+	SessionID string `json:"session_id" format:"uuid"`
 	// timestamp when this participant's data was last updated.
 	UpdatedAt string `json:"updated_at"`
 	// User id for this participant.
-	UserID string                                              `json:"user_id"`
-	JSON   sessionGetParticipantDataFromPeerIDResponseDataJSON `json:"-"`
+	UserID string                                                         `json:"user_id"`
+	JSON   sessionGetParticipantDataFromPeerIDResponseDataParticipantJSON `json:"-"`
 }
 
-// sessionGetParticipantDataFromPeerIDResponseDataJSON contains the JSON metadata
-// for the struct [SessionGetParticipantDataFromPeerIDResponseData]
-type sessionGetParticipantDataFromPeerIDResponseDataJSON struct {
+// sessionGetParticipantDataFromPeerIDResponseDataParticipantJSON contains the JSON
+// metadata for the struct
+// [SessionGetParticipantDataFromPeerIDResponseDataParticipant]
+type sessionGetParticipantDataFromPeerIDResponseDataParticipantJSON struct {
 	ID                  apijson.Field
 	CreatedAt           apijson.Field
 	CustomParticipantID apijson.Field
@@ -329,7 +350,7 @@ type sessionGetParticipantDataFromPeerIDResponseDataJSON struct {
 	LeftAt              apijson.Field
 	PeerEvents          apijson.Field
 	PeerReport          apijson.Field
-	PresetName          apijson.Field
+	Role                apijson.Field
 	SessionID           apijson.Field
 	UpdatedAt           apijson.Field
 	UserID              apijson.Field
@@ -337,37 +358,37 @@ type sessionGetParticipantDataFromPeerIDResponseDataJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *SessionGetParticipantDataFromPeerIDResponseData) UnmarshalJSON(data []byte) (err error) {
+func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipant) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sessionGetParticipantDataFromPeerIDResponseDataJSON) RawJSON() string {
+func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantJSON) RawJSON() string {
 	return r.raw
 }
 
 // Peer call statistics report.
-type SessionGetParticipantDataFromPeerIDResponseDataPeerReport struct {
-	Metadata    map[string]interface{}                                        `json:"metadata"`
-	Quality     map[string]interface{}                                        `json:"quality"`
-	ExtraFields map[string]interface{}                                        `json:"-" api:"extrafields"`
-	JSON        sessionGetParticipantDataFromPeerIDResponseDataPeerReportJSON `json:"-"`
+type SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReport struct {
+	Metadata    map[string]interface{}                                                   `json:"metadata"`
+	Quality     map[string]interface{}                                                   `json:"quality"`
+	ExtraFields map[string]interface{}                                                   `json:"-" api:"extrafields"`
+	JSON        sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportJSON `json:"-"`
 }
 
-// sessionGetParticipantDataFromPeerIDResponseDataPeerReportJSON contains the JSON
-// metadata for the struct
-// [SessionGetParticipantDataFromPeerIDResponseDataPeerReport]
-type sessionGetParticipantDataFromPeerIDResponseDataPeerReportJSON struct {
+// sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportJSON
+// contains the JSON metadata for the struct
+// [SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReport]
+type sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportJSON struct {
 	Metadata    apijson.Field
 	Quality     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SessionGetParticipantDataFromPeerIDResponseDataPeerReport) UnmarshalJSON(data []byte) (err error) {
+func (r *SessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r sessionGetParticipantDataFromPeerIDResponseDataPeerReportJSON) RawJSON() string {
+func (r sessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1004,8 +1025,7 @@ type SessionGenerateSummaryOfTranscriptsParams struct {
 type SessionGetParticipantDataFromPeerIDParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Comma separated list of filters to apply. Note that there must be no spaces
-	// between the filters.
+	// Filter to apply to the peer report.
 	Filters param.Field[SessionGetParticipantDataFromPeerIDParamsFilters] `query:"filters"`
 	// if true, response includes all the peer events of participant.
 	IncludePeerEvents param.Field[bool] `query:"include_peer_events"`
@@ -1020,8 +1040,7 @@ func (r SessionGetParticipantDataFromPeerIDParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Comma separated list of filters to apply. Note that there must be no spaces
-// between the filters.
+// Filter to apply to the peer report.
 type SessionGetParticipantDataFromPeerIDParamsFilters string
 
 const (
