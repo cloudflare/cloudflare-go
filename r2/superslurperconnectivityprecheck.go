@@ -151,10 +151,11 @@ func (r SuperSlurperConnectivityPrecheckSourceParams) MarshalJSON() (data []byte
 }
 
 type SuperSlurperConnectivityPrecheckSourceParamsBody struct {
-	Bucket       param.Field[string]                                                       `json:"bucket" api:"required"`
-	Secret       param.Field[interface{}]                                                  `json:"secret" api:"required"`
-	Vendor       param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyVendor]       `json:"vendor" api:"required"`
-	Endpoint     param.Field[string]                                                       `json:"endpoint"`
+	Bucket param.Field[string]                                                 `json:"bucket" api:"required"`
+	Secret param.Field[interface{}]                                            `json:"secret" api:"required"`
+	Vendor param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyVendor] `json:"vendor" api:"required"`
+	// Custom S3-compatible endpoint that must use https://.
+	Endpoint     param.Field[string]                                                       `json:"endpoint" format:"uri"`
 	Jurisdiction param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyJurisdiction] `json:"jurisdiction"`
 	Keys         param.Field[interface{}]                                                  `json:"keys"`
 	PathPrefix   param.Field[string]                                                       `json:"pathPrefix"`
@@ -178,13 +179,14 @@ type SuperSlurperConnectivityPrecheckSourceParamsBodyUnion interface {
 }
 
 type SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchema struct {
-	Bucket     param.Field[string]                                                                        `json:"bucket" api:"required"`
-	Secret     param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaSecret] `json:"secret" api:"required"`
-	Vendor     param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaVendor] `json:"vendor" api:"required"`
-	Endpoint   param.Field[string]                                                                        `json:"endpoint"`
-	Keys       param.Field[[]string]                                                                      `json:"keys"`
-	PathPrefix param.Field[string]                                                                        `json:"pathPrefix"`
-	Region     param.Field[string]                                                                        `json:"region"`
+	Bucket param.Field[string]                                                                        `json:"bucket" api:"required"`
+	Secret param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaSecret] `json:"secret" api:"required"`
+	Vendor param.Field[SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaVendor] `json:"vendor" api:"required"`
+	// Custom S3-compatible endpoint that must use https://.
+	Endpoint   param.Field[string]   `json:"endpoint" format:"uri"`
+	Keys       param.Field[[]string] `json:"keys"`
+	PathPrefix param.Field[string]   `json:"pathPrefix"`
+	Region     param.Field[string]   `json:"region"`
 }
 
 func (r SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchema) MarshalJSON() (data []byte, err error) {

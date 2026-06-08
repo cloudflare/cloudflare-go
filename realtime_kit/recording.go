@@ -132,24 +132,23 @@ func (r *RecordingService) StartRecordings(ctx context.Context, appID string, pa
 	return res, err
 }
 
-// Starts a track recording in a meeting. Track recordings consist of "layers".
-// Layers are used to map audio/video tracks in a meeting to output destinations.
-// More information about track recordings is available in the
-// [Track Recordings Guide Page](https://docs.realtime.cloudflare.com/guides/capabilities/recording/recording-overview).
-func (r *RecordingService) StartTrackRecording(ctx context.Context, appID string, params RecordingStartTrackRecordingParams, opts ...option.RequestOption) (err error) {
+// Starts track recording for a meeting. Track recording currently records separate
+// participant audio tracks as WebM files in the RealtimeKit bucket. Video track
+// recording is in development. For more information, refer to
+// [Track recording](/realtime/realtimekit/recording-guide/track-recording/).
+func (r *RecordingService) StartTrackRecording(ctx context.Context, appID string, params RecordingStartTrackRecordingParams, opts ...option.RequestOption) (res *RecordingStartTrackRecordingResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
-		return err
+		return nil, err
 	}
 	if appID == "" {
 		err = errors.New("missing required app_id parameter")
-		return err
+		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/recordings/track", params.AccountID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
-	return err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return res, err
 }
 
 type RecordingGetActiveRecordingsResponse struct {
@@ -2081,6 +2080,131 @@ func (r RecordingStartRecordingsResponseDataStorageConfigAuthMethod) IsKnown() b
 	return false
 }
 
+type RecordingStartTrackRecordingResponse struct {
+	// Success status of the operation
+	Success bool `json:"success" api:"required"`
+	// Data returned by the operation
+	Data RecordingStartTrackRecordingResponseData `json:"data"`
+	JSON recordingStartTrackRecordingResponseJSON `json:"-"`
+}
+
+// recordingStartTrackRecordingResponseJSON contains the JSON metadata for the
+// struct [RecordingStartTrackRecordingResponse]
+type recordingStartTrackRecordingResponseJSON struct {
+	Success     apijson.Field
+	Data        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingStartTrackRecordingResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingStartTrackRecordingResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Data returned by the operation
+type RecordingStartTrackRecordingResponseData struct {
+	Recording RecordingStartTrackRecordingResponseDataRecording `json:"recording" api:"required"`
+	JSON      recordingStartTrackRecordingResponseDataJSON      `json:"-"`
+}
+
+// recordingStartTrackRecordingResponseDataJSON contains the JSON metadata for the
+// struct [RecordingStartTrackRecordingResponseData]
+type recordingStartTrackRecordingResponseDataJSON struct {
+	Recording   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingStartTrackRecordingResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingStartTrackRecordingResponseDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordingStartTrackRecordingResponseDataRecording struct {
+	// ID of the recording
+	ID string `json:"id" api:"required" format:"uuid"`
+	// If the audio_config is passed, the URL for downloading the audio recording is
+	// returned.
+	AudioDownloadURL string `json:"audio_download_url" api:"required,nullable" format:"uri"`
+	// URL where the recording can be downloaded.
+	DownloadURL string `json:"download_url" api:"required,nullable" format:"uri"`
+	// Timestamp when the download URL expires.
+	DownloadURLExpiry time.Time `json:"download_url_expiry" api:"required,nullable" format:"date-time"`
+	// File size of the recording, in bytes.
+	FileSize float64 `json:"file_size" api:"required,nullable"`
+	// Timestamp when this recording was invoked.
+	InvokedTime time.Time `json:"invoked_time" api:"required" format:"date-time"`
+	// File name of the recording.
+	OutputFileName string `json:"output_file_name" api:"required"`
+	// ID of the meeting session this recording is for.
+	SessionID string `json:"session_id" api:"required,nullable" format:"uuid"`
+	// Timestamp when this recording actually started after being invoked. Usually a
+	// few seconds after `invoked_time`.
+	StartedTime time.Time `json:"started_time" api:"required,nullable" format:"date-time"`
+	// Current status of the recording.
+	Status RecordingStartTrackRecordingResponseDataRecordingStatus `json:"status" api:"required"`
+	// Timestamp when this recording was stopped. Optional; is present only when the
+	// recording has actually been stopped.
+	StoppedTime time.Time `json:"stopped_time" api:"required,nullable" format:"date-time"`
+	// Total recording time in seconds.
+	RecordingDuration int64                                                 `json:"recording_duration"`
+	JSON              recordingStartTrackRecordingResponseDataRecordingJSON `json:"-"`
+}
+
+// recordingStartTrackRecordingResponseDataRecordingJSON contains the JSON metadata
+// for the struct [RecordingStartTrackRecordingResponseDataRecording]
+type recordingStartTrackRecordingResponseDataRecordingJSON struct {
+	ID                apijson.Field
+	AudioDownloadURL  apijson.Field
+	DownloadURL       apijson.Field
+	DownloadURLExpiry apijson.Field
+	FileSize          apijson.Field
+	InvokedTime       apijson.Field
+	OutputFileName    apijson.Field
+	SessionID         apijson.Field
+	StartedTime       apijson.Field
+	Status            apijson.Field
+	StoppedTime       apijson.Field
+	RecordingDuration apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *RecordingStartTrackRecordingResponseDataRecording) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingStartTrackRecordingResponseDataRecordingJSON) RawJSON() string {
+	return r.raw
+}
+
+// Current status of the recording.
+type RecordingStartTrackRecordingResponseDataRecordingStatus string
+
+const (
+	RecordingStartTrackRecordingResponseDataRecordingStatusInvoked   RecordingStartTrackRecordingResponseDataRecordingStatus = "INVOKED"
+	RecordingStartTrackRecordingResponseDataRecordingStatusRecording RecordingStartTrackRecordingResponseDataRecordingStatus = "RECORDING"
+	RecordingStartTrackRecordingResponseDataRecordingStatusUploading RecordingStartTrackRecordingResponseDataRecordingStatus = "UPLOADING"
+	RecordingStartTrackRecordingResponseDataRecordingStatusUploaded  RecordingStartTrackRecordingResponseDataRecordingStatus = "UPLOADED"
+	RecordingStartTrackRecordingResponseDataRecordingStatusErrored   RecordingStartTrackRecordingResponseDataRecordingStatus = "ERRORED"
+	RecordingStartTrackRecordingResponseDataRecordingStatusPaused    RecordingStartTrackRecordingResponseDataRecordingStatus = "PAUSED"
+)
+
+func (r RecordingStartTrackRecordingResponseDataRecordingStatus) IsKnown() bool {
+	switch r {
+	case RecordingStartTrackRecordingResponseDataRecordingStatusInvoked, RecordingStartTrackRecordingResponseDataRecordingStatusRecording, RecordingStartTrackRecordingResponseDataRecordingStatusUploading, RecordingStartTrackRecordingResponseDataRecordingStatusUploaded, RecordingStartTrackRecordingResponseDataRecordingStatusErrored, RecordingStartTrackRecordingResponseDataRecordingStatusPaused:
+		return true
+	}
+	return false
+}
+
 type RecordingGetActiveRecordingsParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -2484,12 +2608,15 @@ func (r RecordingStartRecordingsParamsVideoConfigWatermarkSize) MarshalJSON() (d
 
 type RecordingStartTrackRecordingParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string]                                              `path:"account_id" api:"required"`
-	Layers    param.Field[map[string]RecordingStartTrackRecordingParamsLayers] `json:"layers" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// ID of the meeting to record.
-	MeetingID param.Field[string] `json:"meeting_id" api:"required"`
-	// Maximum seconds this recording should be active for (beta)
-	MaxSeconds param.Field[float64] `json:"max_seconds"`
+	MeetingID param.Field[string] `json:"meeting_id" api:"required" format:"uuid"`
+	// Optional audio layer configuration. If omitted, RealtimeKit records all
+	// participant audio using the default file name prefix.
+	Layers param.Field[map[string]RecordingStartTrackRecordingParamsLayers] `json:"layers"`
+	// Optional list of participant user IDs to record. Selective track recording
+	// (`user_ids`) is in early beta contact support to use this feature.
+	UserIDs param.Field[[]string] `json:"user_ids"`
 }
 
 func (r RecordingStartTrackRecordingParams) MarshalJSON() (data []byte, err error) {
@@ -2498,108 +2625,25 @@ func (r RecordingStartTrackRecordingParams) MarshalJSON() (data []byte, err erro
 
 type RecordingStartTrackRecordingParamsLayers struct {
 	// A file name prefix to apply for files generated from this layer
-	FileNamePrefix param.Field[string]                                           `json:"file_name_prefix"`
-	Outputs        param.Field[[]RecordingStartTrackRecordingParamsLayersOutput] `json:"outputs"`
+	FileNamePrefix param.Field[string] `json:"file_name_prefix"`
+	// Media kind to record. Track recording currently supports audio only.
+	MediaKind param.Field[RecordingStartTrackRecordingParamsLayersMediaKind] `json:"media_kind"`
 }
 
 func (r RecordingStartTrackRecordingParamsLayers) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type RecordingStartTrackRecordingParamsLayersOutput struct {
-	StorageConfig param.Field[RecordingStartTrackRecordingParamsLayersOutputsStorageConfig] `json:"storage_config"`
-	// The type of output destination this layer is being exported to.
-	Type param.Field[RecordingStartTrackRecordingParamsLayersOutputsType] `json:"type"`
-}
-
-func (r RecordingStartTrackRecordingParamsLayersOutput) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RecordingStartTrackRecordingParamsLayersOutputsStorageConfig struct {
-	// Type of storage media.
-	Type param.Field[RecordingStartTrackRecordingParamsLayersOutputsStorageConfigType] `json:"type" api:"required"`
-	// Access key of the storage medium. Access key is not required for the `gcs`
-	// storage media type.
-	//
-	// Note that this field is not readable by clients, only writeable.
-	AccessKey param.Field[string] `json:"access_key"`
-	// Authentication method used for "sftp" type storage medium
-	AuthMethod param.Field[RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethod] `json:"auth_method"`
-	// Name of the storage medium's bucket.
-	Bucket param.Field[string] `json:"bucket"`
-	// SSH destination server host for SFTP type storage medium
-	Host param.Field[string] `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password param.Field[string] `json:"password"`
-	// Path relative to the bucket root at which the recording will be placed.
-	Path param.Field[string] `json:"path"`
-	// SSH destination server port for SFTP type storage medium
-	Port param.Field[float64] `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey param.Field[string] `json:"private_key"`
-	// Region of the storage medium.
-	Region param.Field[string] `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret param.Field[string] `json:"secret"`
-	// SSH destination server username for SFTP type storage medium
-	Username param.Field[string] `json:"username"`
-}
-
-func (r RecordingStartTrackRecordingParamsLayersOutputsStorageConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Type of storage media.
-type RecordingStartTrackRecordingParamsLayersOutputsStorageConfigType string
+// Media kind to record. Track recording currently supports audio only.
+type RecordingStartTrackRecordingParamsLayersMediaKind string
 
 const (
-	RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeAws          RecordingStartTrackRecordingParamsLayersOutputsStorageConfigType = "aws"
-	RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeAzure        RecordingStartTrackRecordingParamsLayersOutputsStorageConfigType = "azure"
-	RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeDigitalocean RecordingStartTrackRecordingParamsLayersOutputsStorageConfigType = "digitalocean"
-	RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeGcs          RecordingStartTrackRecordingParamsLayersOutputsStorageConfigType = "gcs"
-	RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeSftp         RecordingStartTrackRecordingParamsLayersOutputsStorageConfigType = "sftp"
+	RecordingStartTrackRecordingParamsLayersMediaKindAudio RecordingStartTrackRecordingParamsLayersMediaKind = "audio"
 )
 
-func (r RecordingStartTrackRecordingParamsLayersOutputsStorageConfigType) IsKnown() bool {
+func (r RecordingStartTrackRecordingParamsLayersMediaKind) IsKnown() bool {
 	switch r {
-	case RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeAws, RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeAzure, RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeDigitalocean, RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeGcs, RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeSftp:
-		return true
-	}
-	return false
-}
-
-// Authentication method used for "sftp" type storage medium
-type RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethod string
-
-const (
-	RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethodKey      RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethod = "KEY"
-	RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethodPassword RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethod = "PASSWORD"
-)
-
-func (r RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethod) IsKnown() bool {
-	switch r {
-	case RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethodKey, RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethodPassword:
-		return true
-	}
-	return false
-}
-
-// The type of output destination this layer is being exported to.
-type RecordingStartTrackRecordingParamsLayersOutputsType string
-
-const (
-	RecordingStartTrackRecordingParamsLayersOutputsTypeRealtimekitBucket RecordingStartTrackRecordingParamsLayersOutputsType = "REALTIMEKIT_BUCKET"
-	RecordingStartTrackRecordingParamsLayersOutputsTypeStorageConfig     RecordingStartTrackRecordingParamsLayersOutputsType = "STORAGE_CONFIG"
-)
-
-func (r RecordingStartTrackRecordingParamsLayersOutputsType) IsKnown() bool {
-	switch r {
-	case RecordingStartTrackRecordingParamsLayersOutputsTypeRealtimekitBucket, RecordingStartTrackRecordingParamsLayersOutputsTypeStorageConfig:
+	case RecordingStartTrackRecordingParamsLayersMediaKindAudio:
 		return true
 	}
 	return false

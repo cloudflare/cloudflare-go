@@ -37,7 +37,7 @@ func TestSuperSlurperConnectivityPrecheckSourceWithOptionalParams(t *testing.T) 
 				SecretAccessKey: cloudflare.F("secretAccessKey"),
 			}),
 			Vendor:     cloudflare.F(r2.SuperSlurperConnectivityPrecheckSourceParamsBodyR2SlurperS3SourceSchemaVendorS3),
-			Endpoint:   cloudflare.F("endpoint"),
+			Endpoint:   cloudflare.F("https://example.com"),
 			Keys:       cloudflare.F([]string{"string"}),
 			PathPrefix: cloudflare.F("pathPrefix"),
 			Region:     cloudflare.F("region"),

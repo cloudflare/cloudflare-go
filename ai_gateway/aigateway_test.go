@@ -126,18 +126,42 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			Logpush:               cloudflare.F(true),
 			LogpushPublicKey:      cloudflare.F("xxxxxxxxxxxxxxxx"),
 			Otel: cloudflare.F([]ai_gateway.AIGatewayUpdateParamsOtel{{
-				Authorization: cloudflare.F("authorization"),
 				Headers: cloudflare.F(map[string]string{
 					"foo": "string",
 				}),
-				URL:         cloudflare.F("https://example.com"),
-				ContentType: cloudflare.F(ai_gateway.AIGatewayUpdateParamsOtelContentTypeJson),
+				URL:           cloudflare.F("https://example.com"),
+				Authorization: cloudflare.F("authorization"),
+				ContentType:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsOtelContentTypeJson),
 			}}),
 			RateLimitingTechnique: cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
 			RetryBackoff:          cloudflare.F(ai_gateway.AIGatewayUpdateParamsRetryBackoffConstant),
 			RetryDelay:            cloudflare.F(int64(0)),
 			RetryMaxAttempts:      cloudflare.F(int64(1)),
-			StoreID:               cloudflare.F("store_id"),
+			SpendLimits: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimits{
+				Enabled: cloudflare.F(true),
+				Rules: cloudflare.F([]ai_gateway.AIGatewayUpdateParamsSpendLimitsRule{{
+					Limit:     cloudflare.F(1.000000),
+					LimitType: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesLimitTypeCost),
+					Window:    cloudflare.F(int64(1)),
+					ID:        cloudflare.F("x"),
+					Enabled:   cloudflare.F(true),
+					Metadata: cloudflare.F(map[string]ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesMetadataUnion{
+						"foo": ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesMetadataMode{
+							Mode: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesMetadataModeModePartition),
+						},
+					}),
+					Model: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesModel{
+						Mode:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesModelModeFilter),
+						Values: cloudflare.F([]string{"string"}),
+					}),
+					Provider: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesProvider{
+						Mode:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesProviderModeFilter),
+						Values: cloudflare.F([]string{"string"}),
+					}),
+					Technique: cloudflare.F(ai_gateway.AIGatewayUpdateParamsSpendLimitsRulesTechniqueFixed),
+				}}),
+			}),
+			StoreID: cloudflare.F("store_id"),
 			Stripe: cloudflare.F(ai_gateway.AIGatewayUpdateParamsStripe{
 				Authorization: cloudflare.F("authorization"),
 				UsageEvents: cloudflare.F([]ai_gateway.AIGatewayUpdateParamsStripeUsageEvent{{

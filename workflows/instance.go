@@ -153,23 +153,57 @@ func (r *InstanceService) Get(ctx context.Context, workflowName string, instance
 	return res, nil
 }
 
+// Retrieves the full, untruncated output for a specific step on a workflow
+// instance. Returns a flat status-shaped JSON body with step `status` ('running' |
+// 'waiting' | 'complete' | 'errored'), `error` (nullable), and `output` (the step
+// value, or null while running/waiting/errored). When the step returned a
+// ReadableStream from step.do, the response is served as
+// 'application/octet-stream' with the raw bytes as the body instead of JSON. A
+// `status='running'` response with non-null `error` indicates the step is
+// currently retrying after a prior attempt failed.
+func (r *InstanceService) Step(ctx context.Context, workflowName string, instanceID string, params InstanceStepParams, opts ...option.RequestOption) (res *InstanceStepResponse, err error) {
+	var env InstanceStepResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if workflowName == "" {
+		err = errors.New("missing required workflow_name parameter")
+		return nil, err
+	}
+	if instanceID == "" {
+		err = errors.New("missing required instance_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/workflows/%s/instances/%s/step", params.AccountID, workflowName, instanceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 type InstanceNewResponse struct {
-	ID         string                    `json:"id" api:"required"`
-	Status     InstanceNewResponseStatus `json:"status" api:"required"`
-	VersionID  string                    `json:"version_id" api:"required" format:"uuid"`
-	WorkflowID string                    `json:"workflow_id" api:"required" format:"uuid"`
-	JSON       instanceNewResponseJSON   `json:"-"`
+	ID            string                           `json:"id" api:"required"`
+	Status        InstanceNewResponseStatus        `json:"status" api:"required"`
+	VersionID     string                           `json:"version_id" api:"required" format:"uuid"`
+	WorkflowID    string                           `json:"workflow_id" api:"required" format:"uuid"`
+	TriggerSource InstanceNewResponseTriggerSource `json:"trigger_source"`
+	JSON          instanceNewResponseJSON          `json:"-"`
 }
 
 // instanceNewResponseJSON contains the JSON metadata for the struct
 // [InstanceNewResponse]
 type instanceNewResponseJSON struct {
-	ID          apijson.Field
-	Status      apijson.Field
-	VersionID   apijson.Field
-	WorkflowID  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Status        apijson.Field
+	VersionID     apijson.Field
+	WorkflowID    apijson.Field
+	TriggerSource apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *InstanceNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -191,41 +225,62 @@ const (
 	InstanceNewResponseStatusComplete        InstanceNewResponseStatus = "complete"
 	InstanceNewResponseStatusWaitingForPause InstanceNewResponseStatus = "waitingForPause"
 	InstanceNewResponseStatusWaiting         InstanceNewResponseStatus = "waiting"
+	InstanceNewResponseStatusRollingBack     InstanceNewResponseStatus = "rollingBack"
 )
 
 func (r InstanceNewResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseStatusQueued, InstanceNewResponseStatusRunning, InstanceNewResponseStatusPaused, InstanceNewResponseStatusErrored, InstanceNewResponseStatusTerminated, InstanceNewResponseStatusComplete, InstanceNewResponseStatusWaitingForPause, InstanceNewResponseStatusWaiting:
+	case InstanceNewResponseStatusQueued, InstanceNewResponseStatusRunning, InstanceNewResponseStatusPaused, InstanceNewResponseStatusErrored, InstanceNewResponseStatusTerminated, InstanceNewResponseStatusComplete, InstanceNewResponseStatusWaitingForPause, InstanceNewResponseStatusWaiting, InstanceNewResponseStatusRollingBack:
+		return true
+	}
+	return false
+}
+
+type InstanceNewResponseTriggerSource string
+
+const (
+	InstanceNewResponseTriggerSourceUnknown InstanceNewResponseTriggerSource = "unknown"
+	InstanceNewResponseTriggerSourceAPI     InstanceNewResponseTriggerSource = "api"
+	InstanceNewResponseTriggerSourceBinding InstanceNewResponseTriggerSource = "binding"
+	InstanceNewResponseTriggerSourceEvent   InstanceNewResponseTriggerSource = "event"
+	InstanceNewResponseTriggerSourceCron    InstanceNewResponseTriggerSource = "cron"
+)
+
+func (r InstanceNewResponseTriggerSource) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseTriggerSourceUnknown, InstanceNewResponseTriggerSourceAPI, InstanceNewResponseTriggerSourceBinding, InstanceNewResponseTriggerSourceEvent, InstanceNewResponseTriggerSourceCron:
 		return true
 	}
 	return false
 }
 
 type InstanceListResponse struct {
-	ID         string                     `json:"id" api:"required"`
-	CreatedOn  time.Time                  `json:"created_on" api:"required" format:"date-time"`
-	EndedOn    time.Time                  `json:"ended_on" api:"required,nullable" format:"date-time"`
-	ModifiedOn time.Time                  `json:"modified_on" api:"required" format:"date-time"`
-	StartedOn  time.Time                  `json:"started_on" api:"required,nullable" format:"date-time"`
-	Status     InstanceListResponseStatus `json:"status" api:"required"`
-	VersionID  string                     `json:"version_id" api:"required" format:"uuid"`
-	WorkflowID string                     `json:"workflow_id" api:"required" format:"uuid"`
-	JSON       instanceListResponseJSON   `json:"-"`
+	ID            string                            `json:"id" api:"required"`
+	CreatedOn     time.Time                         `json:"created_on" api:"required" format:"date-time"`
+	EndedOn       time.Time                         `json:"ended_on" api:"required,nullable" format:"date-time"`
+	ModifiedOn    time.Time                         `json:"modified_on" api:"required" format:"date-time"`
+	StartedOn     time.Time                         `json:"started_on" api:"required,nullable" format:"date-time"`
+	Status        InstanceListResponseStatus        `json:"status" api:"required"`
+	VersionID     string                            `json:"version_id" api:"required" format:"uuid"`
+	WorkflowID    string                            `json:"workflow_id" api:"required" format:"uuid"`
+	TriggerSource InstanceListResponseTriggerSource `json:"trigger_source"`
+	JSON          instanceListResponseJSON          `json:"-"`
 }
 
 // instanceListResponseJSON contains the JSON metadata for the struct
 // [InstanceListResponse]
 type instanceListResponseJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	EndedOn     apijson.Field
-	ModifiedOn  apijson.Field
-	StartedOn   apijson.Field
-	Status      apijson.Field
-	VersionID   apijson.Field
-	WorkflowID  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	CreatedOn     apijson.Field
+	EndedOn       apijson.Field
+	ModifiedOn    apijson.Field
+	StartedOn     apijson.Field
+	Status        apijson.Field
+	VersionID     apijson.Field
+	WorkflowID    apijson.Field
+	TriggerSource apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *InstanceListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -247,33 +302,54 @@ const (
 	InstanceListResponseStatusComplete        InstanceListResponseStatus = "complete"
 	InstanceListResponseStatusWaitingForPause InstanceListResponseStatus = "waitingForPause"
 	InstanceListResponseStatusWaiting         InstanceListResponseStatus = "waiting"
+	InstanceListResponseStatusRollingBack     InstanceListResponseStatus = "rollingBack"
 )
 
 func (r InstanceListResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceListResponseStatusQueued, InstanceListResponseStatusRunning, InstanceListResponseStatusPaused, InstanceListResponseStatusErrored, InstanceListResponseStatusTerminated, InstanceListResponseStatusComplete, InstanceListResponseStatusWaitingForPause, InstanceListResponseStatusWaiting:
+	case InstanceListResponseStatusQueued, InstanceListResponseStatusRunning, InstanceListResponseStatusPaused, InstanceListResponseStatusErrored, InstanceListResponseStatusTerminated, InstanceListResponseStatusComplete, InstanceListResponseStatusWaitingForPause, InstanceListResponseStatusWaiting, InstanceListResponseStatusRollingBack:
+		return true
+	}
+	return false
+}
+
+type InstanceListResponseTriggerSource string
+
+const (
+	InstanceListResponseTriggerSourceUnknown InstanceListResponseTriggerSource = "unknown"
+	InstanceListResponseTriggerSourceAPI     InstanceListResponseTriggerSource = "api"
+	InstanceListResponseTriggerSourceBinding InstanceListResponseTriggerSource = "binding"
+	InstanceListResponseTriggerSourceEvent   InstanceListResponseTriggerSource = "event"
+	InstanceListResponseTriggerSourceCron    InstanceListResponseTriggerSource = "cron"
+)
+
+func (r InstanceListResponseTriggerSource) IsKnown() bool {
+	switch r {
+	case InstanceListResponseTriggerSourceUnknown, InstanceListResponseTriggerSourceAPI, InstanceListResponseTriggerSourceBinding, InstanceListResponseTriggerSourceEvent, InstanceListResponseTriggerSourceCron:
 		return true
 	}
 	return false
 }
 
 type InstanceBulkResponse struct {
-	ID         string                     `json:"id" api:"required"`
-	Status     InstanceBulkResponseStatus `json:"status" api:"required"`
-	VersionID  string                     `json:"version_id" api:"required" format:"uuid"`
-	WorkflowID string                     `json:"workflow_id" api:"required" format:"uuid"`
-	JSON       instanceBulkResponseJSON   `json:"-"`
+	ID            string                            `json:"id" api:"required"`
+	Status        InstanceBulkResponseStatus        `json:"status" api:"required"`
+	VersionID     string                            `json:"version_id" api:"required" format:"uuid"`
+	WorkflowID    string                            `json:"workflow_id" api:"required" format:"uuid"`
+	TriggerSource InstanceBulkResponseTriggerSource `json:"trigger_source"`
+	JSON          instanceBulkResponseJSON          `json:"-"`
 }
 
 // instanceBulkResponseJSON contains the JSON metadata for the struct
 // [InstanceBulkResponse]
 type instanceBulkResponseJSON struct {
-	ID          apijson.Field
-	Status      apijson.Field
-	VersionID   apijson.Field
-	WorkflowID  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Status        apijson.Field
+	VersionID     apijson.Field
+	WorkflowID    apijson.Field
+	TriggerSource apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *InstanceBulkResponse) UnmarshalJSON(data []byte) (err error) {
@@ -295,11 +371,30 @@ const (
 	InstanceBulkResponseStatusComplete        InstanceBulkResponseStatus = "complete"
 	InstanceBulkResponseStatusWaitingForPause InstanceBulkResponseStatus = "waitingForPause"
 	InstanceBulkResponseStatusWaiting         InstanceBulkResponseStatus = "waiting"
+	InstanceBulkResponseStatusRollingBack     InstanceBulkResponseStatus = "rollingBack"
 )
 
 func (r InstanceBulkResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceBulkResponseStatusQueued, InstanceBulkResponseStatusRunning, InstanceBulkResponseStatusPaused, InstanceBulkResponseStatusErrored, InstanceBulkResponseStatusTerminated, InstanceBulkResponseStatusComplete, InstanceBulkResponseStatusWaitingForPause, InstanceBulkResponseStatusWaiting:
+	case InstanceBulkResponseStatusQueued, InstanceBulkResponseStatusRunning, InstanceBulkResponseStatusPaused, InstanceBulkResponseStatusErrored, InstanceBulkResponseStatusTerminated, InstanceBulkResponseStatusComplete, InstanceBulkResponseStatusWaitingForPause, InstanceBulkResponseStatusWaiting, InstanceBulkResponseStatusRollingBack:
+		return true
+	}
+	return false
+}
+
+type InstanceBulkResponseTriggerSource string
+
+const (
+	InstanceBulkResponseTriggerSourceUnknown InstanceBulkResponseTriggerSource = "unknown"
+	InstanceBulkResponseTriggerSourceAPI     InstanceBulkResponseTriggerSource = "api"
+	InstanceBulkResponseTriggerSourceBinding InstanceBulkResponseTriggerSource = "binding"
+	InstanceBulkResponseTriggerSourceEvent   InstanceBulkResponseTriggerSource = "event"
+	InstanceBulkResponseTriggerSourceCron    InstanceBulkResponseTriggerSource = "cron"
+)
+
+func (r InstanceBulkResponseTriggerSource) IsKnown() bool {
+	switch r {
+	case InstanceBulkResponseTriggerSourceUnknown, InstanceBulkResponseTriggerSourceAPI, InstanceBulkResponseTriggerSourceBinding, InstanceBulkResponseTriggerSourceEvent, InstanceBulkResponseTriggerSourceCron:
 		return true
 	}
 	return false
@@ -311,6 +406,7 @@ type InstanceGetResponse struct {
 	Output    InstanceGetResponseOutputUnion `json:"output" api:"required"`
 	Params    interface{}                    `json:"params" api:"required"`
 	Queued    time.Time                      `json:"queued" api:"required" format:"date-time"`
+	Rollback  InstanceGetResponseRollback    `json:"rollback" api:"required,nullable"`
 	Start     time.Time                      `json:"start" api:"required,nullable" format:"date-time"`
 	Status    InstanceGetResponseStatus      `json:"status" api:"required"`
 	StepCount int64                          `json:"step_count" api:"required"`
@@ -318,6 +414,7 @@ type InstanceGetResponse struct {
 	Success   bool                           `json:"success" api:"required,nullable"`
 	Trigger   InstanceGetResponseTrigger     `json:"trigger" api:"required"`
 	VersionID string                         `json:"versionId" api:"required" format:"uuid"`
+	Schedule  InstanceGetResponseSchedule    `json:"schedule"`
 	JSON      instanceGetResponseJSON        `json:"-"`
 }
 
@@ -329,6 +426,7 @@ type instanceGetResponseJSON struct {
 	Output      apijson.Field
 	Params      apijson.Field
 	Queued      apijson.Field
+	Rollback    apijson.Field
 	Start       apijson.Field
 	Status      apijson.Field
 	StepCount   apijson.Field
@@ -336,6 +434,7 @@ type instanceGetResponseJSON struct {
 	Success     apijson.Field
 	Trigger     apijson.Field
 	VersionID   apijson.Field
+	Schedule    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -391,6 +490,67 @@ func init() {
 	)
 }
 
+type InstanceGetResponseRollback struct {
+	Error   InstanceGetResponseRollbackError   `json:"error" api:"required,nullable"`
+	Outcome InstanceGetResponseRollbackOutcome `json:"outcome" api:"required"`
+	JSON    instanceGetResponseRollbackJSON    `json:"-"`
+}
+
+// instanceGetResponseRollbackJSON contains the JSON metadata for the struct
+// [InstanceGetResponseRollback]
+type instanceGetResponseRollbackJSON struct {
+	Error       apijson.Field
+	Outcome     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceGetResponseRollback) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceGetResponseRollbackJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceGetResponseRollbackError struct {
+	Message string                               `json:"message" api:"required"`
+	Name    string                               `json:"name" api:"required"`
+	JSON    instanceGetResponseRollbackErrorJSON `json:"-"`
+}
+
+// instanceGetResponseRollbackErrorJSON contains the JSON metadata for the struct
+// [InstanceGetResponseRollbackError]
+type instanceGetResponseRollbackErrorJSON struct {
+	Message     apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceGetResponseRollbackError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceGetResponseRollbackErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceGetResponseRollbackOutcome string
+
+const (
+	InstanceGetResponseRollbackOutcomeComplete InstanceGetResponseRollbackOutcome = "complete"
+	InstanceGetResponseRollbackOutcomeFailed   InstanceGetResponseRollbackOutcome = "failed"
+)
+
+func (r InstanceGetResponseRollbackOutcome) IsKnown() bool {
+	switch r {
+	case InstanceGetResponseRollbackOutcomeComplete, InstanceGetResponseRollbackOutcomeFailed:
+		return true
+	}
+	return false
+}
+
 type InstanceGetResponseStatus string
 
 const (
@@ -402,11 +562,12 @@ const (
 	InstanceGetResponseStatusComplete        InstanceGetResponseStatus = "complete"
 	InstanceGetResponseStatusWaitingForPause InstanceGetResponseStatus = "waitingForPause"
 	InstanceGetResponseStatusWaiting         InstanceGetResponseStatus = "waiting"
+	InstanceGetResponseStatusRollingBack     InstanceGetResponseStatus = "rollingBack"
 )
 
 func (r InstanceGetResponseStatus) IsKnown() bool {
 	switch r {
-	case InstanceGetResponseStatusQueued, InstanceGetResponseStatusRunning, InstanceGetResponseStatusPaused, InstanceGetResponseStatusErrored, InstanceGetResponseStatusTerminated, InstanceGetResponseStatusComplete, InstanceGetResponseStatusWaitingForPause, InstanceGetResponseStatusWaiting:
+	case InstanceGetResponseStatusQueued, InstanceGetResponseStatusRunning, InstanceGetResponseStatusPaused, InstanceGetResponseStatusErrored, InstanceGetResponseStatusTerminated, InstanceGetResponseStatusComplete, InstanceGetResponseStatusWaitingForPause, InstanceGetResponseStatusWaiting, InstanceGetResponseStatusRollingBack:
 		return true
 	}
 	return false
@@ -793,6 +954,105 @@ func (r InstanceGetResponseTriggerSource) IsKnown() bool {
 	return false
 }
 
+type InstanceGetResponseSchedule struct {
+	Cron          string                          `json:"cron" api:"required"`
+	ScheduledTime float64                         `json:"scheduledTime" api:"required"`
+	JSON          instanceGetResponseScheduleJSON `json:"-"`
+}
+
+// instanceGetResponseScheduleJSON contains the JSON metadata for the struct
+// [InstanceGetResponseSchedule]
+type instanceGetResponseScheduleJSON struct {
+	Cron          apijson.Field
+	ScheduledTime apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *InstanceGetResponseSchedule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceGetResponseScheduleJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceStepResponse struct {
+	// Error details when status='errored'; null otherwise.
+	Error  InstanceStepResponseError  `json:"error" api:"required,nullable"`
+	Status InstanceStepResponseStatus `json:"status" api:"required"`
+	// Full step output or waitForEvent payload without truncation. Sensitive outputs
+	// are returned as '[REDACTED]'. Populated when status='complete'. May be a
+	// ReadableStream when the step returned one from step.do; stream outputs are
+	// served as application/octet-stream rather than JSON.
+	Output interface{}              `json:"output"`
+	JSON   instanceStepResponseJSON `json:"-"`
+}
+
+// instanceStepResponseJSON contains the JSON metadata for the struct
+// [InstanceStepResponse]
+type instanceStepResponseJSON struct {
+	Error       apijson.Field
+	Status      apijson.Field
+	Output      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceStepResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceStepResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Error details when status='errored'; null otherwise.
+type InstanceStepResponseError struct {
+	Message string                        `json:"message" api:"required"`
+	Name    string                        `json:"name" api:"required"`
+	JSON    instanceStepResponseErrorJSON `json:"-"`
+}
+
+// instanceStepResponseErrorJSON contains the JSON metadata for the struct
+// [InstanceStepResponseError]
+type instanceStepResponseErrorJSON struct {
+	Message     apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceStepResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceStepResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceStepResponseStatus string
+
+const (
+	InstanceStepResponseStatusQueued          InstanceStepResponseStatus = "queued"
+	InstanceStepResponseStatusRunning         InstanceStepResponseStatus = "running"
+	InstanceStepResponseStatusPaused          InstanceStepResponseStatus = "paused"
+	InstanceStepResponseStatusErrored         InstanceStepResponseStatus = "errored"
+	InstanceStepResponseStatusTerminated      InstanceStepResponseStatus = "terminated"
+	InstanceStepResponseStatusComplete        InstanceStepResponseStatus = "complete"
+	InstanceStepResponseStatusWaitingForPause InstanceStepResponseStatus = "waitingForPause"
+	InstanceStepResponseStatusWaiting         InstanceStepResponseStatus = "waiting"
+	InstanceStepResponseStatusRollingBack     InstanceStepResponseStatus = "rollingBack"
+)
+
+func (r InstanceStepResponseStatus) IsKnown() bool {
+	switch r {
+	case InstanceStepResponseStatusQueued, InstanceStepResponseStatusRunning, InstanceStepResponseStatusPaused, InstanceStepResponseStatusErrored, InstanceStepResponseStatusTerminated, InstanceStepResponseStatusComplete, InstanceStepResponseStatusWaitingForPause, InstanceStepResponseStatusWaiting, InstanceStepResponseStatusRollingBack:
+		return true
+	}
+	return false
+}
+
 type InstanceNewParams struct {
 	AccountID         param.Field[string]                             `path:"account_id" api:"required"`
 	InstanceID        param.Field[string]                             `json:"instance_id"`
@@ -1000,11 +1260,12 @@ const (
 	InstanceListParamsStatusComplete        InstanceListParamsStatus = "complete"
 	InstanceListParamsStatusWaitingForPause InstanceListParamsStatus = "waitingForPause"
 	InstanceListParamsStatusWaiting         InstanceListParamsStatus = "waiting"
+	InstanceListParamsStatusRollingBack     InstanceListParamsStatus = "rollingBack"
 )
 
 func (r InstanceListParamsStatus) IsKnown() bool {
 	switch r {
-	case InstanceListParamsStatusQueued, InstanceListParamsStatusRunning, InstanceListParamsStatusPaused, InstanceListParamsStatusErrored, InstanceListParamsStatusTerminated, InstanceListParamsStatusComplete, InstanceListParamsStatusWaitingForPause, InstanceListParamsStatusWaiting:
+	case InstanceListParamsStatusQueued, InstanceListParamsStatusRunning, InstanceListParamsStatusPaused, InstanceListParamsStatusErrored, InstanceListParamsStatusTerminated, InstanceListParamsStatusComplete, InstanceListParamsStatusWaitingForPause, InstanceListParamsStatusWaiting, InstanceListParamsStatusRollingBack:
 		return true
 	}
 	return false
@@ -1219,5 +1480,162 @@ func (r *InstanceGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err 
 }
 
 func (r instanceGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceStepParams struct {
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Exact step name from the instance logs response, including the generated counter
+	// suffix.
+	Name param.Field[string] `query:"name" api:"required"`
+	// Step type to disambiguate step.do and waitForEvent entries that share the same
+	// name.
+	Type param.Field[InstanceStepParamsType] `query:"type" api:"required"`
+	// Specific attempt number to retrieve output or error for.
+	Attempt param.Field[int64] `query:"attempt"`
+}
+
+// URLQuery serializes [InstanceStepParams]'s query parameters as `url.Values`.
+func (r InstanceStepParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Step type to disambiguate step.do and waitForEvent entries that share the same
+// name.
+type InstanceStepParamsType string
+
+const (
+	InstanceStepParamsTypeStep         InstanceStepParamsType = "step"
+	InstanceStepParamsTypeWaitForEvent InstanceStepParamsType = "waitForEvent"
+)
+
+func (r InstanceStepParamsType) IsKnown() bool {
+	switch r {
+	case InstanceStepParamsTypeStep, InstanceStepParamsTypeWaitForEvent:
+		return true
+	}
+	return false
+}
+
+type InstanceStepResponseEnvelope struct {
+	Errors     []InstanceStepResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages   []InstanceStepResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     InstanceStepResponse                   `json:"result" api:"required"`
+	Success    InstanceStepResponseEnvelopeSuccess    `json:"success" api:"required"`
+	ResultInfo InstanceStepResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       instanceStepResponseEnvelopeJSON       `json:"-"`
+}
+
+// instanceStepResponseEnvelopeJSON contains the JSON metadata for the struct
+// [InstanceStepResponseEnvelope]
+type instanceStepResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceStepResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceStepResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceStepResponseEnvelopeErrors struct {
+	Code    float64                                `json:"code" api:"required"`
+	Message string                                 `json:"message" api:"required"`
+	JSON    instanceStepResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// instanceStepResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [InstanceStepResponseEnvelopeErrors]
+type instanceStepResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceStepResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceStepResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceStepResponseEnvelopeMessages struct {
+	Code    float64                                  `json:"code" api:"required"`
+	Message string                                   `json:"message" api:"required"`
+	JSON    instanceStepResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// instanceStepResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [InstanceStepResponseEnvelopeMessages]
+type instanceStepResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceStepResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceStepResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceStepResponseEnvelopeSuccess bool
+
+const (
+	InstanceStepResponseEnvelopeSuccessTrue InstanceStepResponseEnvelopeSuccess = true
+)
+
+func (r InstanceStepResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case InstanceStepResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type InstanceStepResponseEnvelopeResultInfo struct {
+	Count      float64                                    `json:"count" api:"required"`
+	PerPage    float64                                    `json:"per_page" api:"required"`
+	TotalCount float64                                    `json:"total_count" api:"required"`
+	Cursor     string                                     `json:"cursor"`
+	Page       float64                                    `json:"page"`
+	TotalPages float64                                    `json:"total_pages"`
+	JSON       instanceStepResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// instanceStepResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [InstanceStepResponseEnvelopeResultInfo]
+type instanceStepResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	Cursor      apijson.Field
+	Page        apijson.Field
+	TotalPages  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceStepResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceStepResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
 }

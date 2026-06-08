@@ -246,55 +246,19 @@ func TestRecordingStartTrackRecordingWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.RealtimeKit.Recordings.StartTrackRecording(
+	_, err := client.RealtimeKit.Recordings.StartTrackRecording(
 		context.TODO(),
 		"app_id",
 		realtime_kit.RecordingStartTrackRecordingParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			MeetingID: cloudflare.F("97440c6a-140b-40a9-9499-b23fd7a3868a"),
 			Layers: cloudflare.F(map[string]realtime_kit.RecordingStartTrackRecordingParamsLayers{
-				"default": {
-					FileNamePrefix: cloudflare.F("string"),
-					Outputs: cloudflare.F([]realtime_kit.RecordingStartTrackRecordingParamsLayersOutput{{
-						StorageConfig: cloudflare.F(realtime_kit.RecordingStartTrackRecordingParamsLayersOutputsStorageConfig{
-							Type:       cloudflare.F(realtime_kit.RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeAws),
-							AccessKey:  cloudflare.F("access_key"),
-							AuthMethod: cloudflare.F(realtime_kit.RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethodKey),
-							Bucket:     cloudflare.F("bucket"),
-							Host:       cloudflare.F("host"),
-							Password:   cloudflare.F("password"),
-							Path:       cloudflare.F("path"),
-							Port:       cloudflare.F(0.000000),
-							PrivateKey: cloudflare.F("private_key"),
-							Region:     cloudflare.F("us-east-1"),
-							Secret:     cloudflare.F("secret"),
-							Username:   cloudflare.F("username"),
-						}),
-						Type: cloudflare.F(realtime_kit.RecordingStartTrackRecordingParamsLayersOutputsTypeRealtimekitBucket),
-					}}),
-				},
-				"default-video": {
-					FileNamePrefix: cloudflare.F("string"),
-					Outputs: cloudflare.F([]realtime_kit.RecordingStartTrackRecordingParamsLayersOutput{{
-						StorageConfig: cloudflare.F(realtime_kit.RecordingStartTrackRecordingParamsLayersOutputsStorageConfig{
-							Type:       cloudflare.F(realtime_kit.RecordingStartTrackRecordingParamsLayersOutputsStorageConfigTypeAws),
-							AccessKey:  cloudflare.F("access_key"),
-							AuthMethod: cloudflare.F(realtime_kit.RecordingStartTrackRecordingParamsLayersOutputsStorageConfigAuthMethodKey),
-							Bucket:     cloudflare.F("bucket"),
-							Host:       cloudflare.F("host"),
-							Password:   cloudflare.F("password"),
-							Path:       cloudflare.F("path"),
-							Port:       cloudflare.F(0.000000),
-							PrivateKey: cloudflare.F("private_key"),
-							Region:     cloudflare.F("us-east-1"),
-							Secret:     cloudflare.F("secret"),
-							Username:   cloudflare.F("username"),
-						}),
-						Type: cloudflare.F(realtime_kit.RecordingStartTrackRecordingParamsLayersOutputsTypeRealtimekitBucket),
-					}}),
+				"foo": {
+					FileNamePrefix: cloudflare.F("file_name_prefix"),
+					MediaKind:      cloudflare.F(realtime_kit.RecordingStartTrackRecordingParamsLayersMediaKindAudio),
 				},
 			}),
-			MeetingID:  cloudflare.F("string"),
-			MaxSeconds: cloudflare.F(60.000000),
+			UserIDs: cloudflare.F([]string{"x"}),
 		},
 	)
 	if err != nil {

@@ -236,8 +236,11 @@ type DNSFirewallNewResponse struct {
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
 	NegativeCacheTTL float64 `json:"negative_cache_ttl" api:"required,nullable"`
-	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster)
+	// Maximum number of DNS queries per second that will be forwarded to your upstream
+	// nameservers. The limit is enforced per server, where each server receives a
+	// fraction of the configured value. The actual aggregate rate for a data center
+	// may vary depending on how many servers are present. Responses served from cache
+	// do not count toward this limit. Set to null to disable rate limiting.
 	Ratelimit float64 `json:"ratelimit" api:"required,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)
@@ -317,8 +320,11 @@ type DNSFirewallListResponse struct {
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
 	NegativeCacheTTL float64 `json:"negative_cache_ttl" api:"required,nullable"`
-	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster)
+	// Maximum number of DNS queries per second that will be forwarded to your upstream
+	// nameservers. The limit is enforced per server, where each server receives a
+	// fraction of the configured value. The actual aggregate rate for a data center
+	// may vary depending on how many servers are present. Responses served from cache
+	// do not count toward this limit. Set to null to disable rate limiting.
 	Ratelimit float64 `json:"ratelimit" api:"required,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)
@@ -420,8 +426,11 @@ type DNSFirewallEditResponse struct {
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
 	NegativeCacheTTL float64 `json:"negative_cache_ttl" api:"required,nullable"`
-	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster)
+	// Maximum number of DNS queries per second that will be forwarded to your upstream
+	// nameservers. The limit is enforced per server, where each server receives a
+	// fraction of the configured value. The actual aggregate rate for a data center
+	// may vary depending on how many servers are present. Responses served from cache
+	// do not count toward this limit. Set to null to disable rate limiting.
 	Ratelimit float64 `json:"ratelimit" api:"required,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)
@@ -501,8 +510,11 @@ type DNSFirewallGetResponse struct {
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
 	NegativeCacheTTL float64 `json:"negative_cache_ttl" api:"required,nullable"`
-	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster)
+	// Maximum number of DNS queries per second that will be forwarded to your upstream
+	// nameservers. The limit is enforced per server, where each server receives a
+	// fraction of the configured value. The actual aggregate rate for a data center
+	// may vary depending on how many servers are present. Responses served from cache
+	// do not count toward this limit. Set to null to disable rate limiting.
 	Ratelimit float64 `json:"ratelimit" api:"required,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)
@@ -551,6 +563,9 @@ type DNSFirewallNewParams struct {
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
 	// Whether to refuse to answer queries for the ANY type
 	DeprecateAnyRequests param.Field[bool] `json:"deprecate_any_requests"`
+	// Number of IPv4 addresses to assign to the DNS Firewall cluster. Only used during
+	// cluster creation and cannot be changed later.
+	DNSFirewallIPCount param.Field[int64] `json:"dns_firewall_ip_count"`
 	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
 	ECSFallback param.Field[bool] `json:"ecs_fallback"`
 	// By default, Cloudflare attempts to cache responses for as long as indicated by
@@ -582,8 +597,11 @@ type DNSFirewallNewParams struct {
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
 	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
-	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster)
+	// Maximum number of DNS queries per second that will be forwarded to your upstream
+	// nameservers. The limit is enforced per server, where each server receives a
+	// fraction of the configured value. The actual aggregate rate for a data center
+	// may vary depending on how many servers are present. Responses served from cache
+	// do not count toward this limit. Set to null to disable rate limiting.
 	Ratelimit param.Field[float64] `json:"ratelimit"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)
@@ -934,8 +952,11 @@ type DNSFirewallEditParams struct {
 	// returns to clients. Cloudflare will always forward the TTL value received from
 	// upstream nameservers.
 	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
-	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster)
+	// Maximum number of DNS queries per second that will be forwarded to your upstream
+	// nameservers. The limit is enforced per server, where each server receives a
+	// fraction of the configured value. The actual aggregate rate for a data center
+	// may vary depending on how many servers are present. Responses served from cache
+	// do not count toward this limit. Set to null to disable rate limiting.
 	Ratelimit param.Field[float64] `json:"ratelimit"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt)

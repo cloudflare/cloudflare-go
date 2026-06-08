@@ -90,9 +90,13 @@ type WebhookUpdateResponse struct {
 	// The date and time the webhook was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// The URL where webhooks will be sent.
+<<<<<<< HEAD
+	NotificationURL string `json:"notification_url" format:"uri"`
+=======
 	NotificationURL1 string `json:"notification_url" format:"uri"`
 	// The URL where webhooks will be sent.
 	NotificationURL2 string `json:"notificationUrl" format:"uri"`
+>>>>>>> a48c1a7d1 (Apply custom code)
 	// The secret used to verify webhook signatures.
 	Secret string                    `json:"secret"`
 	JSON   webhookUpdateResponseJSON `json:"-"`
@@ -101,12 +105,20 @@ type WebhookUpdateResponse struct {
 // webhookUpdateResponseJSON contains the JSON metadata for the struct
 // [WebhookUpdateResponse]
 type webhookUpdateResponseJSON struct {
+<<<<<<< HEAD
+	Modified        apijson.Field
+	NotificationURL apijson.Field
+	Secret          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+=======
 	Modified         apijson.Field
 	NotificationURL1 apijson.Field
 	NotificationURL2 apijson.Field
 	Secret           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
+>>>>>>> a48c1a7d1 (Apply custom code)
 }
 
 func (r *WebhookUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -121,9 +133,13 @@ type WebhookGetResponse struct {
 	// The date and time the webhook was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// The URL where webhooks will be sent.
+<<<<<<< HEAD
+	NotificationURL string `json:"notification_url" format:"uri"`
+=======
 	NotificationURL1 string `json:"notification_url" format:"uri"`
 	// The URL where webhooks will be sent.
 	NotificationURL2 string `json:"notificationUrl" format:"uri"`
+>>>>>>> a48c1a7d1 (Apply custom code)
 	// The secret used to verify webhook signatures.
 	Secret string                 `json:"secret"`
 	JSON   webhookGetResponseJSON `json:"-"`
@@ -132,12 +148,20 @@ type WebhookGetResponse struct {
 // webhookGetResponseJSON contains the JSON metadata for the struct
 // [WebhookGetResponse]
 type webhookGetResponseJSON struct {
+<<<<<<< HEAD
+	Modified        apijson.Field
+	NotificationURL apijson.Field
+	Secret          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+=======
 	Modified         apijson.Field
 	NotificationURL1 apijson.Field
 	NotificationURL2 apijson.Field
 	Secret           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
+>>>>>>> a48c1a7d1 (Apply custom code)
 }
 
 func (r *WebhookGetResponse) UnmarshalJSON(data []byte) (err error) {

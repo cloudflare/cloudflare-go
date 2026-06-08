@@ -83,12 +83,15 @@ TEST_PATHS=(
 	custom_hostnames/fallbackorigin_test.go
 	custom_hostnames/certificatepackcertificate_test.go
 	custom_nameservers/customnameserver_test.go
+	tenant_custom_nameservers/tenantcustomnameserver_test.go
 	dns_firewall/dnsfirewall_test.go
 	dns_firewall/analyticsreport_test.go
 	dns_firewall/analyticsreportbytime_test.go
 	dns_firewall/reversedns_test.go
 	dns/dnssec_test.go
 	dns/record_test.go
+	dns/usagezone_test.go
+	dns/usageaccount_test.go
 	dns/settingzone_test.go
 	dns/settingaccount_test.go
 	dns/settingaccountview_test.go
@@ -429,6 +432,7 @@ TEST_PATHS=(
 	zero_trust/accessaicontrolmcpportal_test.go
 	zero_trust/accessaicontrolmcpserver_test.go
 	zero_trust/accessgatewayca_test.go
+	zero_trust/accessidpfederationgrant_test.go
 	zero_trust/accesssamlcertificate_test.go
 	zero_trust/accessinfrastructuretarget_test.go
 	zero_trust/accessapplication_test.go
@@ -468,6 +472,7 @@ TEST_PATHS=(
 	zero_trust/dextraceroutetestresultnetworkpath_test.go
 	zero_trust/dextraceroutetest_test.go
 	zero_trust/dexrule_test.go
+	zero_trust/dexdeviceisp_test.go
 	zero_trust/tunnel_test.go
 	zero_trust/tunnelcloudflared_test.go
 	zero_trust/tunnelcloudflaredconfiguration_test.go
@@ -481,6 +486,7 @@ TEST_PATHS=(
 	zero_trust/tunnelwarpconnectorconnector_test.go
 	zero_trust/tunnelwarpconnectorfailover_test.go
 	zero_trust/connectivitysetting_test.go
+	zero_trust/dlpcustomprompttopic_test.go
 	zero_trust/dlpdataset_test.go
 	zero_trust/dlpdatasetupload_test.go
 	zero_trust/dlpdatasetversion_test.go
@@ -709,6 +715,8 @@ TEST_PATHS=(
 	iam/usergroup_test.go
 	iam/usergroupmember_test.go
 	iam/sso_test.go
+	iam/oauthclient_test.go
+	iam/oauthscope_test.go
 	cloud_connector/rule_test.go
 	botnet_feed/asn_test.go
 	botnet_feed/configasn_test.go
@@ -733,6 +741,7 @@ TEST_PATHS=(
 	content_scanning/setting_test.go
 	ai_security/aisecurity_test.go
 	ai_security/customtopic_test.go
+	csam_scanner/csamscanner_test.go
 	abuse_reports/abusereport_test.go
 	abuse_reports/mitigation_test.go
 	ai/ai_test.go

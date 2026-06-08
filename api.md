@@ -69,6 +69,8 @@
 
 # [CustomNameservers](custom_nameservers/api.md)
 
+# [TenantCustomNameservers](tenant_custom_nameservers/api.md)
+
 # [DNSFirewall](dns_firewall/api.md)
 
 # [DNS](dns/api.md)
@@ -232,6 +234,8 @@
 # [ContentScanning](content_scanning/api.md)
 
 # [AISecurity](ai_security/api.md)
+
+# [CsamScanner](csam_scanner/api.md)
 
 # [AbuseReports](abuse_reports/api.md)
 

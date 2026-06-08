@@ -301,8 +301,12 @@ type UsagePaygoResponse struct {
 	// Identifies the Cloudflare service.
 	ServiceName string `json:"ServiceName" api:"required"`
 	// Identifies the product family for the Cloudflare service.
-	ServiceFamilyName string                 `json:"ServiceFamilyName"`
-	JSON              usagePaygoResponseJSON `json:"-"`
+	ServiceFamilyName string `json:"ServiceFamilyName"`
+	// The identifier for the Cloudflare zone (zone tag).
+	ZoneID string `json:"ZoneId" api:"nullable"`
+	// The display name of the Cloudflare zone.
+	ZoneName string                 `json:"ZoneName" api:"nullable"`
+	JSON     usagePaygoResponseJSON `json:"-"`
 }
 
 // usagePaygoResponseJSON contains the JSON metadata for the struct
@@ -320,6 +324,8 @@ type usagePaygoResponseJSON struct {
 	PricingQuantity          apijson.Field
 	ServiceName              apijson.Field
 	ServiceFamilyName        apijson.Field
+	ZoneID                   apijson.Field
+	ZoneName                 apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
