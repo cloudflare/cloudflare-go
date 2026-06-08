@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package oauth_scopes_test
+package iam_test
 
 import (
 	"context"

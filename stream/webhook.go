@@ -91,8 +91,6 @@ type WebhookUpdateResponse struct {
 	Modified time.Time `json:"modified" format:"date-time"`
 	// The URL where webhooks will be sent.
 	NotificationURL string `json:"notification_url" format:"uri"`
-	// The URL where webhooks will be sent.
-	NotificationURL string `json:"notificationUrl" format:"uri"`
 	// The secret used to verify webhook signatures.
 	Secret string                    `json:"secret"`
 	JSON   webhookUpdateResponseJSON `json:"-"`
@@ -102,7 +100,6 @@ type WebhookUpdateResponse struct {
 // [WebhookUpdateResponse]
 type webhookUpdateResponseJSON struct {
 	Modified        apijson.Field
-	NotificationURL apijson.Field
 	NotificationURL apijson.Field
 	Secret          apijson.Field
 	raw             string
@@ -122,8 +119,6 @@ type WebhookGetResponse struct {
 	Modified time.Time `json:"modified" format:"date-time"`
 	// The URL where webhooks will be sent.
 	NotificationURL string `json:"notification_url" format:"uri"`
-	// The URL where webhooks will be sent.
-	NotificationURL string `json:"notificationUrl" format:"uri"`
 	// The secret used to verify webhook signatures.
 	Secret string                 `json:"secret"`
 	JSON   webhookGetResponseJSON `json:"-"`
@@ -133,7 +128,6 @@ type WebhookGetResponse struct {
 // [WebhookGetResponse]
 type webhookGetResponseJSON struct {
 	Modified        apijson.Field
-	NotificationURL apijson.Field
 	NotificationURL apijson.Field
 	Secret          apijson.Field
 	raw             string
