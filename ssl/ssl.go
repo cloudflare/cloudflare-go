@@ -17,6 +17,7 @@ type SSLService struct {
 	Analyze          *AnalyzeService
 	CertificatePacks *CertificatePackService
 	Recommendations  *RecommendationService
+	AutoOriginTLSKex *AutoOriginTLSKexService
 	Universal        *UniversalService
 	Verification     *VerificationService
 }
@@ -30,6 +31,7 @@ func NewSSLService(opts ...option.RequestOption) (r *SSLService) {
 	r.Analyze = NewAnalyzeService(opts...)
 	r.CertificatePacks = NewCertificatePackService(opts...)
 	r.Recommendations = NewRecommendationService(opts...)
+	r.AutoOriginTLSKex = NewAutoOriginTLSKexService(opts...)
 	r.Universal = NewUniversalService(opts...)
 	r.Verification = NewVerificationService(opts...)
 	return

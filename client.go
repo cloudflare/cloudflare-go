@@ -82,6 +82,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/origin_ca_certificates"
 	"github.com/cloudflare/cloudflare-go/v7/origin_post_quantum_encryption"
 	"github.com/cloudflare/cloudflare-go/v7/origin_tls_client_auth"
+	"github.com/cloudflare/cloudflare-go/v7/origin_tls_compliance_modes"
 	"github.com/cloudflare/cloudflare-go/v7/page_rules"
 	"github.com/cloudflare/cloudflare-go/v7/page_shield"
 	"github.com/cloudflare/cloudflare-go/v7/pages"
@@ -220,6 +221,7 @@ type Client struct {
 	BotManagement               *bot_management.BotManagementService
 	Fraud                       *fraud.FraudService
 	OriginPostQuantumEncryption *origin_post_quantum_encryption.OriginPostQuantumEncryptionService
+	OriginTLSComplianceModes    *origin_tls_compliance_modes.OriginTLSComplianceModeService
 	GoogleTagGateway            *google_tag_gateway.GoogleTagGatewayService
 	Zaraz                       *zaraz.ZarazService
 	Speed                       *speed.SpeedService
@@ -376,6 +378,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.BotManagement = bot_management.NewBotManagementService(opts...)
 	r.Fraud = fraud.NewFraudService(opts...)
 	r.OriginPostQuantumEncryption = origin_post_quantum_encryption.NewOriginPostQuantumEncryptionService(opts...)
+	r.OriginTLSComplianceModes = origin_tls_compliance_modes.NewOriginTLSComplianceModeService(opts...)
 	r.GoogleTagGateway = google_tag_gateway.NewGoogleTagGatewayService(opts...)
 	r.Zaraz = zaraz.NewZarazService(opts...)
 	r.Speed = speed.NewSpeedService(opts...)
