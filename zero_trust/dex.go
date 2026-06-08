@@ -24,6 +24,7 @@ type DEXService struct {
 	TracerouteTestResults *DEXTracerouteTestResultService
 	TracerouteTests       *DEXTracerouteTestService
 	Rules                 *DEXRuleService
+	Devices               *DEXDeviceService
 }
 
 // NewDEXService generates a new service that applies the given options to each
@@ -41,6 +42,7 @@ func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 	r.TracerouteTestResults = NewDEXTracerouteTestResultService(opts...)
 	r.TracerouteTests = NewDEXTracerouteTestService(opts...)
 	r.Rules = NewDEXRuleService(opts...)
+	r.Devices = NewDEXDeviceService(opts...)
 	return
 }
 

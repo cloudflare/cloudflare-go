@@ -1114,6 +1114,18 @@ Methods:
 - <code title="delete /accounts/{account_id}/dex/rules/{rule_id}">client.ZeroTrust.DEX.Rules.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#DEXRuleService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, ruleID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#DEXRuleDeleteParams">DEXRuleDeleteParams</a>) (\*<a href="https://pkg.go.dev/builtin#bool">bool</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/dex/rules/{rule_id}">client.ZeroTrust.DEX.Rules.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#DEXRuleService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, ruleID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#DEXRuleGetParams">DEXRuleGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#DEXRuleGetResponse">DEXRuleGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+### Devices
+
+#### ISPs
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#ISPs">ISPs</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/dex/devices/{device_id}/isps">client.ZeroTrust.DEX.Devices.ISPs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#DEXDeviceISPService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, deviceID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#DEXDeviceISPListParams">DEXDeviceISPListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#V4PagePagination">V4PagePagination</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#ISPs">ISPs</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Tunnels
 
 Response Types:
