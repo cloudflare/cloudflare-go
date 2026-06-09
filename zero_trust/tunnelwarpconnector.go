@@ -27,11 +27,12 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewTunnelWARPConnectorService] method instead.
 type TunnelWARPConnectorService struct {
-	Options     []option.RequestOption
-	Token       *TunnelWARPConnectorTokenService
-	Connections *TunnelWARPConnectorConnectionService
-	Connectors  *TunnelWARPConnectorConnectorService
-	Failover    *TunnelWARPConnectorFailoverService
+	Options        []option.RequestOption
+	Token          *TunnelWARPConnectorTokenService
+	Connections    *TunnelWARPConnectorConnectionService
+	Connectors     *TunnelWARPConnectorConnectorService
+	Failover       *TunnelWARPConnectorFailoverService
+	Configurations *TunnelWARPConnectorConfigurationService
 }
 
 // NewTunnelWARPConnectorService generates a new service that applies the given
@@ -44,6 +45,7 @@ func NewTunnelWARPConnectorService(opts ...option.RequestOption) (r *TunnelWARPC
 	r.Connections = NewTunnelWARPConnectorConnectionService(opts...)
 	r.Connectors = NewTunnelWARPConnectorConnectorService(opts...)
 	r.Failover = NewTunnelWARPConnectorFailoverService(opts...)
+	r.Configurations = NewTunnelWARPConnectorConfigurationService(opts...)
 	return
 }
 

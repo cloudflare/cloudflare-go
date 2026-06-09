@@ -1242,6 +1242,8 @@ Methods:
 
 - <code title="put /accounts/{account_id}/warp_connector/{tunnel_id}/failover">client.ZeroTrust.Tunnels.WARPConnector.Failover.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#TunnelWARPConnectorFailoverService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tunnelID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#TunnelWARPConnectorFailoverUpdateParams">TunnelWARPConnectorFailoverUpdateParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#TunnelWARPConnectorFailoverUpdateResponse">TunnelWARPConnectorFailoverUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+#### Configurations
+
 ## ConnectivitySettings
 
 Response Types:
