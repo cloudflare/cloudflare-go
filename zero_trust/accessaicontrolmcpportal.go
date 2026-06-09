@@ -208,16 +208,18 @@ type AccessAIControlMcpPortalNewResponseServer struct {
 	// customer portal hostname. New public server creates default to true; existing
 	// servers default to false from migration until explicitly updated. Effective
 	// behavior is gated by the gateway worker's per-env rollout mode KV key.
-	IsSharedOAuthCallbackEnabled bool                                                      `json:"is_shared_oauth_callback_enabled"`
-	LastSuccessfulSync           time.Time                                                 `json:"last_successful_sync" format:"date-time"`
-	LastSynced                   time.Time                                                 `json:"last_synced" format:"date-time"`
-	ModifiedAt                   time.Time                                                 `json:"modified_at" format:"date-time"`
-	ModifiedBy                   string                                                    `json:"modified_by"`
-	OnBehalf                     bool                                                      `json:"on_behalf"`
-	Status                       string                                                    `json:"status"`
-	UpdatedPrompts               []AccessAIControlMcpPortalNewResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools                 []AccessAIControlMcpPortalNewResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON                         accessAIControlMcpPortalNewResponseServerJSON             `json:"-"`
+	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
+	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
+	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
+	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy                   string    `json:"modified_by"`
+	OnBehalf                     bool      `json:"on_behalf"`
+	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
+	SecureWebGateway bool                                                      `json:"secure_web_gateway"`
+	Status           string                                                    `json:"status"`
+	UpdatedPrompts   []AccessAIControlMcpPortalNewResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools     []AccessAIControlMcpPortalNewResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON             accessAIControlMcpPortalNewResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalNewResponseServerJSON contains the JSON metadata for the
@@ -241,6 +243,7 @@ type accessAIControlMcpPortalNewResponseServerJSON struct {
 	ModifiedAt                   apijson.Field
 	ModifiedBy                   apijson.Field
 	OnBehalf                     apijson.Field
+	SecureWebGateway             apijson.Field
 	Status                       apijson.Field
 	UpdatedPrompts               apijson.Field
 	UpdatedTools                 apijson.Field
@@ -432,16 +435,18 @@ type AccessAIControlMcpPortalUpdateResponseServer struct {
 	// customer portal hostname. New public server creates default to true; existing
 	// servers default to false from migration until explicitly updated. Effective
 	// behavior is gated by the gateway worker's per-env rollout mode KV key.
-	IsSharedOAuthCallbackEnabled bool                                                         `json:"is_shared_oauth_callback_enabled"`
-	LastSuccessfulSync           time.Time                                                    `json:"last_successful_sync" format:"date-time"`
-	LastSynced                   time.Time                                                    `json:"last_synced" format:"date-time"`
-	ModifiedAt                   time.Time                                                    `json:"modified_at" format:"date-time"`
-	ModifiedBy                   string                                                       `json:"modified_by"`
-	OnBehalf                     bool                                                         `json:"on_behalf"`
-	Status                       string                                                       `json:"status"`
-	UpdatedPrompts               []AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools                 []AccessAIControlMcpPortalUpdateResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON                         accessAIControlMcpPortalUpdateResponseServerJSON             `json:"-"`
+	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
+	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
+	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
+	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy                   string    `json:"modified_by"`
+	OnBehalf                     bool      `json:"on_behalf"`
+	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
+	SecureWebGateway bool                                                         `json:"secure_web_gateway"`
+	Status           string                                                       `json:"status"`
+	UpdatedPrompts   []AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools     []AccessAIControlMcpPortalUpdateResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON             accessAIControlMcpPortalUpdateResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalUpdateResponseServerJSON contains the JSON metadata for
@@ -465,6 +470,7 @@ type accessAIControlMcpPortalUpdateResponseServerJSON struct {
 	ModifiedAt                   apijson.Field
 	ModifiedBy                   apijson.Field
 	OnBehalf                     apijson.Field
+	SecureWebGateway             apijson.Field
 	Status                       apijson.Field
 	UpdatedPrompts               apijson.Field
 	UpdatedTools                 apijson.Field
@@ -658,16 +664,18 @@ type AccessAIControlMcpPortalListResponseServer struct {
 	// customer portal hostname. New public server creates default to true; existing
 	// servers default to false from migration until explicitly updated. Effective
 	// behavior is gated by the gateway worker's per-env rollout mode KV key.
-	IsSharedOAuthCallbackEnabled bool                                                       `json:"is_shared_oauth_callback_enabled"`
-	LastSuccessfulSync           time.Time                                                  `json:"last_successful_sync" format:"date-time"`
-	LastSynced                   time.Time                                                  `json:"last_synced" format:"date-time"`
-	ModifiedAt                   time.Time                                                  `json:"modified_at" format:"date-time"`
-	ModifiedBy                   string                                                     `json:"modified_by"`
-	OnBehalf                     bool                                                       `json:"on_behalf"`
-	Status                       string                                                     `json:"status"`
-	UpdatedPrompts               []AccessAIControlMcpPortalListResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools                 []AccessAIControlMcpPortalListResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON                         accessAIControlMcpPortalListResponseServerJSON             `json:"-"`
+	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
+	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
+	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
+	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy                   string    `json:"modified_by"`
+	OnBehalf                     bool      `json:"on_behalf"`
+	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
+	SecureWebGateway bool                                                       `json:"secure_web_gateway"`
+	Status           string                                                     `json:"status"`
+	UpdatedPrompts   []AccessAIControlMcpPortalListResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools     []AccessAIControlMcpPortalListResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON             accessAIControlMcpPortalListResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalListResponseServerJSON contains the JSON metadata for
@@ -691,6 +699,7 @@ type accessAIControlMcpPortalListResponseServerJSON struct {
 	ModifiedAt                   apijson.Field
 	ModifiedBy                   apijson.Field
 	OnBehalf                     apijson.Field
+	SecureWebGateway             apijson.Field
 	Status                       apijson.Field
 	UpdatedPrompts               apijson.Field
 	UpdatedTools                 apijson.Field
@@ -925,16 +934,18 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	// customer portal hostname. New public server creates default to true; existing
 	// servers default to false from migration until explicitly updated. Effective
 	// behavior is gated by the gateway worker's per-env rollout mode KV key.
-	IsSharedOAuthCallbackEnabled bool                                                       `json:"is_shared_oauth_callback_enabled"`
-	LastSuccessfulSync           time.Time                                                  `json:"last_successful_sync" format:"date-time"`
-	LastSynced                   time.Time                                                  `json:"last_synced" format:"date-time"`
-	ModifiedAt                   time.Time                                                  `json:"modified_at" format:"date-time"`
-	ModifiedBy                   string                                                     `json:"modified_by"`
-	OnBehalf                     bool                                                       `json:"on_behalf"`
-	Status                       string                                                     `json:"status"`
-	UpdatedPrompts               []AccessAIControlMcpPortalReadResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools                 []AccessAIControlMcpPortalReadResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON                         accessAIControlMcpPortalReadResponseServerJSON             `json:"-"`
+	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
+	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
+	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
+	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy                   string    `json:"modified_by"`
+	OnBehalf                     bool      `json:"on_behalf"`
+	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
+	SecureWebGateway bool                                                       `json:"secure_web_gateway"`
+	Status           string                                                     `json:"status"`
+	UpdatedPrompts   []AccessAIControlMcpPortalReadResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools     []AccessAIControlMcpPortalReadResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON             accessAIControlMcpPortalReadResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalReadResponseServerJSON contains the JSON metadata for
@@ -958,6 +969,7 @@ type accessAIControlMcpPortalReadResponseServerJSON struct {
 	ModifiedAt                   apijson.Field
 	ModifiedBy                   apijson.Field
 	OnBehalf                     apijson.Field
+	SecureWebGateway             apijson.Field
 	Status                       apijson.Field
 	UpdatedPrompts               apijson.Field
 	UpdatedTools                 apijson.Field

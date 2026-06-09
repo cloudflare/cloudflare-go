@@ -487,6 +487,7 @@ TEST_PATHS=(
 	zero_trust/tunnelwarpconnectorconnection_test.go
 	zero_trust/tunnelwarpconnectorconnector_test.go
 	zero_trust/tunnelwarpconnectorfailover_test.go
+	zero_trust/tunnelwarpconnectorconfiguration_test.go
 	zero_trust/connectivitysetting_test.go
 	zero_trust/dlpcustomprompttopic_test.go
 	zero_trust/dlpdataset_test.go
