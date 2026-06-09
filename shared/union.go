@@ -14,10 +14,10 @@ func (UnionTime) ImplementsAuditLogListParamsSinceUnion()  {}
 type UnionString string
 
 func (UnionString) ImplementsEmailSendingSendParamsFromUnion()    {}
-func (UnionString) ImplementsEmailSendingSendParamsToUnion()      {}
 func (UnionString) ImplementsEmailSendingSendParamsBccUnion()     {}
 func (UnionString) ImplementsEmailSendingSendParamsCcUnion()      {}
 func (UnionString) ImplementsEmailSendingSendParamsReplyToUnion() {}
+func (UnionString) ImplementsEmailSendingSendParamsToUnion()      {}
 func (UnionString) ImplementsReceivedGetParamsEndUnion()          {}
 func (UnionString) ImplementsReceivedGetParamsStartUnion()        {}
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion() {

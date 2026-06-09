@@ -73,6 +73,8 @@ func (r *EmailSendingService) SendRaw(ctx context.Context, params EmailSendingSe
 type EmailSendingSendResponse struct {
 	// Email addresses to which the message was delivered immediately.
 	Delivered []string `json:"delivered" api:"required"`
+	// Message ID of the sent email.
+	MessageID string `json:"message_id" api:"required"`
 	// Email addresses that permanently bounced.
 	PermanentBounces []string `json:"permanent_bounces" api:"required"`
 	// Email addresses for which delivery was queued for later.
@@ -84,6 +86,7 @@ type EmailSendingSendResponse struct {
 // [EmailSendingSendResponse]
 type emailSendingSendResponseJSON struct {
 	Delivered        apijson.Field
+	MessageID        apijson.Field
 	PermanentBounces apijson.Field
 	Queued           apijson.Field
 	raw              string
@@ -101,6 +104,8 @@ func (r emailSendingSendResponseJSON) RawJSON() string {
 type EmailSendingSendRawResponse struct {
 	// Email addresses to which the message was delivered immediately.
 	Delivered []string `json:"delivered" api:"required"`
+	// Message ID of the sent email.
+	MessageID string `json:"message_id" api:"required"`
 	// Email addresses that permanently bounced.
 	PermanentBounces []string `json:"permanent_bounces" api:"required"`
 	// Email addresses for which delivery was queued for later.
@@ -112,6 +117,7 @@ type EmailSendingSendRawResponse struct {
 // [EmailSendingSendRawResponse]
 type emailSendingSendRawResponseJSON struct {
 	Delivered        apijson.Field
+	MessageID        apijson.Field
 	PermanentBounces apijson.Field
 	Queued           apijson.Field
 	raw              string
@@ -133,8 +139,6 @@ type EmailSendingSendParams struct {
 	From param.Field[EmailSendingSendParamsFromUnion] `json:"from" api:"required"`
 	// Email subject line.
 	Subject param.Field[string] `json:"subject" api:"required"`
-	// Recipient(s). A single email string or an array of email strings.
-	To param.Field[EmailSendingSendParamsToUnion] `json:"to" api:"required"`
 	// File attachments and inline images.
 	Attachments param.Field[[]EmailSendingSendParamsAttachmentUnion] `json:"attachments"`
 	// BCC recipient(s). A single email string or an array of email strings.
@@ -151,6 +155,9 @@ type EmailSendingSendParams struct {
 	// Plain text body of the email. At least one of text or html must be provided
 	// (non-empty).
 	Text param.Field[string] `json:"text"`
+	// Recipient(s). Optional if cc or bcc is provided. A single email string or an
+	// array of email strings.
+	To param.Field[EmailSendingSendParamsToUnion] `json:"to"`
 }
 
 func (r EmailSendingSendParams) MarshalJSON() (data []byte, err error) {
@@ -177,19 +184,6 @@ func (r EmailSendingSendParamsFromEmailSendingEmailAddressObject) MarshalJSON() 
 }
 
 func (r EmailSendingSendParamsFromEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsFromUnion() {
-}
-
-// Recipient(s). A single email string or an array of email strings.
-//
-// Satisfied by [shared.UnionString],
-// [email_sending.EmailSendingSendParamsToEmailSendingEmailAddressList].
-type EmailSendingSendParamsToUnion interface {
-	ImplementsEmailSendingSendParamsToUnion()
-}
-
-type EmailSendingSendParamsToEmailSendingEmailAddressList []string
-
-func (r EmailSendingSendParamsToEmailSendingEmailAddressList) ImplementsEmailSendingSendParamsToUnion() {
 }
 
 type EmailSendingSendParamsAttachment struct {
@@ -351,6 +345,20 @@ func (r EmailSendingSendParamsReplyToEmailSendingEmailAddressObject) MarshalJSON
 }
 
 func (r EmailSendingSendParamsReplyToEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsReplyToUnion() {
+}
+
+// Recipient(s). Optional if cc or bcc is provided. A single email string or an
+// array of email strings.
+//
+// Satisfied by [shared.UnionString],
+// [email_sending.EmailSendingSendParamsToEmailSendingEmailAddressList].
+type EmailSendingSendParamsToUnion interface {
+	ImplementsEmailSendingSendParamsToUnion()
+}
+
+type EmailSendingSendParamsToEmailSendingEmailAddressList []string
+
+func (r EmailSendingSendParamsToEmailSendingEmailAddressList) ImplementsEmailSendingSendParamsToUnion() {
 }
 
 type EmailSendingSendResponseEnvelope struct {

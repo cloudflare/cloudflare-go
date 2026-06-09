@@ -33,7 +33,6 @@ func TestEmailSendingSendWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("account_id"),
 		From:      cloudflare.F[email_sending.EmailSendingSendParamsFromUnion](shared.UnionString("sender@example.com")),
 		Subject:   cloudflare.F("Monthly Report"),
-		To:        cloudflare.F[email_sending.EmailSendingSendParamsToUnion](email_sending.EmailSendingSendParamsToEmailSendingEmailAddressList([]string{"recipient@example.com"})),
 		Attachments: cloudflare.F([]email_sending.EmailSendingSendParamsAttachmentUnion{email_sending.EmailSendingSendParamsAttachmentsEmailSendingEmailAttachment{
 			Content:     cloudflare.F("JVBERi0xLjQK..."),
 			Disposition: cloudflare.F(email_sending.EmailSendingSendParamsAttachmentsEmailSendingEmailAttachmentDispositionAttachment),
@@ -48,6 +47,7 @@ func TestEmailSendingSendWithOptionalParams(t *testing.T) {
 		HTML:    cloudflare.F("<h1>Hello</h1><p>Please find your report attached.</p>"),
 		ReplyTo: cloudflare.F[email_sending.EmailSendingSendParamsReplyToUnion](shared.UnionString("user@example.com")),
 		Text:    cloudflare.F("Hello\n\nPlease find your report attached."),
+		To:      cloudflare.F[email_sending.EmailSendingSendParamsToUnion](email_sending.EmailSendingSendParamsToEmailSendingEmailAddressList([]string{"recipient@example.com"})),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
