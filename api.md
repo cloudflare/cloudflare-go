@@ -217,6 +217,8 @@
 
 # [AIGateway](ai_gateway/api.md)
 
+# [Flagship](flagship/api.md)
+
 # [IAM](iam/api.md)
 
 # [CloudConnector](cloud_connector/api.md)

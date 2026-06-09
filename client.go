@@ -54,6 +54,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/email_sending"
 	"github.com/cloudflare/cloudflare-go/v7/filters"
 	"github.com/cloudflare/cloudflare-go/v7/firewall"
+	"github.com/cloudflare/cloudflare-go/v7/flagship"
 	"github.com/cloudflare/cloudflare-go/v7/fraud"
 	"github.com/cloudflare/cloudflare-go/v7/google_tag_gateway"
 	"github.com/cloudflare/cloudflare-go/v7/healthchecks"
@@ -232,6 +233,7 @@ type Client struct {
 	Calls                       *calls.CallService
 	CloudforceOne               *cloudforce_one.CloudforceOneService
 	AIGateway                   *ai_gateway.AIGatewayService
+	Flagship                    *flagship.FlagshipService
 	IAM                         *iam.IAMService
 	CloudConnector              *cloud_connector.CloudConnectorService
 	BotnetFeed                  *botnet_feed.BotnetFeedService
@@ -389,6 +391,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Calls = calls.NewCallService(opts...)
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
+	r.Flagship = flagship.NewFlagshipService(opts...)
 	r.IAM = iam.NewIAMService(opts...)
 	r.CloudConnector = cloud_connector.NewCloudConnectorService(opts...)
 	r.BotnetFeed = botnet_feed.NewBotnetFeedService(opts...)

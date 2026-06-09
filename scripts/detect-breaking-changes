@@ -712,6 +712,10 @@ TEST_PATHS=(
 	ai_gateway/billingtopup_test.go
 	ai_gateway/billingtopupconfig_test.go
 	ai_gateway/billingspendinglimit_test.go
+	flagship/app_test.go
+	flagship/appflag_test.go
+	flagship/appflagchangelog_test.go
+	flagship/appevaluate_test.go
 	iam/permissiongroup_test.go
 	iam/resourcegroup_test.go
 	iam/usergroup_test.go
