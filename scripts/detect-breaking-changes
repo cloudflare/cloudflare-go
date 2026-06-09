@@ -718,7 +718,7 @@ TEST_PATHS=(
 	iam/usergroupmember_test.go
 	iam/sso_test.go
 	iam/oauthclient_test.go
-	oauth_scopes/oauthscope_test.go
+	iam/oauthscope_test.go
 	cloud_connector/rule_test.go
 	botnet_feed/asn_test.go
 	botnet_feed/configasn_test.go
