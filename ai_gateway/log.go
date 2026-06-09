@@ -436,11 +436,12 @@ const (
 	LogListParamsFiltersKeyWholesale           LogListParamsFiltersKey = "wholesale"
 	LogListParamsFiltersKeyCompatibilityMode   LogListParamsFiltersKey = "compatibilityMode"
 	LogListParamsFiltersKeyDLPAction           LogListParamsFiltersKey = "dlp_action"
+	LogListParamsFiltersKeyUserAgent           LogListParamsFiltersKey = "user_agent"
 )
 
 func (r LogListParamsFiltersKey) IsKnown() bool {
 	switch r {
-	case LogListParamsFiltersKeyID, LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeyRequestType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyModelType, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback, LogListParamsFiltersKeyEventID, LogListParamsFiltersKeyMetadataKey, LogListParamsFiltersKeyMetadataValue, LogListParamsFiltersKeyAuthentication, LogListParamsFiltersKeyWholesale, LogListParamsFiltersKeyCompatibilityMode, LogListParamsFiltersKeyDLPAction:
+	case LogListParamsFiltersKeyID, LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeyRequestType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyModelType, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback, LogListParamsFiltersKeyEventID, LogListParamsFiltersKeyMetadataKey, LogListParamsFiltersKeyMetadataValue, LogListParamsFiltersKeyAuthentication, LogListParamsFiltersKeyWholesale, LogListParamsFiltersKeyCompatibilityMode, LogListParamsFiltersKeyDLPAction, LogListParamsFiltersKeyUserAgent:
 		return true
 	}
 	return false
@@ -559,11 +560,12 @@ const (
 	LogDeleteParamsFiltersKeyWholesale           LogDeleteParamsFiltersKey = "wholesale"
 	LogDeleteParamsFiltersKeyCompatibilityMode   LogDeleteParamsFiltersKey = "compatibilityMode"
 	LogDeleteParamsFiltersKeyDLPAction           LogDeleteParamsFiltersKey = "dlp_action"
+	LogDeleteParamsFiltersKeyUserAgent           LogDeleteParamsFiltersKey = "user_agent"
 )
 
 func (r LogDeleteParamsFiltersKey) IsKnown() bool {
 	switch r {
-	case LogDeleteParamsFiltersKeyID, LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeyRequestType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyModelType, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback, LogDeleteParamsFiltersKeyEventID, LogDeleteParamsFiltersKeyMetadataKey, LogDeleteParamsFiltersKeyMetadataValue, LogDeleteParamsFiltersKeyAuthentication, LogDeleteParamsFiltersKeyWholesale, LogDeleteParamsFiltersKeyCompatibilityMode, LogDeleteParamsFiltersKeyDLPAction:
+	case LogDeleteParamsFiltersKeyID, LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeyRequestType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyModelType, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback, LogDeleteParamsFiltersKeyEventID, LogDeleteParamsFiltersKeyMetadataKey, LogDeleteParamsFiltersKeyMetadataValue, LogDeleteParamsFiltersKeyAuthentication, LogDeleteParamsFiltersKeyWholesale, LogDeleteParamsFiltersKeyCompatibilityMode, LogDeleteParamsFiltersKeyDLPAction, LogDeleteParamsFiltersKeyUserAgent:
 		return true
 	}
 	return false

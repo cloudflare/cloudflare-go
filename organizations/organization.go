@@ -179,19 +179,26 @@ func (r organizationJSON) RawJSON() string {
 
 type OrganizationMeta struct {
 	// Enable features for Organizations.
-	Flags       OrganizationMetaFlags  `json:"flags"`
-	ManagedBy   string                 `json:"managed_by"`
-	ExtraFields map[string]interface{} `json:"-" api:"extrafields"`
-	JSON        organizationMetaJSON   `json:"-"`
+	Flags OrganizationMetaFlags `json:"flags"`
+	// Ordered chain of organization tags from the root organization down to (and
+	// including) this organization itself. Root organizations return a single-element
+	// array containing their own tag; sub-organizations return
+	// `[rootTag, ...intermediateTags, parentTag, selfTag]`. Useful for constructing
+	// authorization scopes that need to cover every ancestor in the hierarchy.
+	HierarchyTags []string               `json:"hierarchy_tags"`
+	ManagedBy     string                 `json:"managed_by"`
+	ExtraFields   map[string]interface{} `json:"-" api:"extrafields"`
+	JSON          organizationMetaJSON   `json:"-"`
 }
 
 // organizationMetaJSON contains the JSON metadata for the struct
 // [OrganizationMeta]
 type organizationMetaJSON struct {
-	Flags       apijson.Field
-	ManagedBy   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Flags         apijson.Field
+	HierarchyTags apijson.Field
+	ManagedBy     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *OrganizationMeta) UnmarshalJSON(data []byte) (err error) {
@@ -268,9 +275,15 @@ func (r OrganizationParam) MarshalJSON() (data []byte, err error) {
 
 type OrganizationMetaParam struct {
 	// Enable features for Organizations.
-	Flags       param.Field[OrganizationMetaFlagsParam] `json:"flags"`
-	ManagedBy   param.Field[string]                     `json:"managed_by"`
-	ExtraFields map[string]interface{}                  `json:"-,extras"`
+	Flags param.Field[OrganizationMetaFlagsParam] `json:"flags"`
+	// Ordered chain of organization tags from the root organization down to (and
+	// including) this organization itself. Root organizations return a single-element
+	// array containing their own tag; sub-organizations return
+	// `[rootTag, ...intermediateTags, parentTag, selfTag]`. Useful for constructing
+	// authorization scopes that need to cover every ancestor in the hierarchy.
+	HierarchyTags param.Field[[]string]  `json:"hierarchy_tags"`
+	ManagedBy     param.Field[string]    `json:"managed_by"`
+	ExtraFields   map[string]interface{} `json:"-,extras"`
 }
 
 func (r OrganizationMetaParam) MarshalJSON() (data []byte, err error) {
