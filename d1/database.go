@@ -173,10 +173,10 @@ func (r *DatabaseService) Export(ctx context.Context, databaseID string, params 
 }
 
 // Returns the specified D1 database.
-func (r *DatabaseService) Get(ctx context.Context, databaseID string, query DatabaseGetParams, opts ...option.RequestOption) (res *D1, err error) {
+func (r *DatabaseService) Get(ctx context.Context, databaseID string, params DatabaseGetParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -184,8 +184,8 @@ func (r *DatabaseService) Get(ctx context.Context, databaseID string, query Data
 		err = errors.New("missing required database_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/d1/database/%s", query.AccountID, databaseID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/d1/database/%s", params.AccountID, databaseID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1361,6 +1361,39 @@ func (r DatabaseExportResponseEnvelopeSuccess) IsKnown() bool {
 type DatabaseGetParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Comma-separated list of fields to include in the response. When omitted, all
+	// fields are returned.
+	Fields param.Field[[]DatabaseGetParamsField] `query:"fields"`
+}
+
+// URLQuery serializes [DatabaseGetParams]'s query parameters as `url.Values`.
+func (r DatabaseGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type DatabaseGetParamsField string
+
+const (
+	DatabaseGetParamsFieldUUID            DatabaseGetParamsField = "uuid"
+	DatabaseGetParamsFieldName            DatabaseGetParamsField = "name"
+	DatabaseGetParamsFieldCreatedAt       DatabaseGetParamsField = "created_at"
+	DatabaseGetParamsFieldVersion         DatabaseGetParamsField = "version"
+	DatabaseGetParamsFieldJurisdiction    DatabaseGetParamsField = "jurisdiction"
+	DatabaseGetParamsFieldNumTables       DatabaseGetParamsField = "num_tables"
+	DatabaseGetParamsFieldFileSize        DatabaseGetParamsField = "file_size"
+	DatabaseGetParamsFieldRunningInRegion DatabaseGetParamsField = "running_in_region"
+	DatabaseGetParamsFieldReadReplication DatabaseGetParamsField = "read_replication"
+)
+
+func (r DatabaseGetParamsField) IsKnown() bool {
+	switch r {
+	case DatabaseGetParamsFieldUUID, DatabaseGetParamsFieldName, DatabaseGetParamsFieldCreatedAt, DatabaseGetParamsFieldVersion, DatabaseGetParamsFieldJurisdiction, DatabaseGetParamsFieldNumTables, DatabaseGetParamsFieldFileSize, DatabaseGetParamsFieldRunningInRegion, DatabaseGetParamsFieldReadReplication:
+		return true
+	}
+	return false
 }
 
 type DatabaseGetResponseEnvelope struct {

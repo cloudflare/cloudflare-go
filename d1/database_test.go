@@ -208,7 +208,7 @@ func TestDatabaseExportWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDatabaseGet(t *testing.T) {
+func TestDatabaseGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -227,6 +227,7 @@ func TestDatabaseGet(t *testing.T) {
 		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 		d1.DatabaseGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Fields:    cloudflare.F([]d1.DatabaseGetParamsField{d1.DatabaseGetParamsFieldUUID}),
 		},
 	)
 	if err != nil {
