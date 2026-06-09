@@ -175,10 +175,10 @@ type ProviderConfigNewParams struct {
 	Alias           param.Field[string]  `json:"alias" api:"required"`
 	DefaultConfig   param.Field[bool]    `json:"default_config" api:"required"`
 	ProviderSlug    param.Field[string]  `json:"provider_slug" api:"required"`
-	Secret          param.Field[string]  `json:"secret" api:"required"`
-	SecretID        param.Field[string]  `json:"secret_id" api:"required"`
 	RateLimit       param.Field[float64] `json:"rate_limit"`
 	RateLimitPeriod param.Field[float64] `json:"rate_limit_period"`
+	Secret          param.Field[string]  `json:"secret"`
+	SecretID        param.Field[string]  `json:"secret_id"`
 }
 
 func (r ProviderConfigNewParams) MarshalJSON() (data []byte, err error) {

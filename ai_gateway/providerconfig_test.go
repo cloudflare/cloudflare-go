@@ -36,10 +36,10 @@ func TestProviderConfigNewWithOptionalParams(t *testing.T) {
 			Alias:           cloudflare.F("alias"),
 			DefaultConfig:   cloudflare.F(true),
 			ProviderSlug:    cloudflare.F("provider_slug"),
-			Secret:          cloudflare.F("secret"),
-			SecretID:        cloudflare.F("secret_id"),
 			RateLimit:       cloudflare.F(0.000000),
 			RateLimitPeriod: cloudflare.F(0.000000),
+			Secret:          cloudflare.F("secret"),
+			SecretID:        cloudflare.F("secret_id"),
 		},
 	)
 	if err != nil {
