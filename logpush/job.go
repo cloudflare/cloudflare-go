@@ -335,6 +335,7 @@ const (
 	LogpushJobDatasetTurnstileEvents                 LogpushJobDataset = "turnstile_events"
 	LogpushJobDatasetWARPConfigChanges               LogpushJobDataset = "warp_config_changes"
 	LogpushJobDatasetWARPToggleChanges               LogpushJobDataset = "warp_toggle_changes"
+	LogpushJobDatasetWebsocketAnalytics              LogpushJobDataset = "websocket_analytics"
 	LogpushJobDatasetWorkersTraceEvents              LogpushJobDataset = "workers_trace_events"
 	LogpushJobDatasetZarazEvents                     LogpushJobDataset = "zaraz_events"
 	LogpushJobDatasetZeroTrustNetworkSessions        LogpushJobDataset = "zero_trust_network_sessions"
@@ -342,7 +343,7 @@ const (
 
 func (r LogpushJobDataset) IsKnown() bool {
 	switch r {
-	case LogpushJobDatasetAccessRequests, LogpushJobDatasetAuditLogs, LogpushJobDatasetAuditLogsV2, LogpushJobDatasetBISOUserActions, LogpushJobDatasetCasbFindings, LogpushJobDatasetDevicePostureResults, LogpushJobDatasetDEXApplicationTests, LogpushJobDatasetDEXDeviceStateEvents, LogpushJobDatasetDLPForensicCopies, LogpushJobDatasetDNSFirewallLogs, LogpushJobDatasetDNSLogs, LogpushJobDatasetEmailSecurityAlerts, LogpushJobDatasetEmailSecurityPostDeliveryEvents, LogpushJobDatasetFirewallEvents, LogpushJobDatasetGatewayDNS, LogpushJobDatasetGatewayHTTP, LogpushJobDatasetGatewayNetwork, LogpushJobDatasetHTTPRequests, LogpushJobDatasetIPSECLogs, LogpushJobDatasetMagicIDsDetections, LogpushJobDatasetMcpPortalLogs, LogpushJobDatasetMNMFlowLogs, LogpushJobDatasetNELReports, LogpushJobDatasetNetworkAnalyticsLogs, LogpushJobDatasetPageShieldEvents, LogpushJobDatasetSinkholeHTTPLogs, LogpushJobDatasetSpectrumEvents, LogpushJobDatasetSSHLogs, LogpushJobDatasetTurnstileEvents, LogpushJobDatasetWARPConfigChanges, LogpushJobDatasetWARPToggleChanges, LogpushJobDatasetWorkersTraceEvents, LogpushJobDatasetZarazEvents, LogpushJobDatasetZeroTrustNetworkSessions:
+	case LogpushJobDatasetAccessRequests, LogpushJobDatasetAuditLogs, LogpushJobDatasetAuditLogsV2, LogpushJobDatasetBISOUserActions, LogpushJobDatasetCasbFindings, LogpushJobDatasetDevicePostureResults, LogpushJobDatasetDEXApplicationTests, LogpushJobDatasetDEXDeviceStateEvents, LogpushJobDatasetDLPForensicCopies, LogpushJobDatasetDNSFirewallLogs, LogpushJobDatasetDNSLogs, LogpushJobDatasetEmailSecurityAlerts, LogpushJobDatasetEmailSecurityPostDeliveryEvents, LogpushJobDatasetFirewallEvents, LogpushJobDatasetGatewayDNS, LogpushJobDatasetGatewayHTTP, LogpushJobDatasetGatewayNetwork, LogpushJobDatasetHTTPRequests, LogpushJobDatasetIPSECLogs, LogpushJobDatasetMagicIDsDetections, LogpushJobDatasetMcpPortalLogs, LogpushJobDatasetMNMFlowLogs, LogpushJobDatasetNELReports, LogpushJobDatasetNetworkAnalyticsLogs, LogpushJobDatasetPageShieldEvents, LogpushJobDatasetSinkholeHTTPLogs, LogpushJobDatasetSpectrumEvents, LogpushJobDatasetSSHLogs, LogpushJobDatasetTurnstileEvents, LogpushJobDatasetWARPConfigChanges, LogpushJobDatasetWARPToggleChanges, LogpushJobDatasetWebsocketAnalytics, LogpushJobDatasetWorkersTraceEvents, LogpushJobDatasetZarazEvents, LogpushJobDatasetZeroTrustNetworkSessions:
 		return true
 	}
 	return false
@@ -712,6 +713,7 @@ const (
 	JobNewParamsDatasetTurnstileEvents                 JobNewParamsDataset = "turnstile_events"
 	JobNewParamsDatasetWARPConfigChanges               JobNewParamsDataset = "warp_config_changes"
 	JobNewParamsDatasetWARPToggleChanges               JobNewParamsDataset = "warp_toggle_changes"
+	JobNewParamsDatasetWebsocketAnalytics              JobNewParamsDataset = "websocket_analytics"
 	JobNewParamsDatasetWorkersTraceEvents              JobNewParamsDataset = "workers_trace_events"
 	JobNewParamsDatasetZarazEvents                     JobNewParamsDataset = "zaraz_events"
 	JobNewParamsDatasetZeroTrustNetworkSessions        JobNewParamsDataset = "zero_trust_network_sessions"
@@ -719,7 +721,7 @@ const (
 
 func (r JobNewParamsDataset) IsKnown() bool {
 	switch r {
-	case JobNewParamsDatasetAccessRequests, JobNewParamsDatasetAuditLogs, JobNewParamsDatasetAuditLogsV2, JobNewParamsDatasetBISOUserActions, JobNewParamsDatasetCasbFindings, JobNewParamsDatasetDevicePostureResults, JobNewParamsDatasetDEXApplicationTests, JobNewParamsDatasetDEXDeviceStateEvents, JobNewParamsDatasetDLPForensicCopies, JobNewParamsDatasetDNSFirewallLogs, JobNewParamsDatasetDNSLogs, JobNewParamsDatasetEmailSecurityAlerts, JobNewParamsDatasetEmailSecurityPostDeliveryEvents, JobNewParamsDatasetFirewallEvents, JobNewParamsDatasetGatewayDNS, JobNewParamsDatasetGatewayHTTP, JobNewParamsDatasetGatewayNetwork, JobNewParamsDatasetHTTPRequests, JobNewParamsDatasetIPSECLogs, JobNewParamsDatasetMagicIDsDetections, JobNewParamsDatasetMcpPortalLogs, JobNewParamsDatasetMNMFlowLogs, JobNewParamsDatasetNELReports, JobNewParamsDatasetNetworkAnalyticsLogs, JobNewParamsDatasetPageShieldEvents, JobNewParamsDatasetSinkholeHTTPLogs, JobNewParamsDatasetSpectrumEvents, JobNewParamsDatasetSSHLogs, JobNewParamsDatasetTurnstileEvents, JobNewParamsDatasetWARPConfigChanges, JobNewParamsDatasetWARPToggleChanges, JobNewParamsDatasetWorkersTraceEvents, JobNewParamsDatasetZarazEvents, JobNewParamsDatasetZeroTrustNetworkSessions:
+	case JobNewParamsDatasetAccessRequests, JobNewParamsDatasetAuditLogs, JobNewParamsDatasetAuditLogsV2, JobNewParamsDatasetBISOUserActions, JobNewParamsDatasetCasbFindings, JobNewParamsDatasetDevicePostureResults, JobNewParamsDatasetDEXApplicationTests, JobNewParamsDatasetDEXDeviceStateEvents, JobNewParamsDatasetDLPForensicCopies, JobNewParamsDatasetDNSFirewallLogs, JobNewParamsDatasetDNSLogs, JobNewParamsDatasetEmailSecurityAlerts, JobNewParamsDatasetEmailSecurityPostDeliveryEvents, JobNewParamsDatasetFirewallEvents, JobNewParamsDatasetGatewayDNS, JobNewParamsDatasetGatewayHTTP, JobNewParamsDatasetGatewayNetwork, JobNewParamsDatasetHTTPRequests, JobNewParamsDatasetIPSECLogs, JobNewParamsDatasetMagicIDsDetections, JobNewParamsDatasetMcpPortalLogs, JobNewParamsDatasetMNMFlowLogs, JobNewParamsDatasetNELReports, JobNewParamsDatasetNetworkAnalyticsLogs, JobNewParamsDatasetPageShieldEvents, JobNewParamsDatasetSinkholeHTTPLogs, JobNewParamsDatasetSpectrumEvents, JobNewParamsDatasetSSHLogs, JobNewParamsDatasetTurnstileEvents, JobNewParamsDatasetWARPConfigChanges, JobNewParamsDatasetWARPToggleChanges, JobNewParamsDatasetWebsocketAnalytics, JobNewParamsDatasetWorkersTraceEvents, JobNewParamsDatasetZarazEvents, JobNewParamsDatasetZeroTrustNetworkSessions:
 		return true
 	}
 	return false
