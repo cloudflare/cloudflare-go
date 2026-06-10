@@ -38,7 +38,8 @@ func NewBinaryStorageService(opts ...option.RequestOption) (r *BinaryStorageServ
 	return
 }
 
-// Posts a file to Binary Storage
+// Uploads a binary file to Cloudforce One's binary database for malware analysis
+// and threat intelligence correlation.
 func (r *BinaryStorageService) New(ctx context.Context, params BinaryStorageNewParams, opts ...option.RequestOption) (res *BinaryStorageNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -50,7 +51,7 @@ func (r *BinaryStorageService) New(ctx context.Context, params BinaryStorageNewP
 	return res, err
 }
 
-// Retrieves a file from Binary Storage
+// Retrieves a binary file from the Cloudforce One binary storage for analysis.
 func (r *BinaryStorageService) Get(ctx context.Context, hash string, query BinaryStorageGetParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
