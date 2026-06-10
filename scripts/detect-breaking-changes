@@ -507,6 +507,12 @@ TEST_PATHS=(
 	zero_trust/dlpentrycustom_test.go
 	zero_trust/dlpentrypredefined_test.go
 	zero_trust/dlpentryintegration_test.go
+	zero_trust/dlpsensitivitygroup_test.go
+	zero_trust/dlpsensitivitygrouplevel_test.go
+	zero_trust/dlpsensitivitygrouplevelorder_test.go
+	zero_trust/dlpdatatagcategory_test.go
+	zero_trust/dlpdatatagcategorydatatag_test.go
+	zero_trust/dlpdataclass_test.go
 	zero_trust/gateway_test.go
 	zero_trust/gatewayauditsshsetting_test.go
 	zero_trust/gatewaycategory_test.go

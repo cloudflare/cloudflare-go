@@ -23,6 +23,9 @@ type DLPService struct {
 	Profiles           *DLPProfileService
 	Limits             *DLPLimitService
 	Entries            *DLPEntryService
+	SensitivityGroups  *DLPSensitivityGroupService
+	DataTagCategories  *DLPDataTagCategoryService
+	DataClasses        *DLPDataClassService
 }
 
 // NewDLPService generates a new service that applies the given options to each
@@ -40,5 +43,8 @@ func NewDLPService(opts ...option.RequestOption) (r *DLPService) {
 	r.Profiles = NewDLPProfileService(opts...)
 	r.Limits = NewDLPLimitService(opts...)
 	r.Entries = NewDLPEntryService(opts...)
+	r.SensitivityGroups = NewDLPSensitivityGroupService(opts...)
+	r.DataTagCategories = NewDLPDataTagCategoryService(opts...)
+	r.DataClasses = NewDLPDataClassService(opts...)
 	return
 }
