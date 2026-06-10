@@ -75,9 +75,16 @@ type ModelListParams struct {
 	// response.
 	Format param.Field[ModelListParamsFormat] `query:"format"`
 	// Filter to hide experimental models
-	HideExperimental param.Field[bool]  `query:"hide_experimental"`
-	Page             param.Field[int64] `query:"page"`
-	PerPage          param.Field[int64] `query:"per_page"`
+	HideExperimental param.Field[bool] `query:"hide_experimental"`
+	// If true, include models whose planned_deprecation_date is in the past — but only
+	// within a three-month grace window after that date. Models whose
+	// planned_deprecation_date is more than three months in the past remain hidden
+	// regardless of this flag. Future planned-deprecation dates are always included
+	// regardless of this flag. Defaults to false, preserving the existing behavior of
+	// hiding all past-dated deprecations.
+	IncludeDeprecated param.Field[bool]  `query:"include_deprecated"`
+	Page              param.Field[int64] `query:"page"`
+	PerPage           param.Field[int64] `query:"per_page"`
 	// Search
 	Search param.Field[string] `query:"search"`
 	// Filter by Source Id
