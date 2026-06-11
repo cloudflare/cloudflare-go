@@ -88,7 +88,9 @@ func TestCustomHostnameListWithOptionalParams(t *testing.T) {
 		CustomOriginServer:   cloudflare.F("origin2.example.com"),
 		Direction:            cloudflare.F(custom_hostnames.CustomHostnameListParamsDirectionDesc),
 		Hostname: cloudflare.F(custom_hostnames.CustomHostnameListParamsHostname{
-			Contain: cloudflare.F("example.com"),
+			Contain:    cloudflare.F("example.com"),
+			Exact:      cloudflare.F("app.example.com"),
+			StartsWith: cloudflare.F("app"),
 		}),
 		HostnameStatus: cloudflare.F(custom_hostnames.CustomHostnameListParamsHostnameStatusProvisioned),
 		Order:          cloudflare.F(custom_hostnames.CustomHostnameListParamsOrderSSL),

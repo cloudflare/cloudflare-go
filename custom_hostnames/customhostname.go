@@ -2457,7 +2457,8 @@ type CustomHostnameListParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Hostname ID to match against. This ID was generated and returned during the
 	// initial custom_hostname creation. This parameter cannot be used with the
-	// 'hostname' parameter.
+	// 'hostname', 'hostname.exact', 'hostname.contain', or 'hostname.startsWith'
+	// parameters.
 	ID param.Field[string] `query:"id"`
 	// Filter by the certificate authority that issued the SSL certificate.
 	CertificateAuthority param.Field[CustomHostnameListParamsCertificateAuthority] `query:"certificate_authority"`
@@ -2526,8 +2527,16 @@ func (r CustomHostnameListParamsDirection) IsKnown() bool {
 
 type CustomHostnameListParamsHostname struct {
 	// Filters hostnames by a substring match on the hostname value. This parameter
-	// cannot be used with the 'id' parameter.
+	// cannot be used with the 'id', 'hostname', 'hostname.exact', or
+	// 'hostname.startsWith' parameters.
 	Contain param.Field[string] `query:"contain"`
+	// Fully qualified domain name to match against. This parameter cannot be used with
+	// the 'id', 'hostname', 'hostname.contain', or 'hostname.startsWith' parameters.
+	Exact param.Field[string] `query:"exact"`
+	// Filters hostnames by a prefix match on the hostname value. This parameter cannot
+	// be used with the 'id', 'hostname', 'hostname.exact', or 'hostname.contain'
+	// parameters.
+	StartsWith param.Field[string] `query:"startsWith"`
 }
 
 // URLQuery serializes [CustomHostnameListParamsHostname]'s query parameters as
