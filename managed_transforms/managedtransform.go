@@ -430,9 +430,9 @@ type ManagedTransformEditParams struct {
 	// The unique ID of the zone.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The list of Managed Request Transforms.
-	ManagedRequestHeaders param.Field[[]ManagedTransformEditParamsManagedRequestHeader] `json:"managed_request_headers" api:"required"`
+	ManagedRequestHeaders param.Field[[]ManagedTransformEditParamsManagedRequestHeader] `json:"managed_request_headers"`
 	// The list of Managed Response Transforms.
-	ManagedResponseHeaders param.Field[[]ManagedTransformEditParamsManagedResponseHeader] `json:"managed_response_headers" api:"required"`
+	ManagedResponseHeaders param.Field[[]ManagedTransformEditParamsManagedResponseHeader] `json:"managed_response_headers"`
 }
 
 func (r ManagedTransformEditParams) MarshalJSON() (data []byte, err error) {
