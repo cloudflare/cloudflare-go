@@ -24,6 +24,11 @@ TEST_PATHS=(
 	organizations/member_test.go
 	organizations/logaudit_test.go
 	organizations/billingusage_test.go
+	tenants/tenant_test.go
+	tenants/accounttype_test.go
+	tenants/account_test.go
+	tenants/entitlement_test.go
+	tenants/membership_test.go
 	origin_ca_certificates/origincacertificate_test.go
 	ips/ip_test.go
 	memberships/membership_test.go
@@ -34,6 +39,7 @@ TEST_PATHS=(
 	user/invite_test.go
 	user/organization_test.go
 	user/subscription_test.go
+	user/tenant_test.go
 	user/token_test.go
 	user/tokenpermissiongroup_test.go
 	user/tokenvalue_test.go

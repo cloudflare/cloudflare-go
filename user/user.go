@@ -26,6 +26,7 @@ type UserService struct {
 	Invites       *InviteService
 	Organizations *OrganizationService
 	Subscriptions *SubscriptionService
+	Tenants       *TenantService
 	Tokens        *TokenService
 }
 
@@ -40,6 +41,7 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 	r.Invites = NewInviteService(opts...)
 	r.Organizations = NewOrganizationService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
+	r.Tenants = NewTenantService(opts...)
 	r.Tokens = NewTokenService(opts...)
 	return
 }

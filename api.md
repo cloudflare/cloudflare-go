@@ -37,6 +37,8 @@
 
 # [Organizations](organizations/api.md)
 
+# [Tenants](tenants/api.md)
+
 # [OriginCACertificates](origin_ca_certificates/api.md)
 
 # [IPs](ips/api.md)

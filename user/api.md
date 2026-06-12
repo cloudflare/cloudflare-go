@@ -76,6 +76,12 @@ Methods:
 - <code title="delete /user/subscriptions/{identifier}">client.User.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#SubscriptionService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#SubscriptionDeleteResponse">SubscriptionDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /user/subscriptions">client.User.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#SubscriptionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#Subscription">Subscription</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## Tenants
+
+Methods:
+
+- <code title="get /user/tenants">client.User.Tenants.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#TenantService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#Organization">Organization</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Tokens
 
 Response Types:

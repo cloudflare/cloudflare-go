@@ -111,6 +111,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/ssl"
 	"github.com/cloudflare/cloudflare-go/v7/stream"
 	"github.com/cloudflare/cloudflare-go/v7/tenant_custom_nameservers"
+	"github.com/cloudflare/cloudflare-go/v7/tenants"
 	"github.com/cloudflare/cloudflare-go/v7/token_validation"
 	"github.com/cloudflare/cloudflare-go/v7/turnstile"
 	"github.com/cloudflare/cloudflare-go/v7/url_normalization"
@@ -135,6 +136,7 @@ type Client struct {
 	Options                 []option.RequestOption
 	Accounts                *accounts.AccountService
 	Organizations           *organizations.OrganizationService
+	Tenants                 *tenants.TenantService
 	OriginCACertificates    *origin_ca_certificates.OriginCACertificateService
 	IPs                     *ips.IPService
 	Memberships             *memberships.MembershipService
@@ -301,6 +303,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 
 	r.Accounts = accounts.NewAccountService(opts...)
 	r.Organizations = organizations.NewOrganizationService(opts...)
+	r.Tenants = tenants.NewTenantService(opts...)
 	r.OriginCACertificates = origin_ca_certificates.NewOriginCACertificateService(opts...)
 	r.IPs = ips.NewIPService(opts...)
 	r.Memberships = memberships.NewMembershipService(opts...)

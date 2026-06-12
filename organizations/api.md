@@ -19,13 +19,9 @@ Methods:
 
 ## OrganizationAccounts
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountGetResponse">OrganizationAccountGetResponse</a>
-
 Methods:
 
-- <code title="get /organizations/{organization_id}/accounts">client.Organizations.OrganizationAccounts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountGetParams">OrganizationAccountGetParams</a>) (\*[]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountGetResponse">OrganizationAccountGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /organizations/{organization_id}/accounts">client.Organizations.OrganizationAccounts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountGetParams">OrganizationAccountGetParams</a>) (\*[]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/tenants">tenants</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/tenants#TenantAccount">TenantAccount</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## OrganizationProfile
 
