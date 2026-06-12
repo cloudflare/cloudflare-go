@@ -37,6 +37,7 @@ type ZoneService struct {
 	Subscriptions     *SubscriptionService
 	Plans             *PlanService
 	RatePlans         *RatePlanService
+	CT                *CTService
 }
 
 // NewZoneService generates a new service that applies the given options to each
@@ -53,6 +54,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r.Subscriptions = NewSubscriptionService(opts...)
 	r.Plans = NewPlanService(opts...)
 	r.RatePlans = NewRatePlanService(opts...)
+	r.CT = NewCTService(opts...)
 	return
 }
 

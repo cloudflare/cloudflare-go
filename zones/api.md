@@ -187,3 +187,17 @@ Response Types:
 Methods:
 
 - <code title="get /zones/{zone_id}/available_rate_plans">client.Zones.RatePlans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#RatePlanService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#RatePlanGetParams">RatePlanGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#RatePlanGetResponse">RatePlanGetResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## CT
+
+### Alerting
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#CTAlertingEditResponse">CTAlertingEditResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#CTAlertingGetResponse">CTAlertingGetResponse</a>
+
+Methods:
+
+- <code title="patch /zones/{zone_id}/ct/alerting">client.Zones.CT.Alerting.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#CTAlertingService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#CTAlertingEditParams">CTAlertingEditParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#CTAlertingEditResponse">CTAlertingEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/ct/alerting">client.Zones.CT.Alerting.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#CTAlertingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#CTAlertingGetParams">CTAlertingGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#CTAlertingGetResponse">CTAlertingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
