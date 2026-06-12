@@ -39,7 +39,7 @@ func NewDEXTestService(opts ...option.RequestOption) (r *DEXTestService) {
 	return
 }
 
-// List DEX tests with overview metrics
+// List DEX tests with overview metrics.
 func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[Tests], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -61,7 +61,7 @@ func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opt
 	return res, nil
 }
 
-// List DEX tests with overview metrics
+// List DEX tests with overview metrics.
 func (r *DEXTestService) ListAutoPaging(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[Tests] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
@@ -131,9 +131,9 @@ func (r testsJSON) RawJSON() string {
 type TestsOverviewMetrics struct {
 	// number of tests.
 	TestsTotal int64 `json:"testsTotal" api:"required"`
-	// percentage availability for all HTTP test results in response
+	// percentage availability for all HTTP test results in response.
 	AvgHTTPAvailabilityPct float64 `json:"avgHttpAvailabilityPct" api:"nullable"`
-	// percentage availability for all traceroutes results in response
+	// percentage availability for all traceroutes results in response.
 	AvgTracerouteAvailabilityPct float64                  `json:"avgTracerouteAvailabilityPct" api:"nullable"`
 	JSON                         testsOverviewMetricsJSON `json:"-"`
 }
@@ -708,6 +708,7 @@ func (r testsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON) RawJSON
 }
 
 type DEXTestListParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
@@ -715,7 +716,7 @@ type DEXTestListParams struct {
 	// Optionally filter result stats to a specific device(s). Cannot be used in
 	// combination with colo param.
 	DeviceID param.Field[[]string] `query:"deviceId"`
-	// Filter by test type
+	// Filter by test type.
 	Kind param.Field[DEXTestListParamsKind] `query:"kind"`
 	// Page number of paginated results
 	Page param.Field[float64] `query:"page"`
@@ -724,7 +725,7 @@ type DEXTestListParams struct {
 	// Optionally filter results to a specific device registration. Must be used in
 	// combination with a single deviceId.
 	RegistrationID param.Field[string] `query:"registration_id"`
-	// Optionally filter results by test name
+	// Optionally filter results by test name.
 	TestName param.Field[string] `query:"testName"`
 }
 
@@ -736,7 +737,7 @@ func (r DEXTestListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Filter by test type
+// Filter by test type.
 type DEXTestListParamsKind string
 
 const (

@@ -85,11 +85,11 @@ func (r httpDetailsPercentilesJSON) RawJSON() string {
 
 type TestStatOverTime struct {
 	Slots []TestStatOverTimeSlot `json:"slots" api:"required"`
-	// average observed in the time period
+	// average observed in the time period.
 	Avg int64 `json:"avg" api:"nullable"`
-	// highest observed in the time period
+	// highest observed in the time period.
 	Max int64 `json:"max" api:"nullable"`
-	// lowest observed in the time period
+	// lowest observed in the time period.
 	Min  int64                `json:"min" api:"nullable"`
 	JSON testStatOverTimeJSON `json:"-"`
 }
@@ -137,10 +137,11 @@ func (r testStatOverTimeSlotJSON) RawJSON() string {
 }
 
 type DEXHTTPTestPercentileGetParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Start time for the query in ISO (RFC3339 - ISO 8601) format
+	// Start time for the query in ISO (RFC3339 - ISO 8601) format.
 	From param.Field[string] `query:"from" api:"required"`
-	// End time for the query in ISO (RFC3339 - ISO 8601) format
+	// End time for the query in ISO (RFC3339 - ISO 8601) format.
 	To param.Field[string] `query:"to" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.

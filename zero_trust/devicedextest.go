@@ -75,7 +75,7 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, par
 	return res, nil
 }
 
-// Fetch all DEX tests
+// Fetch all DEX tests.
 func (r *DeviceDEXTestService) List(ctx context.Context, params DeviceDEXTestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DeviceDEXTestListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -97,7 +97,7 @@ func (r *DeviceDEXTestService) List(ctx context.Context, params DeviceDEXTestLis
 	return res, nil
 }
 
-// Fetch all DEX tests
+// Fetch all DEX tests.
 func (r *DeviceDEXTestService) ListAutoPaging(ctx context.Context, params DeviceDEXTestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DeviceDEXTestListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -250,11 +250,11 @@ func (r DeviceDEXTestNewResponseDataMethod) IsKnown() bool {
 }
 
 type DeviceDEXTestNewResponseTargetPolicy struct {
-	// API Resource UUID tag.
+	// The id of the DEX rule.
 	ID string `json:"id" api:"required"`
-	// Whether the DEX rule is the account default
+	// Whether the DEX rule is the account default.
 	Default bool `json:"default"`
-	// The name of the DEX rule
+	// The name of the DEX rule.
 	Name string                                   `json:"name"`
 	JSON deviceDEXTestNewResponseTargetPolicyJSON `json:"-"`
 }
@@ -382,11 +382,11 @@ func (r DeviceDEXTestUpdateResponseDataMethod) IsKnown() bool {
 }
 
 type DeviceDEXTestUpdateResponseTargetPolicy struct {
-	// API Resource UUID tag.
+	// The id of the DEX rule.
 	ID string `json:"id" api:"required"`
-	// Whether the DEX rule is the account default
+	// Whether the DEX rule is the account default.
 	Default bool `json:"default"`
-	// The name of the DEX rule
+	// The name of the DEX rule.
 	Name string                                      `json:"name"`
 	JSON deviceDEXTestUpdateResponseTargetPolicyJSON `json:"-"`
 }
@@ -514,11 +514,11 @@ func (r DeviceDEXTestListResponseDataMethod) IsKnown() bool {
 }
 
 type DeviceDEXTestListResponseTargetPolicy struct {
-	// API Resource UUID tag.
+	// The id of the DEX rule.
 	ID string `json:"id" api:"required"`
-	// Whether the DEX rule is the account default
+	// Whether the DEX rule is the account default.
 	Default bool `json:"default"`
-	// The name of the DEX rule
+	// The name of the DEX rule.
 	Name string                                    `json:"name"`
 	JSON deviceDEXTestListResponseTargetPolicyJSON `json:"-"`
 }
@@ -667,11 +667,11 @@ func (r DeviceDEXTestDeleteResponseDEXTestsDataMethod) IsKnown() bool {
 }
 
 type DeviceDEXTestDeleteResponseDEXTestsTargetPolicy struct {
-	// API Resource UUID tag.
+	// The id of the DEX rule.
 	ID string `json:"id" api:"required"`
-	// Whether the DEX rule is the account default
+	// Whether the DEX rule is the account default.
 	Default bool `json:"default"`
-	// The name of the DEX rule
+	// The name of the DEX rule.
 	Name string                                              `json:"name"`
 	JSON deviceDEXTestDeleteResponseDEXTestsTargetPolicyJSON `json:"-"`
 }
@@ -799,11 +799,11 @@ func (r DeviceDEXTestGetResponseDataMethod) IsKnown() bool {
 }
 
 type DeviceDEXTestGetResponseTargetPolicy struct {
-	// API Resource UUID tag.
+	// The id of the DEX rule.
 	ID string `json:"id" api:"required"`
-	// Whether the DEX rule is the account default
+	// Whether the DEX rule is the account default.
 	Default bool `json:"default"`
-	// The name of the DEX rule
+	// The name of the DEX rule.
 	Name string                                   `json:"name"`
 	JSON deviceDEXTestGetResponseTargetPolicyJSON `json:"-"`
 }
@@ -827,6 +827,7 @@ func (r deviceDEXTestGetResponseTargetPolicyJSON) RawJSON() string {
 }
 
 type DeviceDEXTestNewParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
@@ -895,11 +896,11 @@ func (r DeviceDEXTestNewParamsDataMethod) IsKnown() bool {
 }
 
 type DeviceDEXTestNewParamsTargetPolicy struct {
-	// API Resource UUID tag.
+	// The id of the DEX rule.
 	ID param.Field[string] `json:"id" api:"required"`
-	// Whether the DEX rule is the account default
+	// Whether the DEX rule is the account default.
 	Default param.Field[bool] `json:"default"`
-	// The name of the DEX rule
+	// The name of the DEX rule.
 	Name param.Field[string] `json:"name"`
 }
 
@@ -1047,6 +1048,7 @@ func (r DeviceDEXTestNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceDEXTestUpdateParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
@@ -1115,11 +1117,11 @@ func (r DeviceDEXTestUpdateParamsDataMethod) IsKnown() bool {
 }
 
 type DeviceDEXTestUpdateParamsTargetPolicy struct {
-	// API Resource UUID tag.
+	// The id of the DEX rule.
 	ID param.Field[string] `json:"id" api:"required"`
-	// Whether the DEX rule is the account default
+	// Whether the DEX rule is the account default.
 	Default param.Field[bool] `json:"default"`
-	// The name of the DEX rule
+	// The name of the DEX rule.
 	Name param.Field[string] `json:"name"`
 }
 
@@ -1267,14 +1269,15 @@ func (r DeviceDEXTestUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceDEXTestListParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Filter by test type
+	// Filter by test type.
 	Kind param.Field[DeviceDEXTestListParamsKind] `query:"kind"`
-	// Page number of paginated results
+	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
-	// Number of items per page
+	// Number of results per page.
 	PerPage param.Field[float64] `query:"per_page"`
-	// Filter by test name
+	// Filter by test name.
 	TestName param.Field[string] `query:"testName"`
 }
 
@@ -1287,7 +1290,7 @@ func (r DeviceDEXTestListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Filter by test type
+// Filter by test type.
 type DeviceDEXTestListParamsKind string
 
 const (
@@ -1304,6 +1307,7 @@ func (r DeviceDEXTestListParamsKind) IsKnown() bool {
 }
 
 type DeviceDEXTestDeleteParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1447,6 +1451,7 @@ func (r DeviceDEXTestDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceDEXTestGetParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

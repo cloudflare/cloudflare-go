@@ -93,7 +93,7 @@ func TestDEXRuleListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.DEX.Rules.List(context.TODO(), zero_trust.DEXRuleListParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(10.000000),
 		Name:      cloudflare.F("name"),
 		SortBy:    cloudflare.F(zero_trust.DEXRuleListParamsSortByName),
 		SortOrder: cloudflare.F(zero_trust.DEXRuleListParamsSortOrderAsc),

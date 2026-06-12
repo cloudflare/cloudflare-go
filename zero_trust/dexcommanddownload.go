@@ -55,5 +55,6 @@ func (r *DEXCommandDownloadService) Get(ctx context.Context, commandID string, f
 }
 
 type DEXCommandDownloadGetParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -61,16 +61,16 @@ func (r *DEXHTTPTestService) Get(ctx context.Context, testID string, params DEXH
 }
 
 type HTTPDetails struct {
-	// The url of the HTTP synthetic application test
+	// The url of the HTTP synthetic application test.
 	Host            string                       `json:"host"`
 	HTTPStats       HTTPDetailsHTTPStats         `json:"httpStats" api:"nullable"`
 	HTTPStatsByColo []HTTPDetailsHTTPStatsByColo `json:"httpStatsByColo"`
 	// The interval at which the HTTP synthetic application test is set to run.
 	Interval string          `json:"interval"`
 	Kind     HTTPDetailsKind `json:"kind"`
-	// The HTTP method to use when running the test
+	// The HTTP method to use when running the test.
 	Method string `json:"method"`
-	// The name of the HTTP synthetic application test
+	// The name of the HTTP synthetic application test.
 	Name           string                     `json:"name"`
 	TargetPolicies []DigitalExperienceMonitor `json:"target_policies" api:"nullable"`
 	Targeted       bool                       `json:"targeted"`
@@ -106,7 +106,7 @@ type HTTPDetailsHTTPStats struct {
 	HTTPStatusCode       []HTTPDetailsHTTPStatsHTTPStatusCode `json:"httpStatusCode" api:"required"`
 	ResourceFetchTimeMs  TestStatOverTime                     `json:"resourceFetchTimeMs" api:"required"`
 	ServerResponseTimeMs TestStatOverTime                     `json:"serverResponseTimeMs" api:"required"`
-	// Count of unique devices that have run this test in the given time period
+	// Count of unique devices that have run this test in the given time period.
 	UniqueDevicesTotal int64                    `json:"uniqueDevicesTotal" api:"required"`
 	JSON               httpDetailsHTTPStatsJSON `json:"-"`
 }
@@ -134,11 +134,11 @@ func (r httpDetailsHTTPStatsJSON) RawJSON() string {
 
 type HTTPDetailsHTTPStatsAvailabilityPct struct {
 	Slots []HTTPDetailsHTTPStatsAvailabilityPctSlot `json:"slots" api:"required"`
-	// average observed in the time period
+	// average observed in the time period.
 	Avg float64 `json:"avg" api:"nullable"`
-	// highest observed in the time period
+	// highest observed in the time period.
 	Max float64 `json:"max" api:"nullable"`
-	// lowest observed in the time period
+	// lowest observed in the time period.
 	Min  float64                                 `json:"min" api:"nullable"`
 	JSON httpDetailsHTTPStatsAvailabilityPctJSON `json:"-"`
 }
@@ -221,7 +221,7 @@ type HTTPDetailsHTTPStatsByColo struct {
 	HTTPStatusCode       []HTTPDetailsHTTPStatsByColoHTTPStatusCode `json:"httpStatusCode" api:"required"`
 	ResourceFetchTimeMs  TestStatOverTime                           `json:"resourceFetchTimeMs" api:"required"`
 	ServerResponseTimeMs TestStatOverTime                           `json:"serverResponseTimeMs" api:"required"`
-	// Count of unique devices that have run this test in the given time period
+	// Count of unique devices that have run this test in the given time period.
 	UniqueDevicesTotal int64                          `json:"uniqueDevicesTotal" api:"required"`
 	JSON               httpDetailsHTTPStatsByColoJSON `json:"-"`
 }
@@ -250,11 +250,11 @@ func (r httpDetailsHTTPStatsByColoJSON) RawJSON() string {
 
 type HTTPDetailsHTTPStatsByColoAvailabilityPct struct {
 	Slots []HTTPDetailsHTTPStatsByColoAvailabilityPctSlot `json:"slots" api:"required"`
-	// average observed in the time period
+	// average observed in the time period.
 	Avg float64 `json:"avg" api:"nullable"`
-	// highest observed in the time period
+	// highest observed in the time period.
 	Max float64 `json:"max" api:"nullable"`
-	// lowest observed in the time period
+	// lowest observed in the time period.
 	Min  float64                                       `json:"min" api:"nullable"`
 	JSON httpDetailsHTTPStatsByColoAvailabilityPctJSON `json:"-"`
 }
@@ -345,12 +345,13 @@ func (r HTTPDetailsKind) IsKnown() bool {
 }
 
 type DEXHTTPTestGetParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Start time for aggregate metrics in ISO ms
+	// Start time for aggregate metrics in ISO ms.
 	From param.Field[string] `query:"from" api:"required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DexhttpTestGetParamsInterval] `query:"interval" api:"required"`
-	// End time for aggregate metrics in ISO ms
+	// End time for aggregate metrics in ISO ms.
 	To param.Field[string] `query:"to" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.

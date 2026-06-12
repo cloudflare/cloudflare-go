@@ -58,29 +58,40 @@ func (r *DEXTracerouteTestResultNetworkPathService) Get(ctx context.Context, tes
 }
 
 type DEXTracerouteTestResultNetworkPathGetResponse struct {
-	// an array of the hops taken by the device to reach the end destination
+	// An array of the hops taken by the device to reach the end destination.
 	Hops []DEXTracerouteTestResultNetworkPathGetResponseHop `json:"hops" api:"required"`
 	// API Resource UUID tag.
 	ResultID string `json:"resultId" api:"required"`
-	// name of the device associated with this network path response
+	// Cloudflare colo airport code.
+	Colo string `json:"colo"`
+	// Name of the device associated with this network path response.
 	DeviceName string `json:"deviceName"`
+	// Whether the test was run inside or outside of the WARP tunnel.
+	ExecutionContext DEXTracerouteTestResultNetworkPathGetResponseExecutionContext `json:"execution_context"`
 	// API Resource UUID tag.
 	TestID string `json:"testId"`
-	// name of the tracroute test
-	TestName string                                            `json:"testName"`
-	JSON     dexTracerouteTestResultNetworkPathGetResponseJSON `json:"-"`
+	// Name of the traceroute test.
+	TestName string `json:"testName"`
+	// Timestamp indicating when the traceroute test execution began.
+	TimeStart  string                                            `json:"time_start"`
+	TunnelType string                                            `json:"tunnel_type" api:"nullable"`
+	JSON       dexTracerouteTestResultNetworkPathGetResponseJSON `json:"-"`
 }
 
 // dexTracerouteTestResultNetworkPathGetResponseJSON contains the JSON metadata for
 // the struct [DEXTracerouteTestResultNetworkPathGetResponse]
 type dexTracerouteTestResultNetworkPathGetResponseJSON struct {
-	Hops        apijson.Field
-	ResultID    apijson.Field
-	DeviceName  apijson.Field
-	TestID      apijson.Field
-	TestName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Hops             apijson.Field
+	ResultID         apijson.Field
+	Colo             apijson.Field
+	DeviceName       apijson.Field
+	ExecutionContext apijson.Field
+	TestID           apijson.Field
+	TestName         apijson.Field
+	TimeStart        apijson.Field
+	TunnelType       apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *DEXTracerouteTestResultNetworkPathGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -171,7 +182,25 @@ func (r DEXTracerouteTestResultNetworkPathGetResponseHopsMile) IsKnown() bool {
 	return false
 }
 
+// Whether the test was run inside or outside of the WARP tunnel.
+type DEXTracerouteTestResultNetworkPathGetResponseExecutionContext string
+
+const (
+	DEXTracerouteTestResultNetworkPathGetResponseExecutionContextExecutionContextInvalid DEXTracerouteTestResultNetworkPathGetResponseExecutionContext = "EXECUTION_CONTEXT_INVALID"
+	DEXTracerouteTestResultNetworkPathGetResponseExecutionContextOutOfTunnel             DEXTracerouteTestResultNetworkPathGetResponseExecutionContext = "OUT_OF_TUNNEL"
+	DEXTracerouteTestResultNetworkPathGetResponseExecutionContextInTunnel                DEXTracerouteTestResultNetworkPathGetResponseExecutionContext = "IN_TUNNEL"
+)
+
+func (r DEXTracerouteTestResultNetworkPathGetResponseExecutionContext) IsKnown() bool {
+	switch r {
+	case DEXTracerouteTestResultNetworkPathGetResponseExecutionContextExecutionContextInvalid, DEXTracerouteTestResultNetworkPathGetResponseExecutionContextOutOfTunnel, DEXTracerouteTestResultNetworkPathGetResponseExecutionContextInTunnel:
+		return true
+	}
+	return false
+}
+
 type DEXTracerouteTestResultNetworkPathGetParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

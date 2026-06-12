@@ -31,7 +31,7 @@ func TestDEXCommandDeviceListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.DEX.Commands.Devices.List(context.TODO(), zero_trust.DEXCommandDeviceListParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(10.000000),
 		Search:    cloudflare.F("search"),
 	})
 	if err != nil {

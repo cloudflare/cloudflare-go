@@ -67,7 +67,7 @@ func TestDEXCommandListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.DEX.Commands.List(context.TODO(), zero_trust.DEXCommandListParams{
 		AccountID:   cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		Page:        cloudflare.F(1.000000),
-		PerPage:     cloudflare.F(50.000000),
+		PerPage:     cloudflare.F(10.000000),
 		CommandType: cloudflare.F(zero_trust.DEXCommandListParamsCommandTypePCAP),
 		DeviceID:    cloudflare.F("device_id"),
 		From:        cloudflare.F(time.Now()),

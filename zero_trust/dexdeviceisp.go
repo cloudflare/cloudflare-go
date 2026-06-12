@@ -90,11 +90,11 @@ func (r ispsJSON) RawJSON() string {
 }
 
 type ISPsISP struct {
-	// The test that generated this result
+	// The test that generated this result.
 	TestID string `json:"test_id" api:"required"`
-	// The specific test result
+	// The specific test result.
 	TestResultID string `json:"test_result_id" api:"required"`
-	// Timestamp of when the ISP was observed
+	// Timestamp of when the ISP was observed.
 	TimeStart time.Time `json:"time_start" api:"required" format:"date-time"`
 	// IP address information for the ISP hop. Fields marked as PII-gated (`name`,
 	// `address`, `netmask`, and all `location` sub-fields) will be returned as the
@@ -129,9 +129,9 @@ func (r ispsISPJSON) RawJSON() string {
 type ISPsISPsIP struct {
 	// IP address. Returned as `"REDACTED"` without PII permission.
 	Address string `json:"address"`
-	// Autonomous System Number
+	// Autonomous System Number.
 	ASN int64 `json:"asn"`
-	// Autonomous System Organization name
+	// Autonomous System Organization name.
 	Aso string `json:"aso"`
 	// Geographic location information. All fields are returned as the literal string
 	// `"REDACTED"` for callers that do not have the PII permission.
@@ -141,7 +141,7 @@ type ISPsISPsIP struct {
 	Name string `json:"name"`
 	// Network mask. Returned as `"REDACTED"` without PII permission.
 	Netmask string `json:"netmask"`
-	// IP version (`1` for IPv4, `2` for IPv6, `0` if unknown)
+	// IP version (`1` for IPv4, `2` for IPv6, `0` if unknown).
 	Version int64          `json:"version"`
 	JSON    ispsISPsIPJSON `json:"-"`
 }
@@ -201,20 +201,21 @@ func (r ispsISPsIPLocationJSON) RawJSON() string {
 }
 
 type DEXDeviceISPListParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Number of items per page
 	PerPage param.Field[int64] `query:"per_page" api:"required"`
 	// Cursor for cursor-based pagination. Mutually exclusive with page.
 	Cursor param.Field[string] `query:"cursor"`
-	// Start time for the query in ISO 8601 format
+	// Start time for the query in ISO 8601 format.
 	From param.Field[time.Time] `query:"from" format:"date-time"`
 	// Page number of paginated results. Mutually exclusive with cursor.
 	Page param.Field[int64] `query:"page"`
-	// The field to sort results by
+	// The field to sort results by.
 	SortBy param.Field[DEXDeviceISPListParamsSortBy] `query:"sort_by"`
-	// The order to sort results
+	// The order to sort results.
 	SortOrder param.Field[DEXDeviceISPListParamsSortOrder] `query:"sort_order"`
-	// End time for the query in ISO 8601 format
+	// End time for the query in ISO 8601 format.
 	To param.Field[time.Time] `query:"to" format:"date-time"`
 }
 
@@ -226,7 +227,7 @@ func (r DEXDeviceISPListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// The field to sort results by
+// The field to sort results by.
 type DEXDeviceISPListParamsSortBy string
 
 const (
@@ -241,7 +242,7 @@ func (r DEXDeviceISPListParamsSortBy) IsKnown() bool {
 	return false
 }
 
-// The order to sort results
+// The order to sort results.
 type DEXDeviceISPListParamsSortOrder string
 
 const (

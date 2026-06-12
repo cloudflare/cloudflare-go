@@ -32,7 +32,7 @@ func TestDEXWARPChangeEventGetWithOptionalParams(t *testing.T) {
 		AccountID:   cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		From:        cloudflare.F("2023-09-20T17:00:00Z"),
 		Page:        cloudflare.F(1.000000),
-		PerPage:     cloudflare.F(1.000000),
+		PerPage:     cloudflare.F(10.000000),
 		To:          cloudflare.F("2023-09-20T17:00:00Z"),
 		AccountName: cloudflare.F("Myorg"),
 		ConfigName:  cloudflare.F("MASQUE"),

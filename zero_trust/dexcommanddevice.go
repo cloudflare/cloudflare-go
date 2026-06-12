@@ -99,16 +99,15 @@ type DEXCommandDeviceListResponseDevice struct {
 	IneligibleReason string `json:"ineligibleReason"`
 	// User contact email address
 	PersonEmail string `json:"personEmail"`
-	// Operating system
+	// Operating system.
 	Platform string `json:"platform"`
 	// Device registration identifier (UUID v4). On multi-user devices, this uniquely
 	// identifies a user's registration on the device.
 	RegistrationID string `json:"registrationId"`
-	// Network status
-	Status string `json:"status"`
-	// Timestamp in ISO format
+	// Network status.
+	Status    string `json:"status"`
 	Timestamp string `json:"timestamp"`
-	// WARP client version
+	// WARP client version.
 	Version string                                 `json:"version"`
 	JSON    dexCommandDeviceListResponseDeviceJSON `json:"-"`
 }
@@ -139,12 +138,13 @@ func (r dexCommandDeviceListResponseDeviceJSON) RawJSON() string {
 }
 
 type DEXCommandDeviceListParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Page number of paginated results
+	// Page number of paginated results.
 	Page param.Field[float64] `query:"page" api:"required"`
-	// Number of items per page
+	// Number of results per page.
 	PerPage param.Field[float64] `query:"per_page" api:"required"`
-	// Filter devices by name or email
+	// Filter devices by name or email.
 	Search param.Field[string] `query:"search"`
 }
 

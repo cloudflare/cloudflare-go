@@ -36,8 +36,8 @@ func TestDEXHTTPTestGetWithOptionalParams(t *testing.T) {
 			From:      cloudflare.F("1689520412000"),
 			Interval:  cloudflare.F(zero_trust.DexhttpTestGetParamsIntervalMinute),
 			To:        cloudflare.F("1689606812000"),
-			Colo:      cloudflare.F("colo"),
-			DeviceID:  cloudflare.F([]string{"string"}),
+			Colo:      cloudflare.F("SJC"),
+			DeviceID:  cloudflare.F([]string{"cb49c27f-7f97-49c5-b6f3-f7c01ead0fd7"}),
 		},
 	)
 	if err != nil {

@@ -36,7 +36,7 @@ func NewDEXTracerouteTestService(opts ...option.RequestOption) (r *DEXTraceroute
 	return
 }
 
-// Get test details and aggregate performance metrics for an traceroute test for a
+// Get test details and aggregate performance metrics for a traceroute test for a
 // given time period between 1 hour and 7 days.
 func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, params DEXTracerouteTestGetParams, opts ...option.RequestOption) (res *Traceroute, err error) {
 	var env DEXTracerouteTestGetResponseEnvelope
@@ -58,7 +58,7 @@ func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, param
 	return res, nil
 }
 
-// Get a breakdown of metrics by hop for individual traceroute test runs
+// Get a breakdown of metrics by hop for individual traceroute test runs.
 func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID string, params DEXTracerouteTestNetworkPathParams, opts ...option.RequestOption) (res *NetworkPathResponse, err error) {
 	var env DEXTracerouteTestNetworkPathResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -102,12 +102,12 @@ func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID strin
 }
 
 type Traceroute struct {
-	// The host of the Traceroute synthetic application test
+	// The host of the Traceroute synthetic application test.
 	Host string `json:"host" api:"required"`
 	// The interval at which the Traceroute synthetic application test is set to run.
 	Interval string         `json:"interval" api:"required"`
 	Kind     TracerouteKind `json:"kind" api:"required"`
-	// The name of the Traceroute synthetic application test
+	// The name of the Traceroute synthetic application test.
 	Name                  string                            `json:"name" api:"required"`
 	TargetPolicies        []DigitalExperienceMonitor        `json:"target_policies" api:"nullable"`
 	Targeted              bool                              `json:"targeted"`
@@ -157,7 +157,7 @@ type TracerouteTracerouteStats struct {
 	HopsCount       TestStatOverTime                         `json:"hopsCount" api:"required"`
 	PacketLossPct   TracerouteTracerouteStatsPacketLossPct   `json:"packetLossPct" api:"required"`
 	RoundTripTimeMs TestStatOverTime                         `json:"roundTripTimeMs" api:"required"`
-	// Count of unique devices that have run this test in the given time period
+	// Count of unique devices that have run this test in the given time period.
 	UniqueDevicesTotal int64                         `json:"uniqueDevicesTotal" api:"required"`
 	JSON               tracerouteTracerouteStatsJSON `json:"-"`
 }
@@ -184,11 +184,11 @@ func (r tracerouteTracerouteStatsJSON) RawJSON() string {
 
 type TracerouteTracerouteStatsAvailabilityPct struct {
 	Slots []TracerouteTracerouteStatsAvailabilityPctSlot `json:"slots" api:"required"`
-	// average observed in the time period
+	// average observed in the time period.
 	Avg float64 `json:"avg" api:"nullable"`
-	// highest observed in the time period
+	// highest observed in the time period.
 	Max float64 `json:"max" api:"nullable"`
-	// lowest observed in the time period
+	// lowest observed in the time period.
 	Min  float64                                      `json:"min" api:"nullable"`
 	JSON tracerouteTracerouteStatsAvailabilityPctJSON `json:"-"`
 }
@@ -237,11 +237,11 @@ func (r tracerouteTracerouteStatsAvailabilityPctSlotJSON) RawJSON() string {
 
 type TracerouteTracerouteStatsPacketLossPct struct {
 	Slots []TracerouteTracerouteStatsPacketLossPctSlot `json:"slots" api:"required"`
-	// average observed in the time period
+	// average observed in the time period.
 	Avg float64 `json:"avg" api:"nullable"`
-	// highest observed in the time period
+	// highest observed in the time period.
 	Max float64 `json:"max" api:"nullable"`
-	// lowest observed in the time period
+	// lowest observed in the time period.
 	Min  float64                                    `json:"min" api:"nullable"`
 	JSON tracerouteTracerouteStatsPacketLossPctJSON `json:"-"`
 }
@@ -294,7 +294,7 @@ type TracerouteTracerouteStatsByColo struct {
 	HopsCount       TestStatOverTime                               `json:"hopsCount" api:"required"`
 	PacketLossPct   TracerouteTracerouteStatsByColoPacketLossPct   `json:"packetLossPct" api:"required"`
 	RoundTripTimeMs TestStatOverTime                               `json:"roundTripTimeMs" api:"required"`
-	// Count of unique devices that have run this test in the given time period
+	// Count of unique devices that have run this test in the given time period.
 	UniqueDevicesTotal int64                               `json:"uniqueDevicesTotal" api:"required"`
 	JSON               tracerouteTracerouteStatsByColoJSON `json:"-"`
 }
@@ -322,11 +322,11 @@ func (r tracerouteTracerouteStatsByColoJSON) RawJSON() string {
 
 type TracerouteTracerouteStatsByColoAvailabilityPct struct {
 	Slots []TracerouteTracerouteStatsByColoAvailabilityPctSlot `json:"slots" api:"required"`
-	// average observed in the time period
+	// average observed in the time period.
 	Avg float64 `json:"avg" api:"nullable"`
-	// highest observed in the time period
+	// highest observed in the time period.
 	Max float64 `json:"max" api:"nullable"`
-	// lowest observed in the time period
+	// lowest observed in the time period.
 	Min  float64                                            `json:"min" api:"nullable"`
 	JSON tracerouteTracerouteStatsByColoAvailabilityPctJSON `json:"-"`
 }
@@ -375,11 +375,11 @@ func (r tracerouteTracerouteStatsByColoAvailabilityPctSlotJSON) RawJSON() string
 
 type TracerouteTracerouteStatsByColoPacketLossPct struct {
 	Slots []TracerouteTracerouteStatsByColoPacketLossPctSlot `json:"slots" api:"required"`
-	// average observed in the time period
+	// average observed in the time period.
 	Avg float64 `json:"avg" api:"nullable"`
-	// highest observed in the time period
+	// highest observed in the time period.
 	Max float64 `json:"max" api:"nullable"`
-	// lowest observed in the time period
+	// lowest observed in the time period.
 	Min  float64                                          `json:"min" api:"nullable"`
 	JSON tracerouteTracerouteStatsByColoPacketLossPctJSON `json:"-"`
 }
@@ -452,12 +452,13 @@ func (r dexTracerouteTestPercentilesResponseJSON) RawJSON() string {
 }
 
 type DEXTracerouteTestGetParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Start time for aggregate metrics in ISO ms
+	// Start time for aggregate metrics in ISO ms.
 	From param.Field[string] `query:"from" api:"required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DEXTracerouteTestGetParamsInterval] `query:"interval" api:"required"`
-	// End time for aggregate metrics in ISO ms
+	// End time for aggregate metrics in ISO ms.
 	To param.Field[string] `query:"to" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
@@ -632,14 +633,15 @@ func (r DEXTracerouteTestGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXTracerouteTestNetworkPathParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Device to filter tracroute result runs to
+	// Device to filter traceroute result runs to.
 	DeviceID param.Field[string] `query:"deviceId" api:"required"`
-	// Start time for aggregate metrics in ISO ms
+	// Start time for aggregate metrics in ISO ms.
 	From param.Field[string] `query:"from" api:"required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DEXTracerouteTestNetworkPathParamsInterval] `query:"interval" api:"required"`
-	// End time for aggregate metrics in ISO ms
+	// End time for aggregate metrics in ISO ms.
 	To param.Field[string] `query:"to" api:"required"`
 }
 
@@ -810,10 +812,11 @@ func (r DEXTracerouteTestNetworkPathResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXTracerouteTestPercentilesParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Start time for the query in ISO (RFC3339 - ISO 8601) format
+	// Start time for the query in ISO (RFC3339 - ISO 8601) format.
 	From param.Field[string] `query:"from" api:"required"`
-	// End time for the query in ISO (RFC3339 - ISO 8601) format
+	// End time for the query in ISO (RFC3339 - ISO 8601) format.
 	To param.Field[string] `query:"to" api:"required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.

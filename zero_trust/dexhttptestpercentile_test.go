@@ -35,8 +35,8 @@ func TestDEXHTTPTestPercentileGetWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			From:      cloudflare.F("2023-09-20T17:00:00Z"),
 			To:        cloudflare.F("2023-09-20T17:00:00Z"),
-			Colo:      cloudflare.F("colo"),
-			DeviceID:  cloudflare.F([]string{"string"}),
+			Colo:      cloudflare.F("SJC"),
+			DeviceID:  cloudflare.F([]string{"cb49c27f-7f97-49c5-b6f3-f7c01ead0fd7"}),
 		},
 	)
 	if err != nil {

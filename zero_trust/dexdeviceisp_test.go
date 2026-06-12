@@ -34,7 +34,7 @@ func TestDEXDeviceISPListWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DEXDeviceISPListParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			PerPage:   cloudflare.F(int64(1)),
+			PerPage:   cloudflare.F(int64(10)),
 			Cursor:    cloudflare.F("cursor"),
 			From:      cloudflare.F(time.Now()),
 			Page:      cloudflare.F(int64(1)),

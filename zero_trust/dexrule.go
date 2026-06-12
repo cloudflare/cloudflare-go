@@ -37,7 +37,7 @@ func NewDEXRuleService(opts ...option.RequestOption) (r *DEXRuleService) {
 	return
 }
 
-// Create a DEX Rule
+// Create a DEX Rule.
 func (r *DEXRuleService) New(ctx context.Context, params DEXRuleNewParams, opts ...option.RequestOption) (res *DEXRuleNewResponse, err error) {
 	var env DEXRuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,7 +54,7 @@ func (r *DEXRuleService) New(ctx context.Context, params DEXRuleNewParams, opts 
 	return res, nil
 }
 
-// Update a DEX Rule
+// Update a DEX Rule.
 func (r *DEXRuleService) Update(ctx context.Context, ruleID string, params DEXRuleUpdateParams, opts ...option.RequestOption) (res *DEXRuleUpdateResponse, err error) {
 	var env DEXRuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -75,7 +75,7 @@ func (r *DEXRuleService) Update(ctx context.Context, ruleID string, params DEXRu
 	return res, nil
 }
 
-// List DEX Rules
+// List DEX Rules.
 func (r *DEXRuleService) List(ctx context.Context, params DEXRuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DEXRuleListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -97,12 +97,12 @@ func (r *DEXRuleService) List(ctx context.Context, params DEXRuleListParams, opt
 	return res, nil
 }
 
-// List DEX Rules
+// List DEX Rules.
 func (r *DEXRuleService) ListAutoPaging(ctx context.Context, params DEXRuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[DEXRuleListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a DEX Rule
+// Delete a DEX Rule.
 func (r *DEXRuleService) Delete(ctx context.Context, ruleID string, body DEXRuleDeleteParams, opts ...option.RequestOption) (res *bool, err error) {
 	var env DEXRuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -123,7 +123,7 @@ func (r *DEXRuleService) Delete(ctx context.Context, ruleID string, body DEXRule
 	return res, nil
 }
 
-// Get details for a DEX Rule
+// Get details for a DEX Rule.
 func (r *DEXRuleService) Get(ctx context.Context, ruleID string, query DEXRuleGetParams, opts ...option.RequestOption) (res *DEXRuleGetResponse, err error) {
 	var env DEXRuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -662,6 +662,7 @@ func (r DEXRuleGetResponseTargetedTestsDataMethod) IsKnown() bool {
 }
 
 type DEXRuleNewParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The wirefilter expression to match.
 	Match param.Field[string] `json:"match" api:"required"`
@@ -814,6 +815,7 @@ func (r DEXRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXRuleUpdateParams struct {
+	// Unique identifier linked to an account.
 	AccountID   param.Field[string] `path:"account_id" api:"required"`
 	Description param.Field[string] `json:"description"`
 	// The wirefilter expression to match.
@@ -966,16 +968,17 @@ func (r DEXRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXRuleListParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Page number of paginated results
+	// Page number of paginated results.
 	Page param.Field[float64] `query:"page" api:"required"`
-	// Number of items per page
+	// Number of results per page.
 	PerPage param.Field[float64] `query:"per_page" api:"required"`
-	// Filter results by rule name
+	// Filter results by rule name.
 	Name param.Field[string] `query:"name"`
-	// Which property to sort results by
+	// Which property to sort results by.
 	SortBy param.Field[DEXRuleListParamsSortBy] `query:"sort_by"`
-	// Sort direction for sort_by property
+	// Sort direction for sort_by property.
 	SortOrder param.Field[DEXRuleListParamsSortOrder] `query:"sort_order"`
 }
 
@@ -987,7 +990,7 @@ func (r DEXRuleListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Which property to sort results by
+// Which property to sort results by.
 type DEXRuleListParamsSortBy string
 
 const (
@@ -1004,7 +1007,7 @@ func (r DEXRuleListParamsSortBy) IsKnown() bool {
 	return false
 }
 
-// Sort direction for sort_by property
+// Sort direction for sort_by property.
 type DEXRuleListParamsSortOrder string
 
 const (
@@ -1021,6 +1024,7 @@ func (r DEXRuleListParamsSortOrder) IsKnown() bool {
 }
 
 type DEXRuleDeleteParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1164,6 +1168,7 @@ func (r DEXRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXRuleGetParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

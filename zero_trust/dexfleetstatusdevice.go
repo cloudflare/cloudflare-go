@@ -37,7 +37,7 @@ func NewDEXFleetStatusDeviceService(opts ...option.RequestOption) (r *DEXFleetSt
 	return
 }
 
-// List details for devices using WARP
+// List details for devices using WARP.
 func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DEXFleetStatusDeviceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -59,38 +59,37 @@ func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetS
 	return res, nil
 }
 
-// List details for devices using WARP
+// List details for devices using WARP.
 func (r *DEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DEXFleetStatusDeviceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type DEXFleetStatusDeviceListResponse struct {
-	// Cloudflare colo
+	// Cloudflare colo airport code.
 	Colo string `json:"colo" api:"required"`
 	// Device identifier (UUID v4)
 	DeviceID string `json:"deviceId" api:"required"`
-	// The mode under which the WARP client is run
+	// The mode under which the WARP client is run.
 	Mode string `json:"mode" api:"required"`
-	// Operating system
+	// Operating system.
 	Platform string `json:"platform" api:"required"`
-	// Network status
-	Status string `json:"status" api:"required"`
-	// Timestamp in ISO format
+	// Network status.
+	Status    string `json:"status" api:"required"`
 	Timestamp string `json:"timestamp" api:"required"`
-	// WARP client version
-	Version         string                                          `json:"version" api:"required"`
-	AlwaysOn        bool                                            `json:"alwaysOn" api:"nullable"`
-	BatteryCharging bool                                            `json:"batteryCharging" api:"nullable"`
-	BatteryCycles   int64                                           `json:"batteryCycles" api:"nullable"`
-	BatteryPct      float64                                         `json:"batteryPct" api:"nullable"`
-	ConnectionType  string                                          `json:"connectionType" api:"nullable"`
-	CPUPct          float64                                         `json:"cpuPct" api:"nullable"`
-	CPUPctByApp     [][]DEXFleetStatusDeviceListResponseCPUPctByApp `json:"cpuPctByApp" api:"nullable"`
-	DeviceIPV4      DEXFleetStatusDeviceListResponseDeviceIPV4      `json:"deviceIpv4"`
-	DeviceIPV6      DEXFleetStatusDeviceListResponseDeviceIPV6      `json:"deviceIpv6"`
-	// Device identifier (human readable)
+	// WARP client version.
+	Version         string                                        `json:"version" api:"required"`
+	AlwaysOn        bool                                          `json:"alwaysOn" api:"nullable"`
+	BatteryCharging bool                                          `json:"batteryCharging" api:"nullable"`
+	BatteryCycles   int64                                         `json:"batteryCycles" api:"nullable"`
+	BatteryPct      float64                                       `json:"batteryPct" api:"nullable"`
+	ConnectionType  string                                        `json:"connectionType" api:"nullable"`
+	CPUPct          float64                                       `json:"cpuPct" api:"nullable"`
+	CPUPctByApp     []DEXFleetStatusDeviceListResponseCPUPctByApp `json:"cpuPctByApp" api:"nullable"`
+	DeviceIPV4      DEXFleetStatusDeviceListResponseDeviceIPV4    `json:"deviceIpv4" api:"nullable"`
+	DeviceIPV6      DEXFleetStatusDeviceListResponseDeviceIPV6    `json:"deviceIpv6" api:"nullable"`
+	// Device identifier (human readable).
 	DeviceName string `json:"deviceName"`
-	// Deprecated: use registrationId. Device registration identifier (UUID v4).
+	// Deprecated: use registrationId. Device registration identifier (UUID).
 	//
 	// Deprecated: Use `registrationId` instead.
 	DeviceRegistration string                                      `json:"deviceRegistration" api:"nullable"`
@@ -100,26 +99,31 @@ type DEXFleetStatusDeviceListResponse struct {
 	DOHSubdomain       string                                      `json:"dohSubdomain" api:"nullable"`
 	EstimatedLossPct   float64                                     `json:"estimatedLossPct" api:"nullable"`
 	FirewallEnabled    bool                                        `json:"firewallEnabled" api:"nullable"`
-	GatewayIPV4        DEXFleetStatusDeviceListResponseGatewayIPV4 `json:"gatewayIpv4"`
-	GatewayIPV6        DEXFleetStatusDeviceListResponseGatewayIPV6 `json:"gatewayIpv6"`
+	GatewayIPV4        DEXFleetStatusDeviceListResponseGatewayIPV4 `json:"gatewayIpv4" api:"nullable"`
+	GatewayIPV6        DEXFleetStatusDeviceListResponseGatewayIPV6 `json:"gatewayIpv6" api:"nullable"`
 	HandshakeLatencyMs float64                                     `json:"handshakeLatencyMs" api:"nullable"`
-	ISPIPV4            DEXFleetStatusDeviceListResponseISPIPV4     `json:"ispIpv4"`
-	ISPIPV6            DEXFleetStatusDeviceListResponseISPIPV6     `json:"ispIpv6"`
+	ISPIPV4            DEXFleetStatusDeviceListResponseISPIPV4     `json:"ispIpv4" api:"nullable"`
+	ISPIPV6            DEXFleetStatusDeviceListResponseISPIPV6     `json:"ispIpv6" api:"nullable"`
 	Metal              string                                      `json:"metal" api:"nullable"`
 	NetworkRcvdBps     int64                                       `json:"networkRcvdBps" api:"nullable"`
 	NetworkSentBps     int64                                       `json:"networkSentBps" api:"nullable"`
 	NetworkSsid        string                                      `json:"networkSsid" api:"nullable"`
 	// User contact email address
-	PersonEmail     string                                              `json:"personEmail"`
-	RamAvailableKB  int64                                               `json:"ramAvailableKb" api:"nullable"`
-	RamUsedPct      float64                                             `json:"ramUsedPct" api:"nullable"`
-	RamUsedPctByApp [][]DEXFleetStatusDeviceListResponseRamUsedPctByApp `json:"ramUsedPctByApp" api:"nullable"`
+	PersonEmail     string                                            `json:"personEmail"`
+	RamAvailableKB  int64                                             `json:"ramAvailableKb" api:"nullable"`
+	RamUsedPct      float64                                           `json:"ramUsedPct" api:"nullable"`
+	RamUsedPctByApp []DEXFleetStatusDeviceListResponseRamUsedPctByApp `json:"ramUsedPctByApp" api:"nullable"`
 	// Device registration identifier (UUID v4). On multi-user devices, this uniquely
 	// identifies a user's registration on the device.
-	RegistrationID  string                               `json:"registrationId" api:"nullable"`
-	SwitchLocked    bool                                 `json:"switchLocked" api:"nullable"`
-	WifiStrengthDbm int64                                `json:"wifiStrengthDbm" api:"nullable"`
-	JSON            dexFleetStatusDeviceListResponseJSON `json:"-"`
+	RegistrationID string `json:"registrationId" api:"nullable"`
+	// Round-trip time statistics for the WARP tunnel.
+	RTT          DEXFleetStatusDeviceListResponseRTT `json:"rtt" api:"nullable"`
+	SwitchLocked bool                                `json:"switchLocked" api:"nullable"`
+	// WARP tunnel packet and byte counters.
+	TunnelStats     DEXFleetStatusDeviceListResponseTunnelStats `json:"tunnelStats" api:"nullable"`
+	TunnelType      string                                      `json:"tunnelType" api:"nullable"`
+	WifiStrengthDbm int64                                       `json:"wifiStrengthDbm" api:"nullable"`
+	JSON            dexFleetStatusDeviceListResponseJSON        `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseJSON contains the JSON metadata for the struct
@@ -163,7 +167,10 @@ type dexFleetStatusDeviceListResponseJSON struct {
 	RamUsedPct         apijson.Field
 	RamUsedPctByApp    apijson.Field
 	RegistrationID     apijson.Field
+	RTT                apijson.Field
 	SwitchLocked       apijson.Field
+	TunnelStats        apijson.Field
+	TunnelType         apijson.Field
 	WifiStrengthDbm    apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -178,9 +185,11 @@ func (r dexFleetStatusDeviceListResponseJSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListResponseCPUPctByApp struct {
-	CPUPct float64                                         `json:"cpu_pct"`
-	Name   string                                          `json:"name"`
-	JSON   dexFleetStatusDeviceListResponseCPUPctByAppJSON `json:"-"`
+	// CPU usage percentage, on a scale of 0 to 100.
+	CPUPct float64 `json:"cpu_pct" api:"nullable"`
+	// Application name.
+	Name string                                          `json:"name" api:"nullable"`
+	JSON dexFleetStatusDeviceListResponseCPUPctByAppJSON `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseCPUPctByAppJSON contains the JSON metadata for
@@ -205,9 +214,11 @@ type DEXFleetStatusDeviceListResponseDeviceIPV4 struct {
 	ASN      int64                                              `json:"asn" api:"nullable"`
 	Aso      string                                             `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseDeviceIPV4Location `json:"location"`
+	Name     string                                             `json:"name" api:"nullable"`
 	Netmask  string                                             `json:"netmask" api:"nullable"`
-	Version  string                                             `json:"version" api:"nullable"`
-	JSON     dexFleetStatusDeviceListResponseDeviceIPV4JSON     `json:"-"`
+	// IP version (`1` for IPv4, `2` for IPv6, `0` if unknown).
+	Version int64                                          `json:"version"`
+	JSON    dexFleetStatusDeviceListResponseDeviceIPV4JSON `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseDeviceIPV4JSON contains the JSON metadata for
@@ -217,6 +228,7 @@ type dexFleetStatusDeviceListResponseDeviceIPV4JSON struct {
 	ASN         apijson.Field
 	Aso         apijson.Field
 	Location    apijson.Field
+	Name        apijson.Field
 	Netmask     apijson.Field
 	Version     apijson.Field
 	raw         string
@@ -263,9 +275,11 @@ type DEXFleetStatusDeviceListResponseDeviceIPV6 struct {
 	ASN      int64                                              `json:"asn" api:"nullable"`
 	Aso      string                                             `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseDeviceIPV6Location `json:"location"`
+	Name     string                                             `json:"name" api:"nullable"`
 	Netmask  string                                             `json:"netmask" api:"nullable"`
-	Version  string                                             `json:"version" api:"nullable"`
-	JSON     dexFleetStatusDeviceListResponseDeviceIPV6JSON     `json:"-"`
+	// IP version (`1` for IPv4, `2` for IPv6, `0` if unknown).
+	Version int64                                          `json:"version"`
+	JSON    dexFleetStatusDeviceListResponseDeviceIPV6JSON `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseDeviceIPV6JSON contains the JSON metadata for
@@ -275,6 +289,7 @@ type dexFleetStatusDeviceListResponseDeviceIPV6JSON struct {
 	ASN         apijson.Field
 	Aso         apijson.Field
 	Location    apijson.Field
+	Name        apijson.Field
 	Netmask     apijson.Field
 	Version     apijson.Field
 	raw         string
@@ -321,9 +336,11 @@ type DEXFleetStatusDeviceListResponseGatewayIPV4 struct {
 	ASN      int64                                               `json:"asn" api:"nullable"`
 	Aso      string                                              `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseGatewayIPV4Location `json:"location"`
+	Name     string                                              `json:"name" api:"nullable"`
 	Netmask  string                                              `json:"netmask" api:"nullable"`
-	Version  string                                              `json:"version" api:"nullable"`
-	JSON     dexFleetStatusDeviceListResponseGatewayIPV4JSON     `json:"-"`
+	// IP version (`1` for IPv4, `2` for IPv6, `0` if unknown).
+	Version int64                                           `json:"version"`
+	JSON    dexFleetStatusDeviceListResponseGatewayIPV4JSON `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseGatewayIPV4JSON contains the JSON metadata for
@@ -333,6 +350,7 @@ type dexFleetStatusDeviceListResponseGatewayIPV4JSON struct {
 	ASN         apijson.Field
 	Aso         apijson.Field
 	Location    apijson.Field
+	Name        apijson.Field
 	Netmask     apijson.Field
 	Version     apijson.Field
 	raw         string
@@ -379,9 +397,11 @@ type DEXFleetStatusDeviceListResponseGatewayIPV6 struct {
 	ASN      int64                                               `json:"asn" api:"nullable"`
 	Aso      string                                              `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseGatewayIPV6Location `json:"location"`
+	Name     string                                              `json:"name" api:"nullable"`
 	Netmask  string                                              `json:"netmask" api:"nullable"`
-	Version  string                                              `json:"version" api:"nullable"`
-	JSON     dexFleetStatusDeviceListResponseGatewayIPV6JSON     `json:"-"`
+	// IP version (`1` for IPv4, `2` for IPv6, `0` if unknown).
+	Version int64                                           `json:"version"`
+	JSON    dexFleetStatusDeviceListResponseGatewayIPV6JSON `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseGatewayIPV6JSON contains the JSON metadata for
@@ -391,6 +411,7 @@ type dexFleetStatusDeviceListResponseGatewayIPV6JSON struct {
 	ASN         apijson.Field
 	Aso         apijson.Field
 	Location    apijson.Field
+	Name        apijson.Field
 	Netmask     apijson.Field
 	Version     apijson.Field
 	raw         string
@@ -437,9 +458,11 @@ type DEXFleetStatusDeviceListResponseISPIPV4 struct {
 	ASN      int64                                           `json:"asn" api:"nullable"`
 	Aso      string                                          `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseISPIPV4Location `json:"location"`
+	Name     string                                          `json:"name" api:"nullable"`
 	Netmask  string                                          `json:"netmask" api:"nullable"`
-	Version  string                                          `json:"version" api:"nullable"`
-	JSON     dexFleetStatusDeviceListResponseIspipv4JSON     `json:"-"`
+	// IP version (`1` for IPv4, `2` for IPv6, `0` if unknown).
+	Version int64                                       `json:"version"`
+	JSON    dexFleetStatusDeviceListResponseIspipv4JSON `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseIspipv4JSON contains the JSON metadata for the
@@ -449,6 +472,7 @@ type dexFleetStatusDeviceListResponseIspipv4JSON struct {
 	ASN         apijson.Field
 	Aso         apijson.Field
 	Location    apijson.Field
+	Name        apijson.Field
 	Netmask     apijson.Field
 	Version     apijson.Field
 	raw         string
@@ -495,9 +519,11 @@ type DEXFleetStatusDeviceListResponseISPIPV6 struct {
 	ASN      int64                                           `json:"asn" api:"nullable"`
 	Aso      string                                          `json:"aso" api:"nullable"`
 	Location DEXFleetStatusDeviceListResponseISPIPV6Location `json:"location"`
+	Name     string                                          `json:"name" api:"nullable"`
 	Netmask  string                                          `json:"netmask" api:"nullable"`
-	Version  string                                          `json:"version" api:"nullable"`
-	JSON     dexFleetStatusDeviceListResponseIspipv6JSON     `json:"-"`
+	// IP version (`1` for IPv4, `2` for IPv6, `0` if unknown).
+	Version int64                                       `json:"version"`
+	JSON    dexFleetStatusDeviceListResponseIspipv6JSON `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseIspipv6JSON contains the JSON metadata for the
@@ -507,6 +533,7 @@ type dexFleetStatusDeviceListResponseIspipv6JSON struct {
 	ASN         apijson.Field
 	Aso         apijson.Field
 	Location    apijson.Field
+	Name        apijson.Field
 	Netmask     apijson.Field
 	Version     apijson.Field
 	raw         string
@@ -549,8 +576,10 @@ func (r dexFleetStatusDeviceListResponseIspipv6LocationJSON) RawJSON() string {
 }
 
 type DEXFleetStatusDeviceListResponseRamUsedPctByApp struct {
-	Name       string                                              `json:"name"`
-	RamUsedPct float64                                             `json:"ram_used_pct"`
+	// Application name.
+	Name string `json:"name" api:"nullable"`
+	// RAM usage percentage, on a scale of 0 to 100.
+	RamUsedPct float64                                             `json:"ram_used_pct" api:"nullable"`
 	JSON       dexFleetStatusDeviceListResponseRamUsedPctByAppJSON `json:"-"`
 }
 
@@ -571,25 +600,372 @@ func (r dexFleetStatusDeviceListResponseRamUsedPctByAppJSON) RawJSON() string {
 	return r.raw
 }
 
+// Round-trip time statistics for the WARP tunnel.
+type DEXFleetStatusDeviceListResponseRTT struct {
+	// Minimum round-trip time in microseconds.
+	MinRTTUs DEXFleetStatusDeviceListResponseRTTMinRTTUs `json:"minRttUs" api:"nullable"`
+	// Round-trip time in microseconds.
+	RTTUs DEXFleetStatusDeviceListResponseRTTRTTUs `json:"rttUs" api:"nullable"`
+	// Round-trip time variance in microseconds.
+	RTTVarUs DEXFleetStatusDeviceListResponseRTTRTTVarUs `json:"rttVarUs" api:"nullable"`
+	JSON     dexFleetStatusDeviceListResponseRTTJSON     `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseRTTJSON contains the JSON metadata for the
+// struct [DEXFleetStatusDeviceListResponseRTT]
+type dexFleetStatusDeviceListResponseRTTJSON struct {
+	MinRTTUs    apijson.Field
+	RTTUs       apijson.Field
+	RTTVarUs    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseRTT) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseRTTJSON) RawJSON() string {
+	return r.raw
+}
+
+// Minimum round-trip time in microseconds.
+type DEXFleetStatusDeviceListResponseRTTMinRTTUs struct {
+	Downstream int64                                           `json:"downstream" api:"nullable"`
+	Upstream   int64                                           `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseRTTMinRTTUsJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseRTTMinRTTUsJSON contains the JSON metadata for
+// the struct [DEXFleetStatusDeviceListResponseRTTMinRTTUs]
+type dexFleetStatusDeviceListResponseRTTMinRTTUsJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseRTTMinRTTUs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseRTTMinRTTUsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Round-trip time in microseconds.
+type DEXFleetStatusDeviceListResponseRTTRTTUs struct {
+	Downstream int64                                        `json:"downstream" api:"nullable"`
+	Upstream   int64                                        `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseRttrttUsJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseRttrttUsJSON contains the JSON metadata for the
+// struct [DEXFleetStatusDeviceListResponseRTTRTTUs]
+type dexFleetStatusDeviceListResponseRttrttUsJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseRTTRTTUs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseRttrttUsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Round-trip time variance in microseconds.
+type DEXFleetStatusDeviceListResponseRTTRTTVarUs struct {
+	Downstream int64                                           `json:"downstream" api:"nullable"`
+	Upstream   int64                                           `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseRttrttVarUsJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseRttrttVarUsJSON contains the JSON metadata for
+// the struct [DEXFleetStatusDeviceListResponseRTTRTTVarUs]
+type dexFleetStatusDeviceListResponseRttrttVarUsJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseRTTRTTVarUs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseRttrttVarUsJSON) RawJSON() string {
+	return r.raw
+}
+
+// WARP tunnel packet and byte counters.
+type DEXFleetStatusDeviceListResponseTunnelStats struct {
+	// Number of bytes lost, split by direction.
+	BytesLost DEXFleetStatusDeviceListResponseTunnelStatsBytesLost `json:"bytesLost" api:"nullable"`
+	// Number of bytes received, split by direction.
+	BytesReceived DEXFleetStatusDeviceListResponseTunnelStatsBytesReceived `json:"bytesReceived" api:"nullable"`
+	// Number of bytes retransmitted, split by direction.
+	BytesRetransmitted DEXFleetStatusDeviceListResponseTunnelStatsBytesRetransmitted `json:"bytesRetransmitted" api:"nullable"`
+	// Number of bytes sent, split by direction.
+	BytesSent DEXFleetStatusDeviceListResponseTunnelStatsBytesSent `json:"bytesSent" api:"nullable"`
+	// Number of packets lost, split by direction.
+	PacketsLost DEXFleetStatusDeviceListResponseTunnelStatsPacketsLost `json:"packetsLost" api:"nullable"`
+	// Number of packets received, split by direction.
+	PacketsReceived DEXFleetStatusDeviceListResponseTunnelStatsPacketsReceived `json:"packetsReceived" api:"nullable"`
+	// Number of packets retransmitted, split by direction.
+	PacketsRetransmitted DEXFleetStatusDeviceListResponseTunnelStatsPacketsRetransmitted `json:"packetsRetransmitted" api:"nullable"`
+	// Number of packets sent, split by direction.
+	PacketsSent DEXFleetStatusDeviceListResponseTunnelStatsPacketsSent `json:"packetsSent" api:"nullable"`
+	// The measurement window duration in milliseconds.
+	StatsWindowMs int64                                           `json:"statsWindowMs" api:"nullable"`
+	JSON          dexFleetStatusDeviceListResponseTunnelStatsJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseTunnelStatsJSON contains the JSON metadata for
+// the struct [DEXFleetStatusDeviceListResponseTunnelStats]
+type dexFleetStatusDeviceListResponseTunnelStatsJSON struct {
+	BytesLost            apijson.Field
+	BytesReceived        apijson.Field
+	BytesRetransmitted   apijson.Field
+	BytesSent            apijson.Field
+	PacketsLost          apijson.Field
+	PacketsReceived      apijson.Field
+	PacketsRetransmitted apijson.Field
+	PacketsSent          apijson.Field
+	StatsWindowMs        apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseTunnelStats) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseTunnelStatsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Number of bytes lost, split by direction.
+type DEXFleetStatusDeviceListResponseTunnelStatsBytesLost struct {
+	Downstream int64                                                    `json:"downstream" api:"nullable"`
+	Upstream   int64                                                    `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseTunnelStatsBytesLostJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseTunnelStatsBytesLostJSON contains the JSON
+// metadata for the struct [DEXFleetStatusDeviceListResponseTunnelStatsBytesLost]
+type dexFleetStatusDeviceListResponseTunnelStatsBytesLostJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseTunnelStatsBytesLost) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseTunnelStatsBytesLostJSON) RawJSON() string {
+	return r.raw
+}
+
+// Number of bytes received, split by direction.
+type DEXFleetStatusDeviceListResponseTunnelStatsBytesReceived struct {
+	Downstream int64                                                        `json:"downstream" api:"nullable"`
+	Upstream   int64                                                        `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseTunnelStatsBytesReceivedJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseTunnelStatsBytesReceivedJSON contains the JSON
+// metadata for the struct
+// [DEXFleetStatusDeviceListResponseTunnelStatsBytesReceived]
+type dexFleetStatusDeviceListResponseTunnelStatsBytesReceivedJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseTunnelStatsBytesReceived) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseTunnelStatsBytesReceivedJSON) RawJSON() string {
+	return r.raw
+}
+
+// Number of bytes retransmitted, split by direction.
+type DEXFleetStatusDeviceListResponseTunnelStatsBytesRetransmitted struct {
+	Downstream int64                                                             `json:"downstream" api:"nullable"`
+	Upstream   int64                                                             `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseTunnelStatsBytesRetransmittedJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseTunnelStatsBytesRetransmittedJSON contains the
+// JSON metadata for the struct
+// [DEXFleetStatusDeviceListResponseTunnelStatsBytesRetransmitted]
+type dexFleetStatusDeviceListResponseTunnelStatsBytesRetransmittedJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseTunnelStatsBytesRetransmitted) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseTunnelStatsBytesRetransmittedJSON) RawJSON() string {
+	return r.raw
+}
+
+// Number of bytes sent, split by direction.
+type DEXFleetStatusDeviceListResponseTunnelStatsBytesSent struct {
+	Downstream int64                                                    `json:"downstream" api:"nullable"`
+	Upstream   int64                                                    `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseTunnelStatsBytesSentJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseTunnelStatsBytesSentJSON contains the JSON
+// metadata for the struct [DEXFleetStatusDeviceListResponseTunnelStatsBytesSent]
+type dexFleetStatusDeviceListResponseTunnelStatsBytesSentJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseTunnelStatsBytesSent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseTunnelStatsBytesSentJSON) RawJSON() string {
+	return r.raw
+}
+
+// Number of packets lost, split by direction.
+type DEXFleetStatusDeviceListResponseTunnelStatsPacketsLost struct {
+	Downstream int64                                                      `json:"downstream" api:"nullable"`
+	Upstream   int64                                                      `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseTunnelStatsPacketsLostJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseTunnelStatsPacketsLostJSON contains the JSON
+// metadata for the struct [DEXFleetStatusDeviceListResponseTunnelStatsPacketsLost]
+type dexFleetStatusDeviceListResponseTunnelStatsPacketsLostJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseTunnelStatsPacketsLost) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseTunnelStatsPacketsLostJSON) RawJSON() string {
+	return r.raw
+}
+
+// Number of packets received, split by direction.
+type DEXFleetStatusDeviceListResponseTunnelStatsPacketsReceived struct {
+	Downstream int64                                                          `json:"downstream" api:"nullable"`
+	Upstream   int64                                                          `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseTunnelStatsPacketsReceivedJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseTunnelStatsPacketsReceivedJSON contains the JSON
+// metadata for the struct
+// [DEXFleetStatusDeviceListResponseTunnelStatsPacketsReceived]
+type dexFleetStatusDeviceListResponseTunnelStatsPacketsReceivedJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseTunnelStatsPacketsReceived) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseTunnelStatsPacketsReceivedJSON) RawJSON() string {
+	return r.raw
+}
+
+// Number of packets retransmitted, split by direction.
+type DEXFleetStatusDeviceListResponseTunnelStatsPacketsRetransmitted struct {
+	Downstream int64                                                               `json:"downstream" api:"nullable"`
+	Upstream   int64                                                               `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseTunnelStatsPacketsRetransmittedJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseTunnelStatsPacketsRetransmittedJSON contains the
+// JSON metadata for the struct
+// [DEXFleetStatusDeviceListResponseTunnelStatsPacketsRetransmitted]
+type dexFleetStatusDeviceListResponseTunnelStatsPacketsRetransmittedJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseTunnelStatsPacketsRetransmitted) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseTunnelStatsPacketsRetransmittedJSON) RawJSON() string {
+	return r.raw
+}
+
+// Number of packets sent, split by direction.
+type DEXFleetStatusDeviceListResponseTunnelStatsPacketsSent struct {
+	Downstream int64                                                      `json:"downstream" api:"nullable"`
+	Upstream   int64                                                      `json:"upstream" api:"nullable"`
+	JSON       dexFleetStatusDeviceListResponseTunnelStatsPacketsSentJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseTunnelStatsPacketsSentJSON contains the JSON
+// metadata for the struct [DEXFleetStatusDeviceListResponseTunnelStatsPacketsSent]
+type dexFleetStatusDeviceListResponseTunnelStatsPacketsSentJSON struct {
+	Downstream  apijson.Field
+	Upstream    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusDeviceListResponseTunnelStatsPacketsSent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusDeviceListResponseTunnelStatsPacketsSentJSON) RawJSON() string {
+	return r.raw
+}
+
 type DEXFleetStatusDeviceListParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Time range beginning in ISO format
+	// Start of the time range to query. Timestamp can be provided in ISO 8601 datetime
+	// format or milliseconds since epoch.
 	From param.Field[string] `query:"from" api:"required"`
-	// Page number
+	// Page number of paginated results.
 	Page param.Field[float64] `query:"page" api:"required"`
-	// Number of results per page
+	// Number of results per page.
 	PerPage param.Field[float64] `query:"per_page" api:"required"`
-	// Time range end in ISO format
+	// End of the time range to query. Timestamp can be provided in ISO 8601 datetime
+	// format or milliseconds since epoch.
 	To param.Field[string] `query:"to" api:"required"`
-	// Cloudflare colo
+	// Cloudflare colo airport code.
 	Colo param.Field[string] `query:"colo"`
-	// Device-specific ID, given as UUID v4
+	// Device-specific ID, given as UUID.
 	DeviceID param.Field[string] `query:"device_id"`
-	// The mode under which the WARP client is run
+	// The mode under which the WARP client is run.
 	Mode param.Field[string] `query:"mode"`
-	// Operating system
+	// Operating system.
 	Platform param.Field[string] `query:"platform"`
-	// Dimension to sort results by
+	// Dimension to sort results by.
 	SortBy param.Field[DEXFleetStatusDeviceListParamsSortBy] `query:"sort_by"`
 	// Source:
 	//
@@ -599,9 +975,9 @@ type DEXFleetStatusDeviceListParams struct {
 	//     instead for longer time ranges.
 	//   - `raw` - device details, up to 7 days prior
 	Source param.Field[DEXFleetStatusDeviceListParamsSource] `query:"source"`
-	// Network status
+	// Network status.
 	Status param.Field[string] `query:"status"`
-	// WARP client version
+	// WARP client version.
 	Version param.Field[string] `query:"version"`
 }
 
@@ -614,7 +990,7 @@ func (r DEXFleetStatusDeviceListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Dimension to sort results by
+// Dimension to sort results by.
 type DEXFleetStatusDeviceListParamsSortBy string
 
 const (

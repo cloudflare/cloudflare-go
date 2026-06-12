@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"reflect"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
@@ -60,27 +61,29 @@ type DexwarpChangeEventGetResponse struct {
 	AccountName string `json:"account_name"`
 	// The public account identifier.
 	AccountTag string `json:"account_tag"`
-	// API Resource UUID tag.
+	// The device ID.
 	DeviceID string `json:"device_id"`
-	// API Resource UUID tag.
+	// Deprecated: use registration_id. The device registration ID.
+	//
+	// Deprecated: Use `registration_id` instead.
 	DeviceRegistration string `json:"device_registration"`
 	// This field can have the runtime type of
 	// [DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventFrom].
 	From interface{} `json:"from"`
-	// The hostname of the machine the event is from
+	// The hostname of the machine the event is from.
 	Hostname string `json:"hostname"`
-	// API Resource UUID tag.
+	// The device registration ID.
 	RegistrationID string `json:"registration_id"`
-	// The serial number of the machine the event is from
+	// The serial number of the machine the event is from.
 	SerialNumber string `json:"serial_number"`
-	// Timestamp in ISO format
-	Timestamp string `json:"timestamp"`
+	// The event time.
+	Timestamp time.Time `json:"timestamp" format:"date-time"`
 	// This field can have the runtime type of
 	// [DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventTo].
 	To interface{} `json:"to"`
 	// The state of the WARP toggle.
 	Toggle DexwarpChangeEventGetResponseToggle `json:"toggle"`
-	// Email tied to the device
+	// Email tied to the device.
 	UserEmail string                            `json:"user_email"`
 	JSON      dexwarpChangeEventGetResponseJSON `json:"-"`
 	union     DexwarpChangeEventGetResponseUnion
@@ -156,21 +159,23 @@ type DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChangeEve
 	AccountName string `json:"account_name"`
 	// The public account identifier.
 	AccountTag string `json:"account_tag"`
-	// API Resource UUID tag.
+	// The device ID.
 	DeviceID string `json:"device_id"`
-	// API Resource UUID tag.
+	// Deprecated: use registration_id. The device registration ID.
+	//
+	// Deprecated: Use `registration_id` instead.
 	DeviceRegistration string `json:"device_registration"`
-	// The hostname of the machine the event is from
+	// The hostname of the machine the event is from.
 	Hostname string `json:"hostname"`
-	// API Resource UUID tag.
+	// The device registration ID.
 	RegistrationID string `json:"registration_id"`
-	// The serial number of the machine the event is from
+	// The serial number of the machine the event is from.
 	SerialNumber string `json:"serial_number"`
-	// Timestamp in ISO format
-	Timestamp string `json:"timestamp"`
+	// The event time.
+	Timestamp time.Time `json:"timestamp" format:"date-time"`
 	// The state of the WARP toggle.
 	Toggle DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChangeEventToggle `json:"toggle"`
-	// Email tied to the device
+	// Email tied to the device.
 	UserEmail string                                                                            `json:"user_email"`
 	JSON      dexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChangeEventJSON `json:"-"`
 }
@@ -221,21 +226,25 @@ func (r DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChange
 }
 
 type DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEvent struct {
-	// API Resource UUID tag.
+	// The device ID.
 	DeviceID string `json:"device_id"`
-	// API Resource UUID tag.
-	DeviceRegistration string                                                                            `json:"device_registration"`
-	From               DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventFrom `json:"from"`
-	// The hostname of the machine the event is from
+	// Deprecated: use registration_id. The device registration ID.
+	//
+	// Deprecated: Use `registration_id` instead.
+	DeviceRegistration string `json:"device_registration"`
+	// The details for the WARP configuration that was switched from.
+	From DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventFrom `json:"from"`
+	// The hostname of the machine the event is from.
 	Hostname string `json:"hostname"`
-	// API Resource UUID tag.
+	// The device registration ID.
 	RegistrationID string `json:"registration_id"`
-	// The serial number of the machine the event is from
+	// The serial number of the machine the event is from.
 	SerialNumber string `json:"serial_number"`
-	// Timestamp in ISO format
-	Timestamp string                                                                          `json:"timestamp"`
-	To        DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventTo `json:"to"`
-	// Email tied to the device
+	// The event time.
+	Timestamp time.Time `json:"timestamp" format:"date-time"`
+	// The details for the WARP configuration that was switched to.
+	To DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventTo `json:"to"`
+	// Email tied to the device.
 	UserEmail string                                                                            `json:"user_email"`
 	JSON      dexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventJSON `json:"-"`
 }
@@ -268,10 +277,11 @@ func (r dexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChange
 func (r DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEvent) implementsDexwarpChangeEventGetResponse() {
 }
 
+// The details for the WARP configuration that was switched from.
 type DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventFrom struct {
 	// The account name.
 	AccountName string `json:"account_name"`
-	// API Resource UUID tag.
+	// The public account identifier.
 	AccountTag string `json:"account_tag"`
 	// The name of the WARP configuration.
 	ConfigName string                                                                                `json:"config_name"`
@@ -297,10 +307,11 @@ func (r dexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChange
 	return r.raw
 }
 
+// The details for the WARP configuration that was switched to.
 type DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventTo struct {
 	// The account name.
 	AccountName string `json:"account_name"`
-	// API Resource UUID tag.
+	// The public account identifier.
 	AccountTag string `json:"account_tag"`
 	// The name of the WARP configuration.
 	ConfigName string                                                                              `json:"config_name"`
@@ -343,14 +354,15 @@ func (r DexwarpChangeEventGetResponseToggle) IsKnown() bool {
 }
 
 type DEXWARPChangeEventGetParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Start time for the query in ISO (RFC3339 - ISO 8601) format
+	// Start time for the query in ISO (RFC3339 - ISO 8601) format.
 	From param.Field[string] `query:"from" api:"required"`
-	// Page number of paginated results
+	// Page number of paginated results.
 	Page param.Field[float64] `query:"page" api:"required"`
-	// Number of items per page
+	// Number of results per page.
 	PerPage param.Field[float64] `query:"per_page" api:"required"`
-	// End time for the query in ISO (RFC3339 - ISO 8601) format
+	// End time for the query in ISO (RFC3339 - ISO 8601) format.
 	To param.Field[string] `query:"to" api:"required"`
 	// Filter events by account name.
 	AccountName param.Field[string] `query:"account_name"`
@@ -361,7 +373,7 @@ type DEXWARPChangeEventGetParams struct {
 	SortOrder param.Field[DexwarpChangeEventGetParamsSortOrder] `query:"sort_order"`
 	// Filter events by type toggle value. Applicable to type='toggle' events only.
 	Toggle param.Field[DexwarpChangeEventGetParamsToggle] `query:"toggle"`
-	// Filter events by type 'config' or 'toggle'
+	// Filter events by type 'config' or 'toggle'.
 	Type param.Field[DexwarpChangeEventGetParamsType] `query:"type"`
 }
 
@@ -406,7 +418,7 @@ func (r DexwarpChangeEventGetParamsToggle) IsKnown() bool {
 	return false
 }
 
-// Filter events by type 'config' or 'toggle'
+// Filter events by type 'config' or 'toggle'.
 type DexwarpChangeEventGetParamsType string
 
 const (

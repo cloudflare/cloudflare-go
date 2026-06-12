@@ -38,7 +38,7 @@ func NewDEXFleetStatusService(opts ...option.RequestOption) (r *DEXFleetStatusSe
 	return
 }
 
-// List details for live (up to 60 minutes) devices using WARP
+// List details for live (up to 60 minutes) devices using WARP.
 func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusLiveParams, opts ...option.RequestOption) (res *DEXFleetStatusLiveResponse, err error) {
 	var env DEXFleetStatusLiveResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +55,7 @@ func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusL
 	return res, nil
 }
 
-// List details for devices using WARP, up to 7 days
+// List details for devices using WARP, up to 7 days.
 func (r *DEXFleetStatusService) OverTime(ctx context.Context, params DEXFleetStatusOverTimeParams, opts ...option.RequestOption) (res *DEXFleetStatusOverTimeResponse, err error) {
 	var env DEXFleetStatusOverTimeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -196,7 +196,6 @@ func (r dexFleetStatusOverTimeResponseDeviceStatsJSON) RawJSON() string {
 }
 
 type DEXFleetStatusOverTimeResponseDeviceStatsByMode struct {
-	// Timestamp in ISO format
 	Timestamp string `json:"timestamp"`
 	// Number of unique devices
 	UniqueDevicesTotal float64                                             `json:"uniqueDevicesTotal"`
@@ -223,7 +222,6 @@ func (r dexFleetStatusOverTimeResponseDeviceStatsByModeJSON) RawJSON() string {
 }
 
 type DEXFleetStatusOverTimeResponseDeviceStatsByStatus struct {
-	// Timestamp in ISO format
 	Timestamp string `json:"timestamp"`
 	// Number of unique devices
 	UniqueDevicesTotal float64                                               `json:"uniqueDevicesTotal"`
@@ -250,8 +248,9 @@ func (r dexFleetStatusOverTimeResponseDeviceStatsByStatusJSON) RawJSON() string 
 }
 
 type DEXFleetStatusLiveParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Number of minutes before current time
+	// Number of minutes before current time.
 	SinceMinutes param.Field[float64] `query:"since_minutes" api:"required"`
 }
 
@@ -404,14 +403,17 @@ func (r DEXFleetStatusLiveResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DEXFleetStatusOverTimeParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Time range beginning in ISO format
+	// Start of the time range to query. Timestamp can be provided in ISO 8601 datetime
+	// format or milliseconds since epoch.
 	From param.Field[string] `query:"from" api:"required"`
-	// Time range end in ISO format
+	// End of the time range to query. Timestamp can be provided in ISO 8601 datetime
+	// format or milliseconds since epoch.
 	To param.Field[string] `query:"to" api:"required"`
-	// Cloudflare colo
+	// Cloudflare colo airport code.
 	Colo param.Field[string] `query:"colo"`
-	// Device-specific ID, given as UUID v4
+	// Device-specific ID, given as UUID.
 	DeviceID param.Field[string] `query:"device_id"`
 }
 

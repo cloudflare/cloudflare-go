@@ -76,11 +76,12 @@ func (r uniqueDevicesJSON) RawJSON() string {
 }
 
 type DEXTestUniqueDeviceListParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optionally filter result stats to a specific device(s). Cannot be used in
 	// combination with colo param.
 	DeviceID param.Field[[]string] `query:"deviceId"`
-	// Optionally filter results by test name
+	// Optionally filter results by test name.
 	TestName param.Field[string] `query:"testName"`
 }
 

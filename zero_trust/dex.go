@@ -49,7 +49,7 @@ func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 type DigitalExperienceMonitor struct {
 	// API Resource UUID tag.
 	ID string `json:"id" api:"required"`
-	// Whether the policy is the default for the account
+	// Whether the policy is the default for the account.
 	Default bool                         `json:"default" api:"required"`
 	Name    string                       `json:"name" api:"required"`
 	JSON    digitalExperienceMonitorJSON `json:"-"`
@@ -175,14 +175,15 @@ func (r NetworkPathSamplingUnit) IsKnown() bool {
 
 type NetworkPathResponse struct {
 	// API Resource UUID tag.
-	ID         string `json:"id" api:"required"`
+	ID string `json:"id" api:"required"`
+	// Name of the device that ran the test.
 	DeviceName string `json:"deviceName"`
 	// The interval at which the Traceroute synthetic application test is set to run.
 	Interval    string                  `json:"interval"`
 	Kind        NetworkPathResponseKind `json:"kind"`
 	Name        string                  `json:"name"`
 	NetworkPath NetworkPath             `json:"networkPath" api:"nullable"`
-	// The host of the Traceroute synthetic application test
+	// The host of the Traceroute synthetic application test.
 	URL  string                  `json:"url"`
 	JSON networkPathResponseJSON `json:"-"`
 }
@@ -224,13 +225,13 @@ func (r NetworkPathResponseKind) IsKnown() bool {
 }
 
 type Percentiles struct {
-	// p50 observed in the time period
+	// p50 observed in the time period.
 	P50 float64 `json:"p50" api:"nullable"`
-	// p90 observed in the time period
+	// p90 observed in the time period.
 	P90 float64 `json:"p90" api:"nullable"`
-	// p95 observed in the time period
+	// p95 observed in the time period.
 	P95 float64 `json:"p95" api:"nullable"`
-	// p99 observed in the time period
+	// p99 observed in the time period.
 	P99  float64         `json:"p99" api:"nullable"`
 	JSON percentilesJSON `json:"-"`
 }

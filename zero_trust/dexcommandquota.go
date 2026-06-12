@@ -54,11 +54,11 @@ func (r *DEXCommandQuotaService) Get(ctx context.Context, query DEXCommandQuotaG
 }
 
 type DEXCommandQuotaGetResponse struct {
-	// The remaining number of commands that can be initiated for an account
+	// The total number of commands that can be initiated for an account.
 	Quota float64 `json:"quota" api:"required"`
-	// The number of commands that have been initiated for an account
+	// The number of commands that have been initiated for an account.
 	QuotaUsage float64 `json:"quota_usage" api:"required"`
-	// The time when the quota resets
+	// The time when the quota resets.
 	ResetTime time.Time                      `json:"reset_time" api:"required" format:"date-time"`
 	JSON      dexCommandQuotaGetResponseJSON `json:"-"`
 }
@@ -82,6 +82,7 @@ func (r dexCommandQuotaGetResponseJSON) RawJSON() string {
 }
 
 type DEXCommandQuotaGetParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

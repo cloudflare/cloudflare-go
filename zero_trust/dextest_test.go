@@ -30,12 +30,12 @@ func TestDEXTestListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.DEX.Tests.List(context.TODO(), zero_trust.DEXTestListParams{
 		AccountID:      cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		Colo:           cloudflare.F("colo"),
-		DeviceID:       cloudflare.F([]string{"string"}),
+		Colo:           cloudflare.F("SJC"),
+		DeviceID:       cloudflare.F([]string{"cb49c27f-7f97-49c5-b6f3-f7c01ead0fd7"}),
 		Kind:           cloudflare.F(zero_trust.DEXTestListParamsKindHTTP),
 		Page:           cloudflare.F(1.000000),
-		PerPage:        cloudflare.F(1.000000),
-		RegistrationID: cloudflare.F("registration_id"),
+		PerPage:        cloudflare.F(10.000000),
+		RegistrationID: cloudflare.F("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
 		TestName:       cloudflare.F("testName"),
 	})
 	if err != nil {

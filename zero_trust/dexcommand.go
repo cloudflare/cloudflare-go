@@ -44,7 +44,7 @@ func NewDEXCommandService(opts ...option.RequestOption) (r *DEXCommandService) {
 	return
 }
 
-// Initiate commands for up to 10 devices per account
+// Initiate commands for up to 10 devices per account.
 func (r *DEXCommandService) New(ctx context.Context, params DEXCommandNewParams, opts ...option.RequestOption) (res *DEXCommandNewResponse, err error) {
 	var env DEXCommandNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -227,6 +227,7 @@ func (r dexCommandListResponseCommandJSON) RawJSON() string {
 }
 
 type DEXCommandNewParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// List of device-level commands to execute
 	Commands param.Field[[]DEXCommandNewParamsCommand] `json:"commands" api:"required"`
@@ -536,22 +537,23 @@ func (r dexCommandNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type DEXCommandListParams struct {
+	// Unique identifier linked to an account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Page number for pagination
+	// Page number of paginated results.
 	Page param.Field[float64] `query:"page" api:"required"`
-	// Number of results per page
+	// Number of results per page.
 	PerPage param.Field[float64] `query:"per_page" api:"required"`
-	// Optionally filter executed commands by command type
+	// Optionally filter executed commands by command type.
 	CommandType param.Field[DEXCommandListParamsCommandType] `query:"command_type"`
-	// Unique identifier for a device
+	// Unique identifier for a device.
 	DeviceID param.Field[string] `query:"device_id"`
-	// Start time for the query in ISO (RFC3339 - ISO 8601) format
+	// Start time for the query in ISO (RFC3339 - ISO 8601) format.
 	From param.Field[time.Time] `query:"from" format:"date-time"`
-	// Optionally filter executed commands by status
+	// Optionally filter executed commands by status.
 	Status param.Field[DEXCommandListParamsStatus] `query:"status"`
-	// End time for the query in ISO (RFC3339 - ISO 8601) format
+	// End time for the query in ISO (RFC3339 - ISO 8601) format.
 	To param.Field[time.Time] `query:"to" format:"date-time"`
-	// Email tied to the device
+	// Email tied to the device.
 	UserEmail param.Field[string] `query:"user_email"`
 }
 
@@ -563,7 +565,7 @@ func (r DEXCommandListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Optionally filter executed commands by command type
+// Optionally filter executed commands by command type.
 type DEXCommandListParamsCommandType string
 
 const (
@@ -580,7 +582,7 @@ func (r DEXCommandListParamsCommandType) IsKnown() bool {
 	return false
 }
 
-// Optionally filter executed commands by status
+// Optionally filter executed commands by status.
 type DEXCommandListParamsStatus string
 
 const (
