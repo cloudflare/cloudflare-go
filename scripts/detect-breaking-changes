@@ -716,6 +716,7 @@ TEST_PATHS=(
 	cloudforce_one/threateventtargetindustry_test.go
 	ai_gateway/aigateway_test.go
 	ai_gateway/evaluationtype_test.go
+	ai_gateway/customprovider_test.go
 	ai_gateway/log_test.go
 	ai_gateway/dataset_test.go
 	ai_gateway/evaluation_test.go

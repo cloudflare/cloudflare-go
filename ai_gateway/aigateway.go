@@ -30,6 +30,7 @@ import (
 type AIGatewayService struct {
 	Options         []option.RequestOption
 	EvaluationTypes *EvaluationTypeService
+	CustomProviders *CustomProviderService
 	Logs            *LogService
 	Datasets        *DatasetService
 	Evaluations     *EvaluationService
@@ -46,6 +47,7 @@ func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 	r = &AIGatewayService{}
 	r.Options = opts
 	r.EvaluationTypes = NewEvaluationTypeService(opts...)
+	r.CustomProviders = NewCustomProviderService(opts...)
 	r.Logs = NewLogService(opts...)
 	r.Datasets = NewDatasetService(opts...)
 	r.Evaluations = NewEvaluationService(opts...)
