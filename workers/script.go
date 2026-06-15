@@ -1983,7 +1983,8 @@ type ScriptUpdateParamsMetadata struct {
 	// `compatibility_date`.
 	CompatibilityFlags param.Field[[]string] `json:"compatibility_flags"`
 	// Retain assets which exist for a previously uploaded Worker version; used in lieu
-	// of providing a completion token.
+	// of providing a completion token. An explicit `assets` upload takes precedence
+	// over `keep_assets`.
 	KeepAssets param.Field[bool] `json:"keep_assets"`
 	// List of binding types to keep from previous_upload.
 	KeepBindings param.Field[[]string] `json:"keep_bindings"`
