@@ -143,68 +143,72 @@ func (r *ThreatEventService) Get(ctx context.Context, eventID string, query Thre
 }
 
 type ThreatEventNewResponse struct {
-	Attacker        string                     `json:"attacker" api:"required"`
-	AttackerCountry string                     `json:"attackerCountry" api:"required"`
-	Category        string                     `json:"category" api:"required"`
-	DatasetID       string                     `json:"datasetId" api:"required"`
-	Date            string                     `json:"date" api:"required"`
-	Event           string                     `json:"event" api:"required"`
-	HasChildren     bool                       `json:"hasChildren" api:"required"`
-	Indicator       string                     `json:"indicator" api:"required"`
-	IndicatorType   string                     `json:"indicatorType" api:"required"`
-	IndicatorTypeID float64                    `json:"indicatorTypeId" api:"required"`
-	KillChain       float64                    `json:"killChain" api:"required"`
-	MitreAttack     []string                   `json:"mitreAttack" api:"required"`
-	MitreCapec      []string                   `json:"mitreCapec" api:"required"`
-	NumReferenced   float64                    `json:"numReferenced" api:"required"`
-	NumReferences   float64                    `json:"numReferences" api:"required"`
-	RawID           string                     `json:"rawId" api:"required"`
-	Referenced      []string                   `json:"referenced" api:"required"`
-	ReferencedIDs   []float64                  `json:"referencedIds" api:"required"`
-	References      []string                   `json:"references" api:"required"`
-	ReferencesIDs   []float64                  `json:"referencesIds" api:"required"`
-	Tags            []string                   `json:"tags" api:"required"`
-	TargetCountry   string                     `json:"targetCountry" api:"required"`
-	TargetIndustry  string                     `json:"targetIndustry" api:"required"`
-	TLP             string                     `json:"tlp" api:"required"`
-	UUID            string                     `json:"uuid" api:"required"`
-	Insight         string                     `json:"insight"`
-	ReleasabilityID string                     `json:"releasabilityId"`
-	JSON            threatEventNewResponseJSON `json:"-"`
+	Attacker              string                     `json:"attacker" api:"required"`
+	AttackerCountry       string                     `json:"attackerCountry" api:"required"`
+	AttackerCountryAlpha3 string                     `json:"attackerCountryAlpha3" api:"required"`
+	Category              string                     `json:"category" api:"required"`
+	DatasetID             string                     `json:"datasetId" api:"required"`
+	Date                  string                     `json:"date" api:"required"`
+	Event                 string                     `json:"event" api:"required"`
+	HasChildren           bool                       `json:"hasChildren" api:"required"`
+	Indicator             string                     `json:"indicator" api:"required"`
+	IndicatorType         string                     `json:"indicatorType" api:"required"`
+	IndicatorTypeID       float64                    `json:"indicatorTypeId" api:"required"`
+	KillChain             float64                    `json:"killChain" api:"required"`
+	MitreAttack           []string                   `json:"mitreAttack" api:"required"`
+	MitreCapec            []string                   `json:"mitreCapec" api:"required"`
+	NumReferenced         float64                    `json:"numReferenced" api:"required"`
+	NumReferences         float64                    `json:"numReferences" api:"required"`
+	RawID                 string                     `json:"rawId" api:"required"`
+	Referenced            []string                   `json:"referenced" api:"required"`
+	ReferencedIDs         []float64                  `json:"referencedIds" api:"required"`
+	References            []string                   `json:"references" api:"required"`
+	ReferencesIDs         []float64                  `json:"referencesIds" api:"required"`
+	Tags                  []string                   `json:"tags" api:"required"`
+	TargetCountry         string                     `json:"targetCountry" api:"required"`
+	TargetCountryAlpha3   string                     `json:"targetCountryAlpha3" api:"required"`
+	TargetIndustry        string                     `json:"targetIndustry" api:"required"`
+	TLP                   string                     `json:"tlp" api:"required"`
+	UUID                  string                     `json:"uuid" api:"required"`
+	Insight               string                     `json:"insight"`
+	ReleasabilityID       string                     `json:"releasabilityId"`
+	JSON                  threatEventNewResponseJSON `json:"-"`
 }
 
 // threatEventNewResponseJSON contains the JSON metadata for the struct
 // [ThreatEventNewResponse]
 type threatEventNewResponseJSON struct {
-	Attacker        apijson.Field
-	AttackerCountry apijson.Field
-	Category        apijson.Field
-	DatasetID       apijson.Field
-	Date            apijson.Field
-	Event           apijson.Field
-	HasChildren     apijson.Field
-	Indicator       apijson.Field
-	IndicatorType   apijson.Field
-	IndicatorTypeID apijson.Field
-	KillChain       apijson.Field
-	MitreAttack     apijson.Field
-	MitreCapec      apijson.Field
-	NumReferenced   apijson.Field
-	NumReferences   apijson.Field
-	RawID           apijson.Field
-	Referenced      apijson.Field
-	ReferencedIDs   apijson.Field
-	References      apijson.Field
-	ReferencesIDs   apijson.Field
-	Tags            apijson.Field
-	TargetCountry   apijson.Field
-	TargetIndustry  apijson.Field
-	TLP             apijson.Field
-	UUID            apijson.Field
-	Insight         apijson.Field
-	ReleasabilityID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Attacker              apijson.Field
+	AttackerCountry       apijson.Field
+	AttackerCountryAlpha3 apijson.Field
+	Category              apijson.Field
+	DatasetID             apijson.Field
+	Date                  apijson.Field
+	Event                 apijson.Field
+	HasChildren           apijson.Field
+	Indicator             apijson.Field
+	IndicatorType         apijson.Field
+	IndicatorTypeID       apijson.Field
+	KillChain             apijson.Field
+	MitreAttack           apijson.Field
+	MitreCapec            apijson.Field
+	NumReferenced         apijson.Field
+	NumReferences         apijson.Field
+	RawID                 apijson.Field
+	Referenced            apijson.Field
+	ReferencedIDs         apijson.Field
+	References            apijson.Field
+	ReferencesIDs         apijson.Field
+	Tags                  apijson.Field
+	TargetCountry         apijson.Field
+	TargetCountryAlpha3   apijson.Field
+	TargetIndustry        apijson.Field
+	TLP                   apijson.Field
+	UUID                  apijson.Field
+	Insight               apijson.Field
+	ReleasabilityID       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *ThreatEventNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -216,68 +220,72 @@ func (r threatEventNewResponseJSON) RawJSON() string {
 }
 
 type ThreatEventListResponse struct {
-	Attacker        string                      `json:"attacker" api:"required"`
-	AttackerCountry string                      `json:"attackerCountry" api:"required"`
-	Category        string                      `json:"category" api:"required"`
-	DatasetID       string                      `json:"datasetId" api:"required"`
-	Date            string                      `json:"date" api:"required"`
-	Event           string                      `json:"event" api:"required"`
-	HasChildren     bool                        `json:"hasChildren" api:"required"`
-	Indicator       string                      `json:"indicator" api:"required"`
-	IndicatorType   string                      `json:"indicatorType" api:"required"`
-	IndicatorTypeID float64                     `json:"indicatorTypeId" api:"required"`
-	KillChain       float64                     `json:"killChain" api:"required"`
-	MitreAttack     []string                    `json:"mitreAttack" api:"required"`
-	MitreCapec      []string                    `json:"mitreCapec" api:"required"`
-	NumReferenced   float64                     `json:"numReferenced" api:"required"`
-	NumReferences   float64                     `json:"numReferences" api:"required"`
-	RawID           string                      `json:"rawId" api:"required"`
-	Referenced      []string                    `json:"referenced" api:"required"`
-	ReferencedIDs   []float64                   `json:"referencedIds" api:"required"`
-	References      []string                    `json:"references" api:"required"`
-	ReferencesIDs   []float64                   `json:"referencesIds" api:"required"`
-	Tags            []string                    `json:"tags" api:"required"`
-	TargetCountry   string                      `json:"targetCountry" api:"required"`
-	TargetIndustry  string                      `json:"targetIndustry" api:"required"`
-	TLP             string                      `json:"tlp" api:"required"`
-	UUID            string                      `json:"uuid" api:"required"`
-	Insight         string                      `json:"insight"`
-	ReleasabilityID string                      `json:"releasabilityId"`
-	JSON            threatEventListResponseJSON `json:"-"`
+	Attacker              string                      `json:"attacker" api:"required"`
+	AttackerCountry       string                      `json:"attackerCountry" api:"required"`
+	AttackerCountryAlpha3 string                      `json:"attackerCountryAlpha3" api:"required"`
+	Category              string                      `json:"category" api:"required"`
+	DatasetID             string                      `json:"datasetId" api:"required"`
+	Date                  string                      `json:"date" api:"required"`
+	Event                 string                      `json:"event" api:"required"`
+	HasChildren           bool                        `json:"hasChildren" api:"required"`
+	Indicator             string                      `json:"indicator" api:"required"`
+	IndicatorType         string                      `json:"indicatorType" api:"required"`
+	IndicatorTypeID       float64                     `json:"indicatorTypeId" api:"required"`
+	KillChain             float64                     `json:"killChain" api:"required"`
+	MitreAttack           []string                    `json:"mitreAttack" api:"required"`
+	MitreCapec            []string                    `json:"mitreCapec" api:"required"`
+	NumReferenced         float64                     `json:"numReferenced" api:"required"`
+	NumReferences         float64                     `json:"numReferences" api:"required"`
+	RawID                 string                      `json:"rawId" api:"required"`
+	Referenced            []string                    `json:"referenced" api:"required"`
+	ReferencedIDs         []float64                   `json:"referencedIds" api:"required"`
+	References            []string                    `json:"references" api:"required"`
+	ReferencesIDs         []float64                   `json:"referencesIds" api:"required"`
+	Tags                  []string                    `json:"tags" api:"required"`
+	TargetCountry         string                      `json:"targetCountry" api:"required"`
+	TargetCountryAlpha3   string                      `json:"targetCountryAlpha3" api:"required"`
+	TargetIndustry        string                      `json:"targetIndustry" api:"required"`
+	TLP                   string                      `json:"tlp" api:"required"`
+	UUID                  string                      `json:"uuid" api:"required"`
+	Insight               string                      `json:"insight"`
+	ReleasabilityID       string                      `json:"releasabilityId"`
+	JSON                  threatEventListResponseJSON `json:"-"`
 }
 
 // threatEventListResponseJSON contains the JSON metadata for the struct
 // [ThreatEventListResponse]
 type threatEventListResponseJSON struct {
-	Attacker        apijson.Field
-	AttackerCountry apijson.Field
-	Category        apijson.Field
-	DatasetID       apijson.Field
-	Date            apijson.Field
-	Event           apijson.Field
-	HasChildren     apijson.Field
-	Indicator       apijson.Field
-	IndicatorType   apijson.Field
-	IndicatorTypeID apijson.Field
-	KillChain       apijson.Field
-	MitreAttack     apijson.Field
-	MitreCapec      apijson.Field
-	NumReferenced   apijson.Field
-	NumReferences   apijson.Field
-	RawID           apijson.Field
-	Referenced      apijson.Field
-	ReferencedIDs   apijson.Field
-	References      apijson.Field
-	ReferencesIDs   apijson.Field
-	Tags            apijson.Field
-	TargetCountry   apijson.Field
-	TargetIndustry  apijson.Field
-	TLP             apijson.Field
-	UUID            apijson.Field
-	Insight         apijson.Field
-	ReleasabilityID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Attacker              apijson.Field
+	AttackerCountry       apijson.Field
+	AttackerCountryAlpha3 apijson.Field
+	Category              apijson.Field
+	DatasetID             apijson.Field
+	Date                  apijson.Field
+	Event                 apijson.Field
+	HasChildren           apijson.Field
+	Indicator             apijson.Field
+	IndicatorType         apijson.Field
+	IndicatorTypeID       apijson.Field
+	KillChain             apijson.Field
+	MitreAttack           apijson.Field
+	MitreCapec            apijson.Field
+	NumReferenced         apijson.Field
+	NumReferences         apijson.Field
+	RawID                 apijson.Field
+	Referenced            apijson.Field
+	ReferencedIDs         apijson.Field
+	References            apijson.Field
+	ReferencesIDs         apijson.Field
+	Tags                  apijson.Field
+	TargetCountry         apijson.Field
+	TargetCountryAlpha3   apijson.Field
+	TargetIndustry        apijson.Field
+	TLP                   apijson.Field
+	UUID                  apijson.Field
+	Insight               apijson.Field
+	ReleasabilityID       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *ThreatEventListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -384,68 +392,72 @@ func (r threatEventBulkNewResponseErrorJSON) RawJSON() string {
 }
 
 type ThreatEventEditResponse struct {
-	Attacker        string                      `json:"attacker" api:"required"`
-	AttackerCountry string                      `json:"attackerCountry" api:"required"`
-	Category        string                      `json:"category" api:"required"`
-	DatasetID       string                      `json:"datasetId" api:"required"`
-	Date            string                      `json:"date" api:"required"`
-	Event           string                      `json:"event" api:"required"`
-	HasChildren     bool                        `json:"hasChildren" api:"required"`
-	Indicator       string                      `json:"indicator" api:"required"`
-	IndicatorType   string                      `json:"indicatorType" api:"required"`
-	IndicatorTypeID float64                     `json:"indicatorTypeId" api:"required"`
-	KillChain       float64                     `json:"killChain" api:"required"`
-	MitreAttack     []string                    `json:"mitreAttack" api:"required"`
-	MitreCapec      []string                    `json:"mitreCapec" api:"required"`
-	NumReferenced   float64                     `json:"numReferenced" api:"required"`
-	NumReferences   float64                     `json:"numReferences" api:"required"`
-	RawID           string                      `json:"rawId" api:"required"`
-	Referenced      []string                    `json:"referenced" api:"required"`
-	ReferencedIDs   []float64                   `json:"referencedIds" api:"required"`
-	References      []string                    `json:"references" api:"required"`
-	ReferencesIDs   []float64                   `json:"referencesIds" api:"required"`
-	Tags            []string                    `json:"tags" api:"required"`
-	TargetCountry   string                      `json:"targetCountry" api:"required"`
-	TargetIndustry  string                      `json:"targetIndustry" api:"required"`
-	TLP             string                      `json:"tlp" api:"required"`
-	UUID            string                      `json:"uuid" api:"required"`
-	Insight         string                      `json:"insight"`
-	ReleasabilityID string                      `json:"releasabilityId"`
-	JSON            threatEventEditResponseJSON `json:"-"`
+	Attacker              string                      `json:"attacker" api:"required"`
+	AttackerCountry       string                      `json:"attackerCountry" api:"required"`
+	AttackerCountryAlpha3 string                      `json:"attackerCountryAlpha3" api:"required"`
+	Category              string                      `json:"category" api:"required"`
+	DatasetID             string                      `json:"datasetId" api:"required"`
+	Date                  string                      `json:"date" api:"required"`
+	Event                 string                      `json:"event" api:"required"`
+	HasChildren           bool                        `json:"hasChildren" api:"required"`
+	Indicator             string                      `json:"indicator" api:"required"`
+	IndicatorType         string                      `json:"indicatorType" api:"required"`
+	IndicatorTypeID       float64                     `json:"indicatorTypeId" api:"required"`
+	KillChain             float64                     `json:"killChain" api:"required"`
+	MitreAttack           []string                    `json:"mitreAttack" api:"required"`
+	MitreCapec            []string                    `json:"mitreCapec" api:"required"`
+	NumReferenced         float64                     `json:"numReferenced" api:"required"`
+	NumReferences         float64                     `json:"numReferences" api:"required"`
+	RawID                 string                      `json:"rawId" api:"required"`
+	Referenced            []string                    `json:"referenced" api:"required"`
+	ReferencedIDs         []float64                   `json:"referencedIds" api:"required"`
+	References            []string                    `json:"references" api:"required"`
+	ReferencesIDs         []float64                   `json:"referencesIds" api:"required"`
+	Tags                  []string                    `json:"tags" api:"required"`
+	TargetCountry         string                      `json:"targetCountry" api:"required"`
+	TargetCountryAlpha3   string                      `json:"targetCountryAlpha3" api:"required"`
+	TargetIndustry        string                      `json:"targetIndustry" api:"required"`
+	TLP                   string                      `json:"tlp" api:"required"`
+	UUID                  string                      `json:"uuid" api:"required"`
+	Insight               string                      `json:"insight"`
+	ReleasabilityID       string                      `json:"releasabilityId"`
+	JSON                  threatEventEditResponseJSON `json:"-"`
 }
 
 // threatEventEditResponseJSON contains the JSON metadata for the struct
 // [ThreatEventEditResponse]
 type threatEventEditResponseJSON struct {
-	Attacker        apijson.Field
-	AttackerCountry apijson.Field
-	Category        apijson.Field
-	DatasetID       apijson.Field
-	Date            apijson.Field
-	Event           apijson.Field
-	HasChildren     apijson.Field
-	Indicator       apijson.Field
-	IndicatorType   apijson.Field
-	IndicatorTypeID apijson.Field
-	KillChain       apijson.Field
-	MitreAttack     apijson.Field
-	MitreCapec      apijson.Field
-	NumReferenced   apijson.Field
-	NumReferences   apijson.Field
-	RawID           apijson.Field
-	Referenced      apijson.Field
-	ReferencedIDs   apijson.Field
-	References      apijson.Field
-	ReferencesIDs   apijson.Field
-	Tags            apijson.Field
-	TargetCountry   apijson.Field
-	TargetIndustry  apijson.Field
-	TLP             apijson.Field
-	UUID            apijson.Field
-	Insight         apijson.Field
-	ReleasabilityID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Attacker              apijson.Field
+	AttackerCountry       apijson.Field
+	AttackerCountryAlpha3 apijson.Field
+	Category              apijson.Field
+	DatasetID             apijson.Field
+	Date                  apijson.Field
+	Event                 apijson.Field
+	HasChildren           apijson.Field
+	Indicator             apijson.Field
+	IndicatorType         apijson.Field
+	IndicatorTypeID       apijson.Field
+	KillChain             apijson.Field
+	MitreAttack           apijson.Field
+	MitreCapec            apijson.Field
+	NumReferenced         apijson.Field
+	NumReferences         apijson.Field
+	RawID                 apijson.Field
+	Referenced            apijson.Field
+	ReferencedIDs         apijson.Field
+	References            apijson.Field
+	ReferencesIDs         apijson.Field
+	Tags                  apijson.Field
+	TargetCountry         apijson.Field
+	TargetCountryAlpha3   apijson.Field
+	TargetIndustry        apijson.Field
+	TLP                   apijson.Field
+	UUID                  apijson.Field
+	Insight               apijson.Field
+	ReleasabilityID       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *ThreatEventEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -457,68 +469,72 @@ func (r threatEventEditResponseJSON) RawJSON() string {
 }
 
 type ThreatEventGetResponse struct {
-	Attacker        string                     `json:"attacker" api:"required"`
-	AttackerCountry string                     `json:"attackerCountry" api:"required"`
-	Category        string                     `json:"category" api:"required"`
-	DatasetID       string                     `json:"datasetId" api:"required"`
-	Date            string                     `json:"date" api:"required"`
-	Event           string                     `json:"event" api:"required"`
-	HasChildren     bool                       `json:"hasChildren" api:"required"`
-	Indicator       string                     `json:"indicator" api:"required"`
-	IndicatorType   string                     `json:"indicatorType" api:"required"`
-	IndicatorTypeID float64                    `json:"indicatorTypeId" api:"required"`
-	KillChain       float64                    `json:"killChain" api:"required"`
-	MitreAttack     []string                   `json:"mitreAttack" api:"required"`
-	MitreCapec      []string                   `json:"mitreCapec" api:"required"`
-	NumReferenced   float64                    `json:"numReferenced" api:"required"`
-	NumReferences   float64                    `json:"numReferences" api:"required"`
-	RawID           string                     `json:"rawId" api:"required"`
-	Referenced      []string                   `json:"referenced" api:"required"`
-	ReferencedIDs   []float64                  `json:"referencedIds" api:"required"`
-	References      []string                   `json:"references" api:"required"`
-	ReferencesIDs   []float64                  `json:"referencesIds" api:"required"`
-	Tags            []string                   `json:"tags" api:"required"`
-	TargetCountry   string                     `json:"targetCountry" api:"required"`
-	TargetIndustry  string                     `json:"targetIndustry" api:"required"`
-	TLP             string                     `json:"tlp" api:"required"`
-	UUID            string                     `json:"uuid" api:"required"`
-	Insight         string                     `json:"insight"`
-	ReleasabilityID string                     `json:"releasabilityId"`
-	JSON            threatEventGetResponseJSON `json:"-"`
+	Attacker              string                     `json:"attacker" api:"required"`
+	AttackerCountry       string                     `json:"attackerCountry" api:"required"`
+	AttackerCountryAlpha3 string                     `json:"attackerCountryAlpha3" api:"required"`
+	Category              string                     `json:"category" api:"required"`
+	DatasetID             string                     `json:"datasetId" api:"required"`
+	Date                  string                     `json:"date" api:"required"`
+	Event                 string                     `json:"event" api:"required"`
+	HasChildren           bool                       `json:"hasChildren" api:"required"`
+	Indicator             string                     `json:"indicator" api:"required"`
+	IndicatorType         string                     `json:"indicatorType" api:"required"`
+	IndicatorTypeID       float64                    `json:"indicatorTypeId" api:"required"`
+	KillChain             float64                    `json:"killChain" api:"required"`
+	MitreAttack           []string                   `json:"mitreAttack" api:"required"`
+	MitreCapec            []string                   `json:"mitreCapec" api:"required"`
+	NumReferenced         float64                    `json:"numReferenced" api:"required"`
+	NumReferences         float64                    `json:"numReferences" api:"required"`
+	RawID                 string                     `json:"rawId" api:"required"`
+	Referenced            []string                   `json:"referenced" api:"required"`
+	ReferencedIDs         []float64                  `json:"referencedIds" api:"required"`
+	References            []string                   `json:"references" api:"required"`
+	ReferencesIDs         []float64                  `json:"referencesIds" api:"required"`
+	Tags                  []string                   `json:"tags" api:"required"`
+	TargetCountry         string                     `json:"targetCountry" api:"required"`
+	TargetCountryAlpha3   string                     `json:"targetCountryAlpha3" api:"required"`
+	TargetIndustry        string                     `json:"targetIndustry" api:"required"`
+	TLP                   string                     `json:"tlp" api:"required"`
+	UUID                  string                     `json:"uuid" api:"required"`
+	Insight               string                     `json:"insight"`
+	ReleasabilityID       string                     `json:"releasabilityId"`
+	JSON                  threatEventGetResponseJSON `json:"-"`
 }
 
 // threatEventGetResponseJSON contains the JSON metadata for the struct
 // [ThreatEventGetResponse]
 type threatEventGetResponseJSON struct {
-	Attacker        apijson.Field
-	AttackerCountry apijson.Field
-	Category        apijson.Field
-	DatasetID       apijson.Field
-	Date            apijson.Field
-	Event           apijson.Field
-	HasChildren     apijson.Field
-	Indicator       apijson.Field
-	IndicatorType   apijson.Field
-	IndicatorTypeID apijson.Field
-	KillChain       apijson.Field
-	MitreAttack     apijson.Field
-	MitreCapec      apijson.Field
-	NumReferenced   apijson.Field
-	NumReferences   apijson.Field
-	RawID           apijson.Field
-	Referenced      apijson.Field
-	ReferencedIDs   apijson.Field
-	References      apijson.Field
-	ReferencesIDs   apijson.Field
-	Tags            apijson.Field
-	TargetCountry   apijson.Field
-	TargetIndustry  apijson.Field
-	TLP             apijson.Field
-	UUID            apijson.Field
-	Insight         apijson.Field
-	ReleasabilityID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Attacker              apijson.Field
+	AttackerCountry       apijson.Field
+	AttackerCountryAlpha3 apijson.Field
+	Category              apijson.Field
+	DatasetID             apijson.Field
+	Date                  apijson.Field
+	Event                 apijson.Field
+	HasChildren           apijson.Field
+	Indicator             apijson.Field
+	IndicatorType         apijson.Field
+	IndicatorTypeID       apijson.Field
+	KillChain             apijson.Field
+	MitreAttack           apijson.Field
+	MitreCapec            apijson.Field
+	NumReferenced         apijson.Field
+	NumReferences         apijson.Field
+	RawID                 apijson.Field
+	Referenced            apijson.Field
+	ReferencedIDs         apijson.Field
+	References            apijson.Field
+	ReferencesIDs         apijson.Field
+	Tags                  apijson.Field
+	TargetCountry         apijson.Field
+	TargetCountryAlpha3   apijson.Field
+	TargetIndustry        apijson.Field
+	TLP                   apijson.Field
+	UUID                  apijson.Field
+	Insight               apijson.Field
+	ReleasabilityID       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *ThreatEventGetResponse) UnmarshalJSON(data []byte) (err error) {

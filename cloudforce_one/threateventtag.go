@@ -63,6 +63,7 @@ type ThreatEventTagNewResponse struct {
 	Motive                  string                        `json:"motive"`
 	OpsecLevel              string                        `json:"opsecLevel"`
 	OriginCountryISO        string                        `json:"originCountryISO"`
+	OriginCountryISOAlpha3  string                        `json:"originCountryISOAlpha3"`
 	Priority                float64                       `json:"priority"`
 	SophisticationLevel     string                        `json:"sophisticationLevel"`
 	JSON                    threatEventTagNewResponseJSON `json:"-"`
@@ -87,6 +88,7 @@ type threatEventTagNewResponseJSON struct {
 	Motive                  apijson.Field
 	OpsecLevel              apijson.Field
 	OriginCountryISO        apijson.Field
+	OriginCountryISOAlpha3  apijson.Field
 	Priority                apijson.Field
 	SophisticationLevel     apijson.Field
 	raw                     string
