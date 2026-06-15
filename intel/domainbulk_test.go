@@ -29,8 +29,10 @@ func TestDomainBulkGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Intel.Domains.Bulks.Get(context.TODO(), intel.DomainBulkGetParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Domain:    cloudflare.F([]string{"string"}),
+		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Domain:         cloudflare.F([]string{"string"}),
+		IncludeRanking: cloudflare.F(true),
+		SkipRanking:    cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
