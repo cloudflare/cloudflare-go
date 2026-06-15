@@ -670,6 +670,7 @@ TEST_PATHS=(
 	bot_management/botmanagement_test.go
 	fraud/fraud_test.go
 	origin_post_quantum_encryption/originpostquantumencryption_test.go
+	origin_tls_compliance_modes/origintlscompliancemode_test.go
 	google_tag_gateway/config_test.go
 	zaraz/zaraz_test.go
 	zaraz/config_test.go
