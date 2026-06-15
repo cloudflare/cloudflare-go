@@ -7,11 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -195,6 +197,27 @@ func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, ipsecTunnelID stri
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", params.AccountID, ipsecTunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// Sets Pre-Shared Keys for multiple IPsec tunnels associated with an account. Use
+// `?validate_only=true` as an optional query parameter to only run validation
+// without persisting changes. After PSKs are applied, they are immediately
+// persisted to Cloudflare's edge and cannot be retrieved later. Store the PSKs in
+// a safe place.
+func (r *IPSECTunnelService) PSKSet(ctx context.Context, params IPSECTunnelPSKSetParams, opts ...option.RequestOption) (res *IPSECTunnelPSKSetResponse, err error) {
+	var env IPSECTunnelPSKSetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/psk", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -2358,6 +2381,63 @@ func (r ipsecTunnelPSKGenerateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type IPSECTunnelPSKSetResponse struct {
+	// Map of tunnel IDs to successfully applied PSK details.
+	SuccessfullyAppliedPSKs map[string]IPSECTunnelPSKSetResponseSuccessfullyAppliedPSK `json:"successfully_applied_psks"`
+	// Map of tunnel IDs to failure reasons for PSKs that could not be applied.
+	UnappliedPSKs map[string]string             `json:"unapplied_psks"`
+	JSON          ipsecTunnelPSKSetResponseJSON `json:"-"`
+}
+
+// ipsecTunnelPSKSetResponseJSON contains the JSON metadata for the struct
+// [IPSECTunnelPSKSetResponse]
+type ipsecTunnelPSKSetResponseJSON struct {
+	SuccessfullyAppliedPSKs apijson.Field
+	UnappliedPSKs           apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *IPSECTunnelPSKSetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelPSKSetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// A successfully applied PSK for an IPsec tunnel.
+type IPSECTunnelPSKSetResponseSuccessfullyAppliedPSK struct {
+	// The IKE identifier used for this tunnel on the Cloudflare edge.
+	IPSECID string `json:"ipsec_id" api:"required"`
+	// Identifier
+	IPSECTunnelID string `json:"ipsec_tunnel_id" api:"required"`
+	// A randomly generated or provided string for use in the IPsec tunnel.
+	PSK string `json:"psk" api:"required"`
+	// The PSK metadata that includes when the PSK was generated.
+	PSKMetadata PSKMetadata                                         `json:"psk_metadata" api:"required"`
+	JSON        ipsecTunnelPSKSetResponseSuccessfullyAppliedPSKJSON `json:"-"`
+}
+
+// ipsecTunnelPSKSetResponseSuccessfullyAppliedPSKJSON contains the JSON metadata
+// for the struct [IPSECTunnelPSKSetResponseSuccessfullyAppliedPSK]
+type ipsecTunnelPSKSetResponseSuccessfullyAppliedPSKJSON struct {
+	IPSECID       apijson.Field
+	IPSECTunnelID apijson.Field
+	PSK           apijson.Field
+	PSKMetadata   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *IPSECTunnelPSKSetResponseSuccessfullyAppliedPSK) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelPSKSetResponseSuccessfullyAppliedPSKJSON) RawJSON() string {
+	return r.raw
+}
+
 type IPSECTunnelNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -3023,6 +3103,83 @@ const (
 func (r IPSECTunnelPSKGenerateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case IPSECTunnelPSKGenerateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type IPSECTunnelPSKSetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// List of tunnel ID and PSK pairs.
+	PSKs param.Field[[]IPSECTunnelPSKSetParamsPSK] `json:"psks" api:"required"`
+	// If `true`, only run validation without persisting changes.
+	ValidateOnly param.Field[bool] `query:"validate_only"`
+}
+
+func (r IPSECTunnelPSKSetParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [IPSECTunnelPSKSetParams]'s query parameters as
+// `url.Values`.
+func (r IPSECTunnelPSKSetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// A PSK entry for a specific IPsec tunnel.
+type IPSECTunnelPSKSetParamsPSK struct {
+	// The ID of the IPsec tunnel.
+	ID param.Field[string] `json:"id" api:"required"`
+	// A randomly generated or provided string for use in the IPsec tunnel.
+	PSK param.Field[string] `json:"psk" api:"required"`
+}
+
+func (r IPSECTunnelPSKSetParamsPSK) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IPSECTunnelPSKSetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo     `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo     `json:"messages" api:"required"`
+	Result   IPSECTunnelPSKSetResponse `json:"result" api:"required"`
+	// Whether the API call was successful
+	Success IPSECTunnelPSKSetResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    ipsecTunnelPSKSetResponseEnvelopeJSON    `json:"-"`
+}
+
+// ipsecTunnelPSKSetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [IPSECTunnelPSKSetResponseEnvelope]
+type ipsecTunnelPSKSetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPSECTunnelPSKSetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelPSKSetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type IPSECTunnelPSKSetResponseEnvelopeSuccess bool
+
+const (
+	IPSECTunnelPSKSetResponseEnvelopeSuccessTrue IPSECTunnelPSKSetResponseEnvelopeSuccess = true
+)
+
+func (r IPSECTunnelPSKSetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelPSKSetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

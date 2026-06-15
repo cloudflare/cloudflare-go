@@ -307,6 +307,8 @@ TEST_PATHS=(
 	magic_transit/connectoreventlatest_test.go
 	magic_transit/connectorsnapshot_test.go
 	magic_transit/connectorsnapshotlatest_test.go
+	magic_transit/cf1site_test.go
+	magic_transit/cf1siteramp_test.go
 	magic_transit/pcap_test.go
 	magic_transit/pcapownership_test.go
 	magic_transit/pcapdownload_test.go

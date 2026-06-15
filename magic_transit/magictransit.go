@@ -27,6 +27,7 @@ type MagicTransitService struct {
 	Routes          *RouteService
 	Sites           *SiteService
 	Connectors      *ConnectorService
+	Cf1Sites        *Cf1SiteService
 	PCAPs           *PCAPService
 }
 
@@ -43,6 +44,7 @@ func NewMagicTransitService(opts ...option.RequestOption) (r *MagicTransitServic
 	r.Routes = NewRouteService(opts...)
 	r.Sites = NewSiteService(opts...)
 	r.Connectors = NewConnectorService(opts...)
+	r.Cf1Sites = NewCf1SiteService(opts...)
 	r.PCAPs = NewPCAPService(opts...)
 	return
 }
