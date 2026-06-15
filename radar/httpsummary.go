@@ -270,6 +270,7 @@ type HTTPSummaryBotClassResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                        `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                      `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                   `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                    `json:"tags"`
 	JSON            httpSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -284,6 +285,7 @@ type httpSummaryBotClassResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -545,6 +547,7 @@ type HTTPSummaryDeviceTypeResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                          `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                        `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                     `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                      `json:"tags"`
 	JSON            httpSummaryDeviceTypeResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -559,6 +562,7 @@ type httpSummaryDeviceTypeResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -823,6 +827,7 @@ type HTTPSummaryHTTPProtocolResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                            `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                          `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                       `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                        `json:"tags"`
 	JSON            httpSummaryHTTPProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -837,6 +842,7 @@ type httpSummaryHTTPProtocolResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1098,6 +1104,7 @@ type HTTPSummaryHTTPVersionResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                           `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                         `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                      `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                       `json:"tags"`
 	JSON            httpSummaryHTTPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1112,6 +1119,7 @@ type httpSummaryHTTPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1376,6 +1384,7 @@ type HTTPSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                         `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                       `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                    `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                     `json:"tags"`
 	JSON            httpSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1390,6 +1399,7 @@ type httpSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1651,6 +1661,7 @@ type HTTPSummaryOSResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                  `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                             `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                              `json:"tags"`
 	JSON            httpSummaryOSResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1664,6 +1675,7 @@ type httpSummaryOSResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1925,6 +1937,7 @@ type HTTPSummaryPostQuantumResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                           `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                         `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                      `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                       `json:"tags"`
 	JSON            httpSummaryPostQuantumResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1939,6 +1952,7 @@ type httpSummaryPostQuantumResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -2200,6 +2214,7 @@ type HTTPSummaryTLSVersionResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                          `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                        `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                     `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                      `json:"tags"`
 	JSON            httpSummaryTLSVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2214,6 +2229,7 @@ type httpSummaryTLSVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

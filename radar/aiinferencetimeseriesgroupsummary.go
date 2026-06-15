@@ -35,7 +35,7 @@ func NewAIInferenceTimeseriesGroupSummaryService(opts ...option.RequestOption) (
 	return
 }
 
-// Retrieves the distribution of unique accounts by model over time.
+// Retrieves the distribution of the number of inferences by model over time.
 //
 // Deprecated: Use
 // [Radar AI Inference Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/inference/methods/timeseries_groups_v2/)
@@ -52,7 +52,7 @@ func (r *AIInferenceTimeseriesGroupSummaryService) Model(ctx context.Context, qu
 	return res, nil
 }
 
-// Retrieves the distribution of unique accounts by task over time.
+// Retrieves the distribution of the number of inferences by task over time.
 //
 // Deprecated: Use
 // [Radar AI Inference Timeseries Groups By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/inference/methods/timeseries_groups_v2/)
@@ -190,6 +190,7 @@ type AIInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotation 
 	IsInstantaneous bool                                                                           `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                         `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                      `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                       `json:"tags"`
 	JSON            aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -204,6 +205,7 @@ type aiInferenceTimeseriesGroupSummaryModelResponseMetaConfidenceInfoAnnotationJ
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -490,6 +492,7 @@ type AIInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotation s
 	IsInstantaneous bool                                                                          `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                        `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                     `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                      `json:"tags"`
 	JSON            aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -504,6 +507,7 @@ type aiInferenceTimeseriesGroupSummaryTaskResponseMetaConfidenceInfoAnnotationJS
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

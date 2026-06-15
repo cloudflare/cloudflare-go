@@ -315,6 +315,7 @@ type EmailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotation struct 
 	IsInstantaneous bool                                                                    `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                  `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                               `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                `json:"tags"`
 	JSON            emailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -329,6 +330,7 @@ type emailSecurityTimeseriesGroupARCResponseMetaConfidenceInfoAnnotationJSON str
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -592,6 +594,7 @@ type EmailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotation struct
 	IsInstantaneous bool                                                                     `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                   `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                 `json:"tags"`
 	JSON            emailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -606,6 +609,7 @@ type emailSecurityTimeseriesGroupDKIMResponseMetaConfidenceInfoAnnotationJSON st
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -869,6 +873,7 @@ type EmailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotation struc
 	IsInstantaneous bool                                                                      `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                    `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                 `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                  `json:"tags"`
 	JSON            emailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -883,6 +888,7 @@ type emailSecurityTimeseriesGroupDMARCResponseMetaConfidenceInfoAnnotationJSON s
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1146,6 +1152,7 @@ type EmailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotation s
 	IsInstantaneous bool                                                                          `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                        `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                     `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                      `json:"tags"`
 	JSON            emailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1160,6 +1167,7 @@ type emailSecurityTimeseriesGroupMaliciousResponseMetaConfidenceInfoAnnotationJS
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1447,6 +1455,7 @@ type EmailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotation struct
 	IsInstantaneous bool                                                                     `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                   `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                 `json:"tags"`
 	JSON            emailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1461,6 +1470,7 @@ type emailSecurityTimeseriesGroupSpamResponseMetaConfidenceInfoAnnotationJSON st
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1747,6 +1757,7 @@ type EmailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotation struct 
 	IsInstantaneous bool                                                                    `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                  `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                               `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                `json:"tags"`
 	JSON            emailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1761,6 +1772,7 @@ type emailSecurityTimeseriesGroupSPFResponseMetaConfidenceInfoAnnotationJSON str
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -2024,6 +2036,7 @@ type EmailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotation struc
 	IsInstantaneous bool                                                                      `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                    `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                 `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                  `json:"tags"`
 	JSON            emailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2038,6 +2051,7 @@ type emailSecurityTimeseriesGroupSpoofResponseMetaConfidenceInfoAnnotationJSON s
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -2324,6 +2338,7 @@ type EmailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotat
 	IsInstantaneous bool                                                                               `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                             `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                          `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                           `json:"tags"`
 	JSON            emailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2338,6 +2353,7 @@ type emailSecurityTimeseriesGroupThreatCategoryResponseMetaConfidenceInfoAnnotat
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -2631,6 +2647,7 @@ type EmailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotation 
 	IsInstantaneous bool                                                                           `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                         `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                      `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                       `json:"tags"`
 	JSON            emailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2645,6 +2662,7 @@ type emailSecurityTimeseriesGroupTLSVersionResponseMetaConfidenceInfoAnnotationJ
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

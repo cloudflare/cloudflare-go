@@ -275,6 +275,7 @@ type AttackLayer3TimeseriesGroupBitrateResponseMetaConfidenceInfoAnnotation stru
 	IsInstantaneous bool                                                                       `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                     `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                  `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                   `json:"tags"`
 	JSON            attackLayer3TimeseriesGroupBitrateResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -289,6 +290,7 @@ type attackLayer3TimeseriesGroupBitrateResponseMetaConfidenceInfoAnnotationJSON 
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -584,6 +586,7 @@ type AttackLayer3TimeseriesGroupDurationResponseMetaConfidenceInfoAnnotation str
 	IsInstantaneous bool                                                                        `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                      `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                   `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                    `json:"tags"`
 	JSON            attackLayer3TimeseriesGroupDurationResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -598,6 +601,7 @@ type attackLayer3TimeseriesGroupDurationResponseMetaConfidenceInfoAnnotationJSON
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -895,6 +899,7 @@ type AttackLayer3TimeseriesGroupIndustryResponseMetaConfidenceInfoAnnotation str
 	IsInstantaneous bool                                                                        `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                      `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                   `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                    `json:"tags"`
 	JSON            attackLayer3TimeseriesGroupIndustryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -909,6 +914,7 @@ type attackLayer3TimeseriesGroupIndustryResponseMetaConfidenceInfoAnnotationJSON
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1195,6 +1201,7 @@ type AttackLayer3TimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotation st
 	IsInstantaneous bool                                                                         `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                       `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                    `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                     `json:"tags"`
 	JSON            attackLayer3TimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1209,6 +1216,7 @@ type attackLayer3TimeseriesGroupIPVersionResponseMetaConfidenceInfoAnnotationJSO
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1498,6 +1506,7 @@ type AttackLayer3TimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotation str
 	IsInstantaneous bool                                                                        `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                      `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                   `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                    `json:"tags"`
 	JSON            attackLayer3TimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1512,6 +1521,7 @@ type attackLayer3TimeseriesGroupProtocolResponseMetaConfidenceInfoAnnotationJSON
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1805,6 +1815,7 @@ type AttackLayer3TimeseriesGroupVectorResponseMetaConfidenceInfoAnnotation struc
 	IsInstantaneous bool                                                                      `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                    `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                 `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                  `json:"tags"`
 	JSON            attackLayer3TimeseriesGroupVectorResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1819,6 +1830,7 @@ type attackLayer3TimeseriesGroupVectorResponseMetaConfidenceInfoAnnotationJSON s
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -2104,6 +2116,7 @@ type AttackLayer3TimeseriesGroupVerticalResponseMetaConfidenceInfoAnnotation str
 	IsInstantaneous bool                                                                        `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                      `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                   `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                    `json:"tags"`
 	JSON            attackLayer3TimeseriesGroupVerticalResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -2118,6 +2131,7 @@ type attackLayer3TimeseriesGroupVerticalResponseMetaConfidenceInfoAnnotationJSON
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

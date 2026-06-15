@@ -157,6 +157,7 @@ type AIMarkdownForAgentSummaryResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                              `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                            `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                         `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                          `json:"tags"`
 	JSON            aiMarkdownForAgentSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -171,6 +172,7 @@ type aiMarkdownForAgentSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -454,6 +456,7 @@ type AIMarkdownForAgentTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                                 `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                               `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                            `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                             `json:"tags"`
 	JSON            aiMarkdownForAgentTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -468,6 +471,7 @@ type aiMarkdownForAgentTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

@@ -156,6 +156,7 @@ type DNSTopAsesResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                               `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                             `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                          `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                           `json:"tags"`
 	JSON            dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -169,6 +170,7 @@ type dnsTopAsesResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -431,6 +433,7 @@ type DNSTopLocationsResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                    `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                  `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                               `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                `json:"tags"`
 	JSON            dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -444,6 +447,7 @@ type dnsTopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

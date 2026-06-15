@@ -35,7 +35,7 @@ func NewAIInferenceSummaryService(opts ...option.RequestOption) (r *AIInferenceS
 	return
 }
 
-// Retrieves the distribution of unique accounts by model.
+// Retrieves the distribution of the number of inferences by model.
 //
 // Deprecated: Use
 // [Radar AI Inference Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/inference/methods/summary_v2/)
@@ -52,7 +52,7 @@ func (r *AIInferenceSummaryService) Model(ctx context.Context, query AIInference
 	return res, nil
 }
 
-// Retrieves the distribution of unique accounts by task.
+// Retrieves the distribution of the number of inferences by task.
 //
 // Deprecated: Use
 // [Radar AI Inference Summary By Dimension](https://developers.cloudflare.com/api/resources/radar/subresources/ai/subresources/inference/methods/summary_v2/)
@@ -163,6 +163,7 @@ type AIInferenceSummaryModelResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                            `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                          `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                       `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                        `json:"tags"`
 	JSON            aiInferenceSummaryModelResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -177,6 +178,7 @@ type aiInferenceSummaryModelResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -413,6 +415,7 @@ type AIInferenceSummaryTaskResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                           `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                         `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                      `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                       `json:"tags"`
 	JSON            aiInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -427,6 +430,7 @@ type aiInferenceSummaryTaskResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

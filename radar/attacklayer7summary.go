@@ -249,6 +249,7 @@ type AttackLayer7SummaryHTTPMethodResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                                  `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                             `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                              `json:"tags"`
 	JSON            attackLayer7SummaryHTTPMethodResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -263,6 +264,7 @@ type attackLayer7SummaryHTTPMethodResponseMetaConfidenceInfoAnnotationJSON struc
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -500,6 +502,7 @@ type AttackLayer7SummaryHTTPVersionResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                                   `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                 `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                              `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                               `json:"tags"`
 	JSON            attackLayer7SummaryHTTPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -514,6 +517,7 @@ type attackLayer7SummaryHTTPVersionResponseMetaConfidenceInfoAnnotationJSON stru
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -775,6 +779,7 @@ type AttackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                                `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                              `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                           `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                            `json:"tags"`
 	JSON            attackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -789,6 +794,7 @@ type attackLayer7SummaryIndustryResponseMetaConfidenceInfoAnnotationJSON struct 
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1025,6 +1031,7 @@ type AttackLayer7SummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                                 `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                               `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                            `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                             `json:"tags"`
 	JSON            attackLayer7SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1039,6 +1046,7 @@ type attackLayer7SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON struct
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1299,6 +1307,7 @@ type AttackLayer7SummaryManagedRulesResponseMetaConfidenceInfoAnnotation struct 
 	IsInstantaneous bool                                                                    `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                  `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                               `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                `json:"tags"`
 	JSON            attackLayer7SummaryManagedRulesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1313,6 +1322,7 @@ type attackLayer7SummaryManagedRulesResponseMetaConfidenceInfoAnnotationJSON str
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1550,6 +1560,7 @@ type AttackLayer7SummaryMitigationProductResponseMetaConfidenceInfoAnnotation st
 	IsInstantaneous bool                                                                         `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                       `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                    `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                     `json:"tags"`
 	JSON            attackLayer7SummaryMitigationProductResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1564,6 +1575,7 @@ type attackLayer7SummaryMitigationProductResponseMetaConfidenceInfoAnnotationJSO
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1801,6 +1813,7 @@ type AttackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                                `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                              `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                           `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                            `json:"tags"`
 	JSON            attackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1815,6 +1828,7 @@ type attackLayer7SummaryVerticalResponseMetaConfidenceInfoAnnotationJSON struct 
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

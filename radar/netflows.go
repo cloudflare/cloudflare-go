@@ -191,6 +191,7 @@ type NetFlowsSummaryResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                    `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                  `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                               `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                `json:"tags"`
 	JSON            netFlowsSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -204,6 +205,7 @@ type netFlowsSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -465,6 +467,7 @@ type NetFlowsSummaryV2ResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                      `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                    `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                 `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                  `json:"tags"`
 	JSON            netFlowsSummaryV2ResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -478,6 +481,7 @@ type netFlowsSummaryV2ResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -740,6 +744,7 @@ type NetFlowsTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                       `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                     `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                  `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                   `json:"tags"`
 	JSON            netFlowsTimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -753,6 +758,7 @@ type netFlowsTimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1038,6 +1044,7 @@ type NetFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                             `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                           `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                        `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                         `json:"tags"`
 	JSON            netFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -1052,6 +1059,7 @@ type netFlowsTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

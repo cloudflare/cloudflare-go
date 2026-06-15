@@ -144,6 +144,7 @@ type HTTPLocationOSGetResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                      `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                    `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                 `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                  `json:"tags"`
 	JSON            httpLocationOSGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -157,6 +158,7 @@ type httpLocationOSGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

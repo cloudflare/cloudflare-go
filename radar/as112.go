@@ -175,6 +175,7 @@ type AS112SummaryV2ResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                   `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                 `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                              `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                               `json:"tags"`
 	JSON            as112SummaryV2ResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -188,6 +189,7 @@ type as112SummaryV2ResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -449,6 +451,7 @@ type AS112TimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                    `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                  `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                               `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                `json:"tags"`
 	JSON            as112TimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -462,6 +465,7 @@ type as112TimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -724,6 +728,7 @@ type AS112TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                            `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                          `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                       `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                        `json:"tags"`
 	JSON            as112TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -738,6 +743,7 @@ type as112TimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

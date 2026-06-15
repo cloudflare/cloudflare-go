@@ -142,28 +142,30 @@ func (r entityASNListResponseJSON) RawJSON() string {
 }
 
 type EntityASNListResponseASN struct {
-	ASN         int64                        `json:"asn" api:"required"`
-	Country     string                       `json:"country" api:"required"`
-	CountryName string                       `json:"countryName" api:"required"`
-	Name        string                       `json:"name" api:"required"`
-	Aka         string                       `json:"aka"`
-	OrgName     string                       `json:"orgName"`
-	Website     string                       `json:"website"`
-	JSON        entityASNListResponseASNJSON `json:"-"`
+	ASN            int64                                   `json:"asn" api:"required"`
+	Country        string                                  `json:"country" api:"required"`
+	CountryName    string                                  `json:"countryName" api:"required"`
+	EstimatedUsers EntityASNListResponseASNsEstimatedUsers `json:"estimatedUsers" api:"required"`
+	Name           string                                  `json:"name" api:"required"`
+	Aka            string                                  `json:"aka"`
+	OrgName        string                                  `json:"orgName"`
+	Website        string                                  `json:"website"`
+	JSON           entityASNListResponseASNJSON            `json:"-"`
 }
 
 // entityASNListResponseASNJSON contains the JSON metadata for the struct
 // [EntityASNListResponseASN]
 type entityASNListResponseASNJSON struct {
-	ASN         apijson.Field
-	Country     apijson.Field
-	CountryName apijson.Field
-	Name        apijson.Field
-	Aka         apijson.Field
-	OrgName     apijson.Field
-	Website     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ASN            apijson.Field
+	Country        apijson.Field
+	CountryName    apijson.Field
+	EstimatedUsers apijson.Field
+	Name           apijson.Field
+	Aka            apijson.Field
+	OrgName        apijson.Field
+	Website        apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *EntityASNListResponseASN) UnmarshalJSON(data []byte) (err error) {
@@ -171,6 +173,28 @@ func (r *EntityASNListResponseASN) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r entityASNListResponseASNJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityASNListResponseASNsEstimatedUsers struct {
+	// Total estimated users.
+	EstimatedUsers int64                                       `json:"estimatedUsers"`
+	JSON           entityASNListResponseASNsEstimatedUsersJSON `json:"-"`
+}
+
+// entityASNListResponseASNsEstimatedUsersJSON contains the JSON metadata for the
+// struct [EntityASNListResponseASNsEstimatedUsers]
+type entityASNListResponseASNsEstimatedUsersJSON struct {
+	EstimatedUsers apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *EntityASNListResponseASNsEstimatedUsers) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityASNListResponseASNsEstimatedUsersJSON) RawJSON() string {
 	return r.raw
 }
 

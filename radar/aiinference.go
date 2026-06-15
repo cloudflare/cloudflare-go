@@ -40,7 +40,7 @@ func NewAIInferenceService(opts ...option.RequestOption) (r *AIInferenceService)
 	return
 }
 
-// Retrieves an aggregated summary of unique accounts using Workers AI inference
+// Retrieves an aggregated summary of the number of inferences run on Workers AI,
 // grouped by the specified dimension.
 func (r *AIInferenceService) SummaryV2(ctx context.Context, dimension AIInferenceSummaryV2ParamsDimension, query AIInferenceSummaryV2Params, opts ...option.RequestOption) (res *AIInferenceSummaryV2Response, err error) {
 	var env AIInferenceSummaryV2ResponseEnvelope
@@ -54,7 +54,7 @@ func (r *AIInferenceService) SummaryV2(ctx context.Context, dimension AIInferenc
 	return res, nil
 }
 
-// Retrieves the distribution of unique accounts using Workers AI inference,
+// Retrieves the distribution of the number of inferences run on Workers AI,
 // grouped by the specified dimension over time.
 func (r *AIInferenceService) TimeseriesGroupsV2(ctx context.Context, dimension AIInferenceTimeseriesGroupsV2ParamsDimension, query AIInferenceTimeseriesGroupsV2Params, opts ...option.RequestOption) (res *AIInferenceTimeseriesGroupsV2Response, err error) {
 	var env AIInferenceTimeseriesGroupsV2ResponseEnvelope
@@ -162,6 +162,7 @@ type AIInferenceSummaryV2ResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                         `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                       `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                    `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                     `json:"tags"`
 	JSON            aiInferenceSummaryV2ResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -176,6 +177,7 @@ type aiInferenceSummaryV2ResponseMetaConfidenceInfoAnnotationJSON struct {
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -439,6 +441,7 @@ type AIInferenceTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotation struct {
 	IsInstantaneous bool                                                                  `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                             `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                              `json:"tags"`
 	JSON            aiInferenceTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -453,6 +456,7 @@ type aiInferenceTimeseriesGroupsV2ResponseMetaConfidenceInfoAnnotationJSON struc
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }

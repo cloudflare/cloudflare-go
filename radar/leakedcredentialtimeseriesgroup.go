@@ -192,6 +192,7 @@ type LeakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotation
 	IsInstantaneous bool                                                                            `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                          `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                       `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                        `json:"tags"`
 	JSON            leakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -206,6 +207,7 @@ type leakedCredentialTimeseriesGroupBotClassResponseMetaConfidenceInfoAnnotation
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -496,6 +498,7 @@ type LeakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotat
 	IsInstantaneous bool                                                                               `json:"isInstantaneous" api:"required"`
 	LinkedURL       string                                                                             `json:"linkedUrl" api:"required" format:"uri"`
 	StartDate       time.Time                                                                          `json:"startDate" api:"required" format:"date-time"`
+	Tags            []string                                                                           `json:"tags"`
 	JSON            leakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
@@ -510,6 +513,7 @@ type leakedCredentialTimeseriesGroupCompromisedResponseMetaConfidenceInfoAnnotat
 	IsInstantaneous apijson.Field
 	LinkedURL       apijson.Field
 	StartDate       apijson.Field
+	Tags            apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
