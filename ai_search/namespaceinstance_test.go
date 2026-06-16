@@ -100,13 +100,6 @@ func TestNamespaceInstanceNewWithOptionalParams(t *testing.T) {
 				Prefix:         cloudflare.F("prefix"),
 				R2Jurisdiction: cloudflare.F("r2_jurisdiction"),
 				WebCrawler: cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawler{
-					CrawlOptions: cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerCrawlOptions{
-						Depth:                cloudflare.F(1.000000),
-						IncludeExternalLinks: cloudflare.F(true),
-						IncludeSubdomains:    cloudflare.F(true),
-						MaxAge:               cloudflare.F(0.000000),
-						Source:               cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSourceAll),
-					}),
 					ParseOptions: cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptions{
 						ContentSelector: cloudflare.F([]ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector{{
 							Path:     cloudflare.F("**/blog/**"),
@@ -228,13 +221,6 @@ func TestNamespaceInstanceUpdateWithOptionalParams(t *testing.T) {
 				Prefix:         cloudflare.F("prefix"),
 				R2Jurisdiction: cloudflare.F("r2_jurisdiction"),
 				WebCrawler: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawler{
-					CrawlOptions: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerCrawlOptions{
-						Depth:                cloudflare.F(1.000000),
-						IncludeExternalLinks: cloudflare.F(true),
-						IncludeSubdomains:    cloudflare.F(true),
-						MaxAge:               cloudflare.F(0.000000),
-						Source:               cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSourceAll),
-					}),
 					ParseOptions: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptions{
 						ContentSelector: cloudflare.F([]ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector{{
 							Path:     cloudflare.F("**/blog/**"),

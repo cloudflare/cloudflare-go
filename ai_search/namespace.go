@@ -961,7 +961,8 @@ type NamespaceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	FusionMethod     param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted, falls back
+	// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
 	KeywordMatchMode param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                                `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                                  `json:"max_num_results"`
@@ -1028,7 +1029,8 @@ func (r NamespaceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod) IsKn
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted, falls back
+// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
 type NamespaceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
@@ -1312,7 +1314,8 @@ type NamespaceSearchParamsAISearchOptionsRetrieval struct {
 	FusionMethod     param.Field[NamespaceSearchParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted, falls back
+	// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
 	KeywordMatchMode param.Field[NamespaceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                       `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                         `json:"max_num_results"`
@@ -1379,7 +1382,8 @@ func (r NamespaceSearchParamsAISearchOptionsRetrievalFusionMethod) IsKnown() boo
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted, falls back
+// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
 type NamespaceSearchParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (

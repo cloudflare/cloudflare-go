@@ -907,7 +907,6 @@ func (r instanceNewResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceNewResponseSourceParamsWebCrawler struct {
-	CrawlOptions InstanceNewResponseSourceParamsWebCrawlerCrawlOptions `json:"crawl_options"`
 	ParseOptions InstanceNewResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    InstanceNewResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
 	StoreOptions InstanceNewResponseSourceParamsWebCrawlerStoreOptions `json:"store_options"`
@@ -917,7 +916,6 @@ type InstanceNewResponseSourceParamsWebCrawler struct {
 // instanceNewResponseSourceParamsWebCrawlerJSON contains the JSON metadata for the
 // struct [InstanceNewResponseSourceParamsWebCrawler]
 type instanceNewResponseSourceParamsWebCrawlerJSON struct {
-	CrawlOptions apijson.Field
 	ParseOptions apijson.Field
 	ParseType    apijson.Field
 	StoreOptions apijson.Field
@@ -931,51 +929,6 @@ func (r *InstanceNewResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (
 
 func (r instanceNewResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
-}
-
-type InstanceNewResponseSourceParamsWebCrawlerCrawlOptions struct {
-	Depth                float64                                                     `json:"depth"`
-	IncludeExternalLinks bool                                                        `json:"include_external_links"`
-	IncludeSubdomains    bool                                                        `json:"include_subdomains"`
-	MaxAge               float64                                                     `json:"max_age"`
-	Source               InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSource `json:"source"`
-	JSON                 instanceNewResponseSourceParamsWebCrawlerCrawlOptionsJSON   `json:"-"`
-}
-
-// instanceNewResponseSourceParamsWebCrawlerCrawlOptionsJSON contains the JSON
-// metadata for the struct [InstanceNewResponseSourceParamsWebCrawlerCrawlOptions]
-type instanceNewResponseSourceParamsWebCrawlerCrawlOptionsJSON struct {
-	Depth                apijson.Field
-	IncludeExternalLinks apijson.Field
-	IncludeSubdomains    apijson.Field
-	MaxAge               apijson.Field
-	Source               apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *InstanceNewResponseSourceParamsWebCrawlerCrawlOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r instanceNewResponseSourceParamsWebCrawlerCrawlOptionsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSource string
-
-const (
-	InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSourceAll      InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSource = "all"
-	InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSourceSitemaps InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSource = "sitemaps"
-	InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSourceLinks    InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSource = "links"
-)
-
-func (r InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSource) IsKnown() bool {
-	switch r {
-	case InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSourceAll, InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSourceSitemaps, InstanceNewResponseSourceParamsWebCrawlerCrawlOptionsSourceLinks:
-		return true
-	}
-	return false
 }
 
 type InstanceNewResponseSourceParamsWebCrawlerParseOptions struct {
@@ -1824,7 +1777,6 @@ func (r instanceUpdateResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceUpdateResponseSourceParamsWebCrawler struct {
-	CrawlOptions InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptions `json:"crawl_options"`
 	ParseOptions InstanceUpdateResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    InstanceUpdateResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
 	StoreOptions InstanceUpdateResponseSourceParamsWebCrawlerStoreOptions `json:"store_options"`
@@ -1834,7 +1786,6 @@ type InstanceUpdateResponseSourceParamsWebCrawler struct {
 // instanceUpdateResponseSourceParamsWebCrawlerJSON contains the JSON metadata for
 // the struct [InstanceUpdateResponseSourceParamsWebCrawler]
 type instanceUpdateResponseSourceParamsWebCrawlerJSON struct {
-	CrawlOptions apijson.Field
 	ParseOptions apijson.Field
 	ParseType    apijson.Field
 	StoreOptions apijson.Field
@@ -1848,52 +1799,6 @@ func (r *InstanceUpdateResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte
 
 func (r instanceUpdateResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
-}
-
-type InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptions struct {
-	Depth                float64                                                        `json:"depth"`
-	IncludeExternalLinks bool                                                           `json:"include_external_links"`
-	IncludeSubdomains    bool                                                           `json:"include_subdomains"`
-	MaxAge               float64                                                        `json:"max_age"`
-	Source               InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSource `json:"source"`
-	JSON                 instanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsJSON   `json:"-"`
-}
-
-// instanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsJSON contains the JSON
-// metadata for the struct
-// [InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptions]
-type instanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsJSON struct {
-	Depth                apijson.Field
-	IncludeExternalLinks apijson.Field
-	IncludeSubdomains    apijson.Field
-	MaxAge               apijson.Field
-	Source               apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r instanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSource string
-
-const (
-	InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSourceAll      InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSource = "all"
-	InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSourceSitemaps InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSource = "sitemaps"
-	InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSourceLinks    InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSource = "links"
-)
-
-func (r InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSource) IsKnown() bool {
-	switch r {
-	case InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSourceAll, InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSourceSitemaps, InstanceUpdateResponseSourceParamsWebCrawlerCrawlOptionsSourceLinks:
-		return true
-	}
-	return false
 }
 
 type InstanceUpdateResponseSourceParamsWebCrawlerParseOptions struct {
@@ -2743,7 +2648,6 @@ func (r instanceListResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceListResponseSourceParamsWebCrawler struct {
-	CrawlOptions InstanceListResponseSourceParamsWebCrawlerCrawlOptions `json:"crawl_options"`
 	ParseOptions InstanceListResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    InstanceListResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
 	StoreOptions InstanceListResponseSourceParamsWebCrawlerStoreOptions `json:"store_options"`
@@ -2753,7 +2657,6 @@ type InstanceListResponseSourceParamsWebCrawler struct {
 // instanceListResponseSourceParamsWebCrawlerJSON contains the JSON metadata for
 // the struct [InstanceListResponseSourceParamsWebCrawler]
 type instanceListResponseSourceParamsWebCrawlerJSON struct {
-	CrawlOptions apijson.Field
 	ParseOptions apijson.Field
 	ParseType    apijson.Field
 	StoreOptions apijson.Field
@@ -2767,51 +2670,6 @@ func (r *InstanceListResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) 
 
 func (r instanceListResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
-}
-
-type InstanceListResponseSourceParamsWebCrawlerCrawlOptions struct {
-	Depth                float64                                                      `json:"depth"`
-	IncludeExternalLinks bool                                                         `json:"include_external_links"`
-	IncludeSubdomains    bool                                                         `json:"include_subdomains"`
-	MaxAge               float64                                                      `json:"max_age"`
-	Source               InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSource `json:"source"`
-	JSON                 instanceListResponseSourceParamsWebCrawlerCrawlOptionsJSON   `json:"-"`
-}
-
-// instanceListResponseSourceParamsWebCrawlerCrawlOptionsJSON contains the JSON
-// metadata for the struct [InstanceListResponseSourceParamsWebCrawlerCrawlOptions]
-type instanceListResponseSourceParamsWebCrawlerCrawlOptionsJSON struct {
-	Depth                apijson.Field
-	IncludeExternalLinks apijson.Field
-	IncludeSubdomains    apijson.Field
-	MaxAge               apijson.Field
-	Source               apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *InstanceListResponseSourceParamsWebCrawlerCrawlOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r instanceListResponseSourceParamsWebCrawlerCrawlOptionsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSource string
-
-const (
-	InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSourceAll      InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSource = "all"
-	InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSourceSitemaps InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSource = "sitemaps"
-	InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSourceLinks    InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSource = "links"
-)
-
-func (r InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSource) IsKnown() bool {
-	switch r {
-	case InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSourceAll, InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSourceSitemaps, InstanceListResponseSourceParamsWebCrawlerCrawlOptionsSourceLinks:
-		return true
-	}
-	return false
 }
 
 type InstanceListResponseSourceParamsWebCrawlerParseOptions struct {
@@ -3660,7 +3518,6 @@ func (r instanceDeleteResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceDeleteResponseSourceParamsWebCrawler struct {
-	CrawlOptions InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptions `json:"crawl_options"`
 	ParseOptions InstanceDeleteResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    InstanceDeleteResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
 	StoreOptions InstanceDeleteResponseSourceParamsWebCrawlerStoreOptions `json:"store_options"`
@@ -3670,7 +3527,6 @@ type InstanceDeleteResponseSourceParamsWebCrawler struct {
 // instanceDeleteResponseSourceParamsWebCrawlerJSON contains the JSON metadata for
 // the struct [InstanceDeleteResponseSourceParamsWebCrawler]
 type instanceDeleteResponseSourceParamsWebCrawlerJSON struct {
-	CrawlOptions apijson.Field
 	ParseOptions apijson.Field
 	ParseType    apijson.Field
 	StoreOptions apijson.Field
@@ -3684,52 +3540,6 @@ func (r *InstanceDeleteResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte
 
 func (r instanceDeleteResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
-}
-
-type InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptions struct {
-	Depth                float64                                                        `json:"depth"`
-	IncludeExternalLinks bool                                                           `json:"include_external_links"`
-	IncludeSubdomains    bool                                                           `json:"include_subdomains"`
-	MaxAge               float64                                                        `json:"max_age"`
-	Source               InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSource `json:"source"`
-	JSON                 instanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsJSON   `json:"-"`
-}
-
-// instanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsJSON contains the JSON
-// metadata for the struct
-// [InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptions]
-type instanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsJSON struct {
-	Depth                apijson.Field
-	IncludeExternalLinks apijson.Field
-	IncludeSubdomains    apijson.Field
-	MaxAge               apijson.Field
-	Source               apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r instanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSource string
-
-const (
-	InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSourceAll      InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSource = "all"
-	InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSourceSitemaps InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSource = "sitemaps"
-	InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSourceLinks    InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSource = "links"
-)
-
-func (r InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSource) IsKnown() bool {
-	switch r {
-	case InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSourceAll, InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSourceSitemaps, InstanceDeleteResponseSourceParamsWebCrawlerCrawlOptionsSourceLinks:
-		return true
-	}
-	return false
 }
 
 type InstanceDeleteResponseSourceParamsWebCrawlerParseOptions struct {
@@ -4776,7 +4586,6 @@ func (r instanceReadResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceReadResponseSourceParamsWebCrawler struct {
-	CrawlOptions InstanceReadResponseSourceParamsWebCrawlerCrawlOptions `json:"crawl_options"`
 	ParseOptions InstanceReadResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    InstanceReadResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
 	StoreOptions InstanceReadResponseSourceParamsWebCrawlerStoreOptions `json:"store_options"`
@@ -4786,7 +4595,6 @@ type InstanceReadResponseSourceParamsWebCrawler struct {
 // instanceReadResponseSourceParamsWebCrawlerJSON contains the JSON metadata for
 // the struct [InstanceReadResponseSourceParamsWebCrawler]
 type instanceReadResponseSourceParamsWebCrawlerJSON struct {
-	CrawlOptions apijson.Field
 	ParseOptions apijson.Field
 	ParseType    apijson.Field
 	StoreOptions apijson.Field
@@ -4800,51 +4608,6 @@ func (r *InstanceReadResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) 
 
 func (r instanceReadResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
-}
-
-type InstanceReadResponseSourceParamsWebCrawlerCrawlOptions struct {
-	Depth                float64                                                      `json:"depth"`
-	IncludeExternalLinks bool                                                         `json:"include_external_links"`
-	IncludeSubdomains    bool                                                         `json:"include_subdomains"`
-	MaxAge               float64                                                      `json:"max_age"`
-	Source               InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSource `json:"source"`
-	JSON                 instanceReadResponseSourceParamsWebCrawlerCrawlOptionsJSON   `json:"-"`
-}
-
-// instanceReadResponseSourceParamsWebCrawlerCrawlOptionsJSON contains the JSON
-// metadata for the struct [InstanceReadResponseSourceParamsWebCrawlerCrawlOptions]
-type instanceReadResponseSourceParamsWebCrawlerCrawlOptionsJSON struct {
-	Depth                apijson.Field
-	IncludeExternalLinks apijson.Field
-	IncludeSubdomains    apijson.Field
-	MaxAge               apijson.Field
-	Source               apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *InstanceReadResponseSourceParamsWebCrawlerCrawlOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r instanceReadResponseSourceParamsWebCrawlerCrawlOptionsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSource string
-
-const (
-	InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSourceAll      InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSource = "all"
-	InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSourceSitemaps InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSource = "sitemaps"
-	InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSourceLinks    InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSource = "links"
-)
-
-func (r InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSource) IsKnown() bool {
-	switch r {
-	case InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSourceAll, InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSourceSitemaps, InstanceReadResponseSourceParamsWebCrawlerCrawlOptionsSourceLinks:
-		return true
-	}
-	return false
 }
 
 type InstanceReadResponseSourceParamsWebCrawlerParseOptions struct {
@@ -5701,7 +5464,6 @@ func (r InstanceNewParamsSourceParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceNewParamsSourceParamsWebCrawler struct {
-	CrawlOptions param.Field[InstanceNewParamsSourceParamsWebCrawlerCrawlOptions] `json:"crawl_options"`
 	ParseOptions param.Field[InstanceNewParamsSourceParamsWebCrawlerParseOptions] `json:"parse_options"`
 	ParseType    param.Field[InstanceNewParamsSourceParamsWebCrawlerParseType]    `json:"parse_type"`
 	StoreOptions param.Field[InstanceNewParamsSourceParamsWebCrawlerStoreOptions] `json:"store_options"`
@@ -5709,34 +5471,6 @@ type InstanceNewParamsSourceParamsWebCrawler struct {
 
 func (r InstanceNewParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type InstanceNewParamsSourceParamsWebCrawlerCrawlOptions struct {
-	Depth                param.Field[float64]                                                   `json:"depth"`
-	IncludeExternalLinks param.Field[bool]                                                      `json:"include_external_links"`
-	IncludeSubdomains    param.Field[bool]                                                      `json:"include_subdomains"`
-	MaxAge               param.Field[float64]                                                   `json:"max_age"`
-	Source               param.Field[InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSource] `json:"source"`
-}
-
-func (r InstanceNewParamsSourceParamsWebCrawlerCrawlOptions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSource string
-
-const (
-	InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSourceAll      InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSource = "all"
-	InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSourceSitemaps InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSource = "sitemaps"
-	InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSourceLinks    InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSource = "links"
-)
-
-func (r InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSource) IsKnown() bool {
-	switch r {
-	case InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSourceAll, InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSourceSitemaps, InstanceNewParamsSourceParamsWebCrawlerCrawlOptionsSourceLinks:
-		return true
-	}
-	return false
 }
 
 type InstanceNewParamsSourceParamsWebCrawlerParseOptions struct {
@@ -6324,7 +6058,6 @@ func (r InstanceUpdateParamsSourceParams) MarshalJSON() (data []byte, err error)
 }
 
 type InstanceUpdateParamsSourceParamsWebCrawler struct {
-	CrawlOptions param.Field[InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptions] `json:"crawl_options"`
 	ParseOptions param.Field[InstanceUpdateParamsSourceParamsWebCrawlerParseOptions] `json:"parse_options"`
 	ParseType    param.Field[InstanceUpdateParamsSourceParamsWebCrawlerParseType]    `json:"parse_type"`
 	StoreOptions param.Field[InstanceUpdateParamsSourceParamsWebCrawlerStoreOptions] `json:"store_options"`
@@ -6332,34 +6065,6 @@ type InstanceUpdateParamsSourceParamsWebCrawler struct {
 
 func (r InstanceUpdateParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptions struct {
-	Depth                param.Field[float64]                                                      `json:"depth"`
-	IncludeExternalLinks param.Field[bool]                                                         `json:"include_external_links"`
-	IncludeSubdomains    param.Field[bool]                                                         `json:"include_subdomains"`
-	MaxAge               param.Field[float64]                                                      `json:"max_age"`
-	Source               param.Field[InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSource] `json:"source"`
-}
-
-func (r InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSource string
-
-const (
-	InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSourceAll      InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSource = "all"
-	InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSourceSitemaps InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSource = "sitemaps"
-	InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSourceLinks    InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSource = "links"
-)
-
-func (r InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSource) IsKnown() bool {
-	switch r {
-	case InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSourceAll, InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSourceSitemaps, InstanceUpdateParamsSourceParamsWebCrawlerCrawlOptionsSourceLinks:
-		return true
-	}
-	return false
 }
 
 type InstanceUpdateParamsSourceParamsWebCrawlerParseOptions struct {
@@ -6760,7 +6465,8 @@ type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	FusionMethod     param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted, falls back
+	// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
 	KeywordMatchMode param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                               `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                                 `json:"max_num_results"`
@@ -6827,7 +6533,8 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod) IsKno
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted, falls back
+// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
@@ -7068,7 +6775,8 @@ type InstanceSearchParamsAISearchOptionsRetrieval struct {
 	FusionMethod     param.Field[InstanceSearchParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted, falls back
+	// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
 	KeywordMatchMode param.Field[InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
 	MatchThreshold   param.Field[float64]                                                      `json:"match_threshold"`
 	MaxNumResults    param.Field[int64]                                                        `json:"max_num_results"`
@@ -7135,7 +6843,8 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalFusionMethod) IsKnown() bool
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted, falls back
+// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
 type InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
