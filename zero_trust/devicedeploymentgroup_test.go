@@ -34,7 +34,7 @@ func TestDeviceDeploymentGroupNewWithOptionalParams(t *testing.T) {
 		Name:      cloudflare.F("Engineering Ring 0"),
 		VersionConfig: cloudflare.F([]zero_trust.DeviceDeploymentGroupNewParamsVersionConfig{{
 			TargetEnvironment: cloudflare.F("windows"),
-			Version:           cloudflare.F("2026.5.234.0"),
+			Version:           cloudflare.F("2026.6.234.0"),
 		}}),
 		PolicyIDs: cloudflare.F([]string{"string"}),
 	})
@@ -131,7 +131,7 @@ func TestDeviceDeploymentGroupEditWithOptionalParams(t *testing.T) {
 			PolicyIDs: cloudflare.F([]string{"string"}),
 			VersionConfig: cloudflare.F([]zero_trust.DeviceDeploymentGroupEditParamsVersionConfig{{
 				TargetEnvironment: cloudflare.F("windows"),
-				Version:           cloudflare.F("2026.5.234.0"),
+				Version:           cloudflare.F("2026.6.234.0"),
 			}}),
 		},
 	)

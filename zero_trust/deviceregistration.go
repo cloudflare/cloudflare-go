@@ -184,7 +184,13 @@ type DeviceRegistrationListResponse struct {
 	// Type of the tunnel - wireguard or masque.
 	TunnelType string                             `json:"tunnel_type" api:"nullable"`
 	User       DeviceRegistrationListResponseUser `json:"user"`
-	JSON       deviceRegistrationListResponseJSON `json:"-"`
+	// The virtual IPv4 address assigned to the network interface of the tunnel for
+	// this registration.
+	VirtualIPV4 string `json:"virtual_ipv4" api:"nullable"`
+	// The virtual IPv6 address assigned to the network interface of the tunnel for
+	// this registration.
+	VirtualIPV6 string                             `json:"virtual_ipv6" api:"nullable"`
+	JSON        deviceRegistrationListResponseJSON `json:"-"`
 }
 
 // deviceRegistrationListResponseJSON contains the JSON metadata for the struct
@@ -202,6 +208,8 @@ type deviceRegistrationListResponseJSON struct {
 	RevokedAt   apijson.Field
 	TunnelType  apijson.Field
 	User        apijson.Field
+	VirtualIPV4 apijson.Field
+	VirtualIPV6 apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -338,7 +346,13 @@ type DeviceRegistrationGetResponse struct {
 	// Type of the tunnel - wireguard or masque.
 	TunnelType string                            `json:"tunnel_type" api:"nullable"`
 	User       DeviceRegistrationGetResponseUser `json:"user"`
-	JSON       deviceRegistrationGetResponseJSON `json:"-"`
+	// The virtual IPv4 address assigned to the network interface of the tunnel for
+	// this registration.
+	VirtualIPV4 string `json:"virtual_ipv4" api:"nullable"`
+	// The virtual IPv6 address assigned to the network interface of the tunnel for
+	// this registration.
+	VirtualIPV6 string                            `json:"virtual_ipv6" api:"nullable"`
+	JSON        deviceRegistrationGetResponseJSON `json:"-"`
 }
 
 // deviceRegistrationGetResponseJSON contains the JSON metadata for the struct
@@ -356,6 +370,8 @@ type deviceRegistrationGetResponseJSON struct {
 	RevokedAt   apijson.Field
 	TunnelType  apijson.Field
 	User        apijson.Field
+	VirtualIPV4 apijson.Field
+	VirtualIPV6 apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
