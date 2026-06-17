@@ -7,15 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 )
 
 // RuleService contains methods and other services that help with interacting with
@@ -79,33 +76,6 @@ func (r *RuleService) Update(ctx context.Context, ruleIdentifier string, params 
 	}
 	res = &env.Result
 	return res, nil
-}
-
-// Lists existing routing rules.
-func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[EmailRoutingRule], err error) {
-	var raw *http.Response
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if params.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("zones/%s/email/routing/rules", params.ZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Lists existing routing rules.
-func (r *RuleService) ListAutoPaging(ctx context.Context, params RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[EmailRoutingRule] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a specific routing rule.
@@ -676,41 +646,6 @@ const (
 func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case RuleUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RuleListParams struct {
-	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	// Filter by enabled routing rules.
-	Enabled param.Field[RuleListParamsEnabled] `query:"enabled"`
-	// Page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// Maximum number of results per page.
-	PerPage param.Field[float64] `query:"per_page"`
-}
-
-// URLQuery serializes [RuleListParams]'s query parameters as `url.Values`.
-func (r RuleListParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-// Filter by enabled routing rules.
-type RuleListParamsEnabled bool
-
-const (
-	RuleListParamsEnabledTrue  RuleListParamsEnabled = true
-	RuleListParamsEnabledFalse RuleListParamsEnabled = false
-)
-
-func (r RuleListParamsEnabled) IsKnown() bool {
-	switch r {
-	case RuleListParamsEnabledTrue, RuleListParamsEnabledFalse:
 		return true
 	}
 	return false

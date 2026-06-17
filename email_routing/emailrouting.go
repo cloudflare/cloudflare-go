@@ -112,6 +112,9 @@ type Settings struct {
 	SkipWizard SettingsSkipWizard `json:"skip_wizard"`
 	// Show the state of your account, and the type or configuration error.
 	Status SettingsStatus `json:"status"`
+	// Whether subaddressing (plus-addressing) is honored when matching incoming mail
+	// against routing rules.
+	SupportSubaddress SettingsSupportSubaddress `json:"support_subaddress"`
 	// Email Routing settings tag. (Deprecated, replaced by Email Routing settings
 	// identifier)
 	//
@@ -122,16 +125,17 @@ type Settings struct {
 
 // settingsJSON contains the JSON metadata for the struct [Settings]
 type settingsJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Created     apijson.Field
-	Modified    apijson.Field
-	SkipWizard  apijson.Field
-	Status      apijson.Field
-	Tag         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                apijson.Field
+	Enabled           apijson.Field
+	Name              apijson.Field
+	Created           apijson.Field
+	Modified          apijson.Field
+	SkipWizard        apijson.Field
+	Status            apijson.Field
+	SupportSubaddress apijson.Field
+	Tag               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *Settings) UnmarshalJSON(data []byte) (err error) {
@@ -188,6 +192,23 @@ const (
 func (r SettingsStatus) IsKnown() bool {
 	switch r {
 	case SettingsStatusReady, SettingsStatusUnconfigured, SettingsStatusMisconfigured, SettingsStatusMisconfiguredLocked, SettingsStatusUnlocked:
+		return true
+	}
+	return false
+}
+
+// Whether subaddressing (plus-addressing) is honored when matching incoming mail
+// against routing rules.
+type SettingsSupportSubaddress bool
+
+const (
+	SettingsSupportSubaddressTrue  SettingsSupportSubaddress = true
+	SettingsSupportSubaddressFalse SettingsSupportSubaddress = false
+)
+
+func (r SettingsSupportSubaddress) IsKnown() bool {
+	switch r {
+	case SettingsSupportSubaddressTrue, SettingsSupportSubaddressFalse:
 		return true
 	}
 	return false
