@@ -700,6 +700,8 @@ TEST_PATHS=(
 	realtime_kit/analytics_test.go
 	calls/sfu_test.go
 	calls/turn_test.go
+	moq/relay_test.go
+	moq/relaytoken_test.go
 	cloudforce_one/scanresult_test.go
 	cloudforce_one/scanconfig_test.go
 	cloudforce_one/binarystorage_test.go

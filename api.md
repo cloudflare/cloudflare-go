@@ -215,6 +215,8 @@
 
 # [Calls](calls/api.md)
 
+# [Moq](moq/api.md)
+
 # [CloudforceOne](cloudforce_one/api.md)
 
 # [AIGateway](ai_gateway/api.md)

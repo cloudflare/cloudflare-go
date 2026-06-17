@@ -76,6 +76,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v7/managed_transforms"
 	"github.com/cloudflare/cloudflare-go/v7/memberships"
+	"github.com/cloudflare/cloudflare-go/v7/moq"
 	"github.com/cloudflare/cloudflare-go/v7/mtls_certificates"
 	"github.com/cloudflare/cloudflare-go/v7/network_interconnects"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -233,6 +234,7 @@ type Client struct {
 	Snippets                    *snippets.SnippetService
 	RealtimeKit                 *realtime_kit.RealtimeKitService
 	Calls                       *calls.CallService
+	Moq                         *moq.MoqService
 	CloudforceOne               *cloudforce_one.CloudforceOneService
 	AIGateway                   *ai_gateway.AIGatewayService
 	Flagship                    *flagship.FlagshipService
@@ -392,6 +394,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Snippets = snippets.NewSnippetService(opts...)
 	r.RealtimeKit = realtime_kit.NewRealtimeKitService(opts...)
 	r.Calls = calls.NewCallService(opts...)
+	r.Moq = moq.NewMoqService(opts...)
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
 	r.Flagship = flagship.NewFlagshipService(opts...)
