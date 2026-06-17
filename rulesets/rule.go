@@ -5450,8 +5450,12 @@ type SetCacheSettingsRuleActionParameters struct {
 	// Whether to strip Last-Modified headers from the origin response before caching.
 	StripLastModified bool `json:"strip_last_modified"`
 	// Whether to strip Set-Cookie headers from the origin response before caching.
-	StripSetCookie bool                                     `json:"strip_set_cookie"`
-	JSON           setCacheSettingsRuleActionParametersJSON `json:"-"`
+	StripSetCookie bool `json:"strip_set_cookie"`
+	// Controls how cached responses vary based on request headers. At least one of
+	// `default` or `headers` must be set, and `default` is required when `headers` is
+	// set.
+	Vary SetCacheSettingsRuleActionParametersVary `json:"vary"`
+	JSON setCacheSettingsRuleActionParametersJSON `json:"-"`
 }
 
 // setCacheSettingsRuleActionParametersJSON contains the JSON metadata for the
@@ -5472,6 +5476,7 @@ type setCacheSettingsRuleActionParametersJSON struct {
 	StripEtags               apijson.Field
 	StripLastModified        apijson.Field
 	StripSetCookie           apijson.Field
+	Vary                     apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -6010,6 +6015,131 @@ func (r setCacheSettingsRuleActionParametersSharedDictionaryJSON) RawJSON() stri
 	return r.raw
 }
 
+// Controls how cached responses vary based on request headers. At least one of
+// `default` or `headers` must be set, and `default` is required when `headers` is
+// set.
+type SetCacheSettingsRuleActionParametersVary struct {
+	// Controls how a single request header (or the default for all headers)
+	// contributes to the cache key.
+	Default SetCacheSettingsRuleActionParametersVaryDefault `json:"default"`
+	// A mapping of lowercase request header names to their vary configuration.
+	Headers map[string]SetCacheSettingsRuleActionParametersVaryHeader `json:"headers"`
+	JSON    setCacheSettingsRuleActionParametersVaryJSON              `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersVaryJSON contains the JSON metadata for the
+// struct [SetCacheSettingsRuleActionParametersVary]
+type setCacheSettingsRuleActionParametersVaryJSON struct {
+	Default     apijson.Field
+	Headers     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersVary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersVaryJSON) RawJSON() string {
+	return r.raw
+}
+
+// Controls how a single request header (or the default for all headers)
+// contributes to the cache key.
+type SetCacheSettingsRuleActionParametersVaryDefault struct {
+	// How the header value is treated when building the cache key.
+	Action SetCacheSettingsRuleActionParametersVaryDefaultAction `json:"action" api:"required"`
+	// The set of languages to normalize against. Only valid for the `accept-language`
+	// header.
+	Languages []string `json:"languages"`
+	// The set of media types to normalize against. Only valid for the `accept` header.
+	MediaTypes []string                                            `json:"media_types"`
+	JSON       setCacheSettingsRuleActionParametersVaryDefaultJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersVaryDefaultJSON contains the JSON metadata
+// for the struct [SetCacheSettingsRuleActionParametersVaryDefault]
+type setCacheSettingsRuleActionParametersVaryDefaultJSON struct {
+	Action      apijson.Field
+	Languages   apijson.Field
+	MediaTypes  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersVaryDefault) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersVaryDefaultJSON) RawJSON() string {
+	return r.raw
+}
+
+// How the header value is treated when building the cache key.
+type SetCacheSettingsRuleActionParametersVaryDefaultAction string
+
+const (
+	SetCacheSettingsRuleActionParametersVaryDefaultActionBypass      SetCacheSettingsRuleActionParametersVaryDefaultAction = "bypass"
+	SetCacheSettingsRuleActionParametersVaryDefaultActionPassthrough SetCacheSettingsRuleActionParametersVaryDefaultAction = "passthrough"
+	SetCacheSettingsRuleActionParametersVaryDefaultActionNormalize   SetCacheSettingsRuleActionParametersVaryDefaultAction = "normalize"
+)
+
+func (r SetCacheSettingsRuleActionParametersVaryDefaultAction) IsKnown() bool {
+	switch r {
+	case SetCacheSettingsRuleActionParametersVaryDefaultActionBypass, SetCacheSettingsRuleActionParametersVaryDefaultActionPassthrough, SetCacheSettingsRuleActionParametersVaryDefaultActionNormalize:
+		return true
+	}
+	return false
+}
+
+// Controls how a single request header (or the default for all headers)
+// contributes to the cache key.
+type SetCacheSettingsRuleActionParametersVaryHeader struct {
+	// How the header value is treated when building the cache key.
+	Action SetCacheSettingsRuleActionParametersVaryHeadersAction `json:"action" api:"required"`
+	// The set of languages to normalize against. Only valid for the `accept-language`
+	// header.
+	Languages []string `json:"languages"`
+	// The set of media types to normalize against. Only valid for the `accept` header.
+	MediaTypes []string                                           `json:"media_types"`
+	JSON       setCacheSettingsRuleActionParametersVaryHeaderJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersVaryHeaderJSON contains the JSON metadata
+// for the struct [SetCacheSettingsRuleActionParametersVaryHeader]
+type setCacheSettingsRuleActionParametersVaryHeaderJSON struct {
+	Action      apijson.Field
+	Languages   apijson.Field
+	MediaTypes  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersVaryHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersVaryHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
+// How the header value is treated when building the cache key.
+type SetCacheSettingsRuleActionParametersVaryHeadersAction string
+
+const (
+	SetCacheSettingsRuleActionParametersVaryHeadersActionBypass      SetCacheSettingsRuleActionParametersVaryHeadersAction = "bypass"
+	SetCacheSettingsRuleActionParametersVaryHeadersActionPassthrough SetCacheSettingsRuleActionParametersVaryHeadersAction = "passthrough"
+	SetCacheSettingsRuleActionParametersVaryHeadersActionNormalize   SetCacheSettingsRuleActionParametersVaryHeadersAction = "normalize"
+)
+
+func (r SetCacheSettingsRuleActionParametersVaryHeadersAction) IsKnown() bool {
+	switch r {
+	case SetCacheSettingsRuleActionParametersVaryHeadersActionBypass, SetCacheSettingsRuleActionParametersVaryHeadersActionPassthrough, SetCacheSettingsRuleActionParametersVaryHeadersActionNormalize:
+		return true
+	}
+	return false
+}
+
 // Configuration for exposed credential checking.
 type SetCacheSettingsRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
@@ -6163,6 +6293,10 @@ type SetCacheSettingsRuleActionParametersParam struct {
 	StripLastModified param.Field[bool] `json:"strip_last_modified"`
 	// Whether to strip Set-Cookie headers from the origin response before caching.
 	StripSetCookie param.Field[bool] `json:"strip_set_cookie"`
+	// Controls how cached responses vary based on request headers. At least one of
+	// `default` or `headers` must be set, and `default` is required when `headers` is
+	// set.
+	Vary param.Field[SetCacheSettingsRuleActionParametersVaryParam] `json:"vary"`
 }
 
 func (r SetCacheSettingsRuleActionParametersParam) MarshalJSON() (data []byte, err error) {
@@ -6387,6 +6521,53 @@ type SetCacheSettingsRuleActionParametersSharedDictionaryParam struct {
 }
 
 func (r SetCacheSettingsRuleActionParametersSharedDictionaryParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Controls how cached responses vary based on request headers. At least one of
+// `default` or `headers` must be set, and `default` is required when `headers` is
+// set.
+type SetCacheSettingsRuleActionParametersVaryParam struct {
+	// Controls how a single request header (or the default for all headers)
+	// contributes to the cache key.
+	Default param.Field[SetCacheSettingsRuleActionParametersVaryDefaultParam] `json:"default"`
+	// A mapping of lowercase request header names to their vary configuration.
+	Headers param.Field[map[string]SetCacheSettingsRuleActionParametersVaryHeaderParam] `json:"headers"`
+}
+
+func (r SetCacheSettingsRuleActionParametersVaryParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Controls how a single request header (or the default for all headers)
+// contributes to the cache key.
+type SetCacheSettingsRuleActionParametersVaryDefaultParam struct {
+	// How the header value is treated when building the cache key.
+	Action param.Field[SetCacheSettingsRuleActionParametersVaryDefaultAction] `json:"action" api:"required"`
+	// The set of languages to normalize against. Only valid for the `accept-language`
+	// header.
+	Languages param.Field[[]string] `json:"languages"`
+	// The set of media types to normalize against. Only valid for the `accept` header.
+	MediaTypes param.Field[[]string] `json:"media_types"`
+}
+
+func (r SetCacheSettingsRuleActionParametersVaryDefaultParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Controls how a single request header (or the default for all headers)
+// contributes to the cache key.
+type SetCacheSettingsRuleActionParametersVaryHeaderParam struct {
+	// How the header value is treated when building the cache key.
+	Action param.Field[SetCacheSettingsRuleActionParametersVaryHeadersAction] `json:"action" api:"required"`
+	// The set of languages to normalize against. Only valid for the `accept-language`
+	// header.
+	Languages param.Field[[]string] `json:"languages"`
+	// The set of media types to normalize against. Only valid for the `accept` header.
+	MediaTypes param.Field[[]string] `json:"media_types"`
+}
+
+func (r SetCacheSettingsRuleActionParametersVaryHeaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
