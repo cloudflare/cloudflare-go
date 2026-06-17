@@ -29,7 +29,7 @@ func TestRelayNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Moq.Relays.New(context.TODO(), moq.RelayNewParams{
+	_, err := client.MoQ.Relays.New(context.TODO(), moq.RelayNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("Production Live Stream"),
 	})
@@ -56,7 +56,7 @@ func TestRelayUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Moq.Relays.Update(
+	_, err := client.MoQ.Relays.Update(
 		context.TODO(),
 		"a1b2c3d4e5f67890a1b2c3d4e5f67890",
 		moq.RelayUpdateParams{
@@ -99,7 +99,7 @@ func TestRelayListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Moq.Relays.List(context.TODO(), moq.RelayListParams{
+	_, err := client.MoQ.Relays.List(context.TODO(), moq.RelayListParams{
 		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Asc:           cloudflare.F(true),
 		CreatedAfter:  cloudflare.F(time.Now()),
@@ -129,7 +129,7 @@ func TestRelayDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Moq.Relays.Delete(
+	_, err := client.MoQ.Relays.Delete(
 		context.TODO(),
 		"a1b2c3d4e5f67890a1b2c3d4e5f67890",
 		moq.RelayDeleteParams{
@@ -159,7 +159,7 @@ func TestRelayGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Moq.Relays.Get(
+	_, err := client.MoQ.Relays.Get(
 		context.TODO(),
 		"a1b2c3d4e5f67890a1b2c3d4e5f67890",
 		moq.RelayGetParams{

@@ -234,7 +234,7 @@ type Client struct {
 	Snippets                    *snippets.SnippetService
 	RealtimeKit                 *realtime_kit.RealtimeKitService
 	Calls                       *calls.CallService
-	Moq                         *moq.MoqService
+	MoQ                         *moq.MoQService
 	CloudforceOne               *cloudforce_one.CloudforceOneService
 	AIGateway                   *ai_gateway.AIGatewayService
 	Flagship                    *flagship.FlagshipService
@@ -394,7 +394,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Snippets = snippets.NewSnippetService(opts...)
 	r.RealtimeKit = realtime_kit.NewRealtimeKitService(opts...)
 	r.Calls = calls.NewCallService(opts...)
-	r.Moq = moq.NewMoqService(opts...)
+	r.MoQ = moq.NewMoQService(opts...)
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
 	r.Flagship = flagship.NewFlagshipService(opts...)

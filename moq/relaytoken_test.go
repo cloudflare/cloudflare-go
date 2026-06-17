@@ -28,7 +28,7 @@ func TestRelayTokenRotate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Moq.Relays.Tokens.Rotate(
+	_, err := client.MoQ.Relays.Tokens.Rotate(
 		context.TODO(),
 		"a1b2c3d4e5f67890a1b2c3d4e5f67890",
 		moq.RelayTokenRotateParams{

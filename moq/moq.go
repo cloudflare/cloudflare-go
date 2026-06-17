@@ -6,22 +6,22 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
-// MoqService contains methods and other services that help with interacting with
+// MoQService contains methods and other services that help with interacting with
 // the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewMoqService] method instead.
-type MoqService struct {
+// the [NewMoQService] method instead.
+type MoQService struct {
 	Options []option.RequestOption
 	Relays  *RelayService
 }
 
-// NewMoqService generates a new service that applies the given options to each
+// NewMoQService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewMoqService(opts ...option.RequestOption) (r *MoqService) {
-	r = &MoqService{}
+func NewMoQService(opts ...option.RequestOption) (r *MoQService) {
+	r = &MoQService{}
 	r.Options = opts
 	r.Relays = NewRelayService(opts...)
 	return
