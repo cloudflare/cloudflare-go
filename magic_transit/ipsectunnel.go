@@ -327,9 +327,13 @@ func (r ipsecTunnelNewResponseJSON) RawJSON() string {
 type IPSECTunnelNewResponseBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -355,11 +359,13 @@ type IPSECTunnelNewResponseBGP struct {
 // ipsecTunnelNewResponseBGPJSON contains the JSON metadata for the struct
 // [IPSECTunnelNewResponseBGP]
 type ipsecTunnelNewResponseBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *IPSECTunnelNewResponseBGP) UnmarshalJSON(data []byte) (err error) {
@@ -681,9 +687,13 @@ func (r ipsecTunnelUpdateResponseModifiedIPSECTunnelJSON) RawJSON() string {
 type IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -709,11 +719,13 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP struct {
 // ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPJSON contains the JSON metadata
 // for the struct [IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP]
 type ipsecTunnelUpdateResponseModifiedIPSECTunnelBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *IPSECTunnelUpdateResponseModifiedIPSECTunnelBGP) UnmarshalJSON(data []byte) (err error) {
@@ -1035,9 +1047,13 @@ func (r ipsecTunnelListResponseIPSECTunnelJSON) RawJSON() string {
 type IPSECTunnelListResponseIPSECTunnelsBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -1063,11 +1079,13 @@ type IPSECTunnelListResponseIPSECTunnelsBGP struct {
 // ipsecTunnelListResponseIPSECTunnelsBGPJSON contains the JSON metadata for the
 // struct [IPSECTunnelListResponseIPSECTunnelsBGP]
 type ipsecTunnelListResponseIPSECTunnelsBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *IPSECTunnelListResponseIPSECTunnelsBGP) UnmarshalJSON(data []byte) (err error) {
@@ -1390,9 +1408,13 @@ func (r ipsecTunnelDeleteResponseDeletedIPSECTunnelJSON) RawJSON() string {
 type IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -1418,11 +1440,13 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP struct {
 // ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPJSON contains the JSON metadata
 // for the struct [IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP]
 type ipsecTunnelDeleteResponseDeletedIPSECTunnelBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *IPSECTunnelDeleteResponseDeletedIPSECTunnelBGP) UnmarshalJSON(data []byte) (err error) {
@@ -1745,9 +1769,13 @@ func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON) RawJSON() string {
 type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -1773,11 +1801,13 @@ type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP struct {
 // ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPJSON contains the JSON
 // metadata for the struct [IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP]
 type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsBGP) UnmarshalJSON(data []byte) (err error) {
@@ -2100,9 +2130,13 @@ func (r ipsecTunnelGetResponseIPSECTunnelJSON) RawJSON() string {
 type IPSECTunnelGetResponseIPSECTunnelBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -2128,11 +2162,13 @@ type IPSECTunnelGetResponseIPSECTunnelBGP struct {
 // ipsecTunnelGetResponseIPSECTunnelBGPJSON contains the JSON metadata for the
 // struct [IPSECTunnelGetResponseIPSECTunnelBGP]
 type ipsecTunnelGetResponseIPSECTunnelBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *IPSECTunnelGetResponseIPSECTunnelBGP) UnmarshalJSON(data []byte) (err error) {
@@ -2481,9 +2517,13 @@ func (r IPSECTunnelNewParams) MarshalJSON() (data []byte, err error) {
 type IPSECTunnelNewParamsBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN param.Field[int64] `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID param.Field[string] `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID param.Field[string] `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -2689,9 +2729,13 @@ func (r IPSECTunnelUpdateParams) MarshalJSON() (data []byte, err error) {
 type IPSECTunnelUpdateParamsBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN param.Field[int64] `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID param.Field[string] `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID param.Field[string] `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security

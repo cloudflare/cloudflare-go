@@ -247,9 +247,13 @@ func (r greTunnelNewResponseJSON) RawJSON() string {
 type GRETunnelNewResponseBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -275,11 +279,13 @@ type GRETunnelNewResponseBGP struct {
 // greTunnelNewResponseBGPJSON contains the JSON metadata for the struct
 // [GRETunnelNewResponseBGP]
 type greTunnelNewResponseBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *GRETunnelNewResponseBGP) UnmarshalJSON(data []byte) (err error) {
@@ -565,9 +571,13 @@ func (r greTunnelUpdateResponseModifiedGRETunnelJSON) RawJSON() string {
 type GRETunnelUpdateResponseModifiedGRETunnelBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -593,11 +603,13 @@ type GRETunnelUpdateResponseModifiedGRETunnelBGP struct {
 // greTunnelUpdateResponseModifiedGRETunnelBGPJSON contains the JSON metadata for
 // the struct [GRETunnelUpdateResponseModifiedGRETunnelBGP]
 type greTunnelUpdateResponseModifiedGRETunnelBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *GRETunnelUpdateResponseModifiedGRETunnelBGP) UnmarshalJSON(data []byte) (err error) {
@@ -882,9 +894,13 @@ func (r greTunnelListResponseGRETunnelJSON) RawJSON() string {
 type GRETunnelListResponseGRETunnelsBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -910,11 +926,13 @@ type GRETunnelListResponseGRETunnelsBGP struct {
 // greTunnelListResponseGRETunnelsBGPJSON contains the JSON metadata for the struct
 // [GRETunnelListResponseGRETunnelsBGP]
 type greTunnelListResponseGRETunnelsBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *GRETunnelListResponseGRETunnelsBGP) UnmarshalJSON(data []byte) (err error) {
@@ -1201,9 +1219,13 @@ func (r greTunnelDeleteResponseDeletedGRETunnelJSON) RawJSON() string {
 type GRETunnelDeleteResponseDeletedGRETunnelBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -1229,11 +1251,13 @@ type GRETunnelDeleteResponseDeletedGRETunnelBGP struct {
 // greTunnelDeleteResponseDeletedGRETunnelBGPJSON contains the JSON metadata for
 // the struct [GRETunnelDeleteResponseDeletedGRETunnelBGP]
 type greTunnelDeleteResponseDeletedGRETunnelBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *GRETunnelDeleteResponseDeletedGRETunnelBGP) UnmarshalJSON(data []byte) (err error) {
@@ -1520,9 +1544,13 @@ func (r greTunnelBulkUpdateResponseModifiedGRETunnelJSON) RawJSON() string {
 type GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -1548,11 +1576,13 @@ type GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP struct {
 // greTunnelBulkUpdateResponseModifiedGRETunnelsBGPJSON contains the JSON metadata
 // for the struct [GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP]
 type greTunnelBulkUpdateResponseModifiedGRETunnelsBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP) UnmarshalJSON(data []byte) (err error) {
@@ -1838,9 +1868,13 @@ func (r greTunnelGetResponseGRETunnelJSON) RawJSON() string {
 type GRETunnelGetResponseGRETunnelBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security
@@ -1866,11 +1900,13 @@ type GRETunnelGetResponseGRETunnelBGP struct {
 // greTunnelGetResponseGRETunnelBGPJSON contains the JSON metadata for the struct
 // [GRETunnelGetResponseGRETunnelBGP]
 type greTunnelGetResponseGRETunnelBGPJSON struct {
-	CustomerASN   apijson.Field
-	ExtraPrefixes apijson.Field
-	Md5Key        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CustomerASN    apijson.Field
+	ExportFilterID apijson.Field
+	ExtraPrefixes  apijson.Field
+	ImportFilterID apijson.Field
+	Md5Key         apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *GRETunnelGetResponseGRETunnelBGP) UnmarshalJSON(data []byte) (err error) {
@@ -2103,9 +2139,13 @@ func (r GRETunnelNewParams) MarshalJSON() (data []byte, err error) {
 type GRETunnelNewParamsBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN param.Field[int64] `json:"customer_asn" api:"required"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID param.Field[string] `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
 	// the routes in the Magic routing table.
 	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID param.Field[string] `json:"import_filter_id"`
 	// MD5 key to use for session authentication.
 	//
 	// Note that _this is not a security measure_. MD5 is not a valid security

@@ -35,9 +35,11 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 		Name:                   cloudflare.F("IPsec_1"),
 		AutomaticReturnRouting: cloudflare.F(true),
 		BGP: cloudflare.F(magic_transit.IPSECTunnelNewParamsBGP{
-			CustomerASN:   cloudflare.F(int64(0)),
-			ExtraPrefixes: cloudflare.F([]string{"string"}),
-			Md5Key:        cloudflare.F("md5_key"),
+			CustomerASN:    cloudflare.F(int64(0)),
+			ExportFilterID: cloudflare.F("a1b2c3d4e5f647890a1b2c3d4e5f6789"),
+			ExtraPrefixes:  cloudflare.F([]string{"string"}),
+			ImportFilterID: cloudflare.F("a1b2c3d4e5f647890a1b2c3d4e5f6789"),
+			Md5Key:         cloudflare.F("md5_key"),
 		}),
 		CustomRemoteIdentities: cloudflare.F(magic_transit.IPSECTunnelNewParamsCustomRemoteIdentities{
 			FqdnID: cloudflare.F("fqdn_id"),
@@ -92,9 +94,11 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 			Name:                   cloudflare.F("IPsec_1"),
 			AutomaticReturnRouting: cloudflare.F(true),
 			BGP: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsBGP{
-				CustomerASN:   cloudflare.F(int64(0)),
-				ExtraPrefixes: cloudflare.F([]string{"string"}),
-				Md5Key:        cloudflare.F("md5_key"),
+				CustomerASN:    cloudflare.F(int64(0)),
+				ExportFilterID: cloudflare.F("a1b2c3d4e5f647890a1b2c3d4e5f6789"),
+				ExtraPrefixes:  cloudflare.F([]string{"string"}),
+				ImportFilterID: cloudflare.F("a1b2c3d4e5f647890a1b2c3d4e5f6789"),
+				Md5Key:         cloudflare.F("md5_key"),
 			}),
 			CustomRemoteIdentities: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsCustomRemoteIdentities{
 				FqdnID: cloudflare.F("fqdn_id"),
