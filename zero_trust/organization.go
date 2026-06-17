@@ -239,14 +239,14 @@ type Organization struct {
 	LoginDesign  LoginDesign `json:"login_design"`
 	// Configures multi-factor authentication (MFA) settings for an organization.
 	MfaConfig OrganizationMfaConfig `json:"mfa_config"`
+	// Configures PIV key requirements for MFA using hardware security keys.
+	MfaPivKeyRequirements OrganizationMfaPivKeyRequirements `json:"mfa_piv_key_requirements"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
 	// session duration configured. Note: 'allowed_authenticators' cannot only contain
-	// 'ssh_piv_key' if the organization has any non-infrastructure applications
-	// because PIV keys are only compatible with infrastructure apps.
+	// 'piv_key' if the organization has any non-infrastructure applications because
+	// PIV keys are only compatible with infrastructure apps.
 	MfaRequiredForAllApps bool `json:"mfa_required_for_all_apps"`
-	// Configures SSH PIV key requirements for MFA using hardware security keys.
-	MfaSSHPivKeyRequirements OrganizationMfaSSHPivKeyRequirements `json:"mfa_ssh_piv_key_requirements"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
@@ -278,8 +278,8 @@ type organizationJSON struct {
 	IsUIReadOnly                           apijson.Field
 	LoginDesign                            apijson.Field
 	MfaConfig                              apijson.Field
+	MfaPivKeyRequirements                  apijson.Field
 	MfaRequiredForAllApps                  apijson.Field
-	MfaSSHPivKeyRequirements               apijson.Field
 	Name                                   apijson.Field
 	SessionDuration                        apijson.Field
 	UIReadOnlyToggleReason                 apijson.Field
@@ -365,42 +365,42 @@ const (
 	OrganizationMfaConfigAllowedAuthenticatorTotp        OrganizationMfaConfigAllowedAuthenticator = "totp"
 	OrganizationMfaConfigAllowedAuthenticatorBiometrics  OrganizationMfaConfigAllowedAuthenticator = "biometrics"
 	OrganizationMfaConfigAllowedAuthenticatorSecurityKey OrganizationMfaConfigAllowedAuthenticator = "security_key"
-	OrganizationMfaConfigAllowedAuthenticatorSSHPivKey   OrganizationMfaConfigAllowedAuthenticator = "ssh_piv_key"
+	OrganizationMfaConfigAllowedAuthenticatorPivKey      OrganizationMfaConfigAllowedAuthenticator = "piv_key"
 )
 
 func (r OrganizationMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case OrganizationMfaConfigAllowedAuthenticatorTotp, OrganizationMfaConfigAllowedAuthenticatorBiometrics, OrganizationMfaConfigAllowedAuthenticatorSecurityKey, OrganizationMfaConfigAllowedAuthenticatorSSHPivKey:
+	case OrganizationMfaConfigAllowedAuthenticatorTotp, OrganizationMfaConfigAllowedAuthenticatorBiometrics, OrganizationMfaConfigAllowedAuthenticatorSecurityKey, OrganizationMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
 }
 
-// Configures SSH PIV key requirements for MFA using hardware security keys.
-type OrganizationMfaSSHPivKeyRequirements struct {
+// Configures PIV key requirements for MFA using hardware security keys.
+type OrganizationMfaPivKeyRequirements struct {
 	// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 	// required), `once` (PIN required once per session), `always` (PIN required for
 	// each use).
-	PinPolicy OrganizationMfaSSHPivKeyRequirementsPinPolicy `json:"pin_policy"`
-	// Requires the SSH PIV key to be stored on a FIPS 140-2 Level 1 or higher
-	// validated device.
+	PinPolicy OrganizationMfaPivKeyRequirementsPinPolicy `json:"pin_policy"`
+	// Requires the PIV key to be stored on a FIPS 140-2 Level 1 or higher validated
+	// device.
 	RequireFipsDevice bool `json:"require_fips_device"`
 	// Specifies the allowed SSH key sizes in bits. Valid sizes depend on key type.
 	// Ed25519 has a fixed key size and does not accept this parameter.
-	SSHKeySize []OrganizationMfaSSHPivKeyRequirementsSSHKeySize `json:"ssh_key_size"`
+	SSHKeySize []OrganizationMfaPivKeyRequirementsSSHKeySize `json:"ssh_key_size"`
 	// Specifies the allowed SSH key types. Valid values are `ecdsa`, `ed25519`, and
 	// `rsa`.
-	SSHKeyType []OrganizationMfaSSHPivKeyRequirementsSSHKeyType `json:"ssh_key_type"`
+	SSHKeyType []OrganizationMfaPivKeyRequirementsSSHKeyType `json:"ssh_key_type"`
 	// Defines when physical touch is required to use the SSH key. Valid values:
 	// `never` (no touch required), `always` (touch required for each use), `cached`
 	// (touch cached for 15 seconds).
-	TouchPolicy OrganizationMfaSSHPivKeyRequirementsTouchPolicy `json:"touch_policy"`
-	JSON        organizationMfaSSHPivKeyRequirementsJSON        `json:"-"`
+	TouchPolicy OrganizationMfaPivKeyRequirementsTouchPolicy `json:"touch_policy"`
+	JSON        organizationMfaPivKeyRequirementsJSON        `json:"-"`
 }
 
-// organizationMfaSSHPivKeyRequirementsJSON contains the JSON metadata for the
-// struct [OrganizationMfaSSHPivKeyRequirements]
-type organizationMfaSSHPivKeyRequirementsJSON struct {
+// organizationMfaPivKeyRequirementsJSON contains the JSON metadata for the struct
+// [OrganizationMfaPivKeyRequirements]
+type organizationMfaPivKeyRequirementsJSON struct {
 	PinPolicy         apijson.Field
 	RequireFipsDevice apijson.Field
 	SSHKeySize        apijson.Field
@@ -410,63 +410,63 @@ type organizationMfaSSHPivKeyRequirementsJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *OrganizationMfaSSHPivKeyRequirements) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationMfaPivKeyRequirements) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r organizationMfaSSHPivKeyRequirementsJSON) RawJSON() string {
+func (r organizationMfaPivKeyRequirementsJSON) RawJSON() string {
 	return r.raw
 }
 
 // Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 // required), `once` (PIN required once per session), `always` (PIN required for
 // each use).
-type OrganizationMfaSSHPivKeyRequirementsPinPolicy string
+type OrganizationMfaPivKeyRequirementsPinPolicy string
 
 const (
-	OrganizationMfaSSHPivKeyRequirementsPinPolicyNever  OrganizationMfaSSHPivKeyRequirementsPinPolicy = "never"
-	OrganizationMfaSSHPivKeyRequirementsPinPolicyOnce   OrganizationMfaSSHPivKeyRequirementsPinPolicy = "once"
-	OrganizationMfaSSHPivKeyRequirementsPinPolicyAlways OrganizationMfaSSHPivKeyRequirementsPinPolicy = "always"
+	OrganizationMfaPivKeyRequirementsPinPolicyNever  OrganizationMfaPivKeyRequirementsPinPolicy = "never"
+	OrganizationMfaPivKeyRequirementsPinPolicyOnce   OrganizationMfaPivKeyRequirementsPinPolicy = "once"
+	OrganizationMfaPivKeyRequirementsPinPolicyAlways OrganizationMfaPivKeyRequirementsPinPolicy = "always"
 )
 
-func (r OrganizationMfaSSHPivKeyRequirementsPinPolicy) IsKnown() bool {
+func (r OrganizationMfaPivKeyRequirementsPinPolicy) IsKnown() bool {
 	switch r {
-	case OrganizationMfaSSHPivKeyRequirementsPinPolicyNever, OrganizationMfaSSHPivKeyRequirementsPinPolicyOnce, OrganizationMfaSSHPivKeyRequirementsPinPolicyAlways:
+	case OrganizationMfaPivKeyRequirementsPinPolicyNever, OrganizationMfaPivKeyRequirementsPinPolicyOnce, OrganizationMfaPivKeyRequirementsPinPolicyAlways:
 		return true
 	}
 	return false
 }
 
-type OrganizationMfaSSHPivKeyRequirementsSSHKeySize int64
+type OrganizationMfaPivKeyRequirementsSSHKeySize int64
 
 const (
-	OrganizationMfaSSHPivKeyRequirementsSSHKeySize256  OrganizationMfaSSHPivKeyRequirementsSSHKeySize = 256
-	OrganizationMfaSSHPivKeyRequirementsSSHKeySize384  OrganizationMfaSSHPivKeyRequirementsSSHKeySize = 384
-	OrganizationMfaSSHPivKeyRequirementsSSHKeySize521  OrganizationMfaSSHPivKeyRequirementsSSHKeySize = 521
-	OrganizationMfaSSHPivKeyRequirementsSSHKeySize2048 OrganizationMfaSSHPivKeyRequirementsSSHKeySize = 2048
-	OrganizationMfaSSHPivKeyRequirementsSSHKeySize3072 OrganizationMfaSSHPivKeyRequirementsSSHKeySize = 3072
-	OrganizationMfaSSHPivKeyRequirementsSSHKeySize4096 OrganizationMfaSSHPivKeyRequirementsSSHKeySize = 4096
+	OrganizationMfaPivKeyRequirementsSSHKeySize256  OrganizationMfaPivKeyRequirementsSSHKeySize = 256
+	OrganizationMfaPivKeyRequirementsSSHKeySize384  OrganizationMfaPivKeyRequirementsSSHKeySize = 384
+	OrganizationMfaPivKeyRequirementsSSHKeySize521  OrganizationMfaPivKeyRequirementsSSHKeySize = 521
+	OrganizationMfaPivKeyRequirementsSSHKeySize2048 OrganizationMfaPivKeyRequirementsSSHKeySize = 2048
+	OrganizationMfaPivKeyRequirementsSSHKeySize3072 OrganizationMfaPivKeyRequirementsSSHKeySize = 3072
+	OrganizationMfaPivKeyRequirementsSSHKeySize4096 OrganizationMfaPivKeyRequirementsSSHKeySize = 4096
 )
 
-func (r OrganizationMfaSSHPivKeyRequirementsSSHKeySize) IsKnown() bool {
+func (r OrganizationMfaPivKeyRequirementsSSHKeySize) IsKnown() bool {
 	switch r {
-	case OrganizationMfaSSHPivKeyRequirementsSSHKeySize256, OrganizationMfaSSHPivKeyRequirementsSSHKeySize384, OrganizationMfaSSHPivKeyRequirementsSSHKeySize521, OrganizationMfaSSHPivKeyRequirementsSSHKeySize2048, OrganizationMfaSSHPivKeyRequirementsSSHKeySize3072, OrganizationMfaSSHPivKeyRequirementsSSHKeySize4096:
+	case OrganizationMfaPivKeyRequirementsSSHKeySize256, OrganizationMfaPivKeyRequirementsSSHKeySize384, OrganizationMfaPivKeyRequirementsSSHKeySize521, OrganizationMfaPivKeyRequirementsSSHKeySize2048, OrganizationMfaPivKeyRequirementsSSHKeySize3072, OrganizationMfaPivKeyRequirementsSSHKeySize4096:
 		return true
 	}
 	return false
 }
 
-type OrganizationMfaSSHPivKeyRequirementsSSHKeyType string
+type OrganizationMfaPivKeyRequirementsSSHKeyType string
 
 const (
-	OrganizationMfaSSHPivKeyRequirementsSSHKeyTypeEcdsa   OrganizationMfaSSHPivKeyRequirementsSSHKeyType = "ecdsa"
-	OrganizationMfaSSHPivKeyRequirementsSSHKeyTypeEd25519 OrganizationMfaSSHPivKeyRequirementsSSHKeyType = "ed25519"
-	OrganizationMfaSSHPivKeyRequirementsSSHKeyTypeRSA     OrganizationMfaSSHPivKeyRequirementsSSHKeyType = "rsa"
+	OrganizationMfaPivKeyRequirementsSSHKeyTypeEcdsa   OrganizationMfaPivKeyRequirementsSSHKeyType = "ecdsa"
+	OrganizationMfaPivKeyRequirementsSSHKeyTypeEd25519 OrganizationMfaPivKeyRequirementsSSHKeyType = "ed25519"
+	OrganizationMfaPivKeyRequirementsSSHKeyTypeRSA     OrganizationMfaPivKeyRequirementsSSHKeyType = "rsa"
 )
 
-func (r OrganizationMfaSSHPivKeyRequirementsSSHKeyType) IsKnown() bool {
+func (r OrganizationMfaPivKeyRequirementsSSHKeyType) IsKnown() bool {
 	switch r {
-	case OrganizationMfaSSHPivKeyRequirementsSSHKeyTypeEcdsa, OrganizationMfaSSHPivKeyRequirementsSSHKeyTypeEd25519, OrganizationMfaSSHPivKeyRequirementsSSHKeyTypeRSA:
+	case OrganizationMfaPivKeyRequirementsSSHKeyTypeEcdsa, OrganizationMfaPivKeyRequirementsSSHKeyTypeEd25519, OrganizationMfaPivKeyRequirementsSSHKeyTypeRSA:
 		return true
 	}
 	return false
@@ -475,17 +475,17 @@ func (r OrganizationMfaSSHPivKeyRequirementsSSHKeyType) IsKnown() bool {
 // Defines when physical touch is required to use the SSH key. Valid values:
 // `never` (no touch required), `always` (touch required for each use), `cached`
 // (touch cached for 15 seconds).
-type OrganizationMfaSSHPivKeyRequirementsTouchPolicy string
+type OrganizationMfaPivKeyRequirementsTouchPolicy string
 
 const (
-	OrganizationMfaSSHPivKeyRequirementsTouchPolicyNever  OrganizationMfaSSHPivKeyRequirementsTouchPolicy = "never"
-	OrganizationMfaSSHPivKeyRequirementsTouchPolicyAlways OrganizationMfaSSHPivKeyRequirementsTouchPolicy = "always"
-	OrganizationMfaSSHPivKeyRequirementsTouchPolicyCached OrganizationMfaSSHPivKeyRequirementsTouchPolicy = "cached"
+	OrganizationMfaPivKeyRequirementsTouchPolicyNever  OrganizationMfaPivKeyRequirementsTouchPolicy = "never"
+	OrganizationMfaPivKeyRequirementsTouchPolicyAlways OrganizationMfaPivKeyRequirementsTouchPolicy = "always"
+	OrganizationMfaPivKeyRequirementsTouchPolicyCached OrganizationMfaPivKeyRequirementsTouchPolicy = "cached"
 )
 
-func (r OrganizationMfaSSHPivKeyRequirementsTouchPolicy) IsKnown() bool {
+func (r OrganizationMfaPivKeyRequirementsTouchPolicy) IsKnown() bool {
 	switch r {
-	case OrganizationMfaSSHPivKeyRequirementsTouchPolicyNever, OrganizationMfaSSHPivKeyRequirementsTouchPolicyAlways, OrganizationMfaSSHPivKeyRequirementsTouchPolicyCached:
+	case OrganizationMfaPivKeyRequirementsTouchPolicyNever, OrganizationMfaPivKeyRequirementsTouchPolicyAlways, OrganizationMfaPivKeyRequirementsTouchPolicyCached:
 		return true
 	}
 	return false
@@ -538,14 +538,14 @@ type OrganizationNewParams struct {
 	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
 	// Configures multi-factor authentication (MFA) settings for an organization.
 	MfaConfig param.Field[OrganizationNewParamsMfaConfig] `json:"mfa_config"`
+	// Configures PIV key requirements for MFA using hardware security keys.
+	MfaPivKeyRequirements param.Field[OrganizationNewParamsMfaPivKeyRequirements] `json:"mfa_piv_key_requirements"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
 	// session duration configured. Note: 'allowed_authenticators' cannot only contain
-	// 'ssh_piv_key' if the organization has any non-infrastructure applications
-	// because PIV keys are only compatible with infrastructure apps.
+	// 'piv_key' if the organization has any non-infrastructure applications because
+	// PIV keys are only compatible with infrastructure apps.
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
-	// Configures SSH PIV key requirements for MFA using hardware security keys.
-	MfaSSHPivKeyRequirements param.Field[OrganizationNewParamsMfaSSHPivKeyRequirements] `json:"mfa_ssh_piv_key_requirements"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
@@ -593,91 +593,91 @@ const (
 	OrganizationNewParamsMfaConfigAllowedAuthenticatorTotp        OrganizationNewParamsMfaConfigAllowedAuthenticator = "totp"
 	OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics  OrganizationNewParamsMfaConfigAllowedAuthenticator = "biometrics"
 	OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey OrganizationNewParamsMfaConfigAllowedAuthenticator = "security_key"
-	OrganizationNewParamsMfaConfigAllowedAuthenticatorSSHPivKey   OrganizationNewParamsMfaConfigAllowedAuthenticator = "ssh_piv_key"
+	OrganizationNewParamsMfaConfigAllowedAuthenticatorPivKey      OrganizationNewParamsMfaConfigAllowedAuthenticator = "piv_key"
 )
 
 func (r OrganizationNewParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case OrganizationNewParamsMfaConfigAllowedAuthenticatorTotp, OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationNewParamsMfaConfigAllowedAuthenticatorSSHPivKey:
+	case OrganizationNewParamsMfaConfigAllowedAuthenticatorTotp, OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationNewParamsMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
 }
 
-// Configures SSH PIV key requirements for MFA using hardware security keys.
-type OrganizationNewParamsMfaSSHPivKeyRequirements struct {
+// Configures PIV key requirements for MFA using hardware security keys.
+type OrganizationNewParamsMfaPivKeyRequirements struct {
 	// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 	// required), `once` (PIN required once per session), `always` (PIN required for
 	// each use).
-	PinPolicy param.Field[OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicy] `json:"pin_policy"`
-	// Requires the SSH PIV key to be stored on a FIPS 140-2 Level 1 or higher
-	// validated device.
+	PinPolicy param.Field[OrganizationNewParamsMfaPivKeyRequirementsPinPolicy] `json:"pin_policy"`
+	// Requires the PIV key to be stored on a FIPS 140-2 Level 1 or higher validated
+	// device.
 	RequireFipsDevice param.Field[bool] `json:"require_fips_device"`
 	// Specifies the allowed SSH key sizes in bits. Valid sizes depend on key type.
 	// Ed25519 has a fixed key size and does not accept this parameter.
-	SSHKeySize param.Field[[]OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize] `json:"ssh_key_size"`
+	SSHKeySize param.Field[[]OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize] `json:"ssh_key_size"`
 	// Specifies the allowed SSH key types. Valid values are `ecdsa`, `ed25519`, and
 	// `rsa`.
-	SSHKeyType param.Field[[]OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyType] `json:"ssh_key_type"`
+	SSHKeyType param.Field[[]OrganizationNewParamsMfaPivKeyRequirementsSSHKeyType] `json:"ssh_key_type"`
 	// Defines when physical touch is required to use the SSH key. Valid values:
 	// `never` (no touch required), `always` (touch required for each use), `cached`
 	// (touch cached for 15 seconds).
-	TouchPolicy param.Field[OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicy] `json:"touch_policy"`
+	TouchPolicy param.Field[OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy] `json:"touch_policy"`
 }
 
-func (r OrganizationNewParamsMfaSSHPivKeyRequirements) MarshalJSON() (data []byte, err error) {
+func (r OrganizationNewParamsMfaPivKeyRequirements) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 // required), `once` (PIN required once per session), `always` (PIN required for
 // each use).
-type OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicy string
+type OrganizationNewParamsMfaPivKeyRequirementsPinPolicy string
 
 const (
-	OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicyNever  OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicy = "never"
-	OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicyOnce   OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicy = "once"
-	OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicyAlways OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicy = "always"
+	OrganizationNewParamsMfaPivKeyRequirementsPinPolicyNever  OrganizationNewParamsMfaPivKeyRequirementsPinPolicy = "never"
+	OrganizationNewParamsMfaPivKeyRequirementsPinPolicyOnce   OrganizationNewParamsMfaPivKeyRequirementsPinPolicy = "once"
+	OrganizationNewParamsMfaPivKeyRequirementsPinPolicyAlways OrganizationNewParamsMfaPivKeyRequirementsPinPolicy = "always"
 )
 
-func (r OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicy) IsKnown() bool {
+func (r OrganizationNewParamsMfaPivKeyRequirementsPinPolicy) IsKnown() bool {
 	switch r {
-	case OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicyNever, OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicyOnce, OrganizationNewParamsMfaSSHPivKeyRequirementsPinPolicyAlways:
+	case OrganizationNewParamsMfaPivKeyRequirementsPinPolicyNever, OrganizationNewParamsMfaPivKeyRequirementsPinPolicyOnce, OrganizationNewParamsMfaPivKeyRequirementsPinPolicyAlways:
 		return true
 	}
 	return false
 }
 
-type OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize int64
+type OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize int64
 
 const (
-	OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize256  OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize = 256
-	OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize384  OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize = 384
-	OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize521  OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize = 521
-	OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize2048 OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize = 2048
-	OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize3072 OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize = 3072
-	OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize4096 OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize = 4096
+	OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize256  OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize = 256
+	OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize384  OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize = 384
+	OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize521  OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize = 521
+	OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize2048 OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize = 2048
+	OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize3072 OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize = 3072
+	OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize4096 OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize = 4096
 )
 
-func (r OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize) IsKnown() bool {
+func (r OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize) IsKnown() bool {
 	switch r {
-	case OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize256, OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize384, OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize521, OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize2048, OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize3072, OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeySize4096:
+	case OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize256, OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize384, OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize521, OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize2048, OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize3072, OrganizationNewParamsMfaPivKeyRequirementsSSHKeySize4096:
 		return true
 	}
 	return false
 }
 
-type OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyType string
+type OrganizationNewParamsMfaPivKeyRequirementsSSHKeyType string
 
 const (
-	OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyTypeEcdsa   OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyType = "ecdsa"
-	OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyTypeEd25519 OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyType = "ed25519"
-	OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyTypeRSA     OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyType = "rsa"
+	OrganizationNewParamsMfaPivKeyRequirementsSSHKeyTypeEcdsa   OrganizationNewParamsMfaPivKeyRequirementsSSHKeyType = "ecdsa"
+	OrganizationNewParamsMfaPivKeyRequirementsSSHKeyTypeEd25519 OrganizationNewParamsMfaPivKeyRequirementsSSHKeyType = "ed25519"
+	OrganizationNewParamsMfaPivKeyRequirementsSSHKeyTypeRSA     OrganizationNewParamsMfaPivKeyRequirementsSSHKeyType = "rsa"
 )
 
-func (r OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyType) IsKnown() bool {
+func (r OrganizationNewParamsMfaPivKeyRequirementsSSHKeyType) IsKnown() bool {
 	switch r {
-	case OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyTypeEcdsa, OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyTypeEd25519, OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyTypeRSA:
+	case OrganizationNewParamsMfaPivKeyRequirementsSSHKeyTypeEcdsa, OrganizationNewParamsMfaPivKeyRequirementsSSHKeyTypeEd25519, OrganizationNewParamsMfaPivKeyRequirementsSSHKeyTypeRSA:
 		return true
 	}
 	return false
@@ -686,17 +686,17 @@ func (r OrganizationNewParamsMfaSSHPivKeyRequirementsSSHKeyType) IsKnown() bool 
 // Defines when physical touch is required to use the SSH key. Valid values:
 // `never` (no touch required), `always` (touch required for each use), `cached`
 // (touch cached for 15 seconds).
-type OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicy string
+type OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy string
 
 const (
-	OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicyNever  OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicy = "never"
-	OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicyAlways OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicy = "always"
-	OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicyCached OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicy = "cached"
+	OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyNever  OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy = "never"
+	OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyAlways OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy = "always"
+	OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyCached OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy = "cached"
 )
 
-func (r OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicy) IsKnown() bool {
+func (r OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy) IsKnown() bool {
 	switch r {
-	case OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicyNever, OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicyAlways, OrganizationNewParamsMfaSSHPivKeyRequirementsTouchPolicyCached:
+	case OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyNever, OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyAlways, OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyCached:
 		return true
 	}
 	return false
@@ -872,14 +872,14 @@ type OrganizationUpdateParams struct {
 	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
 	// Configures multi-factor authentication (MFA) settings for an organization.
 	MfaConfig param.Field[OrganizationUpdateParamsMfaConfig] `json:"mfa_config"`
+	// Configures PIV key requirements for MFA using hardware security keys.
+	MfaPivKeyRequirements param.Field[OrganizationUpdateParamsMfaPivKeyRequirements] `json:"mfa_piv_key_requirements"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
 	// session duration configured. Note: 'allowed_authenticators' cannot only contain
-	// 'ssh_piv_key' if the organization has any non-infrastructure applications
-	// because PIV keys are only compatible with infrastructure apps.
+	// 'piv_key' if the organization has any non-infrastructure applications because
+	// PIV keys are only compatible with infrastructure apps.
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
-	// Configures SSH PIV key requirements for MFA using hardware security keys.
-	MfaSSHPivKeyRequirements param.Field[OrganizationUpdateParamsMfaSSHPivKeyRequirements] `json:"mfa_ssh_piv_key_requirements"`
 	// The name of your Zero Trust organization.
 	Name param.Field[string] `json:"name"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
@@ -941,91 +941,91 @@ const (
 	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorTotp        OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "totp"
 	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics  OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "biometrics"
 	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "security_key"
-	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSSHPivKey   OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "ssh_piv_key"
+	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorPivKey      OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "piv_key"
 )
 
 func (r OrganizationUpdateParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case OrganizationUpdateParamsMfaConfigAllowedAuthenticatorTotp, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSSHPivKey:
+	case OrganizationUpdateParamsMfaConfigAllowedAuthenticatorTotp, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
 }
 
-// Configures SSH PIV key requirements for MFA using hardware security keys.
-type OrganizationUpdateParamsMfaSSHPivKeyRequirements struct {
+// Configures PIV key requirements for MFA using hardware security keys.
+type OrganizationUpdateParamsMfaPivKeyRequirements struct {
 	// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 	// required), `once` (PIN required once per session), `always` (PIN required for
 	// each use).
-	PinPolicy param.Field[OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicy] `json:"pin_policy"`
-	// Requires the SSH PIV key to be stored on a FIPS 140-2 Level 1 or higher
-	// validated device.
+	PinPolicy param.Field[OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicy] `json:"pin_policy"`
+	// Requires the PIV key to be stored on a FIPS 140-2 Level 1 or higher validated
+	// device.
 	RequireFipsDevice param.Field[bool] `json:"require_fips_device"`
 	// Specifies the allowed SSH key sizes in bits. Valid sizes depend on key type.
 	// Ed25519 has a fixed key size and does not accept this parameter.
-	SSHKeySize param.Field[[]OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize] `json:"ssh_key_size"`
+	SSHKeySize param.Field[[]OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize] `json:"ssh_key_size"`
 	// Specifies the allowed SSH key types. Valid values are `ecdsa`, `ed25519`, and
 	// `rsa`.
-	SSHKeyType param.Field[[]OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyType] `json:"ssh_key_type"`
+	SSHKeyType param.Field[[]OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyType] `json:"ssh_key_type"`
 	// Defines when physical touch is required to use the SSH key. Valid values:
 	// `never` (no touch required), `always` (touch required for each use), `cached`
 	// (touch cached for 15 seconds).
-	TouchPolicy param.Field[OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicy] `json:"touch_policy"`
+	TouchPolicy param.Field[OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy] `json:"touch_policy"`
 }
 
-func (r OrganizationUpdateParamsMfaSSHPivKeyRequirements) MarshalJSON() (data []byte, err error) {
+func (r OrganizationUpdateParamsMfaPivKeyRequirements) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 // required), `once` (PIN required once per session), `always` (PIN required for
 // each use).
-type OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicy string
+type OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicy string
 
 const (
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicyNever  OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicy = "never"
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicyOnce   OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicy = "once"
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicyAlways OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicy = "always"
+	OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicyNever  OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicy = "never"
+	OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicyOnce   OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicy = "once"
+	OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicyAlways OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicy = "always"
 )
 
-func (r OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicy) IsKnown() bool {
+func (r OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicy) IsKnown() bool {
 	switch r {
-	case OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicyNever, OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicyOnce, OrganizationUpdateParamsMfaSSHPivKeyRequirementsPinPolicyAlways:
+	case OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicyNever, OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicyOnce, OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicyAlways:
 		return true
 	}
 	return false
 }
 
-type OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize int64
+type OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize int64
 
 const (
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize256  OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize = 256
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize384  OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize = 384
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize521  OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize = 521
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize2048 OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize = 2048
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize3072 OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize = 3072
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize4096 OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize = 4096
+	OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize256  OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize = 256
+	OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize384  OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize = 384
+	OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize521  OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize = 521
+	OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize2048 OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize = 2048
+	OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize3072 OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize = 3072
+	OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize4096 OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize = 4096
 )
 
-func (r OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize) IsKnown() bool {
+func (r OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize) IsKnown() bool {
 	switch r {
-	case OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize256, OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize384, OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize521, OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize2048, OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize3072, OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeySize4096:
+	case OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize256, OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize384, OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize521, OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize2048, OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize3072, OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeySize4096:
 		return true
 	}
 	return false
 }
 
-type OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyType string
+type OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyType string
 
 const (
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyTypeEcdsa   OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyType = "ecdsa"
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyTypeEd25519 OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyType = "ed25519"
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyTypeRSA     OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyType = "rsa"
+	OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyTypeEcdsa   OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyType = "ecdsa"
+	OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyTypeEd25519 OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyType = "ed25519"
+	OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyTypeRSA     OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyType = "rsa"
 )
 
-func (r OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyType) IsKnown() bool {
+func (r OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyType) IsKnown() bool {
 	switch r {
-	case OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyTypeEcdsa, OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyTypeEd25519, OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyTypeRSA:
+	case OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyTypeEcdsa, OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyTypeEd25519, OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyTypeRSA:
 		return true
 	}
 	return false
@@ -1034,17 +1034,17 @@ func (r OrganizationUpdateParamsMfaSSHPivKeyRequirementsSSHKeyType) IsKnown() bo
 // Defines when physical touch is required to use the SSH key. Valid values:
 // `never` (no touch required), `always` (touch required for each use), `cached`
 // (touch cached for 15 seconds).
-type OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicy string
+type OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy string
 
 const (
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicyNever  OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicy = "never"
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicyAlways OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicy = "always"
-	OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicyCached OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicy = "cached"
+	OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicyNever  OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy = "never"
+	OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicyAlways OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy = "always"
+	OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicyCached OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy = "cached"
 )
 
-func (r OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicy) IsKnown() bool {
+func (r OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy) IsKnown() bool {
 	switch r {
-	case OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicyNever, OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicyAlways, OrganizationUpdateParamsMfaSSHPivKeyRequirementsTouchPolicyCached:
+	case OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicyNever, OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicyAlways, OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicyCached:
 		return true
 	}
 	return false

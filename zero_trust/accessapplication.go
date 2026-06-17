@@ -8219,7 +8219,7 @@ func (r accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionR
 // applications.
 type AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `ssh_piv_key` is supported.
+	// applications, only `piv_key` is supported.
 	AllowedAuthenticators []AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -8252,12 +8252,12 @@ func (r accessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigJS
 type AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+	AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
 )
 
 func (r AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+	case AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
@@ -17581,7 +17581,7 @@ func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnecti
 // applications.
 type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `ssh_piv_key` is supported.
+	// applications, only `piv_key` is supported.
 	AllowedAuthenticators []AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -17614,12 +17614,12 @@ func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfi
 type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+	AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
 )
 
 func (r AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+	case AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
@@ -26943,7 +26943,7 @@ func (r accessApplicationListResponseInfrastructureApplicationPoliciesConnection
 // applications.
 type AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `ssh_piv_key` is supported.
+	// applications, only `piv_key` is supported.
 	AllowedAuthenticators []AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -26976,12 +26976,12 @@ func (r accessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigJ
 type AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+	AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
 )
 
 func (r AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+	case AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
@@ -36324,7 +36324,7 @@ func (r accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionR
 // applications.
 type AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `ssh_piv_key` is supported.
+	// applications, only `piv_key` is supported.
 	AllowedAuthenticators []AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -36357,12 +36357,12 @@ func (r accessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigJS
 type AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+	AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
 )
 
 func (r AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+	case AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
@@ -43930,7 +43930,7 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectio
 // applications.
 type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `ssh_piv_key` is supported.
+	// applications, only `piv_key` is supported.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -43947,12 +43947,12 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig
 type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+	AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
 )
 
 func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+	case AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
@@ -50725,7 +50725,7 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnec
 // applications.
 type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `ssh_piv_key` is supported.
+	// applications, only `piv_key` is supported.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -50742,12 +50742,12 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaCon
 type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_piv_key"
+	AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
 )
 
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHPivKey:
+	case AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
