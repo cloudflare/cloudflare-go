@@ -204,8 +204,9 @@ func (r investigateMoveBulkResponseJSON) RawJSON() string {
 
 type InvestigateMoveNewParams struct {
 	// Identifier.
-	AccountID   param.Field[string]                              `path:"account_id" api:"required"`
-	Destination param.Field[InvestigateMoveNewParamsDestination] `json:"destination" api:"required"`
+	AccountID           param.Field[string]                                      `path:"account_id" api:"required"`
+	Destination         param.Field[InvestigateMoveNewParamsDestination]         `json:"destination" api:"required"`
+	ExpectedDisposition param.Field[InvestigateMoveNewParamsExpectedDisposition] `json:"expected_disposition"`
 }
 
 func (r InvestigateMoveNewParams) MarshalJSON() (data []byte, err error) {
@@ -230,10 +231,34 @@ func (r InvestigateMoveNewParamsDestination) IsKnown() bool {
 	return false
 }
 
+type InvestigateMoveNewParamsExpectedDisposition string
+
+const (
+	InvestigateMoveNewParamsExpectedDispositionMalicious    InvestigateMoveNewParamsExpectedDisposition = "MALICIOUS"
+	InvestigateMoveNewParamsExpectedDispositionMaliciousBec InvestigateMoveNewParamsExpectedDisposition = "MALICIOUS-BEC"
+	InvestigateMoveNewParamsExpectedDispositionSuspicious   InvestigateMoveNewParamsExpectedDisposition = "SUSPICIOUS"
+	InvestigateMoveNewParamsExpectedDispositionSpoof        InvestigateMoveNewParamsExpectedDisposition = "SPOOF"
+	InvestigateMoveNewParamsExpectedDispositionSpam         InvestigateMoveNewParamsExpectedDisposition = "SPAM"
+	InvestigateMoveNewParamsExpectedDispositionBulk         InvestigateMoveNewParamsExpectedDisposition = "BULK"
+	InvestigateMoveNewParamsExpectedDispositionEncrypted    InvestigateMoveNewParamsExpectedDisposition = "ENCRYPTED"
+	InvestigateMoveNewParamsExpectedDispositionExternal     InvestigateMoveNewParamsExpectedDisposition = "EXTERNAL"
+	InvestigateMoveNewParamsExpectedDispositionUnknown      InvestigateMoveNewParamsExpectedDisposition = "UNKNOWN"
+	InvestigateMoveNewParamsExpectedDispositionNone         InvestigateMoveNewParamsExpectedDisposition = "NONE"
+)
+
+func (r InvestigateMoveNewParamsExpectedDisposition) IsKnown() bool {
+	switch r {
+	case InvestigateMoveNewParamsExpectedDispositionMalicious, InvestigateMoveNewParamsExpectedDispositionMaliciousBec, InvestigateMoveNewParamsExpectedDispositionSuspicious, InvestigateMoveNewParamsExpectedDispositionSpoof, InvestigateMoveNewParamsExpectedDispositionSpam, InvestigateMoveNewParamsExpectedDispositionBulk, InvestigateMoveNewParamsExpectedDispositionEncrypted, InvestigateMoveNewParamsExpectedDispositionExternal, InvestigateMoveNewParamsExpectedDispositionUnknown, InvestigateMoveNewParamsExpectedDispositionNone:
+		return true
+	}
+	return false
+}
+
 type InvestigateMoveBulkParams struct {
 	// Identifier.
-	AccountID   param.Field[string]                               `path:"account_id" api:"required"`
-	Destination param.Field[InvestigateMoveBulkParamsDestination] `json:"destination" api:"required"`
+	AccountID           param.Field[string]                                       `path:"account_id" api:"required"`
+	Destination         param.Field[InvestigateMoveBulkParamsDestination]         `json:"destination" api:"required"`
+	ExpectedDisposition param.Field[InvestigateMoveBulkParamsExpectedDisposition] `json:"expected_disposition"`
 	// List of message IDs to move
 	IDs param.Field[[]string] `json:"ids"`
 	// Deprecated, use `ids` instead. End of life: November 1, 2026. List of message
@@ -258,6 +283,29 @@ const (
 func (r InvestigateMoveBulkParamsDestination) IsKnown() bool {
 	switch r {
 	case InvestigateMoveBulkParamsDestinationInbox, InvestigateMoveBulkParamsDestinationJunkEmail, InvestigateMoveBulkParamsDestinationDeletedItems, InvestigateMoveBulkParamsDestinationRecoverableItemsDeletions, InvestigateMoveBulkParamsDestinationRecoverableItemsPurges:
+		return true
+	}
+	return false
+}
+
+type InvestigateMoveBulkParamsExpectedDisposition string
+
+const (
+	InvestigateMoveBulkParamsExpectedDispositionMalicious    InvestigateMoveBulkParamsExpectedDisposition = "MALICIOUS"
+	InvestigateMoveBulkParamsExpectedDispositionMaliciousBec InvestigateMoveBulkParamsExpectedDisposition = "MALICIOUS-BEC"
+	InvestigateMoveBulkParamsExpectedDispositionSuspicious   InvestigateMoveBulkParamsExpectedDisposition = "SUSPICIOUS"
+	InvestigateMoveBulkParamsExpectedDispositionSpoof        InvestigateMoveBulkParamsExpectedDisposition = "SPOOF"
+	InvestigateMoveBulkParamsExpectedDispositionSpam         InvestigateMoveBulkParamsExpectedDisposition = "SPAM"
+	InvestigateMoveBulkParamsExpectedDispositionBulk         InvestigateMoveBulkParamsExpectedDisposition = "BULK"
+	InvestigateMoveBulkParamsExpectedDispositionEncrypted    InvestigateMoveBulkParamsExpectedDisposition = "ENCRYPTED"
+	InvestigateMoveBulkParamsExpectedDispositionExternal     InvestigateMoveBulkParamsExpectedDisposition = "EXTERNAL"
+	InvestigateMoveBulkParamsExpectedDispositionUnknown      InvestigateMoveBulkParamsExpectedDisposition = "UNKNOWN"
+	InvestigateMoveBulkParamsExpectedDispositionNone         InvestigateMoveBulkParamsExpectedDisposition = "NONE"
+)
+
+func (r InvestigateMoveBulkParamsExpectedDisposition) IsKnown() bool {
+	switch r {
+	case InvestigateMoveBulkParamsExpectedDispositionMalicious, InvestigateMoveBulkParamsExpectedDispositionMaliciousBec, InvestigateMoveBulkParamsExpectedDispositionSuspicious, InvestigateMoveBulkParamsExpectedDispositionSpoof, InvestigateMoveBulkParamsExpectedDispositionSpam, InvestigateMoveBulkParamsExpectedDispositionBulk, InvestigateMoveBulkParamsExpectedDispositionEncrypted, InvestigateMoveBulkParamsExpectedDispositionExternal, InvestigateMoveBulkParamsExpectedDispositionUnknown, InvestigateMoveBulkParamsExpectedDispositionNone:
 		return true
 	}
 	return false
