@@ -79,6 +79,8 @@
 
 # [EmailSecurity](email_security/api.md)
 
+# [EmailAuth](email_auth/api.md)
+
 # [EmailRouting](email_routing/api.md)
 
 # [EmailSending](email_sending/api.md)

@@ -129,6 +129,8 @@ TEST_PATHS=(
 	email_security/settingtrusteddomain_test.go
 	email_security/settingurlignorepattern_test.go
 	email_security/submission_test.go
+	email_auth/dmarcreport_test.go
+	email_auth/spfinspect_test.go
 	email_routing/emailrouting_test.go
 	email_routing/dns_test.go
 	email_routing/rule_test.go
