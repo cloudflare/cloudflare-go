@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/ai_search"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/r2"
 )
 
 func TestNamespaceInstanceNewWithOptionalParams(t *testing.T) {
@@ -116,11 +115,6 @@ func TestNamespaceInstanceNewWithOptionalParams(t *testing.T) {
 						UseBrowserRendering: cloudflare.F(true),
 					}),
 					ParseType: cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap),
-					StoreOptions: cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerStoreOptions{
-						StorageID:      cloudflare.F("storage_id"),
-						R2Jurisdiction: cloudflare.F("r2_jurisdiction"),
-						StorageType:    cloudflare.F(r2.ProviderR2),
-					}),
 				}),
 			}),
 			SyncInterval: cloudflare.F(ai_search.NamespaceInstanceNewParamsSyncInterval900),
@@ -215,6 +209,7 @@ func TestNamespaceInstanceUpdateWithOptionalParams(t *testing.T) {
 			RewriteModel:   cloudflare.F(ai_search.NamespaceInstanceUpdateParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast),
 			RewriteQuery:   cloudflare.F(true),
 			ScoreThreshold: cloudflare.F(0.000000),
+			Source:         cloudflare.F("source"),
 			SourceParams: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParams{
 				ExcludeItems:   cloudflare.F([]string{"/admin/**", "/private/**", "**\\temp\\**"}),
 				IncludeItems:   cloudflare.F([]string{"/blog/**", "/docs/**/*.html", "**\\blog\\**.html"}),
@@ -237,11 +232,6 @@ func TestNamespaceInstanceUpdateWithOptionalParams(t *testing.T) {
 						UseBrowserRendering: cloudflare.F(true),
 					}),
 					ParseType: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap),
-					StoreOptions: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerStoreOptions{
-						StorageID:      cloudflare.F("storage_id"),
-						R2Jurisdiction: cloudflare.F("r2_jurisdiction"),
-						StorageType:    cloudflare.F(r2.ProviderR2),
-					}),
 				}),
 			}),
 			Summarization:                  cloudflare.F(true),

@@ -51,6 +51,12 @@ func TestDevicePolicyCustomNewWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("Exclude testing domains from the tunnel"),
 		}}),
 		ExcludeOfficeIPs: cloudflare.F(true),
+		GlobalAcceleration: cloudflare.F(zero_trust.DevicePolicyCustomNewParamsGlobalAcceleration{
+			APIEndpoints:       cloudflare.F([]string{"198.51.100.1:443"}),
+			Enabled:            cloudflare.F(true),
+			MasqueEndpoints:    cloudflare.F([]string{"198.51.100.1:443"}),
+			WireguardEndpoints: cloudflare.F([]string{"198.51.100.1:2408"}),
+		}),
 		Include: cloudflare.F([]zero_trust.SplitTunnelIncludeUnionParam{zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam{
 			Address:     cloudflare.F("192.0.2.0/24"),
 			Description: cloudflare.F("Include testing domains in the tunnel"),
@@ -173,6 +179,12 @@ func TestDevicePolicyCustomEditWithOptionalParams(t *testing.T) {
 				Description: cloudflare.F("Exclude testing domains from the tunnel"),
 			}}),
 			ExcludeOfficeIPs: cloudflare.F(true),
+			GlobalAcceleration: cloudflare.F(zero_trust.DevicePolicyCustomEditParamsGlobalAcceleration{
+				APIEndpoints:       cloudflare.F([]string{"198.51.100.1:443"}),
+				Enabled:            cloudflare.F(true),
+				MasqueEndpoints:    cloudflare.F([]string{"198.51.100.1:443"}),
+				WireguardEndpoints: cloudflare.F([]string{"198.51.100.1:2408"}),
+			}),
 			Include: cloudflare.F([]zero_trust.SplitTunnelIncludeUnionParam{zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam{
 				Address:     cloudflare.F("192.0.2.0/24"),
 				Description: cloudflare.F("Include testing domains in the tunnel"),

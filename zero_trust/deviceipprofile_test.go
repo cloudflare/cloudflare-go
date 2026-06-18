@@ -101,6 +101,7 @@ func TestDeviceIPProfileListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.IPProfiles.List(context.TODO(), zero_trust.DeviceIPProfileListParams{
 		AccountID: cloudflare.F("account_id"),
+		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(1)),
 	})
 	if err != nil {

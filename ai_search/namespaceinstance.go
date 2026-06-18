@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v7/r2"
 )
 
 // NamespaceInstanceService contains methods and other services that help with
@@ -945,7 +944,6 @@ func (r namespaceInstanceNewResponseSourceParamsJSON) RawJSON() string {
 type NamespaceInstanceNewResponseSourceParamsWebCrawler struct {
 	ParseOptions NamespaceInstanceNewResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	StoreOptions NamespaceInstanceNewResponseSourceParamsWebCrawlerStoreOptions `json:"store_options"`
 	JSON         namespaceInstanceNewResponseSourceParamsWebCrawlerJSON         `json:"-"`
 }
 
@@ -954,7 +952,6 @@ type NamespaceInstanceNewResponseSourceParamsWebCrawler struct {
 type namespaceInstanceNewResponseSourceParamsWebCrawlerJSON struct {
 	ParseOptions apijson.Field
 	ParseType    apijson.Field
-	StoreOptions apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -1039,42 +1036,15 @@ type NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType string
 
 const (
 	NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeFeedRss NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType = "feed-rss"
 	NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType = "crawl"
 )
 
 func (r NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeFeedRss, NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeCrawl:
 		return true
 	}
 	return false
-}
-
-type NamespaceInstanceNewResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                             `json:"storage_id" api:"required"`
-	R2Jurisdiction string                                                             `json:"r2_jurisdiction"`
-	StorageType    r2.Provider                                                        `json:"storage_type"`
-	JSON           namespaceInstanceNewResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
-}
-
-// namespaceInstanceNewResponseSourceParamsWebCrawlerStoreOptionsJSON contains the
-// JSON metadata for the struct
-// [NamespaceInstanceNewResponseSourceParamsWebCrawlerStoreOptions]
-type namespaceInstanceNewResponseSourceParamsWebCrawlerStoreOptionsJSON struct {
-	StorageID      apijson.Field
-	R2Jurisdiction apijson.Field
-	StorageType    apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *NamespaceInstanceNewResponseSourceParamsWebCrawlerStoreOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceInstanceNewResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() string {
-	return r.raw
 }
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
@@ -1818,7 +1788,6 @@ func (r namespaceInstanceUpdateResponseSourceParamsJSON) RawJSON() string {
 type NamespaceInstanceUpdateResponseSourceParamsWebCrawler struct {
 	ParseOptions NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	StoreOptions NamespaceInstanceUpdateResponseSourceParamsWebCrawlerStoreOptions `json:"store_options"`
 	JSON         namespaceInstanceUpdateResponseSourceParamsWebCrawlerJSON         `json:"-"`
 }
 
@@ -1827,7 +1796,6 @@ type NamespaceInstanceUpdateResponseSourceParamsWebCrawler struct {
 type namespaceInstanceUpdateResponseSourceParamsWebCrawlerJSON struct {
 	ParseOptions apijson.Field
 	ParseType    apijson.Field
-	StoreOptions apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -1912,42 +1880,15 @@ type NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType string
 
 const (
 	NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeFeedRss NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType = "feed-rss"
 	NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType = "crawl"
 )
 
 func (r NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeFeedRss, NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeCrawl:
 		return true
 	}
 	return false
-}
-
-type NamespaceInstanceUpdateResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                                `json:"storage_id" api:"required"`
-	R2Jurisdiction string                                                                `json:"r2_jurisdiction"`
-	StorageType    r2.Provider                                                           `json:"storage_type"`
-	JSON           namespaceInstanceUpdateResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
-}
-
-// namespaceInstanceUpdateResponseSourceParamsWebCrawlerStoreOptionsJSON contains
-// the JSON metadata for the struct
-// [NamespaceInstanceUpdateResponseSourceParamsWebCrawlerStoreOptions]
-type namespaceInstanceUpdateResponseSourceParamsWebCrawlerStoreOptionsJSON struct {
-	StorageID      apijson.Field
-	R2Jurisdiction apijson.Field
-	StorageType    apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *NamespaceInstanceUpdateResponseSourceParamsWebCrawlerStoreOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceInstanceUpdateResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() string {
-	return r.raw
 }
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
@@ -2691,7 +2632,6 @@ func (r namespaceInstanceListResponseSourceParamsJSON) RawJSON() string {
 type NamespaceInstanceListResponseSourceParamsWebCrawler struct {
 	ParseOptions NamespaceInstanceListResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    NamespaceInstanceListResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	StoreOptions NamespaceInstanceListResponseSourceParamsWebCrawlerStoreOptions `json:"store_options"`
 	JSON         namespaceInstanceListResponseSourceParamsWebCrawlerJSON         `json:"-"`
 }
 
@@ -2700,7 +2640,6 @@ type NamespaceInstanceListResponseSourceParamsWebCrawler struct {
 type namespaceInstanceListResponseSourceParamsWebCrawlerJSON struct {
 	ParseOptions apijson.Field
 	ParseType    apijson.Field
-	StoreOptions apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -2785,42 +2724,15 @@ type NamespaceInstanceListResponseSourceParamsWebCrawlerParseType string
 
 const (
 	NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceListResponseSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeFeedRss NamespaceInstanceListResponseSourceParamsWebCrawlerParseType = "feed-rss"
 	NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceListResponseSourceParamsWebCrawlerParseType = "crawl"
 )
 
 func (r NamespaceInstanceListResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeFeedRss, NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeCrawl:
 		return true
 	}
 	return false
-}
-
-type NamespaceInstanceListResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                              `json:"storage_id" api:"required"`
-	R2Jurisdiction string                                                              `json:"r2_jurisdiction"`
-	StorageType    r2.Provider                                                         `json:"storage_type"`
-	JSON           namespaceInstanceListResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
-}
-
-// namespaceInstanceListResponseSourceParamsWebCrawlerStoreOptionsJSON contains the
-// JSON metadata for the struct
-// [NamespaceInstanceListResponseSourceParamsWebCrawlerStoreOptions]
-type namespaceInstanceListResponseSourceParamsWebCrawlerStoreOptionsJSON struct {
-	StorageID      apijson.Field
-	R2Jurisdiction apijson.Field
-	StorageType    apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *NamespaceInstanceListResponseSourceParamsWebCrawlerStoreOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceInstanceListResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() string {
-	return r.raw
 }
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
@@ -3564,7 +3476,6 @@ func (r namespaceInstanceDeleteResponseSourceParamsJSON) RawJSON() string {
 type NamespaceInstanceDeleteResponseSourceParamsWebCrawler struct {
 	ParseOptions NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	StoreOptions NamespaceInstanceDeleteResponseSourceParamsWebCrawlerStoreOptions `json:"store_options"`
 	JSON         namespaceInstanceDeleteResponseSourceParamsWebCrawlerJSON         `json:"-"`
 }
 
@@ -3573,7 +3484,6 @@ type NamespaceInstanceDeleteResponseSourceParamsWebCrawler struct {
 type namespaceInstanceDeleteResponseSourceParamsWebCrawlerJSON struct {
 	ParseOptions apijson.Field
 	ParseType    apijson.Field
-	StoreOptions apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -3658,42 +3568,15 @@ type NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType string
 
 const (
 	NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeFeedRss NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType = "feed-rss"
 	NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType = "crawl"
 )
 
 func (r NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeFeedRss, NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeCrawl:
 		return true
 	}
 	return false
-}
-
-type NamespaceInstanceDeleteResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                                `json:"storage_id" api:"required"`
-	R2Jurisdiction string                                                                `json:"r2_jurisdiction"`
-	StorageType    r2.Provider                                                           `json:"storage_type"`
-	JSON           namespaceInstanceDeleteResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
-}
-
-// namespaceInstanceDeleteResponseSourceParamsWebCrawlerStoreOptionsJSON contains
-// the JSON metadata for the struct
-// [NamespaceInstanceDeleteResponseSourceParamsWebCrawlerStoreOptions]
-type namespaceInstanceDeleteResponseSourceParamsWebCrawlerStoreOptionsJSON struct {
-	StorageID      apijson.Field
-	R2Jurisdiction apijson.Field
-	StorageType    apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *NamespaceInstanceDeleteResponseSourceParamsWebCrawlerStoreOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceInstanceDeleteResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() string {
-	return r.raw
 }
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
@@ -4635,7 +4518,6 @@ func (r namespaceInstanceReadResponseSourceParamsJSON) RawJSON() string {
 type NamespaceInstanceReadResponseSourceParamsWebCrawler struct {
 	ParseOptions NamespaceInstanceReadResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	StoreOptions NamespaceInstanceReadResponseSourceParamsWebCrawlerStoreOptions `json:"store_options"`
 	JSON         namespaceInstanceReadResponseSourceParamsWebCrawlerJSON         `json:"-"`
 }
 
@@ -4644,7 +4526,6 @@ type NamespaceInstanceReadResponseSourceParamsWebCrawler struct {
 type namespaceInstanceReadResponseSourceParamsWebCrawlerJSON struct {
 	ParseOptions apijson.Field
 	ParseType    apijson.Field
-	StoreOptions apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -4729,42 +4610,15 @@ type NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType string
 
 const (
 	NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeFeedRss NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType = "feed-rss"
 	NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType = "crawl"
 )
 
 func (r NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeFeedRss, NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeCrawl:
 		return true
 	}
 	return false
-}
-
-type NamespaceInstanceReadResponseSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      string                                                              `json:"storage_id" api:"required"`
-	R2Jurisdiction string                                                              `json:"r2_jurisdiction"`
-	StorageType    r2.Provider                                                         `json:"storage_type"`
-	JSON           namespaceInstanceReadResponseSourceParamsWebCrawlerStoreOptionsJSON `json:"-"`
-}
-
-// namespaceInstanceReadResponseSourceParamsWebCrawlerStoreOptionsJSON contains the
-// JSON metadata for the struct
-// [NamespaceInstanceReadResponseSourceParamsWebCrawlerStoreOptions]
-type namespaceInstanceReadResponseSourceParamsWebCrawlerStoreOptionsJSON struct {
-	StorageID      apijson.Field
-	R2Jurisdiction apijson.Field
-	StorageType    apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *NamespaceInstanceReadResponseSourceParamsWebCrawlerStoreOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceInstanceReadResponseSourceParamsWebCrawlerStoreOptionsJSON) RawJSON() string {
-	return r.raw
 }
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
@@ -5515,7 +5369,6 @@ func (r NamespaceInstanceNewParamsSourceParams) MarshalJSON() (data []byte, err 
 type NamespaceInstanceNewParamsSourceParamsWebCrawler struct {
 	ParseOptions param.Field[NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptions] `json:"parse_options"`
 	ParseType    param.Field[NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType]    `json:"parse_type"`
-	StoreOptions param.Field[NamespaceInstanceNewParamsSourceParamsWebCrawlerStoreOptions] `json:"store_options"`
 }
 
 func (r NamespaceInstanceNewParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, err error) {
@@ -5561,26 +5414,15 @@ type NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType string
 
 const (
 	NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeFeedRss NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType = "feed-rss"
 	NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType = "crawl"
 )
 
 func (r NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeFeedRss, NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeCrawl:
 		return true
 	}
 	return false
-}
-
-type NamespaceInstanceNewParamsSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      param.Field[string]      `json:"storage_id" api:"required"`
-	R2Jurisdiction param.Field[string]      `json:"r2_jurisdiction"`
-	StorageType    param.Field[r2.Provider] `json:"storage_type"`
-}
-
-func (r NamespaceInstanceNewParamsSourceParamsWebCrawlerStoreOptions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
@@ -5674,6 +5516,7 @@ type NamespaceInstanceUpdateParams struct {
 	RewriteModel         param.Field[NamespaceInstanceUpdateParamsRewriteModel]         `json:"rewrite_model"`
 	RewriteQuery         param.Field[bool]                                              `json:"rewrite_query"`
 	ScoreThreshold       param.Field[float64]                                           `json:"score_threshold"`
+	Source               param.Field[string]                                            `json:"source"`
 	SourceParams         param.Field[NamespaceInstanceUpdateParamsSourceParams]         `json:"source_params"`
 	Summarization        param.Field[bool]                                              `json:"summarization"`
 	SummarizationModel   param.Field[NamespaceInstanceUpdateParamsSummarizationModel]   `json:"summarization_model"`
@@ -6109,7 +5952,6 @@ func (r NamespaceInstanceUpdateParamsSourceParams) MarshalJSON() (data []byte, e
 type NamespaceInstanceUpdateParamsSourceParamsWebCrawler struct {
 	ParseOptions param.Field[NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptions] `json:"parse_options"`
 	ParseType    param.Field[NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType]    `json:"parse_type"`
-	StoreOptions param.Field[NamespaceInstanceUpdateParamsSourceParamsWebCrawlerStoreOptions] `json:"store_options"`
 }
 
 func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, err error) {
@@ -6155,26 +5997,15 @@ type NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType string
 
 const (
 	NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeFeedRss NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType = "feed-rss"
 	NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType = "crawl"
 )
 
 func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeFeedRss, NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeCrawl:
 		return true
 	}
 	return false
-}
-
-type NamespaceInstanceUpdateParamsSourceParamsWebCrawlerStoreOptions struct {
-	StorageID      param.Field[string]      `json:"storage_id" api:"required"`
-	R2Jurisdiction param.Field[string]      `json:"r2_jurisdiction"`
-	StorageType    param.Field[r2.Provider] `json:"storage_type"`
-}
-
-func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawlerStoreOptions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type NamespaceInstanceUpdateParamsSummarizationModel string

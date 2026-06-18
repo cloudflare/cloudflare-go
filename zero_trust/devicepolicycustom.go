@@ -201,6 +201,11 @@ type DevicePolicyCustomNewParams struct {
 	Exclude param.Field[[]SplitTunnelExcludeUnionParam] `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
 	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
+	// Global Acceleration settings for China. When configured, WARP clients connect to
+	// the Global Accelerator addresses instead of the default ones. Please contact
+	// your account representative to enable this feature on your account. See
+	// https://developers.cloudflare.com/china-network/concepts/global-acceleration/.
+	GlobalAcceleration param.Field[DevicePolicyCustomNewParamsGlobalAcceleration] `json:"global_acceleration"`
 	// List of routes included in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
 	Include param.Field[[]SplitTunnelIncludeUnionParam] `json:"include"`
@@ -241,6 +246,27 @@ type DevicePolicyCustomNewParamsDNSSearchSuffix struct {
 }
 
 func (r DevicePolicyCustomNewParamsDNSSearchSuffix) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Global Acceleration settings for China. When configured, WARP clients connect to
+// the Global Accelerator addresses instead of the default ones. Please contact
+// your account representative to enable this feature on your account. See
+// https://developers.cloudflare.com/china-network/concepts/global-acceleration/.
+type DevicePolicyCustomNewParamsGlobalAcceleration struct {
+	// IP:port entries for the API endpoints.
+	APIEndpoints param.Field[[]string] `json:"api_endpoints" api:"required"`
+	// Global acceleration settings are used only when "enabled".
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// IP:port entries for the MASQUE tunnel endpoints. Either wireguard_endpoints or
+	// masque_endpoints must be provided.
+	MasqueEndpoints param.Field[[]string] `json:"masque_endpoints" api:"required"`
+	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
+	// or masque_endpoints must be provided.
+	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+}
+
+func (r DevicePolicyCustomNewParamsGlobalAcceleration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -348,6 +374,11 @@ type DevicePolicyCustomEditParams struct {
 	Exclude param.Field[[]SplitTunnelExcludeUnionParam] `json:"exclude"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
 	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
+	// Global Acceleration settings for China. When configured, WARP clients connect to
+	// the Global Accelerator addresses instead of the default ones. Please contact
+	// your account representative to enable this feature on your account. See
+	// https://developers.cloudflare.com/china-network/concepts/global-acceleration/.
+	GlobalAcceleration param.Field[DevicePolicyCustomEditParamsGlobalAcceleration] `json:"global_acceleration"`
 	// List of routes included in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
 	Include param.Field[[]SplitTunnelIncludeUnionParam] `json:"include"`
@@ -398,6 +429,27 @@ type DevicePolicyCustomEditParamsDNSSearchSuffix struct {
 }
 
 func (r DevicePolicyCustomEditParamsDNSSearchSuffix) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Global Acceleration settings for China. When configured, WARP clients connect to
+// the Global Accelerator addresses instead of the default ones. Please contact
+// your account representative to enable this feature on your account. See
+// https://developers.cloudflare.com/china-network/concepts/global-acceleration/.
+type DevicePolicyCustomEditParamsGlobalAcceleration struct {
+	// IP:port entries for the API endpoints.
+	APIEndpoints param.Field[[]string] `json:"api_endpoints" api:"required"`
+	// Global acceleration settings are used only when "enabled".
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// IP:port entries for the MASQUE tunnel endpoints. Either wireguard_endpoints or
+	// masque_endpoints must be provided.
+	MasqueEndpoints param.Field[[]string] `json:"masque_endpoints" api:"required"`
+	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
+	// or masque_endpoints must be provided.
+	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+}
+
+func (r DevicePolicyCustomEditParamsGlobalAcceleration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

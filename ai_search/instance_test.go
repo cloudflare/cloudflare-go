@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/ai_search"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/r2"
 )
 
 func TestInstanceNewWithOptionalParams(t *testing.T) {
@@ -113,11 +112,6 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 					UseBrowserRendering: cloudflare.F(true),
 				}),
 				ParseType: cloudflare.F(ai_search.InstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap),
-				StoreOptions: cloudflare.F(ai_search.InstanceNewParamsSourceParamsWebCrawlerStoreOptions{
-					StorageID:      cloudflare.F("storage_id"),
-					R2Jurisdiction: cloudflare.F("r2_jurisdiction"),
-					StorageType:    cloudflare.F(r2.ProviderR2),
-				}),
 			}),
 		}),
 		SyncInterval: cloudflare.F(ai_search.InstanceNewParamsSyncInterval900),
@@ -210,6 +204,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			RewriteModel:   cloudflare.F(ai_search.InstanceUpdateParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast),
 			RewriteQuery:   cloudflare.F(true),
 			ScoreThreshold: cloudflare.F(0.000000),
+			Source:         cloudflare.F("source"),
 			SourceParams: cloudflare.F(ai_search.InstanceUpdateParamsSourceParams{
 				ExcludeItems:   cloudflare.F([]string{"/admin/**", "/private/**", "**\\temp\\**"}),
 				IncludeItems:   cloudflare.F([]string{"/blog/**", "/docs/**/*.html", "**\\blog\\**.html"}),
@@ -232,11 +227,6 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 						UseBrowserRendering: cloudflare.F(true),
 					}),
 					ParseType: cloudflare.F(ai_search.InstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap),
-					StoreOptions: cloudflare.F(ai_search.InstanceUpdateParamsSourceParamsWebCrawlerStoreOptions{
-						StorageID:      cloudflare.F("storage_id"),
-						R2Jurisdiction: cloudflare.F("r2_jurisdiction"),
-						StorageType:    cloudflare.F(r2.ProviderR2),
-					}),
 				}),
 			}),
 			Summarization:                  cloudflare.F(true),

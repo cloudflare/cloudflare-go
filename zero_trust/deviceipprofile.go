@@ -78,7 +78,7 @@ func (r *DeviceIPProfileService) Update(ctx context.Context, profileID string, p
 }
 
 // Lists WARP Device IP profiles.
-func (r *DeviceIPProfileService) List(ctx context.Context, params DeviceIPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IPProfile], err error) {
+func (r *DeviceIPProfileService) List(ctx context.Context, params DeviceIPProfileListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[IPProfile], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -100,8 +100,8 @@ func (r *DeviceIPProfileService) List(ctx context.Context, params DeviceIPProfil
 }
 
 // Lists WARP Device IP profiles.
-func (r *DeviceIPProfileService) ListAutoPaging(ctx context.Context, params DeviceIPProfileListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IPProfile] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *DeviceIPProfileService) ListAutoPaging(ctx context.Context, params DeviceIPProfileListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[IPProfile] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a WARP Device IP profile.
@@ -423,6 +423,8 @@ func (r deviceIPProfileUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type DeviceIPProfileListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The page number to return.
+	Page param.Field[int64] `query:"page"`
 	// The number of IP profiles to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
 }
