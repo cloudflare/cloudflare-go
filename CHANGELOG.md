@@ -1,5 +1,14 @@
 # Changelog
 
+## 7.6.1 (2026-06-18)
+
+Full Changelog: [v7.6.0...v7.6.1](https://github.com/cloudflare/cloudflare-go/compare/v7.6.0...v7.6.1)
+
+### Bug Fixes
+
+* **apijson:** replace O(n^2) array encoding with O(n) bytes.Buffer ([23a98b9](https://github.com/cloudflare/cloudflare-go/commit/23a98b9d1d4db20930d61e6258fab97f58d1617a)), closes [#4315](https://github.com/cloudflare/cloudflare-go/issues/4315)
+* **ci:** free disk space before test job on standard runners ([35d9d4f](https://github.com/cloudflare/cloudflare-go/commit/35d9d4f19a277b3a9df531d5a5077f581ace7eb1))
+
 ## 7.6.0 (2026-06-16)
 
 Full Changelog: [v7.5.0...v7.6.0](https://github.com/cloudflare/cloudflare-go/compare/v7.5.0...v7.6.0)
