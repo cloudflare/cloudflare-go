@@ -34,7 +34,12 @@ func NewBillingSpendingLimitService(opts ...option.RequestOption) (r *BillingSpe
 	return
 }
 
-// Configure a spending limit with amount, strategy, and duration.
+// Deprecated: spending limits can no longer be created, enabled, or modified and
+// this endpoint always responds 403. Use the new AI Gateway spend limits instead:
+// https://developers.cloudflare.com/ai-gateway/features/spend-limits/. Existing
+// limits can be removed via DELETE /spending-limit.
+//
+// Deprecated: deprecated
 func (r *BillingSpendingLimitService) New(ctx context.Context, params BillingSpendingLimitNewParams, opts ...option.RequestOption) (res *BillingSpendingLimitNewResponse, err error) {
 	var env BillingSpendingLimitNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
