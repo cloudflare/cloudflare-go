@@ -3,18 +3,7 @@
 package ssl
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"net/http"
-	"slices"
-	"time"
-
-	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v7/internal/param"
-	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // RecommendationService contains methods and other services that help with
@@ -34,105 +23,4 @@ func NewRecommendationService(opts ...option.RequestOption) (r *RecommendationSe
 	r = &RecommendationService{}
 	r.Options = opts
 	return
-}
-
-// Retrieve the SSL/TLS Recommender's recommendation for a zone.
-//
-// Deprecated: SSL/TLS Recommender has been decommissioned in favor of Automatic
-// SSL/TLS
-func (r *RecommendationService) Get(ctx context.Context, query RecommendationGetParams, opts ...option.RequestOption) (res *RecommendationGetResponse, err error) {
-	var env RecommendationGetResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if query.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("zones/%s/ssl/recommendation", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
-}
-
-type RecommendationGetResponse struct {
-	ID string `json:"id" api:"required"`
-	// Whether this setting can be updated or not.
-	Editable bool `json:"editable" api:"required"`
-	// Last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
-	// Current setting of the automatic SSL/TLS.
-	Value RecommendationGetResponseValue `json:"value" api:"required"`
-	// Next time this zone will be scanned by the Automatic SSL/TLS.
-	NextScheduledScan time.Time                     `json:"next_scheduled_scan" api:"nullable" format:"date-time"`
-	JSON              recommendationGetResponseJSON `json:"-"`
-}
-
-// recommendationGetResponseJSON contains the JSON metadata for the struct
-// [RecommendationGetResponse]
-type recommendationGetResponseJSON struct {
-	ID                apijson.Field
-	Editable          apijson.Field
-	ModifiedOn        apijson.Field
-	Value             apijson.Field
-	NextScheduledScan apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecommendationGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recommendationGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Current setting of the automatic SSL/TLS.
-type RecommendationGetResponseValue string
-
-const (
-	RecommendationGetResponseValueAuto   RecommendationGetResponseValue = "auto"
-	RecommendationGetResponseValueCustom RecommendationGetResponseValue = "custom"
-)
-
-func (r RecommendationGetResponseValue) IsKnown() bool {
-	switch r {
-	case RecommendationGetResponseValueAuto, RecommendationGetResponseValueCustom:
-		return true
-	}
-	return false
-}
-
-type RecommendationGetParams struct {
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-}
-
-type RecommendationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo     `json:"messages" api:"required"`
-	Result   RecommendationGetResponse `json:"result" api:"required"`
-	// Indicates the API call's success or failure.
-	Success bool                                  `json:"success" api:"required"`
-	JSON    recommendationGetResponseEnvelopeJSON `json:"-"`
-}
-
-// recommendationGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RecommendationGetResponseEnvelope]
-type recommendationGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecommendationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recommendationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }
