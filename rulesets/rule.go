@@ -5451,9 +5451,9 @@ type SetCacheSettingsRuleActionParameters struct {
 	StripLastModified bool `json:"strip_last_modified"`
 	// Whether to strip Set-Cookie headers from the origin response before caching.
 	StripSetCookie bool `json:"strip_set_cookie"`
-	// Controls how cached responses vary based on request headers. At least one of
-	// `default` or `headers` must be set, and `default` is required when `headers` is
-	// set.
+	// Controls how cached responses vary based on request headers. `default` is
+	// required by the API and applies to any Vary response header that does not have a
+	// per-header override.
 	Vary SetCacheSettingsRuleActionParametersVary `json:"vary"`
 	JSON setCacheSettingsRuleActionParametersJSON `json:"-"`
 }
@@ -6015,12 +6015,12 @@ func (r setCacheSettingsRuleActionParametersSharedDictionaryJSON) RawJSON() stri
 	return r.raw
 }
 
-// Controls how cached responses vary based on request headers. At least one of
-// `default` or `headers` must be set, and `default` is required when `headers` is
-// set.
+// Controls how cached responses vary based on request headers. `default` is
+// required by the API and applies to any Vary response header that does not have a
+// per-header override.
 type SetCacheSettingsRuleActionParametersVary struct {
-	// Controls how a single request header (or the default for all headers)
-	// contributes to the cache key.
+	// Controls how response Vary headers without a per-header override contribute to
+	// the cache key.
 	Default SetCacheSettingsRuleActionParametersVaryDefault `json:"default"`
 	// A mapping of lowercase request header names to their vary configuration.
 	Headers map[string]SetCacheSettingsRuleActionParametersVaryHeader `json:"headers"`
@@ -6044,25 +6044,18 @@ func (r setCacheSettingsRuleActionParametersVaryJSON) RawJSON() string {
 	return r.raw
 }
 
-// Controls how a single request header (or the default for all headers)
-// contributes to the cache key.
+// Controls how response Vary headers without a per-header override contribute to
+// the cache key.
 type SetCacheSettingsRuleActionParametersVaryDefault struct {
 	// How the header value is treated when building the cache key.
 	Action SetCacheSettingsRuleActionParametersVaryDefaultAction `json:"action" api:"required"`
-	// The set of languages to normalize against. Only valid for the `accept-language`
-	// header.
-	Languages []string `json:"languages"`
-	// The set of media types to normalize against. Only valid for the `accept` header.
-	MediaTypes []string                                            `json:"media_types"`
-	JSON       setCacheSettingsRuleActionParametersVaryDefaultJSON `json:"-"`
+	JSON   setCacheSettingsRuleActionParametersVaryDefaultJSON   `json:"-"`
 }
 
 // setCacheSettingsRuleActionParametersVaryDefaultJSON contains the JSON metadata
 // for the struct [SetCacheSettingsRuleActionParametersVaryDefault]
 type setCacheSettingsRuleActionParametersVaryDefaultJSON struct {
 	Action      apijson.Field
-	Languages   apijson.Field
-	MediaTypes  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6092,8 +6085,7 @@ func (r SetCacheSettingsRuleActionParametersVaryDefaultAction) IsKnown() bool {
 	return false
 }
 
-// Controls how a single request header (or the default for all headers)
-// contributes to the cache key.
+// Controls how a single request header contributes to the cache key.
 type SetCacheSettingsRuleActionParametersVaryHeader struct {
 	// How the header value is treated when building the cache key.
 	Action SetCacheSettingsRuleActionParametersVaryHeadersAction `json:"action" api:"required"`
@@ -6293,9 +6285,9 @@ type SetCacheSettingsRuleActionParametersParam struct {
 	StripLastModified param.Field[bool] `json:"strip_last_modified"`
 	// Whether to strip Set-Cookie headers from the origin response before caching.
 	StripSetCookie param.Field[bool] `json:"strip_set_cookie"`
-	// Controls how cached responses vary based on request headers. At least one of
-	// `default` or `headers` must be set, and `default` is required when `headers` is
-	// set.
+	// Controls how cached responses vary based on request headers. `default` is
+	// required by the API and applies to any Vary response header that does not have a
+	// per-header override.
 	Vary param.Field[SetCacheSettingsRuleActionParametersVaryParam] `json:"vary"`
 }
 
@@ -6524,12 +6516,12 @@ func (r SetCacheSettingsRuleActionParametersSharedDictionaryParam) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-// Controls how cached responses vary based on request headers. At least one of
-// `default` or `headers` must be set, and `default` is required when `headers` is
-// set.
+// Controls how cached responses vary based on request headers. `default` is
+// required by the API and applies to any Vary response header that does not have a
+// per-header override.
 type SetCacheSettingsRuleActionParametersVaryParam struct {
-	// Controls how a single request header (or the default for all headers)
-	// contributes to the cache key.
+	// Controls how response Vary headers without a per-header override contribute to
+	// the cache key.
 	Default param.Field[SetCacheSettingsRuleActionParametersVaryDefaultParam] `json:"default"`
 	// A mapping of lowercase request header names to their vary configuration.
 	Headers param.Field[map[string]SetCacheSettingsRuleActionParametersVaryHeaderParam] `json:"headers"`
@@ -6539,24 +6531,18 @@ func (r SetCacheSettingsRuleActionParametersVaryParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Controls how a single request header (or the default for all headers)
-// contributes to the cache key.
+// Controls how response Vary headers without a per-header override contribute to
+// the cache key.
 type SetCacheSettingsRuleActionParametersVaryDefaultParam struct {
 	// How the header value is treated when building the cache key.
 	Action param.Field[SetCacheSettingsRuleActionParametersVaryDefaultAction] `json:"action" api:"required"`
-	// The set of languages to normalize against. Only valid for the `accept-language`
-	// header.
-	Languages param.Field[[]string] `json:"languages"`
-	// The set of media types to normalize against. Only valid for the `accept` header.
-	MediaTypes param.Field[[]string] `json:"media_types"`
 }
 
 func (r SetCacheSettingsRuleActionParametersVaryDefaultParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Controls how a single request header (or the default for all headers)
-// contributes to the cache key.
+// Controls how a single request header contributes to the cache key.
 type SetCacheSettingsRuleActionParametersVaryHeaderParam struct {
 	// How the header value is treated when building the cache key.
 	Action param.Field[SetCacheSettingsRuleActionParametersVaryHeadersAction] `json:"action" api:"required"`
