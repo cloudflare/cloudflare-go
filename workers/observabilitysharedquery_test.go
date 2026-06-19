@@ -57,7 +57,7 @@ func TestObservabilitySharedQueryNewWithOptionalParams(t *testing.T) {
 				FilterCombination: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersFiltersObjectFilterCombinationAnd),
 				Filters: cloudflare.F([]workers.ObservabilitySharedQueryNewParamsParametersFiltersObjectFilterUnion{workers.ObservabilitySharedQueryNewParamsParametersFiltersObjectFiltersObject{
 					FilterCombination: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersFiltersObjectFiltersObjectFilterCombinationAnd),
-					Filters:           cloudflare.F([]interface{}{map[string]interface{}{}}),
+					Filters:           cloudflare.F([]interface{}{}),
 					Kind:              cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersFiltersObjectFiltersObjectKindGroup),
 				}}),
 				Kind: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersFiltersObjectKindGroup),

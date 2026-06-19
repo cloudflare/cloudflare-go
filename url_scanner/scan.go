@@ -4623,7 +4623,7 @@ func (r scanGetResponseMetaProcessorsRobotsTXTDataJSON) RawJSON() string {
 }
 
 type ScanGetResponseMetaProcessorsRobotsTXTDataRules struct {
-	Star ScanGetResponseMetaProcessorsRobotsTXTDataRules     `json:"*" api:"required"`
+	Star ScanGetResponseMetaProcessorsRobotsTXTDataRulesStar `json:"*" api:"required"`
 	JSON scanGetResponseMetaProcessorsRobotsTXTDataRulesJSON `json:"-"`
 }
 
@@ -4640,6 +4640,59 @@ func (r *ScanGetResponseMetaProcessorsRobotsTXTDataRules) UnmarshalJSON(data []b
 }
 
 func (r scanGetResponseMetaProcessorsRobotsTXTDataRulesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsRobotsTXTDataRulesStar struct {
+	Allow         []string                                                         `json:"allow" api:"required"`
+	Disallow      []string                                                         `json:"disallow" api:"required"`
+	ContentSignal ScanGetResponseMetaProcessorsRobotsTXTDataRulesStarContentSignal `json:"contentSignal"`
+	CrawlDelay    float64                                                          `json:"crawlDelay"`
+	JSON          scanGetResponseMetaProcessorsRobotsTXTDataRulesStarJSON          `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsRobotsTXTDataRulesStarJSON contains the JSON
+// metadata for the struct [ScanGetResponseMetaProcessorsRobotsTXTDataRulesStar]
+type scanGetResponseMetaProcessorsRobotsTXTDataRulesStarJSON struct {
+	Allow         apijson.Field
+	Disallow      apijson.Field
+	ContentSignal apijson.Field
+	CrawlDelay    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsRobotsTXTDataRulesStar) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsRobotsTXTDataRulesStarJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsRobotsTXTDataRulesStarContentSignal struct {
+	AIInput string                                                               `json:"ai-input"`
+	AITrain string                                                               `json:"ai-train"`
+	Search  string                                                               `json:"search"`
+	JSON    scanGetResponseMetaProcessorsRobotsTXTDataRulesStarContentSignalJSON `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsRobotsTXTDataRulesStarContentSignalJSON contains
+// the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsRobotsTXTDataRulesStarContentSignal]
+type scanGetResponseMetaProcessorsRobotsTXTDataRulesStarContentSignalJSON struct {
+	AIInput     apijson.Field
+	AITrain     apijson.Field
+	Search      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsRobotsTXTDataRulesStarContentSignal) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsRobotsTXTDataRulesStarContentSignalJSON) RawJSON() string {
 	return r.raw
 }
 
