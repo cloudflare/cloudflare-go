@@ -59,7 +59,8 @@ func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...opt
 	return res, nil
 }
 
-// User Details
+// Retrieves detailed information about the currently authenticated user, including
+// email, name, and account memberships.
 func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (res *UserGetResponse, err error) {
 	var env UserGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

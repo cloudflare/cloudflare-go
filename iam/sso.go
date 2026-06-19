@@ -36,7 +36,8 @@ func NewSSOService(opts ...option.RequestOption) (r *SSOService) {
 	return
 }
 
-// Initialize new SSO connector
+// Creates a new SSO connector for logging into Cloudflare through an identity
+// provider.
 func (r *SSOService) New(ctx context.Context, params SSONewParams, opts ...option.RequestOption) (res *SSONewResponse, err error) {
 	var env SSONewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +54,7 @@ func (r *SSOService) New(ctx context.Context, params SSONewParams, opts ...optio
 	return res, nil
 }
 
-// Update SSO connector state
+// Updates the state or configuration of an SSO connector.
 func (r *SSOService) Update(ctx context.Context, ssoConnectorID string, params SSOUpdateParams, opts ...option.RequestOption) (res *SSOUpdateResponse, err error) {
 	var env SSOUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -74,7 +75,7 @@ func (r *SSOService) Update(ctx context.Context, ssoConnectorID string, params S
 	return res, nil
 }
 
-// Get all SSO connectors
+// Lists all SSO connectors configured for the account.
 func (r *SSOService) List(ctx context.Context, query SSOListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SSOListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -96,12 +97,12 @@ func (r *SSOService) List(ctx context.Context, query SSOListParams, opts ...opti
 	return res, nil
 }
 
-// Get all SSO connectors
+// Lists all SSO connectors configured for the account.
 func (r *SSOService) ListAutoPaging(ctx context.Context, query SSOListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SSOListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete SSO connector
+// Deletes an SSO connector from the account.
 func (r *SSOService) Delete(ctx context.Context, ssoConnectorID string, body SSODeleteParams, opts ...option.RequestOption) (res *SSODeleteResponse, err error) {
 	var env SSODeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -122,7 +123,8 @@ func (r *SSOService) Delete(ctx context.Context, ssoConnectorID string, body SSO
 	return res, nil
 }
 
-// Begin SSO connector verification
+// Validates the user has added the DNS TXT record required for validating
+// ownership of the domain they are trying to set up a connector for.
 func (r *SSOService) BeginVerification(ctx context.Context, ssoConnectorID string, body SSOBeginVerificationParams, opts ...option.RequestOption) (res *SSOBeginVerificationResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -138,7 +140,7 @@ func (r *SSOService) BeginVerification(ctx context.Context, ssoConnectorID strin
 	return res, err
 }
 
-// Get single SSO connector
+// Retrieves details for a specific SSO connector.
 func (r *SSOService) Get(ctx context.Context, ssoConnectorID string, query SSOGetParams, opts ...option.RequestOption) (res *SSOGetResponse, err error) {
 	var env SSOGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
