@@ -120,6 +120,9 @@ TEST_PATHS=(
 	email_security/investigatemove_test.go
 	email_security/investigatereclassify_test.go
 	email_security/investigaterelease_test.go
+	email_security/investigatebulk_test.go
+	email_security/investigatebulkcancel_test.go
+	email_security/investigatebulkmessage_test.go
 	email_security/phishguardreport_test.go
 	email_security/settingallowpolicy_test.go
 	email_security/settingblocksender_test.go

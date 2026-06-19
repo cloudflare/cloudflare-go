@@ -34,6 +34,7 @@ type InvestigateService struct {
 	Move       *InvestigateMoveService
 	Reclassify *InvestigateReclassifyService
 	Release    *InvestigateReleaseService
+	Bulk       *InvestigateBulkService
 }
 
 // NewInvestigateService generates a new service that applies the given options to
@@ -49,6 +50,7 @@ func NewInvestigateService(opts ...option.RequestOption) (r *InvestigateService)
 	r.Move = NewInvestigateMoveService(opts...)
 	r.Reclassify = NewInvestigateReclassifyService(opts...)
 	r.Release = NewInvestigateReleaseService(opts...)
+	r.Bulk = NewInvestigateBulkService(opts...)
 	return
 }
 
