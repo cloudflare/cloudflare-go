@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -49,14 +51,14 @@ func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventD
 }
 
 // Lists all datasets in an account
-func (r *ThreatEventDatasetService) List(ctx context.Context, query ThreatEventDatasetListParams, opts ...option.RequestOption) (res *[]ThreatEventDatasetListResponse, err error) {
+func (r *ThreatEventDatasetService) List(ctx context.Context, params ThreatEventDatasetListParams, opts ...option.RequestOption) (res *[]ThreatEventDatasetListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return res, err
 }
 
@@ -114,10 +116,11 @@ func (r *ThreatEventDatasetService) Raw(ctx context.Context, datasetID string, e
 }
 
 type ThreatEventDatasetNewResponse struct {
-	IsPublic bool                              `json:"isPublic" api:"required"`
-	Name     string                            `json:"name" api:"required"`
-	UUID     string                            `json:"uuid" api:"required"`
-	JSON     threatEventDatasetNewResponseJSON `json:"-"`
+	IsPublic  bool                              `json:"isPublic" api:"required"`
+	Name      string                            `json:"name" api:"required"`
+	UUID      string                            `json:"uuid" api:"required"`
+	DeletedAt string                            `json:"deletedAt"`
+	JSON      threatEventDatasetNewResponseJSON `json:"-"`
 }
 
 // threatEventDatasetNewResponseJSON contains the JSON metadata for the struct
@@ -126,6 +129,7 @@ type threatEventDatasetNewResponseJSON struct {
 	IsPublic    apijson.Field
 	Name        apijson.Field
 	UUID        apijson.Field
+	DeletedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -139,10 +143,11 @@ func (r threatEventDatasetNewResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetListResponse struct {
-	IsPublic bool                               `json:"isPublic" api:"required"`
-	Name     string                             `json:"name" api:"required"`
-	UUID     string                             `json:"uuid" api:"required"`
-	JSON     threatEventDatasetListResponseJSON `json:"-"`
+	IsPublic  bool                               `json:"isPublic" api:"required"`
+	Name      string                             `json:"name" api:"required"`
+	UUID      string                             `json:"uuid" api:"required"`
+	DeletedAt string                             `json:"deletedAt"`
+	JSON      threatEventDatasetListResponseJSON `json:"-"`
 }
 
 // threatEventDatasetListResponseJSON contains the JSON metadata for the struct
@@ -151,6 +156,7 @@ type threatEventDatasetListResponseJSON struct {
 	IsPublic    apijson.Field
 	Name        apijson.Field
 	UUID        apijson.Field
+	DeletedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -164,10 +170,11 @@ func (r threatEventDatasetListResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetEditResponse struct {
-	IsPublic bool                               `json:"isPublic" api:"required"`
-	Name     string                             `json:"name" api:"required"`
-	UUID     string                             `json:"uuid" api:"required"`
-	JSON     threatEventDatasetEditResponseJSON `json:"-"`
+	IsPublic  bool                               `json:"isPublic" api:"required"`
+	Name      string                             `json:"name" api:"required"`
+	UUID      string                             `json:"uuid" api:"required"`
+	DeletedAt string                             `json:"deletedAt"`
+	JSON      threatEventDatasetEditResponseJSON `json:"-"`
 }
 
 // threatEventDatasetEditResponseJSON contains the JSON metadata for the struct
@@ -176,6 +183,7 @@ type threatEventDatasetEditResponseJSON struct {
 	IsPublic    apijson.Field
 	Name        apijson.Field
 	UUID        apijson.Field
+	DeletedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -189,10 +197,11 @@ func (r threatEventDatasetEditResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetGetResponse struct {
-	IsPublic bool                              `json:"isPublic" api:"required"`
-	Name     string                            `json:"name" api:"required"`
-	UUID     string                            `json:"uuid" api:"required"`
-	JSON     threatEventDatasetGetResponseJSON `json:"-"`
+	IsPublic  bool                              `json:"isPublic" api:"required"`
+	Name      string                            `json:"name" api:"required"`
+	UUID      string                            `json:"uuid" api:"required"`
+	DeletedAt string                            `json:"deletedAt"`
+	JSON      threatEventDatasetGetResponseJSON `json:"-"`
 }
 
 // threatEventDatasetGetResponseJSON contains the JSON metadata for the struct
@@ -201,6 +210,7 @@ type threatEventDatasetGetResponseJSON struct {
 	IsPublic    apijson.Field
 	Name        apijson.Field
 	UUID        apijson.Field
+	DeletedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -261,6 +271,18 @@ func (r ThreatEventDatasetNewParams) MarshalJSON() (data []byte, err error) {
 type ThreatEventDatasetListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// When true, include soft-deleted datasets in the response. Each item includes a
+	// `deletedAt` field (ISO 8601 or null). Default: false.
+	IncludeDeleted param.Field[bool] `query:"includeDeleted"`
+}
+
+// URLQuery serializes [ThreatEventDatasetListParams]'s query parameters as
+// `url.Values`.
+func (r ThreatEventDatasetListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type ThreatEventDatasetEditParams struct {

@@ -43,7 +43,7 @@ func TestThreatEventDatasetNew(t *testing.T) {
 	}
 }
 
-func TestThreatEventDatasetList(t *testing.T) {
+func TestThreatEventDatasetListWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: HTTP 401 from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -59,7 +59,8 @@ func TestThreatEventDatasetList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Datasets.List(context.TODO(), cloudforce_one.ThreatEventDatasetListParams{
-		AccountID: cloudflare.F("account_id"),
+		AccountID:      cloudflare.F("account_id"),
+		IncludeDeleted: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
