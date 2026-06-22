@@ -180,11 +180,13 @@ type ConnectorNewResponse struct {
 	InterruptWindowHourOfDay    float64                    `json:"interrupt_window_hour_of_day" api:"required"`
 	LastUpdated                 string                     `json:"last_updated" api:"required"`
 	Notes                       string                     `json:"notes" api:"required"`
+	Primary                     bool                       `json:"primary" api:"required"`
 	Timezone                    string                     `json:"timezone" api:"required"`
 	Device                      ConnectorNewResponseDevice `json:"device"`
 	LastHeartbeat               string                     `json:"last_heartbeat"`
 	LastSeenVersion             string                     `json:"last_seen_version"`
 	LicenseKey                  string                     `json:"license_key"`
+	SiteID                      string                     `json:"site_id"`
 	JSON                        connectorNewResponseJSON   `json:"-"`
 }
 
@@ -199,11 +201,13 @@ type connectorNewResponseJSON struct {
 	InterruptWindowHourOfDay     apijson.Field
 	LastUpdated                  apijson.Field
 	Notes                        apijson.Field
+	Primary                      apijson.Field
 	Timezone                     apijson.Field
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
 	LicenseKey                   apijson.Field
+	SiteID                       apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -287,11 +291,13 @@ type ConnectorUpdateResponse struct {
 	InterruptWindowHourOfDay    float64                       `json:"interrupt_window_hour_of_day" api:"required"`
 	LastUpdated                 string                        `json:"last_updated" api:"required"`
 	Notes                       string                        `json:"notes" api:"required"`
+	Primary                     bool                          `json:"primary" api:"required"`
 	Timezone                    string                        `json:"timezone" api:"required"`
 	Device                      ConnectorUpdateResponseDevice `json:"device"`
 	LastHeartbeat               string                        `json:"last_heartbeat"`
 	LastSeenVersion             string                        `json:"last_seen_version"`
 	LicenseKey                  string                        `json:"license_key"`
+	SiteID                      string                        `json:"site_id"`
 	JSON                        connectorUpdateResponseJSON   `json:"-"`
 }
 
@@ -306,11 +312,13 @@ type connectorUpdateResponseJSON struct {
 	InterruptWindowHourOfDay     apijson.Field
 	LastUpdated                  apijson.Field
 	Notes                        apijson.Field
+	Primary                      apijson.Field
 	Timezone                     apijson.Field
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
 	LicenseKey                   apijson.Field
+	SiteID                       apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -394,11 +402,13 @@ type ConnectorListResponse struct {
 	InterruptWindowHourOfDay    float64                     `json:"interrupt_window_hour_of_day" api:"required"`
 	LastUpdated                 string                      `json:"last_updated" api:"required"`
 	Notes                       string                      `json:"notes" api:"required"`
+	Primary                     bool                        `json:"primary" api:"required"`
 	Timezone                    string                      `json:"timezone" api:"required"`
 	Device                      ConnectorListResponseDevice `json:"device"`
 	LastHeartbeat               string                      `json:"last_heartbeat"`
 	LastSeenVersion             string                      `json:"last_seen_version"`
 	LicenseKey                  string                      `json:"license_key"`
+	SiteID                      string                      `json:"site_id"`
 	JSON                        connectorListResponseJSON   `json:"-"`
 }
 
@@ -413,11 +423,13 @@ type connectorListResponseJSON struct {
 	InterruptWindowHourOfDay     apijson.Field
 	LastUpdated                  apijson.Field
 	Notes                        apijson.Field
+	Primary                      apijson.Field
 	Timezone                     apijson.Field
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
 	LicenseKey                   apijson.Field
+	SiteID                       apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -501,11 +513,13 @@ type ConnectorDeleteResponse struct {
 	InterruptWindowHourOfDay    float64                       `json:"interrupt_window_hour_of_day" api:"required"`
 	LastUpdated                 string                        `json:"last_updated" api:"required"`
 	Notes                       string                        `json:"notes" api:"required"`
+	Primary                     bool                          `json:"primary" api:"required"`
 	Timezone                    string                        `json:"timezone" api:"required"`
 	Device                      ConnectorDeleteResponseDevice `json:"device"`
 	LastHeartbeat               string                        `json:"last_heartbeat"`
 	LastSeenVersion             string                        `json:"last_seen_version"`
 	LicenseKey                  string                        `json:"license_key"`
+	SiteID                      string                        `json:"site_id"`
 	JSON                        connectorDeleteResponseJSON   `json:"-"`
 }
 
@@ -520,11 +534,13 @@ type connectorDeleteResponseJSON struct {
 	InterruptWindowHourOfDay     apijson.Field
 	LastUpdated                  apijson.Field
 	Notes                        apijson.Field
+	Primary                      apijson.Field
 	Timezone                     apijson.Field
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
 	LicenseKey                   apijson.Field
+	SiteID                       apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -608,11 +624,13 @@ type ConnectorEditResponse struct {
 	InterruptWindowHourOfDay    float64                     `json:"interrupt_window_hour_of_day" api:"required"`
 	LastUpdated                 string                      `json:"last_updated" api:"required"`
 	Notes                       string                      `json:"notes" api:"required"`
+	Primary                     bool                        `json:"primary" api:"required"`
 	Timezone                    string                      `json:"timezone" api:"required"`
 	Device                      ConnectorEditResponseDevice `json:"device"`
 	LastHeartbeat               string                      `json:"last_heartbeat"`
 	LastSeenVersion             string                      `json:"last_seen_version"`
 	LicenseKey                  string                      `json:"license_key"`
+	SiteID                      string                      `json:"site_id"`
 	JSON                        connectorEditResponseJSON   `json:"-"`
 }
 
@@ -627,11 +645,13 @@ type connectorEditResponseJSON struct {
 	InterruptWindowHourOfDay     apijson.Field
 	LastUpdated                  apijson.Field
 	Notes                        apijson.Field
+	Primary                      apijson.Field
 	Timezone                     apijson.Field
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
 	LicenseKey                   apijson.Field
+	SiteID                       apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -715,11 +735,13 @@ type ConnectorGetResponse struct {
 	InterruptWindowHourOfDay    float64                    `json:"interrupt_window_hour_of_day" api:"required"`
 	LastUpdated                 string                     `json:"last_updated" api:"required"`
 	Notes                       string                     `json:"notes" api:"required"`
+	Primary                     bool                       `json:"primary" api:"required"`
 	Timezone                    string                     `json:"timezone" api:"required"`
 	Device                      ConnectorGetResponseDevice `json:"device"`
 	LastHeartbeat               string                     `json:"last_heartbeat"`
 	LastSeenVersion             string                     `json:"last_seen_version"`
 	LicenseKey                  string                     `json:"license_key"`
+	SiteID                      string                     `json:"site_id"`
 	JSON                        connectorGetResponseJSON   `json:"-"`
 }
 
@@ -734,11 +756,13 @@ type connectorGetResponseJSON struct {
 	InterruptWindowHourOfDay     apijson.Field
 	LastUpdated                  apijson.Field
 	Notes                        apijson.Field
+	Primary                      apijson.Field
 	Timezone                     apijson.Field
 	Device                       apijson.Field
 	LastHeartbeat                apijson.Field
 	LastSeenVersion              apijson.Field
 	LicenseKey                   apijson.Field
+	SiteID                       apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -824,6 +848,8 @@ type ConnectorNewParams struct {
 	InterruptWindowEmbargoDates param.Field[[]string] `json:"interrupt_window_embargo_dates"`
 	InterruptWindowHourOfDay    param.Field[float64]  `json:"interrupt_window_hour_of_day"`
 	Notes                       param.Field[string]   `json:"notes"`
+	Primary                     param.Field[bool]     `json:"primary"`
+	SiteID                      param.Field[string]   `json:"site_id"`
 	Timezone                    param.Field[string]   `json:"timezone"`
 }
 
@@ -947,8 +973,10 @@ type ConnectorUpdateParams struct {
 	InterruptWindowEmbargoDates param.Field[[]string] `json:"interrupt_window_embargo_dates"`
 	InterruptWindowHourOfDay    param.Field[float64]  `json:"interrupt_window_hour_of_day"`
 	Notes                       param.Field[string]   `json:"notes"`
+	Primary                     param.Field[bool]     `json:"primary"`
 	// When true, regenerate license key for the connector.
 	ProvisionLicense param.Field[bool]   `json:"provision_license"`
+	SiteID           param.Field[string] `json:"site_id"`
 	Timezone         param.Field[string] `json:"timezone"`
 }
 
@@ -1169,8 +1197,10 @@ type ConnectorEditParams struct {
 	InterruptWindowEmbargoDates param.Field[[]string] `json:"interrupt_window_embargo_dates"`
 	InterruptWindowHourOfDay    param.Field[float64]  `json:"interrupt_window_hour_of_day"`
 	Notes                       param.Field[string]   `json:"notes"`
+	Primary                     param.Field[bool]     `json:"primary"`
 	// When true, regenerate license key for the connector.
 	ProvisionLicense param.Field[bool]   `json:"provision_license"`
+	SiteID           param.Field[string] `json:"site_id"`
 	Timezone         param.Field[string] `json:"timezone"`
 }
 
