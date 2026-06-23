@@ -5332,7 +5332,8 @@ func (r StreamListParams) URLQuery() (v url.Values) {
 type StreamDeleteParams struct {
 	// Specifies the public ID of the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Delete stream forcefully, including deleting any dependent pipelines.
+	// Deprecated: Delete stream forcefully, including deleting any dependent
+	// pipelines.
 	Force param.Field[string] `query:"force"`
 }
 

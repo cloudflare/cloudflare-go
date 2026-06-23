@@ -5784,7 +5784,7 @@ func (r SinkListParams) URLQuery() (v url.Values) {
 type SinkDeleteParams struct {
 	// Specifies the public ID of the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Delete sink forcefully, including deleting any dependent pipelines.
+	// Deprecated: Delete sink forcefully, including deleting any dependent pipelines.
 	Force param.Field[string] `query:"force"`
 }
 
