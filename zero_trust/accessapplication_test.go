@@ -83,10 +83,21 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination{
 				McpServerID: cloudflare.F("mcp-server-1"),
 				Type:        cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal),
+			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestination{
+				Type:     cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationTypeWorker),
+				WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
+			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination{
+				Type:     cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker),
+				WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
+			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestination{
+				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers),
+			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination{
+				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers),
 			}}),
-			EnableBindingCookie:     cloudflare.F(true),
-			HTTPOnlyCookieAttribute: cloudflare.F(true),
-			LogoURL:                 cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
+			EagerRedirectCookieSetting: cloudflare.F(true),
+			EnableBindingCookie:        cloudflare.F(true),
+			HTTPOnlyCookieAttribute:    cloudflare.F(true),
+			LogoURL:                    cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
 			MfaConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfig{
 				AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorSecurityKey}),
 				MfaDisabled:           cloudflare.F(false),
@@ -223,10 +234,21 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination{
 					McpServerID: cloudflare.F("mcp-server-1"),
 					Type:        cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal),
+				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestination{
+					Type:     cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationTypeWorker),
+					WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
+				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination{
+					Type:     cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker),
+					WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
+				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestination{
+					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers),
+				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination{
+					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers),
 				}}),
-				EnableBindingCookie:     cloudflare.F(true),
-				HTTPOnlyCookieAttribute: cloudflare.F(true),
-				LogoURL:                 cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
+				EagerRedirectCookieSetting: cloudflare.F(true),
+				EnableBindingCookie:        cloudflare.F(true),
+				HTTPOnlyCookieAttribute:    cloudflare.F(true),
+				LogoURL:                    cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
 				MfaConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfig{
 					AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorSecurityKey}),
 					MfaDisabled:           cloudflare.F(false),

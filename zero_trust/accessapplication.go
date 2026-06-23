@@ -2158,6 +2158,11 @@ type AccessApplicationNewResponse struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -2282,6 +2287,7 @@ type accessApplicationNewResponseJSON struct {
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
 	Domain                               apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	FooterLinks                          apijson.Field
 	HeaderBgColor                        apijson.Field
@@ -2462,6 +2468,11 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationNewResponseSelfHostedApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -2544,6 +2555,7 @@ type accessApplicationNewResponseSelfHostedApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -2597,9 +2609,11 @@ type AccessApplicationNewResponseSelfHostedApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                           `json:"vnet_id"`
-	JSON   accessApplicationNewResponseSelfHostedApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                           `json:"worker_id"`
+	JSON     accessApplicationNewResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion
 }
 
 // accessApplicationNewResponseSelfHostedApplicationDestinationJSON contains the
@@ -2614,6 +2628,7 @@ type accessApplicationNewResponseSelfHostedApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2638,7 +2653,11 @@ func (r *AccessApplicationNewResponseSelfHostedApplicationDestination) Unmarshal
 // Possible runtime types of the union are
 // [AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination],
 // [AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination],
-// [AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationNewResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -2648,9 +2667,13 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestination) AsUnion() 
 //
 // Union satisfied by
 // [AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination],
-// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination]
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseSelfHostedApplicationDestination()
 }
@@ -2670,6 +2693,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -2837,6 +2876,188 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                             `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestination]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestination) implementsAccessApplicationNewResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                    `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestination]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsL4Protocol string
@@ -2860,11 +3081,15 @@ const (
 	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic             AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "public"
 	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate            AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "private"
 	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeWorker             AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "worker"
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePreviewWorker      AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeAllWorkers         AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "all_workers"
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeWorker, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePreviewWorker, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeAllWorkers, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -4311,6 +4536,11 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationNewResponseBrowserSSHApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -4393,6 +4623,7 @@ type accessApplicationNewResponseBrowserSSHApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -4474,9 +4705,11 @@ type AccessApplicationNewResponseBrowserSSHApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                           `json:"vnet_id"`
-	JSON   accessApplicationNewResponseBrowserSSHApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                           `json:"worker_id"`
+	JSON     accessApplicationNewResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion
 }
 
 // accessApplicationNewResponseBrowserSSHApplicationDestinationJSON contains the
@@ -4491,6 +4724,7 @@ type accessApplicationNewResponseBrowserSSHApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4515,7 +4749,11 @@ func (r *AccessApplicationNewResponseBrowserSSHApplicationDestination) Unmarshal
 // Possible runtime types of the union are
 // [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination],
 // [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination],
-// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationNewResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -4525,9 +4763,13 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestination) AsUnion() 
 //
 // Union satisfied by
 // [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination]
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseBrowserSSHApplicationDestination()
 }
@@ -4547,6 +4789,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -4714,6 +4972,188 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                             `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestination]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestination) implementsAccessApplicationNewResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                    `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4Protocol string
@@ -4737,11 +5177,15 @@ const (
 	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic             AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "public"
 	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "private"
 	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeWorker             AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "worker"
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePreviewWorker      AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeAllWorkers         AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "all_workers"
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeWorker, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePreviewWorker, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeAllWorkers, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -5456,6 +5900,11 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationNewResponseBrowserVNCApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -5538,6 +5987,7 @@ type accessApplicationNewResponseBrowserVNCApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -5619,9 +6069,11 @@ type AccessApplicationNewResponseBrowserVNCApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                           `json:"vnet_id"`
-	JSON   accessApplicationNewResponseBrowserVNCApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                           `json:"worker_id"`
+	JSON     accessApplicationNewResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion
 }
 
 // accessApplicationNewResponseBrowserVNCApplicationDestinationJSON contains the
@@ -5636,6 +6088,7 @@ type accessApplicationNewResponseBrowserVNCApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5660,7 +6113,11 @@ func (r *AccessApplicationNewResponseBrowserVNCApplicationDestination) Unmarshal
 // Possible runtime types of the union are
 // [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination],
 // [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination],
-// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationNewResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -5670,9 +6127,13 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestination) AsUnion() 
 //
 // Union satisfied by
 // [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination]
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseBrowserVNCApplicationDestination()
 }
@@ -5692,6 +6153,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -5859,6 +6336,188 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                             `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestination]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestination) implementsAccessApplicationNewResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                    `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4Protocol string
@@ -5882,11 +6541,15 @@ const (
 	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic             AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "public"
 	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "private"
 	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeWorker             AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "worker"
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePreviewWorker      AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeAllWorkers         AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "all_workers"
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeWorker, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePreviewWorker, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeAllWorkers, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -8305,6 +8968,11 @@ type AccessApplicationNewResponseBrowserRDPApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationNewResponseBrowserRDPApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -8388,6 +9056,7 @@ type accessApplicationNewResponseBrowserRDPApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -8486,9 +9155,11 @@ type AccessApplicationNewResponseBrowserRDPApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                           `json:"vnet_id"`
-	JSON   accessApplicationNewResponseBrowserRDPApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationNewResponseBrowserRDPApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                           `json:"worker_id"`
+	JSON     accessApplicationNewResponseBrowserRDPApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationNewResponseBrowserRDPApplicationDestinationsUnion
 }
 
 // accessApplicationNewResponseBrowserRDPApplicationDestinationJSON contains the
@@ -8503,6 +9174,7 @@ type accessApplicationNewResponseBrowserRDPApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -8527,7 +9199,11 @@ func (r *AccessApplicationNewResponseBrowserRDPApplicationDestination) Unmarshal
 // Possible runtime types of the union are
 // [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestination],
 // [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPrivateDestination],
-// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationNewResponseBrowserRDPApplicationDestination) AsUnion() AccessApplicationNewResponseBrowserRDPApplicationDestinationsUnion {
 	return r.union
 }
@@ -8537,9 +9213,13 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationDestination) AsUnion() 
 //
 // Union satisfied by
 // [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestination],
-// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPrivateDestination]
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationNewResponseBrowserRDPApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseBrowserRDPApplicationDestination()
 }
@@ -8559,6 +9239,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -8726,6 +9422,188 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsViaMcpServe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                             `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestination]
+type accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestination) implementsAccessApplicationNewResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                    `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
+type accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewResponseBrowserRDPApplicationDestinationsL4Protocol string
@@ -8749,11 +9627,15 @@ const (
 	AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypePublic             AccessApplicationNewResponseBrowserRDPApplicationDestinationsType = "public"
 	AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypePrivate            AccessApplicationNewResponseBrowserRDPApplicationDestinationsType = "private"
 	AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewResponseBrowserRDPApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypeWorker             AccessApplicationNewResponseBrowserRDPApplicationDestinationsType = "worker"
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypePreviewWorker      AccessApplicationNewResponseBrowserRDPApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypeAllWorkers         AccessApplicationNewResponseBrowserRDPApplicationDestinationsType = "all_workers"
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewResponseBrowserRDPApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypeWorker, AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypePreviewWorker, AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypeAllWorkers, AccessApplicationNewResponseBrowserRDPApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -9552,9 +10434,11 @@ type AccessApplicationNewResponseMcpServerApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                          `json:"vnet_id"`
-	JSON   accessApplicationNewResponseMcpServerApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationNewResponseMcpServerApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                          `json:"worker_id"`
+	JSON     accessApplicationNewResponseMcpServerApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationNewResponseMcpServerApplicationDestinationsUnion
 }
 
 // accessApplicationNewResponseMcpServerApplicationDestinationJSON contains the
@@ -9569,6 +10453,7 @@ type accessApplicationNewResponseMcpServerApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -9593,7 +10478,11 @@ func (r *AccessApplicationNewResponseMcpServerApplicationDestination) UnmarshalJ
 // Possible runtime types of the union are
 // [AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestination],
 // [AccessApplicationNewResponseMcpServerApplicationDestinationsPrivateDestination],
-// [AccessApplicationNewResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationNewResponseMcpServerApplicationDestination) AsUnion() AccessApplicationNewResponseMcpServerApplicationDestinationsUnion {
 	return r.union
 }
@@ -9603,9 +10492,13 @@ func (r AccessApplicationNewResponseMcpServerApplicationDestination) AsUnion() A
 //
 // Union satisfied by
 // [AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestination],
-// [AccessApplicationNewResponseMcpServerApplicationDestinationsPrivateDestination]
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationNewResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationNewResponseMcpServerApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseMcpServerApplicationDestination()
 }
@@ -9625,6 +10518,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -9792,6 +10701,188 @@ func (r AccessApplicationNewResponseMcpServerApplicationDestinationsViaMcpServer
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                            `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestination]
+type accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestination) implementsAccessApplicationNewResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                   `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestination]
+type accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewResponseMcpServerApplicationDestinationsL4Protocol string
@@ -9815,11 +10906,15 @@ const (
 	AccessApplicationNewResponseMcpServerApplicationDestinationsTypePublic             AccessApplicationNewResponseMcpServerApplicationDestinationsType = "public"
 	AccessApplicationNewResponseMcpServerApplicationDestinationsTypePrivate            AccessApplicationNewResponseMcpServerApplicationDestinationsType = "private"
 	AccessApplicationNewResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewResponseMcpServerApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewResponseMcpServerApplicationDestinationsTypeWorker             AccessApplicationNewResponseMcpServerApplicationDestinationsType = "worker"
+	AccessApplicationNewResponseMcpServerApplicationDestinationsTypePreviewWorker      AccessApplicationNewResponseMcpServerApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewResponseMcpServerApplicationDestinationsTypeAllWorkers         AccessApplicationNewResponseMcpServerApplicationDestinationsType = "all_workers"
+	AccessApplicationNewResponseMcpServerApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewResponseMcpServerApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewResponseMcpServerApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseMcpServerApplicationDestinationsTypePublic, AccessApplicationNewResponseMcpServerApplicationDestinationsTypePrivate, AccessApplicationNewResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewResponseMcpServerApplicationDestinationsTypePublic, AccessApplicationNewResponseMcpServerApplicationDestinationsTypePrivate, AccessApplicationNewResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewResponseMcpServerApplicationDestinationsTypeWorker, AccessApplicationNewResponseMcpServerApplicationDestinationsTypePreviewWorker, AccessApplicationNewResponseMcpServerApplicationDestinationsTypeAllWorkers, AccessApplicationNewResponseMcpServerApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -10574,9 +11669,11 @@ type AccessApplicationNewResponseMcpServerPortalApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                                `json:"vnet_id"`
-	JSON   accessApplicationNewResponseMcpServerPortalApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationNewResponseMcpServerPortalApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                `json:"worker_id"`
+	JSON     accessApplicationNewResponseMcpServerPortalApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationNewResponseMcpServerPortalApplicationDestinationsUnion
 }
 
 // accessApplicationNewResponseMcpServerPortalApplicationDestinationJSON contains
@@ -10591,6 +11688,7 @@ type accessApplicationNewResponseMcpServerPortalApplicationDestinationJSON struc
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -10615,7 +11713,11 @@ func (r *AccessApplicationNewResponseMcpServerPortalApplicationDestination) Unma
 // Possible runtime types of the union are
 // [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestination],
 // [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPrivateDestination],
-// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationNewResponseMcpServerPortalApplicationDestination) AsUnion() AccessApplicationNewResponseMcpServerPortalApplicationDestinationsUnion {
 	return r.union
 }
@@ -10625,9 +11727,13 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationDestination) AsUni
 //
 // Union satisfied by
 // [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestination],
-// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPrivateDestination]
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPrivateDestination],
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestination],
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsUnion interface {
 	implementsAccessApplicationNewResponseMcpServerPortalApplicationDestination()
 }
@@ -10647,6 +11753,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -10814,6 +11936,188 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsViaMcp
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                                  `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestination]
+type accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestination) implementsAccessApplicationNewResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                         `json:"worker_id" api:"required"`
+	JSON     accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
+type accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsL4Protocol string
@@ -10837,11 +12141,15 @@ const (
 	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypePublic             AccessApplicationNewResponseMcpServerPortalApplicationDestinationsType = "public"
 	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypePrivate            AccessApplicationNewResponseMcpServerPortalApplicationDestinationsType = "private"
 	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewResponseMcpServerPortalApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypeWorker             AccessApplicationNewResponseMcpServerPortalApplicationDestinationsType = "worker"
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypePreviewWorker      AccessApplicationNewResponseMcpServerPortalApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypeAllWorkers         AccessApplicationNewResponseMcpServerPortalApplicationDestinationsType = "all_workers"
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewResponseMcpServerPortalApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypeWorker, AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypePreviewWorker, AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypeAllWorkers, AccessApplicationNewResponseMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -11513,6 +12821,11 @@ type AccessApplicationUpdateResponse struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -11637,6 +12950,7 @@ type accessApplicationUpdateResponseJSON struct {
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
 	Domain                               apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	FooterLinks                          apijson.Field
 	HeaderBgColor                        apijson.Field
@@ -11817,6 +13131,11 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationUpdateResponseSelfHostedApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -11899,6 +13218,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -11953,9 +13273,11 @@ type AccessApplicationUpdateResponseSelfHostedApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                              `json:"vnet_id"`
-	JSON   accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                              `json:"worker_id"`
+	JSON     accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion
 }
 
 // accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON contains the
@@ -11970,6 +13292,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON struct 
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -11994,7 +13317,11 @@ func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestination) Unmars
 // Possible runtime types of the union are
 // [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination],
 // [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination],
-// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationUpdateResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -12004,9 +13331,13 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestination) AsUnion
 //
 // Union satisfied by
 // [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination],
-// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination]
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseSelfHostedApplicationDestination()
 }
@@ -12026,6 +13357,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -12193,6 +13540,188 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpSe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                                `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestination]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                       `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestination]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4Protocol string
@@ -12216,11 +13745,15 @@ const (
 	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic             AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "public"
 	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate            AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "private"
 	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeWorker             AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "worker"
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeWorker, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -13668,6 +15201,11 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationUpdateResponseBrowserSSHApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -13750,6 +15288,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -13832,9 +15371,11 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                              `json:"vnet_id"`
-	JSON   accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                              `json:"worker_id"`
+	JSON     accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion
 }
 
 // accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON contains the
@@ -13849,6 +15390,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON struct 
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -13873,7 +15415,11 @@ func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestination) Unmars
 // Possible runtime types of the union are
 // [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination],
 // [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination],
-// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -13883,9 +15429,13 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestination) AsUnion
 //
 // Union satisfied by
 // [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination]
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserSSHApplicationDestination()
 }
@@ -13905,6 +15455,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -14072,6 +15638,188 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpSe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                                `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestination]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                       `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4Protocol string
@@ -14095,11 +15843,15 @@ const (
 	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic             AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "public"
 	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "private"
 	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeWorker             AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "worker"
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeWorker, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -14814,6 +16566,11 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationUpdateResponseBrowserVNCApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -14896,6 +16653,7 @@ type accessApplicationUpdateResponseBrowserVNCApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -14978,9 +16736,11 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                              `json:"vnet_id"`
-	JSON   accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                              `json:"worker_id"`
+	JSON     accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion
 }
 
 // accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON contains the
@@ -14995,6 +16755,7 @@ type accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON struct 
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -15019,7 +16780,11 @@ func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestination) Unmars
 // Possible runtime types of the union are
 // [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination],
 // [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination],
-// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -15029,9 +16794,13 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestination) AsUnion
 //
 // Union satisfied by
 // [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination]
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserVNCApplicationDestination()
 }
@@ -15051,6 +16820,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -15218,6 +17003,188 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpSe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                                `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestination]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                       `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4Protocol string
@@ -15241,11 +17208,15 @@ const (
 	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic             AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "public"
 	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "private"
 	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeWorker             AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "worker"
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeWorker, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -17667,6 +19638,11 @@ type AccessApplicationUpdateResponseBrowserRDPApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationUpdateResponseBrowserRDPApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -17750,6 +19726,7 @@ type accessApplicationUpdateResponseBrowserRDPApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -17849,9 +19826,11 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                              `json:"vnet_id"`
-	JSON   accessApplicationUpdateResponseBrowserRDPApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                              `json:"worker_id"`
+	JSON     accessApplicationUpdateResponseBrowserRDPApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsUnion
 }
 
 // accessApplicationUpdateResponseBrowserRDPApplicationDestinationJSON contains the
@@ -17866,6 +19845,7 @@ type accessApplicationUpdateResponseBrowserRDPApplicationDestinationJSON struct 
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -17890,7 +19870,11 @@ func (r *AccessApplicationUpdateResponseBrowserRDPApplicationDestination) Unmars
 // Possible runtime types of the union are
 // [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestination],
 // [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPrivateDestination],
-// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestination) AsUnion() AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsUnion {
 	return r.union
 }
@@ -17900,9 +19884,13 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestination) AsUnion
 //
 // Union satisfied by
 // [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestination],
-// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPrivateDestination]
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseBrowserRDPApplicationDestination()
 }
@@ -17922,6 +19910,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -18089,6 +20093,188 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsViaMcpSe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                                `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestination]
+type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                       `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
+type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsL4Protocol string
@@ -18112,11 +20298,15 @@ const (
 	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypePublic             AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsType = "public"
 	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypePrivate            AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsType = "private"
 	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypeWorker             AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsType = "worker"
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypeWorker, AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -18916,9 +21106,11 @@ type AccessApplicationUpdateResponseMcpServerApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                             `json:"vnet_id"`
-	JSON   accessApplicationUpdateResponseMcpServerApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationUpdateResponseMcpServerApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                             `json:"worker_id"`
+	JSON     accessApplicationUpdateResponseMcpServerApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationUpdateResponseMcpServerApplicationDestinationsUnion
 }
 
 // accessApplicationUpdateResponseMcpServerApplicationDestinationJSON contains the
@@ -18933,6 +21125,7 @@ type accessApplicationUpdateResponseMcpServerApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -18957,7 +21150,11 @@ func (r *AccessApplicationUpdateResponseMcpServerApplicationDestination) Unmarsh
 // Possible runtime types of the union are
 // [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestination],
 // [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPrivateDestination],
-// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationUpdateResponseMcpServerApplicationDestination) AsUnion() AccessApplicationUpdateResponseMcpServerApplicationDestinationsUnion {
 	return r.union
 }
@@ -18967,9 +21164,13 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationDestination) AsUnion(
 //
 // Union satisfied by
 // [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestination],
-// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPrivateDestination]
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationUpdateResponseMcpServerApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseMcpServerApplicationDestination()
 }
@@ -18989,6 +21190,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -19156,6 +21373,188 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsViaMcpSer
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                               `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestination]
+type accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                      `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestination]
+type accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateResponseMcpServerApplicationDestinationsL4Protocol string
@@ -19179,11 +21578,15 @@ const (
 	AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypePublic             AccessApplicationUpdateResponseMcpServerApplicationDestinationsType = "public"
 	AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypePrivate            AccessApplicationUpdateResponseMcpServerApplicationDestinationsType = "private"
 	AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateResponseMcpServerApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypeWorker             AccessApplicationUpdateResponseMcpServerApplicationDestinationsType = "worker"
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateResponseMcpServerApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateResponseMcpServerApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateResponseMcpServerApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypePublic, AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypePublic, AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypeWorker, AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateResponseMcpServerApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -19940,9 +22343,11 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationDestination struct
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                                   `json:"vnet_id"`
-	JSON   accessApplicationUpdateResponseMcpServerPortalApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                   `json:"worker_id"`
+	JSON     accessApplicationUpdateResponseMcpServerPortalApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsUnion
 }
 
 // accessApplicationUpdateResponseMcpServerPortalApplicationDestinationJSON
@@ -19957,6 +22362,7 @@ type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationJSON st
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -19981,7 +22387,11 @@ func (r *AccessApplicationUpdateResponseMcpServerPortalApplicationDestination) U
 // Possible runtime types of the union are
 // [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestination],
 // [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPrivateDestination],
-// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestination) AsUnion() AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsUnion {
 	return r.union
 }
@@ -19991,9 +22401,13 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestination) As
 //
 // Union satisfied by
 // [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestination],
-// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPrivateDestination]
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPrivateDestination],
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestination],
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsUnion interface {
 	implementsAccessApplicationUpdateResponseMcpServerPortalApplicationDestination()
 }
@@ -20013,6 +22427,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -20180,6 +22610,188 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsVia
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                                     `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestination]
+type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                            `json:"worker_id" api:"required"`
+	JSON     accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
+type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsL4Protocol string
@@ -20203,11 +22815,15 @@ const (
 	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypePublic             AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsType = "public"
 	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypePrivate            AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsType = "private"
 	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypeWorker             AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsType = "worker"
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypeWorker, AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -20879,6 +23495,11 @@ type AccessApplicationListResponse struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -21003,6 +23624,7 @@ type accessApplicationListResponseJSON struct {
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
 	Domain                               apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	FooterLinks                          apijson.Field
 	HeaderBgColor                        apijson.Field
@@ -21183,6 +23805,11 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationListResponseSelfHostedApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -21265,6 +23892,7 @@ type accessApplicationListResponseSelfHostedApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -21319,9 +23947,11 @@ type AccessApplicationListResponseSelfHostedApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                            `json:"vnet_id"`
-	JSON   accessApplicationListResponseSelfHostedApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationListResponseSelfHostedApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                            `json:"worker_id"`
+	JSON     accessApplicationListResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationListResponseSelfHostedApplicationDestinationsUnion
 }
 
 // accessApplicationListResponseSelfHostedApplicationDestinationJSON contains the
@@ -21336,6 +23966,7 @@ type accessApplicationListResponseSelfHostedApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -21360,7 +23991,11 @@ func (r *AccessApplicationListResponseSelfHostedApplicationDestination) Unmarsha
 // Possible runtime types of the union are
 // [AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination],
 // [AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination],
-// [AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationListResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationListResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -21370,9 +24005,13 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestination) AsUnion()
 //
 // Union satisfied by
 // [AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination],
-// [AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination]
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPrivateDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationListResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseSelfHostedApplicationDestination()
 }
@@ -21392,6 +24031,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -21559,6 +24214,188 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServ
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                              `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestination]
+type accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestination) implementsAccessApplicationListResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                     `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationListResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestination]
+type accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestination) implementsAccessApplicationListResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationListResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationListResponseSelfHostedApplicationDestinationsL4Protocol string
@@ -21582,11 +24419,15 @@ const (
 	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic             AccessApplicationListResponseSelfHostedApplicationDestinationsType = "public"
 	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate            AccessApplicationListResponseSelfHostedApplicationDestinationsType = "private"
 	AccessApplicationListResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationListResponseSelfHostedApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationListResponseSelfHostedApplicationDestinationsTypeWorker             AccessApplicationListResponseSelfHostedApplicationDestinationsType = "worker"
+	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePreviewWorker      AccessApplicationListResponseSelfHostedApplicationDestinationsType = "preview_worker"
+	AccessApplicationListResponseSelfHostedApplicationDestinationsTypeAllWorkers         AccessApplicationListResponseSelfHostedApplicationDestinationsType = "all_workers"
+	AccessApplicationListResponseSelfHostedApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationListResponseSelfHostedApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationListResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationListResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationListResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationListResponseSelfHostedApplicationDestinationsTypeWorker, AccessApplicationListResponseSelfHostedApplicationDestinationsTypePreviewWorker, AccessApplicationListResponseSelfHostedApplicationDestinationsTypeAllWorkers, AccessApplicationListResponseSelfHostedApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -23033,6 +25874,11 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationListResponseBrowserSSHApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -23115,6 +25961,7 @@ type accessApplicationListResponseBrowserSSHApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -23197,9 +26044,11 @@ type AccessApplicationListResponseBrowserSSHApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                            `json:"vnet_id"`
-	JSON   accessApplicationListResponseBrowserSSHApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                            `json:"worker_id"`
+	JSON     accessApplicationListResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion
 }
 
 // accessApplicationListResponseBrowserSSHApplicationDestinationJSON contains the
@@ -23214,6 +26063,7 @@ type accessApplicationListResponseBrowserSSHApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -23238,7 +26088,11 @@ func (r *AccessApplicationListResponseBrowserSSHApplicationDestination) Unmarsha
 // Possible runtime types of the union are
 // [AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination],
 // [AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination],
-// [AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationListResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -23248,9 +26102,13 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestination) AsUnion()
 //
 // Union satisfied by
 // [AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination]
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPrivateDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseBrowserSSHApplicationDestination()
 }
@@ -23270,6 +26128,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -23437,6 +26311,188 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServ
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                              `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestination]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestination) implementsAccessApplicationListResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                     `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationListResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestination) implementsAccessApplicationListResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationListResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsL4Protocol string
@@ -23460,11 +26516,15 @@ const (
 	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic             AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "public"
 	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "private"
 	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeWorker             AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "worker"
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePreviewWorker      AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "preview_worker"
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeAllWorkers         AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "all_workers"
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeWorker, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePreviewWorker, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeAllWorkers, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -24179,6 +27239,11 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationListResponseBrowserVNCApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -24261,6 +27326,7 @@ type accessApplicationListResponseBrowserVNCApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -24343,9 +27409,11 @@ type AccessApplicationListResponseBrowserVNCApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                            `json:"vnet_id"`
-	JSON   accessApplicationListResponseBrowserVNCApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                            `json:"worker_id"`
+	JSON     accessApplicationListResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion
 }
 
 // accessApplicationListResponseBrowserVNCApplicationDestinationJSON contains the
@@ -24360,6 +27428,7 @@ type accessApplicationListResponseBrowserVNCApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -24384,7 +27453,11 @@ func (r *AccessApplicationListResponseBrowserVNCApplicationDestination) Unmarsha
 // Possible runtime types of the union are
 // [AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination],
 // [AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination],
-// [AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationListResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -24394,9 +27467,13 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestination) AsUnion()
 //
 // Union satisfied by
 // [AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination]
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPrivateDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseBrowserVNCApplicationDestination()
 }
@@ -24416,6 +27493,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -24583,6 +27676,188 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServ
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                              `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestination]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestination) implementsAccessApplicationListResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                     `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationListResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestination) implementsAccessApplicationListResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationListResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsL4Protocol string
@@ -24606,11 +27881,15 @@ const (
 	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic             AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "public"
 	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "private"
 	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeWorker             AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "worker"
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePreviewWorker      AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "preview_worker"
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeAllWorkers         AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "all_workers"
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeWorker, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePreviewWorker, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeAllWorkers, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -27029,6 +30308,11 @@ type AccessApplicationListResponseBrowserRDPApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationListResponseBrowserRDPApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -27112,6 +30396,7 @@ type accessApplicationListResponseBrowserRDPApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -27211,9 +30496,11 @@ type AccessApplicationListResponseBrowserRDPApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                            `json:"vnet_id"`
-	JSON   accessApplicationListResponseBrowserRDPApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationListResponseBrowserRDPApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                            `json:"worker_id"`
+	JSON     accessApplicationListResponseBrowserRDPApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationListResponseBrowserRDPApplicationDestinationsUnion
 }
 
 // accessApplicationListResponseBrowserRDPApplicationDestinationJSON contains the
@@ -27228,6 +30515,7 @@ type accessApplicationListResponseBrowserRDPApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -27252,7 +30540,11 @@ func (r *AccessApplicationListResponseBrowserRDPApplicationDestination) Unmarsha
 // Possible runtime types of the union are
 // [AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestination],
 // [AccessApplicationListResponseBrowserRDPApplicationDestinationsPrivateDestination],
-// [AccessApplicationListResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationListResponseBrowserRDPApplicationDestination) AsUnion() AccessApplicationListResponseBrowserRDPApplicationDestinationsUnion {
 	return r.union
 }
@@ -27262,9 +30554,13 @@ func (r AccessApplicationListResponseBrowserRDPApplicationDestination) AsUnion()
 //
 // Union satisfied by
 // [AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestination],
-// [AccessApplicationListResponseBrowserRDPApplicationDestinationsPrivateDestination]
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsPrivateDestination],
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationListResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationListResponseBrowserRDPApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseBrowserRDPApplicationDestination()
 }
@@ -27284,6 +30580,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -27451,6 +30763,188 @@ func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsViaMcpServ
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                              `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestination]
+type accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestination) implementsAccessApplicationListResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                     `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationListResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
+type accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestination) implementsAccessApplicationListResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationListResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationListResponseBrowserRDPApplicationDestinationsL4Protocol string
@@ -27474,11 +30968,15 @@ const (
 	AccessApplicationListResponseBrowserRDPApplicationDestinationsTypePublic             AccessApplicationListResponseBrowserRDPApplicationDestinationsType = "public"
 	AccessApplicationListResponseBrowserRDPApplicationDestinationsTypePrivate            AccessApplicationListResponseBrowserRDPApplicationDestinationsType = "private"
 	AccessApplicationListResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal AccessApplicationListResponseBrowserRDPApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsTypeWorker             AccessApplicationListResponseBrowserRDPApplicationDestinationsType = "worker"
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsTypePreviewWorker      AccessApplicationListResponseBrowserRDPApplicationDestinationsType = "preview_worker"
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsTypeAllWorkers         AccessApplicationListResponseBrowserRDPApplicationDestinationsType = "all_workers"
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationListResponseBrowserRDPApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserRDPApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationListResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationListResponseBrowserRDPApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationListResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationListResponseBrowserRDPApplicationDestinationsTypeWorker, AccessApplicationListResponseBrowserRDPApplicationDestinationsTypePreviewWorker, AccessApplicationListResponseBrowserRDPApplicationDestinationsTypeAllWorkers, AccessApplicationListResponseBrowserRDPApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -28278,9 +31776,11 @@ type AccessApplicationListResponseMcpServerApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                           `json:"vnet_id"`
-	JSON   accessApplicationListResponseMcpServerApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationListResponseMcpServerApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                           `json:"worker_id"`
+	JSON     accessApplicationListResponseMcpServerApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationListResponseMcpServerApplicationDestinationsUnion
 }
 
 // accessApplicationListResponseMcpServerApplicationDestinationJSON contains the
@@ -28295,6 +31795,7 @@ type accessApplicationListResponseMcpServerApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -28319,7 +31820,11 @@ func (r *AccessApplicationListResponseMcpServerApplicationDestination) Unmarshal
 // Possible runtime types of the union are
 // [AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestination],
 // [AccessApplicationListResponseMcpServerApplicationDestinationsPrivateDestination],
-// [AccessApplicationListResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationListResponseMcpServerApplicationDestination) AsUnion() AccessApplicationListResponseMcpServerApplicationDestinationsUnion {
 	return r.union
 }
@@ -28329,9 +31834,13 @@ func (r AccessApplicationListResponseMcpServerApplicationDestination) AsUnion() 
 //
 // Union satisfied by
 // [AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestination],
-// [AccessApplicationListResponseMcpServerApplicationDestinationsPrivateDestination]
+// [AccessApplicationListResponseMcpServerApplicationDestinationsPrivateDestination],
+// [AccessApplicationListResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationListResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationListResponseMcpServerApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseMcpServerApplicationDestination()
 }
@@ -28351,6 +31860,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -28518,6 +32043,188 @@ func (r AccessApplicationListResponseMcpServerApplicationDestinationsViaMcpServe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                             `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestination]
+type accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestination) implementsAccessApplicationListResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                    `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationListResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestination]
+type accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestination) implementsAccessApplicationListResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationListResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationListResponseMcpServerApplicationDestinationsL4Protocol string
@@ -28541,11 +32248,15 @@ const (
 	AccessApplicationListResponseMcpServerApplicationDestinationsTypePublic             AccessApplicationListResponseMcpServerApplicationDestinationsType = "public"
 	AccessApplicationListResponseMcpServerApplicationDestinationsTypePrivate            AccessApplicationListResponseMcpServerApplicationDestinationsType = "private"
 	AccessApplicationListResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal AccessApplicationListResponseMcpServerApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationListResponseMcpServerApplicationDestinationsTypeWorker             AccessApplicationListResponseMcpServerApplicationDestinationsType = "worker"
+	AccessApplicationListResponseMcpServerApplicationDestinationsTypePreviewWorker      AccessApplicationListResponseMcpServerApplicationDestinationsType = "preview_worker"
+	AccessApplicationListResponseMcpServerApplicationDestinationsTypeAllWorkers         AccessApplicationListResponseMcpServerApplicationDestinationsType = "all_workers"
+	AccessApplicationListResponseMcpServerApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationListResponseMcpServerApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationListResponseMcpServerApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseMcpServerApplicationDestinationsTypePublic, AccessApplicationListResponseMcpServerApplicationDestinationsTypePrivate, AccessApplicationListResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationListResponseMcpServerApplicationDestinationsTypePublic, AccessApplicationListResponseMcpServerApplicationDestinationsTypePrivate, AccessApplicationListResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationListResponseMcpServerApplicationDestinationsTypeWorker, AccessApplicationListResponseMcpServerApplicationDestinationsTypePreviewWorker, AccessApplicationListResponseMcpServerApplicationDestinationsTypeAllWorkers, AccessApplicationListResponseMcpServerApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -29302,9 +33013,11 @@ type AccessApplicationListResponseMcpServerPortalApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                                 `json:"vnet_id"`
-	JSON   accessApplicationListResponseMcpServerPortalApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationListResponseMcpServerPortalApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                 `json:"worker_id"`
+	JSON     accessApplicationListResponseMcpServerPortalApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationListResponseMcpServerPortalApplicationDestinationsUnion
 }
 
 // accessApplicationListResponseMcpServerPortalApplicationDestinationJSON contains
@@ -29319,6 +33032,7 @@ type accessApplicationListResponseMcpServerPortalApplicationDestinationJSON stru
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -29343,7 +33057,11 @@ func (r *AccessApplicationListResponseMcpServerPortalApplicationDestination) Unm
 // Possible runtime types of the union are
 // [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestination],
 // [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPrivateDestination],
-// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationListResponseMcpServerPortalApplicationDestination) AsUnion() AccessApplicationListResponseMcpServerPortalApplicationDestinationsUnion {
 	return r.union
 }
@@ -29353,9 +33071,13 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationDestination) AsUn
 //
 // Union satisfied by
 // [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestination],
-// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPrivateDestination]
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPrivateDestination],
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestination],
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationListResponseMcpServerPortalApplicationDestinationsUnion interface {
 	implementsAccessApplicationListResponseMcpServerPortalApplicationDestination()
 }
@@ -29375,6 +33097,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -29542,6 +33280,188 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsViaMc
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                                   `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestination]
+type accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestination) implementsAccessApplicationListResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                          `json:"worker_id" api:"required"`
+	JSON     accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationListResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
+type accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestination) implementsAccessApplicationListResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationListResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationListResponseMcpServerPortalApplicationDestinationsL4Protocol string
@@ -29565,11 +33485,15 @@ const (
 	AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypePublic             AccessApplicationListResponseMcpServerPortalApplicationDestinationsType = "public"
 	AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypePrivate            AccessApplicationListResponseMcpServerPortalApplicationDestinationsType = "private"
 	AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal AccessApplicationListResponseMcpServerPortalApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypeWorker             AccessApplicationListResponseMcpServerPortalApplicationDestinationsType = "worker"
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypePreviewWorker      AccessApplicationListResponseMcpServerPortalApplicationDestinationsType = "preview_worker"
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypeAllWorkers         AccessApplicationListResponseMcpServerPortalApplicationDestinationsType = "all_workers"
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationListResponseMcpServerPortalApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypeWorker, AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypePreviewWorker, AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypeAllWorkers, AccessApplicationListResponseMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -30263,6 +34187,11 @@ type AccessApplicationGetResponse struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -30387,6 +34316,7 @@ type accessApplicationGetResponseJSON struct {
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
 	Domain                               apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	FooterLinks                          apijson.Field
 	HeaderBgColor                        apijson.Field
@@ -30567,6 +34497,11 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationGetResponseSelfHostedApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -30649,6 +34584,7 @@ type accessApplicationGetResponseSelfHostedApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -30702,9 +34638,11 @@ type AccessApplicationGetResponseSelfHostedApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                           `json:"vnet_id"`
-	JSON   accessApplicationGetResponseSelfHostedApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                           `json:"worker_id"`
+	JSON     accessApplicationGetResponseSelfHostedApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion
 }
 
 // accessApplicationGetResponseSelfHostedApplicationDestinationJSON contains the
@@ -30719,6 +34657,7 @@ type accessApplicationGetResponseSelfHostedApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -30743,7 +34682,11 @@ func (r *AccessApplicationGetResponseSelfHostedApplicationDestination) Unmarshal
 // Possible runtime types of the union are
 // [AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination],
 // [AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination],
-// [AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationGetResponseSelfHostedApplicationDestination) AsUnion() AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion {
 	return r.union
 }
@@ -30753,9 +34696,13 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestination) AsUnion() 
 //
 // Union satisfied by
 // [AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination],
-// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination]
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPrivateDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseSelfHostedApplicationDestination()
 }
@@ -30775,6 +34722,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -30942,6 +34905,188 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                             `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestination]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestination) implementsAccessApplicationGetResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                    `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationGetResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestination]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestination) implementsAccessApplicationGetResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationGetResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsL4Protocol string
@@ -30965,11 +35110,15 @@ const (
 	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic             AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "public"
 	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate            AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "private"
 	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeWorker             AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "worker"
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePreviewWorker      AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "preview_worker"
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeAllWorkers         AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "all_workers"
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeWorker, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePreviewWorker, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeAllWorkers, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -32416,6 +36565,11 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationGetResponseBrowserSSHApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -32498,6 +36652,7 @@ type accessApplicationGetResponseBrowserSSHApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -32579,9 +36734,11 @@ type AccessApplicationGetResponseBrowserSSHApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                           `json:"vnet_id"`
-	JSON   accessApplicationGetResponseBrowserSSHApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                           `json:"worker_id"`
+	JSON     accessApplicationGetResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion
 }
 
 // accessApplicationGetResponseBrowserSSHApplicationDestinationJSON contains the
@@ -32596,6 +36753,7 @@ type accessApplicationGetResponseBrowserSSHApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -32620,7 +36778,11 @@ func (r *AccessApplicationGetResponseBrowserSSHApplicationDestination) Unmarshal
 // Possible runtime types of the union are
 // [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination],
 // [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination],
-// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationGetResponseBrowserSSHApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion {
 	return r.union
 }
@@ -32630,9 +36792,13 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestination) AsUnion() 
 //
 // Union satisfied by
 // [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination],
-// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination]
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPrivateDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseBrowserSSHApplicationDestination()
 }
@@ -32652,6 +36818,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -32819,6 +37001,188 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                             `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestination]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestination) implementsAccessApplicationGetResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                    `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationGetResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestination) implementsAccessApplicationGetResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationGetResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4Protocol string
@@ -32842,11 +37206,15 @@ const (
 	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic             AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "public"
 	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "private"
 	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeWorker             AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "worker"
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePreviewWorker      AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "preview_worker"
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeAllWorkers         AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "all_workers"
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeWorker, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePreviewWorker, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeAllWorkers, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -33561,6 +37929,11 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationGetResponseBrowserVNCApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -33643,6 +38016,7 @@ type accessApplicationGetResponseBrowserVNCApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -33724,9 +38098,11 @@ type AccessApplicationGetResponseBrowserVNCApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                           `json:"vnet_id"`
-	JSON   accessApplicationGetResponseBrowserVNCApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                           `json:"worker_id"`
+	JSON     accessApplicationGetResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion
 }
 
 // accessApplicationGetResponseBrowserVNCApplicationDestinationJSON contains the
@@ -33741,6 +38117,7 @@ type accessApplicationGetResponseBrowserVNCApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -33765,7 +38142,11 @@ func (r *AccessApplicationGetResponseBrowserVNCApplicationDestination) Unmarshal
 // Possible runtime types of the union are
 // [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination],
 // [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination],
-// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationGetResponseBrowserVNCApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion {
 	return r.union
 }
@@ -33775,9 +38156,13 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestination) AsUnion() 
 //
 // Union satisfied by
 // [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination],
-// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination]
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPrivateDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseBrowserVNCApplicationDestination()
 }
@@ -33797,6 +38182,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -33964,6 +38365,188 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                             `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestination]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestination) implementsAccessApplicationGetResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                    `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationGetResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestination) implementsAccessApplicationGetResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationGetResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4Protocol string
@@ -33987,11 +38570,15 @@ const (
 	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic             AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "public"
 	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "private"
 	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeWorker             AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "worker"
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePreviewWorker      AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "preview_worker"
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeAllWorkers         AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "all_workers"
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeWorker, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePreviewWorker, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeAllWorkers, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -36410,6 +40997,11 @@ type AccessApplicationGetResponseBrowserRDPApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations []AccessApplicationGetResponseBrowserRDPApplicationDestination `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting bool `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -36493,6 +41085,7 @@ type accessApplicationGetResponseBrowserRDPApplicationJSON struct {
 	CustomNonIdentityDenyURL             apijson.Field
 	CustomPages                          apijson.Field
 	Destinations                         apijson.Field
+	EagerRedirectCookieSetting           apijson.Field
 	EnableBindingCookie                  apijson.Field
 	HTTPOnlyCookieAttribute              apijson.Field
 	LogoURL                              apijson.Field
@@ -36591,9 +41184,11 @@ type AccessApplicationGetResponseBrowserRDPApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                           `json:"vnet_id"`
-	JSON   accessApplicationGetResponseBrowserRDPApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationGetResponseBrowserRDPApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                           `json:"worker_id"`
+	JSON     accessApplicationGetResponseBrowserRDPApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationGetResponseBrowserRDPApplicationDestinationsUnion
 }
 
 // accessApplicationGetResponseBrowserRDPApplicationDestinationJSON contains the
@@ -36608,6 +41203,7 @@ type accessApplicationGetResponseBrowserRDPApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -36632,7 +41228,11 @@ func (r *AccessApplicationGetResponseBrowserRDPApplicationDestination) Unmarshal
 // Possible runtime types of the union are
 // [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestination],
 // [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPrivateDestination],
-// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationGetResponseBrowserRDPApplicationDestination) AsUnion() AccessApplicationGetResponseBrowserRDPApplicationDestinationsUnion {
 	return r.union
 }
@@ -36642,9 +41242,13 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationDestination) AsUnion() 
 //
 // Union satisfied by
 // [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestination],
-// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPrivateDestination]
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPrivateDestination],
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationGetResponseBrowserRDPApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseBrowserRDPApplicationDestination()
 }
@@ -36664,6 +41268,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserRDPApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -36831,6 +41451,188 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsViaMcpServe
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                             `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestination]
+type accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestination) implementsAccessApplicationGetResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                    `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationGetResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
+type accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestination) implementsAccessApplicationGetResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationGetResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationGetResponseBrowserRDPApplicationDestinationsL4Protocol string
@@ -36854,11 +41656,15 @@ const (
 	AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypePublic             AccessApplicationGetResponseBrowserRDPApplicationDestinationsType = "public"
 	AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypePrivate            AccessApplicationGetResponseBrowserRDPApplicationDestinationsType = "private"
 	AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal AccessApplicationGetResponseBrowserRDPApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypeWorker             AccessApplicationGetResponseBrowserRDPApplicationDestinationsType = "worker"
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypePreviewWorker      AccessApplicationGetResponseBrowserRDPApplicationDestinationsType = "preview_worker"
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypeAllWorkers         AccessApplicationGetResponseBrowserRDPApplicationDestinationsType = "all_workers"
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationGetResponseBrowserRDPApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypeWorker, AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypePreviewWorker, AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypeAllWorkers, AccessApplicationGetResponseBrowserRDPApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -37657,9 +42463,11 @@ type AccessApplicationGetResponseMcpServerApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                          `json:"vnet_id"`
-	JSON   accessApplicationGetResponseMcpServerApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationGetResponseMcpServerApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                          `json:"worker_id"`
+	JSON     accessApplicationGetResponseMcpServerApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationGetResponseMcpServerApplicationDestinationsUnion
 }
 
 // accessApplicationGetResponseMcpServerApplicationDestinationJSON contains the
@@ -37674,6 +42482,7 @@ type accessApplicationGetResponseMcpServerApplicationDestinationJSON struct {
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -37698,7 +42507,11 @@ func (r *AccessApplicationGetResponseMcpServerApplicationDestination) UnmarshalJ
 // Possible runtime types of the union are
 // [AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestination],
 // [AccessApplicationGetResponseMcpServerApplicationDestinationsPrivateDestination],
-// [AccessApplicationGetResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationGetResponseMcpServerApplicationDestination) AsUnion() AccessApplicationGetResponseMcpServerApplicationDestinationsUnion {
 	return r.union
 }
@@ -37708,9 +42521,13 @@ func (r AccessApplicationGetResponseMcpServerApplicationDestination) AsUnion() A
 //
 // Union satisfied by
 // [AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestination],
-// [AccessApplicationGetResponseMcpServerApplicationDestinationsPrivateDestination]
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsPrivateDestination],
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationGetResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationGetResponseMcpServerApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseMcpServerApplicationDestination()
 }
@@ -37730,6 +42547,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -37897,6 +42730,188 @@ func (r AccessApplicationGetResponseMcpServerApplicationDestinationsViaMcpServer
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                            `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestination]
+type accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestination) implementsAccessApplicationGetResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                   `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationGetResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestination]
+type accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestination) implementsAccessApplicationGetResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationGetResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationGetResponseMcpServerApplicationDestinationsL4Protocol string
@@ -37920,11 +42935,15 @@ const (
 	AccessApplicationGetResponseMcpServerApplicationDestinationsTypePublic             AccessApplicationGetResponseMcpServerApplicationDestinationsType = "public"
 	AccessApplicationGetResponseMcpServerApplicationDestinationsTypePrivate            AccessApplicationGetResponseMcpServerApplicationDestinationsType = "private"
 	AccessApplicationGetResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal AccessApplicationGetResponseMcpServerApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationGetResponseMcpServerApplicationDestinationsTypeWorker             AccessApplicationGetResponseMcpServerApplicationDestinationsType = "worker"
+	AccessApplicationGetResponseMcpServerApplicationDestinationsTypePreviewWorker      AccessApplicationGetResponseMcpServerApplicationDestinationsType = "preview_worker"
+	AccessApplicationGetResponseMcpServerApplicationDestinationsTypeAllWorkers         AccessApplicationGetResponseMcpServerApplicationDestinationsType = "all_workers"
+	AccessApplicationGetResponseMcpServerApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationGetResponseMcpServerApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationGetResponseMcpServerApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseMcpServerApplicationDestinationsTypePublic, AccessApplicationGetResponseMcpServerApplicationDestinationsTypePrivate, AccessApplicationGetResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationGetResponseMcpServerApplicationDestinationsTypePublic, AccessApplicationGetResponseMcpServerApplicationDestinationsTypePrivate, AccessApplicationGetResponseMcpServerApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationGetResponseMcpServerApplicationDestinationsTypeWorker, AccessApplicationGetResponseMcpServerApplicationDestinationsTypePreviewWorker, AccessApplicationGetResponseMcpServerApplicationDestinationsTypeAllWorkers, AccessApplicationGetResponseMcpServerApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -38679,9 +43698,11 @@ type AccessApplicationGetResponseMcpServerPortalApplicationDestination struct {
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
 	URI string `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
-	VnetID string                                                                `json:"vnet_id"`
-	JSON   accessApplicationGetResponseMcpServerPortalApplicationDestinationJSON `json:"-"`
-	union  AccessApplicationGetResponseMcpServerPortalApplicationDestinationsUnion
+	VnetID string `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                `json:"worker_id"`
+	JSON     accessApplicationGetResponseMcpServerPortalApplicationDestinationJSON `json:"-"`
+	union    AccessApplicationGetResponseMcpServerPortalApplicationDestinationsUnion
 }
 
 // accessApplicationGetResponseMcpServerPortalApplicationDestinationJSON contains
@@ -38696,6 +43717,7 @@ type accessApplicationGetResponseMcpServerPortalApplicationDestinationJSON struc
 	Type        apijson.Field
 	URI         apijson.Field
 	VnetID      apijson.Field
+	WorkerID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -38720,7 +43742,11 @@ func (r *AccessApplicationGetResponseMcpServerPortalApplicationDestination) Unma
 // Possible runtime types of the union are
 // [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestination],
 // [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPrivateDestination],
-// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestination],
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination].
 func (r AccessApplicationGetResponseMcpServerPortalApplicationDestination) AsUnion() AccessApplicationGetResponseMcpServerPortalApplicationDestinationsUnion {
 	return r.union
 }
@@ -38730,9 +43756,13 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationDestination) AsUni
 //
 // Union satisfied by
 // [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestination],
-// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPrivateDestination]
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPrivateDestination],
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination],
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestination],
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination],
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
 // or
-// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination].
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination].
 type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsUnion interface {
 	implementsAccessApplicationGetResponseMcpServerPortalApplicationDestination()
 }
@@ -38752,6 +43782,22 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestination{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination{}),
 		},
 	)
 }
@@ -38919,6 +43965,188 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsViaMcp
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestination struct {
+	Type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID string                                                                                  `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestination]
+type accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestination) implementsAccessApplicationGetResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination struct {
+	Type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID string                                                                                         `json:"worker_id" api:"required"`
+	JSON     accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination]
+type accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON struct {
+	Type        apijson.Field
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationGetResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
+	Type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
+type accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestination) implementsAccessApplicationGetResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
+	JSON accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination]
+type accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationGetResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsL4Protocol string
@@ -38942,11 +44170,15 @@ const (
 	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypePublic             AccessApplicationGetResponseMcpServerPortalApplicationDestinationsType = "public"
 	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypePrivate            AccessApplicationGetResponseMcpServerPortalApplicationDestinationsType = "private"
 	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal AccessApplicationGetResponseMcpServerPortalApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypeWorker             AccessApplicationGetResponseMcpServerPortalApplicationDestinationsType = "worker"
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypePreviewWorker      AccessApplicationGetResponseMcpServerPortalApplicationDestinationsType = "preview_worker"
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypeAllWorkers         AccessApplicationGetResponseMcpServerPortalApplicationDestinationsType = "all_workers"
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationGetResponseMcpServerPortalApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypeWorker, AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypePreviewWorker, AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypeAllWorkers, AccessApplicationGetResponseMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -39621,6 +44853,11 @@ type AccessApplicationNewParamsBody struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting param.Field[bool] `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool]        `json:"enable_binding_cookie"`
@@ -39742,6 +44979,11 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion] `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting param.Field[bool] `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -39838,6 +45080,8 @@ type AccessApplicationNewParamsBodySelfHostedApplicationDestination struct {
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -39854,6 +45098,10 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestination) implemen
 // [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationNewParamsBodySelfHostedApplicationDestination].
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion interface {
 	implementsAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion()
@@ -39973,6 +45221,130 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpSer
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestination) implementsAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4Protocol string
@@ -39996,11 +45368,15 @@ const (
 	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic             AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "public"
 	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate            AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "private"
 	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeWorker             AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "worker"
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePreviewWorker      AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeAllWorkers         AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "all_workers"
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeWorker, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePreviewWorker, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeAllWorkers, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -41066,6 +46442,11 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion] `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting param.Field[bool] `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -41190,6 +46571,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationDestination struct {
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -41206,6 +46589,10 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestination) implemen
 // [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationNewParamsBodyBrowserSSHApplicationDestination].
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion interface {
 	implementsAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion()
@@ -41325,6 +46712,130 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsViaMcpSer
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestination) implementsAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4Protocol string
@@ -41348,11 +46859,15 @@ const (
 	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic             AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "public"
 	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "private"
 	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeWorker             AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "worker"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePreviewWorker      AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeAllWorkers         AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "all_workers"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeWorker, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePreviewWorker, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeAllWorkers, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -41887,6 +47402,11 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion] `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting param.Field[bool] `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -42011,6 +47531,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationDestination struct {
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -42027,6 +47549,10 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestination) implemen
 // [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationNewParamsBodyBrowserVNCApplicationDestination].
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion interface {
 	implementsAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion()
@@ -42146,6 +47672,130 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsViaMcpSer
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestination) implementsAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4Protocol string
@@ -42169,11 +47819,15 @@ const (
 	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic             AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "public"
 	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "private"
 	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeWorker             AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "worker"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePreviewWorker      AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeAllWorkers         AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "all_workers"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeWorker, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePreviewWorker, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeAllWorkers, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -43997,6 +49651,11 @@ type AccessApplicationNewParamsBodyBrowserRDPApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationUnion] `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting param.Field[bool] `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -44122,6 +49781,8 @@ type AccessApplicationNewParamsBodyBrowserRDPApplicationDestination struct {
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -44138,6 +49799,10 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestination) implemen
 // [zero_trust.AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationNewParamsBodyBrowserRDPApplicationDestination].
 type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationUnion interface {
 	implementsAccessApplicationNewParamsBodyBrowserRDPApplicationDestinationUnion()
@@ -44257,6 +49922,130 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsViaMcpSer
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestination) implementsAccessApplicationNewParamsBodyBrowserRDPApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewParamsBodyBrowserRDPApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewParamsBodyBrowserRDPApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewParamsBodyBrowserRDPApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsL4Protocol string
@@ -44280,11 +50069,15 @@ const (
 	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypePublic             AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsType = "public"
 	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypePrivate            AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsType = "private"
 	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypeWorker             AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsType = "worker"
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypePreviewWorker      AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypeAllWorkers         AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsType = "all_workers"
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypeWorker, AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypePreviewWorker, AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypeAllWorkers, AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -44876,6 +50669,8 @@ type AccessApplicationNewParamsBodyMcpServerApplicationDestination struct {
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -44892,6 +50687,10 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationDestination) implement
 // [zero_trust.AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationNewParamsBodyMcpServerApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationNewParamsBodyMcpServerApplicationDestination].
 type AccessApplicationNewParamsBodyMcpServerApplicationDestinationUnion interface {
 	implementsAccessApplicationNewParamsBodyMcpServerApplicationDestinationUnion()
@@ -45011,6 +50810,130 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsViaMcpServ
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestination) implementsAccessApplicationNewParamsBodyMcpServerApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewParamsBodyMcpServerApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewParamsBodyMcpServerApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewParamsBodyMcpServerApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsL4Protocol string
@@ -45034,11 +50957,15 @@ const (
 	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypePublic             AccessApplicationNewParamsBodyMcpServerApplicationDestinationsType = "public"
 	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypePrivate            AccessApplicationNewParamsBodyMcpServerApplicationDestinationsType = "private"
 	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewParamsBodyMcpServerApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypeWorker             AccessApplicationNewParamsBodyMcpServerApplicationDestinationsType = "worker"
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypePreviewWorker      AccessApplicationNewParamsBodyMcpServerApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypeAllWorkers         AccessApplicationNewParamsBodyMcpServerApplicationDestinationsType = "all_workers"
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewParamsBodyMcpServerApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypeWorker, AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypePreviewWorker, AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypeAllWorkers, AccessApplicationNewParamsBodyMcpServerApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -45601,6 +51528,8 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestination struct 
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -45617,6 +51546,10 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestination) imp
 // [zero_trust.AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationNewParamsBodyMcpServerPortalApplicationDestination].
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationUnion interface {
 	implementsAccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationUnion()
@@ -45736,6 +51669,130 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsViaM
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestination) implementsAccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination) implementsAccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsL4Protocol string
@@ -45759,11 +51816,15 @@ const (
 	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypePublic             AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsType = "public"
 	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypePrivate            AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsType = "private"
 	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypeWorker             AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsType = "worker"
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypePreviewWorker      AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsType = "preview_worker"
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypeAllWorkers         AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsType = "all_workers"
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypeWorker, AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypePreviewWorker, AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypeAllWorkers, AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -46415,6 +52476,11 @@ type AccessApplicationUpdateParamsBody struct {
 	// The primary hostname and path secured by Access. This domain will be displayed
 	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting param.Field[bool] `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool]        `json:"enable_binding_cookie"`
@@ -46537,6 +52603,11 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion] `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting param.Field[bool] `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -46633,6 +52704,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationDestination struct {
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -46649,6 +52722,10 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestination) imple
 // [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationUpdateParamsBodySelfHostedApplicationDestination].
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion interface {
 	implementsAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion()
@@ -46768,6 +52845,130 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcp
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4Protocol string
@@ -46791,11 +52992,15 @@ const (
 	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic             AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "public"
 	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate            AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "private"
 	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeWorker             AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "worker"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeWorker, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -47861,6 +54066,11 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion] `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting param.Field[bool] `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -47985,6 +54195,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination struct {
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -48001,6 +54213,10 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination) imple
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination].
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion interface {
 	implementsAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion()
@@ -48120,6 +54336,130 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsViaMcp
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4Protocol string
@@ -48143,11 +54483,15 @@ const (
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic             AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "public"
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate            AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "private"
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeWorker             AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "worker"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeWorker, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -48682,6 +55026,11 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion] `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting param.Field[bool] `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -48806,6 +55155,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination struct {
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -48822,6 +55173,10 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination) imple
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination].
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion interface {
 	implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion()
@@ -48941,6 +55296,130 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsViaMcp
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4Protocol string
@@ -48964,11 +55443,15 @@ const (
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic             AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "public"
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate            AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "private"
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeWorker             AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "worker"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeWorker, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -50792,6 +57275,11 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplication struct {
 	// allow for more flexibility in defining different types of domains. If
 	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationUnion] `json:"destinations"`
+	// Preemptively sets the Access session cookie on every hostname in a
+	// multi-hostname self-hosted application during the initial redirect chain, rather
+	// than setting it lazily on first visit. Defaults to true. Set to false to disable
+	// the eager redirect cookie behavior.
+	EagerRedirectCookieSetting param.Field[bool] `json:"eager_redirect_cookie_setting"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -50917,6 +57405,8 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestination struct {
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -50933,6 +57423,10 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestination) imple
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestination].
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationUnion interface {
 	implementsAccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationUnion()
@@ -51052,6 +57546,130 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsViaMcp
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsL4Protocol string
@@ -51075,11 +57693,15 @@ const (
 	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypePublic             AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsType = "public"
 	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypePrivate            AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsType = "private"
 	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypeWorker             AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsType = "worker"
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypeWorker, AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -51671,6 +58293,8 @@ type AccessApplicationUpdateParamsBodyMcpServerApplicationDestination struct {
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -51687,6 +58311,10 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestination) implem
 // [zero_trust.AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationUpdateParamsBodyMcpServerApplicationDestination].
 type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationUnion interface {
 	implementsAccessApplicationUpdateParamsBodyMcpServerApplicationDestinationUnion()
@@ -51806,6 +58434,130 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsViaMcpS
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateParamsBodyMcpServerApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateParamsBodyMcpServerApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateParamsBodyMcpServerApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateParamsBodyMcpServerApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsL4Protocol string
@@ -51829,11 +58581,15 @@ const (
 	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypePublic             AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsType = "public"
 	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypePrivate            AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsType = "private"
 	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypeWorker             AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsType = "worker"
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypeWorker, AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false
@@ -52396,6 +59152,8 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestination stru
 	URI param.Field[string] `json:"uri"`
 	// The VNET ID to match the destination. When omitted, all VNETs will match.
 	VnetID param.Field[string] `json:"vnet_id"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestination) MarshalJSON() (data []byte, err error) {
@@ -52412,6 +59170,10 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestination) 
 // [zero_trust.AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPrivateDestination],
 // [zero_trust.AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsViaMcpServerPortalDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination],
+// [zero_trust.AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination],
 // [AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestination].
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationUnion interface {
 	implementsAccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationUnion()
@@ -52531,6 +59293,130 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsV
 	return false
 }
 
+// A specific Cloudflare Worker that Access will secure. All requests routed to the
+// specified Worker, including its preview deployments, will be protected. The
+// `preview_worker` and `public` destination types takes precedence, so you can
+// create separate applications to override the policies for the Worker's previews
+// or specific paths.
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker to protect with Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestination) implementsAccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationType = "worker"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationTypeWorker:
+		return true
+	}
+	return false
+}
+
+// A specific Cloudflare Worker whose preview deployments Access will secure. Only
+// requests routed to the preview deployments of the specified Worker will be
+// protected. The `public` destination type takes precedence, so you can create
+// separate applications to override the policies for specific paths.
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType] `json:"type" api:"required"`
+	// The ID of the Cloudflare Worker whose preview deployments to protect with
+	// Access.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestination) implementsAccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType = "preview_worker"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker:
+		return true
+	}
+	return false
+}
+
+// Protects all Cloudflare Workers on the account with Access, including their
+// preview deployments. At most one destination of this type can exist per account.
+// The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
+// types take precedence, so you can create separate applications to override the
+// policies for specific Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination) implementsAccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationType = "all_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationTypeAllWorkers:
+		return true
+	}
+	return false
+}
+
+// Protects the preview deployments of all Cloudflare Workers on the account with
+// Access. At most one destination of this type can exist per account. The
+// `worker`, `preview_worker`, and `public` destination types take precedence, so
+// you can create separate applications to override the policies for specific
+// Workers, their previews, or specific paths.
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) implementsAccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType = "all_preview_workers"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
 // The L4 protocol of the destination. When omitted, both UDP and TCP traffic will
 // match.
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsL4Protocol string
@@ -52554,11 +59440,15 @@ const (
 	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypePublic             AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsType = "public"
 	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypePrivate            AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsType = "private"
 	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsType = "via_mcp_server_portal"
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypeWorker             AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsType = "worker"
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypePreviewWorker      AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsType = "preview_worker"
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypeAllWorkers         AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsType = "all_workers"
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers  AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsType = "all_preview_workers"
 )
 
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal:
+	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypePrivate, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypeViaMcpServerPortal, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypeWorker, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsTypeAllPreviewWorkers:
 		return true
 	}
 	return false

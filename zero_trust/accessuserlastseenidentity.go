@@ -63,7 +63,7 @@ type Identity struct {
 	DeviceSessions     map[string]IdentityDeviceSession `json:"device_sessions"`
 	DevicePosture      map[string]IdentityDevicePosture `json:"devicePosture"`
 	Email              string                           `json:"email"`
-	Geo                UserPolicyCheckGeo               `json:"geo"`
+	Geo                IdentityGeo                      `json:"geo"`
 	Iat                float64                          `json:"iat"`
 	IdP                IdentityIdP                      `json:"idp"`
 	IP                 string                           `json:"ip"`
@@ -187,6 +187,26 @@ func (r *IdentityDevicePostureCheck) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r identityDevicePostureCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityGeo struct {
+	Country string          `json:"country"`
+	JSON    identityGeoJSON `json:"-"`
+}
+
+// identityGeoJSON contains the JSON metadata for the struct [IdentityGeo]
+type identityGeoJSON struct {
+	Country     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityGeo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityGeoJSON) RawJSON() string {
 	return r.raw
 }
 

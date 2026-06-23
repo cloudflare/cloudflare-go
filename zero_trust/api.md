@@ -604,7 +604,6 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#UserPolicyCheckGeo">UserPolicyCheckGeo</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessApplicationUserPolicyCheckListResponse">AccessApplicationUserPolicyCheckListResponse</a>
 
 Methods:

@@ -180,7 +180,7 @@ type AccessUserActiveSessionGetResponse struct {
 	DeviceSessions     map[string]AccessUserActiveSessionGetResponseDeviceSession `json:"device_sessions"`
 	DevicePosture      map[string]AccessUserActiveSessionGetResponseDevicePosture `json:"devicePosture"`
 	Email              string                                                     `json:"email"`
-	Geo                UserPolicyCheckGeo                                         `json:"geo"`
+	Geo                AccessUserActiveSessionGetResponseGeo                      `json:"geo"`
 	Iat                float64                                                    `json:"iat"`
 	IdP                AccessUserActiveSessionGetResponseIdP                      `json:"idp"`
 	IP                 string                                                     `json:"ip"`
@@ -307,6 +307,27 @@ func (r *AccessUserActiveSessionGetResponseDevicePostureCheck) UnmarshalJSON(dat
 }
 
 func (r accessUserActiveSessionGetResponseDevicePostureCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessUserActiveSessionGetResponseGeo struct {
+	Country string                                    `json:"country"`
+	JSON    accessUserActiveSessionGetResponseGeoJSON `json:"-"`
+}
+
+// accessUserActiveSessionGetResponseGeoJSON contains the JSON metadata for the
+// struct [AccessUserActiveSessionGetResponseGeo]
+type accessUserActiveSessionGetResponseGeoJSON struct {
+	Country     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserActiveSessionGetResponseGeo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessUserActiveSessionGetResponseGeoJSON) RawJSON() string {
 	return r.raw
 }
 
