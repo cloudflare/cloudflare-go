@@ -211,6 +211,15 @@ func (UnionString) ImplementsAIRunResponseUnion()                               
 func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()                              {}
 func (UnionString) ImplementsAIRunParamsBodyTextGenerationMessagesContentUnion()                   {}
 func (UnionString) ImplementsAIRunParamsBodyImageTextToTextMessagesContentUnion()                  {}
+func (UnionString) ImplementsNamespaceChatCompletionsResponseChoicesMessageContentUnion()          {}
+func (UnionString) ImplementsNamespaceChatCompletionsParamsMessagesContentUnion()                  {}
+func (UnionString) ImplementsNamespaceSearchParamsMessagesContentUnion()                           {}
+func (UnionString) ImplementsNamespaceInstanceChatCompletionsResponseChoicesMessageContentUnion()  {}
+func (UnionString) ImplementsNamespaceInstanceChatCompletionsParamsMessagesContentUnion()          {}
+func (UnionString) ImplementsNamespaceInstanceSearchParamsMessagesContentUnion()                   {}
+func (UnionString) ImplementsInstanceChatCompletionsResponseChoicesMessageContentUnion()           {}
+func (UnionString) ImplementsInstanceChatCompletionsParamsMessagesContentUnion()                   {}
+func (UnionString) ImplementsInstanceSearchParamsMessagesContentUnion()                            {}
 func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsHeightUnion()                         {}
 func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginBottomUnion()                   {}
 func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()                     {}

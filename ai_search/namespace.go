@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 	"time"
 
@@ -17,6 +18,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
+	"github.com/tidwall/gjson"
 )
 
 // NamespaceService contains methods and other services that help with interacting
@@ -321,10 +324,10 @@ func (r namespaceChatCompletionsResponseChoiceJSON) RawJSON() string {
 }
 
 type NamespaceChatCompletionsResponseChoicesMessage struct {
-	Content     string                                             `json:"content" api:"required,nullable"`
-	Role        NamespaceChatCompletionsResponseChoicesMessageRole `json:"role" api:"required"`
-	ExtraFields map[string]interface{}                             `json:"-" api:"extrafields"`
-	JSON        namespaceChatCompletionsResponseChoicesMessageJSON `json:"-"`
+	Content     NamespaceChatCompletionsResponseChoicesMessageContentUnion `json:"content" api:"required,nullable"`
+	Role        NamespaceChatCompletionsResponseChoicesMessageRole         `json:"role" api:"required"`
+	ExtraFields map[string]interface{}                                     `json:"-" api:"extrafields"`
+	JSON        namespaceChatCompletionsResponseChoicesMessageJSON         `json:"-"`
 }
 
 // namespaceChatCompletionsResponseChoicesMessageJSON contains the JSON metadata
@@ -342,6 +345,155 @@ func (r *NamespaceChatCompletionsResponseChoicesMessage) UnmarshalJSON(data []by
 
 func (r namespaceChatCompletionsResponseChoicesMessageJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [shared.UnionString] or
+// [NamespaceChatCompletionsResponseChoicesMessageContentArray].
+type NamespaceChatCompletionsResponseChoicesMessageContentUnion interface {
+	ImplementsNamespaceChatCompletionsResponseChoicesMessageContentUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*NamespaceChatCompletionsResponseChoicesMessageContentUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NamespaceChatCompletionsResponseChoicesMessageContentArray{}),
+		},
+	)
+}
+
+type NamespaceChatCompletionsResponseChoicesMessageContentArray []NamespaceChatCompletionsResponseChoicesMessageContentArrayItem
+
+func (r NamespaceChatCompletionsResponseChoicesMessageContentArray) ImplementsNamespaceChatCompletionsResponseChoicesMessageContentUnion() {
+}
+
+type NamespaceChatCompletionsResponseChoicesMessageContentArrayItem struct {
+	Type NamespaceChatCompletionsResponseChoicesMessageContentArrayType `json:"type" api:"required"`
+	// This field can have the runtime type of
+	// [NamespaceChatCompletionsResponseChoicesMessageContentArrayObjectImageURL].
+	ImageURL interface{}                                                        `json:"image_url"`
+	Text     string                                                             `json:"text"`
+	JSON     namespaceChatCompletionsResponseChoicesMessageContentArrayItemJSON `json:"-"`
+	union    NamespaceChatCompletionsResponseChoicesMessageContentArrayUnionItem
+}
+
+// namespaceChatCompletionsResponseChoicesMessageContentArrayItemJSON contains the
+// JSON metadata for the struct
+// [NamespaceChatCompletionsResponseChoicesMessageContentArrayItem]
+type namespaceChatCompletionsResponseChoicesMessageContentArrayItemJSON struct {
+	Type        apijson.Field
+	ImageURL    apijson.Field
+	Text        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r namespaceChatCompletionsResponseChoicesMessageContentArrayItemJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *NamespaceChatCompletionsResponseChoicesMessageContentArrayItem) UnmarshalJSON(data []byte) (err error) {
+	*r = NamespaceChatCompletionsResponseChoicesMessageContentArrayItem{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [NamespaceChatCompletionsResponseChoicesMessageContentArrayUnionItem] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject],
+// [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject].
+func (r NamespaceChatCompletionsResponseChoicesMessageContentArrayItem) AsUnion() NamespaceChatCompletionsResponseChoicesMessageContentArrayUnionItem {
+	return r.union
+}
+
+// Union satisfied by
+// [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject] or
+// [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject].
+type NamespaceChatCompletionsResponseChoicesMessageContentArrayUnionItem interface {
+	implementsNamespaceChatCompletionsResponseChoicesMessageContentArrayItem()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*NamespaceChatCompletionsResponseChoicesMessageContentArrayUnionItem)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NamespaceChatCompletionsResponseChoicesMessageContentArrayObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NamespaceChatCompletionsResponseChoicesMessageContentArrayObject{}),
+		},
+	)
+}
+
+type NamespaceChatCompletionsResponseChoicesMessageContentArrayObject struct {
+	Text string                                                               `json:"text" api:"required"`
+	Type NamespaceChatCompletionsResponseChoicesMessageContentArrayObjectType `json:"type" api:"required"`
+	JSON namespaceChatCompletionsResponseChoicesMessageContentArrayObjectJSON `json:"-"`
+}
+
+// namespaceChatCompletionsResponseChoicesMessageContentArrayObjectJSON contains
+// the JSON metadata for the struct
+// [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject]
+type namespaceChatCompletionsResponseChoicesMessageContentArrayObjectJSON struct {
+	Text        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceChatCompletionsResponseChoicesMessageContentArrayObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceChatCompletionsResponseChoicesMessageContentArrayObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r NamespaceChatCompletionsResponseChoicesMessageContentArrayObject) implementsNamespaceChatCompletionsResponseChoicesMessageContentArrayItem() {
+}
+
+type NamespaceChatCompletionsResponseChoicesMessageContentArrayObjectType string
+
+const (
+	NamespaceChatCompletionsResponseChoicesMessageContentArrayObjectTypeText NamespaceChatCompletionsResponseChoicesMessageContentArrayObjectType = "text"
+)
+
+func (r NamespaceChatCompletionsResponseChoicesMessageContentArrayObjectType) IsKnown() bool {
+	switch r {
+	case NamespaceChatCompletionsResponseChoicesMessageContentArrayObjectTypeText:
+		return true
+	}
+	return false
+}
+
+type NamespaceChatCompletionsResponseChoicesMessageContentArrayType string
+
+const (
+	NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeText     NamespaceChatCompletionsResponseChoicesMessageContentArrayType = "text"
+	NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeImageURL NamespaceChatCompletionsResponseChoicesMessageContentArrayType = "image_url"
+)
+
+func (r NamespaceChatCompletionsResponseChoicesMessageContentArrayType) IsKnown() bool {
+	switch r {
+	case NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeText, NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeImageURL:
+		return true
+	}
+	return false
 }
 
 type NamespaceChatCompletionsResponseChoicesMessageRole string
@@ -516,18 +668,20 @@ func (r namespaceReadResponseJSON) RawJSON() string {
 }
 
 type NamespaceSearchResponse struct {
-	Chunks      []NamespaceSearchResponseChunk `json:"chunks" api:"required"`
-	SearchQuery string                         `json:"search_query" api:"required"`
-	Errors      []NamespaceSearchResponseError `json:"errors"`
-	JSON        namespaceSearchResponseJSON    `json:"-"`
+	Chunks      []NamespaceSearchResponseChunk   `json:"chunks" api:"required"`
+	QueryKind   NamespaceSearchResponseQueryKind `json:"query_kind" api:"required"`
+	Errors      []NamespaceSearchResponseError   `json:"errors"`
+	SearchQuery string                           `json:"search_query"`
+	JSON        namespaceSearchResponseJSON      `json:"-"`
 }
 
 // namespaceSearchResponseJSON contains the JSON metadata for the struct
 // [NamespaceSearchResponse]
 type namespaceSearchResponseJSON struct {
 	Chunks      apijson.Field
-	SearchQuery apijson.Field
+	QueryKind   apijson.Field
 	Errors      apijson.Field
+	SearchQuery apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -639,6 +793,22 @@ const (
 func (r NamespaceSearchResponseChunksScoringDetailsFusionMethod) IsKnown() bool {
 	switch r {
 	case NamespaceSearchResponseChunksScoringDetailsFusionMethodRrf, NamespaceSearchResponseChunksScoringDetailsFusionMethodMax:
+		return true
+	}
+	return false
+}
+
+type NamespaceSearchResponseQueryKind string
+
+const (
+	NamespaceSearchResponseQueryKindText       NamespaceSearchResponseQueryKind = "text"
+	NamespaceSearchResponseQueryKindImage      NamespaceSearchResponseQueryKind = "image"
+	NamespaceSearchResponseQueryKindMultimodal NamespaceSearchResponseQueryKind = "multimodal"
+)
+
+func (r NamespaceSearchResponseQueryKind) IsKnown() bool {
+	switch r {
+	case NamespaceSearchResponseQueryKindText, NamespaceSearchResponseQueryKindImage, NamespaceSearchResponseQueryKindMultimodal:
 		return true
 	}
 	return false
@@ -1063,13 +1233,86 @@ func (r NamespaceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType) IsK
 }
 
 type NamespaceChatCompletionsParamsMessage struct {
-	Content     param.Field[string]                                     `json:"content" api:"required"`
-	Role        param.Field[NamespaceChatCompletionsParamsMessagesRole] `json:"role" api:"required"`
-	ExtraFields map[string]interface{}                                  `json:"-,extras"`
+	Content     param.Field[NamespaceChatCompletionsParamsMessagesContentUnion] `json:"content" api:"required"`
+	Role        param.Field[NamespaceChatCompletionsParamsMessagesRole]         `json:"role" api:"required"`
+	ExtraFields map[string]interface{}                                          `json:"-,extras"`
 }
 
 func (r NamespaceChatCompletionsParamsMessage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Satisfied by [shared.UnionString],
+// [ai_search.NamespaceChatCompletionsParamsMessagesContentArray].
+type NamespaceChatCompletionsParamsMessagesContentUnion interface {
+	ImplementsNamespaceChatCompletionsParamsMessagesContentUnion()
+}
+
+type NamespaceChatCompletionsParamsMessagesContentArray []NamespaceChatCompletionsParamsMessagesContentArrayItemUnion
+
+func (r NamespaceChatCompletionsParamsMessagesContentArray) ImplementsNamespaceChatCompletionsParamsMessagesContentUnion() {
+}
+
+type NamespaceChatCompletionsParamsMessagesContentArrayItem struct {
+	Type     param.Field[NamespaceChatCompletionsParamsMessagesContentArrayType] `json:"type" api:"required"`
+	ImageURL param.Field[interface{}]                                            `json:"image_url"`
+	Text     param.Field[string]                                                 `json:"text"`
+}
+
+func (r NamespaceChatCompletionsParamsMessagesContentArrayItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r NamespaceChatCompletionsParamsMessagesContentArrayItem) implementsNamespaceChatCompletionsParamsMessagesContentArrayItemUnion() {
+}
+
+// Satisfied by
+// [ai_search.NamespaceChatCompletionsParamsMessagesContentArrayObject],
+// [ai_search.NamespaceChatCompletionsParamsMessagesContentArrayObject],
+// [NamespaceChatCompletionsParamsMessagesContentArrayItem].
+type NamespaceChatCompletionsParamsMessagesContentArrayItemUnion interface {
+	implementsNamespaceChatCompletionsParamsMessagesContentArrayItemUnion()
+}
+
+type NamespaceChatCompletionsParamsMessagesContentArrayObject struct {
+	Text param.Field[string]                                                       `json:"text" api:"required"`
+	Type param.Field[NamespaceChatCompletionsParamsMessagesContentArrayObjectType] `json:"type" api:"required"`
+}
+
+func (r NamespaceChatCompletionsParamsMessagesContentArrayObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r NamespaceChatCompletionsParamsMessagesContentArrayObject) implementsNamespaceChatCompletionsParamsMessagesContentArrayItemUnion() {
+}
+
+type NamespaceChatCompletionsParamsMessagesContentArrayObjectType string
+
+const (
+	NamespaceChatCompletionsParamsMessagesContentArrayObjectTypeText NamespaceChatCompletionsParamsMessagesContentArrayObjectType = "text"
+)
+
+func (r NamespaceChatCompletionsParamsMessagesContentArrayObjectType) IsKnown() bool {
+	switch r {
+	case NamespaceChatCompletionsParamsMessagesContentArrayObjectTypeText:
+		return true
+	}
+	return false
+}
+
+type NamespaceChatCompletionsParamsMessagesContentArrayType string
+
+const (
+	NamespaceChatCompletionsParamsMessagesContentArrayTypeText     NamespaceChatCompletionsParamsMessagesContentArrayType = "text"
+	NamespaceChatCompletionsParamsMessagesContentArrayTypeImageURL NamespaceChatCompletionsParamsMessagesContentArrayType = "image_url"
+)
+
+func (r NamespaceChatCompletionsParamsMessagesContentArrayType) IsKnown() bool {
+	switch r {
+	case NamespaceChatCompletionsParamsMessagesContentArrayTypeText, NamespaceChatCompletionsParamsMessagesContentArrayTypeImageURL:
+		return true
+	}
+	return false
 }
 
 type NamespaceChatCompletionsParamsMessagesRole string
@@ -1177,7 +1420,12 @@ func (r NamespaceReadResponseEnvelopeSuccess) IsKnown() bool {
 type NamespaceSearchParams struct {
 	AccountID       param.Field[string]                               `path:"account_id" api:"required"`
 	AISearchOptions param.Field[NamespaceSearchParamsAISearchOptions] `json:"ai_search_options" api:"required"`
-	Messages        param.Field[[]NamespaceSearchParamsMessage]       `json:"messages"`
+	// OpenAI-compatible message array. For multimodal queries, set the last user
+	// message's `content` to an array of typed parts:
+	// `[{type:'text', text:'…'}, {type:'image_url', image_url:{url:'…'}}]`. Image
+	// inputs require the RAG's embedding_model to declare 'image' in
+	// supported_modalities.
+	Messages param.Field[[]NamespaceSearchParamsMessage] `json:"messages"`
 	// A simple text query string. Alternative to 'messages' — provide either this or
 	// 'messages', not both.
 	Query param.Field[string] `json:"query"`
@@ -1416,13 +1664,85 @@ func (r NamespaceSearchParamsAISearchOptionsRetrievalRetrievalType) IsKnown() bo
 }
 
 type NamespaceSearchParamsMessage struct {
-	Content     param.Field[string]                            `json:"content" api:"required"`
-	Role        param.Field[NamespaceSearchParamsMessagesRole] `json:"role" api:"required"`
-	ExtraFields map[string]interface{}                         `json:"-,extras"`
+	Content     param.Field[NamespaceSearchParamsMessagesContentUnion] `json:"content" api:"required"`
+	Role        param.Field[NamespaceSearchParamsMessagesRole]         `json:"role" api:"required"`
+	ExtraFields map[string]interface{}                                 `json:"-,extras"`
 }
 
 func (r NamespaceSearchParamsMessage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Satisfied by [shared.UnionString],
+// [ai_search.NamespaceSearchParamsMessagesContentArray].
+type NamespaceSearchParamsMessagesContentUnion interface {
+	ImplementsNamespaceSearchParamsMessagesContentUnion()
+}
+
+type NamespaceSearchParamsMessagesContentArray []NamespaceSearchParamsMessagesContentArrayItemUnion
+
+func (r NamespaceSearchParamsMessagesContentArray) ImplementsNamespaceSearchParamsMessagesContentUnion() {
+}
+
+type NamespaceSearchParamsMessagesContentArrayItem struct {
+	Type     param.Field[NamespaceSearchParamsMessagesContentArrayType] `json:"type" api:"required"`
+	ImageURL param.Field[interface{}]                                   `json:"image_url"`
+	Text     param.Field[string]                                        `json:"text"`
+}
+
+func (r NamespaceSearchParamsMessagesContentArrayItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r NamespaceSearchParamsMessagesContentArrayItem) implementsNamespaceSearchParamsMessagesContentArrayItemUnion() {
+}
+
+// Satisfied by [ai_search.NamespaceSearchParamsMessagesContentArrayObject],
+// [ai_search.NamespaceSearchParamsMessagesContentArrayObject],
+// [NamespaceSearchParamsMessagesContentArrayItem].
+type NamespaceSearchParamsMessagesContentArrayItemUnion interface {
+	implementsNamespaceSearchParamsMessagesContentArrayItemUnion()
+}
+
+type NamespaceSearchParamsMessagesContentArrayObject struct {
+	Text param.Field[string]                                              `json:"text" api:"required"`
+	Type param.Field[NamespaceSearchParamsMessagesContentArrayObjectType] `json:"type" api:"required"`
+}
+
+func (r NamespaceSearchParamsMessagesContentArrayObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r NamespaceSearchParamsMessagesContentArrayObject) implementsNamespaceSearchParamsMessagesContentArrayItemUnion() {
+}
+
+type NamespaceSearchParamsMessagesContentArrayObjectType string
+
+const (
+	NamespaceSearchParamsMessagesContentArrayObjectTypeText NamespaceSearchParamsMessagesContentArrayObjectType = "text"
+)
+
+func (r NamespaceSearchParamsMessagesContentArrayObjectType) IsKnown() bool {
+	switch r {
+	case NamespaceSearchParamsMessagesContentArrayObjectTypeText:
+		return true
+	}
+	return false
+}
+
+type NamespaceSearchParamsMessagesContentArrayType string
+
+const (
+	NamespaceSearchParamsMessagesContentArrayTypeText     NamespaceSearchParamsMessagesContentArrayType = "text"
+	NamespaceSearchParamsMessagesContentArrayTypeImageURL NamespaceSearchParamsMessagesContentArrayType = "image_url"
+)
+
+func (r NamespaceSearchParamsMessagesContentArrayType) IsKnown() bool {
+	switch r {
+	case NamespaceSearchParamsMessagesContentArrayTypeText, NamespaceSearchParamsMessagesContentArrayTypeImageURL:
+		return true
+	}
+	return false
 }
 
 type NamespaceSearchParamsMessagesRole string

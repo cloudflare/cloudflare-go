@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/ai_search"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 func TestNamespaceNewWithOptionalParams(t *testing.T) {
@@ -185,7 +186,7 @@ func TestNamespaceChatCompletionsWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			Messages: cloudflare.F([]ai_search.NamespaceChatCompletionsParamsMessage{{
-				Content: cloudflare.F("content"),
+				Content: cloudflare.F[ai_search.NamespaceChatCompletionsParamsMessagesContentUnion](shared.UnionString("string")),
 				Role:    cloudflare.F(ai_search.NamespaceChatCompletionsParamsMessagesRoleSystem),
 			}}),
 			Model:  cloudflare.F(ai_search.NamespaceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast),
@@ -284,7 +285,7 @@ func TestNamespaceSearchWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			Messages: cloudflare.F([]ai_search.NamespaceSearchParamsMessage{{
-				Content: cloudflare.F("content"),
+				Content: cloudflare.F[ai_search.NamespaceSearchParamsMessagesContentUnion](shared.UnionString("string")),
 				Role:    cloudflare.F(ai_search.NamespaceSearchParamsMessagesRoleSystem),
 			}}),
 			Query: cloudflare.F("x"),

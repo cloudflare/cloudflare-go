@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/ai_search"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 func TestNamespaceInstanceNewWithOptionalParams(t *testing.T) {
@@ -340,7 +341,7 @@ func TestNamespaceInstanceChatCompletionsWithOptionalParams(t *testing.T) {
 		ai_search.NamespaceInstanceChatCompletionsParams{
 			AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 			Messages: cloudflare.F([]ai_search.NamespaceInstanceChatCompletionsParamsMessage{{
-				Content: cloudflare.F("content"),
+				Content: cloudflare.F[ai_search.NamespaceInstanceChatCompletionsParamsMessagesContentUnion](shared.UnionString("string")),
 				Role:    cloudflare.F(ai_search.NamespaceInstanceChatCompletionsParamsMessagesRoleSystem),
 			}}),
 			AISearchOptions: cloudflare.F(ai_search.NamespaceInstanceChatCompletionsParamsAISearchOptions{
@@ -472,7 +473,7 @@ func TestNamespaceInstanceSearchWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			Messages: cloudflare.F([]ai_search.NamespaceInstanceSearchParamsMessage{{
-				Content: cloudflare.F("content"),
+				Content: cloudflare.F[ai_search.NamespaceInstanceSearchParamsMessagesContentUnion](shared.UnionString("string")),
 				Role:    cloudflare.F(ai_search.NamespaceInstanceSearchParamsMessagesRoleSystem),
 			}}),
 			Query: cloudflare.F("x"),

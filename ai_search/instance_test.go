@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/ai_search"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 func TestInstanceNewWithOptionalParams(t *testing.T) {
@@ -329,7 +330,7 @@ func TestInstanceChatCompletionsWithOptionalParams(t *testing.T) {
 		ai_search.InstanceChatCompletionsParams{
 			AccountID: cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 			Messages: cloudflare.F([]ai_search.InstanceChatCompletionsParamsMessage{{
-				Content: cloudflare.F("content"),
+				Content: cloudflare.F[ai_search.InstanceChatCompletionsParamsMessagesContentUnion](shared.UnionString("string")),
 				Role:    cloudflare.F(ai_search.InstanceChatCompletionsParamsMessagesRoleSystem),
 			}}),
 			AISearchOptions: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptions{
@@ -459,7 +460,7 @@ func TestInstanceSearchWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			Messages: cloudflare.F([]ai_search.InstanceSearchParamsMessage{{
-				Content: cloudflare.F("content"),
+				Content: cloudflare.F[ai_search.InstanceSearchParamsMessagesContentUnion](shared.UnionString("string")),
 				Role:    cloudflare.F(ai_search.InstanceSearchParamsMessagesRoleSystem),
 			}}),
 			Query: cloudflare.F("x"),
