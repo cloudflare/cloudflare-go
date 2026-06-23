@@ -781,7 +781,8 @@ func (r instanceGetResponseStepsObjectConfigJSON) RawJSON() string {
 }
 
 type InstanceGetResponseStepsObjectConfigRetries struct {
-	// Specifies the delay duration.
+	// Specifies the delay duration. '[dynamic]' indicates the delay is computed by a
+	// user-supplied function.
 	Delay   InstanceGetResponseStepsObjectConfigRetriesDelayUnion `json:"delay" api:"required"`
 	Limit   float64                                               `json:"limit" api:"required"`
 	Backoff InstanceGetResponseStepsObjectConfigRetriesBackoff    `json:"backoff"`
@@ -806,7 +807,8 @@ func (r instanceGetResponseStepsObjectConfigRetriesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Specifies the delay duration.
+// Specifies the delay duration. '[dynamic]' indicates the delay is computed by a
+// user-supplied function.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionFloat].
 type InstanceGetResponseStepsObjectConfigRetriesDelayUnion interface {
