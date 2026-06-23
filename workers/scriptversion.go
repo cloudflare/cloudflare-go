@@ -2769,6 +2769,7 @@ const (
 	ScriptVersionNewResponseMetadataSourceWrangler     ScriptVersionNewResponseMetadataSource = "wrangler"
 	ScriptVersionNewResponseMetadataSourceTerraform    ScriptVersionNewResponseMetadataSource = "terraform"
 	ScriptVersionNewResponseMetadataSourceDash         ScriptVersionNewResponseMetadataSource = "dash"
+	ScriptVersionNewResponseMetadataSourceCfCli        ScriptVersionNewResponseMetadataSource = "cf_cli"
 	ScriptVersionNewResponseMetadataSourceDashTemplate ScriptVersionNewResponseMetadataSource = "dash_template"
 	ScriptVersionNewResponseMetadataSourceIntegration  ScriptVersionNewResponseMetadataSource = "integration"
 	ScriptVersionNewResponseMetadataSourceQuickEditor  ScriptVersionNewResponseMetadataSource = "quick_editor"
@@ -2778,7 +2779,7 @@ const (
 
 func (r ScriptVersionNewResponseMetadataSource) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewResponseMetadataSourceUnknown, ScriptVersionNewResponseMetadataSourceAPI, ScriptVersionNewResponseMetadataSourceWrangler, ScriptVersionNewResponseMetadataSourceTerraform, ScriptVersionNewResponseMetadataSourceDash, ScriptVersionNewResponseMetadataSourceDashTemplate, ScriptVersionNewResponseMetadataSourceIntegration, ScriptVersionNewResponseMetadataSourceQuickEditor, ScriptVersionNewResponseMetadataSourcePlayground, ScriptVersionNewResponseMetadataSourceWorkersci:
+	case ScriptVersionNewResponseMetadataSourceUnknown, ScriptVersionNewResponseMetadataSourceAPI, ScriptVersionNewResponseMetadataSourceWrangler, ScriptVersionNewResponseMetadataSourceTerraform, ScriptVersionNewResponseMetadataSourceDash, ScriptVersionNewResponseMetadataSourceCfCli, ScriptVersionNewResponseMetadataSourceDashTemplate, ScriptVersionNewResponseMetadataSourceIntegration, ScriptVersionNewResponseMetadataSourceQuickEditor, ScriptVersionNewResponseMetadataSourcePlayground, ScriptVersionNewResponseMetadataSourceWorkersci:
 		return true
 	}
 	return false
@@ -2857,6 +2858,7 @@ const (
 	ScriptVersionListResponseMetadataSourceWrangler     ScriptVersionListResponseMetadataSource = "wrangler"
 	ScriptVersionListResponseMetadataSourceTerraform    ScriptVersionListResponseMetadataSource = "terraform"
 	ScriptVersionListResponseMetadataSourceDash         ScriptVersionListResponseMetadataSource = "dash"
+	ScriptVersionListResponseMetadataSourceCfCli        ScriptVersionListResponseMetadataSource = "cf_cli"
 	ScriptVersionListResponseMetadataSourceDashTemplate ScriptVersionListResponseMetadataSource = "dash_template"
 	ScriptVersionListResponseMetadataSourceIntegration  ScriptVersionListResponseMetadataSource = "integration"
 	ScriptVersionListResponseMetadataSourceQuickEditor  ScriptVersionListResponseMetadataSource = "quick_editor"
@@ -2866,7 +2868,7 @@ const (
 
 func (r ScriptVersionListResponseMetadataSource) IsKnown() bool {
 	switch r {
-	case ScriptVersionListResponseMetadataSourceUnknown, ScriptVersionListResponseMetadataSourceAPI, ScriptVersionListResponseMetadataSourceWrangler, ScriptVersionListResponseMetadataSourceTerraform, ScriptVersionListResponseMetadataSourceDash, ScriptVersionListResponseMetadataSourceDashTemplate, ScriptVersionListResponseMetadataSourceIntegration, ScriptVersionListResponseMetadataSourceQuickEditor, ScriptVersionListResponseMetadataSourcePlayground, ScriptVersionListResponseMetadataSourceWorkersci:
+	case ScriptVersionListResponseMetadataSourceUnknown, ScriptVersionListResponseMetadataSourceAPI, ScriptVersionListResponseMetadataSourceWrangler, ScriptVersionListResponseMetadataSourceTerraform, ScriptVersionListResponseMetadataSourceDash, ScriptVersionListResponseMetadataSourceCfCli, ScriptVersionListResponseMetadataSourceDashTemplate, ScriptVersionListResponseMetadataSourceIntegration, ScriptVersionListResponseMetadataSourceQuickEditor, ScriptVersionListResponseMetadataSourcePlayground, ScriptVersionListResponseMetadataSourceWorkersci:
 		return true
 	}
 	return false
@@ -5515,6 +5517,7 @@ const (
 	ScriptVersionGetResponseMetadataSourceWrangler     ScriptVersionGetResponseMetadataSource = "wrangler"
 	ScriptVersionGetResponseMetadataSourceTerraform    ScriptVersionGetResponseMetadataSource = "terraform"
 	ScriptVersionGetResponseMetadataSourceDash         ScriptVersionGetResponseMetadataSource = "dash"
+	ScriptVersionGetResponseMetadataSourceCfCli        ScriptVersionGetResponseMetadataSource = "cf_cli"
 	ScriptVersionGetResponseMetadataSourceDashTemplate ScriptVersionGetResponseMetadataSource = "dash_template"
 	ScriptVersionGetResponseMetadataSourceIntegration  ScriptVersionGetResponseMetadataSource = "integration"
 	ScriptVersionGetResponseMetadataSourceQuickEditor  ScriptVersionGetResponseMetadataSource = "quick_editor"
@@ -5524,7 +5527,7 @@ const (
 
 func (r ScriptVersionGetResponseMetadataSource) IsKnown() bool {
 	switch r {
-	case ScriptVersionGetResponseMetadataSourceUnknown, ScriptVersionGetResponseMetadataSourceAPI, ScriptVersionGetResponseMetadataSourceWrangler, ScriptVersionGetResponseMetadataSourceTerraform, ScriptVersionGetResponseMetadataSourceDash, ScriptVersionGetResponseMetadataSourceDashTemplate, ScriptVersionGetResponseMetadataSourceIntegration, ScriptVersionGetResponseMetadataSourceQuickEditor, ScriptVersionGetResponseMetadataSourcePlayground, ScriptVersionGetResponseMetadataSourceWorkersci:
+	case ScriptVersionGetResponseMetadataSourceUnknown, ScriptVersionGetResponseMetadataSourceAPI, ScriptVersionGetResponseMetadataSourceWrangler, ScriptVersionGetResponseMetadataSourceTerraform, ScriptVersionGetResponseMetadataSourceDash, ScriptVersionGetResponseMetadataSourceCfCli, ScriptVersionGetResponseMetadataSourceDashTemplate, ScriptVersionGetResponseMetadataSourceIntegration, ScriptVersionGetResponseMetadataSourceQuickEditor, ScriptVersionGetResponseMetadataSourcePlayground, ScriptVersionGetResponseMetadataSourceWorkersci:
 		return true
 	}
 	return false
