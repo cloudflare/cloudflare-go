@@ -42,6 +42,8 @@ func NewOriginPostQuantumEncryptionService(opts ...option.RequestOption) (r *Ori
 // connections when the origin supports and prefers PQ), supported means that PQ
 // algorithms are advertised but only used when requested by the origin, and off
 // means that PQ algorithms are not advertised.
+//
+// Deprecated: deprecated
 func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params OriginPostQuantumEncryptionUpdateParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionUpdateResponse, err error) {
 	var env OriginPostQuantumEncryptionUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -64,6 +66,8 @@ func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params 
 // connections when the origin supports and prefers PQ), supported means that PQ
 // algorithms are advertised but only used when requested by the origin, and off
 // means that PQ algorithms are not advertised.
+//
+// Deprecated: deprecated
 func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query OriginPostQuantumEncryptionGetParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionGetResponse, err error) {
 	var env OriginPostQuantumEncryptionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
