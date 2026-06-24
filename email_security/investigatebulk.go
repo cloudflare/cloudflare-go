@@ -88,8 +88,8 @@ func (r *InvestigateBulkService) ListAutoPaging(ctx context.Context, params Inve
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Soft-deletes the job, hiding it from all list and detail endpoints. Only jobs in
-// a terminal state (`COMPLETED`, `CANCELLED`, `FAILED`, or `SKIPPED`) can be
+// Deletes the job, removing it from all list and detail endpoints. Only jobs in a
+// terminal state (`COMPLETED`, `CANCELLED`, `FAILED`, or `SKIPPED`) can be
 // deleted. To stop an in-progress job without removing it, use the cancel endpoint
 // instead.
 func (r *InvestigateBulkService) Delete(ctx context.Context, jobID string, body InvestigateBulkDeleteParams, opts ...option.RequestOption) (res *InvestigateBulkDeleteResponse, err error) {
