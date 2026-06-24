@@ -85,6 +85,7 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 			Inspection: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionParam{
 				Mode: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionModeStatic),
 			}),
+			MaxTTLSecs: cloudflare.F(int64(3600)),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
 			}),
@@ -177,6 +178,7 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 			Inspection: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionParam{
 				Mode: cloudflare.F(zero_trust.GatewayConfigurationSettingsInspectionModeStatic),
 			}),
+			MaxTTLSecs: cloudflare.F(int64(3600)),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
 			}),

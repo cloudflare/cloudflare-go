@@ -58,6 +58,10 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 				}}),
 			}),
 		}),
+		MaxTTL: cloudflare.F(zero_trust.GatewayLocationNewParamsMaxTTL{
+			Mode:    cloudflare.F(zero_trust.GatewayLocationNewParamsMaxTTLModeOverride),
+			TTLSecs: cloudflare.F(int64(3600)),
+		}),
 		Networks: cloudflare.F([]zero_trust.GatewayLocationNewParamsNetwork{{
 			Network: cloudflare.F("192.0.2.1/32"),
 		}}),
@@ -117,6 +121,10 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 						Network: cloudflare.F("2001:85a3::/64"),
 					}}),
 				}),
+			}),
+			MaxTTL: cloudflare.F(zero_trust.GatewayLocationUpdateParamsMaxTTL{
+				Mode:    cloudflare.F(zero_trust.GatewayLocationUpdateParamsMaxTTLModeOverride),
+				TTLSecs: cloudflare.F(int64(3600)),
 			}),
 			Networks: cloudflare.F([]zero_trust.GatewayLocationUpdateParamsNetwork{{
 				Network: cloudflare.F("192.0.2.1/32"),
