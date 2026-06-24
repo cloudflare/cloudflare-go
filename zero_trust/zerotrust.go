@@ -19,6 +19,7 @@ type ZeroTrustService struct {
 	Organizations        *OrganizationService
 	Seats                *SeatService
 	Access               *AccessService
+	Casb                 *CasbService
 	DEX                  *DEXService
 	Tunnels              *TunnelService
 	ConnectivitySettings *ConnectivitySettingService
@@ -40,6 +41,7 @@ func NewZeroTrustService(opts ...option.RequestOption) (r *ZeroTrustService) {
 	r.Organizations = NewOrganizationService(opts...)
 	r.Seats = NewSeatService(opts...)
 	r.Access = NewAccessService(opts...)
+	r.Casb = NewCasbService(opts...)
 	r.DEX = NewDEXService(opts...)
 	r.Tunnels = NewTunnelService(opts...)
 	r.ConnectivitySettings = NewConnectivitySettingService(opts...)

@@ -939,6 +939,14 @@ Methods:
 - <code title="delete /accounts/{account_id}/access/policies/{policy_id}">client.ZeroTrust.Access.Policies.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessPolicyService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, policyID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessPolicyDeleteParams">AccessPolicyDeleteParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessPolicyDeleteResponse">AccessPolicyDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/access/policies/{policy_id}">client.ZeroTrust.Access.Policies.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessPolicyService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, policyID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessPolicyGetParams">AccessPolicyGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessPolicyGetResponse">AccessPolicyGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## Casb
+
+### Applications
+
+#### SetupFlows
+
+### Integrations
+
 ## DEX
 
 Response Types:
