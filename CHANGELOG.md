@@ -17,6 +17,9 @@ See the [v7.7.0 Migration Guide](./docs/migration-guides/v7.7.0-migration-guide.
 
   These fields were unreadable in the previous type (marshaling panicked with `reflect: call of reflect.Value.SetString on struct Value`). The new `interface{}` type matches the codegen pattern used by sibling merged fields on the same structs (e.g. `Values`, `Fields`, `AllowedMicrosoftOrganizations`); callers should switch on the parent union via `AsUnion()` for a strongly-typed variant.
 
+* **zero_trust:** `Devices.DEXTests.{New,Update,List,Get}` response type renamed from `DeviceDEXTest{New,Update,List,Get}Response` to the shared `SchemaHTTP`; field structure unchanged. Nested types renamed accordingly (e.g. `DeviceDEXTestNewResponseData` → `SchemaData`, `DeviceDEXTestNewResponseTargetPolicy` → `SchemaHTTPTargetPolicy`). Callers using `:=` inference and field access continue to compile; callers referencing the removed type names must update to `SchemaHTTP`.
+* **zero_trust:** `Devices.IPProfiles.List` pagination changed from `pagination.SinglePage[IPProfile]` to `pagination.V4PagePaginationArray[IPProfile]`. `.Result` field access and `ListAutoPaging()` iteration continue to work; callers referencing the pagination type by name must update.
+
 ### Features
 
 * **NEW SERVICE: `email_auth`** &mdash; DMARC reports edit/get and SPF inspect
@@ -41,7 +44,6 @@ See the [v7.7.0 Migration Guide](./docs/migration-guides/v7.7.0-migration-guide.
   * `Investigate.Bulk.Messages.List`
 * **accounts:** add `Logs.Audit.History` and `Logs.Audit.ProductCategories` methods
 * **organizations:** add `Logs.Audit.History` method
-* **zero_trust:** add `Devices.DEXTests.{New,Update,List,Get}` and `Devices.IPProfiles.List` methods
 
 ### Bug Fixes
 
