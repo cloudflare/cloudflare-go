@@ -23,10 +23,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewEmailRoutingService] method instead.
 type EmailRoutingService struct {
-	Options   []option.RequestOption
-	DNS       *DNSService
-	Rules     *RuleService
-	Addresses *AddressService
+	Options      []option.RequestOption
+	DNS          *DNSService
+	Rules        *RuleService
+	AccountRules *AccountRuleService
+	Addresses    *AddressService
 }
 
 // NewEmailRoutingService generates a new service that applies the given options to
@@ -37,6 +38,7 @@ func NewEmailRoutingService(opts ...option.RequestOption) (r *EmailRoutingServic
 	r.Options = opts
 	r.DNS = NewDNSService(opts...)
 	r.Rules = NewRuleService(opts...)
+	r.AccountRules = NewAccountRuleService(opts...)
 	r.Addresses = NewAddressService(opts...)
 	return
 }

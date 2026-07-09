@@ -8,7 +8,6 @@ Full Changelog: [v7.6.0...v7.7.0](https://github.com/cloudflare/cloudflare-go/co
 
 See the [v7.7.0 Migration Guide](./docs/migration-guides/v7.7.0-migration-guide.md) for before/after code examples and actions needed for each change.
 
-* **email_routing:** `Rules.List` method removed.
 * **ssl:** `Recommendations.Get` method and `RecommendationGetResponse` / `RecommendationGetParams` types removed.
 * **ai_gateway, workflows, zero_trust/dlpemailaccountmapping:** merged-union parent fields with same-name-different-type collisions changed from a variant-struct type to `interface{}`. Affected fields:
   * `ai_gateway.AIGateway{New,Update,List,Delete,Get}ResponseSpendLimitsRulesMetadata.Mode` (5 structs)
@@ -38,6 +37,7 @@ See the [v7.7.0 Migration Guide](./docs/migration-guides/v7.7.0-migration-guide.
   * `LogExplorer.Datasets.Available.List`
 * **browser_rendering:** add `AccessibilityTree.New` method
 * **email_routing:** add `EmailRouting.Unlock` and `EmailRouting.Addresses.Edit` methods
+* **email_routing:** add `AccountRules.List` method (`GET /accounts/{account_id}/email/routing/rules`) returning `AccountRule` with new `Zone` field; `Rules.List` gains optional `AccountID` param (mutually exclusive with `ZoneID`) so callers can list rules by account or zone
 * **email_security:** add bulk investigation APIs
   * `Investigate.Bulk.{New,List,Delete,Get}`
   * `Investigate.Bulk.Cancel.New`
