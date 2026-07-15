@@ -31,7 +31,7 @@ func TestTotalTLSUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.ACM.TotalTLS.Update(context.TODO(), acm.TotalTLSUpdateParams{
 		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Enabled:              cloudflare.F(true),
-		CertificateAuthority: cloudflare.F(acm.TotalTLSUpdateParamsCertificateAuthorityGoogle),
+		CertificateAuthority: cloudflare.F(acm.CertificateAuthorityGoogle),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -59,7 +59,7 @@ func TestTotalTLSEditWithOptionalParams(t *testing.T) {
 	_, err := client.ACM.TotalTLS.Edit(context.TODO(), acm.TotalTLSEditParams{
 		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Enabled:              cloudflare.F(true),
-		CertificateAuthority: cloudflare.F(acm.TotalTLSEditParamsCertificateAuthorityGoogle),
+		CertificateAuthority: cloudflare.F(acm.CertificateAuthorityGoogle),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

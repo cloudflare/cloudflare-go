@@ -325,9 +325,8 @@ type AccessibilityTreeNewParamsBodyUnion interface {
 }
 
 type AccessibilityTreeNewParamsBodyObject struct {
-	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
-	// `url` must be set.
-	HTML param.Field[string] `json:"html" api:"required"`
+	// URL to navigate to, eg. `https://example.com`.
+	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 	// The maximum duration allowed for the browser action to complete after the page
 	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
 	// If this time limit is exceeded, the action stops and returns a timeout error.
