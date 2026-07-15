@@ -53,6 +53,7 @@ TEST_PATHS=(
 	zones/plan_test.go
 	zones/rateplan_test.go
 	zones/ctalerting_test.go
+	load_balancers/loadbalancer_test.go
 	load_balancers/monitor_test.go
 	load_balancers/monitorpreview_test.go
 	load_balancers/monitorreference_test.go
