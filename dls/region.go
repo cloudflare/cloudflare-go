@@ -17,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // RegionService contains methods and other services that help with interacting
@@ -38,7 +39,7 @@ func NewRegionService(opts ...option.RequestOption) (r *RegionService) {
 	return
 }
 
-// List the DLS regions (managed and custom) available to an account.
+// List DLS regions for an account
 func (r *RegionService) List(ctx context.Context, params RegionListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[RegionListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -60,12 +61,12 @@ func (r *RegionService) List(ctx context.Context, params RegionListParams, opts 
 	return res, nil
 }
 
-// List the DLS regions (managed and custom) available to an account.
+// List DLS regions for an account
 func (r *RegionService) ListAutoPaging(ctx context.Context, params RegionListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[RegionListResponse] {
 	return pagination.NewCursorPaginationAutoPager(r.List(ctx, params, opts...))
 }
 
-// Retrieve a single DLS region (managed or custom) by ID or region key.
+// Get a DLS region
 func (r *RegionService) Get(ctx context.Context, regionID string, query RegionGetParams, opts ...option.RequestOption) (res *RegionGetResponse, err error) {
 	var env RegionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -193,11 +194,11 @@ type RegionGetParams struct {
 }
 
 type RegionGetResponseEnvelope struct {
-	Messages []RegionGetResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   RegionGetResponse                   `json:"result" api:"required"`
-	Success  bool                                `json:"success" api:"required"`
-	Errors   []RegionGetResponseEnvelopeErrors   `json:"errors"`
-	JSON     regionGetResponseEnvelopeJSON       `json:"-"`
+	Messages []shared.ResponseInfo         `json:"messages" api:"required"`
+	Result   RegionGetResponse             `json:"result" api:"required"`
+	Success  bool                          `json:"success" api:"required"`
+	Errors   []shared.ResponseInfo         `json:"errors"`
+	JSON     regionGetResponseEnvelopeJSON `json:"-"`
 }
 
 // regionGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -216,59 +217,5 @@ func (r *RegionGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r regionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionGetResponseEnvelopeMessages struct {
-	Code    int64  `json:"code" api:"required"`
-	Message string `json:"message" api:"required"`
-	// Optional upstream error context for APIv4 errors that wrap downstream service
-	// failures.
-	ErrorChain []interface{}                         `json:"error_chain"`
-	JSON       regionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// regionGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RegionGetResponseEnvelopeMessages]
-type regionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	ErrorChain  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionGetResponseEnvelopeErrors struct {
-	Code    int64  `json:"code" api:"required"`
-	Message string `json:"message" api:"required"`
-	// Optional upstream error context for APIv4 errors that wrap downstream service
-	// failures.
-	ErrorChain []interface{}                       `json:"error_chain"`
-	JSON       regionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// regionGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RegionGetResponseEnvelopeErrors]
-type regionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	ErrorChain  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }

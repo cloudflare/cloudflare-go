@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"slices"
 
+	"github.com/cloudflare/cloudflare-go/v7/custom_certificates"
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
@@ -183,7 +184,7 @@ type ClientCertificate struct {
 	State string `json:"state"`
 	// Client Certificates may be active or revoked, and the pending_reactivation or
 	// pending_revocation represent in-progress asynchronous transitions.
-	Status ClientCertificateStatus `json:"status"`
+	Status custom_certificates.Status `json:"status"`
 	// The number of days the Client Certificate will be valid after the issued_on
 	// date.
 	ValidityDays int64                 `json:"validity_days"`
@@ -245,25 +246,6 @@ func (r *ClientCertificateCertificateAuthority) UnmarshalJSON(data []byte) (err 
 
 func (r clientCertificateCertificateAuthorityJSON) RawJSON() string {
 	return r.raw
-}
-
-// Client Certificates may be active or revoked, and the pending_reactivation or
-// pending_revocation represent in-progress asynchronous transitions.
-type ClientCertificateStatus string
-
-const (
-	ClientCertificateStatusActive              ClientCertificateStatus = "active"
-	ClientCertificateStatusPendingReactivation ClientCertificateStatus = "pending_reactivation"
-	ClientCertificateStatusPendingRevocation   ClientCertificateStatus = "pending_revocation"
-	ClientCertificateStatusRevoked             ClientCertificateStatus = "revoked"
-)
-
-func (r ClientCertificateStatus) IsKnown() bool {
-	switch r {
-	case ClientCertificateStatusActive, ClientCertificateStatusPendingReactivation, ClientCertificateStatusPendingRevocation, ClientCertificateStatusRevoked:
-		return true
-	}
-	return false
 }
 
 type ClientCertificateNewParams struct {

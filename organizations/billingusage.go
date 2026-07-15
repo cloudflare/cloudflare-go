@@ -261,6 +261,8 @@ type BillingUsageGetParams struct {
 	// period (when consumption happened), not billing period. The maximum date range
 	// is 31 days.
 	From param.Field[time.Time] `query:"from" format:"date"`
+	// Filter results by billable metric id (e.g., workers_standard_requests).
+	Metric param.Field[string] `query:"metric"`
 	// End date for the usage query (ISO 8601). Required if `from` is set. When omitted
 	// along with `from`, defaults to today. Filters by charge period (when consumption
 	// happened), not billing period. The maximum date range is 31 days.

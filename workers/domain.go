@@ -124,6 +124,10 @@ type DomainUpdateResponse struct {
 	ID string `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the domain.
 	CERTID string `json:"cert_id" api:"required" format:"uuid"`
+	// Worker environment associated with the domain.
+	//
+	// Deprecated: deprecated
+	Environment string `json:"environment" api:"required"`
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
 	Hostname string `json:"hostname" api:"required"`
@@ -133,12 +137,8 @@ type DomainUpdateResponse struct {
 	// ID of the zone containing the domain hostname.
 	ZoneID string `json:"zone_id" api:"required"`
 	// Name of the zone containing the domain hostname.
-	ZoneName string `json:"zone_name" api:"required"`
-	// Worker environment associated with the domain.
-	//
-	// Deprecated: deprecated
-	Environment string                   `json:"environment"`
-	JSON        domainUpdateResponseJSON `json:"-"`
+	ZoneName string                   `json:"zone_name" api:"required"`
+	JSON     domainUpdateResponseJSON `json:"-"`
 }
 
 // domainUpdateResponseJSON contains the JSON metadata for the struct
@@ -146,11 +146,11 @@ type DomainUpdateResponse struct {
 type domainUpdateResponseJSON struct {
 	ID          apijson.Field
 	CERTID      apijson.Field
+	Environment apijson.Field
 	Hostname    apijson.Field
 	Service     apijson.Field
 	ZoneID      apijson.Field
 	ZoneName    apijson.Field
-	Environment apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -168,6 +168,10 @@ type DomainListResponse struct {
 	ID string `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the domain.
 	CERTID string `json:"cert_id" api:"required" format:"uuid"`
+	// Worker environment associated with the domain.
+	//
+	// Deprecated: deprecated
+	Environment string `json:"environment" api:"required"`
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
 	Hostname string `json:"hostname" api:"required"`
@@ -177,12 +181,8 @@ type DomainListResponse struct {
 	// ID of the zone containing the domain hostname.
 	ZoneID string `json:"zone_id" api:"required"`
 	// Name of the zone containing the domain hostname.
-	ZoneName string `json:"zone_name" api:"required"`
-	// Worker environment associated with the domain.
-	//
-	// Deprecated: deprecated
-	Environment string                 `json:"environment"`
-	JSON        domainListResponseJSON `json:"-"`
+	ZoneName string                 `json:"zone_name" api:"required"`
+	JSON     domainListResponseJSON `json:"-"`
 }
 
 // domainListResponseJSON contains the JSON metadata for the struct
@@ -190,11 +190,11 @@ type DomainListResponse struct {
 type domainListResponseJSON struct {
 	ID          apijson.Field
 	CERTID      apijson.Field
+	Environment apijson.Field
 	Hostname    apijson.Field
 	Service     apijson.Field
 	ZoneID      apijson.Field
 	ZoneName    apijson.Field
-	Environment apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -349,6 +349,10 @@ type DomainGetResponse struct {
 	ID string `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the domain.
 	CERTID string `json:"cert_id" api:"required" format:"uuid"`
+	// Worker environment associated with the domain.
+	//
+	// Deprecated: deprecated
+	Environment string `json:"environment" api:"required"`
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
 	Hostname string `json:"hostname" api:"required"`
@@ -358,12 +362,8 @@ type DomainGetResponse struct {
 	// ID of the zone containing the domain hostname.
 	ZoneID string `json:"zone_id" api:"required"`
 	// Name of the zone containing the domain hostname.
-	ZoneName string `json:"zone_name" api:"required"`
-	// Worker environment associated with the domain.
-	//
-	// Deprecated: deprecated
-	Environment string                `json:"environment"`
-	JSON        domainGetResponseJSON `json:"-"`
+	ZoneName string                `json:"zone_name" api:"required"`
+	JSON     domainGetResponseJSON `json:"-"`
 }
 
 // domainGetResponseJSON contains the JSON metadata for the struct
@@ -371,11 +371,11 @@ type DomainGetResponse struct {
 type domainGetResponseJSON struct {
 	ID          apijson.Field
 	CERTID      apijson.Field
+	Environment apijson.Field
 	Hostname    apijson.Field
 	Service     apijson.Field
 	ZoneID      apijson.Field
 	ZoneName    apijson.Field
-	Environment apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -397,6 +397,8 @@ type DomainUpdateParams struct {
 	// Name of the Worker associated with the domain. Requests to the configured
 	// hostname will be routed to this Worker.
 	Service param.Field[string] `json:"service" api:"required"`
+	// Worker environment associated with the domain.
+	Environment param.Field[string] `json:"environment"`
 	// ID of the zone containing the domain hostname.
 	ZoneID param.Field[string] `json:"zone_id"`
 	// Name of the zone containing the domain hostname.
