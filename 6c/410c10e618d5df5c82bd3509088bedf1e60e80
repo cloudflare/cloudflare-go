@@ -1,0 +1,55 @@
+acm/totaltls.go
+  s_2b2484d7f0649b::t_d8d97ee61614df 88-104,107,151,195,244,397
+client_certificates/clientcertificate.go
+  s_2b2484d7f0649b::t_5065ac4770afa7 13,187
+custom_certificates/customcertificate.go
+  s_2b2484d7f0649b::t_0586b2e8fa856e 317-335
+dls/region.go
+  s_2b2484d7f0649b::t_dcb764986279f7 20,42,64,69,197-201
+dls/regionalserviceprefixbinding.go
+  s_2b2484d7f0649b::t_ab135a52f4470a 19,41,58,80,85,101,122,206-209,308-312,369-373,401-405
+load_balancers/loadbalancer.go
+  s_2b2484d7f0649b::t_a814927d32f457 6-10,15,17-18,52-231,264-267,349-505,600-706,945-2234
+load_balancers/loadbalancer_test.go
+  s_2b2484d7f0649b::t_8415c353c49f54 1-491
+magic_transit/connectorevent.go
+  s_2b2484d7f0649b::t_b5767981db6904 11,19,43,64,173-180,187-188,193-196,198-383,387-740,744-1209,1238
+magic_transit/connectoreventlatest.go
+  s_2b2484d7f0649b::t_775caea9e169cb 10,17,39,115-122,129-130,135-138,140-328,332-617,621-1182,1211
+moq/relay.go
+  s_2b2484d7f0649b::t_7440a4ade5e3d4 45-46,64-65,168,170-178,187-195,206,208,218-221,232-255,309,341,343,353-356,367-390,489,521,523,533-536,547-570,652,724-727,734,736,746-755
+mtls_certificates/mtlscertificate.go
+  s_2b2484d7f0649b::t_a75b130c95578a 67,92,98,121,141,159,161-162,165-166,181,185,190,193-195,198,200,206,224-226,229,232-234,244,250,254,259,262-264,267,269,474,618
+organizations/billingusage.go
+  s_2b2484d7f0649b::t_ba5f0a36b33a82 264-265
+registrar/registration.go
+  s_2b2484d7f0649b::t_6f1303c49566da 58-74
+ssl/certificatepack.go
+  s_2b2484d7f0649b::t_efe7453611b11f 152-155,177-228,237,239,589,591,963,965,1315,1317,1668
+workers/domain.go
+  s_2b2484d7f0649b::t_9621509bc7d446 127-130,140-141,149,171-174,184-185,193,352-355,365-366,374,400-401
+zero_trust/casbapplication.go
+  s_2b2484d7f0649b::t_365662057ec136 53-65,82-89,107,125-128,135,205-229,233-236,243,256-546,561-582
+zero_trust/casbapplication_test.go
+  s_2b2484d7f0649b::t_1b0bf30b7cf77d 43-72
+zero_trust/casbapplicationsetupflow.go
+  s_2b2484d7f0649b::t_c902c3ffecbfff 6-16,38-355
+zero_trust/casbapplicationsetupflow_test.go
+  s_2b2484d7f0649b::t_202191bcbeed5f 1-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6c410c10e618d5df5c82bd3509088bedf1e60e80",
+  "prompts": {},
+  "sessions": {
+    "s_2b2484d7f0649b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_098f55189ffeA9XYaFfBNc1j26",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
