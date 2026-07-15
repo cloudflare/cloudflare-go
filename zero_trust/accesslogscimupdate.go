@@ -175,7 +175,7 @@ func (r AccessLogSCIMUpdateListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// AccessLogSCIMUpdateListParamsDirection is the chronological order used to sort the logs.
+// The chronological order used to sort the logs.
 type AccessLogSCIMUpdateListParamsDirection string
 
 const (

@@ -38,7 +38,7 @@ func NewThreatEventDatasetService(opts ...option.RequestOption) (r *ThreatEventD
 	return
 }
 
-// Creates a dataset
+// Create a new dataset in the account.
 func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventDatasetNewParams, opts ...option.RequestOption) (res *ThreatEventDatasetNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -50,7 +50,7 @@ func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventD
 	return res, err
 }
 
-// Lists all datasets in an account
+// List all datasets accessible to the account.
 func (r *ThreatEventDatasetService) List(ctx context.Context, params ThreatEventDatasetListParams, opts ...option.RequestOption) (res *[]ThreatEventDatasetListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -62,7 +62,7 @@ func (r *ThreatEventDatasetService) List(ctx context.Context, params ThreatEvent
 	return res, err
 }
 
-// Updates an existing dataset
+// Update an existing dataset by its identifier.
 func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, params ThreatEventDatasetEditParams, opts ...option.RequestOption) (res *ThreatEventDatasetEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -78,7 +78,7 @@ func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, 
 	return res, err
 }
 
-// Reads a dataset
+// Retrieve metadata for a specific dataset.
 func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, query ThreatEventDatasetGetParams, opts ...option.RequestOption) (res *ThreatEventDatasetGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

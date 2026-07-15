@@ -285,7 +285,7 @@ func (r deviceDeploymentGroupNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeploymentGroupNewResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeploymentGroupNewResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code" api:"required"`
@@ -310,7 +310,7 @@ func (r deviceDeploymentGroupNewResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeploymentGroupNewResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeploymentGroupNewResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code" api:"required"`
@@ -384,7 +384,7 @@ func (r deviceDeploymentGroupDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeploymentGroupDeleteResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeploymentGroupDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code" api:"required"`
@@ -409,7 +409,7 @@ func (r deviceDeploymentGroupDeleteResponseEnvelopeErrorsJSON) RawJSON() string 
 	return r.raw
 }
 
-// DeviceDeploymentGroupDeleteResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeploymentGroupDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code" api:"required"`
@@ -487,7 +487,7 @@ func (r deviceDeploymentGroupEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeploymentGroupEditResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeploymentGroupEditResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code" api:"required"`
@@ -512,7 +512,7 @@ func (r deviceDeploymentGroupEditResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeploymentGroupEditResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeploymentGroupEditResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code" api:"required"`
@@ -569,7 +569,7 @@ func (r deviceDeploymentGroupGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeploymentGroupGetResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeploymentGroupGetResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code" api:"required"`
@@ -594,7 +594,7 @@ func (r deviceDeploymentGroupGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeploymentGroupGetResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeploymentGroupGetResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code" api:"required"`

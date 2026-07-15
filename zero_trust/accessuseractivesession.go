@@ -518,7 +518,7 @@ func (r accessUserActiveSessionGetResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// AccessUserActiveSessionGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessUserActiveSessionGetResponseEnvelopeSuccess bool
 
 const (

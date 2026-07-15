@@ -77,7 +77,7 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 }
 
 // Use `datasetId=all` or `datasetId=*` to query all event datasets for the account
-// (limited to 10). When `datasetId` is unspecified, events are listed from the
+// (limited to 50). When `datasetId` is unspecified, events are listed from the
 // default Cloudforce One Threat Events dataset. To list existing datasets, use the
 // [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
 // endpoint.
@@ -107,7 +107,7 @@ func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulk
 	return res, err
 }
 
-// Updates an event
+// Update an existing event by its identifier.
 func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params ThreatEventEditParams, opts ...option.RequestOption) (res *ThreatEventEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

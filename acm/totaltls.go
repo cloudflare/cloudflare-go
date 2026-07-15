@@ -85,26 +85,9 @@ func (r *TotalTLSService) Get(ctx context.Context, query TotalTLSGetParams, opts
 	return res, nil
 }
 
-// The Certificate Authority that Total TLS certificates will be issued through.
-type CertificateAuthority string
-
-const (
-	CertificateAuthorityGoogle      CertificateAuthority = "google"
-	CertificateAuthorityLetsEncrypt CertificateAuthority = "lets_encrypt"
-	CertificateAuthoritySSLCom      CertificateAuthority = "ssl_com"
-)
-
-func (r CertificateAuthority) IsKnown() bool {
-	switch r {
-	case CertificateAuthorityGoogle, CertificateAuthorityLetsEncrypt, CertificateAuthoritySSLCom:
-		return true
-	}
-	return false
-}
-
 type TotalTLSUpdateResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority TotalTLSUpdateResponseCertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
@@ -131,6 +114,23 @@ func (r totalTLSUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// The Certificate Authority that Total TLS certificates will be issued through.
+type TotalTLSUpdateResponseCertificateAuthority string
+
+const (
+	TotalTLSUpdateResponseCertificateAuthorityGoogle      TotalTLSUpdateResponseCertificateAuthority = "google"
+	TotalTLSUpdateResponseCertificateAuthorityLetsEncrypt TotalTLSUpdateResponseCertificateAuthority = "lets_encrypt"
+	TotalTLSUpdateResponseCertificateAuthoritySSLCom      TotalTLSUpdateResponseCertificateAuthority = "ssl_com"
+)
+
+func (r TotalTLSUpdateResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case TotalTLSUpdateResponseCertificateAuthorityGoogle, TotalTLSUpdateResponseCertificateAuthorityLetsEncrypt, TotalTLSUpdateResponseCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
+}
+
 // The validity period in days for the certificates ordered via Total TLS.
 type TotalTLSUpdateResponseValidityPeriod int64
 
@@ -148,7 +148,7 @@ func (r TotalTLSUpdateResponseValidityPeriod) IsKnown() bool {
 
 type TotalTLSEditResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority TotalTLSEditResponseCertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
@@ -175,6 +175,23 @@ func (r totalTLSEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// The Certificate Authority that Total TLS certificates will be issued through.
+type TotalTLSEditResponseCertificateAuthority string
+
+const (
+	TotalTLSEditResponseCertificateAuthorityGoogle      TotalTLSEditResponseCertificateAuthority = "google"
+	TotalTLSEditResponseCertificateAuthorityLetsEncrypt TotalTLSEditResponseCertificateAuthority = "lets_encrypt"
+	TotalTLSEditResponseCertificateAuthoritySSLCom      TotalTLSEditResponseCertificateAuthority = "ssl_com"
+)
+
+func (r TotalTLSEditResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case TotalTLSEditResponseCertificateAuthorityGoogle, TotalTLSEditResponseCertificateAuthorityLetsEncrypt, TotalTLSEditResponseCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
+}
+
 // The validity period in days for the certificates ordered via Total TLS.
 type TotalTLSEditResponseValidityPeriod int64
 
@@ -192,7 +209,7 @@ func (r TotalTLSEditResponseValidityPeriod) IsKnown() bool {
 
 type TotalTLSGetResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority TotalTLSGetResponseCertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
@@ -219,6 +236,23 @@ func (r totalTLSGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// The Certificate Authority that Total TLS certificates will be issued through.
+type TotalTLSGetResponseCertificateAuthority string
+
+const (
+	TotalTLSGetResponseCertificateAuthorityGoogle      TotalTLSGetResponseCertificateAuthority = "google"
+	TotalTLSGetResponseCertificateAuthorityLetsEncrypt TotalTLSGetResponseCertificateAuthority = "lets_encrypt"
+	TotalTLSGetResponseCertificateAuthoritySSLCom      TotalTLSGetResponseCertificateAuthority = "ssl_com"
+)
+
+func (r TotalTLSGetResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case TotalTLSGetResponseCertificateAuthorityGoogle, TotalTLSGetResponseCertificateAuthorityLetsEncrypt, TotalTLSGetResponseCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
+}
+
 // The validity period in days for the certificates ordered via Total TLS.
 type TotalTLSGetResponseValidityPeriod int64
 
@@ -241,11 +275,28 @@ type TotalTLSUpdateParams struct {
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority param.Field[CertificateAuthority] `json:"certificate_authority"`
+	CertificateAuthority param.Field[TotalTLSUpdateParamsCertificateAuthority] `json:"certificate_authority"`
 }
 
 func (r TotalTLSUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The Certificate Authority that Total TLS certificates will be issued through.
+type TotalTLSUpdateParamsCertificateAuthority string
+
+const (
+	TotalTLSUpdateParamsCertificateAuthorityGoogle      TotalTLSUpdateParamsCertificateAuthority = "google"
+	TotalTLSUpdateParamsCertificateAuthorityLetsEncrypt TotalTLSUpdateParamsCertificateAuthority = "lets_encrypt"
+	TotalTLSUpdateParamsCertificateAuthoritySSLCom      TotalTLSUpdateParamsCertificateAuthority = "ssl_com"
+)
+
+func (r TotalTLSUpdateParamsCertificateAuthority) IsKnown() bool {
+	switch r {
+	case TotalTLSUpdateParamsCertificateAuthorityGoogle, TotalTLSUpdateParamsCertificateAuthorityLetsEncrypt, TotalTLSUpdateParamsCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
 }
 
 type TotalTLSUpdateResponseEnvelope struct {
@@ -394,11 +445,28 @@ type TotalTLSEditParams struct {
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority param.Field[CertificateAuthority] `json:"certificate_authority"`
+	CertificateAuthority param.Field[TotalTLSEditParamsCertificateAuthority] `json:"certificate_authority"`
 }
 
 func (r TotalTLSEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The Certificate Authority that Total TLS certificates will be issued through.
+type TotalTLSEditParamsCertificateAuthority string
+
+const (
+	TotalTLSEditParamsCertificateAuthorityGoogle      TotalTLSEditParamsCertificateAuthority = "google"
+	TotalTLSEditParamsCertificateAuthorityLetsEncrypt TotalTLSEditParamsCertificateAuthority = "lets_encrypt"
+	TotalTLSEditParamsCertificateAuthoritySSLCom      TotalTLSEditParamsCertificateAuthority = "ssl_com"
+)
+
+func (r TotalTLSEditParamsCertificateAuthority) IsKnown() bool {
+	switch r {
+	case TotalTLSEditParamsCertificateAuthorityGoogle, TotalTLSEditParamsCertificateAuthorityLetsEncrypt, TotalTLSEditParamsCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
 }
 
 type TotalTLSEditResponseEnvelope struct {

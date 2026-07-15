@@ -314,25 +314,6 @@ func (r GeoRestrictionsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Client Certificates may be active or revoked, and the pending_reactivation or
-// pending_revocation represent in-progress asynchronous transitions.
-type Status string
-
-const (
-	StatusActive              Status = "active"
-	StatusPendingReactivation Status = "pending_reactivation"
-	StatusPendingRevocation   Status = "pending_revocation"
-	StatusRevoked             Status = "revoked"
-)
-
-func (r Status) IsKnown() bool {
-	switch r {
-	case StatusActive, StatusPendingReactivation, StatusPendingRevocation, StatusRevoked:
-		return true
-	}
-	return false
-}
-
 type CustomCertificateDeleteResponse struct {
 	// Identifier.
 	ID   string                              `json:"id"`

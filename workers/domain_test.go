@@ -30,12 +30,11 @@ func TestDomainUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Domains.Update(context.TODO(), workers.DomainUpdateParams{
-		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Hostname:    cloudflare.F("app.example.com"),
-		Service:     cloudflare.F("my-worker"),
-		Environment: cloudflare.F("production"),
-		ZoneID:      cloudflare.F("593c9c94de529bbbfaac7c53ced0447d"),
-		ZoneName:    cloudflare.F("example.com"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Hostname:  cloudflare.F("app.example.com"),
+		Service:   cloudflare.F("my-worker"),
+		ZoneID:    cloudflare.F("593c9c94de529bbbfaac7c53ced0447d"),
+		ZoneName:  cloudflare.F("example.com"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

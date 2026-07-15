@@ -251,7 +251,7 @@ func (r riskScoringSummaryGetResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// RiskScoringSummaryGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type RiskScoringSummaryGetResponseEnvelopeSuccess bool
 
 const (

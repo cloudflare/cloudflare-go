@@ -127,7 +127,7 @@ func (r *DLPDatasetService) Delete(ctx context.Context, datasetID string, body D
 	return err
 }
 
-// Fetch a specific dataset
+// Gets a dataset and its latest upload status.
 func (r *DLPDatasetService) Get(ctx context.Context, datasetID string, query DLPDatasetGetParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	var env DLPDatasetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -486,7 +486,7 @@ func (r dlpDatasetNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDatasetNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDatasetNewResponseEnvelopeSuccess bool
 
 const (
@@ -641,7 +641,7 @@ func (r dlpDatasetUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDatasetUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDatasetUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -792,7 +792,7 @@ func (r dlpDatasetGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDatasetGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDatasetGetResponseEnvelopeSuccess bool
 
 const (

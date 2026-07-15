@@ -67,9 +67,7 @@ func (r *UsageService) Get(ctx context.Context, params UsageGetParams, opts ...o
 }
 
 // Returns billable usage data for PayGo (self-serve) accounts. When no query
-// parameters are provided, returns usage for the current billing period. This
-// endpoint is currently in alpha and access is restricted to select accounts.
-// While in alpha, the endpoint may get breaking changes.
+// parameters are provided, returns usage for the current billing period.
 func (r *UsageService) Paygo(ctx context.Context, params UsagePaygoParams, opts ...option.RequestOption) (res *[]UsagePaygoResponse, err error) {
 	var env UsagePaygoResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -349,8 +347,9 @@ type UsageGetParams struct {
 	// period (when consumption happened), not billing period. The maximum date range
 	// is 31 days.
 	From param.Field[time.Time] `query:"from" format:"date"`
-	// Filter results by billable metric id (e.g., workers_standard_requests).
-	Metric param.Field[string] `query:"metric"`
+	// Filter results by one or more billable metric ids. Repeat the parameter to
+	// filter by multiple metrics. Maximum 10 values.
+	MetricID param.Field[[]string] `query:"metric_id"`
 	// End date for the usage query (ISO 8601). Required if `from` is set. When omitted
 	// along with `from`, defaults to today. Filters by charge period (when consumption
 	// happened), not billing period. The maximum date range is 31 days.

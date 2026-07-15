@@ -229,10 +229,10 @@ func (r *RecordService) Export(ctx context.Context, query RecordExportParams, op
 }
 
 // Retrieves details for a specific DNS record in the zone.
-func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query RecordGetParams, opts ...option.RequestOption) (res *RecordResponse, err error) {
+func (r *RecordService) Get(ctx context.Context, dnsRecordID string, params RecordGetParams, opts ...option.RequestOption) (res *RecordResponse, err error) {
 	var env RecordGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if query.ZoneID.Value == "" {
+	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
@@ -240,8 +240,8 @@ func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query Recor
 		err = errors.New("missing required dns_record_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/dns_records/%s", query.ZoneID, dnsRecordID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -3396,7 +3396,17 @@ type RecordResponse struct {
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of [RecordResponseARecordMeta],
+	// [RecordResponseAAAARecordMeta], [RecordResponseCNAMERecordMeta],
+	// [RecordResponseMXRecordMeta], [RecordResponseNSRecordMeta],
+	// [RecordResponseOpenpgpkeyRecordMeta], [RecordResponsePTRRecordMeta],
+	// [RecordResponseTXTRecordMeta], [RecordResponseCAARecordMeta],
+	// [RecordResponseCERTRecordMeta], [RecordResponseDNSKEYRecordMeta],
+	// [RecordResponseDSRecordMeta], [RecordResponseHTTPSRecordMeta],
+	// [RecordResponseLOCRecordMeta], [RecordResponseNAPTRRecordMeta],
+	// [RecordResponseSMIMEARecordMeta], [RecordResponseSRVRecordMeta],
+	// [RecordResponseSSHFPRecordMeta], [RecordResponseSVCBRecordMeta],
+	// [RecordResponseTLSARecordMeta], [RecordResponseURIRecordMeta].
 	Meta interface{} `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
@@ -3415,12 +3425,12 @@ type RecordResponse struct {
 	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
 	// [CNAMERecordSettings], [MXRecordSettings], [NSRecordSettings],
-	// [RecordResponseOpenpgpkeySettings], [PTRRecordSettings], [TXTRecordSettings],
-	// [CAARecordSettings], [CERTRecordSettings], [DNSKEYRecordSettings],
-	// [DSRecordSettings], [HTTPSRecordSettings], [LOCRecordSettings],
-	// [NAPTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
-	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
-	// [URIRecordSettings].
+	// [RecordResponseOpenpgpkeyRecordSettings], [PTRRecordSettings],
+	// [TXTRecordSettings], [CAARecordSettings], [CERTRecordSettings],
+	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
+	// [LOCRecordSettings], [NAPTRRecordSettings], [SMIMEARecordSettings],
+	// [SRVRecordSettings], [SSHFPRecordSettings], [SVCBRecordSettings],
+	// [TLSARecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -3476,26 +3486,31 @@ func (r *RecordResponse) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [RecordResponseUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [RecordResponseA], [RecordResponseAAAA],
-// [RecordResponseCNAME], [RecordResponseMX], [RecordResponseNS],
-// [RecordResponseOpenpgpkey], [RecordResponsePTR], [RecordResponseTXT],
-// [RecordResponseCAA], [RecordResponseCERT], [RecordResponseDNSKEY],
-// [RecordResponseDS], [RecordResponseHTTPS], [RecordResponseLOC],
-// [RecordResponseNAPTR], [RecordResponseSMIMEA], [RecordResponseSRV],
-// [RecordResponseSSHFP], [RecordResponseSVCB], [RecordResponseTLSA],
-// [RecordResponseURI].
+// Possible runtime types of the union are [RecordResponseARecord],
+// [RecordResponseAAAARecord], [RecordResponseCNAMERecord],
+// [RecordResponseMXRecord], [RecordResponseNSRecord],
+// [RecordResponseOpenpgpkeyRecord], [RecordResponsePTRRecord],
+// [RecordResponseTXTRecord], [RecordResponseCAARecord],
+// [RecordResponseCERTRecord], [RecordResponseDNSKEYRecord],
+// [RecordResponseDSRecord], [RecordResponseHTTPSRecord],
+// [RecordResponseLOCRecord], [RecordResponseNAPTRRecord],
+// [RecordResponseSMIMEARecord], [RecordResponseSRVRecord],
+// [RecordResponseSSHFPRecord], [RecordResponseSVCBRecord],
+// [RecordResponseTLSARecord], [RecordResponseURIRecord].
 func (r RecordResponse) AsUnion() RecordResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [RecordResponseA], [RecordResponseAAAA],
-// [RecordResponseCNAME], [RecordResponseMX], [RecordResponseNS],
-// [RecordResponseOpenpgpkey], [RecordResponsePTR], [RecordResponseTXT],
-// [RecordResponseCAA], [RecordResponseCERT], [RecordResponseDNSKEY],
-// [RecordResponseDS], [RecordResponseHTTPS], [RecordResponseLOC],
-// [RecordResponseNAPTR], [RecordResponseSMIMEA], [RecordResponseSRV],
-// [RecordResponseSSHFP], [RecordResponseSVCB], [RecordResponseTLSA] or
-// [RecordResponseURI].
+// Union satisfied by [RecordResponseARecord], [RecordResponseAAAARecord],
+// [RecordResponseCNAMERecord], [RecordResponseMXRecord], [RecordResponseNSRecord],
+// [RecordResponseOpenpgpkeyRecord], [RecordResponsePTRRecord],
+// [RecordResponseTXTRecord], [RecordResponseCAARecord],
+// [RecordResponseCERTRecord], [RecordResponseDNSKEYRecord],
+// [RecordResponseDSRecord], [RecordResponseHTTPSRecord],
+// [RecordResponseLOCRecord], [RecordResponseNAPTRRecord],
+// [RecordResponseSMIMEARecord], [RecordResponseSRVRecord],
+// [RecordResponseSSHFPRecord], [RecordResponseSVCBRecord],
+// [RecordResponseTLSARecord] or [RecordResponseURIRecord].
 type RecordResponseUnion interface {
 	implementsRecordResponse()
 }
@@ -3503,122 +3518,101 @@ type RecordResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordResponseUnion)(nil)).Elem(),
-		"type",
+		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseA{}),
-			DiscriminatorValue: "A",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseARecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseAAAA{}),
-			DiscriminatorValue: "AAAA",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseAAAARecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseCNAME{}),
-			DiscriminatorValue: "CNAME",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseCNAMERecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseMX{}),
-			DiscriminatorValue: "MX",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseMXRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseNS{}),
-			DiscriminatorValue: "NS",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseNSRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseOpenpgpkey{}),
-			DiscriminatorValue: "OPENPGPKEY",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseOpenpgpkeyRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponsePTR{}),
-			DiscriminatorValue: "PTR",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponsePTRRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseTXT{}),
-			DiscriminatorValue: "TXT",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseTXTRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseCAA{}),
-			DiscriminatorValue: "CAA",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseCAARecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseCERT{}),
-			DiscriminatorValue: "CERT",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseCERTRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseDNSKEY{}),
-			DiscriminatorValue: "DNSKEY",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseDNSKEYRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseDS{}),
-			DiscriminatorValue: "DS",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseDSRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseHTTPS{}),
-			DiscriminatorValue: "HTTPS",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseHTTPSRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseLOC{}),
-			DiscriminatorValue: "LOC",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseLOCRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseNAPTR{}),
-			DiscriminatorValue: "NAPTR",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseNAPTRRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSMIMEA{}),
-			DiscriminatorValue: "SMIMEA",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseSMIMEARecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSRV{}),
-			DiscriminatorValue: "SRV",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseSRVRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSSHFP{}),
-			DiscriminatorValue: "SSHFP",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseSSHFPRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseSVCB{}),
-			DiscriminatorValue: "SVCB",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseSVCBRecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseTLSA{}),
-			DiscriminatorValue: "TLSA",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseTLSARecord{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordResponseURI{}),
-			DiscriminatorValue: "URI",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordResponseURIRecord{}),
 		},
 	)
 }
 
-type RecordResponseA struct {
+type RecordResponseARecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseARecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3626,13 +3620,14 @@ type RecordResponseA struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time           `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseAJSON `json:"-"`
+	TagsModifiedOn time.Time                 `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseARecordJSON `json:"-"`
 	ARecord
 }
 
-// recordResponseAJSON contains the JSON metadata for the struct [RecordResponseA]
-type recordResponseAJSON struct {
+// recordResponseARecordJSON contains the JSON metadata for the struct
+// [RecordResponseARecord]
+type recordResponseARecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3644,23 +3639,61 @@ type recordResponseAJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseA) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseARecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseAJSON) RawJSON() string {
+func (r recordResponseARecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseA) implementsRecordResponse() {}
+func (r RecordResponseARecord) implementsRecordResponse() {}
 
-type RecordResponseAAAA struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseARecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                         `json:"shadowed_records_count"`
+	JSON                 recordResponseARecordMetaJSON `json:"-"`
+}
+
+// recordResponseARecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseARecordMeta]
+type recordResponseARecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseARecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseARecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseAAAARecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseAAAARecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3668,14 +3701,14 @@ type RecordResponseAAAA struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseAAAAJSON `json:"-"`
+	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseAAAARecordJSON `json:"-"`
 	AAAARecord
 }
 
-// recordResponseAAAAJSON contains the JSON metadata for the struct
-// [RecordResponseAAAA]
-type recordResponseAAAAJSON struct {
+// recordResponseAAAARecordJSON contains the JSON metadata for the struct
+// [RecordResponseAAAARecord]
+type recordResponseAAAARecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3687,23 +3720,61 @@ type recordResponseAAAAJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseAAAA) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseAAAARecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseAAAAJSON) RawJSON() string {
+func (r recordResponseAAAARecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseAAAA) implementsRecordResponse() {}
+func (r RecordResponseAAAARecord) implementsRecordResponse() {}
 
-type RecordResponseCNAME struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseAAAARecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                            `json:"shadowed_records_count"`
+	JSON                 recordResponseAAAARecordMetaJSON `json:"-"`
+}
+
+// recordResponseAAAARecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseAAAARecordMeta]
+type recordResponseAAAARecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseAAAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseAAAARecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseCNAMERecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseCNAMERecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3711,14 +3782,14 @@ type RecordResponseCNAME struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCNAMEJSON `json:"-"`
+	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseCNAMERecordJSON `json:"-"`
 	CNAMERecord
 }
 
-// recordResponseCNAMEJSON contains the JSON metadata for the struct
-// [RecordResponseCNAME]
-type recordResponseCNAMEJSON struct {
+// recordResponseCNAMERecordJSON contains the JSON metadata for the struct
+// [RecordResponseCNAMERecord]
+type recordResponseCNAMERecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3730,23 +3801,61 @@ type recordResponseCNAMEJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseCNAME) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseCNAMERecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseCNAMEJSON) RawJSON() string {
+func (r recordResponseCNAMERecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCNAME) implementsRecordResponse() {}
+func (r RecordResponseCNAMERecord) implementsRecordResponse() {}
 
-type RecordResponseMX struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseCNAMERecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                             `json:"shadowed_records_count"`
+	JSON                 recordResponseCNAMERecordMetaJSON `json:"-"`
+}
+
+// recordResponseCNAMERecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseCNAMERecordMeta]
+type recordResponseCNAMERecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseCNAMERecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseCNAMERecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseMXRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseMXRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3754,14 +3863,14 @@ type RecordResponseMX struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseMXJSON `json:"-"`
+	TagsModifiedOn time.Time                  `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseMXRecordJSON `json:"-"`
 	MXRecord
 }
 
-// recordResponseMXJSON contains the JSON metadata for the struct
-// [RecordResponseMX]
-type recordResponseMXJSON struct {
+// recordResponseMXRecordJSON contains the JSON metadata for the struct
+// [RecordResponseMXRecord]
+type recordResponseMXRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3773,23 +3882,61 @@ type recordResponseMXJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseMX) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseMXRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseMXJSON) RawJSON() string {
+func (r recordResponseMXRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseMX) implementsRecordResponse() {}
+func (r RecordResponseMXRecord) implementsRecordResponse() {}
 
-type RecordResponseNS struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseMXRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                          `json:"shadowed_records_count"`
+	JSON                 recordResponseMXRecordMetaJSON `json:"-"`
+}
+
+// recordResponseMXRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseMXRecordMeta]
+type recordResponseMXRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseMXRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseMXRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseNSRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseNSRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3797,14 +3944,14 @@ type RecordResponseNS struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseNSJSON `json:"-"`
+	TagsModifiedOn time.Time                  `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseNSRecordJSON `json:"-"`
 	NSRecord
 }
 
-// recordResponseNSJSON contains the JSON metadata for the struct
-// [RecordResponseNS]
-type recordResponseNSJSON struct {
+// recordResponseNSRecordJSON contains the JSON metadata for the struct
+// [RecordResponseNSRecord]
+type recordResponseNSRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3816,17 +3963,55 @@ type recordResponseNSJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseNS) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseNSRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseNSJSON) RawJSON() string {
+func (r recordResponseNSRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseNS) implementsRecordResponse() {}
+func (r RecordResponseNSRecord) implementsRecordResponse() {}
 
-type RecordResponseOpenpgpkey struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseNSRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                          `json:"shadowed_records_count"`
+	JSON                 recordResponseNSRecordMetaJSON `json:"-"`
+}
+
+// recordResponseNSRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseNSRecordMeta]
+type recordResponseNSRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseNSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseNSRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseOpenpgpkeyRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3836,8 +4021,8 @@ type RecordResponseOpenpgpkey struct {
 	Content string `json:"content" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseOpenpgpkeyRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Complete DNS record name, including the zone name, in Punycode.
@@ -3848,7 +4033,7 @@ type RecordResponseOpenpgpkey struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied" api:"required"`
 	// Settings for the DNS record.
-	Settings RecordResponseOpenpgpkeySettings `json:"settings" api:"required"`
+	Settings RecordResponseOpenpgpkeyRecordSettings `json:"settings" api:"required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags" api:"required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3856,17 +4041,17 @@ type RecordResponseOpenpgpkey struct {
 	// Enterprise zones.
 	TTL TTL `json:"ttl" api:"required"`
 	// Record type.
-	Type RecordResponseOpenpgpkeyType `json:"type" api:"required"`
+	Type RecordResponseOpenpgpkeyRecordType `json:"type" api:"required"`
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseOpenpgpkeyJSON `json:"-"`
+	TagsModifiedOn time.Time                          `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseOpenpgpkeyRecordJSON `json:"-"`
 }
 
-// recordResponseOpenpgpkeyJSON contains the JSON metadata for the struct
-// [RecordResponseOpenpgpkey]
-type recordResponseOpenpgpkeyJSON struct {
+// recordResponseOpenpgpkeyRecordJSON contains the JSON metadata for the struct
+// [RecordResponseOpenpgpkeyRecord]
+type recordResponseOpenpgpkeyRecordJSON struct {
 	ID                apijson.Field
 	Comment           apijson.Field
 	Content           apijson.Field
@@ -3886,18 +4071,56 @@ type recordResponseOpenpgpkeyJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseOpenpgpkeyJSON) RawJSON() string {
+func (r recordResponseOpenpgpkeyRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseOpenpgpkey) implementsRecordResponse() {}
+func (r RecordResponseOpenpgpkeyRecord) implementsRecordResponse() {}
+
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseOpenpgpkeyRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                                  `json:"shadowed_records_count"`
+	JSON                 recordResponseOpenpgpkeyRecordMetaJSON `json:"-"`
+}
+
+// recordResponseOpenpgpkeyRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseOpenpgpkeyRecordMeta]
+type recordResponseOpenpgpkeyRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseOpenpgpkeyRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseOpenpgpkeyRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
 
 // Settings for the DNS record.
-type RecordResponseOpenpgpkeySettings struct {
+type RecordResponseOpenpgpkeyRecordSettings struct {
 	// When enabled, only A records will be generated, and AAAA records will not be
 	// created. This setting is intended for exceptional cases. Note that this option
 	// only applies to proxied records and it has no effect on whether Cloudflare
@@ -3907,49 +4130,49 @@ type RecordResponseOpenpgpkeySettings struct {
 	// created. This setting is intended for exceptional cases. Note that this option
 	// only applies to proxied records and it has no effect on whether Cloudflare
 	// communicates with the origin using IPv4 or IPv6.
-	IPV6Only bool                                 `json:"ipv6_only"`
-	JSON     recordResponseOpenpgpkeySettingsJSON `json:"-"`
+	IPV6Only bool                                       `json:"ipv6_only"`
+	JSON     recordResponseOpenpgpkeyRecordSettingsJSON `json:"-"`
 }
 
-// recordResponseOpenpgpkeySettingsJSON contains the JSON metadata for the struct
-// [RecordResponseOpenpgpkeySettings]
-type recordResponseOpenpgpkeySettingsJSON struct {
+// recordResponseOpenpgpkeyRecordSettingsJSON contains the JSON metadata for the
+// struct [RecordResponseOpenpgpkeyRecordSettings]
+type recordResponseOpenpgpkeyRecordSettingsJSON struct {
 	IPV4Only    apijson.Field
 	IPV6Only    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordResponseOpenpgpkeySettings) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseOpenpgpkeySettingsJSON) RawJSON() string {
+func (r recordResponseOpenpgpkeyRecordSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
 // Record type.
-type RecordResponseOpenpgpkeyType string
+type RecordResponseOpenpgpkeyRecordType string
 
 const (
-	RecordResponseOpenpgpkeyTypeOpenpgpkey RecordResponseOpenpgpkeyType = "OPENPGPKEY"
+	RecordResponseOpenpgpkeyRecordTypeOpenpgpkey RecordResponseOpenpgpkeyRecordType = "OPENPGPKEY"
 )
 
-func (r RecordResponseOpenpgpkeyType) IsKnown() bool {
+func (r RecordResponseOpenpgpkeyRecordType) IsKnown() bool {
 	switch r {
-	case RecordResponseOpenpgpkeyTypeOpenpgpkey:
+	case RecordResponseOpenpgpkeyRecordTypeOpenpgpkey:
 		return true
 	}
 	return false
 }
 
-type RecordResponsePTR struct {
+type RecordResponsePTRRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponsePTRRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3957,14 +4180,14 @@ type RecordResponsePTR struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponsePTRJSON `json:"-"`
+	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponsePTRRecordJSON `json:"-"`
 	PTRRecord
 }
 
-// recordResponsePTRJSON contains the JSON metadata for the struct
-// [RecordResponsePTR]
-type recordResponsePTRJSON struct {
+// recordResponsePTRRecordJSON contains the JSON metadata for the struct
+// [RecordResponsePTRRecord]
+type recordResponsePTRRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -3976,23 +4199,61 @@ type recordResponsePTRJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponsePTR) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponsePTRRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponsePTRJSON) RawJSON() string {
+func (r recordResponsePTRRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponsePTR) implementsRecordResponse() {}
+func (r RecordResponsePTRRecord) implementsRecordResponse() {}
 
-type RecordResponseTXT struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponsePTRRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                           `json:"shadowed_records_count"`
+	JSON                 recordResponsePTRRecordMetaJSON `json:"-"`
+}
+
+// recordResponsePTRRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponsePTRRecordMeta]
+type recordResponsePTRRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponsePTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponsePTRRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseTXTRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseTXTRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4000,14 +4261,14 @@ type RecordResponseTXT struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseTXTJSON `json:"-"`
+	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseTXTRecordJSON `json:"-"`
 	TXTRecord
 }
 
-// recordResponseTXTJSON contains the JSON metadata for the struct
-// [RecordResponseTXT]
-type recordResponseTXTJSON struct {
+// recordResponseTXTRecordJSON contains the JSON metadata for the struct
+// [RecordResponseTXTRecord]
+type recordResponseTXTRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4019,23 +4280,61 @@ type recordResponseTXTJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseTXT) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseTXTRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseTXTJSON) RawJSON() string {
+func (r recordResponseTXTRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseTXT) implementsRecordResponse() {}
+func (r RecordResponseTXTRecord) implementsRecordResponse() {}
 
-type RecordResponseCAA struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseTXTRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                           `json:"shadowed_records_count"`
+	JSON                 recordResponseTXTRecordMetaJSON `json:"-"`
+}
+
+// recordResponseTXTRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseTXTRecordMeta]
+type recordResponseTXTRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseTXTRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseTXTRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseCAARecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseCAARecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4043,14 +4342,14 @@ type RecordResponseCAA struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCAAJSON `json:"-"`
+	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseCAARecordJSON `json:"-"`
 	CAARecord
 }
 
-// recordResponseCAAJSON contains the JSON metadata for the struct
-// [RecordResponseCAA]
-type recordResponseCAAJSON struct {
+// recordResponseCAARecordJSON contains the JSON metadata for the struct
+// [RecordResponseCAARecord]
+type recordResponseCAARecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4062,23 +4361,61 @@ type recordResponseCAAJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseCAA) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseCAARecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseCAAJSON) RawJSON() string {
+func (r recordResponseCAARecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCAA) implementsRecordResponse() {}
+func (r RecordResponseCAARecord) implementsRecordResponse() {}
 
-type RecordResponseCERT struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseCAARecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                           `json:"shadowed_records_count"`
+	JSON                 recordResponseCAARecordMetaJSON `json:"-"`
+}
+
+// recordResponseCAARecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseCAARecordMeta]
+type recordResponseCAARecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseCAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseCAARecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseCERTRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseCERTRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4086,14 +4423,14 @@ type RecordResponseCERT struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseCERTJSON `json:"-"`
+	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseCERTRecordJSON `json:"-"`
 	CERTRecord
 }
 
-// recordResponseCERTJSON contains the JSON metadata for the struct
-// [RecordResponseCERT]
-type recordResponseCERTJSON struct {
+// recordResponseCERTRecordJSON contains the JSON metadata for the struct
+// [RecordResponseCERTRecord]
+type recordResponseCERTRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4105,23 +4442,61 @@ type recordResponseCERTJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseCERT) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseCERTRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseCERTJSON) RawJSON() string {
+func (r recordResponseCERTRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseCERT) implementsRecordResponse() {}
+func (r RecordResponseCERTRecord) implementsRecordResponse() {}
 
-type RecordResponseDNSKEY struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseCERTRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                            `json:"shadowed_records_count"`
+	JSON                 recordResponseCERTRecordMetaJSON `json:"-"`
+}
+
+// recordResponseCERTRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseCERTRecordMeta]
+type recordResponseCERTRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseCERTRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseCERTRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseDNSKEYRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseDNSKEYRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4129,14 +4504,14 @@ type RecordResponseDNSKEY struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseDNSKEYJSON `json:"-"`
+	TagsModifiedOn time.Time                      `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseDNSKEYRecordJSON `json:"-"`
 	DNSKEYRecord
 }
 
-// recordResponseDNSKEYJSON contains the JSON metadata for the struct
-// [RecordResponseDNSKEY]
-type recordResponseDNSKEYJSON struct {
+// recordResponseDNSKEYRecordJSON contains the JSON metadata for the struct
+// [RecordResponseDNSKEYRecord]
+type recordResponseDNSKEYRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4148,23 +4523,61 @@ type recordResponseDNSKEYJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseDNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseDNSKEYJSON) RawJSON() string {
+func (r recordResponseDNSKEYRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseDNSKEY) implementsRecordResponse() {}
+func (r RecordResponseDNSKEYRecord) implementsRecordResponse() {}
 
-type RecordResponseDS struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseDNSKEYRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                              `json:"shadowed_records_count"`
+	JSON                 recordResponseDNSKEYRecordMetaJSON `json:"-"`
+}
+
+// recordResponseDNSKEYRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseDNSKEYRecordMeta]
+type recordResponseDNSKEYRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseDNSKEYRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseDNSKEYRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseDSRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseDSRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4172,14 +4585,14 @@ type RecordResponseDS struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time            `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseDSJSON `json:"-"`
+	TagsModifiedOn time.Time                  `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseDSRecordJSON `json:"-"`
 	DSRecord
 }
 
-// recordResponseDSJSON contains the JSON metadata for the struct
-// [RecordResponseDS]
-type recordResponseDSJSON struct {
+// recordResponseDSRecordJSON contains the JSON metadata for the struct
+// [RecordResponseDSRecord]
+type recordResponseDSRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4191,23 +4604,61 @@ type recordResponseDSJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseDS) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseDSRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseDSJSON) RawJSON() string {
+func (r recordResponseDSRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseDS) implementsRecordResponse() {}
+func (r RecordResponseDSRecord) implementsRecordResponse() {}
 
-type RecordResponseHTTPS struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseDSRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                          `json:"shadowed_records_count"`
+	JSON                 recordResponseDSRecordMetaJSON `json:"-"`
+}
+
+// recordResponseDSRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseDSRecordMeta]
+type recordResponseDSRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseDSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseDSRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseHTTPSRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseHTTPSRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4215,14 +4666,14 @@ type RecordResponseHTTPS struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseHTTPSJSON `json:"-"`
+	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseHTTPSRecordJSON `json:"-"`
 	HTTPSRecord
 }
 
-// recordResponseHTTPSJSON contains the JSON metadata for the struct
-// [RecordResponseHTTPS]
-type recordResponseHTTPSJSON struct {
+// recordResponseHTTPSRecordJSON contains the JSON metadata for the struct
+// [RecordResponseHTTPSRecord]
+type recordResponseHTTPSRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4234,23 +4685,61 @@ type recordResponseHTTPSJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseHTTPSRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseHTTPSJSON) RawJSON() string {
+func (r recordResponseHTTPSRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseHTTPS) implementsRecordResponse() {}
+func (r RecordResponseHTTPSRecord) implementsRecordResponse() {}
 
-type RecordResponseLOC struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseHTTPSRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                             `json:"shadowed_records_count"`
+	JSON                 recordResponseHTTPSRecordMetaJSON `json:"-"`
+}
+
+// recordResponseHTTPSRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseHTTPSRecordMeta]
+type recordResponseHTTPSRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseHTTPSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseHTTPSRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseLOCRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseLOCRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4258,14 +4747,14 @@ type RecordResponseLOC struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseLOCJSON `json:"-"`
+	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseLOCRecordJSON `json:"-"`
 	LOCRecord
 }
 
-// recordResponseLOCJSON contains the JSON metadata for the struct
-// [RecordResponseLOC]
-type recordResponseLOCJSON struct {
+// recordResponseLOCRecordJSON contains the JSON metadata for the struct
+// [RecordResponseLOCRecord]
+type recordResponseLOCRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4277,23 +4766,61 @@ type recordResponseLOCJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseLOC) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseLOCRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseLOCJSON) RawJSON() string {
+func (r recordResponseLOCRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseLOC) implementsRecordResponse() {}
+func (r RecordResponseLOCRecord) implementsRecordResponse() {}
 
-type RecordResponseNAPTR struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseLOCRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                           `json:"shadowed_records_count"`
+	JSON                 recordResponseLOCRecordMetaJSON `json:"-"`
+}
+
+// recordResponseLOCRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseLOCRecordMeta]
+type recordResponseLOCRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseLOCRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseLOCRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseNAPTRRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseNAPTRRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4301,14 +4828,14 @@ type RecordResponseNAPTR struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseNAPTRJSON `json:"-"`
+	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseNAPTRRecordJSON `json:"-"`
 	NAPTRRecord
 }
 
-// recordResponseNAPTRJSON contains the JSON metadata for the struct
-// [RecordResponseNAPTR]
-type recordResponseNAPTRJSON struct {
+// recordResponseNAPTRRecordJSON contains the JSON metadata for the struct
+// [RecordResponseNAPTRRecord]
+type recordResponseNAPTRRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4320,23 +4847,61 @@ type recordResponseNAPTRJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseNAPTRRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseNAPTRJSON) RawJSON() string {
+func (r recordResponseNAPTRRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseNAPTR) implementsRecordResponse() {}
+func (r RecordResponseNAPTRRecord) implementsRecordResponse() {}
 
-type RecordResponseSMIMEA struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseNAPTRRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                             `json:"shadowed_records_count"`
+	JSON                 recordResponseNAPTRRecordMetaJSON `json:"-"`
+}
+
+// recordResponseNAPTRRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseNAPTRRecordMeta]
+type recordResponseNAPTRRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseNAPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseNAPTRRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseSMIMEARecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseSMIMEARecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4344,14 +4909,14 @@ type RecordResponseSMIMEA struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSMIMEAJSON `json:"-"`
+	TagsModifiedOn time.Time                      `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSMIMEARecordJSON `json:"-"`
 	SMIMEARecord
 }
 
-// recordResponseSMIMEAJSON contains the JSON metadata for the struct
-// [RecordResponseSMIMEA]
-type recordResponseSMIMEAJSON struct {
+// recordResponseSMIMEARecordJSON contains the JSON metadata for the struct
+// [RecordResponseSMIMEARecord]
+type recordResponseSMIMEARecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4363,23 +4928,61 @@ type recordResponseSMIMEAJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSMIMEA) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSMIMEARecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSMIMEAJSON) RawJSON() string {
+func (r recordResponseSMIMEARecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSMIMEA) implementsRecordResponse() {}
+func (r RecordResponseSMIMEARecord) implementsRecordResponse() {}
 
-type RecordResponseSRV struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseSMIMEARecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                              `json:"shadowed_records_count"`
+	JSON                 recordResponseSMIMEARecordMetaJSON `json:"-"`
+}
+
+// recordResponseSMIMEARecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseSMIMEARecordMeta]
+type recordResponseSMIMEARecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseSMIMEARecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseSMIMEARecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseSRVRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseSRVRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4387,14 +4990,14 @@ type RecordResponseSRV struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSRVJSON `json:"-"`
+	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSRVRecordJSON `json:"-"`
 	SRVRecord
 }
 
-// recordResponseSRVJSON contains the JSON metadata for the struct
-// [RecordResponseSRV]
-type recordResponseSRVJSON struct {
+// recordResponseSRVRecordJSON contains the JSON metadata for the struct
+// [RecordResponseSRVRecord]
+type recordResponseSRVRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4406,23 +5009,61 @@ type recordResponseSRVJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSRV) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSRVRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSRVJSON) RawJSON() string {
+func (r recordResponseSRVRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSRV) implementsRecordResponse() {}
+func (r RecordResponseSRVRecord) implementsRecordResponse() {}
 
-type RecordResponseSSHFP struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseSRVRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                           `json:"shadowed_records_count"`
+	JSON                 recordResponseSRVRecordMetaJSON `json:"-"`
+}
+
+// recordResponseSRVRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseSRVRecordMeta]
+type recordResponseSRVRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseSRVRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseSRVRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseSSHFPRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseSSHFPRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4430,14 +5071,14 @@ type RecordResponseSSHFP struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time               `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSSHFPJSON `json:"-"`
+	TagsModifiedOn time.Time                     `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSSHFPRecordJSON `json:"-"`
 	SSHFPRecord
 }
 
-// recordResponseSSHFPJSON contains the JSON metadata for the struct
-// [RecordResponseSSHFP]
-type recordResponseSSHFPJSON struct {
+// recordResponseSSHFPRecordJSON contains the JSON metadata for the struct
+// [RecordResponseSSHFPRecord]
+type recordResponseSSHFPRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4449,23 +5090,61 @@ type recordResponseSSHFPJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSSHFPRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSSHFPJSON) RawJSON() string {
+func (r recordResponseSSHFPRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSSHFP) implementsRecordResponse() {}
+func (r RecordResponseSSHFPRecord) implementsRecordResponse() {}
 
-type RecordResponseSVCB struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseSSHFPRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                             `json:"shadowed_records_count"`
+	JSON                 recordResponseSSHFPRecordMetaJSON `json:"-"`
+}
+
+// recordResponseSSHFPRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseSSHFPRecordMeta]
+type recordResponseSSHFPRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseSSHFPRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseSSHFPRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseSVCBRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseSVCBRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4473,14 +5152,14 @@ type RecordResponseSVCB struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseSVCBJSON `json:"-"`
+	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseSVCBRecordJSON `json:"-"`
 	SVCBRecord
 }
 
-// recordResponseSVCBJSON contains the JSON metadata for the struct
-// [RecordResponseSVCB]
-type recordResponseSVCBJSON struct {
+// recordResponseSVCBRecordJSON contains the JSON metadata for the struct
+// [RecordResponseSVCBRecord]
+type recordResponseSVCBRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4492,23 +5171,61 @@ type recordResponseSVCBJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseSVCB) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseSVCBRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseSVCBJSON) RawJSON() string {
+func (r recordResponseSVCBRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseSVCB) implementsRecordResponse() {}
+func (r RecordResponseSVCBRecord) implementsRecordResponse() {}
 
-type RecordResponseTLSA struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseSVCBRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                            `json:"shadowed_records_count"`
+	JSON                 recordResponseSVCBRecordMetaJSON `json:"-"`
+}
+
+// recordResponseSVCBRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseSVCBRecordMeta]
+type recordResponseSVCBRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseSVCBRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseSVCBRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseTLSARecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseTLSARecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4516,14 +5233,14 @@ type RecordResponseTLSA struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseTLSAJSON `json:"-"`
+	TagsModifiedOn time.Time                    `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseTLSARecordJSON `json:"-"`
 	TLSARecord
 }
 
-// recordResponseTLSAJSON contains the JSON metadata for the struct
-// [RecordResponseTLSA]
-type recordResponseTLSAJSON struct {
+// recordResponseTLSARecordJSON contains the JSON metadata for the struct
+// [RecordResponseTLSARecord]
+type recordResponseTLSARecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4535,23 +5252,61 @@ type recordResponseTLSAJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseTLSA) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseTLSARecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseTLSAJSON) RawJSON() string {
+func (r recordResponseTLSARecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseTLSA) implementsRecordResponse() {}
+func (r RecordResponseTLSARecord) implementsRecordResponse() {}
 
-type RecordResponseURI struct {
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseTLSARecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                            `json:"shadowed_records_count"`
+	JSON                 recordResponseTLSARecordMetaJSON `json:"-"`
+}
+
+// recordResponseTLSARecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseTLSARecordMeta]
+type recordResponseTLSARecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseTLSARecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseTLSARecordMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordResponseURIRecord struct {
 	// Identifier.
 	ID string `json:"id" api:"required"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta" api:"required"`
+	// Extra Cloudflare-specific metadata about the record.
+	Meta RecordResponseURIRecordMeta `json:"meta" api:"required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4559,14 +5314,14 @@ type RecordResponseURI struct {
 	// When the record comment was last modified. Omitted if there is no comment.
 	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordResponseURIJSON `json:"-"`
+	TagsModifiedOn time.Time                   `json:"tags_modified_on" format:"date-time"`
+	JSON           recordResponseURIRecordJSON `json:"-"`
 	URIRecord
 }
 
-// recordResponseURIJSON contains the JSON metadata for the struct
-// [RecordResponseURI]
-type recordResponseURIJSON struct {
+// recordResponseURIRecordJSON contains the JSON metadata for the struct
+// [RecordResponseURIRecord]
+type recordResponseURIRecordJSON struct {
 	ID                apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
@@ -4578,15 +5333,53 @@ type recordResponseURIJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RecordResponseURI) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordResponseURIRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordResponseURIJSON) RawJSON() string {
+func (r recordResponseURIRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordResponseURI) implementsRecordResponse() {}
+func (r RecordResponseURIRecord) implementsRecordResponse() {}
+
+// Extra Cloudflare-specific metadata about the record.
+type RecordResponseURIRecordMeta struct {
+	// Whether this glue record is not served because a shallower NS delegation takes
+	// precedence over the deeper delegation that needs it. Present only when true;
+	// reachable glue carries only `is_glue`. See
+	// [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
+	DeadGlue bool `json:"dead_glue"`
+	// Whether this A or AAAA record is glue for a subdomain NS delegation. See
+	// [Glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#glue-records).
+	IsGlue bool `json:"is_glue"`
+	// IDs of the NS records that shadow this record. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedBy []string `json:"shadowed_by"`
+	// Number of records shadowed by this NS delegation. See
+	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
+	ShadowedRecordsCount int64                           `json:"shadowed_records_count"`
+	JSON                 recordResponseURIRecordMetaJSON `json:"-"`
+}
+
+// recordResponseURIRecordMetaJSON contains the JSON metadata for the struct
+// [RecordResponseURIRecordMeta]
+type recordResponseURIRecordMetaJSON struct {
+	DeadGlue             apijson.Field
+	IsGlue               apijson.Field
+	ShadowedBy           apijson.Field
+	ShadowedRecordsCount apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *RecordResponseURIRecordMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordResponseURIRecordMetaJSON) RawJSON() string {
+	return r.raw
+}
 
 // Record type.
 type RecordResponseType string
@@ -6258,6 +7051,14 @@ func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
+// URLQuery serializes [RecordNewParams]'s query parameters as `url.Values`.
+func (r RecordNewParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
 type RecordNewParamsBody struct {
 	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -6552,6 +7353,14 @@ type RecordUpdateParams struct {
 
 func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
+}
+
+// URLQuery serializes [RecordUpdateParams]'s query parameters as `url.Values`.
+func (r RecordUpdateParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type RecordUpdateParamsBody struct {
@@ -6867,7 +7676,7 @@ type RecordListParams struct {
 	// intentionally left unspecified and is subject to change in the future. This
 	// parameter works independently of the `match` setting. For automated searches,
 	// please use the other available parameters.
-	Search param.Field[string]              `query:"search"`
+	Search param.Field[string] `query:"search"`
 	// Filters to records at or below the given NS delegation name, excluding the NS
 	// records that form the delegation itself. The value must be a subdomain of the
 	// zone; the zone apex is not accepted. Requires `include_shadow_metadata=true`.
@@ -6879,7 +7688,7 @@ type RecordListParams struct {
 	// must be a subdomain of the zone; the zone apex is not accepted. See
 	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
 	ShadowingName param.Field[string]              `query:"shadowing_name"`
-	Tag    param.Field[RecordListParamsTag] `query:"tag"`
+	Tag           param.Field[RecordListParamsTag] `query:"tag"`
 	// Whether to match all tag search requirements or at least one (any). If set to
 	// `all`, acts like a logical AND between tag filters. If set to `any`, acts like a
 	// logical OR instead. Note that the regular `match` parameter is still used to
@@ -7113,19 +7922,27 @@ func (r recordDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type RecordBatchParams struct {
 	// Identifier.
-	ZoneID  param.Field[string]                       `path:"zone_id" api:"required"`
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether to include shadow metadata in the `meta` field of each record in the
 	// response. See
 	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
 	IncludeShadowMetadata param.Field[bool]                         `query:"include_shadow_metadata"`
-	Deletes param.Field[[]RecordBatchParamsDelete]    `json:"deletes"`
-	Patches param.Field[[]BatchPatchUnionParam]       `json:"patches"`
-	Posts   param.Field[[]RecordBatchParamsPostUnion] `json:"posts"`
-	Puts    param.Field[[]BatchPutUnionParam]         `json:"puts"`
+	Deletes               param.Field[[]RecordBatchParamsDelete]    `json:"deletes"`
+	Patches               param.Field[[]BatchPatchUnionParam]       `json:"patches"`
+	Posts                 param.Field[[]RecordBatchParamsPostUnion] `json:"posts"`
+	Puts                  param.Field[[]BatchPutUnionParam]         `json:"puts"`
 }
 
 func (r RecordBatchParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [RecordBatchParams]'s query parameters as `url.Values`.
+func (r RecordBatchParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type RecordBatchParamsDelete struct {
@@ -7433,6 +8250,14 @@ func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
+// URLQuery serializes [RecordEditParams]'s query parameters as `url.Values`.
+func (r RecordEditParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
 type RecordEditParamsBody struct {
 	// Complete DNS record name, including the zone name, in Punycode.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -7727,6 +8552,14 @@ type RecordGetParams struct {
 	// response. See
 	// [Shadowed records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records).
 	IncludeShadowMetadata param.Field[bool] `query:"include_shadow_metadata"`
+}
+
+// URLQuery serializes [RecordGetParams]'s query parameters as `url.Values`.
+func (r RecordGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type RecordGetResponseEnvelope struct {

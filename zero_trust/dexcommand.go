@@ -149,7 +149,7 @@ func (r dexCommandNewResponseCommandJSON) RawJSON() string {
 	return r.raw
 }
 
-// DEXCommandNewResponseCommandsStatus current status of the command
+// Current status of the command
 type DEXCommandNewResponseCommandsStatus string
 
 const (
@@ -255,7 +255,7 @@ func (r DEXCommandNewParamsCommand) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// DEXCommandNewParamsCommandsType type of command to execute on the device
+// Type of command to execute on the device
 type DEXCommandNewParamsCommandsType string
 
 const (
@@ -272,7 +272,7 @@ func (r DEXCommandNewParamsCommandsType) IsKnown() bool {
 	return false
 }
 
-// DEXCommandNewParamsCommandsArgs command arguments. Allowed fields depend on `type`.
+// Command arguments. Allowed fields depend on `type`.
 type DEXCommandNewParamsCommandsArgs struct {
 	Interfaces param.Field[interface{}] `json:"interfaces"`
 	// Maximum file size (in MB) for the capture file. If the capture artifact exceeds
@@ -294,7 +294,7 @@ func (r DEXCommandNewParamsCommandsArgs) MarshalJSON() (data []byte, err error) 
 
 func (r DEXCommandNewParamsCommandsArgs) implementsDEXCommandNewParamsCommandsArgsUnion() {}
 
-// DEXCommandNewParamsCommandsArgsUnion command arguments. Allowed fields depend on `type`.
+// Command arguments. Allowed fields depend on `type`.
 //
 // Satisfied by [zero_trust.DEXCommandNewParamsCommandsArgsWARPDiagArgs],
 // [zero_trust.DEXCommandNewParamsCommandsArgsPCAPArgs],
@@ -487,7 +487,7 @@ func (r dexCommandNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DEXCommandNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DEXCommandNewResponseEnvelopeSuccess bool
 
 const (
@@ -565,7 +565,7 @@ func (r DEXCommandListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// DEXCommandListParamsCommandType optionally filter executed commands by command type.
+// Optionally filter executed commands by command type.
 type DEXCommandListParamsCommandType string
 
 const (
@@ -582,7 +582,7 @@ func (r DEXCommandListParamsCommandType) IsKnown() bool {
 	return false
 }
 
-// DEXCommandListParamsStatus optionally filter executed commands by status.
+// Optionally filter executed commands by status.
 type DEXCommandListParamsStatus string
 
 const (

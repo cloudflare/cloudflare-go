@@ -392,7 +392,7 @@ func (r accessUserLastSeenIdentityGetResponseEnvelopeMessagesSourceJSON) RawJSON
 	return r.raw
 }
 
-// AccessUserLastSeenIdentityGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessUserLastSeenIdentityGetResponseEnvelopeSuccess bool
 
 const (

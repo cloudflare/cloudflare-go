@@ -160,7 +160,7 @@ func (r networkRouteNetworkNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkRouteNetworkNewResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkRouteNetworkNewResponseEnvelopeSuccess bool
 
 const (
@@ -195,7 +195,7 @@ func (r NetworkRouteNetworkDeleteParams) URLQuery() (v url.Values) {
 	})
 }
 
-// NetworkRouteNetworkDeleteParamsTunType is the type of tunnel.
+// The type of tunnel.
 type NetworkRouteNetworkDeleteParamsTunType string
 
 const (
@@ -244,7 +244,7 @@ func (r networkRouteNetworkDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkRouteNetworkDeleteResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkRouteNetworkDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -292,7 +292,7 @@ func (r networkRouteNetworkEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkRouteNetworkEditResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkRouteNetworkEditResponseEnvelopeSuccess bool
 
 const (

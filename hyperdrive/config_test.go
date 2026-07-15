@@ -36,6 +36,7 @@ func TestConfigNewWithOptionalParams(t *testing.T) {
 			Origin: cloudflare.F[hyperdrive.HyperdriveOriginUnionParam](hyperdrive.HyperdriveOriginPublicDatabaseParam{
 				Database: cloudflare.F("postgres"),
 				Host:     cloudflare.F("database.example.com"),
+				Password: cloudflare.F("password"),
 				Port:     cloudflare.F(int64(5432)),
 				Scheme:   cloudflare.F(hyperdrive.HyperdriveOriginPublicDatabaseSchemePostgres),
 				User:     cloudflare.F("postgres"),
@@ -85,6 +86,7 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 				Origin: cloudflare.F[hyperdrive.HyperdriveOriginUnionParam](hyperdrive.HyperdriveOriginPublicDatabaseParam{
 					Database: cloudflare.F("postgres"),
 					Host:     cloudflare.F("database.example.com"),
+					Password: cloudflare.F("password"),
 					Port:     cloudflare.F(int64(5432)),
 					Scheme:   cloudflare.F(hyperdrive.HyperdriveOriginPublicDatabaseSchemePostgres),
 					User:     cloudflare.F("postgres"),
@@ -110,7 +112,7 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestConfigList(t *testing.T) {
+func TestConfigListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -126,6 +128,8 @@ func TestConfigList(t *testing.T) {
 	)
 	_, err := client.Hyperdrive.Configs.List(context.TODO(), hyperdrive.ConfigListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(1)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -197,6 +201,7 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 			Name: cloudflare.F("example-hyperdrive"),
 			Origin: cloudflare.F[hyperdrive.ConfigEditParamsOriginUnion](hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveDatabase{
 				Database: cloudflare.F("postgres"),
+				Password: cloudflare.F("password"),
 				Scheme:   cloudflare.F(hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgres),
 				User:     cloudflare.F("postgres"),
 			}),

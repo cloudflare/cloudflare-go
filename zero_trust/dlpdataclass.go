@@ -36,7 +36,7 @@ func NewDLPDataClassService(opts ...option.RequestOption) (r *DLPDataClassServic
 	return
 }
 
-// Creates a new data class
+// Creates a data class for use in DLP profiles.
 func (r *DLPDataClassService) New(ctx context.Context, params DLPDataClassNewParams, opts ...option.RequestOption) (res *DLPDataClassNewResponse, err error) {
 	var env DLPDataClassNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +53,7 @@ func (r *DLPDataClassService) New(ctx context.Context, params DLPDataClassNewPar
 	return res, nil
 }
 
-// Update the attributes of a single data class
+// Updates the configuration for a data class.
 func (r *DLPDataClassService) Update(ctx context.Context, dataClassID string, params DLPDataClassUpdateParams, opts ...option.RequestOption) (res *DLPDataClassUpdateResponse, err error) {
 	var env DLPDataClassUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -74,7 +74,7 @@ func (r *DLPDataClassService) Update(ctx context.Context, dataClassID string, pa
 	return res, nil
 }
 
-// Retrieve all data classes in an account
+// Lists data classes configured for the account.
 func (r *DLPDataClassService) List(ctx context.Context, query DLPDataClassListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DLPDataClassListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -96,12 +96,12 @@ func (r *DLPDataClassService) List(ctx context.Context, query DLPDataClassListPa
 	return res, nil
 }
 
-// Retrieve all data classes in an account
+// Lists data classes configured for the account.
 func (r *DLPDataClassService) ListAutoPaging(ctx context.Context, query DLPDataClassListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DLPDataClassListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a single data class
+// Deletes a data class from the account.
 func (r *DLPDataClassService) Delete(ctx context.Context, dataClassID string, body DLPDataClassDeleteParams, opts ...option.RequestOption) (res *DLPDataClassDeleteResponse, err error) {
 	var env DLPDataClassDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -122,7 +122,7 @@ func (r *DLPDataClassService) Delete(ctx context.Context, dataClassID string, bo
 	return res, nil
 }
 
-// Retrieve a specific data class
+// Gets the configuration for a data class.
 func (r *DLPDataClassService) Get(ctx context.Context, dataClassID string, query DLPDataClassGetParams, opts ...option.RequestOption) (res *DLPDataClassGetResponse, err error) {
 	var env DLPDataClassGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -178,7 +178,7 @@ func (r dlpDataClassNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDataClassNewResponseSensitivityLevel is a reference pairing a sensitivity group with a specific level within that group.
+// A reference pairing a sensitivity group with a specific level within that group.
 type DLPDataClassNewResponseSensitivityLevel struct {
 	GroupID string                                      `json:"group_id" api:"required" format:"uuid"`
 	LevelID string                                      `json:"level_id" api:"required" format:"uuid"`
@@ -237,7 +237,7 @@ func (r dlpDataClassUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDataClassUpdateResponseSensitivityLevel is a reference pairing a sensitivity group with a specific level within that group.
+// A reference pairing a sensitivity group with a specific level within that group.
 type DLPDataClassUpdateResponseSensitivityLevel struct {
 	GroupID string                                         `json:"group_id" api:"required" format:"uuid"`
 	LevelID string                                         `json:"level_id" api:"required" format:"uuid"`
@@ -296,7 +296,7 @@ func (r dlpDataClassListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDataClassListResponseSensitivityLevel is a reference pairing a sensitivity group with a specific level within that group.
+// A reference pairing a sensitivity group with a specific level within that group.
 type DLPDataClassListResponseSensitivityLevel struct {
 	GroupID string                                       `json:"group_id" api:"required" format:"uuid"`
 	LevelID string                                       `json:"level_id" api:"required" format:"uuid"`
@@ -357,7 +357,7 @@ func (r dlpDataClassGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDataClassGetResponseSensitivityLevel is a reference pairing a sensitivity group with a specific level within that group.
+// A reference pairing a sensitivity group with a specific level within that group.
 type DLPDataClassGetResponseSensitivityLevel struct {
 	GroupID string                                      `json:"group_id" api:"required" format:"uuid"`
 	LevelID string                                      `json:"level_id" api:"required" format:"uuid"`
@@ -394,7 +394,7 @@ func (r DLPDataClassNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// DLPDataClassNewParamsSensitivityLevel is a reference pairing a sensitivity group with a specific level within that group.
+// A reference pairing a sensitivity group with a specific level within that group.
 type DLPDataClassNewParamsSensitivityLevel struct {
 	GroupID param.Field[string] `json:"group_id" api:"required" format:"uuid"`
 	LevelID param.Field[string] `json:"level_id" api:"required" format:"uuid"`
@@ -528,7 +528,7 @@ func (r dlpDataClassNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDataClassNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDataClassNewResponseEnvelopeSuccess bool
 
 const (
@@ -556,7 +556,7 @@ func (r DLPDataClassUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// DLPDataClassUpdateParamsSensitivityLevel is a reference pairing a sensitivity group with a specific level within that group.
+// A reference pairing a sensitivity group with a specific level within that group.
 type DLPDataClassUpdateParamsSensitivityLevel struct {
 	GroupID param.Field[string] `json:"group_id" api:"required" format:"uuid"`
 	LevelID param.Field[string] `json:"level_id" api:"required" format:"uuid"`
@@ -690,7 +690,7 @@ func (r dlpDataClassUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDataClassUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDataClassUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -837,7 +837,7 @@ func (r dlpDataClassDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDataClassDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDataClassDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -980,7 +980,7 @@ func (r dlpDataClassGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPDataClassGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDataClassGetResponseEnvelopeSuccess bool
 
 const (

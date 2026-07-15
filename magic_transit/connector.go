@@ -41,7 +41,7 @@ func NewConnectorService(opts ...option.RequestOption) (r *ConnectorService) {
 	return
 }
 
-// Add a connector to your account
+// Creates a Magic WAN Connector.
 func (r *ConnectorService) New(ctx context.Context, params ConnectorNewParams, opts ...option.RequestOption) (res *ConnectorNewResponse, err error) {
 	var env ConnectorNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -58,7 +58,8 @@ func (r *ConnectorService) New(ctx context.Context, params ConnectorNewParams, o
 	return res, nil
 }
 
-// Replace Connector or Re-provision License Key
+// Replaces properties of a Magic WAN Connector. May be used to re-provision a
+// license key.
 func (r *ConnectorService) Update(ctx context.Context, connectorID string, params ConnectorUpdateParams, opts ...option.RequestOption) (res *ConnectorUpdateResponse, err error) {
 	var env ConnectorUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -79,7 +80,7 @@ func (r *ConnectorService) Update(ctx context.Context, connectorID string, param
 	return res, nil
 }
 
-// List Connectors
+// Lists Magic WAN Connectors.
 func (r *ConnectorService) List(ctx context.Context, params ConnectorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConnectorListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -101,12 +102,12 @@ func (r *ConnectorService) List(ctx context.Context, params ConnectorListParams,
 	return res, nil
 }
 
-// List Connectors
+// Lists Magic WAN Connectors.
 func (r *ConnectorService) ListAutoPaging(ctx context.Context, params ConnectorListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ConnectorListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Remove a connector from your account
+// Deletes a Magic WAN Connector.
 func (r *ConnectorService) Delete(ctx context.Context, connectorID string, body ConnectorDeleteParams, opts ...option.RequestOption) (res *ConnectorDeleteResponse, err error) {
 	var env ConnectorDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -127,7 +128,8 @@ func (r *ConnectorService) Delete(ctx context.Context, connectorID string, body 
 	return res, nil
 }
 
-// Edit Connector to update specific properties or Re-provision License Key
+// Updates properties of a Magic WAN Connector. May be used to re-provision a
+// license key.
 func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params ConnectorEditParams, opts ...option.RequestOption) (res *ConnectorEditResponse, err error) {
 	var env ConnectorEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -148,7 +150,7 @@ func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params 
 	return res, nil
 }
 
-// Fetch Connector
+// Fetches a Magic WAN Connector.
 func (r *ConnectorService) Get(ctx context.Context, connectorID string, query ConnectorGetParams, opts ...option.RequestOption) (res *ConnectorGetResponse, err error) {
 	var env ConnectorGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

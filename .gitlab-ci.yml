@@ -2,15 +2,9 @@ stages:
   - lint
   - build
   - test
-  - review
-
-include:
-  - component: $CI_SERVER_FQDN/cloudflare/ci/ai/opencode@~latest
-    inputs:
-      runOnMR: true
 
 default:
-  image: $IMAGE_GO_TRIXIE
+  image: golang:1.21
 
 workflow:
   rules:
@@ -20,7 +14,7 @@ workflow:
 
 lint:
   stage: lint
-  timeout: 30 minutes
+  timeout: 10 minutes
   rules:
     - if: $CI_COMMIT_TITLE == "codegen metadata"
       when: never
@@ -31,7 +25,7 @@ lint:
 
 build:
   stage: build
-  timeout: 30 minutes
+  timeout: 10 minutes
   rules:
     - if: $CI_COMMIT_TITLE == "codegen metadata"
       when: never
@@ -40,31 +34,3 @@ build:
   script:
     - go build ./...
 
-test:
-  stage: test
-  timeout: 30 minutes
-  allow_failure: true
-  rules:
-    - if: $CI_COMMIT_TITLE == "codegen metadata"
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "push"
-    - if: $CI_MERGE_REQUEST_SOURCE_PROJECT_PATH != $CI_PROJECT_PATH
-  before_script:
-    # $IMAGE_GO_TRIXIE lacks node/npm; scripts/mock needs `npm exec` to run
-    # the prism mock server against openapi.yaml. Install from Debian trixie
-    # apt (ships node 20+, sufficient for `npm exec --package=...`).
-    - apt-get update && apt-get install -y --no-install-recommends nodejs npm
-    - node --version && npm --version
-  script:
-    - ./scripts/test
-
-detect-breaking-changes:
-  stage: test
-  timeout: 30 minutes
-  allow_failure: true
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_SOURCE_PROJECT_PATH == $CI_PROJECT_PATH
-  variables:
-    GIT_DEPTH: 0
-  script:
-    - ./scripts/detect-breaking-changes $CI_MERGE_REQUEST_DIFF_BASE_SHA

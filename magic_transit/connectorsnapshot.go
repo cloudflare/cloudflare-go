@@ -38,7 +38,7 @@ func NewConnectorSnapshotService(opts ...option.RequestOption) (r *ConnectorSnap
 	return
 }
 
-// List Snapshots
+// Lists Magic WAN Connector Telemetry Snapshots
 func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string, params ConnectorSnapshotListParams, opts ...option.RequestOption) (res *ConnectorSnapshotListResponse, err error) {
 	var env ConnectorSnapshotListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -59,7 +59,7 @@ func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string,
 	return res, nil
 }
 
-// Get Snapshot
+// Fetches Magic WAN Connector Telemetry Snapshot
 func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, snapshotT float64, query ConnectorSnapshotGetParams, opts ...option.RequestOption) (res *ConnectorSnapshotGetResponse, err error) {
 	var env ConnectorSnapshotGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

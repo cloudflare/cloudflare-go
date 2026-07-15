@@ -43,7 +43,7 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 	return
 }
 
-// Create a new instance.
+// Create a new AI Search instance with the given configuration.
 func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +60,7 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 	return res, nil
 }
 
-// Update instance.
+// Update the configuration of an AI Search instance.
 func (r *InstanceService) Update(ctx context.Context, id string, params InstanceUpdateParams, opts ...option.RequestOption) (res *InstanceUpdateResponse, err error) {
 	var env InstanceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -81,7 +81,7 @@ func (r *InstanceService) Update(ctx context.Context, id string, params Instance
 	return res, nil
 }
 
-// List instances.
+// List all AI Search instances in the account.
 func (r *InstanceService) List(ctx context.Context, params InstanceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InstanceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -103,12 +103,12 @@ func (r *InstanceService) List(ctx context.Context, params InstanceListParams, o
 	return res, nil
 }
 
-// List instances.
+// List all AI Search instances in the account.
 func (r *InstanceService) ListAutoPaging(ctx context.Context, params InstanceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InstanceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete instance.
+// Permanently delete an AI Search instance and all its indexed data.
 func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDeleteParams, opts ...option.RequestOption) (res *InstanceDeleteResponse, err error) {
 	var env InstanceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -146,7 +146,7 @@ func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params
 	return res, err
 }
 
-// Read instance.
+// Retrieve the configuration and status of an AI Search instance.
 func (r *InstanceService) Read(ctx context.Context, id string, query InstanceReadParams, opts ...option.RequestOption) (res *InstanceReadResponse, err error) {
 	var env InstanceReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -189,7 +189,7 @@ func (r *InstanceService) Search(ctx context.Context, id string, params Instance
 	return res, nil
 }
 
-// Retrieves usage statistics for AI Search instances.
+// Retrieve usage and indexing statistics for an AI Search instance.
 func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceStatsParams, opts ...option.RequestOption) (res *InstanceStatsResponse, err error) {
 	var env InstanceStatsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -454,6 +454,7 @@ const (
 	InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceNewResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        InstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceNewResponseEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceNewResponseEmbeddingModel = "openai/text-embedding-3-large"
 	InstanceNewResponseEmbeddingModelEmpty                                 InstanceNewResponseEmbeddingModel = ""
@@ -461,7 +462,7 @@ const (
 
 func (r InstanceNewResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceNewResponseEmbeddingModelCfBaaiBgeM3, InstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceNewResponseEmbeddingModelEmpty:
+	case InstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceNewResponseEmbeddingModelCfBaaiBgeM3, InstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceNewResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -745,7 +746,9 @@ type InstanceNewResponseRetrievalOptions struct {
 	BoostBy []InstanceNewResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode InstanceNewResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceNewResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -821,7 +824,9 @@ func (r InstanceNewResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type InstanceNewResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -1302,6 +1307,7 @@ const (
 	InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceUpdateResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        InstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-large"
 	InstanceUpdateResponseEmbeddingModelEmpty                                 InstanceUpdateResponseEmbeddingModel = ""
@@ -1309,7 +1315,7 @@ const (
 
 func (r InstanceUpdateResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceUpdateResponseEmbeddingModelCfBaaiBgeM3, InstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateResponseEmbeddingModelEmpty:
+	case InstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceUpdateResponseEmbeddingModelCfBaaiBgeM3, InstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -1594,7 +1600,9 @@ type InstanceUpdateResponseRetrievalOptions struct {
 	BoostBy []InstanceUpdateResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode InstanceUpdateResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceUpdateResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -1670,7 +1678,9 @@ func (r InstanceUpdateResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type InstanceUpdateResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -2152,6 +2162,7 @@ const (
 	InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceListResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        InstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceListResponseEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceListResponseEmbeddingModel = "openai/text-embedding-3-large"
 	InstanceListResponseEmbeddingModelEmpty                                 InstanceListResponseEmbeddingModel = ""
@@ -2159,7 +2170,7 @@ const (
 
 func (r InstanceListResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceListResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceListResponseEmbeddingModelCfBaaiBgeM3, InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceListResponseEmbeddingModelEmpty:
+	case InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceListResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceListResponseEmbeddingModelCfBaaiBgeM3, InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceListResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -2443,7 +2454,9 @@ type InstanceListResponseRetrievalOptions struct {
 	BoostBy []InstanceListResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode InstanceListResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceListResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -2519,7 +2532,9 @@ func (r InstanceListResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type InstanceListResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -3000,6 +3015,7 @@ const (
 	InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceDeleteResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        InstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-large"
 	InstanceDeleteResponseEmbeddingModelEmpty                                 InstanceDeleteResponseEmbeddingModel = ""
@@ -3007,7 +3023,7 @@ const (
 
 func (r InstanceDeleteResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceDeleteResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceDeleteResponseEmbeddingModelCfBaaiBgeM3, InstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceDeleteResponseEmbeddingModelEmpty:
+	case InstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceDeleteResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceDeleteResponseEmbeddingModelCfBaaiBgeM3, InstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceDeleteResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -3292,7 +3308,9 @@ type InstanceDeleteResponseRetrievalOptions struct {
 	BoostBy []InstanceDeleteResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode InstanceDeleteResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceDeleteResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -3368,7 +3386,9 @@ func (r InstanceDeleteResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type InstanceDeleteResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -4196,6 +4216,7 @@ const (
 	InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceReadResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        InstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceReadResponseEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceReadResponseEmbeddingModel = "openai/text-embedding-3-large"
 	InstanceReadResponseEmbeddingModelEmpty                                 InstanceReadResponseEmbeddingModel = ""
@@ -4203,7 +4224,7 @@ const (
 
 func (r InstanceReadResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceReadResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceReadResponseEmbeddingModelCfBaaiBgeM3, InstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceReadResponseEmbeddingModelEmpty:
+	case InstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceReadResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceReadResponseEmbeddingModelCfBaaiBgeM3, InstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceReadResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -4487,7 +4508,9 @@ type InstanceReadResponseRetrievalOptions struct {
 	BoostBy []InstanceReadResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode InstanceReadResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceReadResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -4563,7 +4586,9 @@ func (r InstanceReadResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type InstanceReadResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -5231,6 +5256,7 @@ const (
 	InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceNewParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2        InstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small             InstanceNewParamsEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large             InstanceNewParamsEmbeddingModel = "openai/text-embedding-3-large"
 	InstanceNewParamsEmbeddingModelEmpty                                 InstanceNewParamsEmbeddingModel = ""
@@ -5238,7 +5264,7 @@ const (
 
 func (r InstanceNewParamsEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewParamsEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceNewParamsEmbeddingModelCfBaaiBgeM3, InstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceNewParamsEmbeddingModelEmpty:
+	case InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceNewParamsEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceNewParamsEmbeddingModelCfBaaiBgeM3, InstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceNewParamsEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -5406,7 +5432,9 @@ type InstanceNewParamsRetrievalOptions struct {
 	BoostBy param.Field[[]InstanceNewParamsRetrievalOptionsBoostBy] `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode param.Field[InstanceNewParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -5454,7 +5482,9 @@ func (r InstanceNewParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type InstanceNewParamsRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -5820,6 +5850,7 @@ const (
 	InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceUpdateParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2        InstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small             InstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-small"
 	InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large             InstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-large"
 	InstanceUpdateParamsEmbeddingModelEmpty                                 InstanceUpdateParamsEmbeddingModel = ""
@@ -5827,7 +5858,7 @@ const (
 
 func (r InstanceUpdateParamsEmbeddingModel) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateParamsEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3, InstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateParamsEmbeddingModelEmpty:
+	case InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceUpdateParamsEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceUpdateParamsEmbeddingModelCfBaaiBgeM3, InstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small, InstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large, InstanceUpdateParamsEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -5995,7 +6026,9 @@ type InstanceUpdateParamsRetrievalOptions struct {
 	BoostBy param.Field[[]InstanceUpdateParamsRetrievalOptionsBoostBy] `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode param.Field[InstanceUpdateParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -6043,7 +6076,9 @@ func (r InstanceUpdateParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type InstanceUpdateParamsRetrievalOptionsKeywordMatchMode string
 
 const (

@@ -212,7 +212,7 @@ func (r dexCommandQuotaGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DEXCommandQuotaGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DEXCommandQuotaGetResponseEnvelopeSuccess bool
 
 const (

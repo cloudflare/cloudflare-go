@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
@@ -230,14 +231,18 @@ type SchemaHTTP struct {
 	Interval string `json:"interval" api:"required"`
 	// The name of the DEX test. Must be unique.
 	Name string `json:"name" api:"required"`
+	// Date the test was created, in RFC 3339 format.
+	Created time.Time `json:"created" format:"date-time"`
 	// Additional details about the test.
 	Description string `json:"description"`
 	// DEX rules targeted by this test
 	TargetPolicies []SchemaHTTPTargetPolicy `json:"target_policies"`
 	Targeted       bool                     `json:"targeted"`
 	// The unique identifier for the test.
-	TestID string         `json:"test_id"`
-	JSON   schemaHTTPJSON `json:"-"`
+	TestID string `json:"test_id"`
+	// Date the test was last updated, in RFC 3339 format.
+	Updated time.Time      `json:"updated" format:"date-time"`
+	JSON    schemaHTTPJSON `json:"-"`
 }
 
 // schemaHTTPJSON contains the JSON metadata for the struct [SchemaHTTP]
@@ -246,10 +251,12 @@ type schemaHTTPJSON struct {
 	Enabled        apijson.Field
 	Interval       apijson.Field
 	Name           apijson.Field
+	Created        apijson.Field
 	Description    apijson.Field
 	TargetPolicies apijson.Field
 	Targeted       apijson.Field
 	TestID         apijson.Field
+	Updated        apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }

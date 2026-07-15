@@ -2,13 +2,8 @@
 
 ## TotalTLS
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/acm#CertificateAuthority">CertificateAuthority</a>
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/acm#CertificateAuthority">CertificateAuthority</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/acm#TotalTLSUpdateResponse">TotalTLSUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/acm#TotalTLSEditResponse">TotalTLSEditResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/acm">acm</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/acm#TotalTLSGetResponse">TotalTLSGetResponse</a>

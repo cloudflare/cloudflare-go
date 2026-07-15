@@ -211,6 +211,7 @@ const (
 	MitigationListResponseMitigationsTypeR2TakedownObject        MitigationListResponseMitigationsType = "r2_takedown_object"
 	MitigationListResponseMitigationsTypeRateLimitCache          MitigationListResponseMitigationsType = "rate_limit_cache"
 	MitigationListResponseMitigationsTypeRedirectVideoStream     MitigationListResponseMitigationsType = "redirect_video_stream"
+	MitigationListResponseMitigationsTypeZoneFint                MitigationListResponseMitigationsType = "zone_fint"
 	MitigationListResponseMitigationsTypeRegistrarFreeze         MitigationListResponseMitigationsType = "registrar_freeze"
 	MitigationListResponseMitigationsTypeRegistrarParking        MitigationListResponseMitigationsType = "registrar_parking"
 	MitigationListResponseMitigationsTypeStreamBlockAccount      MitigationListResponseMitigationsType = "stream_block_account"
@@ -220,7 +221,7 @@ const (
 
 func (r MitigationListResponseMitigationsType) IsKnown() bool {
 	switch r {
-	case MitigationListResponseMitigationsTypeAccountSuspend, MitigationListResponseMitigationsTypeCopyrightInterstitial, MitigationListResponseMitigationsTypeGeoBlock, MitigationListResponseMitigationsTypeLegalBlock, MitigationListResponseMitigationsTypeMalwareInterstitial, MitigationListResponseMitigationsTypeMisleadingInterstitial, MitigationListResponseMitigationsTypeNetworkBlock, MitigationListResponseMitigationsTypePhishingInterstitial, MitigationListResponseMitigationsTypePlayfairiteEnforce, MitigationListResponseMitigationsTypeR2TakedownAccount, MitigationListResponseMitigationsTypeR2TakedownBucket, MitigationListResponseMitigationsTypeR2TakedownObject, MitigationListResponseMitigationsTypeRateLimitCache, MitigationListResponseMitigationsTypeRedirectVideoStream, MitigationListResponseMitigationsTypeRegistrarFreeze, MitigationListResponseMitigationsTypeRegistrarParking, MitigationListResponseMitigationsTypeStreamBlockAccount, MitigationListResponseMitigationsTypeUserSuspend, MitigationListResponseMitigationsTypeWorkersTakedownByZoneID:
+	case MitigationListResponseMitigationsTypeAccountSuspend, MitigationListResponseMitigationsTypeCopyrightInterstitial, MitigationListResponseMitigationsTypeGeoBlock, MitigationListResponseMitigationsTypeLegalBlock, MitigationListResponseMitigationsTypeMalwareInterstitial, MitigationListResponseMitigationsTypeMisleadingInterstitial, MitigationListResponseMitigationsTypeNetworkBlock, MitigationListResponseMitigationsTypePhishingInterstitial, MitigationListResponseMitigationsTypePlayfairiteEnforce, MitigationListResponseMitigationsTypeR2TakedownAccount, MitigationListResponseMitigationsTypeR2TakedownBucket, MitigationListResponseMitigationsTypeR2TakedownObject, MitigationListResponseMitigationsTypeRateLimitCache, MitigationListResponseMitigationsTypeRedirectVideoStream, MitigationListResponseMitigationsTypeZoneFint, MitigationListResponseMitigationsTypeRegistrarFreeze, MitigationListResponseMitigationsTypeRegistrarParking, MitigationListResponseMitigationsTypeStreamBlockAccount, MitigationListResponseMitigationsTypeUserSuspend, MitigationListResponseMitigationsTypeWorkersTakedownByZoneID:
 		return true
 	}
 	return false
@@ -317,6 +318,7 @@ const (
 	MitigationReviewResponseTypeR2TakedownObject        MitigationReviewResponseType = "r2_takedown_object"
 	MitigationReviewResponseTypeRateLimitCache          MitigationReviewResponseType = "rate_limit_cache"
 	MitigationReviewResponseTypeRedirectVideoStream     MitigationReviewResponseType = "redirect_video_stream"
+	MitigationReviewResponseTypeZoneFint                MitigationReviewResponseType = "zone_fint"
 	MitigationReviewResponseTypeRegistrarFreeze         MitigationReviewResponseType = "registrar_freeze"
 	MitigationReviewResponseTypeRegistrarParking        MitigationReviewResponseType = "registrar_parking"
 	MitigationReviewResponseTypeStreamBlockAccount      MitigationReviewResponseType = "stream_block_account"
@@ -326,7 +328,7 @@ const (
 
 func (r MitigationReviewResponseType) IsKnown() bool {
 	switch r {
-	case MitigationReviewResponseTypeAccountSuspend, MitigationReviewResponseTypeCopyrightInterstitial, MitigationReviewResponseTypeGeoBlock, MitigationReviewResponseTypeLegalBlock, MitigationReviewResponseTypeMalwareInterstitial, MitigationReviewResponseTypeMisleadingInterstitial, MitigationReviewResponseTypeNetworkBlock, MitigationReviewResponseTypePhishingInterstitial, MitigationReviewResponseTypePlayfairiteEnforce, MitigationReviewResponseTypeR2TakedownAccount, MitigationReviewResponseTypeR2TakedownBucket, MitigationReviewResponseTypeR2TakedownObject, MitigationReviewResponseTypeRateLimitCache, MitigationReviewResponseTypeRedirectVideoStream, MitigationReviewResponseTypeRegistrarFreeze, MitigationReviewResponseTypeRegistrarParking, MitigationReviewResponseTypeStreamBlockAccount, MitigationReviewResponseTypeUserSuspend, MitigationReviewResponseTypeWorkersTakedownByZoneID:
+	case MitigationReviewResponseTypeAccountSuspend, MitigationReviewResponseTypeCopyrightInterstitial, MitigationReviewResponseTypeGeoBlock, MitigationReviewResponseTypeLegalBlock, MitigationReviewResponseTypeMalwareInterstitial, MitigationReviewResponseTypeMisleadingInterstitial, MitigationReviewResponseTypeNetworkBlock, MitigationReviewResponseTypePhishingInterstitial, MitigationReviewResponseTypePlayfairiteEnforce, MitigationReviewResponseTypeR2TakedownAccount, MitigationReviewResponseTypeR2TakedownBucket, MitigationReviewResponseTypeR2TakedownObject, MitigationReviewResponseTypeRateLimitCache, MitigationReviewResponseTypeRedirectVideoStream, MitigationReviewResponseTypeZoneFint, MitigationReviewResponseTypeRegistrarFreeze, MitigationReviewResponseTypeRegistrarParking, MitigationReviewResponseTypeStreamBlockAccount, MitigationReviewResponseTypeUserSuspend, MitigationReviewResponseTypeWorkersTakedownByZoneID:
 		return true
 	}
 	return false
@@ -440,6 +442,7 @@ const (
 	MitigationListParamsTypeR2TakedownObject        MitigationListParamsType = "r2_takedown_object"
 	MitigationListParamsTypeRateLimitCache          MitigationListParamsType = "rate_limit_cache"
 	MitigationListParamsTypeRedirectVideoStream     MitigationListParamsType = "redirect_video_stream"
+	MitigationListParamsTypeZoneFint                MitigationListParamsType = "zone_fint"
 	MitigationListParamsTypeRegistrarFreeze         MitigationListParamsType = "registrar_freeze"
 	MitigationListParamsTypeRegistrarParking        MitigationListParamsType = "registrar_parking"
 	MitigationListParamsTypeStreamBlockAccount      MitigationListParamsType = "stream_block_account"
@@ -449,7 +452,7 @@ const (
 
 func (r MitigationListParamsType) IsKnown() bool {
 	switch r {
-	case MitigationListParamsTypeAccountSuspend, MitigationListParamsTypeCopyrightInterstitial, MitigationListParamsTypeGeoBlock, MitigationListParamsTypeLegalBlock, MitigationListParamsTypeMalwareInterstitial, MitigationListParamsTypeMisleadingInterstitial, MitigationListParamsTypeNetworkBlock, MitigationListParamsTypePhishingInterstitial, MitigationListParamsTypePlayfairiteEnforce, MitigationListParamsTypeR2TakedownAccount, MitigationListParamsTypeR2TakedownBucket, MitigationListParamsTypeR2TakedownObject, MitigationListParamsTypeRateLimitCache, MitigationListParamsTypeRedirectVideoStream, MitigationListParamsTypeRegistrarFreeze, MitigationListParamsTypeRegistrarParking, MitigationListParamsTypeStreamBlockAccount, MitigationListParamsTypeUserSuspend, MitigationListParamsTypeWorkersTakedownByZoneID:
+	case MitigationListParamsTypeAccountSuspend, MitigationListParamsTypeCopyrightInterstitial, MitigationListParamsTypeGeoBlock, MitigationListParamsTypeLegalBlock, MitigationListParamsTypeMalwareInterstitial, MitigationListParamsTypeMisleadingInterstitial, MitigationListParamsTypeNetworkBlock, MitigationListParamsTypePhishingInterstitial, MitigationListParamsTypePlayfairiteEnforce, MitigationListParamsTypeR2TakedownAccount, MitigationListParamsTypeR2TakedownBucket, MitigationListParamsTypeR2TakedownObject, MitigationListParamsTypeRateLimitCache, MitigationListParamsTypeRedirectVideoStream, MitigationListParamsTypeZoneFint, MitigationListParamsTypeRegistrarFreeze, MitigationListParamsTypeRegistrarParking, MitigationListParamsTypeStreamBlockAccount, MitigationListParamsTypeUserSuspend, MitigationListParamsTypeWorkersTakedownByZoneID:
 		return true
 	}
 	return false
@@ -458,7 +461,11 @@ func (r MitigationListParamsType) IsKnown() bool {
 type MitigationReviewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// List of mitigations to appeal.
-	Appeals param.Field[[]MitigationReviewParamsAppeal] `json:"appeals" api:"required"`
+	Appeals param.Field[[]MitigationReviewParamsAppeal] `json:"appeals"`
+	// Counter-notice details supporting an appeal.
+	Data param.Field[MitigationReviewParamsData] `json:"data"`
+	// The type of appeal being submitted.
+	Type param.Field[MitigationReviewParamsType] `json:"type"`
 }
 
 func (r MitigationReviewParams) MarshalJSON() (data []byte, err error) {
@@ -487,6 +494,44 @@ const (
 func (r MitigationReviewParamsAppealsReason) IsKnown() bool {
 	switch r {
 	case MitigationReviewParamsAppealsReasonRemoved, MitigationReviewParamsAppealsReasonMisclassified:
+		return true
+	}
+	return false
+}
+
+// Counter-notice details supporting an appeal.
+type MitigationReviewParamsData struct {
+	City                  param.Field[string]   `json:"city" api:"required"`
+	Country               param.Field[string]   `json:"country" api:"required"`
+	Email                 param.Field[string]   `json:"email" api:"required" format:"email"`
+	FullName              param.Field[string]   `json:"full_name" api:"required"`
+	JurisdictionConsent   param.Field[bool]     `json:"jurisdiction_consent" api:"required"`
+	PerjuryAttestation    param.Field[bool]     `json:"perjury_attestation" api:"required"`
+	PhoneNumber           param.Field[string]   `json:"phone_number" api:"required"`
+	Signature             param.Field[string]   `json:"signature" api:"required"`
+	State                 param.Field[string]   `json:"state" api:"required"`
+	StreetAddress         param.Field[string]   `json:"street_address" api:"required"`
+	URLs                  param.Field[[]string] `json:"urls" api:"required" format:"uri"`
+	ZipCode               param.Field[string]   `json:"zip_code" api:"required"`
+	Company               param.Field[string]   `json:"company"`
+	CounterNoticeResponse param.Field[string]   `json:"counter_notice_response"`
+}
+
+func (r MitigationReviewParamsData) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of appeal being submitted.
+type MitigationReviewParamsType string
+
+const (
+	MitigationReviewParamsTypeCounterNotice  MitigationReviewParamsType = "counter_notice"
+	MitigationReviewParamsTypeContentRemoved MitigationReviewParamsType = "content_removed"
+)
+
+func (r MitigationReviewParamsType) IsKnown() bool {
+	switch r {
+	case MitigationReviewParamsTypeCounterNotice, MitigationReviewParamsTypeContentRemoved:
 		return true
 	}
 	return false

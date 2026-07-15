@@ -346,7 +346,7 @@ func (r accessBookmarkNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// AccessBookmarkNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessBookmarkNewResponseEnvelopeSuccess bool
 
 const (
@@ -494,7 +494,7 @@ func (r accessBookmarkUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string
 	return r.raw
 }
 
-// AccessBookmarkUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessBookmarkUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -641,7 +641,7 @@ func (r accessBookmarkDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string
 	return r.raw
 }
 
-// AccessBookmarkDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessBookmarkDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -784,7 +784,7 @@ func (r accessBookmarkGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// AccessBookmarkGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessBookmarkGetResponseEnvelopeSuccess bool
 
 const (

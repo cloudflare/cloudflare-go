@@ -206,7 +206,7 @@ func (r dlpEntryPredefinedNewResponseConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPEntryPredefinedNewResponseVariant is a Predefined AI prompt classification topic entry.
+// A Predefined AI prompt classification topic entry.
 type DLPEntryPredefinedNewResponseVariant struct {
 	Type DLPEntryPredefinedNewResponseVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -250,7 +250,7 @@ func (r DLPEntryPredefinedNewResponseVariant) AsUnion() DLPEntryPredefinedNewRes
 	return r.union
 }
 
-// DLPEntryPredefinedNewResponseVariantUnion is a Predefined AI prompt classification topic entry.
+// A Predefined AI prompt classification topic entry.
 //
 // Union satisfied by [DLPEntryPredefinedNewResponseVariantObject] or
 // [DLPEntryPredefinedNewResponseVariantObject].
@@ -273,7 +273,7 @@ func init() {
 	)
 }
 
-// DLPEntryPredefinedNewResponseVariantObject is a Predefined AI prompt classification topic entry.
+// A Predefined AI prompt classification topic entry.
 type DLPEntryPredefinedNewResponseVariantObject struct {
 	TopicType DLPEntryPredefinedNewResponseVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      DLPEntryPredefinedNewResponseVariantObjectType      `json:"type" api:"required"`
@@ -422,7 +422,7 @@ func (r dlpEntryPredefinedUpdateResponseConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPEntryPredefinedUpdateResponseVariant is a Predefined AI prompt classification topic entry.
+// A Predefined AI prompt classification topic entry.
 type DLPEntryPredefinedUpdateResponseVariant struct {
 	Type DLPEntryPredefinedUpdateResponseVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -466,7 +466,7 @@ func (r DLPEntryPredefinedUpdateResponseVariant) AsUnion() DLPEntryPredefinedUpd
 	return r.union
 }
 
-// DLPEntryPredefinedUpdateResponseVariantUnion is a Predefined AI prompt classification topic entry.
+// A Predefined AI prompt classification topic entry.
 //
 // Union satisfied by [DLPEntryPredefinedUpdateResponseVariantObject] or
 // [DLPEntryPredefinedUpdateResponseVariantObject].
@@ -489,7 +489,7 @@ func init() {
 	)
 }
 
-// DLPEntryPredefinedUpdateResponseVariantObject is a Predefined AI prompt classification topic entry.
+// A Predefined AI prompt classification topic entry.
 type DLPEntryPredefinedUpdateResponseVariantObject struct {
 	TopicType DLPEntryPredefinedUpdateResponseVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      DLPEntryPredefinedUpdateResponseVariantObjectType      `json:"type" api:"required"`
@@ -654,7 +654,7 @@ func (r DLPEntryPredefinedListResponse) AsUnion() DLPEntryPredefinedListResponse
 	return r.union
 }
 
-// DLPEntryPredefinedListResponseUnion is satisfied by [DLPEntryPredefinedListResponseObject],
+// Union satisfied by [DLPEntryPredefinedListResponseObject],
 // [DLPEntryPredefinedListResponseObject], [DLPEntryPredefinedListResponseObject],
 // [DLPEntryPredefinedListResponseObject], [DLPEntryPredefinedListResponseObject],
 // [DLPEntryPredefinedListResponseObject] or
@@ -894,7 +894,7 @@ func (r DLPEntryPredefinedGetResponse) AsUnion() DLPEntryPredefinedGetResponseUn
 	return r.union
 }
 
-// DLPEntryPredefinedGetResponseUnion is satisfied by [DLPEntryPredefinedGetResponseObject],
+// Union satisfied by [DLPEntryPredefinedGetResponseObject],
 // [DLPEntryPredefinedGetResponseObject], [DLPEntryPredefinedGetResponseObject],
 // [DLPEntryPredefinedGetResponseObject], [DLPEntryPredefinedGetResponseObject],
 // [DLPEntryPredefinedGetResponseObject] or [DLPEntryPredefinedGetResponseObject].
@@ -996,7 +996,7 @@ func (r DLPEntryPredefinedGetResponseObjectType) IsKnown() bool {
 	return false
 }
 
-// DLPEntryPredefinedGetResponseObjectProfile computed entry field for a profile that an entry is shared into.
+// Computed entry field for a profile that an entry is shared into.
 type DLPEntryPredefinedGetResponseObjectProfile struct {
 	ID   string                                         `json:"id" api:"required" format:"uuid"`
 	Name string                                         `json:"name" api:"required"`
@@ -1215,7 +1215,7 @@ func (r dlpEntryPredefinedNewResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// DLPEntryPredefinedNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPEntryPredefinedNewResponseEnvelopeSuccess bool
 
 const (
@@ -1363,7 +1363,7 @@ func (r dlpEntryPredefinedUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// DLPEntryPredefinedUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPEntryPredefinedUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1510,7 +1510,7 @@ func (r dlpEntryPredefinedDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// DLPEntryPredefinedDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPEntryPredefinedDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1653,7 +1653,7 @@ func (r dlpEntryPredefinedGetResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// DLPEntryPredefinedGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPEntryPredefinedGetResponseEnvelopeSuccess bool
 
 const (

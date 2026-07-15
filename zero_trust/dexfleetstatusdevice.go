@@ -600,7 +600,7 @@ func (r dexFleetStatusDeviceListResponseRamUsedPctByAppJSON) RawJSON() string {
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseRTT contains round-trip time statistics for the WARP tunnel.
+// Round-trip time statistics for the WARP tunnel.
 type DEXFleetStatusDeviceListResponseRTT struct {
 	// Minimum round-trip time in microseconds.
 	MinRTTUs DEXFleetStatusDeviceListResponseRTTMinRTTUs `json:"minRttUs" api:"nullable"`
@@ -629,7 +629,7 @@ func (r dexFleetStatusDeviceListResponseRTTJSON) RawJSON() string {
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseRTTMinRTTUs contains the minimum round-trip time in microseconds.
+// Minimum round-trip time in microseconds.
 type DEXFleetStatusDeviceListResponseRTTMinRTTUs struct {
 	Downstream int64                                           `json:"downstream" api:"nullable"`
 	Upstream   int64                                           `json:"upstream" api:"nullable"`
@@ -653,7 +653,7 @@ func (r dexFleetStatusDeviceListResponseRTTMinRTTUsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseRTTRTTUs contains the round-trip time in microseconds.
+// Round-trip time in microseconds.
 type DEXFleetStatusDeviceListResponseRTTRTTUs struct {
 	Downstream int64                                        `json:"downstream" api:"nullable"`
 	Upstream   int64                                        `json:"upstream" api:"nullable"`
@@ -677,7 +677,7 @@ func (r dexFleetStatusDeviceListResponseRttrttUsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseRTTRTTVarUs contains the round-trip time variance in microseconds.
+// Round-trip time variance in microseconds.
 type DEXFleetStatusDeviceListResponseRTTRTTVarUs struct {
 	Downstream int64                                           `json:"downstream" api:"nullable"`
 	Upstream   int64                                           `json:"upstream" api:"nullable"`
@@ -701,7 +701,7 @@ func (r dexFleetStatusDeviceListResponseRttrttVarUsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseTunnelStats contains WARP tunnel packet and byte counters.
+// WARP tunnel packet and byte counters.
 type DEXFleetStatusDeviceListResponseTunnelStats struct {
 	// Number of bytes lost, split by direction.
 	BytesLost DEXFleetStatusDeviceListResponseTunnelStatsBytesLost `json:"bytesLost" api:"nullable"`
@@ -748,7 +748,7 @@ func (r dexFleetStatusDeviceListResponseTunnelStatsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseTunnelStatsBytesLost is the number of bytes lost, split by direction.
+// Number of bytes lost, split by direction.
 type DEXFleetStatusDeviceListResponseTunnelStatsBytesLost struct {
 	Downstream int64                                                    `json:"downstream" api:"nullable"`
 	Upstream   int64                                                    `json:"upstream" api:"nullable"`
@@ -772,7 +772,7 @@ func (r dexFleetStatusDeviceListResponseTunnelStatsBytesLostJSON) RawJSON() stri
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseTunnelStatsBytesReceived is the number of bytes received, split by direction.
+// Number of bytes received, split by direction.
 type DEXFleetStatusDeviceListResponseTunnelStatsBytesReceived struct {
 	Downstream int64                                                        `json:"downstream" api:"nullable"`
 	Upstream   int64                                                        `json:"upstream" api:"nullable"`
@@ -797,7 +797,7 @@ func (r dexFleetStatusDeviceListResponseTunnelStatsBytesReceivedJSON) RawJSON() 
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseTunnelStatsBytesRetransmitted is the number of bytes retransmitted, split by direction.
+// Number of bytes retransmitted, split by direction.
 type DEXFleetStatusDeviceListResponseTunnelStatsBytesRetransmitted struct {
 	Downstream int64                                                             `json:"downstream" api:"nullable"`
 	Upstream   int64                                                             `json:"upstream" api:"nullable"`
@@ -822,7 +822,7 @@ func (r dexFleetStatusDeviceListResponseTunnelStatsBytesRetransmittedJSON) RawJS
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseTunnelStatsBytesSent is the number of bytes sent, split by direction.
+// Number of bytes sent, split by direction.
 type DEXFleetStatusDeviceListResponseTunnelStatsBytesSent struct {
 	Downstream int64                                                    `json:"downstream" api:"nullable"`
 	Upstream   int64                                                    `json:"upstream" api:"nullable"`
@@ -846,7 +846,7 @@ func (r dexFleetStatusDeviceListResponseTunnelStatsBytesSentJSON) RawJSON() stri
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseTunnelStatsPacketsLost is the number of packets lost, split by direction.
+// Number of packets lost, split by direction.
 type DEXFleetStatusDeviceListResponseTunnelStatsPacketsLost struct {
 	Downstream int64                                                      `json:"downstream" api:"nullable"`
 	Upstream   int64                                                      `json:"upstream" api:"nullable"`
@@ -870,7 +870,7 @@ func (r dexFleetStatusDeviceListResponseTunnelStatsPacketsLostJSON) RawJSON() st
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseTunnelStatsPacketsReceived is the number of packets received, split by direction.
+// Number of packets received, split by direction.
 type DEXFleetStatusDeviceListResponseTunnelStatsPacketsReceived struct {
 	Downstream int64                                                          `json:"downstream" api:"nullable"`
 	Upstream   int64                                                          `json:"upstream" api:"nullable"`
@@ -895,7 +895,7 @@ func (r dexFleetStatusDeviceListResponseTunnelStatsPacketsReceivedJSON) RawJSON(
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseTunnelStatsPacketsRetransmitted is the number of packets retransmitted, split by direction.
+// Number of packets retransmitted, split by direction.
 type DEXFleetStatusDeviceListResponseTunnelStatsPacketsRetransmitted struct {
 	Downstream int64                                                               `json:"downstream" api:"nullable"`
 	Upstream   int64                                                               `json:"upstream" api:"nullable"`
@@ -920,7 +920,7 @@ func (r dexFleetStatusDeviceListResponseTunnelStatsPacketsRetransmittedJSON) Raw
 	return r.raw
 }
 
-// DEXFleetStatusDeviceListResponseTunnelStatsPacketsSent is the number of packets sent, split by direction.
+// Number of packets sent, split by direction.
 type DEXFleetStatusDeviceListResponseTunnelStatsPacketsSent struct {
 	Downstream int64                                                      `json:"downstream" api:"nullable"`
 	Upstream   int64                                                      `json:"upstream" api:"nullable"`
@@ -990,7 +990,7 @@ func (r DEXFleetStatusDeviceListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// DEXFleetStatusDeviceListParamsSortBy dimension to sort results by.
+// Dimension to sort results by.
 type DEXFleetStatusDeviceListParamsSortBy string
 
 const (
@@ -1011,7 +1011,7 @@ func (r DEXFleetStatusDeviceListParamsSortBy) IsKnown() bool {
 	return false
 }
 
-// DEXFleetStatusDeviceListParamsSource source:
+// Source:
 //
 //   - `hourly` - device details aggregated hourly, up to 7 days prior
 //   - `last_seen` - device details, up to 60 minutes prior. Time windows exceeding

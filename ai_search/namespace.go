@@ -108,7 +108,7 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceL
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete namespace.
+// Permanently delete a namespace. The namespace must be empty (no instances).
 func (r *NamespaceService) Delete(ctx context.Context, name string, body NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponse, err error) {
 	var env NamespaceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

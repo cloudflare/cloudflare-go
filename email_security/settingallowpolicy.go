@@ -189,9 +189,22 @@ type SettingAllowPolicyNewResponse struct {
 	// Messages from this sender will bypass all detections and link following
 	IsTrustedSender bool      `json:"is_trusted_sender"`
 	ModifiedAt      time.Time `json:"modified_at" format:"date-time"`
-	Pattern         string    `json:"pattern"`
-	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-	// creating or updating policies, but may be returned for existing entries.
+	// The pattern value to match against. Format depends on `pattern_type`:
+	//
+	//   - EMAIL: a valid email address, e.g. `user@example.com`
+	//   - DOMAIN: a valid domain name, e.g. `example.com`
+	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
+	//     loopback, link-local, and unspecified addresses are rejected.
+	Pattern string `json:"pattern"`
+	// Type of pattern matching.
+	//
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+	//     may be returned for existing entries.
 	PatternType SettingAllowPolicyNewResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -229,8 +242,14 @@ func (r settingAllowPolicyNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-// creating or updating policies, but may be returned for existing entries.
+// Type of pattern matching.
+//
+//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+//   - DOMAIN: matches a domain name (e.g. `example.com`)
+//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+//     may be returned for existing entries.
 type SettingAllowPolicyNewResponsePatternType string
 
 const (
@@ -283,9 +302,22 @@ type SettingAllowPolicyListResponse struct {
 	// Messages from this sender will bypass all detections and link following
 	IsTrustedSender bool      `json:"is_trusted_sender"`
 	ModifiedAt      time.Time `json:"modified_at" format:"date-time"`
-	Pattern         string    `json:"pattern"`
-	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-	// creating or updating policies, but may be returned for existing entries.
+	// The pattern value to match against. Format depends on `pattern_type`:
+	//
+	//   - EMAIL: a valid email address, e.g. `user@example.com`
+	//   - DOMAIN: a valid domain name, e.g. `example.com`
+	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
+	//     loopback, link-local, and unspecified addresses are rejected.
+	Pattern string `json:"pattern"`
+	// Type of pattern matching.
+	//
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+	//     may be returned for existing entries.
 	PatternType SettingAllowPolicyListResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -323,8 +355,14 @@ func (r settingAllowPolicyListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-// creating or updating policies, but may be returned for existing entries.
+// Type of pattern matching.
+//
+//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+//   - DOMAIN: matches a domain name (e.g. `example.com`)
+//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+//     may be returned for existing entries.
 type SettingAllowPolicyListResponsePatternType string
 
 const (
@@ -399,9 +437,22 @@ type SettingAllowPolicyEditResponse struct {
 	// Messages from this sender will bypass all detections and link following
 	IsTrustedSender bool      `json:"is_trusted_sender"`
 	ModifiedAt      time.Time `json:"modified_at" format:"date-time"`
-	Pattern         string    `json:"pattern"`
-	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-	// creating or updating policies, but may be returned for existing entries.
+	// The pattern value to match against. Format depends on `pattern_type`:
+	//
+	//   - EMAIL: a valid email address, e.g. `user@example.com`
+	//   - DOMAIN: a valid domain name, e.g. `example.com`
+	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
+	//     loopback, link-local, and unspecified addresses are rejected.
+	Pattern string `json:"pattern"`
+	// Type of pattern matching.
+	//
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+	//     may be returned for existing entries.
 	PatternType SettingAllowPolicyEditResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -439,8 +490,14 @@ func (r settingAllowPolicyEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-// creating or updating policies, but may be returned for existing entries.
+// Type of pattern matching.
+//
+//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+//   - DOMAIN: matches a domain name (e.g. `example.com`)
+//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+//     may be returned for existing entries.
 type SettingAllowPolicyEditResponsePatternType string
 
 const (
@@ -493,9 +550,22 @@ type SettingAllowPolicyGetResponse struct {
 	// Messages from this sender will bypass all detections and link following
 	IsTrustedSender bool      `json:"is_trusted_sender"`
 	ModifiedAt      time.Time `json:"modified_at" format:"date-time"`
-	Pattern         string    `json:"pattern"`
-	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-	// creating or updating policies, but may be returned for existing entries.
+	// The pattern value to match against. Format depends on `pattern_type`:
+	//
+	//   - EMAIL: a valid email address, e.g. `user@example.com`
+	//   - DOMAIN: a valid domain name, e.g. `example.com`
+	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
+	//     loopback, link-local, and unspecified addresses are rejected.
+	Pattern string `json:"pattern"`
+	// Type of pattern matching.
+	//
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+	//     may be returned for existing entries.
 	PatternType SettingAllowPolicyGetResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -533,8 +603,14 @@ func (r settingAllowPolicyGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-// creating or updating policies, but may be returned for existing entries.
+// Type of pattern matching.
+//
+//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+//   - DOMAIN: matches a domain name (e.g. `example.com`)
+//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+//     may be returned for existing entries.
 type SettingAllowPolicyGetResponsePatternType string
 
 const (
@@ -563,10 +639,23 @@ type SettingAllowPolicyNewParams struct {
 	IsExemptRecipient param.Field[bool] `json:"is_exempt_recipient" api:"required"`
 	IsRegex           param.Field[bool] `json:"is_regex" api:"required"`
 	// Messages from this sender will bypass all detections and link following
-	IsTrustedSender param.Field[bool]   `json:"is_trusted_sender" api:"required"`
-	Pattern         param.Field[string] `json:"pattern" api:"required"`
-	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-	// creating or updating policies, but may be returned for existing entries.
+	IsTrustedSender param.Field[bool] `json:"is_trusted_sender" api:"required"`
+	// The pattern value to match against. Format depends on `pattern_type`:
+	//
+	//   - EMAIL: a valid email address, e.g. `user@example.com`
+	//   - DOMAIN: a valid domain name, e.g. `example.com`
+	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
+	//     loopback, link-local, and unspecified addresses are rejected.
+	Pattern param.Field[string] `json:"pattern" api:"required"`
+	// Type of pattern matching.
+	//
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+	//     may be returned for existing entries.
 	PatternType param.Field[SettingAllowPolicyNewParamsPatternType] `json:"pattern_type" api:"required"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -587,8 +676,14 @@ func (r SettingAllowPolicyNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-// creating or updating policies, but may be returned for existing entries.
+// Type of pattern matching.
+//
+//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+//   - DOMAIN: matches a domain name (e.g. `example.com`)
+//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+//     may be returned for existing entries.
 type SettingAllowPolicyNewParamsPatternType string
 
 const (
@@ -765,8 +860,14 @@ type SettingAllowPolicyListParams struct {
 	// Current page within paginated list of results.
 	Page    param.Field[int64]  `query:"page"`
 	Pattern param.Field[string] `query:"pattern"`
-	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-	// creating or updating policies, but may be returned for existing entries.
+	// Type of pattern matching.
+	//
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+	//     may be returned for existing entries.
 	PatternType param.Field[SettingAllowPolicyListParamsPatternType] `query:"pattern_type"`
 	// The number of results per page. Maximum value is 1000.
 	PerPage param.Field[int64] `query:"per_page"`
@@ -817,8 +918,14 @@ func (r SettingAllowPolicyListParamsOrder) IsKnown() bool {
 	return false
 }
 
-// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-// creating or updating policies, but may be returned for existing entries.
+// Type of pattern matching.
+//
+//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+//   - DOMAIN: matches a domain name (e.g. `example.com`)
+//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+//     may be returned for existing entries.
 type SettingAllowPolicyListParamsPatternType string
 
 const (
@@ -1001,10 +1108,23 @@ type SettingAllowPolicyEditParams struct {
 	// July 1, 2026.
 	IsSpoof param.Field[bool] `json:"is_spoof"`
 	// Messages from this sender will bypass all detections and link following
-	IsTrustedSender param.Field[bool]   `json:"is_trusted_sender"`
-	Pattern         param.Field[string] `json:"pattern"`
-	// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-	// creating or updating policies, but may be returned for existing entries.
+	IsTrustedSender param.Field[bool] `json:"is_trusted_sender"`
+	// The pattern value to match against. Format depends on `pattern_type`:
+	//
+	//   - EMAIL: a valid email address, e.g. `user@example.com`
+	//   - DOMAIN: a valid domain name, e.g. `example.com`
+	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
+	//     loopback, link-local, and unspecified addresses are rejected.
+	Pattern param.Field[string] `json:"pattern"`
+	// Type of pattern matching.
+	//
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+	//     may be returned for existing entries.
 	PatternType param.Field[SettingAllowPolicyEditParamsPatternType] `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -1015,8 +1135,14 @@ func (r SettingAllowPolicyEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Type of pattern matching. Note: UNKNOWN is deprecated and cannot be used when
-// creating or updating policies, but may be returned for existing entries.
+// Type of pattern matching.
+//
+//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+//   - DOMAIN: matches a domain name (e.g. `example.com`)
+//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
+//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
+//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
+//     may be returned for existing entries.
 type SettingAllowPolicyEditParamsPatternType string
 
 const (

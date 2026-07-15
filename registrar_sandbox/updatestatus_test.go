@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package zero_trust_test
+package registrar_sandbox_test
 
 import (
 	"context"
@@ -11,10 +11,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v7/registrar_sandbox"
 )
 
-func TestCasbApplicationSetupFlowListWithOptionalParams(t *testing.T) {
+func TestUpdateStatusGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,13 +28,11 @@ func TestCasbApplicationSetupFlowListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Casb.Applications.SetupFlows.List(
+	_, err := client.RegistrarSandbox.UpdateStatus.Get(
 		context.TODO(),
-		"slug",
-		zero_trust.CasbApplicationSetupFlowListParams{
-			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AuthMethod:  cloudflare.F("auth_method"),
-			Environment: cloudflare.F(zero_trust.CasbApplicationSetupFlowListParamsEnvironmentFedramp),
+		"example.com",
+		registrar_sandbox.UpdateStatusGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

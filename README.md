@@ -1,6 +1,6 @@
 # Cloudflare Go API Library
 
-<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v4.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v7.svg" alt="Go Reference"></a>
 
 The Cloudflare Go library provides convenient access to the [Cloudflare REST API](https://developers.cloudflare.com/api)
 from applications written in Go.
@@ -152,7 +152,7 @@ client.Zones.New(context.TODO(), ...,
 )
 ```
 
-See the [full list of request options](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/option).
+See the [full list of request options](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/option).
 
 ### Pagination
 
@@ -414,11 +414,9 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_
 2. Changes that we do not expect to impact the vast majority of users in practice.
 
-## Maintenance
+We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-This SDK is actively maintained, however, many issues are tracked outside of GitHub on internal Cloudflare systems. Members of the community are welcome to join and discuss your issues during our twice monthly triage meetings. For urgent issues, please contact [Cloudflare support](https://www.support.cloudflare.com/s/?language=en_US). 
-
-* [Community triage meeting](https://calendar.google.com/calendar/embed?src=c_dbf6ce250643f2e60f806d28f3fc09a9de24cbe0ab3ffb699838303d2adfc9e4%40group.calendar.google.com&ctz=America%2FLos_Angeles)
+We are keen for your feedback; please open an [issue](https://www.gitlab.cfdata.org/cloudflare/sdks/cloudflare-go/issues) with questions, bugs, or suggestions.
 
 ## Contributing
 

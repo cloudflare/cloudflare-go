@@ -302,7 +302,7 @@ func (r accessIdPFederationGrantNewResponseEnvelopeMessagesSourceJSON) RawJSON()
 	return r.raw
 }
 
-// AccessIdPFederationGrantNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessIdPFederationGrantNewResponseEnvelopeSuccess bool
 
 const (
@@ -450,7 +450,7 @@ func (r accessIdPFederationGrantListResponseEnvelopeMessagesSourceJSON) RawJSON(
 	return r.raw
 }
 
-// AccessIdPFederationGrantListResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessIdPFederationGrantListResponseEnvelopeSuccess bool
 
 const (
@@ -630,7 +630,7 @@ func (r accessIdPFederationGrantDeleteResponseEnvelopeMessagesSourceJSON) RawJSO
 	return r.raw
 }
 
-// AccessIdPFederationGrantDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessIdPFederationGrantDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -776,7 +776,7 @@ func (r accessIdPFederationGrantGetResponseEnvelopeMessagesSourceJSON) RawJSON()
 	return r.raw
 }
 
-// AccessIdPFederationGrantGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessIdPFederationGrantGetResponseEnvelopeSuccess bool
 
 const (

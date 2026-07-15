@@ -324,7 +324,7 @@ func (r accessApplicationUserPolicyCheckListResponseEnvelopeMessagesSourceJSON) 
 	return r.raw
 }
 
-// AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess bool
 
 const (

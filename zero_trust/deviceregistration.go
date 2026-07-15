@@ -157,7 +157,7 @@ func (r *DeviceRegistrationService) Unrevoke(ctx context.Context, params DeviceR
 	return res, nil
 }
 
-// DeviceRegistrationListResponse is a WARP configuration tied to a single user. Multiple registrations can be
+// A WARP configuration tied to a single user. Multiple registrations can be
 // created from a single WARP device.
 type DeviceRegistrationListResponse struct {
 	// The ID of the registration.
@@ -222,7 +222,7 @@ func (r deviceRegistrationListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationListResponseDevice device details embedded inside of a registration.
+// Device details embedded inside of a registration.
 type DeviceRegistrationListResponseDevice struct {
 	// The ID of the device.
 	ID string `json:"id" api:"required"`
@@ -251,7 +251,7 @@ func (r deviceRegistrationListResponseDeviceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationListResponsePolicy is the device settings profile assigned to this registration.
+// The device settings profile assigned to this registration.
 type DeviceRegistrationListResponsePolicy struct {
 	// The ID of the device settings profile.
 	ID string `json:"id" api:"required"`
@@ -319,7 +319,7 @@ type DeviceRegistrationDeleteResponse = interface{}
 
 type DeviceRegistrationBulkDeleteResponse = interface{}
 
-// DeviceRegistrationGetResponse is a WARP configuration tied to a single user. Multiple registrations can be
+// A WARP configuration tied to a single user. Multiple registrations can be
 // created from a single WARP device.
 type DeviceRegistrationGetResponse struct {
 	// The ID of the registration.
@@ -384,7 +384,7 @@ func (r deviceRegistrationGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationGetResponseDevice device details embedded inside of a registration.
+// Device details embedded inside of a registration.
 type DeviceRegistrationGetResponseDevice struct {
 	// The ID of the device.
 	ID string `json:"id" api:"required"`
@@ -413,7 +413,7 @@ func (r deviceRegistrationGetResponseDeviceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationGetResponsePolicy is the device settings profile assigned to this registration.
+// The device settings profile assigned to this registration.
 type DeviceRegistrationGetResponsePolicy struct {
 	// The ID of the device settings profile.
 	ID string `json:"id" api:"required"`
@@ -535,7 +535,7 @@ func (r DeviceRegistrationListParamsDevice) URLQuery() (v url.Values) {
 	})
 }
 
-// DeviceRegistrationListParamsSortBy is the registration field to order results by.
+// The registration field to order results by.
 type DeviceRegistrationListParamsSortBy string
 
 const (
@@ -554,7 +554,7 @@ func (r DeviceRegistrationListParamsSortBy) IsKnown() bool {
 	return false
 }
 
-// DeviceRegistrationListParamsSortOrder sort direction.
+// Sort direction.
 type DeviceRegistrationListParamsSortOrder string
 
 const (
@@ -570,7 +570,7 @@ func (r DeviceRegistrationListParamsSortOrder) IsKnown() bool {
 	return false
 }
 
-// DeviceRegistrationListParamsStatus filter by registration status. Defaults to 'active'.
+// Filter by registration status. Defaults to 'active'.
 type DeviceRegistrationListParamsStatus string
 
 const (
@@ -633,7 +633,7 @@ func (r deviceRegistrationDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationDeleteResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceRegistrationDeleteResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code" api:"required"`
@@ -658,7 +658,7 @@ func (r deviceRegistrationDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationDeleteResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceRegistrationDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code" api:"required"`
@@ -729,7 +729,7 @@ func (r deviceRegistrationBulkDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationBulkDeleteResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceRegistrationBulkDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code" api:"required"`
@@ -754,7 +754,7 @@ func (r deviceRegistrationBulkDeleteResponseEnvelopeErrorsJSON) RawJSON() string
 	return r.raw
 }
 
-// DeviceRegistrationBulkDeleteResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceRegistrationBulkDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code" api:"required"`
@@ -779,7 +779,7 @@ func (r deviceRegistrationBulkDeleteResponseEnvelopeMessagesJSON) RawJSON() stri
 	return r.raw
 }
 
-// DeviceRegistrationBulkDeleteResponseEnvelopeResultInfo v4 public API Pagination/Cursor info.
+// V4 public API Pagination/Cursor info.
 type DeviceRegistrationBulkDeleteResponseEnvelopeResultInfo struct {
 	// Number of records in the response.
 	Count int64 `json:"count" api:"required"`
@@ -857,7 +857,7 @@ func (r deviceRegistrationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationGetResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceRegistrationGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code" api:"required"`
@@ -882,7 +882,7 @@ func (r deviceRegistrationGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationGetResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceRegistrationGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code" api:"required"`
@@ -953,7 +953,7 @@ func (r deviceRegistrationRevokeResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationRevokeResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceRegistrationRevokeResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code" api:"required"`
@@ -978,7 +978,7 @@ func (r deviceRegistrationRevokeResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationRevokeResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceRegistrationRevokeResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code" api:"required"`
@@ -1003,7 +1003,7 @@ func (r deviceRegistrationRevokeResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationRevokeResponseEnvelopeResultInfo v4 public API Pagination/Cursor info.
+// V4 public API Pagination/Cursor info.
 type DeviceRegistrationRevokeResponseEnvelopeResultInfo struct {
 	// Number of records in the response.
 	Count int64 `json:"count" api:"required"`
@@ -1081,7 +1081,7 @@ func (r deviceRegistrationUnrevokeResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationUnrevokeResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceRegistrationUnrevokeResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code" api:"required"`
@@ -1106,7 +1106,7 @@ func (r deviceRegistrationUnrevokeResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceRegistrationUnrevokeResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceRegistrationUnrevokeResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code" api:"required"`
@@ -1131,7 +1131,7 @@ func (r deviceRegistrationUnrevokeResponseEnvelopeMessagesJSON) RawJSON() string
 	return r.raw
 }
 
-// DeviceRegistrationUnrevokeResponseEnvelopeResultInfo v4 public API Pagination/Cursor info.
+// V4 public API Pagination/Cursor info.
 type DeviceRegistrationUnrevokeResponseEnvelopeResultInfo struct {
 	// Number of records in the response.
 	Count int64 `json:"count" api:"required"`

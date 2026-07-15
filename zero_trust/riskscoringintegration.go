@@ -127,7 +127,7 @@ func (r *RiskScoringIntegrationService) Delete(ctx context.Context, integrationI
 	return res, nil
 }
 
-// Get risk score integration by id.
+// Gets a Zero Trust risk score integration by ID.
 func (r *RiskScoringIntegrationService) Get(ctx context.Context, integrationID string, query RiskScoringIntegrationGetParams, opts ...option.RequestOption) (res *RiskScoringIntegrationGetResponse, err error) {
 	var env RiskScoringIntegrationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -544,7 +544,7 @@ func (r riskScoringIntegrationNewResponseEnvelopeMessagesSourceJSON) RawJSON() s
 	return r.raw
 }
 
-// RiskScoringIntegrationNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type RiskScoringIntegrationNewResponseEnvelopeSuccess bool
 
 const (
@@ -702,7 +702,7 @@ func (r riskScoringIntegrationUpdateResponseEnvelopeMessagesSourceJSON) RawJSON(
 	return r.raw
 }
 
-// RiskScoringIntegrationUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type RiskScoringIntegrationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -851,7 +851,7 @@ func (r riskScoringIntegrationDeleteResponseEnvelopeMessagesSourceJSON) RawJSON(
 	return r.raw
 }
 
-// RiskScoringIntegrationDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type RiskScoringIntegrationDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -995,7 +995,7 @@ func (r riskScoringIntegrationGetResponseEnvelopeMessagesSourceJSON) RawJSON() s
 	return r.raw
 }
 
-// RiskScoringIntegrationGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type RiskScoringIntegrationGetResponseEnvelopeSuccess bool
 
 const (

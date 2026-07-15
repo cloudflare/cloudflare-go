@@ -174,7 +174,7 @@ func (r customPageJSON) RawJSON() string {
 	return r.raw
 }
 
-// CustomPageType custom page type.
+// Custom page type.
 type CustomPageType string
 
 const (
@@ -231,7 +231,7 @@ func (r customPageWithoutHTMLJSON) RawJSON() string {
 	return r.raw
 }
 
-// CustomPageWithoutHTMLType custom page type.
+// Custom page type.
 type CustomPageWithoutHTMLType string
 
 const (
@@ -403,7 +403,7 @@ func (r accessCustomPageNewResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 	return r.raw
 }
 
-// AccessCustomPageNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessCustomPageNewResponseEnvelopeSuccess bool
 
 const (
@@ -552,7 +552,7 @@ func (r accessCustomPageUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// AccessCustomPageUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessCustomPageUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -714,7 +714,7 @@ func (r accessCustomPageDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// AccessCustomPageDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessCustomPageDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -858,7 +858,7 @@ func (r accessCustomPageGetResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 	return r.raw
 }
 
-// AccessCustomPageGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessCustomPageGetResponseEnvelopeSuccess bool
 
 const (

@@ -140,7 +140,7 @@ func (r DLPDatasetVersionNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r DLPDatasetVersionNewParamsBody) implementsDLPDatasetVersionNewParamsBodyUnion() {}
 
-// DLPDatasetVersionNewParamsBodyUnion satisfied by [zero_trust.DLPDatasetVersionNewParamsBodyExistingColumn],
+// Satisfied by [zero_trust.DLPDatasetVersionNewParamsBodyExistingColumn],
 // [zero_trust.DLPDatasetVersionNewParamsBodyNewColumn],
 // [DLPDatasetVersionNewParamsBody].
 type DLPDatasetVersionNewParamsBodyUnion interface {

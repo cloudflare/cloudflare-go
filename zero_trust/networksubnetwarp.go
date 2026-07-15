@@ -177,7 +177,7 @@ func (r subnetJSON) RawJSON() string {
 	return r.raw
 }
 
-// SubnetSubnetType is the type of subnet.
+// The type of subnet.
 type SubnetSubnetType string
 
 const (
@@ -238,7 +238,7 @@ func (r networkSubnetWARPDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkSubnetWARPDeleteResponseSubnetType is the type of subnet.
+// The type of subnet.
 type NetworkSubnetWARPDeleteResponseSubnetType string
 
 const (
@@ -300,7 +300,7 @@ func (r networkSubnetWARPNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkSubnetWARPNewResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkSubnetWARPNewResponseEnvelopeSuccess bool
 
 const (
@@ -348,7 +348,7 @@ func (r networkSubnetWARPDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkSubnetWARPDeleteResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkSubnetWARPDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -409,7 +409,7 @@ func (r networkSubnetWARPEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkSubnetWARPEditResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkSubnetWARPEditResponseEnvelopeSuccess bool
 
 const (
@@ -457,7 +457,7 @@ func (r networkSubnetWARPGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkSubnetWARPGetResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkSubnetWARPGetResponseEnvelopeSuccess bool
 
 const (

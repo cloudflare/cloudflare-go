@@ -218,7 +218,7 @@ func (r dlpPatternValidateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPPatternValidateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPPatternValidateResponseEnvelopeSuccess bool
 
 const (

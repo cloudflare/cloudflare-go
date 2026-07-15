@@ -191,11 +191,12 @@ type AccessAIControlMcpServerNewResponse struct {
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                               `json:"secure_web_gateway"`
-	Status           string                                             `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpServerNewResponseUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpServerNewResponseUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpServerNewResponseJSON            `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpServerNewResponseStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpServerNewResponseUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpServerNewResponseUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpServerNewResponseJSON            `json:"-"`
 }
 
 // accessAIControlMcpServerNewResponseJSON contains the JSON metadata for the
@@ -283,6 +284,24 @@ func (r accessAIControlMcpServerNewResponseErrorDetailsJSON) RawJSON() string {
 	return r.raw
 }
 
+// Current sync state of the server
+type AccessAIControlMcpServerNewResponseStatus string
+
+const (
+	AccessAIControlMcpServerNewResponseStatusWaiting AccessAIControlMcpServerNewResponseStatus = "waiting"
+	AccessAIControlMcpServerNewResponseStatusReady   AccessAIControlMcpServerNewResponseStatus = "ready"
+	AccessAIControlMcpServerNewResponseStatusStale   AccessAIControlMcpServerNewResponseStatus = "stale"
+	AccessAIControlMcpServerNewResponseStatusError   AccessAIControlMcpServerNewResponseStatus = "error"
+)
+
+func (r AccessAIControlMcpServerNewResponseStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpServerNewResponseStatusWaiting, AccessAIControlMcpServerNewResponseStatusReady, AccessAIControlMcpServerNewResponseStatusStale, AccessAIControlMcpServerNewResponseStatusError:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpServerNewResponseUpdatedPrompt struct {
 	Name        string                                               `json:"name" api:"required"`
 	Alias       string                                               `json:"alias"`
@@ -361,11 +380,12 @@ type AccessAIControlMcpServerUpdateResponse struct {
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                  `json:"secure_web_gateway"`
-	Status           string                                                `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpServerUpdateResponseUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpServerUpdateResponseUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpServerUpdateResponseJSON            `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpServerUpdateResponseStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpServerUpdateResponseUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpServerUpdateResponseUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpServerUpdateResponseJSON            `json:"-"`
 }
 
 // accessAIControlMcpServerUpdateResponseJSON contains the JSON metadata for the
@@ -453,6 +473,24 @@ func (r accessAIControlMcpServerUpdateResponseErrorDetailsJSON) RawJSON() string
 	return r.raw
 }
 
+// Current sync state of the server
+type AccessAIControlMcpServerUpdateResponseStatus string
+
+const (
+	AccessAIControlMcpServerUpdateResponseStatusWaiting AccessAIControlMcpServerUpdateResponseStatus = "waiting"
+	AccessAIControlMcpServerUpdateResponseStatusReady   AccessAIControlMcpServerUpdateResponseStatus = "ready"
+	AccessAIControlMcpServerUpdateResponseStatusStale   AccessAIControlMcpServerUpdateResponseStatus = "stale"
+	AccessAIControlMcpServerUpdateResponseStatusError   AccessAIControlMcpServerUpdateResponseStatus = "error"
+)
+
+func (r AccessAIControlMcpServerUpdateResponseStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpServerUpdateResponseStatusWaiting, AccessAIControlMcpServerUpdateResponseStatusReady, AccessAIControlMcpServerUpdateResponseStatusStale, AccessAIControlMcpServerUpdateResponseStatusError:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpServerUpdateResponseUpdatedPrompt struct {
 	Name        string                                                  `json:"name" api:"required"`
 	Alias       string                                                  `json:"alias"`
@@ -531,11 +569,12 @@ type AccessAIControlMcpServerListResponse struct {
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                `json:"secure_web_gateway"`
-	Status           string                                              `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpServerListResponseUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpServerListResponseUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpServerListResponseJSON            `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpServerListResponseStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpServerListResponseUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpServerListResponseUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpServerListResponseJSON            `json:"-"`
 }
 
 // accessAIControlMcpServerListResponseJSON contains the JSON metadata for the
@@ -623,6 +662,24 @@ func (r accessAIControlMcpServerListResponseErrorDetailsJSON) RawJSON() string {
 	return r.raw
 }
 
+// Current sync state of the server
+type AccessAIControlMcpServerListResponseStatus string
+
+const (
+	AccessAIControlMcpServerListResponseStatusWaiting AccessAIControlMcpServerListResponseStatus = "waiting"
+	AccessAIControlMcpServerListResponseStatusReady   AccessAIControlMcpServerListResponseStatus = "ready"
+	AccessAIControlMcpServerListResponseStatusStale   AccessAIControlMcpServerListResponseStatus = "stale"
+	AccessAIControlMcpServerListResponseStatusError   AccessAIControlMcpServerListResponseStatus = "error"
+)
+
+func (r AccessAIControlMcpServerListResponseStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpServerListResponseStatusWaiting, AccessAIControlMcpServerListResponseStatusReady, AccessAIControlMcpServerListResponseStatusStale, AccessAIControlMcpServerListResponseStatusError:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpServerListResponseUpdatedPrompt struct {
 	Name        string                                                `json:"name" api:"required"`
 	Alias       string                                                `json:"alias"`
@@ -701,11 +758,12 @@ type AccessAIControlMcpServerDeleteResponse struct {
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                  `json:"secure_web_gateway"`
-	Status           string                                                `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpServerDeleteResponseUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpServerDeleteResponseUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpServerDeleteResponseJSON            `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpServerDeleteResponseStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpServerDeleteResponseUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpServerDeleteResponseUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpServerDeleteResponseJSON            `json:"-"`
 }
 
 // accessAIControlMcpServerDeleteResponseJSON contains the JSON metadata for the
@@ -793,6 +851,24 @@ func (r accessAIControlMcpServerDeleteResponseErrorDetailsJSON) RawJSON() string
 	return r.raw
 }
 
+// Current sync state of the server
+type AccessAIControlMcpServerDeleteResponseStatus string
+
+const (
+	AccessAIControlMcpServerDeleteResponseStatusWaiting AccessAIControlMcpServerDeleteResponseStatus = "waiting"
+	AccessAIControlMcpServerDeleteResponseStatusReady   AccessAIControlMcpServerDeleteResponseStatus = "ready"
+	AccessAIControlMcpServerDeleteResponseStatusStale   AccessAIControlMcpServerDeleteResponseStatus = "stale"
+	AccessAIControlMcpServerDeleteResponseStatusError   AccessAIControlMcpServerDeleteResponseStatus = "error"
+)
+
+func (r AccessAIControlMcpServerDeleteResponseStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpServerDeleteResponseStatusWaiting, AccessAIControlMcpServerDeleteResponseStatusReady, AccessAIControlMcpServerDeleteResponseStatusStale, AccessAIControlMcpServerDeleteResponseStatusError:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpServerDeleteResponseUpdatedPrompt struct {
 	Name        string                                                  `json:"name" api:"required"`
 	Alias       string                                                  `json:"alias"`
@@ -871,11 +947,12 @@ type AccessAIControlMcpServerReadResponse struct {
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                `json:"secure_web_gateway"`
-	Status           string                                              `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpServerReadResponseUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpServerReadResponseUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpServerReadResponseJSON            `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpServerReadResponseStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpServerReadResponseUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpServerReadResponseUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpServerReadResponseJSON            `json:"-"`
 }
 
 // accessAIControlMcpServerReadResponseJSON contains the JSON metadata for the
@@ -963,6 +1040,24 @@ func (r accessAIControlMcpServerReadResponseErrorDetailsJSON) RawJSON() string {
 	return r.raw
 }
 
+// Current sync state of the server
+type AccessAIControlMcpServerReadResponseStatus string
+
+const (
+	AccessAIControlMcpServerReadResponseStatusWaiting AccessAIControlMcpServerReadResponseStatus = "waiting"
+	AccessAIControlMcpServerReadResponseStatusReady   AccessAIControlMcpServerReadResponseStatus = "ready"
+	AccessAIControlMcpServerReadResponseStatusStale   AccessAIControlMcpServerReadResponseStatus = "stale"
+	AccessAIControlMcpServerReadResponseStatusError   AccessAIControlMcpServerReadResponseStatus = "error"
+)
+
+func (r AccessAIControlMcpServerReadResponseStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpServerReadResponseStatusWaiting, AccessAIControlMcpServerReadResponseStatusReady, AccessAIControlMcpServerReadResponseStatusStale, AccessAIControlMcpServerReadResponseStatusError:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpServerReadResponseUpdatedPrompt struct {
 	Name        string                                                `json:"name" api:"required"`
 	Alias       string                                                `json:"alias"`
@@ -1020,7 +1115,7 @@ func (r accessAIControlMcpServerReadResponseUpdatedToolJSON) RawJSON() string {
 type AccessAIControlMcpServerSyncResponse struct {
 	Error        string                                           `json:"error"`
 	ErrorDetails AccessAIControlMcpServerSyncResponseErrorDetails `json:"error_details"`
-	Status       string                                           `json:"status"`
+	Status       AccessAIControlMcpServerSyncResponseStatus       `json:"status"`
 	JSON         accessAIControlMcpServerSyncResponseJSON         `json:"-"`
 }
 
@@ -1074,6 +1169,23 @@ func (r *AccessAIControlMcpServerSyncResponseErrorDetails) UnmarshalJSON(data []
 
 func (r accessAIControlMcpServerSyncResponseErrorDetailsJSON) RawJSON() string {
 	return r.raw
+}
+
+type AccessAIControlMcpServerSyncResponseStatus string
+
+const (
+	AccessAIControlMcpServerSyncResponseStatusWaiting AccessAIControlMcpServerSyncResponseStatus = "waiting"
+	AccessAIControlMcpServerSyncResponseStatusReady   AccessAIControlMcpServerSyncResponseStatus = "ready"
+	AccessAIControlMcpServerSyncResponseStatusStale   AccessAIControlMcpServerSyncResponseStatus = "stale"
+	AccessAIControlMcpServerSyncResponseStatusError   AccessAIControlMcpServerSyncResponseStatus = "error"
+)
+
+func (r AccessAIControlMcpServerSyncResponseStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpServerSyncResponseStatusWaiting, AccessAIControlMcpServerSyncResponseStatusReady, AccessAIControlMcpServerSyncResponseStatusStale, AccessAIControlMcpServerSyncResponseStatusError:
+		return true
+	}
+	return false
 }
 
 type AccessAIControlMcpServerNewParams struct {

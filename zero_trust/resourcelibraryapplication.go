@@ -436,7 +436,7 @@ func (r resourceLibraryApplicationGetResponseEnvelopeMessagesSourceJSON) RawJSON
 	return r.raw
 }
 
-// ResourceLibraryApplicationGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Indicates whether the API call was successful.
 type ResourceLibraryApplicationGetResponseEnvelopeSuccess bool
 
 const (

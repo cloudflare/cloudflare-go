@@ -124,7 +124,7 @@ func (r *AccessAIControlMcpPortalService) Delete(ctx context.Context, id string,
 	return res, nil
 }
 
-// Read details of an MCP Portal
+// Read the details of a single MCP Portal, including its configured servers.
 func (r *AccessAIControlMcpPortalService) Read(ctx context.Context, id string, query AccessAIControlMcpPortalReadParams, opts ...option.RequestOption) (res *AccessAIControlMcpPortalReadResponse, err error) {
 	var env AccessAIControlMcpPortalReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -217,11 +217,12 @@ type AccessAIControlMcpPortalNewResponseServer struct {
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                      `json:"secure_web_gateway"`
-	Status           string                                                    `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpPortalNewResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpPortalNewResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpPortalNewResponseServerJSON             `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpPortalNewResponseServersStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpPortalNewResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpPortalNewResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpPortalNewResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalNewResponseServerJSON contains the JSON metadata for the
@@ -310,6 +311,24 @@ func (r *AccessAIControlMcpPortalNewResponseServersErrorDetails) UnmarshalJSON(d
 
 func (r accessAIControlMcpPortalNewResponseServersErrorDetailsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Current sync state of the server
+type AccessAIControlMcpPortalNewResponseServersStatus string
+
+const (
+	AccessAIControlMcpPortalNewResponseServersStatusWaiting AccessAIControlMcpPortalNewResponseServersStatus = "waiting"
+	AccessAIControlMcpPortalNewResponseServersStatusReady   AccessAIControlMcpPortalNewResponseServersStatus = "ready"
+	AccessAIControlMcpPortalNewResponseServersStatusStale   AccessAIControlMcpPortalNewResponseServersStatus = "stale"
+	AccessAIControlMcpPortalNewResponseServersStatusError   AccessAIControlMcpPortalNewResponseServersStatus = "error"
+)
+
+func (r AccessAIControlMcpPortalNewResponseServersStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalNewResponseServersStatusWaiting, AccessAIControlMcpPortalNewResponseServersStatusReady, AccessAIControlMcpPortalNewResponseServersStatusStale, AccessAIControlMcpPortalNewResponseServersStatusError:
+		return true
+	}
+	return false
 }
 
 type AccessAIControlMcpPortalNewResponseServersUpdatedPrompt struct {
@@ -447,11 +466,12 @@ type AccessAIControlMcpPortalUpdateResponseServer struct {
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                         `json:"secure_web_gateway"`
-	Status           string                                                       `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpPortalUpdateResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpPortalUpdateResponseServerJSON             `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpPortalUpdateResponseServersStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpPortalUpdateResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpPortalUpdateResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalUpdateResponseServerJSON contains the JSON metadata for
@@ -541,6 +561,24 @@ func (r *AccessAIControlMcpPortalUpdateResponseServersErrorDetails) UnmarshalJSO
 
 func (r accessAIControlMcpPortalUpdateResponseServersErrorDetailsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Current sync state of the server
+type AccessAIControlMcpPortalUpdateResponseServersStatus string
+
+const (
+	AccessAIControlMcpPortalUpdateResponseServersStatusWaiting AccessAIControlMcpPortalUpdateResponseServersStatus = "waiting"
+	AccessAIControlMcpPortalUpdateResponseServersStatusReady   AccessAIControlMcpPortalUpdateResponseServersStatus = "ready"
+	AccessAIControlMcpPortalUpdateResponseServersStatusStale   AccessAIControlMcpPortalUpdateResponseServersStatus = "stale"
+	AccessAIControlMcpPortalUpdateResponseServersStatusError   AccessAIControlMcpPortalUpdateResponseServersStatus = "error"
+)
+
+func (r AccessAIControlMcpPortalUpdateResponseServersStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalUpdateResponseServersStatusWaiting, AccessAIControlMcpPortalUpdateResponseServersStatusReady, AccessAIControlMcpPortalUpdateResponseServersStatusStale, AccessAIControlMcpPortalUpdateResponseServersStatusError:
+		return true
+	}
+	return false
 }
 
 type AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt struct {
@@ -679,11 +717,12 @@ type AccessAIControlMcpPortalListResponseServer struct {
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                       `json:"secure_web_gateway"`
-	Status           string                                                     `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpPortalListResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpPortalListResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpPortalListResponseServerJSON             `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpPortalListResponseServersStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpPortalListResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpPortalListResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpPortalListResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalListResponseServerJSON contains the JSON metadata for
@@ -773,6 +812,24 @@ func (r *AccessAIControlMcpPortalListResponseServersErrorDetails) UnmarshalJSON(
 
 func (r accessAIControlMcpPortalListResponseServersErrorDetailsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Current sync state of the server
+type AccessAIControlMcpPortalListResponseServersStatus string
+
+const (
+	AccessAIControlMcpPortalListResponseServersStatusWaiting AccessAIControlMcpPortalListResponseServersStatus = "waiting"
+	AccessAIControlMcpPortalListResponseServersStatusReady   AccessAIControlMcpPortalListResponseServersStatus = "ready"
+	AccessAIControlMcpPortalListResponseServersStatusStale   AccessAIControlMcpPortalListResponseServersStatus = "stale"
+	AccessAIControlMcpPortalListResponseServersStatusError   AccessAIControlMcpPortalListResponseServersStatus = "error"
+)
+
+func (r AccessAIControlMcpPortalListResponseServersStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalListResponseServersStatusWaiting, AccessAIControlMcpPortalListResponseServersStatusReady, AccessAIControlMcpPortalListResponseServersStatusStale, AccessAIControlMcpPortalListResponseServersStatusError:
+		return true
+	}
+	return false
 }
 
 type AccessAIControlMcpPortalListResponseServersUpdatedPrompt struct {
@@ -952,11 +1009,12 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                       `json:"secure_web_gateway"`
-	Status           string                                                     `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpPortalReadResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpPortalReadResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpPortalReadResponseServerJSON             `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpPortalReadResponseServersStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpPortalReadResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpPortalReadResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpPortalReadResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalReadResponseServerJSON contains the JSON metadata for
@@ -1046,6 +1104,24 @@ func (r *AccessAIControlMcpPortalReadResponseServersErrorDetails) UnmarshalJSON(
 
 func (r accessAIControlMcpPortalReadResponseServersErrorDetailsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Current sync state of the server
+type AccessAIControlMcpPortalReadResponseServersStatus string
+
+const (
+	AccessAIControlMcpPortalReadResponseServersStatusWaiting AccessAIControlMcpPortalReadResponseServersStatus = "waiting"
+	AccessAIControlMcpPortalReadResponseServersStatusReady   AccessAIControlMcpPortalReadResponseServersStatus = "ready"
+	AccessAIControlMcpPortalReadResponseServersStatusStale   AccessAIControlMcpPortalReadResponseServersStatus = "stale"
+	AccessAIControlMcpPortalReadResponseServersStatusError   AccessAIControlMcpPortalReadResponseServersStatus = "error"
+)
+
+func (r AccessAIControlMcpPortalReadResponseServersStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalReadResponseServersStatusWaiting, AccessAIControlMcpPortalReadResponseServersStatusReady, AccessAIControlMcpPortalReadResponseServersStatusStale, AccessAIControlMcpPortalReadResponseServersStatusError:
+		return true
+	}
+	return false
 }
 
 type AccessAIControlMcpPortalReadResponseServersUpdatedPrompt struct {

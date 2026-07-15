@@ -53,7 +53,7 @@ func TestMitigationListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMitigationReview(t *testing.T) {
+func TestMitigationReviewWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: support api token auth scheme")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -77,6 +77,23 @@ func TestMitigationReview(t *testing.T) {
 				ID:     cloudflare.F("id"),
 				Reason: cloudflare.F(abuse_reports.MitigationReviewParamsAppealsReasonMisclassified),
 			}}),
+			Data: cloudflare.F(abuse_reports.MitigationReviewParamsData{
+				City:                  cloudflare.F("city"),
+				Country:               cloudflare.F("country"),
+				Email:                 cloudflare.F("dev@stainless.com"),
+				FullName:              cloudflare.F("full_name"),
+				JurisdictionConsent:   cloudflare.F(true),
+				PerjuryAttestation:    cloudflare.F(true),
+				PhoneNumber:           cloudflare.F("phone_number"),
+				Signature:             cloudflare.F("signature"),
+				State:                 cloudflare.F("state"),
+				StreetAddress:         cloudflare.F("street_address"),
+				URLs:                  cloudflare.F([]string{"https://example.com"}),
+				ZipCode:               cloudflare.F("zip_code"),
+				Company:               cloudflare.F("company"),
+				CounterNoticeResponse: cloudflare.F("counter_notice_response"),
+			}),
+			Type: cloudflare.F(abuse_reports.MitigationReviewParamsTypeCounterNotice),
 		},
 	)
 	if err != nil {

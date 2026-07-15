@@ -64,7 +64,7 @@ func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificate
 // (BYO-CA) for mTLS. To list certificates issued by the Cloudflare managed CA, use
 // the
 // [List Client Certificates endpoint](/api/resources/client_certificates/methods/list/).
-func (r *MTLSCertificateService) List(ctx context.Context, params MTLSCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MTLSCertificate], err error) {
+func (r *MTLSCertificateService) List(ctx context.Context, params MTLSCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MTLSCertificateListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -89,13 +89,13 @@ func (r *MTLSCertificateService) List(ctx context.Context, params MTLSCertificat
 // (BYO-CA) for mTLS. To list certificates issued by the Cloudflare managed CA, use
 // the
 // [List Client Certificates endpoint](/api/resources/client_certificates/methods/list/).
-func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, params MTLSCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MTLSCertificate] {
+func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, params MTLSCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MTLSCertificateListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes the mTLS certificate unless the certificate is in use by one or more
 // Cloudflare services.
-func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
+func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificateDeleteResponse, err error) {
 	var env MTLSCertificateDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -118,7 +118,7 @@ func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID s
 // Fetches a single mTLS certificate uploaded to your account. To get a certificate
 // issued by the Cloudflare managed CA, use the
 // [Client Certificate Details endpoint](/api/resources/client_certificates/methods/get/).
-func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateGetParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
+func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateGetParams, opts ...option.RequestOption) (res *MTLSCertificateGetResponse, err error) {
 	var env MTLSCertificateGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -136,71 +136,6 @@ func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID stri
 	}
 	res = &env.Result
 	return res, nil
-}
-
-type MTLSCertificate struct {
-	// Identifier.
-	ID string `json:"id"`
-	// Indicates whether the certificate is a CA or leaf certificate.
-	CA bool `json:"ca"`
-	// The uploaded root CA certificate.
-	Certificates string `json:"certificates"`
-	// When the certificate expires.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// The certificate authority that issued the certificate.
-	Issuer string `json:"issuer"`
-	// Optional unique name for the certificate. Only used for human readability.
-	Name string `json:"name"`
-	// The certificate serial number.
-	SerialNumber string `json:"serial_number"`
-	// The type of hash used for the certificate.
-	Signature string `json:"signature"`
-	// The type of the certificate, indicating how it was created and who manages it.
-	Type MTLSCertificateType `json:"type"`
-	// This is the time the certificate was uploaded.
-	UploadedOn time.Time           `json:"uploaded_on" format:"date-time"`
-	JSON       mtlsCertificateJSON `json:"-"`
-}
-
-// mtlsCertificateJSON contains the JSON metadata for the struct [MTLSCertificate]
-type mtlsCertificateJSON struct {
-	ID           apijson.Field
-	CA           apijson.Field
-	Certificates apijson.Field
-	ExpiresOn    apijson.Field
-	Issuer       apijson.Field
-	Name         apijson.Field
-	SerialNumber apijson.Field
-	Signature    apijson.Field
-	Type         apijson.Field
-	UploadedOn   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *MTLSCertificate) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of the certificate, indicating how it was created and who manages it.
-type MTLSCertificateType string
-
-const (
-	MTLSCertificateTypeCustom         MTLSCertificateType = "custom"
-	MTLSCertificateTypeGatewayManaged MTLSCertificateType = "gateway_managed"
-	MTLSCertificateTypeAccessManaged  MTLSCertificateType = "access_managed"
-)
-
-func (r MTLSCertificateType) IsKnown() bool {
-	switch r {
-	case MTLSCertificateTypeCustom, MTLSCertificateTypeGatewayManaged, MTLSCertificateTypeAccessManaged:
-		return true
-	}
-	return false
 }
 
 type MTLSCertificateNewResponse struct {
@@ -267,6 +202,204 @@ const (
 func (r MTLSCertificateNewResponseType) IsKnown() bool {
 	switch r {
 	case MTLSCertificateNewResponseTypeCustom, MTLSCertificateNewResponseTypeGatewayManaged, MTLSCertificateNewResponseTypeAccessManaged:
+		return true
+	}
+	return false
+}
+
+type MTLSCertificateListResponse struct {
+	// Identifier.
+	ID string `json:"id"`
+	// Indicates whether the certificate is a CA or leaf certificate.
+	CA bool `json:"ca"`
+	// The uploaded root CA certificate.
+	Certificates string `json:"certificates"`
+	// When the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// Optional unique name for the certificate. Only used for human readability.
+	Name string `json:"name"`
+	// The certificate serial number.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// The type of the certificate, indicating how it was created and who manages it.
+	Type MTLSCertificateListResponseType `json:"type"`
+	// This is the time the certificate was uploaded.
+	UploadedOn time.Time                       `json:"uploaded_on" format:"date-time"`
+	JSON       mtlsCertificateListResponseJSON `json:"-"`
+}
+
+// mtlsCertificateListResponseJSON contains the JSON metadata for the struct
+// [MTLSCertificateListResponse]
+type mtlsCertificateListResponseJSON struct {
+	ID           apijson.Field
+	CA           apijson.Field
+	Certificates apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	Name         apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	Type         apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *MTLSCertificateListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of the certificate, indicating how it was created and who manages it.
+type MTLSCertificateListResponseType string
+
+const (
+	MTLSCertificateListResponseTypeCustom         MTLSCertificateListResponseType = "custom"
+	MTLSCertificateListResponseTypeGatewayManaged MTLSCertificateListResponseType = "gateway_managed"
+	MTLSCertificateListResponseTypeAccessManaged  MTLSCertificateListResponseType = "access_managed"
+)
+
+func (r MTLSCertificateListResponseType) IsKnown() bool {
+	switch r {
+	case MTLSCertificateListResponseTypeCustom, MTLSCertificateListResponseTypeGatewayManaged, MTLSCertificateListResponseTypeAccessManaged:
+		return true
+	}
+	return false
+}
+
+type MTLSCertificateDeleteResponse struct {
+	// Identifier.
+	ID string `json:"id"`
+	// Indicates whether the certificate is a CA or leaf certificate.
+	CA bool `json:"ca"`
+	// The uploaded root CA certificate.
+	Certificates string `json:"certificates"`
+	// When the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// Optional unique name for the certificate. Only used for human readability.
+	Name string `json:"name"`
+	// The certificate serial number.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// The type of the certificate, indicating how it was created and who manages it.
+	Type MTLSCertificateDeleteResponseType `json:"type"`
+	// This is the time the certificate was uploaded.
+	UploadedOn time.Time                         `json:"uploaded_on" format:"date-time"`
+	JSON       mtlsCertificateDeleteResponseJSON `json:"-"`
+}
+
+// mtlsCertificateDeleteResponseJSON contains the JSON metadata for the struct
+// [MTLSCertificateDeleteResponse]
+type mtlsCertificateDeleteResponseJSON struct {
+	ID           apijson.Field
+	CA           apijson.Field
+	Certificates apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	Name         apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	Type         apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *MTLSCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of the certificate, indicating how it was created and who manages it.
+type MTLSCertificateDeleteResponseType string
+
+const (
+	MTLSCertificateDeleteResponseTypeCustom         MTLSCertificateDeleteResponseType = "custom"
+	MTLSCertificateDeleteResponseTypeGatewayManaged MTLSCertificateDeleteResponseType = "gateway_managed"
+	MTLSCertificateDeleteResponseTypeAccessManaged  MTLSCertificateDeleteResponseType = "access_managed"
+)
+
+func (r MTLSCertificateDeleteResponseType) IsKnown() bool {
+	switch r {
+	case MTLSCertificateDeleteResponseTypeCustom, MTLSCertificateDeleteResponseTypeGatewayManaged, MTLSCertificateDeleteResponseTypeAccessManaged:
+		return true
+	}
+	return false
+}
+
+type MTLSCertificateGetResponse struct {
+	// Identifier.
+	ID string `json:"id"`
+	// Indicates whether the certificate is a CA or leaf certificate.
+	CA bool `json:"ca"`
+	// The uploaded root CA certificate.
+	Certificates string `json:"certificates"`
+	// When the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// Optional unique name for the certificate. Only used for human readability.
+	Name string `json:"name"`
+	// The certificate serial number.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// The type of the certificate, indicating how it was created and who manages it.
+	Type MTLSCertificateGetResponseType `json:"type"`
+	// This is the time the certificate was uploaded.
+	UploadedOn time.Time                      `json:"uploaded_on" format:"date-time"`
+	JSON       mtlsCertificateGetResponseJSON `json:"-"`
+}
+
+// mtlsCertificateGetResponseJSON contains the JSON metadata for the struct
+// [MTLSCertificateGetResponse]
+type mtlsCertificateGetResponseJSON struct {
+	ID           apijson.Field
+	CA           apijson.Field
+	Certificates apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	Name         apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	Type         apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *MTLSCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of the certificate, indicating how it was created and who manages it.
+type MTLSCertificateGetResponseType string
+
+const (
+	MTLSCertificateGetResponseTypeCustom         MTLSCertificateGetResponseType = "custom"
+	MTLSCertificateGetResponseTypeGatewayManaged MTLSCertificateGetResponseType = "gateway_managed"
+	MTLSCertificateGetResponseTypeAccessManaged  MTLSCertificateGetResponseType = "access_managed"
+)
+
+func (r MTLSCertificateGetResponseType) IsKnown() bool {
+	switch r {
+	case MTLSCertificateGetResponseTypeCustom, MTLSCertificateGetResponseTypeGatewayManaged, MTLSCertificateGetResponseTypeAccessManaged:
 		return true
 	}
 	return false
@@ -471,7 +604,7 @@ type MTLSCertificateDeleteResponseEnvelope struct {
 	Messages []MTLSCertificateDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success MTLSCertificateDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
-	Result  MTLSCertificate                              `json:"result"`
+	Result  MTLSCertificateDeleteResponse                `json:"result"`
 	JSON    mtlsCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -615,7 +748,7 @@ type MTLSCertificateGetResponseEnvelope struct {
 	Messages []MTLSCertificateGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success MTLSCertificateGetResponseEnvelopeSuccess `json:"success" api:"required"`
-	Result  MTLSCertificate                           `json:"result"`
+	Result  MTLSCertificateGetResponse                `json:"result"`
 	JSON    mtlsCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
