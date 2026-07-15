@@ -49,7 +49,6 @@ func NewLoadBalancerService(opts ...option.RequestOption) (r *LoadBalancerServic
 	return
 }
 
-<<<<<<< HEAD
 // Create a new account or zone-scoped load balancer.
 func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerNewResponseEnvelope
@@ -73,17 +72,6 @@ func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewPar
 		accountOrZoneID = params.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/load_balancers", accountOrZone, accountOrZoneID)
-=======
-// Create a new load balancer.
-func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
-	var env LoadBalancerNewResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("zones/%s/load_balancers", params.ZoneID)
->>>>>>> b6b43d5b0 (Apply custom code)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -92,7 +80,6 @@ func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewPar
 	return res, nil
 }
 
-<<<<<<< HEAD
 // Update a configured account or zone-scoped load balancer.
 func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string, params LoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerUpdateResponseEnvelope
@@ -114,25 +101,12 @@ func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string,
 	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
-=======
-// Update a configured load balancer.
-func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string, params LoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
-	var env LoadBalancerUpdateResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
->>>>>>> b6b43d5b0 (Apply custom code)
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
 		return nil, err
 	}
-<<<<<<< HEAD
 	path := fmt.Sprintf("%s/%s/load_balancers/%s", accountOrZone, accountOrZoneID, loadBalancerID)
-=======
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
->>>>>>> b6b43d5b0 (Apply custom code)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -141,16 +115,11 @@ func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string,
 	return res, nil
 }
 
-<<<<<<< HEAD
 // List configured account or zone-scoped load balancers.
-=======
-// List configured load balancers.
->>>>>>> b6b43d5b0 (Apply custom code)
 func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LoadBalancer], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-<<<<<<< HEAD
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -170,13 +139,6 @@ func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListPa
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/load_balancers", accountOrZone, accountOrZoneID)
-=======
-	if query.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("zones/%s/load_balancers", query.ZoneID)
->>>>>>> b6b43d5b0 (Apply custom code)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -189,16 +151,11 @@ func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListPa
 	return res, nil
 }
 
-<<<<<<< HEAD
 // List configured account or zone-scoped load balancers.
-=======
-// List configured load balancers.
->>>>>>> b6b43d5b0 (Apply custom code)
 func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LoadBalancer] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-<<<<<<< HEAD
 // Delete a configured account or zone-scoped load balancer.
 func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, body LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
 	var env LoadBalancerDeleteResponseEnvelope
@@ -220,25 +177,12 @@ func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string,
 	if body.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
-=======
-// Delete a configured load balancer.
-func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, body LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
-	var env LoadBalancerDeleteResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if body.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
->>>>>>> b6b43d5b0 (Apply custom code)
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
 		return nil, err
 	}
-<<<<<<< HEAD
 	path := fmt.Sprintf("%s/%s/load_balancers/%s", accountOrZone, accountOrZoneID, loadBalancerID)
-=======
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", body.ZoneID, loadBalancerID)
->>>>>>> b6b43d5b0 (Apply custom code)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -247,7 +191,6 @@ func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string,
 	return res, nil
 }
 
-<<<<<<< HEAD
 // Apply changes to an existing account or zone-scoped load balancer, overwriting
 // the supplied properties.
 func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, params LoadBalancerEditParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
@@ -270,25 +213,12 @@ func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, p
 	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
-=======
-// Apply changes to an existing load balancer, overwriting the supplied properties.
-func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, params LoadBalancerEditParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
-	var env LoadBalancerEditResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
->>>>>>> b6b43d5b0 (Apply custom code)
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
 		return nil, err
 	}
-<<<<<<< HEAD
 	path := fmt.Sprintf("%s/%s/load_balancers/%s", accountOrZone, accountOrZoneID, loadBalancerID)
-=======
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
->>>>>>> b6b43d5b0 (Apply custom code)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -297,7 +227,6 @@ func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, p
 	return res, nil
 }
 
-<<<<<<< HEAD
 // Fetch a single configured account or zone-scoped load balancer.
 func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, query LoadBalancerGetParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerGetResponseEnvelope
@@ -319,25 +248,12 @@ func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, qu
 	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
-=======
-// Fetch a single configured load balancer.
-func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, query LoadBalancerGetParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
-	var env LoadBalancerGetResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if query.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
->>>>>>> b6b43d5b0 (Apply custom code)
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
 		return nil, err
 	}
-<<<<<<< HEAD
 	path := fmt.Sprintf("%s/%s/load_balancers/%s", accountOrZone, accountOrZoneID, loadBalancerID)
-=======
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", query.ZoneID, loadBalancerID)
->>>>>>> b6b43d5b0 (Apply custom code)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -1820,10 +1736,6 @@ func (r loadBalancerDeleteResponseJSON) RawJSON() string {
 }
 
 type LoadBalancerNewParams struct {
-<<<<<<< HEAD
-=======
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
->>>>>>> b6b43d5b0 (Apply custom code)
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools" api:"required"`
@@ -1833,13 +1745,10 @@ type LoadBalancerNewParams struct {
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
 	Name param.Field[string] `json:"name" api:"required"`
-<<<<<<< HEAD
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-=======
->>>>>>> b6b43d5b0 (Apply custom code)
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -1854,11 +1763,8 @@ type LoadBalancerNewParams struct {
 	CountryPools param.Field[map[string][]string] `json:"country_pools"`
 	// Object description.
 	Description param.Field[string] `json:"description"`
-<<<<<<< HEAD
 	// Whether to enable (the default) this load balancer.
 	Enabled param.Field[bool] `json:"enabled"`
-=======
->>>>>>> b6b43d5b0 (Apply custom code)
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
@@ -1996,10 +1902,6 @@ func (r LoadBalancerNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerUpdateParams struct {
-<<<<<<< HEAD
-=======
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
->>>>>>> b6b43d5b0 (Apply custom code)
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools" api:"required"`
@@ -2009,13 +1911,10 @@ type LoadBalancerUpdateParams struct {
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
 	Name param.Field[string] `json:"name" api:"required"`
-<<<<<<< HEAD
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-=======
->>>>>>> b6b43d5b0 (Apply custom code)
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -2169,7 +2068,6 @@ func (r LoadBalancerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerListParams struct {
-<<<<<<< HEAD
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -2181,13 +2079,6 @@ type LoadBalancerDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-=======
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-}
-
-type LoadBalancerDeleteParams struct {
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
->>>>>>> b6b43d5b0 (Apply custom code)
 }
 
 type LoadBalancerDeleteResponseEnvelope struct {
@@ -2234,14 +2125,10 @@ func (r LoadBalancerDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerEditParams struct {
-<<<<<<< HEAD
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-=======
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
->>>>>>> b6b43d5b0 (Apply custom code)
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -2270,11 +2157,8 @@ type LoadBalancerEditParams struct {
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
 	Name param.Field[string] `json:"name"`
-<<<<<<< HEAD
 	// List of networks where Load Balancer or Pool is enabled.
 	Networks param.Field[[]string] `json:"networks"`
-=======
->>>>>>> b6b43d5b0 (Apply custom code)
 	// Enterprise only: A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -2407,14 +2291,10 @@ func (r LoadBalancerEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerGetParams struct {
-<<<<<<< HEAD
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-=======
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
->>>>>>> b6b43d5b0 (Apply custom code)
 }
 
 type LoadBalancerGetResponseEnvelope struct {
