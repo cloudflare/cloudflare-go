@@ -53,7 +53,6 @@ TEST_PATHS=(
 	zones/plan_test.go
 	zones/rateplan_test.go
 	zones/ctalerting_test.go
-	load_balancers/loadbalancer_test.go
 	load_balancers/monitor_test.go
 	load_balancers/monitorpreview_test.go
 	load_balancers/monitorreference_test.go
@@ -79,6 +78,9 @@ TEST_PATHS=(
 	ssl/verification_test.go
 	acm/totaltls_test.go
 	acm/customtruststore_test.go
+	analyticsquery_test.go
+	analyticsquerydatasecuritycontentfinding_test.go
+	analyticsquerydatasecurityfinding_test.go
 	argo/smartrouting_test.go
 	argo/tieredcaching_test.go
 	certificate_authorities/hostnameassociation_test.go
@@ -137,6 +139,7 @@ TEST_PATHS=(
 	email_routing/dns_test.go
 	email_routing/rule_test.go
 	email_routing/rulecatchall_test.go
+	email_routing/accountrule_test.go
 	email_routing/address_test.go
 	email_sending/emailsending_test.go
 	email_sending/subdomain_test.go
@@ -359,6 +362,10 @@ TEST_PATHS=(
 	registrar/registration_test.go
 	registrar/registrationstatus_test.go
 	registrar/updatestatus_test.go
+	registrar_sandbox/registrarsandbox_test.go
+	registrar_sandbox/registration_test.go
+	registrar_sandbox/registrationstatus_test.go
+	registrar_sandbox/updatestatus_test.go
 	request_tracers/trace_test.go
 	rules/list_test.go
 	rules/listbulkoperation_test.go
@@ -477,7 +484,6 @@ TEST_PATHS=(
 	zero_trust/accesstag_test.go
 	zero_trust/accesspolicy_test.go
 	zero_trust/casbapplication_test.go
-	zero_trust/casbapplicationsetupflow_test.go
 	zero_trust/casbintegration_test.go
 	zero_trust/dexwarpchangeevent_test.go
 	zero_trust/dexcommand_test.go

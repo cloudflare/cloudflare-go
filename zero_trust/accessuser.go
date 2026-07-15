@@ -219,7 +219,7 @@ func (r accessUserEmailJSON) RawJSON() string {
 	return r.raw
 }
 
-// AccessUserMeta is the metadata of the SCIM resource.
+// The metadata of the SCIM resource.
 type AccessUserMeta struct {
 	// The timestamp of when the SCIM resource was created.
 	Created time.Time `json:"created" format:"date-time"`
@@ -583,7 +583,7 @@ func (r accessUserNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// AccessUserNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessUserNewResponseEnvelopeSuccess bool
 
 const (
@@ -735,7 +735,7 @@ func (r accessUserUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// AccessUserUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessUserUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -902,7 +902,7 @@ func (r accessUserDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// AccessUserDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessUserDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1046,7 +1046,7 @@ func (r accessUserGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// AccessUserGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessUserGetResponseEnvelopeSuccess bool
 
 const (

@@ -252,7 +252,7 @@ func (r settingsPolicyDNSSearchSuffixJSON) RawJSON() string {
 	return r.raw
 }
 
-// SettingsPolicyGlobalAcceleration global Acceleration settings for China. When configured, WARP clients connect to
+// Global Acceleration settings for China. When configured, WARP clients connect to
 // the Global Accelerator addresses instead of the default ones. Please contact
 // your account representative to enable this feature on your account. See
 // https://developers.cloudflare.com/china-network/concepts/global-acceleration/.
@@ -339,7 +339,7 @@ func (r settingsPolicyTargetTestJSON) RawJSON() string {
 	return r.raw
 }
 
-// SettingsPolicyVirtualNetworks virtual network access settings for the device.
+// Virtual network access settings for the device.
 type SettingsPolicyVirtualNetworks struct {
 	// List of virtual network IDs the device is allowed to access. When
 	// virtual_networks is set, at least one entry is required.
@@ -412,7 +412,7 @@ func (r SplitTunnelExclude) AsUnion() SplitTunnelExcludeUnion {
 	return r.union
 }
 
-// SplitTunnelExcludeUnion is satisfied by [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress]
+// Union satisfied by [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddress]
 // or [SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHost].
 type SplitTunnelExcludeUnion interface {
 	implementsSplitTunnelExclude()
@@ -508,7 +508,7 @@ func (r SplitTunnelExcludeParam) MarshalJSON() (data []byte, err error) {
 
 func (r SplitTunnelExcludeParam) implementsSplitTunnelExcludeUnionParam() {}
 
-// SplitTunnelExcludeUnionParam satisfied by
+// Satisfied by
 // [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam],
 // [zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithHostParam],
 // [SplitTunnelExcludeParam].
@@ -592,7 +592,7 @@ func (r SplitTunnelInclude) AsUnion() SplitTunnelIncludeUnion {
 	return r.union
 }
 
-// SplitTunnelIncludeUnion is satisfied by [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress]
+// Union satisfied by [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddress]
 // or [SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHost].
 type SplitTunnelIncludeUnion interface {
 	implementsSplitTunnelInclude()
@@ -688,7 +688,7 @@ func (r SplitTunnelIncludeParam) MarshalJSON() (data []byte, err error) {
 
 func (r SplitTunnelIncludeParam) implementsSplitTunnelIncludeUnionParam() {}
 
-// SplitTunnelIncludeUnionParam satisfied by
+// Satisfied by
 // [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam],
 // [zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithHostParam],
 // [SplitTunnelIncludeParam].

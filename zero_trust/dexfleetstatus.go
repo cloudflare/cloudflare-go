@@ -387,7 +387,7 @@ func (r dexFleetStatusLiveResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DEXFleetStatusLiveResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DEXFleetStatusLiveResponseEnvelopeSuccess bool
 
 const (
@@ -550,7 +550,7 @@ func (r dexFleetStatusOverTimeResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// DEXFleetStatusOverTimeResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DEXFleetStatusOverTimeResponseEnvelopeSuccess bool
 
 const (

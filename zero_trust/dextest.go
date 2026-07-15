@@ -215,7 +215,7 @@ func (r testsTestJSON) RawJSON() string {
 	return r.raw
 }
 
-// TestsTestsKind test type, http or traceroute
+// test type, http or traceroute
 type TestsTestsKind string
 
 const (
@@ -737,7 +737,7 @@ func (r DEXTestListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// DEXTestListParamsKind filter by test type.
+// Filter by test type.
 type DEXTestListParamsKind string
 
 const (

@@ -95,10 +95,7 @@ func (r dlpEmailAccountMappingNewResponseJSON) RawJSON() string {
 }
 
 type DLPEmailAccountMappingNewResponseAuthRequirements struct {
-	// This field can have the runtime type of
-	// [DLPEmailAccountMappingNewResponseAuthRequirementsObjectType],
-	// [DLPEmailAccountMappingNewResponseAuthRequirementsTypeType].
-	Type interface{} `json:"type" api:"required"`
+	Type DLPEmailAccountMappingNewResponseAuthRequirementsType `json:"type" api:"required"`
 	// This field can have the runtime type of [[]string].
 	AllowedMicrosoftOrganizations interface{}                                           `json:"allowed_microsoft_organizations"`
 	JSON                          dlpEmailAccountMappingNewResponseAuthRequirementsJSON `json:"-"`
@@ -137,7 +134,7 @@ func (r DLPEmailAccountMappingNewResponseAuthRequirements) AsUnion() DLPEmailAcc
 	return r.union
 }
 
-// DLPEmailAccountMappingNewResponseAuthRequirementsUnion is satisfied by [DLPEmailAccountMappingNewResponseAuthRequirementsObject] or
+// Union satisfied by [DLPEmailAccountMappingNewResponseAuthRequirementsObject] or
 // [DLPEmailAccountMappingNewResponseAuthRequirementsType].
 type DLPEmailAccountMappingNewResponseAuthRequirementsUnion interface {
 	implementsDLPEmailAccountMappingNewResponseAuthRequirements()
@@ -261,10 +258,7 @@ func (r dlpEmailAccountMappingGetResponseJSON) RawJSON() string {
 }
 
 type DLPEmailAccountMappingGetResponseAuthRequirements struct {
-	// This field can have the runtime type of
-	// [DLPEmailAccountMappingGetResponseAuthRequirementsObjectType],
-	// [DLPEmailAccountMappingGetResponseAuthRequirementsTypeType].
-	Type interface{} `json:"type" api:"required"`
+	Type DLPEmailAccountMappingGetResponseAuthRequirementsType `json:"type" api:"required"`
 	// This field can have the runtime type of [[]string].
 	AllowedMicrosoftOrganizations interface{}                                           `json:"allowed_microsoft_organizations"`
 	JSON                          dlpEmailAccountMappingGetResponseAuthRequirementsJSON `json:"-"`
@@ -303,7 +297,7 @@ func (r DLPEmailAccountMappingGetResponseAuthRequirements) AsUnion() DLPEmailAcc
 	return r.union
 }
 
-// DLPEmailAccountMappingGetResponseAuthRequirementsUnion is satisfied by [DLPEmailAccountMappingGetResponseAuthRequirementsObject] or
+// Union satisfied by [DLPEmailAccountMappingGetResponseAuthRequirementsObject] or
 // [DLPEmailAccountMappingGetResponseAuthRequirementsType].
 type DLPEmailAccountMappingGetResponseAuthRequirementsUnion interface {
 	implementsDLPEmailAccountMappingGetResponseAuthRequirements()
@@ -424,7 +418,7 @@ func (r DLPEmailAccountMappingNewParamsAuthRequirements) MarshalJSON() (data []b
 func (r DLPEmailAccountMappingNewParamsAuthRequirements) implementsDLPEmailAccountMappingNewParamsAuthRequirementsUnion() {
 }
 
-// DLPEmailAccountMappingNewParamsAuthRequirementsUnion satisfied by [zero_trust.DLPEmailAccountMappingNewParamsAuthRequirementsObject],
+// Satisfied by [zero_trust.DLPEmailAccountMappingNewParamsAuthRequirementsObject],
 // [zero_trust.DLPEmailAccountMappingNewParamsAuthRequirementsType],
 // [DLPEmailAccountMappingNewParamsAuthRequirements].
 type DLPEmailAccountMappingNewParamsAuthRequirementsUnion interface {
@@ -607,7 +601,7 @@ func (r dlpEmailAccountMappingNewResponseEnvelopeMessagesSourceJSON) RawJSON() s
 	return r.raw
 }
 
-// DLPEmailAccountMappingNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPEmailAccountMappingNewResponseEnvelopeSuccess bool
 
 const (
@@ -751,7 +745,7 @@ func (r dlpEmailAccountMappingGetResponseEnvelopeMessagesSourceJSON) RawJSON() s
 	return r.raw
 }
 
-// DLPEmailAccountMappingGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPEmailAccountMappingGetResponseEnvelopeSuccess bool
 
 const (

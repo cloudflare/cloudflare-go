@@ -220,7 +220,7 @@ func (r dlpLimitListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPLimitListResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPLimitListResponseEnvelopeSuccess bool
 
 const (

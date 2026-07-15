@@ -45,7 +45,7 @@ func NewNamespaceInstanceService(opts ...option.RequestOption) (r *NamespaceInst
 	return
 }
 
-// Create a new instance.
+// Create a new AI Search instance with the given configuration.
 func (r *NamespaceInstanceService) New(ctx context.Context, name string, params NamespaceInstanceNewParams, opts ...option.RequestOption) (res *NamespaceInstanceNewResponse, err error) {
 	var env NamespaceInstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -66,7 +66,7 @@ func (r *NamespaceInstanceService) New(ctx context.Context, name string, params 
 	return res, nil
 }
 
-// Update instance.
+// Update the configuration of an AI Search instance.
 func (r *NamespaceInstanceService) Update(ctx context.Context, name string, id string, params NamespaceInstanceUpdateParams, opts ...option.RequestOption) (res *NamespaceInstanceUpdateResponse, err error) {
 	var env NamespaceInstanceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -91,7 +91,7 @@ func (r *NamespaceInstanceService) Update(ctx context.Context, name string, id s
 	return res, nil
 }
 
-// List instances.
+// List all AI Search instances in the account.
 func (r *NamespaceInstanceService) List(ctx context.Context, name string, params NamespaceInstanceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[NamespaceInstanceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -117,12 +117,12 @@ func (r *NamespaceInstanceService) List(ctx context.Context, name string, params
 	return res, nil
 }
 
-// List instances.
+// List all AI Search instances in the account.
 func (r *NamespaceInstanceService) ListAutoPaging(ctx context.Context, name string, params NamespaceInstanceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[NamespaceInstanceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, name, params, opts...))
 }
 
-// Delete instance.
+// Permanently delete an AI Search instance and all its indexed data.
 func (r *NamespaceInstanceService) Delete(ctx context.Context, name string, id string, body NamespaceInstanceDeleteParams, opts ...option.RequestOption) (res *NamespaceInstanceDeleteResponse, err error) {
 	var env NamespaceInstanceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -168,7 +168,7 @@ func (r *NamespaceInstanceService) ChatCompletions(ctx context.Context, name str
 	return res, err
 }
 
-// Read instance.
+// Retrieve the configuration and status of an AI Search instance.
 func (r *NamespaceInstanceService) Read(ctx context.Context, name string, id string, query NamespaceInstanceReadParams, opts ...option.RequestOption) (res *NamespaceInstanceReadResponse, err error) {
 	var env NamespaceInstanceReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -219,7 +219,7 @@ func (r *NamespaceInstanceService) Search(ctx context.Context, name string, id s
 	return res, nil
 }
 
-// Retrieves usage statistics for AI Search instances.
+// Retrieve usage and indexing statistics for an AI Search instance.
 func (r *NamespaceInstanceService) Stats(ctx context.Context, name string, id string, query NamespaceInstanceStatsParams, opts ...option.RequestOption) (res *NamespaceInstanceStatsResponse, err error) {
 	var env NamespaceInstanceStatsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -488,6 +488,7 @@ const (
 	NamespaceInstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceNewResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	NamespaceInstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceNewResponseEmbeddingModel = "openai/text-embedding-3-small"
 	NamespaceInstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceNewResponseEmbeddingModel = "openai/text-embedding-3-large"
 	NamespaceInstanceNewResponseEmbeddingModelEmpty                                 NamespaceInstanceNewResponseEmbeddingModel = ""
@@ -495,7 +496,7 @@ const (
 
 func (r NamespaceInstanceNewResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceNewResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceNewResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceNewResponseEmbeddingModelEmpty:
+	case NamespaceInstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceNewResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceNewResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceNewResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -781,7 +782,9 @@ type NamespaceInstanceNewResponseRetrievalOptions struct {
 	BoostBy []NamespaceInstanceNewResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode NamespaceInstanceNewResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             namespaceInstanceNewResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -857,7 +860,9 @@ func (r NamespaceInstanceNewResponseRetrievalOptionsBoostByDirection) IsKnown() 
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type NamespaceInstanceNewResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -1339,6 +1344,7 @@ const (
 	NamespaceInstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceUpdateResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	NamespaceInstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-small"
 	NamespaceInstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-large"
 	NamespaceInstanceUpdateResponseEmbeddingModelEmpty                                 NamespaceInstanceUpdateResponseEmbeddingModel = ""
@@ -1346,7 +1352,7 @@ const (
 
 func (r NamespaceInstanceUpdateResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceUpdateResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceUpdateResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceUpdateResponseEmbeddingModelEmpty:
+	case NamespaceInstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceUpdateResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceUpdateResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceUpdateResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -1632,7 +1638,9 @@ type NamespaceInstanceUpdateResponseRetrievalOptions struct {
 	BoostBy []NamespaceInstanceUpdateResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode NamespaceInstanceUpdateResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             namespaceInstanceUpdateResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -1708,7 +1716,9 @@ func (r NamespaceInstanceUpdateResponseRetrievalOptionsBoostByDirection) IsKnown
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type NamespaceInstanceUpdateResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -2190,6 +2200,7 @@ const (
 	NamespaceInstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceListResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	NamespaceInstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	NamespaceInstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	NamespaceInstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	NamespaceInstanceListResponseEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceListResponseEmbeddingModel = "openai/text-embedding-3-small"
 	NamespaceInstanceListResponseEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceListResponseEmbeddingModel = "openai/text-embedding-3-large"
 	NamespaceInstanceListResponseEmbeddingModelEmpty                                 NamespaceInstanceListResponseEmbeddingModel = ""
@@ -2197,7 +2208,7 @@ const (
 
 func (r NamespaceInstanceListResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceListResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceListResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceListResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceListResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceListResponseEmbeddingModelEmpty:
+	case NamespaceInstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceListResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceListResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceListResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceListResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceListResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -2483,7 +2494,9 @@ type NamespaceInstanceListResponseRetrievalOptions struct {
 	BoostBy []NamespaceInstanceListResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode NamespaceInstanceListResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             namespaceInstanceListResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -2559,7 +2572,9 @@ func (r NamespaceInstanceListResponseRetrievalOptionsBoostByDirection) IsKnown()
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type NamespaceInstanceListResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -3041,6 +3056,7 @@ const (
 	NamespaceInstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceDeleteResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	NamespaceInstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-small"
 	NamespaceInstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-large"
 	NamespaceInstanceDeleteResponseEmbeddingModelEmpty                                 NamespaceInstanceDeleteResponseEmbeddingModel = ""
@@ -3048,7 +3064,7 @@ const (
 
 func (r NamespaceInstanceDeleteResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceDeleteResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceDeleteResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceDeleteResponseEmbeddingModelEmpty:
+	case NamespaceInstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceDeleteResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceDeleteResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceDeleteResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -3334,7 +3350,9 @@ type NamespaceInstanceDeleteResponseRetrievalOptions struct {
 	BoostBy []NamespaceInstanceDeleteResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode NamespaceInstanceDeleteResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             namespaceInstanceDeleteResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -3410,7 +3428,9 @@ func (r NamespaceInstanceDeleteResponseRetrievalOptionsBoostByDirection) IsKnown
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type NamespaceInstanceDeleteResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -4239,6 +4259,7 @@ const (
 	NamespaceInstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceReadResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	NamespaceInstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceReadResponseEmbeddingModel = "openai/text-embedding-3-small"
 	NamespaceInstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceReadResponseEmbeddingModel = "openai/text-embedding-3-large"
 	NamespaceInstanceReadResponseEmbeddingModelEmpty                                 NamespaceInstanceReadResponseEmbeddingModel = ""
@@ -4246,7 +4267,7 @@ const (
 
 func (r NamespaceInstanceReadResponseEmbeddingModel) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceReadResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceReadResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceReadResponseEmbeddingModelEmpty:
+	case NamespaceInstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceReadResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceReadResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceReadResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -4532,7 +4553,9 @@ type NamespaceInstanceReadResponseRetrievalOptions struct {
 	BoostBy []NamespaceInstanceReadResponseRetrievalOptionsBoostBy `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode NamespaceInstanceReadResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             namespaceInstanceReadResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -4608,7 +4631,9 @@ func (r NamespaceInstanceReadResponseRetrievalOptionsBoostByDirection) IsKnown()
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type NamespaceInstanceReadResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -5277,6 +5302,7 @@ const (
 	NamespaceInstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceNewParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	NamespaceInstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceNewParamsEmbeddingModel = "openai/text-embedding-3-small"
 	NamespaceInstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceNewParamsEmbeddingModel = "openai/text-embedding-3-large"
 	NamespaceInstanceNewParamsEmbeddingModelEmpty                                 NamespaceInstanceNewParamsEmbeddingModel = ""
@@ -5284,7 +5310,7 @@ const (
 
 func (r NamespaceInstanceNewParamsEmbeddingModel) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceNewParamsEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceNewParamsEmbeddingModelCfBaaiBgeM3, NamespaceInstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceNewParamsEmbeddingModelEmpty:
+	case NamespaceInstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceNewParamsEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceNewParamsEmbeddingModelCfBaaiBgeM3, NamespaceInstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceNewParamsEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -5452,7 +5478,9 @@ type NamespaceInstanceNewParamsRetrievalOptions struct {
 	BoostBy param.Field[[]NamespaceInstanceNewParamsRetrievalOptionsBoostBy] `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode param.Field[NamespaceInstanceNewParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -5500,7 +5528,9 @@ func (r NamespaceInstanceNewParamsRetrievalOptionsBoostByDirection) IsKnown() bo
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type NamespaceInstanceNewParamsRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -5866,6 +5896,7 @@ const (
 	NamespaceInstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceUpdateParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
 	NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
 	NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
+	NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2"
 	NamespaceInstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-small"
 	NamespaceInstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-large"
 	NamespaceInstanceUpdateParamsEmbeddingModelEmpty                                 NamespaceInstanceUpdateParamsEmbeddingModel = ""
@@ -5873,7 +5904,7 @@ const (
 
 func (r NamespaceInstanceUpdateParamsEmbeddingModel) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceUpdateParamsEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceUpdateParamsEmbeddingModelCfBaaiBgeM3, NamespaceInstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceUpdateParamsEmbeddingModelEmpty:
+	case NamespaceInstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceUpdateParamsEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceUpdateParamsEmbeddingModelCfBaaiBgeM3, NamespaceInstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceUpdateParamsEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -6041,7 +6072,9 @@ type NamespaceInstanceUpdateParamsRetrievalOptions struct {
 	BoostBy param.Field[[]NamespaceInstanceUpdateParamsRetrievalOptionsBoostBy] `json:"boost_by"`
 	// Controls which documents are candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+	// containing at least one term, ranked by BM25 relevance. When omitted on an
+	// update, the existing stored value is preserved; when never set, search falls
+	// back to 'and'.
 	KeywordMatchMode param.Field[NamespaceInstanceUpdateParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -6089,7 +6122,9 @@ func (r NamespaceInstanceUpdateParamsRetrievalOptionsBoostByDirection) IsKnown()
 
 // Controls which documents are candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. Defaults to 'and'.
+// containing at least one term, ranked by BM25 relevance. When omitted on an
+// update, the existing stored value is preserved; when never set, search falls
+// back to 'and'.
 type NamespaceInstanceUpdateParamsRetrievalOptionsKeywordMatchMode string
 
 const (

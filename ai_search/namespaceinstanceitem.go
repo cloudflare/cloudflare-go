@@ -274,8 +274,7 @@ func (r *NamespaceInstanceItemService) Sync(ctx context.Context, name string, id
 	return res, nil
 }
 
-// Uploads a file to a managed AI Search instance via multipart/form-data (max
-// 4MB).
+// Uploads a file to a managed AI Search instance via multipart/form-data.
 func (r *NamespaceInstanceItemService) Upload(ctx context.Context, name string, id string, params NamespaceInstanceItemUploadParams, opts ...option.RequestOption) (res *NamespaceInstanceItemUploadResponse, err error) {
 	var env NamespaceInstanceItemUploadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -807,6 +806,9 @@ type NamespaceInstanceItemListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter items by their unique ID. Returns at most one item.
 	ItemID param.Field[string] `query:"item_id"`
+	// Filter items by their exact key (object key / filename). Keys are unique per
+	// source, so combine with `source` to disambiguate across data sources.
+	Key param.Field[string] `query:"key"`
 	// JSON-encoded metadata filter using Vectorize filter syntax. Examples:
 	// {"folder":"reports/"},
 	// {"timestamp":{"$gte":1700000000000}}, {"folder":{"$in":["docs/","reports/"]}}
@@ -1189,7 +1191,7 @@ func (r NamespaceInstanceItemUploadParams) MarshalMultipart() (data []byte, cont
 }
 
 type NamespaceInstanceItemUploadParamsFile struct {
-	// The file to upload (max 4MB). Filename must not exceed 128 characters.
+	// The file to upload. Filename must not exceed 128 characters.
 	File param.Field[io.Reader] `json:"file" api:"required" format:"binary"`
 	// JSON string of custom metadata key-value pairs.
 	Metadata param.Field[string] `json:"metadata"`

@@ -40,7 +40,8 @@ func NewInvestigateBulkMessageService(opts ...option.RequestOption) (r *Investig
 	return
 }
 
-// List messages for a bulk action job
+// Returns the individual messages associated with a bulk action job, including
+// their processing status.
 func (r *InvestigateBulkMessageService) List(ctx context.Context, jobID string, params InvestigateBulkMessageListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InvestigateBulkMessageListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -66,7 +67,8 @@ func (r *InvestigateBulkMessageService) List(ctx context.Context, jobID string, 
 	return res, nil
 }
 
-// List messages for a bulk action job
+// Returns the individual messages associated with a bulk action job, including
+// their processing status.
 func (r *InvestigateBulkMessageService) ListAutoPaging(ctx context.Context, jobID string, params InvestigateBulkMessageListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InvestigateBulkMessageListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, jobID, params, opts...))
 }

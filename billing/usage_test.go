@@ -32,7 +32,7 @@ func TestUsageGetWithOptionalParams(t *testing.T) {
 	_, err := client.Billing.Usage.Get(context.TODO(), billing.UsageGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		From:      cloudflare.F(time.Now()),
-		Metric:    cloudflare.F("workers_standard_requests"),
+		MetricID:  cloudflare.F([]string{"workers_standard_requests", "http_transferred_bytes"}),
 		To:        cloudflare.F(time.Now()),
 	})
 	if err != nil {

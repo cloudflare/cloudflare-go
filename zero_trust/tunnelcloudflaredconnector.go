@@ -95,7 +95,7 @@ func (r tunnelCloudflaredConnectorGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// TunnelCloudflaredConnectorGetResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type TunnelCloudflaredConnectorGetResponseEnvelopeSuccess bool
 
 const (

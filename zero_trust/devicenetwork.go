@@ -186,7 +186,7 @@ func (r deviceNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceNetworkConfig is the configuration object containing information for the WARP client to detect
+// The configuration object containing information for the WARP client to detect
 // the managed network.
 type DeviceNetworkConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
@@ -216,7 +216,7 @@ func (r deviceNetworkConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceNetworkType is the type of device managed network.
+// The type of device managed network.
 type DeviceNetworkType string
 
 const (
@@ -246,7 +246,7 @@ func (r DeviceNetworkNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// DeviceNetworkNewParamsConfig is the configuration object containing information for the WARP client to detect
+// The configuration object containing information for the WARP client to detect
 // the managed network.
 type DeviceNetworkNewParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
@@ -262,7 +262,7 @@ func (r DeviceNetworkNewParamsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// DeviceNetworkNewParamsType is the type of device managed network.
+// The type of device managed network.
 type DeviceNetworkNewParamsType string
 
 const (
@@ -305,7 +305,7 @@ func (r deviceNetworkNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceNetworkNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DeviceNetworkNewResponseEnvelopeSuccess bool
 
 const (
@@ -335,7 +335,7 @@ func (r DeviceNetworkUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// DeviceNetworkUpdateParamsConfig is the configuration object containing information for the WARP client to detect
+// The configuration object containing information for the WARP client to detect
 // the managed network.
 type DeviceNetworkUpdateParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
@@ -351,7 +351,7 @@ func (r DeviceNetworkUpdateParamsConfig) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-// DeviceNetworkUpdateParamsType is the type of device managed network.
+// The type of device managed network.
 type DeviceNetworkUpdateParamsType string
 
 const (
@@ -394,7 +394,7 @@ func (r deviceNetworkUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceNetworkUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DeviceNetworkUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -449,7 +449,7 @@ func (r deviceNetworkGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceNetworkGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DeviceNetworkGetResponseEnvelopeSuccess bool
 
 const (

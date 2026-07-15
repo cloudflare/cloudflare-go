@@ -34,7 +34,7 @@ func NewThreatEventRawService(opts ...option.RequestOption) (r *ThreatEventRawSe
 	return
 }
 
-// Updates a raw event
+// Update raw data for a specific event.
 func (r *ThreatEventRawService) Edit(ctx context.Context, eventID string, rawID string, params ThreatEventRawEditParams, opts ...option.RequestOption) (res *ThreatEventRawEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -54,7 +54,7 @@ func (r *ThreatEventRawService) Edit(ctx context.Context, eventID string, rawID 
 	return res, err
 }
 
-// Reads data for a raw event
+// Retrieve raw data for a specific event.
 func (r *ThreatEventRawService) Get(ctx context.Context, eventID string, rawID string, query ThreatEventRawGetParams, opts ...option.RequestOption) (res *ThreatEventRawGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

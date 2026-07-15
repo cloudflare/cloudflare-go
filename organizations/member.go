@@ -162,12 +162,14 @@ type OrganizationMemberStatus string
 
 const (
 	OrganizationMemberStatusActive   OrganizationMemberStatus = "active"
+	OrganizationMemberStatusPending  OrganizationMemberStatus = "pending"
+	OrganizationMemberStatusRejected OrganizationMemberStatus = "rejected"
 	OrganizationMemberStatusCanceled OrganizationMemberStatus = "canceled"
 )
 
 func (r OrganizationMemberStatus) IsKnown() bool {
 	switch r {
-	case OrganizationMemberStatusActive, OrganizationMemberStatusCanceled:
+	case OrganizationMemberStatusActive, OrganizationMemberStatusPending, OrganizationMemberStatusRejected, OrganizationMemberStatusCanceled:
 		return true
 	}
 	return false
@@ -307,12 +309,14 @@ type MemberListParamsStatus string
 
 const (
 	MemberListParamsStatusActive   MemberListParamsStatus = "active"
+	MemberListParamsStatusPending  MemberListParamsStatus = "pending"
+	MemberListParamsStatusRejected MemberListParamsStatus = "rejected"
 	MemberListParamsStatusCanceled MemberListParamsStatus = "canceled"
 )
 
 func (r MemberListParamsStatus) IsKnown() bool {
 	switch r {
-	case MemberListParamsStatusActive, MemberListParamsStatusCanceled:
+	case MemberListParamsStatusActive, MemberListParamsStatusPending, MemberListParamsStatusRejected, MemberListParamsStatusCanceled:
 		return true
 	}
 	return false

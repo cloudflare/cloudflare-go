@@ -44,7 +44,8 @@ func NewInvestigateBulkService(opts ...option.RequestOption) (r *InvestigateBulk
 	return
 }
 
-// Create a bulk action job
+// Creates a new bulk action job to move or release messages that match the
+// provided search parameters.
 func (r *InvestigateBulkService) New(ctx context.Context, params InvestigateBulkNewParams, opts ...option.RequestOption) (res *InvestigateBulkNewResponse, err error) {
 	var env InvestigateBulkNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -61,7 +62,7 @@ func (r *InvestigateBulkService) New(ctx context.Context, params InvestigateBulk
 	return res, nil
 }
 
-// List bulk action jobs
+// Returns a paginated list of bulk action jobs for the account.
 func (r *InvestigateBulkService) List(ctx context.Context, params InvestigateBulkListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InvestigateBulkListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -83,7 +84,7 @@ func (r *InvestigateBulkService) List(ctx context.Context, params InvestigateBul
 	return res, nil
 }
 
-// List bulk action jobs
+// Returns a paginated list of bulk action jobs for the account.
 func (r *InvestigateBulkService) ListAutoPaging(ctx context.Context, params InvestigateBulkListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InvestigateBulkListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -112,7 +113,7 @@ func (r *InvestigateBulkService) Delete(ctx context.Context, jobID string, body 
 	return res, nil
 }
 
-// Get bulk action job details
+// Returns the status and details of a specific bulk action job.
 func (r *InvestigateBulkService) Get(ctx context.Context, jobID string, query InvestigateBulkGetParams, opts ...option.RequestOption) (res *InvestigateBulkGetResponse, err error) {
 	var env InvestigateBulkGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -13,16 +13,22 @@ func (UnionTime) ImplementsAuditLogListParamsSinceUnion()  {}
 
 type UnionString string
 
-func (UnionString) ImplementsEmailSendingSendParamsFromUnion()         {}
-func (UnionString) ImplementsEmailSendingSendParamsBccUnion()          {}
-func (UnionString) ImplementsEmailSendingSendParamsBccArrayItemUnion() {}
-func (UnionString) ImplementsEmailSendingSendParamsCcUnion()           {}
-func (UnionString) ImplementsEmailSendingSendParamsCcArrayItemUnion()  {}
-func (UnionString) ImplementsEmailSendingSendParamsReplyToUnion()      {}
-func (UnionString) ImplementsEmailSendingSendParamsToUnion()           {}
-func (UnionString) ImplementsEmailSendingSendParamsToArrayItemUnion()  {}
-func (UnionString) ImplementsReceivedGetParamsEndUnion()               {}
-func (UnionString) ImplementsReceivedGetParamsStartUnion()             {}
+func (UnionString) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
+func (UnionString) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                     {}
+func (UnionString) ImplementsAnalyticsQueryTopNParamsFiltersValueUnion()                           {}
+func (UnionString) ImplementsAnalyticsQueryDataSecurityContentFindingTopNParamsFiltersValueUnion() {}
+func (UnionString) ImplementsAnalyticsQueryDataSecurityFindingSummaryParamsFiltersValueUnion()     {}
+func (UnionString) ImplementsAnalyticsQueryDataSecurityFindingTimeseriesParamsFiltersValueUnion()  {}
+func (UnionString) ImplementsEmailSendingSendParamsFromUnion()                                     {}
+func (UnionString) ImplementsEmailSendingSendParamsBccUnion()                                      {}
+func (UnionString) ImplementsEmailSendingSendParamsBccArrayItemUnion()                             {}
+func (UnionString) ImplementsEmailSendingSendParamsCcUnion()                                       {}
+func (UnionString) ImplementsEmailSendingSendParamsCcArrayItemUnion()                              {}
+func (UnionString) ImplementsEmailSendingSendParamsReplyToUnion()                                  {}
+func (UnionString) ImplementsEmailSendingSendParamsToUnion()                                       {}
+func (UnionString) ImplementsEmailSendingSendParamsToArrayItemUnion()                              {}
+func (UnionString) ImplementsReceivedGetParamsEndUnion()                                           {}
+func (UnionString) ImplementsReceivedGetParamsStartUnion()                                         {}
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion() {
@@ -236,21 +242,17 @@ func (UnionString) ImplementsJsonNewParamsBodyObjectResponseFormatJsonSchemaUnio
 func (UnionString) ImplementsAccessibilityTreeNewResponseAccessibilityTreeValueUnion()             {}
 func (UnionString) ImplementsCrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion()    {}
 
-// Restored after excluding realtime_kit from staging-next sync. The
-// realtime_kit Preset Union types remain on origin/next and require
-// these shared.UnionString implementations.
-func (UnionString) ImplementsPresetNewResponseDataPermissionsPluginsConfigUnion()           {}
-func (UnionString) ImplementsPresetUpdateResponseDataPermissionsPluginsConfigUnion()        {}
-func (UnionString) ImplementsPresetDeleteResponseDataPermissionsPluginsConfigUnion()        {}
-func (UnionString) ImplementsPresetGetPresetByIDResponseDataPermissionsPluginsConfigUnion() {}
-func (UnionString) ImplementsPresetNewParamsPermissionsPluginsConfigUnion()                 {}
-func (UnionString) ImplementsPresetUpdateParamsPermissionsPluginsConfigUnion()              {}
-
 type UnionBool bool
 
-func (UnionBool) ImplementsVersionAssetsConfigRunWorkerFirstUnionParam()               {}
-func (UnionBool) ImplementsVersionAssetsConfigRunWorkerFirstUnion()                    {}
-func (UnionBool) ImplementsScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion() {}
+func (UnionBool) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
+func (UnionBool) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                     {}
+func (UnionBool) ImplementsAnalyticsQueryTopNParamsFiltersValueUnion()                           {}
+func (UnionBool) ImplementsAnalyticsQueryDataSecurityContentFindingTopNParamsFiltersValueUnion() {}
+func (UnionBool) ImplementsAnalyticsQueryDataSecurityFindingSummaryParamsFiltersValueUnion()     {}
+func (UnionBool) ImplementsAnalyticsQueryDataSecurityFindingTimeseriesParamsFiltersValueUnion()  {}
+func (UnionBool) ImplementsVersionAssetsConfigRunWorkerFirstUnionParam()                         {}
+func (UnionBool) ImplementsVersionAssetsConfigRunWorkerFirstUnion()                              {}
+func (UnionBool) ImplementsScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion()           {}
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionBool) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion() {}
@@ -382,9 +384,15 @@ func (UnionInt) ImplementsInstanceBulkParamsBodyInstanceRetentionSuccessRetentio
 
 type UnionFloat float64
 
-func (UnionFloat) ImplementsSettingEditParamsBodyValueValueUnion() {}
-func (UnionFloat) ImplementsTTLParam()                             {}
-func (UnionFloat) ImplementsTTL()                                  {}
+func (UnionFloat) ImplementsSettingEditParamsBodyValueValueUnion()                                {}
+func (UnionFloat) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
+func (UnionFloat) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                     {}
+func (UnionFloat) ImplementsAnalyticsQueryTopNParamsFiltersValueUnion()                           {}
+func (UnionFloat) ImplementsAnalyticsQueryDataSecurityContentFindingTopNParamsFiltersValueUnion() {}
+func (UnionFloat) ImplementsAnalyticsQueryDataSecurityFindingSummaryParamsFiltersValueUnion()     {}
+func (UnionFloat) ImplementsAnalyticsQueryDataSecurityFindingTimeseriesParamsFiltersValueUnion()  {}
+func (UnionFloat) ImplementsTTLParam()                                                            {}
+func (UnionFloat) ImplementsTTL()                                                                 {}
 func (UnionFloat) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionFloat) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion() {}

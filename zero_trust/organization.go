@@ -323,7 +323,7 @@ func (r organizationCustomPagesJSON) RawJSON() string {
 	return r.raw
 }
 
-// OrganizationMfaConfig configures multi-factor authentication (MFA) settings for an organization.
+// Configures multi-factor authentication (MFA) settings for an organization.
 type OrganizationMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []OrganizationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
@@ -376,7 +376,7 @@ func (r OrganizationMfaConfigAllowedAuthenticator) IsKnown() bool {
 	return false
 }
 
-// OrganizationMfaPivKeyRequirements configures PIV key requirements for MFA using hardware security keys.
+// Configures PIV key requirements for MFA using hardware security keys.
 type OrganizationMfaPivKeyRequirements struct {
 	// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 	// required), `once` (PIN required once per session), `always` (PIN required for
@@ -418,7 +418,7 @@ func (r organizationMfaPivKeyRequirementsJSON) RawJSON() string {
 	return r.raw
 }
 
-// OrganizationMfaPivKeyRequirementsPinPolicy defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
+// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 // required), `once` (PIN required once per session), `always` (PIN required for
 // each use).
 type OrganizationMfaPivKeyRequirementsPinPolicy string
@@ -472,7 +472,7 @@ func (r OrganizationMfaPivKeyRequirementsSSHKeyType) IsKnown() bool {
 	return false
 }
 
-// OrganizationMfaPivKeyRequirementsTouchPolicy defines when physical touch is required to use the SSH key. Valid values:
+// Defines when physical touch is required to use the SSH key. Valid values:
 // `never` (no touch required), `always` (touch required for each use), `cached`
 // (touch cached for 15 seconds).
 type OrganizationMfaPivKeyRequirementsTouchPolicy string
@@ -567,7 +567,7 @@ func (r OrganizationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// OrganizationNewParamsMfaConfig configures multi-factor authentication (MFA) settings for an organization.
+// Configures multi-factor authentication (MFA) settings for an organization.
 type OrganizationNewParamsMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]OrganizationNewParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
@@ -604,7 +604,7 @@ func (r OrganizationNewParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 	return false
 }
 
-// OrganizationNewParamsMfaPivKeyRequirements configures PIV key requirements for MFA using hardware security keys.
+// Configures PIV key requirements for MFA using hardware security keys.
 type OrganizationNewParamsMfaPivKeyRequirements struct {
 	// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 	// required), `once` (PIN required once per session), `always` (PIN required for
@@ -629,7 +629,7 @@ func (r OrganizationNewParamsMfaPivKeyRequirements) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-// OrganizationNewParamsMfaPivKeyRequirementsPinPolicy defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
+// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 // required), `once` (PIN required once per session), `always` (PIN required for
 // each use).
 type OrganizationNewParamsMfaPivKeyRequirementsPinPolicy string
@@ -683,7 +683,7 @@ func (r OrganizationNewParamsMfaPivKeyRequirementsSSHKeyType) IsKnown() bool {
 	return false
 }
 
-// OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy defines when physical touch is required to use the SSH key. Valid values:
+// Defines when physical touch is required to use the SSH key. Valid values:
 // `never` (no touch required), `always` (touch required for each use), `cached`
 // (touch cached for 15 seconds).
 type OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy string
@@ -826,7 +826,7 @@ func (r organizationNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// OrganizationNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type OrganizationNewResponseEnvelopeSuccess bool
 
 const (
@@ -915,7 +915,7 @@ func (r OrganizationUpdateParamsCustomPages) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-// OrganizationUpdateParamsMfaConfig configures multi-factor authentication (MFA) settings for an organization.
+// Configures multi-factor authentication (MFA) settings for an organization.
 type OrganizationUpdateParamsMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]OrganizationUpdateParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
@@ -952,7 +952,7 @@ func (r OrganizationUpdateParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 	return false
 }
 
-// OrganizationUpdateParamsMfaPivKeyRequirements configures PIV key requirements for MFA using hardware security keys.
+// Configures PIV key requirements for MFA using hardware security keys.
 type OrganizationUpdateParamsMfaPivKeyRequirements struct {
 	// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 	// required), `once` (PIN required once per session), `always` (PIN required for
@@ -977,7 +977,7 @@ func (r OrganizationUpdateParamsMfaPivKeyRequirements) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicy defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
+// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 // required), `once` (PIN required once per session), `always` (PIN required for
 // each use).
 type OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicy string
@@ -1031,7 +1031,7 @@ func (r OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyType) IsKnown() bool 
 	return false
 }
 
-// OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy defines when physical touch is required to use the SSH key. Valid values:
+// Defines when physical touch is required to use the SSH key. Valid values:
 // `never` (no touch required), `always` (touch required for each use), `cached`
 // (touch cached for 15 seconds).
 type OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy string
@@ -1174,7 +1174,7 @@ func (r organizationUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// OrganizationUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type OrganizationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1320,7 +1320,7 @@ func (r organizationListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// OrganizationListResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type OrganizationListResponseEnvelopeSuccess bool
 
 const (

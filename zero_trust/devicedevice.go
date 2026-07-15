@@ -127,7 +127,7 @@ func (r *DeviceDeviceService) Revoke(ctx context.Context, deviceID string, body 
 	return res, nil
 }
 
-// DeviceDeviceListResponse is a WARP Device.
+// A WARP Device.
 type DeviceDeviceListResponse struct {
 	// The unique ID of the device.
 	ID string `json:"id" api:"required"`
@@ -210,7 +210,7 @@ func (r deviceDeviceListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeviceListResponseLastSeenRegistration is the last seen registration for the device.
+// The last seen registration for the device.
 type DeviceDeviceListResponseLastSeenRegistration struct {
 	// A summary of the device profile evaluated for the registration.
 	Policy DeviceDeviceListResponseLastSeenRegistrationPolicy `json:"policy" api:"nullable"`
@@ -233,7 +233,7 @@ func (r deviceDeviceListResponseLastSeenRegistrationJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeviceListResponseLastSeenRegistrationPolicy is a summary of the device profile evaluated for the registration.
+// A summary of the device profile evaluated for the registration.
 type DeviceDeviceListResponseLastSeenRegistrationPolicy struct {
 	// The ID of the device settings profile.
 	ID string `json:"id" api:"required"`
@@ -269,7 +269,7 @@ func (r deviceDeviceListResponseLastSeenRegistrationPolicyJSON) RawJSON() string
 	return r.raw
 }
 
-// DeviceDeviceListResponseLastSeenUser is the last user to use the WARP device.
+// The last user to use the WARP device.
 type DeviceDeviceListResponseLastSeenUser struct {
 	// UUID.
 	ID string `json:"id"`
@@ -300,7 +300,7 @@ func (r deviceDeviceListResponseLastSeenUserJSON) RawJSON() string {
 
 type DeviceDeviceDeleteResponse = interface{}
 
-// DeviceDeviceGetResponse is a WARP Device.
+// A WARP Device.
 type DeviceDeviceGetResponse struct {
 	// The unique ID of the device.
 	ID string `json:"id" api:"required"`
@@ -383,7 +383,7 @@ func (r deviceDeviceGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeviceGetResponseLastSeenRegistration is the last seen registration for the device.
+// The last seen registration for the device.
 type DeviceDeviceGetResponseLastSeenRegistration struct {
 	// A summary of the device profile evaluated for the registration.
 	Policy DeviceDeviceGetResponseLastSeenRegistrationPolicy `json:"policy" api:"nullable"`
@@ -406,7 +406,7 @@ func (r deviceDeviceGetResponseLastSeenRegistrationJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeviceGetResponseLastSeenRegistrationPolicy is a summary of the device profile evaluated for the registration.
+// A summary of the device profile evaluated for the registration.
 type DeviceDeviceGetResponseLastSeenRegistrationPolicy struct {
 	// The ID of the device settings profile.
 	ID string `json:"id" api:"required"`
@@ -442,7 +442,7 @@ func (r deviceDeviceGetResponseLastSeenRegistrationPolicyJSON) RawJSON() string 
 	return r.raw
 }
 
-// DeviceDeviceGetResponseLastSeenUser is the last user to use the WARP device.
+// The last user to use the WARP device.
 type DeviceDeviceGetResponseLastSeenUser struct {
 	// UUID.
 	ID string `json:"id"`
@@ -512,7 +512,7 @@ func (r DeviceDeviceListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// DeviceDeviceListParamsActiveRegistrations include or exclude devices with active registrations. The default is "only" -
+// Include or exclude devices with active registrations. The default is "only" -
 // return only devices with active registrations.
 type DeviceDeviceListParamsActiveRegistrations string
 
@@ -544,7 +544,7 @@ func (r DeviceDeviceListParamsLastSeenUser) URLQuery() (v url.Values) {
 	})
 }
 
-// DeviceDeviceListParamsSortBy is the device field to order results by.
+// The device field to order results by.
 type DeviceDeviceListParamsSortBy string
 
 const (
@@ -565,7 +565,7 @@ func (r DeviceDeviceListParamsSortBy) IsKnown() bool {
 	return false
 }
 
-// DeviceDeviceListParamsSortOrder sort direction.
+// Sort direction.
 type DeviceDeviceListParamsSortOrder string
 
 const (
@@ -613,7 +613,7 @@ func (r deviceDeviceDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeviceDeleteResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeviceDeleteResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code" api:"required"`
@@ -638,7 +638,7 @@ func (r deviceDeviceDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeviceDeleteResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeviceDeleteResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code" api:"required"`
@@ -707,7 +707,7 @@ func (r deviceDeviceGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeviceGetResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeviceGetResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code" api:"required"`
@@ -732,7 +732,7 @@ func (r deviceDeviceGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeviceGetResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeviceGetResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code" api:"required"`
@@ -789,7 +789,7 @@ func (r deviceDeviceRevokeResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeviceRevokeResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeviceRevokeResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code" api:"required"`
@@ -814,7 +814,7 @@ func (r deviceDeviceRevokeResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// DeviceDeviceRevokeResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
+// A message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceDeviceRevokeResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code" api:"required"`

@@ -305,7 +305,7 @@ func (r accessKeyUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// AccessKeyUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessKeyUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -449,7 +449,7 @@ func (r accessKeyGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// AccessKeyGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessKeyGetResponseEnvelopeSuccess bool
 
 const (
@@ -593,7 +593,7 @@ func (r accessKeyRotateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// AccessKeyRotateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessKeyRotateResponseEnvelopeSuccess bool
 
 const (

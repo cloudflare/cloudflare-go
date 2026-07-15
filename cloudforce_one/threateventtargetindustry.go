@@ -36,7 +36,7 @@ func NewThreatEventTargetIndustryService(opts ...option.RequestOption) (r *Threa
 	return
 }
 
-// Lists target industries across multiple datasets
+// List target industries referenced in events across one or more datasets.
 func (r *ThreatEventTargetIndustryService) List(ctx context.Context, params ThreatEventTargetIndustryListParams, opts ...option.RequestOption) (res *ThreatEventTargetIndustryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

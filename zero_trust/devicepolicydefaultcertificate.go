@@ -108,7 +108,7 @@ func (r devicePolicyDefaultCertificateEditResponseEnvelopeJSON) RawJSON() string
 	return r.raw
 }
 
-// DevicePolicyDefaultCertificateEditResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DevicePolicyDefaultCertificateEditResponseEnvelopeSuccess bool
 
 const (
@@ -155,7 +155,7 @@ func (r devicePolicyDefaultCertificateGetResponseEnvelopeJSON) RawJSON() string 
 	return r.raw
 }
 
-// DevicePolicyDefaultCertificateGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DevicePolicyDefaultCertificateGetResponseEnvelopeSuccess bool
 
 const (

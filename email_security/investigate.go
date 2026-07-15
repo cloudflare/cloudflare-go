@@ -1121,7 +1121,8 @@ type InvestigateListParams struct {
 	Query     param.Field[string] `query:"query"`
 	Recipient param.Field[string] `query:"recipient"`
 	Sender    param.Field[string] `query:"sender"`
-	// The beginning of the search date range. Defaults to `now - 30 days`.
+	// The beginning of the search date range. Defaults to `now - 30 days`. Must not be
+	// in the future.
 	Start   param.Field[time.Time] `query:"start" format:"date-time"`
 	Subject param.Field[string]    `query:"subject"`
 }

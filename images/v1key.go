@@ -35,7 +35,8 @@ func NewV1KeyService(opts ...option.RequestOption) (r *V1KeyService) {
 	return
 }
 
-// Create a new signing key with specified name. Returns all keys available.
+// Create a new CF Images signing key with specified name. Returns all keys
+// available.
 func (r *V1KeyService) Update(ctx context.Context, signingKeyName string, body V1KeyUpdateParams, opts ...option.RequestOption) (res *V1KeyUpdateResponse, err error) {
 	var env V1KeyUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +57,7 @@ func (r *V1KeyService) Update(ctx context.Context, signingKeyName string, body V
 	return res, nil
 }
 
-// Lists your signing keys. These can be found on your Cloudflare Images dashboard.
+// List your CF Images signing keys.
 func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...option.RequestOption) (res *V1KeyListResponse, err error) {
 	var env V1KeyListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -73,8 +74,8 @@ func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...
 	return res, nil
 }
 
-// Delete signing key with specified name. Returns all keys available. When last
-// key is removed, a new default signing key will be generated.
+// Delete a CF Images signing key with specified name. Returns all keys available.
+// When the last key is removed, a new default signing key will be generated.
 func (r *V1KeyService) Delete(ctx context.Context, signingKeyName string, body V1KeyDeleteParams, opts ...option.RequestOption) (res *V1KeyDeleteResponse, err error) {
 	var env V1KeyDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

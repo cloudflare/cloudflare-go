@@ -38,7 +38,7 @@ func NewEvaluationTypeService(opts ...option.RequestOption) (r *EvaluationTypeSe
 	return
 }
 
-// List Evaluators
+// Lists all available evaluator types for scoring AI gateway responses.
 func (r *EvaluationTypeService) List(ctx context.Context, params EvaluationTypeListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[EvaluationTypeListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +60,7 @@ func (r *EvaluationTypeService) List(ctx context.Context, params EvaluationTypeL
 	return res, nil
 }
 
-// List Evaluators
+// Lists all available evaluator types for scoring AI gateway responses.
 func (r *EvaluationTypeService) ListAutoPaging(ctx context.Context, params EvaluationTypeListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[EvaluationTypeListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }

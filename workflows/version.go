@@ -696,10 +696,7 @@ func (r VersionGraphResponseGraphWorkflowNodesKind) IsKnown() bool {
 
 // Shape descriptor for JSON payloads.
 type VersionGraphResponseGraphWorkflowPayload struct {
-	// This field can have the runtime type of
-	// [VersionGraphResponseGraphWorkflowPayloadTypeType],
-	// [VersionGraphResponseGraphWorkflowPayloadObjectType].
-	Type interface{} `json:"type" api:"required"`
+	Type VersionGraphResponseGraphWorkflowPayloadType `json:"type" api:"required"`
 	// This field can have the runtime type of [map[string]interface{}].
 	Fields interface{}                                  `json:"fields"`
 	JSON   versionGraphResponseGraphWorkflowPayloadJSON `json:"-"`

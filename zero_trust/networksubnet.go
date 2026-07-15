@@ -107,7 +107,7 @@ func (r NetworkSubnetListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// NetworkSubnetListParamsAddressFamily if set, only include subnets in the given address family - `v4` or `v6`
+// If set, only include subnets in the given address family - `v4` or `v6`
 type NetworkSubnetListParamsAddressFamily string
 
 const (
@@ -123,7 +123,7 @@ func (r NetworkSubnetListParamsAddressFamily) IsKnown() bool {
 	return false
 }
 
-// NetworkSubnetListParamsSortOrder sort order of the results. `asc` means oldest to newest, `desc` means newest to
+// Sort order of the results. `asc` means oldest to newest, `desc` means newest to
 // oldest. If not set, they will not be in any particular order.
 type NetworkSubnetListParamsSortOrder string
 
@@ -140,7 +140,7 @@ func (r NetworkSubnetListParamsSortOrder) IsKnown() bool {
 	return false
 }
 
-// NetworkSubnetListParamsSubnetTypes if set, the types of subnets to include, separated by comma.
+// If set, the types of subnets to include, separated by comma.
 type NetworkSubnetListParamsSubnetTypes string
 
 const (

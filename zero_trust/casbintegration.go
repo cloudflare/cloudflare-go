@@ -37,7 +37,10 @@ func NewCasbIntegrationService(opts ...option.RequestOption) (r *CasbIntegration
 	return
 }
 
-// Creates a new integration for the specified application.
+// Creates a new integration for the specified application. Integration creation
+// with OAuth is not supported by API at the moment. For other auth methods, use
+// `GET /v2/applications/{application_id}/credential-guide` to see the required
+// credential structure and example payloads for each vendor.
 func (r *CasbIntegrationService) New(ctx context.Context, params CasbIntegrationNewParams, opts ...option.RequestOption) (res *CasbIntegrationNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -589,8 +592,13 @@ type CasbIntegrationNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Vendor/application slug (e.g., GOOGLE_WORKSPACE).
 	//
+	// - `BITBUCKET` - BITBUCKET
+	// - `BOX` - BOX
+	// - `CONFLUENCE` - CONFLUENCE
+	// - `DROPBOX` - DROPBOX
 	// - `GITHUB` - GITHUB
 	// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
+	// - `JIRA` - JIRA
 	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
 	// - `SALESFORCE` - SALESFORCE
 	// - `SLACK` - SLACK
@@ -616,16 +624,26 @@ func (r CasbIntegrationNewParams) MarshalJSON() (data []byte, err error) {
 
 // Vendor/application slug (e.g., GOOGLE_WORKSPACE).
 //
+// - `BITBUCKET` - BITBUCKET
+// - `BOX` - BOX
+// - `CONFLUENCE` - CONFLUENCE
+// - `DROPBOX` - DROPBOX
 // - `GITHUB` - GITHUB
 // - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
+// - `JIRA` - JIRA
 // - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
 // - `SALESFORCE` - SALESFORCE
 // - `SLACK` - SLACK
 type CasbIntegrationNewParamsApplication string
 
 const (
+	CasbIntegrationNewParamsApplicationBitbucket         CasbIntegrationNewParamsApplication = "BITBUCKET"
+	CasbIntegrationNewParamsApplicationBox               CasbIntegrationNewParamsApplication = "BOX"
+	CasbIntegrationNewParamsApplicationConfluence        CasbIntegrationNewParamsApplication = "CONFLUENCE"
+	CasbIntegrationNewParamsApplicationDropbox           CasbIntegrationNewParamsApplication = "DROPBOX"
 	CasbIntegrationNewParamsApplicationGitHub            CasbIntegrationNewParamsApplication = "GITHUB"
 	CasbIntegrationNewParamsApplicationGoogleWorkspace   CasbIntegrationNewParamsApplication = "GOOGLE_WORKSPACE"
+	CasbIntegrationNewParamsApplicationJira              CasbIntegrationNewParamsApplication = "JIRA"
 	CasbIntegrationNewParamsApplicationMicrosoftInternal CasbIntegrationNewParamsApplication = "MICROSOFT_INTERNAL"
 	CasbIntegrationNewParamsApplicationSalesforce        CasbIntegrationNewParamsApplication = "SALESFORCE"
 	CasbIntegrationNewParamsApplicationSlack             CasbIntegrationNewParamsApplication = "SLACK"
@@ -633,7 +651,7 @@ const (
 
 func (r CasbIntegrationNewParamsApplication) IsKnown() bool {
 	switch r {
-	case CasbIntegrationNewParamsApplicationGitHub, CasbIntegrationNewParamsApplicationGoogleWorkspace, CasbIntegrationNewParamsApplicationMicrosoftInternal, CasbIntegrationNewParamsApplicationSalesforce, CasbIntegrationNewParamsApplicationSlack:
+	case CasbIntegrationNewParamsApplicationBitbucket, CasbIntegrationNewParamsApplicationBox, CasbIntegrationNewParamsApplicationConfluence, CasbIntegrationNewParamsApplicationDropbox, CasbIntegrationNewParamsApplicationGitHub, CasbIntegrationNewParamsApplicationGoogleWorkspace, CasbIntegrationNewParamsApplicationJira, CasbIntegrationNewParamsApplicationMicrosoftInternal, CasbIntegrationNewParamsApplicationSalesforce, CasbIntegrationNewParamsApplicationSlack:
 		return true
 	}
 	return false

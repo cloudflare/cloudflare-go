@@ -182,7 +182,7 @@ func (r DEXTracerouteTestResultNetworkPathGetResponseHopsMile) IsKnown() bool {
 	return false
 }
 
-// DEXTracerouteTestResultNetworkPathGetResponseExecutionContext indicates whether the test was run inside or outside of the WARP tunnel.
+// Whether the test was run inside or outside of the WARP tunnel.
 type DEXTracerouteTestResultNetworkPathGetResponseExecutionContext string
 
 const (
@@ -332,7 +332,7 @@ func (r dexTracerouteTestResultNetworkPathGetResponseEnvelopeMessagesSourceJSON)
 	return r.raw
 }
 
-// DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccess bool
 
 const (

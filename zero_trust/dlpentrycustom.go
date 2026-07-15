@@ -294,7 +294,7 @@ func (r DLPEntryCustomListResponse) AsUnion() DLPEntryCustomListResponseUnion {
 	return r.union
 }
 
-// DLPEntryCustomListResponseUnion is satisfied by [DLPEntryCustomListResponseObject],
+// Union satisfied by [DLPEntryCustomListResponseObject],
 // [DLPEntryCustomListResponseObject], [DLPEntryCustomListResponseObject],
 // [DLPEntryCustomListResponseObject], [DLPEntryCustomListResponseObject],
 // [DLPEntryCustomListResponseObject] or [DLPEntryCustomListResponseObject].
@@ -533,7 +533,7 @@ func (r DLPEntryCustomGetResponse) AsUnion() DLPEntryCustomGetResponseUnion {
 	return r.union
 }
 
-// DLPEntryCustomGetResponseUnion is satisfied by [DLPEntryCustomGetResponseObject],
+// Union satisfied by [DLPEntryCustomGetResponseObject],
 // [DLPEntryCustomGetResponseObject], [DLPEntryCustomGetResponseObject],
 // [DLPEntryCustomGetResponseObject], [DLPEntryCustomGetResponseObject],
 // [DLPEntryCustomGetResponseObject] or [DLPEntryCustomGetResponseObject].
@@ -635,7 +635,7 @@ func (r DLPEntryCustomGetResponseObjectType) IsKnown() bool {
 	return false
 }
 
-// DLPEntryCustomGetResponseObjectProfile computed entry field for a profile that an entry is shared into.
+// Computed entry field for a profile that an entry is shared into.
 type DLPEntryCustomGetResponseObjectProfile struct {
 	ID   string                                     `json:"id" api:"required" format:"uuid"`
 	Name string                                     `json:"name" api:"required"`
@@ -854,7 +854,7 @@ func (r dlpEntryCustomNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPEntryCustomNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPEntryCustomNewResponseEnvelopeSuccess bool
 
 const (
@@ -1005,7 +1005,7 @@ func (r dlpEntryCustomUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string
 	return r.raw
 }
 
-// DLPEntryCustomUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPEntryCustomUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1152,7 +1152,7 @@ func (r dlpEntryCustomDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string
 	return r.raw
 }
 
-// DLPEntryCustomDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPEntryCustomDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1295,7 +1295,7 @@ func (r dlpEntryCustomGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DLPEntryCustomGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPEntryCustomGetResponseEnvelopeSuccess bool
 
 const (

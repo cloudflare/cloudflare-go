@@ -131,7 +131,7 @@ func (r DexwarpChangeEventGetResponse) AsUnion() DexwarpChangeEventGetResponseUn
 	return r.union
 }
 
-// DexwarpChangeEventGetResponseUnion union satisfied by
+// Union satisfied by
 // [DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChangeEvent]
 // or
 // [DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEvent].
@@ -209,7 +209,7 @@ func (r dexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChange
 func (r DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChangeEvent) implementsDexwarpChangeEventGetResponse() {
 }
 
-// DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChangeEventToggle is the state of the WARP toggle.
+// The state of the WARP toggle.
 type DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPToggleChangeEventToggle string
 
 const (
@@ -277,7 +277,7 @@ func (r dexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChange
 func (r DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEvent) implementsDexwarpChangeEventGetResponse() {
 }
 
-// DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventFrom is the details for the WARP configuration that was switched from.
+// The details for the WARP configuration that was switched from.
 type DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventFrom struct {
 	// The account name.
 	AccountName string `json:"account_name"`
@@ -307,7 +307,7 @@ func (r dexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChange
 	return r.raw
 }
 
-// DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventTo is the details for the WARP configuration that was switched to.
+// The details for the WARP configuration that was switched to.
 type DexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChangeEventTo struct {
 	// The account name.
 	AccountName string `json:"account_name"`
@@ -337,7 +337,7 @@ func (r dexwarpChangeEventGetResponseDigitalExperienceMonitoringWARPConfigChange
 	return r.raw
 }
 
-// DexwarpChangeEventGetResponseToggle is the state of the WARP toggle.
+// The state of the WARP toggle.
 type DexwarpChangeEventGetResponseToggle string
 
 const (
@@ -386,7 +386,7 @@ func (r DEXWARPChangeEventGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// DexwarpChangeEventGetParamsSortOrder sort response by event timestamp.
+// Sort response by event timestamp.
 type DexwarpChangeEventGetParamsSortOrder string
 
 const (
@@ -402,7 +402,7 @@ func (r DexwarpChangeEventGetParamsSortOrder) IsKnown() bool {
 	return false
 }
 
-// DexwarpChangeEventGetParamsToggle filter events by type toggle value. Applicable to type='toggle' events only.
+// Filter events by type toggle value. Applicable to type='toggle' events only.
 type DexwarpChangeEventGetParamsToggle string
 
 const (
@@ -418,7 +418,7 @@ func (r DexwarpChangeEventGetParamsToggle) IsKnown() bool {
 	return false
 }
 
-// DexwarpChangeEventGetParamsType filter events by type 'config' or 'toggle'.
+// Filter events by type 'config' or 'toggle'.
 type DexwarpChangeEventGetParamsType string
 
 const (
@@ -560,7 +560,7 @@ func (r dexwarpChangeEventGetResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// DexwarpChangeEventGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DexwarpChangeEventGetResponseEnvelopeSuccess bool
 
 const (

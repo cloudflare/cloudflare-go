@@ -319,7 +319,7 @@ func (r dlpCustomPromptTopicNewResponseEnvelopeMessagesSourceJSON) RawJSON() str
 	return r.raw
 }
 
-// DLPCustomPromptTopicNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPCustomPromptTopicNewResponseEnvelopeSuccess bool
 
 const (
@@ -471,7 +471,7 @@ func (r dlpCustomPromptTopicUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// DLPCustomPromptTopicUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPCustomPromptTopicUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -619,7 +619,7 @@ func (r dlpCustomPromptTopicDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// DLPCustomPromptTopicDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPCustomPromptTopicDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -762,7 +762,7 @@ func (r dlpCustomPromptTopicGetResponseEnvelopeMessagesSourceJSON) RawJSON() str
 	return r.raw
 }
 
-// DLPCustomPromptTopicGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPCustomPromptTopicGetResponseEnvelopeSuccess bool
 
 const (

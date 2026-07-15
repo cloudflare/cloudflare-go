@@ -239,7 +239,7 @@ func (r crowdstrikeInputJSON) RawJSON() string {
 
 func (r CrowdstrikeInput) implementsDeviceInput() {}
 
-// CrowdstrikeInputOperator operator.
+// Operator.
 type CrowdstrikeInputOperator string
 
 const (
@@ -258,7 +258,7 @@ func (r CrowdstrikeInputOperator) IsKnown() bool {
 	return false
 }
 
-// CrowdstrikeInputState for more details on state, please refer to the Crowdstrike documentation.
+// For more details on state, please refer to the Crowdstrike documentation.
 type CrowdstrikeInputState string
 
 const (
@@ -275,7 +275,7 @@ func (r CrowdstrikeInputState) IsKnown() bool {
 	return false
 }
 
-// CrowdstrikeInputVersionOperator version Operator.
+// Version Operator.
 type CrowdstrikeInputVersionOperator string
 
 const (
@@ -321,7 +321,7 @@ func (r CrowdstrikeInputParam) MarshalJSON() (data []byte, err error) {
 
 func (r CrowdstrikeInputParam) implementsDeviceInputUnionParam() {}
 
-// DeviceInput is the value to be checked against.
+// The value to be checked against.
 type DeviceInput struct {
 	// List ID.
 	ID string `json:"id"`
@@ -497,7 +497,7 @@ func (r DeviceInput) AsUnion() DeviceInputUnion {
 	return r.union
 }
 
-// DeviceInputUnion is the value to be checked against.
+// The value to be checked against.
 //
 // Union satisfied by [FileInput], [UniqueClientIDInput], [DomainJoinedInput],
 // [OSVersionInput], [FirewallInput], [SentineloneInput],
@@ -633,7 +633,7 @@ func (r deviceInputTeamsDevicesCarbonblackInputRequestJSON) RawJSON() string {
 
 func (r DeviceInputTeamsDevicesCarbonblackInputRequest) implementsDeviceInput() {}
 
-// DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem operating system.
+// Operating system.
 type DeviceInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
 
 const (
@@ -708,7 +708,7 @@ func (r deviceInputTeamsDevicesApplicationInputRequestJSON) RawJSON() string {
 
 func (r DeviceInputTeamsDevicesApplicationInputRequest) implementsDeviceInput() {}
 
-// DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem operating system.
+// Operating system.
 type DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem string
 
 const (
@@ -769,7 +769,7 @@ func (r deviceInputTeamsDevicesClientCertificateV2InputRequestJSON) RawJSON() st
 
 func (r DeviceInputTeamsDevicesClientCertificateV2InputRequest) implementsDeviceInput() {}
 
-// DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem operating system.
+// Operating system.
 type DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem string
 
 const (
@@ -896,7 +896,7 @@ func (r deviceInputTeamsDevicesCustomS2sInputRequestJSON) RawJSON() string {
 
 func (r DeviceInputTeamsDevicesCustomS2sInputRequest) implementsDeviceInput() {}
 
-// DeviceInputTeamsDevicesCustomS2sInputRequestOperator operator.
+// Operator.
 type DeviceInputTeamsDevicesCustomS2sInputRequestOperator string
 
 const (
@@ -915,7 +915,7 @@ func (r DeviceInputTeamsDevicesCustomS2sInputRequestOperator) IsKnown() bool {
 	return false
 }
 
-// DeviceInputComplianceStatus compliance Status.
+// Compliance Status.
 type DeviceInputComplianceStatus string
 
 const (
@@ -935,7 +935,7 @@ func (r DeviceInputComplianceStatus) IsKnown() bool {
 	return false
 }
 
-// DeviceInputCountOperator count Operator.
+// Count Operator.
 type DeviceInputCountOperator string
 
 const (
@@ -954,7 +954,7 @@ func (r DeviceInputCountOperator) IsKnown() bool {
 	return false
 }
 
-// DeviceInputNetworkStatus network status of device.
+// Network status of device.
 type DeviceInputNetworkStatus string
 
 const (
@@ -972,7 +972,7 @@ func (r DeviceInputNetworkStatus) IsKnown() bool {
 	return false
 }
 
-// DeviceInputOperatingSystem operating system.
+// Operating system.
 type DeviceInputOperatingSystem string
 
 const (
@@ -992,7 +992,7 @@ func (r DeviceInputOperatingSystem) IsKnown() bool {
 	return false
 }
 
-// DeviceInputOperationalState agent operational state.
+// Agent operational state.
 type DeviceInputOperationalState string
 
 const (
@@ -1013,7 +1013,7 @@ func (r DeviceInputOperationalState) IsKnown() bool {
 	return false
 }
 
-// DeviceInputOperator operator.
+// Operator.
 type DeviceInputOperator string
 
 const (
@@ -1032,7 +1032,7 @@ func (r DeviceInputOperator) IsKnown() bool {
 	return false
 }
 
-// DeviceInputRiskLevel for more details on risk level, refer to the Tanium documentation.
+// For more details on risk level, refer to the Tanium documentation.
 type DeviceInputRiskLevel string
 
 const (
@@ -1050,7 +1050,7 @@ func (r DeviceInputRiskLevel) IsKnown() bool {
 	return false
 }
 
-// DeviceInputScoreOperator score Operator.
+// Score Operator.
 type DeviceInputScoreOperator string
 
 const (
@@ -1069,7 +1069,7 @@ func (r DeviceInputScoreOperator) IsKnown() bool {
 	return false
 }
 
-// DeviceInputState for more details on state, please refer to the Crowdstrike documentation.
+// For more details on state, please refer to the Crowdstrike documentation.
 type DeviceInputState string
 
 const (
@@ -1086,7 +1086,7 @@ func (r DeviceInputState) IsKnown() bool {
 	return false
 }
 
-// DeviceInputVersionOperator version Operator.
+// Version Operator.
 type DeviceInputVersionOperator string
 
 const (
@@ -1105,7 +1105,7 @@ func (r DeviceInputVersionOperator) IsKnown() bool {
 	return false
 }
 
-// DeviceInputParam is the value to be checked against.
+// The value to be checked against.
 type DeviceInputParam struct {
 	// List ID.
 	ID param.Field[string] `json:"id"`
@@ -1199,7 +1199,7 @@ func (r DeviceInputParam) MarshalJSON() (data []byte, err error) {
 
 func (r DeviceInputParam) implementsDeviceInputUnionParam() {}
 
-// DeviceInputUnionParam is the value to be checked against.
+// The value to be checked against.
 //
 // Satisfied by [zero_trust.FileInputParam], [zero_trust.UniqueClientIDInputParam],
 // [zero_trust.DomainJoinedInputParam], [zero_trust.OSVersionInputParam],
@@ -1381,6 +1381,10 @@ type DevicePostureRule struct {
 	ID string `json:"id"`
 	// The description of the device posture rule.
 	Description string `json:"description"`
+	// Whether the rule is enabled. This is a computed, read-only value. It is false
+	// for deprecated Kolide posture rules that still use the issue_count input, and
+	// true otherwise.
+	Enabled bool `json:"enabled"`
 	// Sets the expiration time for a posture check result. If empty, the result
 	// remains valid until it is overwritten by new data from the WARP client.
 	Expiration string `json:"expiration"`
@@ -1403,6 +1407,7 @@ type DevicePostureRule struct {
 type devicePostureRuleJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
+	Enabled     apijson.Field
 	Expiration  apijson.Field
 	Input       apijson.Field
 	Match       apijson.Field
@@ -1421,7 +1426,7 @@ func (r devicePostureRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-// DevicePostureRuleType is the type of device posture rule.
+// The type of device posture rule.
 type DevicePostureRuleType string
 
 const (
@@ -1525,7 +1530,7 @@ func (r domainJoinedInputJSON) RawJSON() string {
 
 func (r DomainJoinedInput) implementsDeviceInput() {}
 
-// DomainJoinedInputOperatingSystem operating System.
+// Operating System.
 type DomainJoinedInputOperatingSystem string
 
 const (
@@ -1588,7 +1593,7 @@ func (r fileInputJSON) RawJSON() string {
 
 func (r FileInput) implementsDeviceInput() {}
 
-// FileInputOperatingSystem operating system.
+// Operating system.
 type FileInputOperatingSystem string
 
 const (
@@ -1650,7 +1655,7 @@ func (r firewallInputJSON) RawJSON() string {
 
 func (r FirewallInput) implementsDeviceInput() {}
 
-// FirewallInputOperatingSystem operating System.
+// Operating System.
 type FirewallInputOperatingSystem string
 
 const (
@@ -1705,7 +1710,7 @@ func (r intuneInputJSON) RawJSON() string {
 
 func (r IntuneInput) implementsDeviceInput() {}
 
-// IntuneInputComplianceStatus compliance Status.
+// Compliance Status.
 type IntuneInputComplianceStatus string
 
 const (
@@ -1788,7 +1793,7 @@ func (r KolideInputAuthState) IsKnown() bool {
 	return false
 }
 
-// KolideInputCountOperator count Operator.
+// Count Operator.
 type KolideInputCountOperator string
 
 const (
@@ -1865,7 +1870,7 @@ func (r osVersionInputJSON) RawJSON() string {
 
 func (r OSVersionInput) implementsDeviceInput() {}
 
-// OSVersionInputOperatingSystem operating System.
+// Operating System.
 type OSVersionInputOperatingSystem string
 
 const (
@@ -1880,7 +1885,7 @@ func (r OSVersionInputOperatingSystem) IsKnown() bool {
 	return false
 }
 
-// OSVersionInputOperator operator.
+// Operator.
 type OSVersionInputOperator string
 
 const (
@@ -1955,7 +1960,7 @@ func (r sentineloneInputJSON) RawJSON() string {
 
 func (r SentineloneInput) implementsDeviceInput() {}
 
-// SentineloneInputOperatingSystem operating system.
+// Operating system.
 type SentineloneInputOperatingSystem string
 
 const (
@@ -2031,7 +2036,7 @@ func (r sentineloneS2sInputJSON) RawJSON() string {
 
 func (r SentineloneS2sInput) implementsDeviceInput() {}
 
-// SentineloneS2sInputNetworkStatus network status of device.
+// Network status of device.
 type SentineloneS2sInputNetworkStatus string
 
 const (
@@ -2049,7 +2054,7 @@ func (r SentineloneS2sInputNetworkStatus) IsKnown() bool {
 	return false
 }
 
-// SentineloneS2sInputOperationalState agent operational state.
+// Agent operational state.
 type SentineloneS2sInputOperationalState string
 
 const (
@@ -2070,7 +2075,7 @@ func (r SentineloneS2sInputOperationalState) IsKnown() bool {
 	return false
 }
 
-// SentineloneS2sInputOperator operator.
+// Operator.
 type SentineloneS2sInputOperator string
 
 const (
@@ -2150,7 +2155,7 @@ func (r taniumInputJSON) RawJSON() string {
 
 func (r TaniumInput) implementsDeviceInput() {}
 
-// TaniumInputOperator operator to evaluate risk_level or eid_last_seen.
+// Operator to evaluate risk_level or eid_last_seen.
 type TaniumInputOperator string
 
 const (
@@ -2169,7 +2174,7 @@ func (r TaniumInputOperator) IsKnown() bool {
 	return false
 }
 
-// TaniumInputRiskLevel for more details on risk level, refer to the Tanium documentation.
+// For more details on risk level, refer to the Tanium documentation.
 type TaniumInputRiskLevel string
 
 const (
@@ -2187,7 +2192,7 @@ func (r TaniumInputRiskLevel) IsKnown() bool {
 	return false
 }
 
-// TaniumInputScoreOperator score Operator.
+// Score Operator.
 type TaniumInputScoreOperator string
 
 const (
@@ -2254,7 +2259,7 @@ func (r uniqueClientIDInputJSON) RawJSON() string {
 
 func (r UniqueClientIDInput) implementsDeviceInput() {}
 
-// UniqueClientIDInputOperatingSystem operating System.
+// Operating System.
 type UniqueClientIDInputOperatingSystem string
 
 const (
@@ -2311,7 +2316,7 @@ func (r workspaceOneInputJSON) RawJSON() string {
 
 func (r WorkspaceOneInput) implementsDeviceInput() {}
 
-// WorkspaceOneInputComplianceStatus compliance Status.
+// Compliance Status.
 type WorkspaceOneInputComplianceStatus string
 
 const (
@@ -2387,7 +2392,7 @@ func (r DevicePostureNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// DevicePostureNewParamsType is the type of device posture rule.
+// The type of device posture rule.
 type DevicePostureNewParamsType string
 
 const (
@@ -2452,7 +2457,7 @@ func (r devicePostureNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DevicePostureNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DevicePostureNewResponseEnvelopeSuccess bool
 
 const (
@@ -2491,7 +2496,7 @@ func (r DevicePostureUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// DevicePostureUpdateParamsType is the type of device posture rule.
+// The type of device posture rule.
 type DevicePostureUpdateParamsType string
 
 const (
@@ -2556,7 +2561,7 @@ func (r devicePostureUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DevicePostureUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DevicePostureUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -2607,7 +2612,7 @@ func (r devicePostureDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DevicePostureDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DevicePostureDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -2654,7 +2659,7 @@ func (r devicePostureGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// DevicePostureGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DevicePostureGetResponseEnvelopeSuccess bool
 
 const (

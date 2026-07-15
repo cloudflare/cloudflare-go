@@ -36,7 +36,7 @@ func NewEnvironmentService(opts ...option.RequestOption) (r *EnvironmentService)
 	return
 }
 
-// Create zone environments
+// Creates environments for a zone.
 func (r *EnvironmentService) New(ctx context.Context, params EnvironmentNewParams, opts ...option.RequestOption) (res *EnvironmentNewResponse, err error) {
 	var env EnvironmentNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +53,7 @@ func (r *EnvironmentService) New(ctx context.Context, params EnvironmentNewParam
 	return res, nil
 }
 
-// Upsert zone environments
+// Replaces the full environment configuration for a zone.
 func (r *EnvironmentService) Update(ctx context.Context, params EnvironmentUpdateParams, opts ...option.RequestOption) (res *EnvironmentUpdateResponse, err error) {
 	var env EnvironmentUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -70,7 +70,7 @@ func (r *EnvironmentService) Update(ctx context.Context, params EnvironmentUpdat
 	return res, nil
 }
 
-// List zone environments
+// Lists configured environments for a zone.
 func (r *EnvironmentService) List(ctx context.Context, query EnvironmentListParams, opts ...option.RequestOption) (res *EnvironmentListResponse, err error) {
 	var env EnvironmentListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -87,7 +87,7 @@ func (r *EnvironmentService) List(ctx context.Context, query EnvironmentListPara
 	return res, nil
 }
 
-// Delete zone environment
+// Deletes a zone environment by reference identifier.
 func (r *EnvironmentService) Delete(ctx context.Context, environmentID string, body EnvironmentDeleteParams, opts ...option.RequestOption) (res *EnvironmentDeleteResponse, err error) {
 	var env EnvironmentDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -108,7 +108,7 @@ func (r *EnvironmentService) Delete(ctx context.Context, environmentID string, b
 	return res, nil
 }
 
-// Partially update zone environments
+// Applies partial updates to zone environments.
 func (r *EnvironmentService) Edit(ctx context.Context, params EnvironmentEditParams, opts ...option.RequestOption) (res *EnvironmentEditResponse, err error) {
 	var env EnvironmentEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,7 +125,7 @@ func (r *EnvironmentService) Edit(ctx context.Context, params EnvironmentEditPar
 	return res, nil
 }
 
-// Roll back zone environment
+// Rolls a zone environment back to its previous version.
 func (r *EnvironmentService) Rollback(ctx context.Context, environmentID string, body EnvironmentRollbackParams, opts ...option.RequestOption) (res *EnvironmentRollbackResponse, err error) {
 	var env EnvironmentRollbackResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

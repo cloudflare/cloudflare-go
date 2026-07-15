@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
@@ -14,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
-func TestRelayTokenRotate(t *testing.T) {
+func TestRelayTokenNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,12 +29,75 @@ func TestRelayTokenRotate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MoQ.Relays.Tokens.Rotate(
+	_, err := client.MoQ.Relays.Tokens.New(
 		context.TODO(),
 		"a1b2c3d4e5f67890a1b2c3d4e5f67890",
-		moq.RelayTokenRotateParams{
+		moq.RelayTokenNewParams{
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Operations: cloudflare.F([]moq.RelayTokenNewParamsOperation{moq.RelayTokenNewParamsOperationPublish, moq.RelayTokenNewParamsOperationSubscribe}),
+			ExpiresAt:  cloudflare.F(time.Now()),
+			Label:      cloudflare.F("primary-encoder"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestRelayTokenList(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.MoQ.Relays.Tokens.List(
+		context.TODO(),
+		"a1b2c3d4e5f67890a1b2c3d4e5f67890",
+		moq.RelayTokenListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Type:      cloudflare.F(moq.RelayTokenRotateParamsTypePublishSubscribe),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestRelayTokenDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.MoQ.Relays.Tokens.Delete(
+		context.TODO(),
+		"a1b2c3d4e5f67890a1b2c3d4e5f67890",
+		"f3a1b2c3d4e5f67890a1b2c3d4e5f678",
+		moq.RelayTokenDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

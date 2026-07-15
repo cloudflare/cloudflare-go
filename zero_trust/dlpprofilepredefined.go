@@ -225,7 +225,7 @@ func (r PredefinedProfileEntry) AsUnion() PredefinedProfileEntriesUnion {
 	return r.union
 }
 
-// PredefinedProfileEntriesUnion is satisfied by [PredefinedProfileEntriesCustomEntry],
+// Union satisfied by [PredefinedProfileEntriesCustomEntry],
 // [PredefinedProfileEntriesCustomPromptTopicEntry],
 // [PredefinedProfileEntriesPredefinedEntry],
 // [PredefinedProfileEntriesIntegrationEntry],
@@ -454,7 +454,7 @@ func (r PredefinedProfileEntriesPredefinedEntryType) IsKnown() bool {
 	return false
 }
 
-// PredefinedProfileEntriesPredefinedEntryVariant is a Predefined AI prompt classification topic entry.
+// A Predefined AI prompt classification topic entry.
 type PredefinedProfileEntriesPredefinedEntryVariant struct {
 	Type PredefinedProfileEntriesPredefinedEntryVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -498,7 +498,7 @@ func (r PredefinedProfileEntriesPredefinedEntryVariant) AsUnion() PredefinedProf
 	return r.union
 }
 
-// PredefinedProfileEntriesPredefinedEntryVariantUnion is a Predefined AI prompt classification topic entry.
+// A Predefined AI prompt classification topic entry.
 //
 // Union satisfied by [PredefinedProfileEntriesPredefinedEntryVariantObject] or
 // [PredefinedProfileEntriesPredefinedEntryVariantObject].
@@ -521,7 +521,7 @@ func init() {
 	)
 }
 
-// PredefinedProfileEntriesPredefinedEntryVariantObject is a Predefined AI prompt classification topic entry.
+// A Predefined AI prompt classification topic entry.
 type PredefinedProfileEntriesPredefinedEntryVariantObject struct {
 	TopicType PredefinedProfileEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      PredefinedProfileEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
@@ -987,7 +987,7 @@ func (r dlpProfilePredefinedUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// DLPProfilePredefinedUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPProfilePredefinedUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1131,7 +1131,7 @@ func (r dlpProfilePredefinedDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// DLPProfilePredefinedDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPProfilePredefinedDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1274,7 +1274,7 @@ func (r dlpProfilePredefinedGetResponseEnvelopeMessagesSourceJSON) RawJSON() str
 	return r.raw
 }
 
-// DLPProfilePredefinedGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPProfilePredefinedGetResponseEnvelopeSuccess bool
 
 const (

@@ -521,7 +521,7 @@ func (r accessServiceTokenNewResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// AccessServiceTokenNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessServiceTokenNewResponseEnvelopeSuccess bool
 
 const (
@@ -687,7 +687,7 @@ func (r accessServiceTokenUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// AccessServiceTokenUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessServiceTokenUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -857,7 +857,7 @@ func (r accessServiceTokenDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// AccessServiceTokenDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessServiceTokenDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1003,7 +1003,7 @@ func (r accessServiceTokenGetResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// AccessServiceTokenGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessServiceTokenGetResponseEnvelopeSuccess bool
 
 const (
@@ -1148,7 +1148,7 @@ func (r accessServiceTokenRefreshResponseEnvelopeMessagesSourceJSON) RawJSON() s
 	return r.raw
 }
 
-// AccessServiceTokenRefreshResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessServiceTokenRefreshResponseEnvelopeSuccess bool
 
 const (
@@ -1299,7 +1299,7 @@ func (r accessServiceTokenRotateResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// AccessServiceTokenRotateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessServiceTokenRotateResponseEnvelopeSuccess bool
 
 const (

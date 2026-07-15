@@ -34,7 +34,7 @@ func NewConnectorSnapshotLatestService(opts ...option.RequestOption) (r *Connect
 	return
 }
 
-// Get latest Snapshots
+// Fetches latest Magic WAN Connector Telemetry Snapshots
 func (r *ConnectorSnapshotLatestService) List(ctx context.Context, connectorID string, query ConnectorSnapshotLatestListParams, opts ...option.RequestOption) (res *ConnectorSnapshotLatestListResponse, err error) {
 	var env ConnectorSnapshotLatestListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

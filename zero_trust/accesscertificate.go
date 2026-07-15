@@ -416,7 +416,7 @@ func (r accessCertificateNewResponseEnvelopeMessagesSourceJSON) RawJSON() string
 	return r.raw
 }
 
-// AccessCertificateNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessCertificateNewResponseEnvelopeSuccess bool
 
 const (
@@ -570,7 +570,7 @@ func (r accessCertificateUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() str
 	return r.raw
 }
 
-// AccessCertificateUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessCertificateUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -736,7 +736,7 @@ func (r accessCertificateDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() str
 	return r.raw
 }
 
-// AccessCertificateDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessCertificateDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -882,7 +882,7 @@ func (r accessCertificateGetResponseEnvelopeMessagesSourceJSON) RawJSON() string
 	return r.raw
 }
 
-// AccessCertificateGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type AccessCertificateGetResponseEnvelopeSuccess bool
 
 const (

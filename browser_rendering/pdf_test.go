@@ -33,7 +33,7 @@ func TestPDFNewWithOptionalParams(t *testing.T) {
 	resp, err := client.BrowserRendering.PDF.New(context.TODO(), browser_rendering.PDFNewParams{
 		AccountID: cloudflare.F("account_id"),
 		Body: browser_rendering.PDFNewParamsBodyObject{
-			HTML:          cloudflare.F("x"),
+			URL:           cloudflare.F("https://www.example.com/"),
 			ActionTimeout: cloudflare.F(120000.000000),
 			AddScriptTag: cloudflare.F([]browser_rendering.PDFNewParamsBodyObjectAddScriptTag{{
 				ID:      cloudflare.F("id"),

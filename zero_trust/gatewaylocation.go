@@ -227,7 +227,7 @@ func (r DOTEndpointParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Endpoint configure the destination endpoints for this location.
+// Configure the destination endpoints for this location.
 type Endpoint struct {
 	DOH  DOHEndpoint  `json:"doh" api:"required"`
 	DOT  DOTEndpoint  `json:"dot" api:"required"`
@@ -254,7 +254,7 @@ func (r endpointJSON) RawJSON() string {
 	return r.raw
 }
 
-// EndpointParam configure the destination endpoints for this location.
+// Configure the destination endpoints for this location.
 type EndpointParam struct {
 	DOH  param.Field[DOHEndpointParam]  `json:"doh" api:"required"`
 	DOT  param.Field[DOTEndpointParam]  `json:"dot" api:"required"`
@@ -466,9 +466,9 @@ func (r locationJSON) RawJSON() string {
 	return r.raw
 }
 
-// LocationMaxTTL controls how DNS response TTLs are capped for this location
-// relative to the account `max_ttl_secs` setting. Omitting `max_ttl` on update
-// resets it to `inherit`.
+// Controls how DNS response TTLs are capped for this location relative to the
+// account `max_ttl_secs` setting. Omitting `max_ttl` on update resets it to
+// `inherit`.
 type LocationMaxTTL struct {
 	// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
 	// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
@@ -495,7 +495,6 @@ func (r locationMaxTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-// LocationMaxTTLMode specifies how this location handles DNS response TTLs.
 // `inherit` uses the account `max_ttl_secs`. `override` uses this location's
 // `ttl_secs`. `disabled` leaves returned TTLs unchanged.
 type LocationMaxTTLMode string
@@ -535,7 +534,7 @@ func (r locationNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
-type GatewayLocationDeleteResponse = any
+type GatewayLocationDeleteResponse = interface{}
 
 type GatewayLocationNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -567,9 +566,9 @@ func (r GatewayLocationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// GatewayLocationNewParamsMaxTTL controls how DNS response TTLs are capped for
-// this location relative to the account `max_ttl_secs` setting. Omitting
-// `max_ttl` on update resets it to `inherit`.
+// Controls how DNS response TTLs are capped for this location relative to the
+// account `max_ttl_secs` setting. Omitting `max_ttl` on update resets it to
+// `inherit`.
 type GatewayLocationNewParamsMaxTTL struct {
 	// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
 	// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
@@ -583,9 +582,8 @@ func (r GatewayLocationNewParamsMaxTTL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// GatewayLocationNewParamsMaxTTLMode specifies how this location handles DNS
-// response TTLs. `inherit` uses the account `max_ttl_secs`. `override` uses this
-// location's `ttl_secs`. `disabled` leaves returned TTLs unchanged.
+// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
+// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
 type GatewayLocationNewParamsMaxTTLMode string
 
 const (
@@ -639,7 +637,7 @@ func (r gatewayLocationNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayLocationNewResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayLocationNewResponseEnvelopeSuccess bool
 
 const (
@@ -684,9 +682,9 @@ func (r GatewayLocationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// GatewayLocationUpdateParamsMaxTTL controls how DNS response TTLs are capped
-// for this location relative to the account `max_ttl_secs` setting. Omitting
-// `max_ttl` on update resets it to `inherit`.
+// Controls how DNS response TTLs are capped for this location relative to the
+// account `max_ttl_secs` setting. Omitting `max_ttl` on update resets it to
+// `inherit`.
 type GatewayLocationUpdateParamsMaxTTL struct {
 	// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
 	// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
@@ -700,9 +698,8 @@ func (r GatewayLocationUpdateParamsMaxTTL) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-// GatewayLocationUpdateParamsMaxTTLMode specifies how this location handles DNS
-// response TTLs. `inherit` uses the account `max_ttl_secs`. `override` uses this
-// location's `ttl_secs`. `disabled` leaves returned TTLs unchanged.
+// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
+// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
 type GatewayLocationUpdateParamsMaxTTLMode string
 
 const (
@@ -756,7 +753,7 @@ func (r gatewayLocationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayLocationUpdateResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayLocationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -807,7 +804,7 @@ func (r gatewayLocationDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayLocationDeleteResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayLocationDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -854,7 +851,7 @@ func (r gatewayLocationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayLocationGetResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayLocationGetResponseEnvelopeSuccess bool
 
 const (
