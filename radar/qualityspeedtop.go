@@ -655,7 +655,11 @@ type QualitySpeedTopAsesParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[QualitySpeedTopAsesParamsFormat] `query:"format"`
@@ -751,7 +755,11 @@ type QualitySpeedTopLocationsParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[QualitySpeedTopLocationsParamsFormat] `query:"format"`

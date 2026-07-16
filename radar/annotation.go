@@ -243,11 +243,20 @@ type AnnotationListParams struct {
 	ASN param.Field[int64] `query:"asn"`
 	// Filters results by data source.
 	DataSource param.Field[AnnotationListParamsDataSource] `query:"dataSource"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`.
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range.
+	// Filters results by a relative date range ending at the current time. Use `<n>d`
+	// for days (up to `364d`) or `<n>w` for weeks (up to `52w`), e.g. `7d`. Append
+	// `control` to request the equivalent previous period for comparison: the
+	// comparison window is shifted back by the current window's length rounded up to a
+	// whole number of weeks, so it keeps the same weekday alignment and does not
+	// overlap the current window (e.g. `3dcontrol` covers days -10 to -7, `7dcontrol`
+	// covers days -14 to -7, `28dcontrol` covers days -56 to -28, and `10dcontrol`
+	// covers days -24 to -14). Mutually exclusive with `dateStart`/`dateEnd`.
 	DateRange param.Field[string] `query:"dateRange"`
-	// Start of the date range (inclusive).
+	// Start of the date range (inclusive). Alternative to `dateRange`; provide
+	// together with `dateEnd`.
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by event type.
 	EventType param.Field[AnnotationListParamsEventType] `query:"eventType"`

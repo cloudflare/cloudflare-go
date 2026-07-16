@@ -16,6 +16,7 @@ type CasbService struct {
 	Options      []option.RequestOption
 	Applications *CasbApplicationService
 	Integrations *CasbIntegrationService
+	Posture      *CasbPostureService
 }
 
 // NewCasbService generates a new service that applies the given options to each
@@ -26,5 +27,6 @@ func NewCasbService(opts ...option.RequestOption) (r *CasbService) {
 	r.Options = opts
 	r.Applications = NewCasbApplicationService(opts...)
 	r.Integrations = NewCasbIntegrationService(opts...)
+	r.Posture = NewCasbPostureService(opts...)
 	return
 }

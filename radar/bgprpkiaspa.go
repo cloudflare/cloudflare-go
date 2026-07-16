@@ -461,9 +461,11 @@ func (r bgprpkiaspaTimeseriesResponseSerie0JSON) RawJSON() string {
 type BGPRPKIASPAChangesParams struct {
 	// Filter changes involving this ASN (as customer or provider).
 	ASN param.Field[int64] `query:"asn"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`.
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
-	// Start of the date range (inclusive).
+	// Start of the date range (inclusive). Alternative to `dateRange`; provide
+	// together with `dateEnd`.
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[BgprpkiaspaChangesParamsFormat] `query:"format"`
@@ -581,9 +583,11 @@ func (r bgprpkiaspaSnapshotResponseEnvelopeJSON) RawJSON() string {
 }
 
 type BGPRPKIASPATimeseriesParams struct {
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`.
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
-	// Start of the date range (inclusive).
+	// Start of the date range (inclusive). Alternative to `dateRange`; provide
+	// together with `dateEnd`.
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[BgprpkiaspaTimeseriesParamsFormat] `query:"format"`

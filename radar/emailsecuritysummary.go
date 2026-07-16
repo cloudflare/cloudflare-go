@@ -2603,13 +2603,29 @@ func (r emailSecuritySummaryTLSVersionResponseSummary0JSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryARCParams struct {
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummaryARCParamsDKIM] `query:"dkim"`
@@ -2742,13 +2758,29 @@ func (r emailSecuritySummaryARCResponseEnvelopeJSON) RawJSON() string {
 type EmailSecuritySummaryDKIMParams struct {
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummaryDKIMParamsARC] `query:"arc"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
 	// Conformance) validation status.
@@ -2879,13 +2911,29 @@ func (r emailSecuritySummaryDKIMResponseEnvelopeJSON) RawJSON() string {
 type EmailSecuritySummaryDMARCParams struct {
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummaryDMARCParamsARC] `query:"arc"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummaryDMARCParamsDKIM] `query:"dkim"`
@@ -3015,13 +3063,29 @@ func (r emailSecuritySummaryDMARCResponseEnvelopeJSON) RawJSON() string {
 type EmailSecuritySummaryMaliciousParams struct {
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummaryMaliciousParamsARC] `query:"arc"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummaryMaliciousParamsDKIM] `query:"dkim"`
@@ -3170,13 +3234,29 @@ func (r emailSecuritySummaryMaliciousResponseEnvelopeJSON) RawJSON() string {
 type EmailSecuritySummarySpamParams struct {
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummarySpamParamsARC] `query:"arc"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummarySpamParamsDKIM] `query:"dkim"`
@@ -3325,13 +3405,29 @@ func (r emailSecuritySummarySpamResponseEnvelopeJSON) RawJSON() string {
 type EmailSecuritySummarySPFParams struct {
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummarySPFParamsARC] `query:"arc"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummarySPFParamsDKIM] `query:"dkim"`
@@ -3462,13 +3558,29 @@ func (r emailSecuritySummarySPFResponseEnvelopeJSON) RawJSON() string {
 type EmailSecuritySummarySpoofParams struct {
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummarySpoofParamsARC] `query:"arc"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummarySpoofParamsDKIM] `query:"dkim"`
@@ -3617,13 +3729,29 @@ func (r emailSecuritySummarySpoofResponseEnvelopeJSON) RawJSON() string {
 type EmailSecuritySummaryThreatCategoryParams struct {
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummaryThreatCategoryParamsARC] `query:"arc"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummaryThreatCategoryParamsDKIM] `query:"dkim"`
@@ -3772,13 +3900,29 @@ func (r emailSecuritySummaryThreatCategoryResponseEnvelopeJSON) RawJSON() string
 type EmailSecuritySummaryTLSVersionParams struct {
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailSecuritySummaryTLSVersionParamsARC] `query:"arc"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailSecuritySummaryTLSVersionParamsDKIM] `query:"dkim"`

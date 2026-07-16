@@ -84,6 +84,24 @@ func (r *UsageService) Paygo(ctx context.Context, params UsagePaygoParams, opts 
 	return res, nil
 }
 
+// Returns high-level usage information for the account, including coverage, and
+// subscription metadata.
+func (r *UsageService) PaygoInfo(ctx context.Context, query UsagePaygoInfoParams, opts ...option.RequestOption) (res *UsagePaygoInfoResponse, err error) {
+	var env UsagePaygoInfoResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/paygo-usage-info", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 // A single cost and usage record for a metered product within a specific charge
 // period, aligned with the FinOps FOCUS v1.3 specification.
 type UsageGetResponse struct {
@@ -339,6 +357,64 @@ func (r usagePaygoResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Contains the paygo usage info.
+type UsagePaygoInfoResponse struct {
+	// Indicates whether the account is covered.
+	Covered bool `json:"covered" api:"required"`
+	// List of subscriptions for the account.
+	Subscriptions []UsagePaygoInfoResponseSubscription `json:"subscriptions" api:"required"`
+	JSON          usagePaygoInfoResponseJSON           `json:"-"`
+}
+
+// usagePaygoInfoResponseJSON contains the JSON metadata for the struct
+// [UsagePaygoInfoResponse]
+type usagePaygoInfoResponseJSON struct {
+	Covered       apijson.Field
+	Subscriptions apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *UsagePaygoInfoResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r usagePaygoInfoResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type UsagePaygoInfoResponseSubscription struct {
+	// The identifier for the Cloudflare subscription.
+	ID string `json:"id" api:"required"`
+	// The subscription billing cycle anchor timestamp.
+	BillingCycleAnchorTimestamp time.Time `json:"billing_cycle_anchor_timestamp" api:"required" format:"date-time"`
+	// The subscription start timestamp.
+	StartTimestamp time.Time `json:"start_timestamp" api:"required" format:"date-time"`
+	// The subscription end timestamp. Omitted for active subscriptions; present only
+	// when the subscription has been cancelled.
+	EndTimestamp time.Time                              `json:"end_timestamp" format:"date-time"`
+	JSON         usagePaygoInfoResponseSubscriptionJSON `json:"-"`
+}
+
+// usagePaygoInfoResponseSubscriptionJSON contains the JSON metadata for the struct
+// [UsagePaygoInfoResponseSubscription]
+type usagePaygoInfoResponseSubscriptionJSON struct {
+	ID                          apijson.Field
+	BillingCycleAnchorTimestamp apijson.Field
+	StartTimestamp              apijson.Field
+	EndTimestamp                apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
+}
+
+func (r *UsagePaygoInfoResponseSubscription) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r usagePaygoInfoResponseSubscriptionJSON) RawJSON() string {
+	return r.raw
+}
+
 type UsageGetParams struct {
 	// Represents a Cloudflare resource identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -574,6 +650,110 @@ const (
 func (r UsagePaygoResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case UsagePaygoResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type UsagePaygoInfoParams struct {
+	// Represents a Cloudflare resource identifier tag.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+// Represents a successful response containing subscription info.
+type UsagePaygoInfoResponseEnvelope struct {
+	// Contains error details if the request failed.
+	Errors []UsagePaygoInfoResponseEnvelopeErrors `json:"errors" api:"required,nullable"`
+	// Contains any informational messages from the API.
+	Messages []UsagePaygoInfoResponseEnvelopeMessages `json:"messages" api:"required,nullable"`
+	// Contains the paygo usage info.
+	Result UsagePaygoInfoResponse `json:"result" api:"required"`
+	// Indicates whether the API call was successful.
+	Success UsagePaygoInfoResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    usagePaygoInfoResponseEnvelopeJSON    `json:"-"`
+}
+
+// usagePaygoInfoResponseEnvelopeJSON contains the JSON metadata for the struct
+// [UsagePaygoInfoResponseEnvelope]
+type usagePaygoInfoResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UsagePaygoInfoResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r usagePaygoInfoResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Represents an API notice or error detail.
+type UsagePaygoInfoResponseEnvelopeErrors struct {
+	// Describes the error or notice.
+	Message string `json:"message" api:"required"`
+	// Identifies the error or notice type.
+	Code int64                                    `json:"code"`
+	JSON usagePaygoInfoResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// usagePaygoInfoResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [UsagePaygoInfoResponseEnvelopeErrors]
+type usagePaygoInfoResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UsagePaygoInfoResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r usagePaygoInfoResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Represents an API notice or error detail.
+type UsagePaygoInfoResponseEnvelopeMessages struct {
+	// Describes the error or notice.
+	Message string `json:"message" api:"required"`
+	// Identifies the error or notice type.
+	Code int64                                      `json:"code"`
+	JSON usagePaygoInfoResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// usagePaygoInfoResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [UsagePaygoInfoResponseEnvelopeMessages]
+type usagePaygoInfoResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UsagePaygoInfoResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r usagePaygoInfoResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates whether the API call was successful.
+type UsagePaygoInfoResponseEnvelopeSuccess bool
+
+const (
+	UsagePaygoInfoResponseEnvelopeSuccessTrue UsagePaygoInfoResponseEnvelopeSuccess = true
+)
+
+func (r UsagePaygoInfoResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UsagePaygoInfoResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

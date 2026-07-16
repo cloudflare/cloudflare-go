@@ -145,25 +145,27 @@ func (UnionString) ImplementsAccessApplicationUpdateParamsBodyBrowserRDPApplicat
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodyMcpServerApplicationPolicyUnion()  {}
 func (UnionString) ImplementsAccessApplicationUpdateParamsBodyMcpServerPortalApplicationPolicyUnion() {
 }
-func (UnionString) ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion()                {}
-func (UnionString) ImplementsDLPEmailRuleNewResponseConditionsValueUnion()                    {}
-func (UnionString) ImplementsDLPEmailRuleUpdateResponseConditionsValueUnion()                 {}
-func (UnionString) ImplementsDLPEmailRuleListResponseConditionsValueUnion()                   {}
-func (UnionString) ImplementsDLPEmailRuleDeleteResponseConditionsValueUnion()                 {}
-func (UnionString) ImplementsDLPEmailRuleBulkEditResponseConditionsValueUnion()               {}
-func (UnionString) ImplementsDLPEmailRuleGetResponseConditionsValueUnion()                    {}
-func (UnionString) ImplementsDLPEmailRuleNewParamsConditionsValueUnion()                      {}
-func (UnionString) ImplementsDLPEmailRuleUpdateParamsConditionsValueUnion()                   {}
-func (UnionString) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                     {}
-func (UnionString) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union()      {}
-func (UnionString) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()      {}
-func (UnionString) ImplementsConfigurationToolsZarazManagedComponentSettingsUnion()           {}
-func (UnionString) ImplementsConfigurationToolsWorkerDefaultFieldsUnion()                     {}
-func (UnionString) ImplementsConfigurationToolsWorkerSettingsUnion()                          {}
-func (UnionString) ImplementsConfigUpdateParamsToolsZarazManagedComponentDefaultFieldsUnion() {}
-func (UnionString) ImplementsConfigUpdateParamsToolsZarazManagedComponentSettingsUnion()      {}
-func (UnionString) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()                {}
-func (UnionString) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                     {}
+func (UnionString) ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion()                  {}
+func (UnionString) ImplementsCasbPostureRemediationJobNewResponseCreatedAssetFieldsValueUnion() {}
+func (UnionString) ImplementsCasbPostureRemediationJobListResponseAssetFieldsValueUnion()       {}
+func (UnionString) ImplementsDLPEmailRuleNewResponseConditionsValueUnion()                      {}
+func (UnionString) ImplementsDLPEmailRuleUpdateResponseConditionsValueUnion()                   {}
+func (UnionString) ImplementsDLPEmailRuleListResponseConditionsValueUnion()                     {}
+func (UnionString) ImplementsDLPEmailRuleDeleteResponseConditionsValueUnion()                   {}
+func (UnionString) ImplementsDLPEmailRuleBulkEditResponseConditionsValueUnion()                 {}
+func (UnionString) ImplementsDLPEmailRuleGetResponseConditionsValueUnion()                      {}
+func (UnionString) ImplementsDLPEmailRuleNewParamsConditionsValueUnion()                        {}
+func (UnionString) ImplementsDLPEmailRuleUpdateParamsConditionsValueUnion()                     {}
+func (UnionString) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                       {}
+func (UnionString) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union()        {}
+func (UnionString) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()        {}
+func (UnionString) ImplementsConfigurationToolsZarazManagedComponentSettingsUnion()             {}
+func (UnionString) ImplementsConfigurationToolsWorkerDefaultFieldsUnion()                       {}
+func (UnionString) ImplementsConfigurationToolsWorkerSettingsUnion()                            {}
+func (UnionString) ImplementsConfigUpdateParamsToolsZarazManagedComponentDefaultFieldsUnion()   {}
+func (UnionString) ImplementsConfigUpdateParamsToolsZarazManagedComponentSettingsUnion()        {}
+func (UnionString) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()                  {}
+func (UnionString) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                       {}
 func (UnionString) ImplementsSessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventsMetadataUnion() {
 }
 func (UnionString) ImplementsThreatEventListParamsSearchValueUnion()             {}
@@ -312,14 +314,16 @@ func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesU
 func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
 func (UnionBool) ImplementsDispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion() {
 }
-func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()      {}
-func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentSettingsUnion()           {}
-func (UnionBool) ImplementsConfigurationToolsWorkerDefaultFieldsUnion()                     {}
-func (UnionBool) ImplementsConfigurationToolsWorkerSettingsUnion()                          {}
-func (UnionBool) ImplementsConfigUpdateParamsToolsZarazManagedComponentDefaultFieldsUnion() {}
-func (UnionBool) ImplementsConfigUpdateParamsToolsZarazManagedComponentSettingsUnion()      {}
-func (UnionBool) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()                {}
-func (UnionBool) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                     {}
+func (UnionBool) ImplementsCasbPostureRemediationJobNewResponseCreatedAssetFieldsValueUnion() {}
+func (UnionBool) ImplementsCasbPostureRemediationJobListResponseAssetFieldsValueUnion()       {}
+func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentDefaultFieldsUnion()        {}
+func (UnionBool) ImplementsConfigurationToolsZarazManagedComponentSettingsUnion()             {}
+func (UnionBool) ImplementsConfigurationToolsWorkerDefaultFieldsUnion()                       {}
+func (UnionBool) ImplementsConfigurationToolsWorkerSettingsUnion()                            {}
+func (UnionBool) ImplementsConfigUpdateParamsToolsZarazManagedComponentDefaultFieldsUnion()   {}
+func (UnionBool) ImplementsConfigUpdateParamsToolsZarazManagedComponentSettingsUnion()        {}
+func (UnionBool) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()                  {}
+func (UnionBool) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                       {}
 func (UnionBool) ImplementsSessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventsMetadataUnion() {
 }
 func (UnionBool) ImplementsLogListParamsFiltersValueUnion()                    {}
@@ -447,11 +451,13 @@ func (UnionFloat) ImplementsObservabilitySharedQueryNewParamsParametersFiltersOb
 }
 func (UnionFloat) ImplementsObservabilitySharedQueryNewParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
-func (UnionFloat) ImplementsObservabilitySharedQueryNewParamsParametersNeedleValueUnion()  {}
-func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()    {}
-func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
-func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                   {}
-func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union()    {}
+func (UnionFloat) ImplementsObservabilitySharedQueryNewParamsParametersNeedleValueUnion()      {}
+func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()        {}
+func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()     {}
+func (UnionFloat) ImplementsCasbPostureRemediationJobNewResponseCreatedAssetFieldsValueUnion() {}
+func (UnionFloat) ImplementsCasbPostureRemediationJobListResponseAssetFieldsValueUnion()       {}
+func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()                       {}
+func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union()        {}
 func (UnionFloat) ImplementsSessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventsMetadataUnion() {
 }
 func (UnionFloat) ImplementsThreatEventListParamsSearchValueUnion()             {}

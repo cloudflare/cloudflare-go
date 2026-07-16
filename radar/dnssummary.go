@@ -2962,13 +2962,29 @@ type DNSSummaryCacheHitParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryCacheHitParamsFormat] `query:"format"`
@@ -2986,7 +3002,10 @@ type DNSSummaryCacheHitParams struct {
 	QueryType param.Field[[]DNSSummaryCacheHitParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSSummaryCacheHitParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain.
+	// Filters results by top-level domain. Incompatible with the `ipVersion`,
+	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
+	// filters/dimensions; this restriction does not apply to country-code TLDs
+	// (2-letter, e.g. `uk`).
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -3198,13 +3217,29 @@ type DNSSummaryDNSSECParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryDNSSECParamsFormat] `query:"format"`
@@ -3222,7 +3257,10 @@ type DNSSummaryDNSSECParams struct {
 	QueryType param.Field[[]DNSSummaryDNSSECParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSSummaryDNSSECParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain.
+	// Filters results by top-level domain. Incompatible with the `ipVersion`,
+	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
+	// filters/dimensions; this restriction does not apply to country-code TLDs
+	// (2-letter, e.g. `uk`).
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -3433,13 +3471,29 @@ type DNSSummaryDNSSECAwareParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryDNSSECAwareParamsFormat] `query:"format"`
@@ -3457,7 +3511,10 @@ type DNSSummaryDNSSECAwareParams struct {
 	QueryType param.Field[[]DNSSummaryDNSSECAwareParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSSummaryDNSSECAwareParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain.
+	// Filters results by top-level domain. Incompatible with the `ipVersion`,
+	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
+	// filters/dimensions; this restriction does not apply to country-code TLDs
+	// (2-letter, e.g. `uk`).
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -3669,13 +3726,29 @@ type DNSSummaryDNSSECE2EParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryDnssece2EParamsFormat] `query:"format"`
@@ -3693,7 +3766,10 @@ type DNSSummaryDNSSECE2EParams struct {
 	QueryType param.Field[[]DNSSummaryDnssece2EParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSSummaryDnssece2EParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain.
+	// Filters results by top-level domain. Incompatible with the `ipVersion`,
+	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
+	// filters/dimensions; this restriction does not apply to country-code TLDs
+	// (2-letter, e.g. `uk`).
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -3905,13 +3981,29 @@ type DNSSummaryIPVersionParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryIPVersionParamsFormat] `query:"format"`
@@ -3929,7 +4021,10 @@ type DNSSummaryIPVersionParams struct {
 	QueryType param.Field[[]DNSSummaryIPVersionParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSSummaryIPVersionParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain.
+	// Filters results by top-level domain. Incompatible with the `ipVersion`,
+	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
+	// filters/dimensions; this restriction does not apply to country-code TLDs
+	// (2-letter, e.g. `uk`).
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -4141,13 +4236,29 @@ type DNSSummaryMatchingAnswerParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryMatchingAnswerParamsFormat] `query:"format"`
@@ -4165,7 +4276,10 @@ type DNSSummaryMatchingAnswerParams struct {
 	QueryType param.Field[[]DNSSummaryMatchingAnswerParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSSummaryMatchingAnswerParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain.
+	// Filters results by top-level domain. Incompatible with the `ipVersion`,
+	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
+	// filters/dimensions; this restriction does not apply to country-code TLDs
+	// (2-letter, e.g. `uk`).
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -4377,13 +4491,29 @@ type DNSSummaryProtocolParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryProtocolParamsFormat] `query:"format"`
@@ -4399,7 +4529,10 @@ type DNSSummaryProtocolParams struct {
 	QueryType param.Field[[]DNSSummaryProtocolParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSSummaryProtocolParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain.
+	// Filters results by top-level domain. Incompatible with the `ipVersion`,
+	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
+	// filters/dimensions; this restriction does not apply to country-code TLDs
+	// (2-letter, e.g. `uk`).
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -4594,19 +4727,36 @@ type DNSSummaryQueryTypeParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryQueryTypeParamsFormat] `query:"format"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
-	// an "other" category.
+	// an "other" category. Only supported on high-cardinality dimensions; otherwise
+	// the request is rejected. Minimum value is 2.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
@@ -4620,7 +4770,10 @@ type DNSSummaryQueryTypeParams struct {
 	Protocol param.Field[[]DNSSummaryQueryTypeParamsProtocol] `query:"protocol"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSSummaryQueryTypeParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain.
+	// Filters results by top-level domain. Incompatible with the `ipVersion`,
+	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
+	// filters/dimensions; this restriction does not apply to country-code TLDs
+	// (2-letter, e.g. `uk`).
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -4731,19 +4884,36 @@ type DNSSummaryResponseCodeParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryResponseCodeParamsFormat] `query:"format"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
-	// an "other" category.
+	// an "other" category. Only supported on high-cardinality dimensions; otherwise
+	// the request is rejected. Minimum value is 2.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
@@ -4757,7 +4927,10 @@ type DNSSummaryResponseCodeParams struct {
 	Protocol param.Field[[]DNSSummaryResponseCodeParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
 	QueryType param.Field[[]DNSSummaryResponseCodeParamsQueryType] `query:"queryType"`
-	// Filters results by top-level domain.
+	// Filters results by top-level domain. Incompatible with the `ipVersion`,
+	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
+	// filters/dimensions; this restriction does not apply to country-code TLDs
+	// (2-letter, e.g. `uk`).
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -4937,13 +5110,29 @@ type DNSSummaryResponseTTLParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSSummaryResponseTTLParamsFormat] `query:"format"`
@@ -4961,7 +5150,10 @@ type DNSSummaryResponseTTLParams struct {
 	QueryType param.Field[[]DNSSummaryResponseTTLParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSSummaryResponseTTLParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain.
+	// Filters results by top-level domain. Incompatible with the `ipVersion`,
+	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
+	// filters/dimensions; this restriction does not apply to country-code TLDs
+	// (2-letter, e.g. `uk`).
 	TLD param.Field[[]string] `query:"tld"`
 }
 

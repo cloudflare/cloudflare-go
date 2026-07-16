@@ -3249,6 +3249,9 @@ type HTTPTimeseriesGroupBotClassParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	// When omitted, the interval is auto-selected from the requested date range; finer
+	// intervals are only available for shorter ranges. If the requested interval is
+	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[HTTPTimeseriesGroupBotClassParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -3261,13 +3264,29 @@ type HTTPTimeseriesGroupBotClassParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupBotClassParamsDeviceType] `query:"deviceType"`
@@ -3308,6 +3327,9 @@ func (r HTTPTimeseriesGroupBotClassParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+// When omitted, the interval is auto-selected from the requested date range; finer
+// intervals are only available for shorter ranges. If the requested interval is
+// too granular for the date range, the request is rejected.
 type HTTPTimeseriesGroupBotClassParamsAggInterval string
 
 const (
@@ -3485,6 +3507,9 @@ type HTTPTimeseriesGroupBrowserParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	// When omitted, the interval is auto-selected from the requested date range; finer
+	// intervals are only available for shorter ranges. If the requested interval is
+	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[HTTPTimeseriesGroupBrowserParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -3500,13 +3525,29 @@ type HTTPTimeseriesGroupBrowserParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupBrowserParamsDeviceType] `query:"deviceType"`
@@ -3525,7 +3566,8 @@ type HTTPTimeseriesGroupBrowserParams struct {
 	IPVersion param.Field[[]HTTPTimeseriesGroupBrowserParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
-	// an "other" category.
+	// an "other" category. Only supported on high-cardinality dimensions; otherwise
+	// the request is rejected. Minimum value is 2.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
@@ -3551,6 +3593,9 @@ func (r HTTPTimeseriesGroupBrowserParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+// When omitted, the interval is auto-selected from the requested date range; finer
+// intervals are only available for shorter ranges. If the requested interval is
+// too granular for the date range, the request is rejected.
 type HTTPTimeseriesGroupBrowserParamsAggInterval string
 
 const (
@@ -3743,6 +3788,9 @@ type HTTPTimeseriesGroupBrowserFamilyParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	// When omitted, the interval is auto-selected from the requested date range; finer
+	// intervals are only available for shorter ranges. If the requested interval is
+	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[HTTPTimeseriesGroupBrowserFamilyParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -3756,13 +3804,29 @@ type HTTPTimeseriesGroupBrowserFamilyParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsDeviceType] `query:"deviceType"`
@@ -3781,7 +3845,8 @@ type HTTPTimeseriesGroupBrowserFamilyParams struct {
 	IPVersion param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsIPVersion] `query:"ipVersion"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
-	// an "other" category.
+	// an "other" category. Only supported on high-cardinality dimensions; otherwise
+	// the request is rejected. Minimum value is 2.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
@@ -3807,6 +3872,9 @@ func (r HTTPTimeseriesGroupBrowserFamilyParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+// When omitted, the interval is auto-selected from the requested date range; finer
+// intervals are only available for shorter ranges. If the requested interval is
+// too granular for the date range, the request is rejected.
 type HTTPTimeseriesGroupBrowserFamilyParamsAggInterval string
 
 const (
@@ -3982,6 +4050,9 @@ type HTTPTimeseriesGroupDeviceTypeParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	// When omitted, the interval is auto-selected from the requested date range; finer
+	// intervals are only available for shorter ranges. If the requested interval is
+	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[HTTPTimeseriesGroupDeviceTypeParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -3997,13 +4068,29 @@ type HTTPTimeseriesGroupDeviceTypeParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[HTTPTimeseriesGroupDeviceTypeParamsFormat] `query:"format"`
@@ -4042,6 +4129,9 @@ func (r HTTPTimeseriesGroupDeviceTypeParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+// When omitted, the interval is auto-selected from the requested date range; finer
+// intervals are only available for shorter ranges. If the requested interval is
+// too granular for the date range, the request is rejected.
 type HTTPTimeseriesGroupDeviceTypeParamsAggInterval string
 
 const (
@@ -4218,6 +4308,9 @@ type HTTPTimeseriesGroupHTTPProtocolParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	// When omitted, the interval is auto-selected from the requested date range; finer
+	// intervals are only available for shorter ranges. If the requested interval is
+	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[HTTPTimeseriesGroupHTTPProtocolParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -4233,13 +4326,29 @@ type HTTPTimeseriesGroupHTTPProtocolParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupHTTPProtocolParamsDeviceType] `query:"deviceType"`
@@ -4278,6 +4387,9 @@ func (r HTTPTimeseriesGroupHTTPProtocolParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+// When omitted, the interval is auto-selected from the requested date range; finer
+// intervals are only available for shorter ranges. If the requested interval is
+// too granular for the date range, the request is rejected.
 type HTTPTimeseriesGroupHTTPProtocolParamsAggInterval string
 
 const (
@@ -4455,6 +4567,9 @@ type HTTPTimeseriesGroupHTTPVersionParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	// When omitted, the interval is auto-selected from the requested date range; finer
+	// intervals are only available for shorter ranges. If the requested interval is
+	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[HTTPTimeseriesGroupHTTPVersionParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -4470,13 +4585,29 @@ type HTTPTimeseriesGroupHTTPVersionParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupHTTPVersionParamsDeviceType] `query:"deviceType"`
@@ -4515,6 +4646,9 @@ func (r HTTPTimeseriesGroupHTTPVersionParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+// When omitted, the interval is auto-selected from the requested date range; finer
+// intervals are only available for shorter ranges. If the requested interval is
+// too granular for the date range, the request is rejected.
 type HTTPTimeseriesGroupHTTPVersionParamsAggInterval string
 
 const (
@@ -4691,6 +4825,9 @@ type HTTPTimeseriesGroupIPVersionParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	// When omitted, the interval is auto-selected from the requested date range; finer
+	// intervals are only available for shorter ranges. If the requested interval is
+	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[HTTPTimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -4706,13 +4843,29 @@ type HTTPTimeseriesGroupIPVersionParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupIPVersionParamsDeviceType] `query:"deviceType"`
@@ -4751,6 +4904,9 @@ func (r HTTPTimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+// When omitted, the interval is auto-selected from the requested date range; finer
+// intervals are only available for shorter ranges. If the requested interval is
+// too granular for the date range, the request is rejected.
 type HTTPTimeseriesGroupIPVersionParamsAggInterval string
 
 const (
@@ -4928,6 +5084,9 @@ type HTTPTimeseriesGroupOSParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	// When omitted, the interval is auto-selected from the requested date range; finer
+	// intervals are only available for shorter ranges. If the requested interval is
+	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[HTTPTimeseriesGroupOSParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -4943,13 +5102,29 @@ type HTTPTimeseriesGroupOSParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupOSParamsDeviceType] `query:"deviceType"`
@@ -4988,6 +5163,9 @@ func (r HTTPTimeseriesGroupOSParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+// When omitted, the interval is auto-selected from the requested date range; finer
+// intervals are only available for shorter ranges. If the requested interval is
+// too granular for the date range, the request is rejected.
 type HTTPTimeseriesGroupOSParamsAggInterval string
 
 const (
@@ -5160,6 +5338,9 @@ type HTTPTimeseriesGroupPostQuantumParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	// When omitted, the interval is auto-selected from the requested date range; finer
+	// intervals are only available for shorter ranges. If the requested interval is
+	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[HTTPTimeseriesGroupPostQuantumParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -5175,13 +5356,29 @@ type HTTPTimeseriesGroupPostQuantumParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupPostQuantumParamsDeviceType] `query:"deviceType"`
@@ -5222,6 +5419,9 @@ func (r HTTPTimeseriesGroupPostQuantumParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+// When omitted, the interval is auto-selected from the requested date range; finer
+// intervals are only available for shorter ranges. If the requested interval is
+// too granular for the date range, the request is rejected.
 type HTTPTimeseriesGroupPostQuantumParamsAggInterval string
 
 const (
@@ -5414,6 +5614,9 @@ type HTTPTimeseriesGroupTLSVersionParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	// When omitted, the interval is auto-selected from the requested date range; finer
+	// intervals are only available for shorter ranges. If the requested interval is
+	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[HTTPTimeseriesGroupTLSVersionParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -5429,13 +5632,29 @@ type HTTPTimeseriesGroupTLSVersionParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`. When requesting comparison series, every series must resolve
+	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
+	// to the nearest 15 minutes before evaluation, so windows whose durations match
+	// only before alignment may be rejected.
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
-	// this week with the previous week. Use this parameter or set specific start and
-	// end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by relative date range ending at the current time, with each
+	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
+	// for weeks (up to `52w`). Append `control` to request the equivalent previous
+	// period for comparison: the comparison window is shifted back by the current
+	// window's length rounded up to a whole number of weeks, so it keeps the same
+	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
+	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
+	// `7d` and `7dcontrol` to compare this week with the previous week. All series
+	// must resolve to the same duration as the main series; relative ranges (including
+	// `control`) satisfy this automatically. Use this parameter or set specific start
+	// and end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range.
+	// Start of the date range. Alternative to `dateRange`; provide together with
+	// `dateEnd`. When requesting comparison series, every series must resolve to the
+	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
+	// nearest 15 minutes before evaluation, so windows whose durations match only
+	// before alignment may be rejected.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by device type.
 	DeviceType param.Field[[]HTTPTimeseriesGroupTLSVersionParamsDeviceType] `query:"deviceType"`
@@ -5474,6 +5693,9 @@ func (r HTTPTimeseriesGroupTLSVersionParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+// When omitted, the interval is auto-selected from the requested date range; finer
+// intervals are only available for shorter ranges. If the requested interval is
+// too granular for the date range, the request is rejected.
 type HTTPTimeseriesGroupTLSVersionParamsAggInterval string
 
 const (

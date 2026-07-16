@@ -485,7 +485,17 @@ TEST_PATHS=(
 	zero_trust/accesstag_test.go
 	zero_trust/accesspolicy_test.go
 	zero_trust/casbapplication_test.go
+	zero_trust/casbapplicationauthmethod_test.go
 	zero_trust/casbintegration_test.go
+	zero_trust/casbposturefinding_test.go
+	zero_trust/casbposturefindinginstance_test.go
+	zero_trust/casbpostureexport_test.go
+	zero_trust/casbposturefindingtype_test.go
+	zero_trust/casbposturefindingtyperemediationtype_test.go
+	zero_trust/casbposturecontent_test.go
+	zero_trust/casbpostureremediationjob_test.go
+	zero_trust/casbposturewebhook_test.go
+	zero_trust/casbposturewebhookjob_test.go
 	zero_trust/dexwarpchangeevent_test.go
 	zero_trust/dexcommand_test.go
 	zero_trust/dexcommanddevice_test.go

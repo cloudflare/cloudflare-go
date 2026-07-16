@@ -88,6 +88,12 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
 					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
+				PoolDefaultWeight: cloudflare.F(0.200000),
+				PoolWeights: cloudflare.F(map[string]float64{
+					"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+					"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+				}),
+				Pools: cloudflare.F([]string{"17b5962d775c646f3f9725cbc7a53df4"}),
 				POPPools: cloudflare.F(map[string][]string{
 					"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
@@ -219,6 +225,12 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
+					PoolDefaultWeight: cloudflare.F(0.200000),
+					PoolWeights: cloudflare.F(map[string]float64{
+						"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+						"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+					}),
+					Pools: cloudflare.F([]string{"17b5962d775c646f3f9725cbc7a53df4"}),
 					POPPools: cloudflare.F(map[string][]string{
 						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
@@ -407,6 +419,12 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
+					PoolDefaultWeight: cloudflare.F(0.200000),
+					PoolWeights: cloudflare.F(map[string]float64{
+						"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+						"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+					}),
+					Pools: cloudflare.F([]string{"17b5962d775c646f3f9725cbc7a53df4"}),
 					POPPools: cloudflare.F(map[string][]string{
 						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},

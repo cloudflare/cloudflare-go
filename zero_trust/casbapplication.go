@@ -24,8 +24,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewCasbApplicationService] method instead.
 type CasbApplicationService struct {
-	Options    []option.RequestOption
-	SetupFlows *CasbApplicationSetupFlowService
+	Options     []option.RequestOption
+	AuthMethods *CasbApplicationAuthMethodService
 }
 
 // NewCasbApplicationService generates a new service that applies the given options
@@ -34,7 +34,7 @@ type CasbApplicationService struct {
 func NewCasbApplicationService(opts ...option.RequestOption) (r *CasbApplicationService) {
 	r = &CasbApplicationService{}
 	r.Options = opts
-	r.SetupFlows = NewCasbApplicationSetupFlowService(opts...)
+	r.AuthMethods = NewCasbApplicationAuthMethodService(opts...)
 	return
 }
 
@@ -52,13 +52,13 @@ func (r *CasbApplicationService) List(ctx context.Context, params CasbApplicatio
 
 // Returns full application details including auth methods, use cases, and
 // permissions.
-func (r *CasbApplicationService) Get(ctx context.Context, slug CasbApplicationGetParamsSlug, query CasbApplicationGetParams, opts ...option.RequestOption) (res *CasbApplicationGetResponse, err error) {
+func (r *CasbApplicationService) Get(ctx context.Context, applicationID CasbApplicationGetParamsApplicationID, query CasbApplicationGetParams, opts ...option.RequestOption) (res *CasbApplicationGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/one/applications/%v", query.AccountID, slug)
+	path := fmt.Sprintf("accounts/%s/one/applications/%v", query.AccountID, applicationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
 }
@@ -255,6 +255,19 @@ func (r casbApplicationListResponseUseCaseJSON) RawJSON() string {
 
 // Full application detail for onboarding UI.
 type CasbApplicationGetResponse struct {
+	// Vendor identifier.
+	//
+	// - `BITBUCKET` - BITBUCKET
+	// - `BOX` - BOX
+	// - `CONFLUENCE` - CONFLUENCE
+	// - `DROPBOX` - DROPBOX
+	// - `GITHUB` - GITHUB
+	// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
+	// - `JIRA` - JIRA
+	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
+	// - `SALESFORCE` - SALESFORCE
+	// - `SLACK` - SLACK
+	ID CasbApplicationGetResponseID `json:"id" api:"required"`
 	// Available authentication methods.
 	AuthMethods []CasbApplicationGetResponseAuthMethod `json:"auth_methods" api:"required"`
 	// Vendor category.
@@ -269,14 +282,6 @@ type CasbApplicationGetResponse struct {
 	Instructions string `json:"instructions" api:"required,nullable"`
 	// Logo path.
 	Logo string `json:"logo" api:"required,nullable"`
-	// Vendor identifier.
-	//
-	// - `GITHUB` - GITHUB
-	// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
-	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
-	// - `SALESFORCE` - SALESFORCE
-	// - `SLACK` - SLACK
-	Slug CasbApplicationGetResponseSlug `json:"slug" api:"required"`
 	// Use cases with full scope details.
 	UseCases []CasbApplicationGetResponseUseCase `json:"use_cases" api:"required"`
 	JSON     casbApplicationGetResponseJSON      `json:"-"`
@@ -285,6 +290,7 @@ type CasbApplicationGetResponse struct {
 // casbApplicationGetResponseJSON contains the JSON metadata for the struct
 // [CasbApplicationGetResponse]
 type casbApplicationGetResponseJSON struct {
+	ID           apijson.Field
 	AuthMethods  apijson.Field
 	Category     apijson.Field
 	Description  apijson.Field
@@ -292,7 +298,6 @@ type casbApplicationGetResponseJSON struct {
 	DLPEnabled   apijson.Field
 	Instructions apijson.Field
 	Logo         apijson.Field
-	Slug         apijson.Field
 	UseCases     apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -306,14 +311,49 @@ func (r casbApplicationGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Vendor identifier.
+//
+// - `BITBUCKET` - BITBUCKET
+// - `BOX` - BOX
+// - `CONFLUENCE` - CONFLUENCE
+// - `DROPBOX` - DROPBOX
+// - `GITHUB` - GITHUB
+// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
+// - `JIRA` - JIRA
+// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
+// - `SALESFORCE` - SALESFORCE
+// - `SLACK` - SLACK
+type CasbApplicationGetResponseID string
+
+const (
+	CasbApplicationGetResponseIDBitbucket         CasbApplicationGetResponseID = "BITBUCKET"
+	CasbApplicationGetResponseIDBox               CasbApplicationGetResponseID = "BOX"
+	CasbApplicationGetResponseIDConfluence        CasbApplicationGetResponseID = "CONFLUENCE"
+	CasbApplicationGetResponseIDDropbox           CasbApplicationGetResponseID = "DROPBOX"
+	CasbApplicationGetResponseIDGitHub            CasbApplicationGetResponseID = "GITHUB"
+	CasbApplicationGetResponseIDGoogleWorkspace   CasbApplicationGetResponseID = "GOOGLE_WORKSPACE"
+	CasbApplicationGetResponseIDJira              CasbApplicationGetResponseID = "JIRA"
+	CasbApplicationGetResponseIDMicrosoftInternal CasbApplicationGetResponseID = "MICROSOFT_INTERNAL"
+	CasbApplicationGetResponseIDSalesforce        CasbApplicationGetResponseID = "SALESFORCE"
+	CasbApplicationGetResponseIDSlack             CasbApplicationGetResponseID = "SLACK"
+)
+
+func (r CasbApplicationGetResponseID) IsKnown() bool {
+	switch r {
+	case CasbApplicationGetResponseIDBitbucket, CasbApplicationGetResponseIDBox, CasbApplicationGetResponseIDConfluence, CasbApplicationGetResponseIDDropbox, CasbApplicationGetResponseIDGitHub, CasbApplicationGetResponseIDGoogleWorkspace, CasbApplicationGetResponseIDJira, CasbApplicationGetResponseIDMicrosoftInternal, CasbApplicationGetResponseIDSalesforce, CasbApplicationGetResponseIDSlack:
+		return true
+	}
+	return false
+}
+
 // Authentication method available for a vendor.
 type CasbApplicationGetResponseAuthMethod struct {
+	// Auth method identifier.
+	ID string `json:"id" api:"required"`
 	// Human-readable auth method name.
 	DisplayName string `json:"display_name" api:"required"`
 	// Whether this is the default auth method.
 	IsDefault bool `json:"is_default" api:"required"`
-	// Auth method identifier.
-	Slug string `json:"slug" api:"required"`
 	// Environments this auth method supports.
 	SupportedEnvironments []string                                 `json:"supported_environments" api:"required"`
 	JSON                  casbApplicationGetResponseAuthMethodJSON `json:"-"`
@@ -322,9 +362,9 @@ type CasbApplicationGetResponseAuthMethod struct {
 // casbApplicationGetResponseAuthMethodJSON contains the JSON metadata for the
 // struct [CasbApplicationGetResponseAuthMethod]
 type casbApplicationGetResponseAuthMethodJSON struct {
+	ID                    apijson.Field
 	DisplayName           apijson.Field
 	IsDefault             apijson.Field
-	Slug                  apijson.Field
 	SupportedEnvironments apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -338,33 +378,10 @@ func (r casbApplicationGetResponseAuthMethodJSON) RawJSON() string {
 	return r.raw
 }
 
-// Vendor identifier.
-//
-// - `GITHUB` - GITHUB
-// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
-// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
-// - `SALESFORCE` - SALESFORCE
-// - `SLACK` - SLACK
-type CasbApplicationGetResponseSlug string
-
-const (
-	CasbApplicationGetResponseSlugGitHub            CasbApplicationGetResponseSlug = "GITHUB"
-	CasbApplicationGetResponseSlugGoogleWorkspace   CasbApplicationGetResponseSlug = "GOOGLE_WORKSPACE"
-	CasbApplicationGetResponseSlugMicrosoftInternal CasbApplicationGetResponseSlug = "MICROSOFT_INTERNAL"
-	CasbApplicationGetResponseSlugSalesforce        CasbApplicationGetResponseSlug = "SALESFORCE"
-	CasbApplicationGetResponseSlugSlack             CasbApplicationGetResponseSlug = "SLACK"
-)
-
-func (r CasbApplicationGetResponseSlug) IsKnown() bool {
-	switch r {
-	case CasbApplicationGetResponseSlugGitHub, CasbApplicationGetResponseSlugGoogleWorkspace, CasbApplicationGetResponseSlugMicrosoftInternal, CasbApplicationGetResponseSlugSalesforce, CasbApplicationGetResponseSlugSlack:
-		return true
-	}
-	return false
-}
-
 // Full use case with scopes and features for detail endpoint.
 type CasbApplicationGetResponseUseCase struct {
+	// Use case identifier.
+	ID string `json:"id" api:"required"`
 	// Scopes always required for this use case.
 	BaseScopes []CasbApplicationGetResponseUseCasesBaseScope `json:"base_scopes" api:"required"`
 	// Use case description.
@@ -373,19 +390,17 @@ type CasbApplicationGetResponseUseCase struct {
 	DisplayName string `json:"display_name" api:"required"`
 	// Optional features with extra scopes.
 	Features []CasbApplicationGetResponseUseCasesFeature `json:"features" api:"required"`
-	// Use case identifier.
-	Slug string                                `json:"slug" api:"required"`
-	JSON casbApplicationGetResponseUseCaseJSON `json:"-"`
+	JSON     casbApplicationGetResponseUseCaseJSON       `json:"-"`
 }
 
 // casbApplicationGetResponseUseCaseJSON contains the JSON metadata for the struct
 // [CasbApplicationGetResponseUseCase]
 type casbApplicationGetResponseUseCaseJSON struct {
+	ID          apijson.Field
 	BaseScopes  apijson.Field
 	Description apijson.Field
 	DisplayName apijson.Field
 	Features    apijson.Field
-	Slug        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -457,24 +472,24 @@ func (r CasbApplicationGetResponseUseCasesBaseScopesSeverity) IsKnown() bool {
 
 // A feature with its additional scopes.
 type CasbApplicationGetResponseUseCasesFeature struct {
+	// Feature identifier.
+	ID string `json:"id" api:"required"`
 	// Feature description.
 	Description string `json:"description" api:"required"`
 	// Human-readable feature name.
 	DisplayName string `json:"display_name" api:"required"`
 	// Additional scopes when feature is enabled.
 	Scopes []CasbApplicationGetResponseUseCasesFeaturesScope `json:"scopes" api:"required"`
-	// Feature identifier.
-	Slug string                                        `json:"slug" api:"required"`
-	JSON casbApplicationGetResponseUseCasesFeatureJSON `json:"-"`
+	JSON   casbApplicationGetResponseUseCasesFeatureJSON     `json:"-"`
 }
 
 // casbApplicationGetResponseUseCasesFeatureJSON contains the JSON metadata for the
 // struct [CasbApplicationGetResponseUseCasesFeature]
 type casbApplicationGetResponseUseCasesFeatureJSON struct {
+	ID          apijson.Field
 	Description apijson.Field
 	DisplayName apijson.Field
 	Scopes      apijson.Field
-	Slug        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -563,19 +578,24 @@ type CasbApplicationGetParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
-type CasbApplicationGetParamsSlug string
+type CasbApplicationGetParamsApplicationID string
 
 const (
-	CasbApplicationGetParamsSlugGitHub            CasbApplicationGetParamsSlug = "GITHUB"
-	CasbApplicationGetParamsSlugGoogleWorkspace   CasbApplicationGetParamsSlug = "GOOGLE_WORKSPACE"
-	CasbApplicationGetParamsSlugMicrosoftInternal CasbApplicationGetParamsSlug = "MICROSOFT_INTERNAL"
-	CasbApplicationGetParamsSlugSalesforce        CasbApplicationGetParamsSlug = "SALESFORCE"
-	CasbApplicationGetParamsSlugSlack             CasbApplicationGetParamsSlug = "SLACK"
+	CasbApplicationGetParamsApplicationIDBitbucket         CasbApplicationGetParamsApplicationID = "BITBUCKET"
+	CasbApplicationGetParamsApplicationIDBox               CasbApplicationGetParamsApplicationID = "BOX"
+	CasbApplicationGetParamsApplicationIDConfluence        CasbApplicationGetParamsApplicationID = "CONFLUENCE"
+	CasbApplicationGetParamsApplicationIDDropbox           CasbApplicationGetParamsApplicationID = "DROPBOX"
+	CasbApplicationGetParamsApplicationIDGitHub            CasbApplicationGetParamsApplicationID = "GITHUB"
+	CasbApplicationGetParamsApplicationIDGoogleWorkspace   CasbApplicationGetParamsApplicationID = "GOOGLE_WORKSPACE"
+	CasbApplicationGetParamsApplicationIDJira              CasbApplicationGetParamsApplicationID = "JIRA"
+	CasbApplicationGetParamsApplicationIDMicrosoftInternal CasbApplicationGetParamsApplicationID = "MICROSOFT_INTERNAL"
+	CasbApplicationGetParamsApplicationIDSalesforce        CasbApplicationGetParamsApplicationID = "SALESFORCE"
+	CasbApplicationGetParamsApplicationIDSlack             CasbApplicationGetParamsApplicationID = "SLACK"
 )
 
-func (r CasbApplicationGetParamsSlug) IsKnown() bool {
+func (r CasbApplicationGetParamsApplicationID) IsKnown() bool {
 	switch r {
-	case CasbApplicationGetParamsSlugGitHub, CasbApplicationGetParamsSlugGoogleWorkspace, CasbApplicationGetParamsSlugMicrosoftInternal, CasbApplicationGetParamsSlugSalesforce, CasbApplicationGetParamsSlugSlack:
+	case CasbApplicationGetParamsApplicationIDBitbucket, CasbApplicationGetParamsApplicationIDBox, CasbApplicationGetParamsApplicationIDConfluence, CasbApplicationGetParamsApplicationIDDropbox, CasbApplicationGetParamsApplicationIDGitHub, CasbApplicationGetParamsApplicationIDGoogleWorkspace, CasbApplicationGetParamsApplicationIDJira, CasbApplicationGetParamsApplicationIDMicrosoftInternal, CasbApplicationGetParamsApplicationIDSalesforce, CasbApplicationGetParamsApplicationIDSlack:
 		return true
 	}
 	return false
