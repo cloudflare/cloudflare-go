@@ -10,11 +10,11 @@ import (
 	"net/url"
 	"slices"
 
-	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v7/internal/param"
-	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // CasbApplicationService contains methods and other services that help with
@@ -65,6 +65,19 @@ func (r *CasbApplicationService) Get(ctx context.Context, applicationID CasbAppl
 
 // Application item in list response.
 type CasbApplicationListResponse struct {
+	// Vendor identifier (e.g. microsoft_internal, google_workspace).
+	//
+	// - `BITBUCKET` - BITBUCKET
+	// - `BOX` - BOX
+	// - `CONFLUENCE` - CONFLUENCE
+	// - `DROPBOX` - DROPBOX
+	// - `GITHUB` - GITHUB
+	// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
+	// - `JIRA` - JIRA
+	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
+	// - `SALESFORCE` - SALESFORCE
+	// - `SLACK` - SLACK
+	ID CasbApplicationListResponseID `json:"id" api:"required"`
 	// Available auth methods.
 	AuthMethods []CasbApplicationListResponseAuthMethod `json:"auth_methods" api:"required"`
 	// Vendor category (e.g. Productivity, AI).
@@ -79,14 +92,6 @@ type CasbApplicationListResponse struct {
 	Logo string `json:"logo" api:"required,nullable"`
 	// All permissions with severity.
 	Permissions []CasbApplicationListResponsePermission `json:"permissions" api:"required"`
-	// Vendor identifier (e.g. microsoft_internal, google_workspace).
-	//
-	// - `GITHUB` - GITHUB
-	// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
-	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
-	// - `SALESFORCE` - SALESFORCE
-	// - `SLACK` - SLACK
-	Slug CasbApplicationListResponseSlug `json:"slug" api:"required"`
 	// Environments this vendor supports (standard, fedramp).
 	SupportedEnvironments []string `json:"supported_environments" api:"required"`
 	// Supported use cases.
@@ -97,6 +102,7 @@ type CasbApplicationListResponse struct {
 // casbApplicationListResponseJSON contains the JSON metadata for the struct
 // [CasbApplicationListResponse]
 type casbApplicationListResponseJSON struct {
+	ID                    apijson.Field
 	AuthMethods           apijson.Field
 	Category              apijson.Field
 	Description           apijson.Field
@@ -104,7 +110,6 @@ type casbApplicationListResponseJSON struct {
 	DLPEnabled            apijson.Field
 	Logo                  apijson.Field
 	Permissions           apijson.Field
-	Slug                  apijson.Field
 	SupportedEnvironments apijson.Field
 	UseCases              apijson.Field
 	raw                   string
@@ -119,20 +124,55 @@ func (r casbApplicationListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Vendor identifier (e.g. microsoft_internal, google_workspace).
+//
+// - `BITBUCKET` - BITBUCKET
+// - `BOX` - BOX
+// - `CONFLUENCE` - CONFLUENCE
+// - `DROPBOX` - DROPBOX
+// - `GITHUB` - GITHUB
+// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
+// - `JIRA` - JIRA
+// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
+// - `SALESFORCE` - SALESFORCE
+// - `SLACK` - SLACK
+type CasbApplicationListResponseID string
+
+const (
+	CasbApplicationListResponseIDBitbucket         CasbApplicationListResponseID = "BITBUCKET"
+	CasbApplicationListResponseIDBox               CasbApplicationListResponseID = "BOX"
+	CasbApplicationListResponseIDConfluence        CasbApplicationListResponseID = "CONFLUENCE"
+	CasbApplicationListResponseIDDropbox           CasbApplicationListResponseID = "DROPBOX"
+	CasbApplicationListResponseIDGitHub            CasbApplicationListResponseID = "GITHUB"
+	CasbApplicationListResponseIDGoogleWorkspace   CasbApplicationListResponseID = "GOOGLE_WORKSPACE"
+	CasbApplicationListResponseIDJira              CasbApplicationListResponseID = "JIRA"
+	CasbApplicationListResponseIDMicrosoftInternal CasbApplicationListResponseID = "MICROSOFT_INTERNAL"
+	CasbApplicationListResponseIDSalesforce        CasbApplicationListResponseID = "SALESFORCE"
+	CasbApplicationListResponseIDSlack             CasbApplicationListResponseID = "SLACK"
+)
+
+func (r CasbApplicationListResponseID) IsKnown() bool {
+	switch r {
+	case CasbApplicationListResponseIDBitbucket, CasbApplicationListResponseIDBox, CasbApplicationListResponseIDConfluence, CasbApplicationListResponseIDDropbox, CasbApplicationListResponseIDGitHub, CasbApplicationListResponseIDGoogleWorkspace, CasbApplicationListResponseIDJira, CasbApplicationListResponseIDMicrosoftInternal, CasbApplicationListResponseIDSalesforce, CasbApplicationListResponseIDSlack:
+		return true
+	}
+	return false
+}
+
 // Auth method summary for list endpoint.
 type CasbApplicationListResponseAuthMethod struct {
-	// Human-readable auth method name.
-	DisplayName string `json:"display_name" api:"required"`
 	// Auth method identifier.
-	Slug string                                    `json:"slug" api:"required"`
-	JSON casbApplicationListResponseAuthMethodJSON `json:"-"`
+	ID string `json:"id" api:"required"`
+	// Human-readable auth method name.
+	DisplayName string                                    `json:"display_name" api:"required"`
+	JSON        casbApplicationListResponseAuthMethodJSON `json:"-"`
 }
 
 // casbApplicationListResponseAuthMethodJSON contains the JSON metadata for the
 // struct [CasbApplicationListResponseAuthMethod]
 type casbApplicationListResponseAuthMethodJSON struct {
+	ID          apijson.Field
 	DisplayName apijson.Field
-	Slug        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -202,45 +242,20 @@ func (r CasbApplicationListResponsePermissionsSeverity) IsKnown() bool {
 	return false
 }
 
-// Vendor identifier (e.g. microsoft_internal, google_workspace).
-//
-// - `GITHUB` - GITHUB
-// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
-// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
-// - `SALESFORCE` - SALESFORCE
-// - `SLACK` - SLACK
-type CasbApplicationListResponseSlug string
-
-const (
-	CasbApplicationListResponseSlugGitHub            CasbApplicationListResponseSlug = "GITHUB"
-	CasbApplicationListResponseSlugGoogleWorkspace   CasbApplicationListResponseSlug = "GOOGLE_WORKSPACE"
-	CasbApplicationListResponseSlugMicrosoftInternal CasbApplicationListResponseSlug = "MICROSOFT_INTERNAL"
-	CasbApplicationListResponseSlugSalesforce        CasbApplicationListResponseSlug = "SALESFORCE"
-	CasbApplicationListResponseSlugSlack             CasbApplicationListResponseSlug = "SLACK"
-)
-
-func (r CasbApplicationListResponseSlug) IsKnown() bool {
-	switch r {
-	case CasbApplicationListResponseSlugGitHub, CasbApplicationListResponseSlugGoogleWorkspace, CasbApplicationListResponseSlugMicrosoftInternal, CasbApplicationListResponseSlugSalesforce, CasbApplicationListResponseSlugSlack:
-		return true
-	}
-	return false
-}
-
 // Lightweight use case for list endpoint.
 type CasbApplicationListResponseUseCase struct {
-	// Human-readable use case name.
-	DisplayName string `json:"display_name" api:"required"`
 	// Use case identifier (e.g. casb, ces).
-	Slug string                                 `json:"slug" api:"required"`
-	JSON casbApplicationListResponseUseCaseJSON `json:"-"`
+	ID string `json:"id" api:"required"`
+	// Human-readable use case name.
+	DisplayName string                                 `json:"display_name" api:"required"`
+	JSON        casbApplicationListResponseUseCaseJSON `json:"-"`
 }
 
 // casbApplicationListResponseUseCaseJSON contains the JSON metadata for the struct
 // [CasbApplicationListResponseUseCase]
 type casbApplicationListResponseUseCaseJSON struct {
+	ID          apijson.Field
 	DisplayName apijson.Field
-	Slug        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
