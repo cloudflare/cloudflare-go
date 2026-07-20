@@ -26,6 +26,7 @@ import (
 type ThreatEventDatasetService struct {
 	Options []option.RequestOption
 	Health  *ThreatEventDatasetHealthService
+	Events  *ThreatEventDatasetEventService
 }
 
 // NewThreatEventDatasetService generates a new service that applies the given
@@ -35,6 +36,7 @@ func NewThreatEventDatasetService(opts ...option.RequestOption) (r *ThreatEventD
 	r = &ThreatEventDatasetService{}
 	r.Options = opts
 	r.Health = NewThreatEventDatasetHealthService(opts...)
+	r.Events = NewThreatEventDatasetEventService(opts...)
 	return
 }
 
@@ -59,6 +61,22 @@ func (r *ThreatEventDatasetService) List(ctx context.Context, params ThreatEvent
 	}
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	return res, err
+}
+
+// Soft-deletes a dataset given a datasetId.
+func (r *ThreatEventDatasetService) Delete(ctx context.Context, datasetID string, body ThreatEventDatasetDeleteParams, opts ...option.RequestOption) (res *ThreatEventDatasetDeleteResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if datasetID == "" {
+		err = errors.New("missing required dataset_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/dataset/%s", body.AccountID, datasetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return res, err
 }
 
@@ -166,6 +184,29 @@ func (r *ThreatEventDatasetListResponse) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r threatEventDatasetListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventDatasetDeleteResponse struct {
+	Name string                               `json:"name" api:"required"`
+	UUID string                               `json:"uuid" api:"required"`
+	JSON threatEventDatasetDeleteResponseJSON `json:"-"`
+}
+
+// threatEventDatasetDeleteResponseJSON contains the JSON metadata for the struct
+// [ThreatEventDatasetDeleteResponse]
+type threatEventDatasetDeleteResponseJSON struct {
+	Name        apijson.Field
+	UUID        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventDatasetDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventDatasetDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -283,6 +324,11 @@ func (r ThreatEventDatasetListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type ThreatEventDatasetDeleteParams struct {
+	// Account ID.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ThreatEventDatasetEditParams struct {

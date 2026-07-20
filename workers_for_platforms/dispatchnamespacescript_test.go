@@ -69,12 +69,22 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsCache{
 							Enabled: cloudflare.F(true),
 						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsStateCreated),
+						Storage:       cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
 					},
 					"default": {
 						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsTypeWorker),
 						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsCache{
 							Enabled: cloudflare.F(false),
 						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsStateCreated),
+						Storage:       cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
 					},
 				}),
 				KeepAssets:   cloudflare.F(false),

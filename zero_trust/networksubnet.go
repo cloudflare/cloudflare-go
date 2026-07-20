@@ -144,13 +144,14 @@ func (r NetworkSubnetListParamsSortOrder) IsKnown() bool {
 type NetworkSubnetListParamsSubnetTypes string
 
 const (
-	NetworkSubnetListParamsSubnetTypesCloudflareSource NetworkSubnetListParamsSubnetTypes = "cloudflare_source"
-	NetworkSubnetListParamsSubnetTypesWARP             NetworkSubnetListParamsSubnetTypes = "warp"
+	NetworkSubnetListParamsSubnetTypesCloudflareSource  NetworkSubnetListParamsSubnetTypes = "cloudflare_source"
+	NetworkSubnetListParamsSubnetTypesInitialResolvedIP NetworkSubnetListParamsSubnetTypes = "initial_resolved_ip"
+	NetworkSubnetListParamsSubnetTypesWARP              NetworkSubnetListParamsSubnetTypes = "warp"
 )
 
 func (r NetworkSubnetListParamsSubnetTypes) IsKnown() bool {
 	switch r {
-	case NetworkSubnetListParamsSubnetTypesCloudflareSource, NetworkSubnetListParamsSubnetTypesWARP:
+	case NetworkSubnetListParamsSubnetTypesCloudflareSource, NetworkSubnetListParamsSubnetTypesInitialResolvedIP, NetworkSubnetListParamsSubnetTypesWARP:
 		return true
 	}
 	return false

@@ -176,6 +176,12 @@ type Version struct {
 	// List of containers attached to a Worker. Containers can only be attached to
 	// Durable Object classes of this Worker script.
 	Containers []VersionContainer `json:"containers"`
+	// Declarative exports for the version, including Durable Object classes (with
+	// their `storage` backend) and named Worker entrypoints. On reads, tombstoned
+	// lifecycle entries are omitted, so only live exports (`created` and
+	// `expecting-transfer`) are returned. `exports` and `migrations` are mutually
+	// exclusive on upload.
+	Exports map[string]VersionExport `json:"exports"`
 	// Resource limits enforced at runtime.
 	Limits VersionLimits `json:"limits"`
 	// The name of the main module in the `modules` array (e.g. the name of the module
@@ -230,6 +236,7 @@ type versionJSON struct {
 	CompatibilityDate   apijson.Field
 	CompatibilityFlags  apijson.Field
 	Containers          apijson.Field
+	Exports             apijson.Field
 	Limits              apijson.Field
 	MainModule          apijson.Field
 	MigrationTag        apijson.Field
@@ -2800,6 +2807,146 @@ func (r versionContainerJSON) RawJSON() string {
 	return r.raw
 }
 
+// A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
+// class name, a Durable Object class name, or `default` for the Worker's default
+// export). Worker entrypoint entries set `type: worker` and may carry `cache`
+// configuration for that entrypoint. Durable Object entries set
+// `type: durable-object` and carry additional provisioning fields.
+type VersionExport struct {
+	// The kind of export.
+	Type VersionExportsType `json:"type" api:"required"`
+	// Cache override for this entrypoint. It applies only to `type: worker` entries
+	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+	Cache VersionExportsCache `json:"cache"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State VersionExportsState `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage VersionExportsStorage `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom string            `json:"transfer_from"`
+	JSON         versionExportJSON `json:"-"`
+}
+
+// versionExportJSON contains the JSON metadata for the struct [VersionExport]
+type versionExportJSON struct {
+	Type         apijson.Field
+	Cache        apijson.Field
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *VersionExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionExportJSON) RawJSON() string {
+	return r.raw
+}
+
+// The kind of export.
+type VersionExportsType string
+
+const (
+	VersionExportsTypeWorker        VersionExportsType = "worker"
+	VersionExportsTypeDurableObject VersionExportsType = "durable-object"
+)
+
+func (r VersionExportsType) IsKnown() bool {
+	switch r {
+	case VersionExportsTypeWorker, VersionExportsTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Cache override for this entrypoint. It applies only to `type: worker` entries
+// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+type VersionExportsCache struct {
+	// Whether caching is enabled for this entrypoint.
+	Enabled bool                    `json:"enabled" api:"required"`
+	JSON    versionExportsCacheJSON `json:"-"`
+}
+
+// versionExportsCacheJSON contains the JSON metadata for the struct
+// [VersionExportsCache]
+type versionExportsCacheJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionExportsCache) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionExportsCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+// export) when omitted.
+//
+// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+// operations that retire, rename, or hand off a provisioned Durable Object
+// namespace. They are applied at upload and are filtered out of GET responses, so
+// a read only ever returns `created` or `expecting-transfer`.
+//
+// `expecting-transfer` is a live export whose data is being received from another
+// script via the two-phase transfer flow; it carries `storage` and
+// `transfer_from`.
+type VersionExportsState string
+
+const (
+	VersionExportsStateCreated           VersionExportsState = "created"
+	VersionExportsStateDeleted           VersionExportsState = "deleted"
+	VersionExportsStateRenamed           VersionExportsState = "renamed"
+	VersionExportsStateTransferred       VersionExportsState = "transferred"
+	VersionExportsStateExpectingTransfer VersionExportsState = "expecting-transfer"
+)
+
+func (r VersionExportsState) IsKnown() bool {
+	switch r {
+	case VersionExportsStateCreated, VersionExportsStateDeleted, VersionExportsStateRenamed, VersionExportsStateTransferred, VersionExportsStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Storage backend for a `type: durable-object` export. Required for live Durable
+// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+type VersionExportsStorage string
+
+const (
+	VersionExportsStorageSqlite   VersionExportsStorage = "sqlite"
+	VersionExportsStorageLegacyKV VersionExportsStorage = "legacy-kv"
+)
+
+func (r VersionExportsStorage) IsKnown() bool {
+	switch r {
+	case VersionExportsStorageSqlite, VersionExportsStorageLegacyKV:
+		return true
+	}
+	return false
+}
+
 // Resource limits enforced at runtime.
 type VersionLimits struct {
 	// CPU time limit in milliseconds.
@@ -3285,6 +3432,12 @@ type VersionParam struct {
 	// List of containers attached to a Worker. Containers can only be attached to
 	// Durable Object classes of this Worker script.
 	Containers param.Field[[]VersionContainerParam] `json:"containers"`
+	// Declarative exports for the version, including Durable Object classes (with
+	// their `storage` backend) and named Worker entrypoints. On reads, tombstoned
+	// lifecycle entries are omitted, so only live exports (`created` and
+	// `expecting-transfer`) are returned. `exports` and `migrations` are mutually
+	// exclusive on upload.
+	Exports param.Field[map[string]VersionExportParam] `json:"exports"`
 	// Resource limits enforced at runtime.
 	Limits param.Field[VersionLimitsParam] `json:"limits"`
 	// The name of the main module in the `modules` array (e.g. the name of the module
@@ -4161,6 +4314,62 @@ type VersionContainerParam struct {
 }
 
 func (r VersionContainerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
+// class name, a Durable Object class name, or `default` for the Worker's default
+// export). Worker entrypoint entries set `type: worker` and may carry `cache`
+// configuration for that entrypoint. Durable Object entries set
+// `type: durable-object` and carry additional provisioning fields.
+type VersionExportParam struct {
+	// The kind of export.
+	Type param.Field[VersionExportsType] `json:"type" api:"required"`
+	// Cache override for this entrypoint. It applies only to `type: worker` entries
+	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+	Cache param.Field[VersionExportsCacheParam] `json:"cache"`
+	// Destination class name for a `state: renamed` tombstone. The target must appear
+	// as a live (`created`) entry in the same `exports` map. Write-only: never present
+	// in GET responses.
+	RenamedTo param.Field[string] `json:"renamed_to"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State param.Field[VersionExportsState] `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage param.Field[VersionExportsStorage] `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom param.Field[string] `json:"transfer_from"`
+	// Destination script for a `state: transferred` tombstone. Must reference a script
+	// in the same account; cross-dispatch-namespace transfers are rejected.
+	// Write-only: never present in GET responses.
+	TransferredTo param.Field[string] `json:"transferred_to"`
+}
+
+func (r VersionExportParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Cache override for this entrypoint. It applies only to `type: worker` entries
+// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+type VersionExportsCacheParam struct {
+	// Whether caching is enabled for this entrypoint.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+}
+
+func (r VersionExportsCacheParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

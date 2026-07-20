@@ -81,8 +81,9 @@ type OrganizationDOHUpdateResponse struct {
 	// Default expiration is 24h
 	DOHJWTDuration string `json:"doh_jwt_duration"`
 	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
+	// `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens.
+	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
+	// hours (8760h).
 	Duration  string    `json:"duration"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
 	// The name of the service token.
@@ -122,8 +123,9 @@ type OrganizationDOHGetResponse struct {
 	// duration for this setting is the same as the key rotation period on the account.
 	DOHJWTDuration string `json:"doh_jwt_duration"`
 	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
+	// `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens.
+	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
+	// hours (8760h).
 	Duration  string    `json:"duration"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
 	// The name of the service token.

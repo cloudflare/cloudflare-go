@@ -584,12 +584,18 @@ type InstanceNewResponsePublicEndpointParams struct {
 	// responses return the current set; on update (PUT) this field is only echoed back
 	// when supplied in the request body, otherwise it is null (omit it to leave
 	// domains unchanged).
-	CustomDomains  []string                                              `json:"custom_domains" api:"nullable"`
-	Enabled        bool                                                  `json:"enabled"`
-	Mcp            InstanceNewResponsePublicEndpointParamsMcp            `json:"mcp"`
-	RateLimit      InstanceNewResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
-	SearchEndpoint InstanceNewResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
-	JSON           instanceNewResponsePublicEndpointParamsJSON           `json:"-"`
+	CustomDomains []string `json:"custom_domains" api:"nullable"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled bool                                                  `json:"default_domain_enabled"`
+	Enabled              bool                                                  `json:"enabled"`
+	Mcp                  InstanceNewResponsePublicEndpointParamsMcp            `json:"mcp"`
+	RateLimit            InstanceNewResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
+	SearchEndpoint       InstanceNewResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
+	JSON                 instanceNewResponsePublicEndpointParamsJSON           `json:"-"`
 }
 
 // instanceNewResponsePublicEndpointParamsJSON contains the JSON metadata for the
@@ -598,6 +604,7 @@ type instanceNewResponsePublicEndpointParamsJSON struct {
 	AuthorizedHosts         apijson.Field
 	ChatCompletionsEndpoint apijson.Field
 	CustomDomains           apijson.Field
+	DefaultDomainEnabled    apijson.Field
 	Enabled                 apijson.Field
 	Mcp                     apijson.Field
 	RateLimit               apijson.Field
@@ -1437,12 +1444,18 @@ type InstanceUpdateResponsePublicEndpointParams struct {
 	// responses return the current set; on update (PUT) this field is only echoed back
 	// when supplied in the request body, otherwise it is null (omit it to leave
 	// domains unchanged).
-	CustomDomains  []string                                                 `json:"custom_domains" api:"nullable"`
-	Enabled        bool                                                     `json:"enabled"`
-	Mcp            InstanceUpdateResponsePublicEndpointParamsMcp            `json:"mcp"`
-	RateLimit      InstanceUpdateResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
-	SearchEndpoint InstanceUpdateResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
-	JSON           instanceUpdateResponsePublicEndpointParamsJSON           `json:"-"`
+	CustomDomains []string `json:"custom_domains" api:"nullable"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled bool                                                     `json:"default_domain_enabled"`
+	Enabled              bool                                                     `json:"enabled"`
+	Mcp                  InstanceUpdateResponsePublicEndpointParamsMcp            `json:"mcp"`
+	RateLimit            InstanceUpdateResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
+	SearchEndpoint       InstanceUpdateResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
+	JSON                 instanceUpdateResponsePublicEndpointParamsJSON           `json:"-"`
 }
 
 // instanceUpdateResponsePublicEndpointParamsJSON contains the JSON metadata for
@@ -1451,6 +1464,7 @@ type instanceUpdateResponsePublicEndpointParamsJSON struct {
 	AuthorizedHosts         apijson.Field
 	ChatCompletionsEndpoint apijson.Field
 	CustomDomains           apijson.Field
+	DefaultDomainEnabled    apijson.Field
 	Enabled                 apijson.Field
 	Mcp                     apijson.Field
 	RateLimit               apijson.Field
@@ -2292,12 +2306,18 @@ type InstanceListResponsePublicEndpointParams struct {
 	// responses return the current set; on update (PUT) this field is only echoed back
 	// when supplied in the request body, otherwise it is null (omit it to leave
 	// domains unchanged).
-	CustomDomains  []string                                               `json:"custom_domains" api:"nullable"`
-	Enabled        bool                                                   `json:"enabled"`
-	Mcp            InstanceListResponsePublicEndpointParamsMcp            `json:"mcp"`
-	RateLimit      InstanceListResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
-	SearchEndpoint InstanceListResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
-	JSON           instanceListResponsePublicEndpointParamsJSON           `json:"-"`
+	CustomDomains []string `json:"custom_domains" api:"nullable"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled bool                                                   `json:"default_domain_enabled"`
+	Enabled              bool                                                   `json:"enabled"`
+	Mcp                  InstanceListResponsePublicEndpointParamsMcp            `json:"mcp"`
+	RateLimit            InstanceListResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
+	SearchEndpoint       InstanceListResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
+	JSON                 instanceListResponsePublicEndpointParamsJSON           `json:"-"`
 }
 
 // instanceListResponsePublicEndpointParamsJSON contains the JSON metadata for the
@@ -2306,6 +2326,7 @@ type instanceListResponsePublicEndpointParamsJSON struct {
 	AuthorizedHosts         apijson.Field
 	ChatCompletionsEndpoint apijson.Field
 	CustomDomains           apijson.Field
+	DefaultDomainEnabled    apijson.Field
 	Enabled                 apijson.Field
 	Mcp                     apijson.Field
 	RateLimit               apijson.Field
@@ -3145,12 +3166,18 @@ type InstanceDeleteResponsePublicEndpointParams struct {
 	// responses return the current set; on update (PUT) this field is only echoed back
 	// when supplied in the request body, otherwise it is null (omit it to leave
 	// domains unchanged).
-	CustomDomains  []string                                                 `json:"custom_domains" api:"nullable"`
-	Enabled        bool                                                     `json:"enabled"`
-	Mcp            InstanceDeleteResponsePublicEndpointParamsMcp            `json:"mcp"`
-	RateLimit      InstanceDeleteResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
-	SearchEndpoint InstanceDeleteResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
-	JSON           instanceDeleteResponsePublicEndpointParamsJSON           `json:"-"`
+	CustomDomains []string `json:"custom_domains" api:"nullable"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled bool                                                     `json:"default_domain_enabled"`
+	Enabled              bool                                                     `json:"enabled"`
+	Mcp                  InstanceDeleteResponsePublicEndpointParamsMcp            `json:"mcp"`
+	RateLimit            InstanceDeleteResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
+	SearchEndpoint       InstanceDeleteResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
+	JSON                 instanceDeleteResponsePublicEndpointParamsJSON           `json:"-"`
 }
 
 // instanceDeleteResponsePublicEndpointParamsJSON contains the JSON metadata for
@@ -3159,6 +3186,7 @@ type instanceDeleteResponsePublicEndpointParamsJSON struct {
 	AuthorizedHosts         apijson.Field
 	ChatCompletionsEndpoint apijson.Field
 	CustomDomains           apijson.Field
+	DefaultDomainEnabled    apijson.Field
 	Enabled                 apijson.Field
 	Mcp                     apijson.Field
 	RateLimit               apijson.Field
@@ -3732,6 +3760,9 @@ func (r InstanceChatCompletionsResponseChoicesMessageContentArray) ImplementsIns
 type InstanceChatCompletionsResponseChoicesMessageContentArrayItem struct {
 	Type InstanceChatCompletionsResponseChoicesMessageContentArrayType `json:"type" api:"required"`
 	// This field can have the runtime type of
+	// [InstanceChatCompletionsResponseChoicesMessageContentArrayObjectFile].
+	File interface{} `json:"file"`
+	// This field can have the runtime type of
 	// [InstanceChatCompletionsResponseChoicesMessageContentArrayObjectImageURL].
 	ImageURL interface{}                                                       `json:"image_url"`
 	Text     string                                                            `json:"text"`
@@ -3744,6 +3775,7 @@ type InstanceChatCompletionsResponseChoicesMessageContentArrayItem struct {
 // [InstanceChatCompletionsResponseChoicesMessageContentArrayItem]
 type instanceChatCompletionsResponseChoicesMessageContentArrayItemJSON struct {
 	Type        apijson.Field
+	File        apijson.Field
 	ImageURL    apijson.Field
 	Text        apijson.Field
 	raw         string
@@ -3769,12 +3801,14 @@ func (r *InstanceChatCompletionsResponseChoicesMessageContentArrayItem) Unmarsha
 //
 // Possible runtime types of the union are
 // [InstanceChatCompletionsResponseChoicesMessageContentArrayObject],
+// [InstanceChatCompletionsResponseChoicesMessageContentArrayObject],
 // [InstanceChatCompletionsResponseChoicesMessageContentArrayObject].
 func (r InstanceChatCompletionsResponseChoicesMessageContentArrayItem) AsUnion() InstanceChatCompletionsResponseChoicesMessageContentArrayUnionItem {
 	return r.union
 }
 
 // Union satisfied by
+// [InstanceChatCompletionsResponseChoicesMessageContentArrayObject],
 // [InstanceChatCompletionsResponseChoicesMessageContentArrayObject] or
 // [InstanceChatCompletionsResponseChoicesMessageContentArrayObject].
 type InstanceChatCompletionsResponseChoicesMessageContentArrayUnionItem interface {
@@ -3785,6 +3819,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*InstanceChatCompletionsResponseChoicesMessageContentArrayUnionItem)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(InstanceChatCompletionsResponseChoicesMessageContentArrayObject{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(InstanceChatCompletionsResponseChoicesMessageContentArrayObject{}),
@@ -3842,11 +3880,12 @@ type InstanceChatCompletionsResponseChoicesMessageContentArrayType string
 const (
 	InstanceChatCompletionsResponseChoicesMessageContentArrayTypeText     InstanceChatCompletionsResponseChoicesMessageContentArrayType = "text"
 	InstanceChatCompletionsResponseChoicesMessageContentArrayTypeImageURL InstanceChatCompletionsResponseChoicesMessageContentArrayType = "image_url"
+	InstanceChatCompletionsResponseChoicesMessageContentArrayTypeFile     InstanceChatCompletionsResponseChoicesMessageContentArrayType = "file"
 )
 
 func (r InstanceChatCompletionsResponseChoicesMessageContentArrayType) IsKnown() bool {
 	switch r {
-	case InstanceChatCompletionsResponseChoicesMessageContentArrayTypeText, InstanceChatCompletionsResponseChoicesMessageContentArrayTypeImageURL:
+	case InstanceChatCompletionsResponseChoicesMessageContentArrayTypeText, InstanceChatCompletionsResponseChoicesMessageContentArrayTypeImageURL, InstanceChatCompletionsResponseChoicesMessageContentArrayTypeFile:
 		return true
 	}
 	return false
@@ -4346,12 +4385,18 @@ type InstanceReadResponsePublicEndpointParams struct {
 	// responses return the current set; on update (PUT) this field is only echoed back
 	// when supplied in the request body, otherwise it is null (omit it to leave
 	// domains unchanged).
-	CustomDomains  []string                                               `json:"custom_domains" api:"nullable"`
-	Enabled        bool                                                   `json:"enabled"`
-	Mcp            InstanceReadResponsePublicEndpointParamsMcp            `json:"mcp"`
-	RateLimit      InstanceReadResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
-	SearchEndpoint InstanceReadResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
-	JSON           instanceReadResponsePublicEndpointParamsJSON           `json:"-"`
+	CustomDomains []string `json:"custom_domains" api:"nullable"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled bool                                                   `json:"default_domain_enabled"`
+	Enabled              bool                                                   `json:"enabled"`
+	Mcp                  InstanceReadResponsePublicEndpointParamsMcp            `json:"mcp"`
+	RateLimit            InstanceReadResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
+	SearchEndpoint       InstanceReadResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
+	JSON                 instanceReadResponsePublicEndpointParamsJSON           `json:"-"`
 }
 
 // instanceReadResponsePublicEndpointParamsJSON contains the JSON metadata for the
@@ -4360,6 +4405,7 @@ type instanceReadResponsePublicEndpointParamsJSON struct {
 	AuthorizedHosts         apijson.Field
 	ChatCompletionsEndpoint apijson.Field
 	CustomDomains           apijson.Field
+	DefaultDomainEnabled    apijson.Field
 	Enabled                 apijson.Field
 	Mcp                     apijson.Field
 	RateLimit               apijson.Field
@@ -5345,11 +5391,17 @@ type InstanceNewParamsPublicEndpointParams struct {
 	// responses return the current set; on update (PUT) this field is only echoed back
 	// when supplied in the request body, otherwise it is null (omit it to leave
 	// domains unchanged).
-	CustomDomains  param.Field[[]string]                                            `json:"custom_domains"`
-	Enabled        param.Field[bool]                                                `json:"enabled"`
-	Mcp            param.Field[InstanceNewParamsPublicEndpointParamsMcp]            `json:"mcp"`
-	RateLimit      param.Field[InstanceNewParamsPublicEndpointParamsRateLimit]      `json:"rate_limit"`
-	SearchEndpoint param.Field[InstanceNewParamsPublicEndpointParamsSearchEndpoint] `json:"search_endpoint"`
+	CustomDomains param.Field[[]string] `json:"custom_domains"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled param.Field[bool]                                                `json:"default_domain_enabled"`
+	Enabled              param.Field[bool]                                                `json:"enabled"`
+	Mcp                  param.Field[InstanceNewParamsPublicEndpointParamsMcp]            `json:"mcp"`
+	RateLimit            param.Field[InstanceNewParamsPublicEndpointParamsRateLimit]      `json:"rate_limit"`
+	SearchEndpoint       param.Field[InstanceNewParamsPublicEndpointParamsSearchEndpoint] `json:"search_endpoint"`
 }
 
 func (r InstanceNewParamsPublicEndpointParams) MarshalJSON() (data []byte, err error) {
@@ -5939,11 +5991,17 @@ type InstanceUpdateParamsPublicEndpointParams struct {
 	// responses return the current set; on update (PUT) this field is only echoed back
 	// when supplied in the request body, otherwise it is null (omit it to leave
 	// domains unchanged).
-	CustomDomains  param.Field[[]string]                                               `json:"custom_domains"`
-	Enabled        param.Field[bool]                                                   `json:"enabled"`
-	Mcp            param.Field[InstanceUpdateParamsPublicEndpointParamsMcp]            `json:"mcp"`
-	RateLimit      param.Field[InstanceUpdateParamsPublicEndpointParamsRateLimit]      `json:"rate_limit"`
-	SearchEndpoint param.Field[InstanceUpdateParamsPublicEndpointParamsSearchEndpoint] `json:"search_endpoint"`
+	CustomDomains param.Field[[]string] `json:"custom_domains"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled param.Field[bool]                                                   `json:"default_domain_enabled"`
+	Enabled              param.Field[bool]                                                   `json:"enabled"`
+	Mcp                  param.Field[InstanceUpdateParamsPublicEndpointParamsMcp]            `json:"mcp"`
+	RateLimit            param.Field[InstanceUpdateParamsPublicEndpointParamsRateLimit]      `json:"rate_limit"`
+	SearchEndpoint       param.Field[InstanceUpdateParamsPublicEndpointParamsSearchEndpoint] `json:"search_endpoint"`
 }
 
 func (r InstanceUpdateParamsPublicEndpointParams) MarshalJSON() (data []byte, err error) {
@@ -6420,6 +6478,7 @@ func (r InstanceChatCompletionsParamsMessagesContentArray) ImplementsInstanceCha
 
 type InstanceChatCompletionsParamsMessagesContentArrayItem struct {
 	Type     param.Field[InstanceChatCompletionsParamsMessagesContentArrayType] `json:"type" api:"required"`
+	File     param.Field[interface{}]                                           `json:"file"`
 	ImageURL param.Field[interface{}]                                           `json:"image_url"`
 	Text     param.Field[string]                                                `json:"text"`
 }
@@ -6432,6 +6491,7 @@ func (r InstanceChatCompletionsParamsMessagesContentArrayItem) implementsInstanc
 }
 
 // Satisfied by
+// [ai_search.InstanceChatCompletionsParamsMessagesContentArrayObject],
 // [ai_search.InstanceChatCompletionsParamsMessagesContentArrayObject],
 // [ai_search.InstanceChatCompletionsParamsMessagesContentArrayObject],
 // [InstanceChatCompletionsParamsMessagesContentArrayItem].
@@ -6470,11 +6530,12 @@ type InstanceChatCompletionsParamsMessagesContentArrayType string
 const (
 	InstanceChatCompletionsParamsMessagesContentArrayTypeText     InstanceChatCompletionsParamsMessagesContentArrayType = "text"
 	InstanceChatCompletionsParamsMessagesContentArrayTypeImageURL InstanceChatCompletionsParamsMessagesContentArrayType = "image_url"
+	InstanceChatCompletionsParamsMessagesContentArrayTypeFile     InstanceChatCompletionsParamsMessagesContentArrayType = "file"
 )
 
 func (r InstanceChatCompletionsParamsMessagesContentArrayType) IsKnown() bool {
 	switch r {
-	case InstanceChatCompletionsParamsMessagesContentArrayTypeText, InstanceChatCompletionsParamsMessagesContentArrayTypeImageURL:
+	case InstanceChatCompletionsParamsMessagesContentArrayTypeText, InstanceChatCompletionsParamsMessagesContentArrayTypeImageURL, InstanceChatCompletionsParamsMessagesContentArrayTypeFile:
 		return true
 	}
 	return false
@@ -7063,6 +7124,7 @@ func (r InstanceSearchParamsMessagesContentArray) ImplementsInstanceSearchParams
 
 type InstanceSearchParamsMessagesContentArrayItem struct {
 	Type     param.Field[InstanceSearchParamsMessagesContentArrayType] `json:"type" api:"required"`
+	File     param.Field[interface{}]                                  `json:"file"`
 	ImageURL param.Field[interface{}]                                  `json:"image_url"`
 	Text     param.Field[string]                                       `json:"text"`
 }
@@ -7075,6 +7137,7 @@ func (r InstanceSearchParamsMessagesContentArrayItem) implementsInstanceSearchPa
 }
 
 // Satisfied by [ai_search.InstanceSearchParamsMessagesContentArrayObject],
+// [ai_search.InstanceSearchParamsMessagesContentArrayObject],
 // [ai_search.InstanceSearchParamsMessagesContentArrayObject],
 // [InstanceSearchParamsMessagesContentArrayItem].
 type InstanceSearchParamsMessagesContentArrayItemUnion interface {
@@ -7112,11 +7175,12 @@ type InstanceSearchParamsMessagesContentArrayType string
 const (
 	InstanceSearchParamsMessagesContentArrayTypeText     InstanceSearchParamsMessagesContentArrayType = "text"
 	InstanceSearchParamsMessagesContentArrayTypeImageURL InstanceSearchParamsMessagesContentArrayType = "image_url"
+	InstanceSearchParamsMessagesContentArrayTypeFile     InstanceSearchParamsMessagesContentArrayType = "file"
 )
 
 func (r InstanceSearchParamsMessagesContentArrayType) IsKnown() bool {
 	switch r {
-	case InstanceSearchParamsMessagesContentArrayTypeText, InstanceSearchParamsMessagesContentArrayTypeImageURL:
+	case InstanceSearchParamsMessagesContentArrayTypeText, InstanceSearchParamsMessagesContentArrayTypeImageURL, InstanceSearchParamsMessagesContentArrayTypeFile:
 		return true
 	}
 	return false

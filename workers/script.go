@@ -188,6 +188,11 @@ type Script struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
+	// Declarative exports for the Worker's most recent version, including Durable
+	// Object classes (with their `storage` backend) and named Worker entrypoints.
+	// Tombstoned lifecycle entries are omitted, so only live exports (`created` and
+	// `expecting-transfer`) are returned.
+	Exports map[string]ScriptExport `json:"exports"`
 	// The names of handlers exported as part of the default export.
 	Handlers []string `json:"handlers"`
 	// Whether a Worker contains assets.
@@ -242,6 +247,7 @@ type scriptJSON struct {
 	CompatibilityFlags apijson.Field
 	CreatedOn          apijson.Field
 	Etag               apijson.Field
+	Exports            apijson.Field
 	Handlers           apijson.Field
 	HasAssets          apijson.Field
 	HasModules         apijson.Field
@@ -298,6 +304,146 @@ func (r *ScriptCacheOptions) UnmarshalJSON(data []byte) (err error) {
 
 func (r scriptCacheOptionsJSON) RawJSON() string {
 	return r.raw
+}
+
+// A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
+// class name, a Durable Object class name, or `default` for the Worker's default
+// export). Worker entrypoint entries set `type: worker` and may carry `cache`
+// configuration for that entrypoint. Durable Object entries set
+// `type: durable-object` and carry additional provisioning fields.
+type ScriptExport struct {
+	// The kind of export.
+	Type ScriptExportsType `json:"type" api:"required"`
+	// Cache override for this entrypoint. It applies only to `type: worker` entries
+	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+	Cache ScriptExportsCache `json:"cache"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State ScriptExportsState `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage ScriptExportsStorage `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom string           `json:"transfer_from"`
+	JSON         scriptExportJSON `json:"-"`
+}
+
+// scriptExportJSON contains the JSON metadata for the struct [ScriptExport]
+type scriptExportJSON struct {
+	Type         apijson.Field
+	Cache        apijson.Field
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ScriptExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptExportJSON) RawJSON() string {
+	return r.raw
+}
+
+// The kind of export.
+type ScriptExportsType string
+
+const (
+	ScriptExportsTypeWorker        ScriptExportsType = "worker"
+	ScriptExportsTypeDurableObject ScriptExportsType = "durable-object"
+)
+
+func (r ScriptExportsType) IsKnown() bool {
+	switch r {
+	case ScriptExportsTypeWorker, ScriptExportsTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Cache override for this entrypoint. It applies only to `type: worker` entries
+// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+type ScriptExportsCache struct {
+	// Whether caching is enabled for this entrypoint.
+	Enabled bool                   `json:"enabled" api:"required"`
+	JSON    scriptExportsCacheJSON `json:"-"`
+}
+
+// scriptExportsCacheJSON contains the JSON metadata for the struct
+// [ScriptExportsCache]
+type scriptExportsCacheJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptExportsCache) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptExportsCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+// export) when omitted.
+//
+// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+// operations that retire, rename, or hand off a provisioned Durable Object
+// namespace. They are applied at upload and are filtered out of GET responses, so
+// a read only ever returns `created` or `expecting-transfer`.
+//
+// `expecting-transfer` is a live export whose data is being received from another
+// script via the two-phase transfer flow; it carries `storage` and
+// `transfer_from`.
+type ScriptExportsState string
+
+const (
+	ScriptExportsStateCreated           ScriptExportsState = "created"
+	ScriptExportsStateDeleted           ScriptExportsState = "deleted"
+	ScriptExportsStateRenamed           ScriptExportsState = "renamed"
+	ScriptExportsStateTransferred       ScriptExportsState = "transferred"
+	ScriptExportsStateExpectingTransfer ScriptExportsState = "expecting-transfer"
+)
+
+func (r ScriptExportsState) IsKnown() bool {
+	switch r {
+	case ScriptExportsStateCreated, ScriptExportsStateDeleted, ScriptExportsStateRenamed, ScriptExportsStateTransferred, ScriptExportsStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Storage backend for a `type: durable-object` export. Required for live Durable
+// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+type ScriptExportsStorage string
+
+const (
+	ScriptExportsStorageSqlite   ScriptExportsStorage = "sqlite"
+	ScriptExportsStorageLegacyKV ScriptExportsStorage = "legacy-kv"
+)
+
+func (r ScriptExportsStorage) IsKnown() bool {
+	switch r {
+	case ScriptExportsStorageSqlite, ScriptExportsStorageLegacyKV:
+		return true
+	}
+	return false
 }
 
 type ScriptNamedHandler struct {
@@ -939,6 +1085,11 @@ type ScriptUpdateResponse struct {
 	EntryPoint string `json:"entry_point"`
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
+	// Declarative exports for the Worker's most recent version, including Durable
+	// Object classes (with their `storage` backend) and named Worker entrypoints.
+	// Tombstoned lifecycle entries are omitted, so only live exports (`created` and
+	// `expecting-transfer`) are returned.
+	Exports map[string]ScriptUpdateResponseExport `json:"exports"`
 	// The names of handlers exported as part of the default export.
 	Handlers []string `json:"handlers"`
 	// Whether a Worker contains assets.
@@ -989,6 +1140,7 @@ type scriptUpdateResponseJSON struct {
 	CreatedOn          apijson.Field
 	EntryPoint         apijson.Field
 	Etag               apijson.Field
+	Exports            apijson.Field
 	Handlers           apijson.Field
 	HasAssets          apijson.Field
 	HasModules         apijson.Field
@@ -1045,6 +1197,147 @@ func (r *ScriptUpdateResponseCacheOptions) UnmarshalJSON(data []byte) (err error
 
 func (r scriptUpdateResponseCacheOptionsJSON) RawJSON() string {
 	return r.raw
+}
+
+// A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
+// class name, a Durable Object class name, or `default` for the Worker's default
+// export). Worker entrypoint entries set `type: worker` and may carry `cache`
+// configuration for that entrypoint. Durable Object entries set
+// `type: durable-object` and carry additional provisioning fields.
+type ScriptUpdateResponseExport struct {
+	// The kind of export.
+	Type ScriptUpdateResponseExportsType `json:"type" api:"required"`
+	// Cache override for this entrypoint. It applies only to `type: worker` entries
+	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+	Cache ScriptUpdateResponseExportsCache `json:"cache"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State ScriptUpdateResponseExportsState `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage ScriptUpdateResponseExportsStorage `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom string                         `json:"transfer_from"`
+	JSON         scriptUpdateResponseExportJSON `json:"-"`
+}
+
+// scriptUpdateResponseExportJSON contains the JSON metadata for the struct
+// [ScriptUpdateResponseExport]
+type scriptUpdateResponseExportJSON struct {
+	Type         apijson.Field
+	Cache        apijson.Field
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponseExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseExportJSON) RawJSON() string {
+	return r.raw
+}
+
+// The kind of export.
+type ScriptUpdateResponseExportsType string
+
+const (
+	ScriptUpdateResponseExportsTypeWorker        ScriptUpdateResponseExportsType = "worker"
+	ScriptUpdateResponseExportsTypeDurableObject ScriptUpdateResponseExportsType = "durable-object"
+)
+
+func (r ScriptUpdateResponseExportsType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateResponseExportsTypeWorker, ScriptUpdateResponseExportsTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Cache override for this entrypoint. It applies only to `type: worker` entries
+// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+type ScriptUpdateResponseExportsCache struct {
+	// Whether caching is enabled for this entrypoint.
+	Enabled bool                                 `json:"enabled" api:"required"`
+	JSON    scriptUpdateResponseExportsCacheJSON `json:"-"`
+}
+
+// scriptUpdateResponseExportsCacheJSON contains the JSON metadata for the struct
+// [ScriptUpdateResponseExportsCache]
+type scriptUpdateResponseExportsCacheJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponseExportsCache) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseExportsCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+// export) when omitted.
+//
+// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+// operations that retire, rename, or hand off a provisioned Durable Object
+// namespace. They are applied at upload and are filtered out of GET responses, so
+// a read only ever returns `created` or `expecting-transfer`.
+//
+// `expecting-transfer` is a live export whose data is being received from another
+// script via the two-phase transfer flow; it carries `storage` and
+// `transfer_from`.
+type ScriptUpdateResponseExportsState string
+
+const (
+	ScriptUpdateResponseExportsStateCreated           ScriptUpdateResponseExportsState = "created"
+	ScriptUpdateResponseExportsStateDeleted           ScriptUpdateResponseExportsState = "deleted"
+	ScriptUpdateResponseExportsStateRenamed           ScriptUpdateResponseExportsState = "renamed"
+	ScriptUpdateResponseExportsStateTransferred       ScriptUpdateResponseExportsState = "transferred"
+	ScriptUpdateResponseExportsStateExpectingTransfer ScriptUpdateResponseExportsState = "expecting-transfer"
+)
+
+func (r ScriptUpdateResponseExportsState) IsKnown() bool {
+	switch r {
+	case ScriptUpdateResponseExportsStateCreated, ScriptUpdateResponseExportsStateDeleted, ScriptUpdateResponseExportsStateRenamed, ScriptUpdateResponseExportsStateTransferred, ScriptUpdateResponseExportsStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Storage backend for a `type: durable-object` export. Required for live Durable
+// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+type ScriptUpdateResponseExportsStorage string
+
+const (
+	ScriptUpdateResponseExportsStorageSqlite   ScriptUpdateResponseExportsStorage = "sqlite"
+	ScriptUpdateResponseExportsStorageLegacyKV ScriptUpdateResponseExportsStorage = "legacy-kv"
+)
+
+func (r ScriptUpdateResponseExportsStorage) IsKnown() bool {
+	switch r {
+	case ScriptUpdateResponseExportsStorageSqlite, ScriptUpdateResponseExportsStorageLegacyKV:
+		return true
+	}
+	return false
 }
 
 type ScriptUpdateResponseNamedHandler struct {
@@ -1455,6 +1748,11 @@ type ScriptListResponse struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
+	// Declarative exports for the Worker's most recent version, including Durable
+	// Object classes (with their `storage` backend) and named Worker entrypoints.
+	// Tombstoned lifecycle entries are omitted, so only live exports (`created` and
+	// `expecting-transfer`) are returned.
+	Exports map[string]ScriptListResponseExport `json:"exports"`
 	// The names of handlers exported as part of the default export.
 	Handlers []string `json:"handlers"`
 	// Whether a Worker contains assets.
@@ -1505,6 +1803,7 @@ type scriptListResponseJSON struct {
 	CompatibilityFlags apijson.Field
 	CreatedOn          apijson.Field
 	Etag               apijson.Field
+	Exports            apijson.Field
 	Handlers           apijson.Field
 	HasAssets          apijson.Field
 	HasModules         apijson.Field
@@ -1562,6 +1861,147 @@ func (r *ScriptListResponseCacheOptions) UnmarshalJSON(data []byte) (err error) 
 
 func (r scriptListResponseCacheOptionsJSON) RawJSON() string {
 	return r.raw
+}
+
+// A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
+// class name, a Durable Object class name, or `default` for the Worker's default
+// export). Worker entrypoint entries set `type: worker` and may carry `cache`
+// configuration for that entrypoint. Durable Object entries set
+// `type: durable-object` and carry additional provisioning fields.
+type ScriptListResponseExport struct {
+	// The kind of export.
+	Type ScriptListResponseExportsType `json:"type" api:"required"`
+	// Cache override for this entrypoint. It applies only to `type: worker` entries
+	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+	Cache ScriptListResponseExportsCache `json:"cache"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State ScriptListResponseExportsState `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage ScriptListResponseExportsStorage `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom string                       `json:"transfer_from"`
+	JSON         scriptListResponseExportJSON `json:"-"`
+}
+
+// scriptListResponseExportJSON contains the JSON metadata for the struct
+// [ScriptListResponseExport]
+type scriptListResponseExportJSON struct {
+	Type         apijson.Field
+	Cache        apijson.Field
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ScriptListResponseExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponseExportJSON) RawJSON() string {
+	return r.raw
+}
+
+// The kind of export.
+type ScriptListResponseExportsType string
+
+const (
+	ScriptListResponseExportsTypeWorker        ScriptListResponseExportsType = "worker"
+	ScriptListResponseExportsTypeDurableObject ScriptListResponseExportsType = "durable-object"
+)
+
+func (r ScriptListResponseExportsType) IsKnown() bool {
+	switch r {
+	case ScriptListResponseExportsTypeWorker, ScriptListResponseExportsTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Cache override for this entrypoint. It applies only to `type: worker` entries
+// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+type ScriptListResponseExportsCache struct {
+	// Whether caching is enabled for this entrypoint.
+	Enabled bool                               `json:"enabled" api:"required"`
+	JSON    scriptListResponseExportsCacheJSON `json:"-"`
+}
+
+// scriptListResponseExportsCacheJSON contains the JSON metadata for the struct
+// [ScriptListResponseExportsCache]
+type scriptListResponseExportsCacheJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptListResponseExportsCache) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponseExportsCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+// export) when omitted.
+//
+// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+// operations that retire, rename, or hand off a provisioned Durable Object
+// namespace. They are applied at upload and are filtered out of GET responses, so
+// a read only ever returns `created` or `expecting-transfer`.
+//
+// `expecting-transfer` is a live export whose data is being received from another
+// script via the two-phase transfer flow; it carries `storage` and
+// `transfer_from`.
+type ScriptListResponseExportsState string
+
+const (
+	ScriptListResponseExportsStateCreated           ScriptListResponseExportsState = "created"
+	ScriptListResponseExportsStateDeleted           ScriptListResponseExportsState = "deleted"
+	ScriptListResponseExportsStateRenamed           ScriptListResponseExportsState = "renamed"
+	ScriptListResponseExportsStateTransferred       ScriptListResponseExportsState = "transferred"
+	ScriptListResponseExportsStateExpectingTransfer ScriptListResponseExportsState = "expecting-transfer"
+)
+
+func (r ScriptListResponseExportsState) IsKnown() bool {
+	switch r {
+	case ScriptListResponseExportsStateCreated, ScriptListResponseExportsStateDeleted, ScriptListResponseExportsStateRenamed, ScriptListResponseExportsStateTransferred, ScriptListResponseExportsStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Storage backend for a `type: durable-object` export. Required for live Durable
+// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+type ScriptListResponseExportsStorage string
+
+const (
+	ScriptListResponseExportsStorageSqlite   ScriptListResponseExportsStorage = "sqlite"
+	ScriptListResponseExportsStorageLegacyKV ScriptListResponseExportsStorage = "legacy-kv"
+)
+
+func (r ScriptListResponseExportsStorage) IsKnown() bool {
+	switch r {
+	case ScriptListResponseExportsStorageSqlite, ScriptListResponseExportsStorageLegacyKV:
+		return true
+	}
+	return false
 }
 
 type ScriptListResponseNamedHandler struct {
@@ -3752,6 +4192,34 @@ type ScriptUpdateParamsMetadataExports struct {
 	// Cache override for this entrypoint. It applies only to `type: worker` entries
 	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
 	Cache param.Field[ScriptUpdateParamsMetadataExportsCache] `json:"cache"`
+	// Destination class name for a `state: renamed` tombstone. The target must appear
+	// as a live (`created`) entry in the same `exports` map. Write-only: never present
+	// in GET responses.
+	RenamedTo param.Field[string] `json:"renamed_to"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State param.Field[ScriptUpdateParamsMetadataExportsState] `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage param.Field[ScriptUpdateParamsMetadataExportsStorage] `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom param.Field[string] `json:"transfer_from"`
+	// Destination script for a `state: transferred` tombstone. Must reference a script
+	// in the same account; cross-dispatch-namespace transfers are rejected.
+	// Write-only: never present in GET responses.
+	TransferredTo param.Field[string] `json:"transferred_to"`
 }
 
 func (r ScriptUpdateParamsMetadataExports) MarshalJSON() (data []byte, err error) {
@@ -3783,6 +4251,53 @@ type ScriptUpdateParamsMetadataExportsCache struct {
 
 func (r ScriptUpdateParamsMetadataExportsCache) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+// export) when omitted.
+//
+// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+// operations that retire, rename, or hand off a provisioned Durable Object
+// namespace. They are applied at upload and are filtered out of GET responses, so
+// a read only ever returns `created` or `expecting-transfer`.
+//
+// `expecting-transfer` is a live export whose data is being received from another
+// script via the two-phase transfer flow; it carries `storage` and
+// `transfer_from`.
+type ScriptUpdateParamsMetadataExportsState string
+
+const (
+	ScriptUpdateParamsMetadataExportsStateCreated           ScriptUpdateParamsMetadataExportsState = "created"
+	ScriptUpdateParamsMetadataExportsStateDeleted           ScriptUpdateParamsMetadataExportsState = "deleted"
+	ScriptUpdateParamsMetadataExportsStateRenamed           ScriptUpdateParamsMetadataExportsState = "renamed"
+	ScriptUpdateParamsMetadataExportsStateTransferred       ScriptUpdateParamsMetadataExportsState = "transferred"
+	ScriptUpdateParamsMetadataExportsStateExpectingTransfer ScriptUpdateParamsMetadataExportsState = "expecting-transfer"
+)
+
+func (r ScriptUpdateParamsMetadataExportsState) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataExportsStateCreated, ScriptUpdateParamsMetadataExportsStateDeleted, ScriptUpdateParamsMetadataExportsStateRenamed, ScriptUpdateParamsMetadataExportsStateTransferred, ScriptUpdateParamsMetadataExportsStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Storage backend for a `type: durable-object` export. Required for live Durable
+// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+type ScriptUpdateParamsMetadataExportsStorage string
+
+const (
+	ScriptUpdateParamsMetadataExportsStorageSqlite   ScriptUpdateParamsMetadataExportsStorage = "sqlite"
+	ScriptUpdateParamsMetadataExportsStorageLegacyKV ScriptUpdateParamsMetadataExportsStorage = "legacy-kv"
+)
+
+func (r ScriptUpdateParamsMetadataExportsStorage) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataExportsStorageSqlite, ScriptUpdateParamsMetadataExportsStorageLegacyKV:
+		return true
+	}
+	return false
 }
 
 // Limits to apply for this Worker.

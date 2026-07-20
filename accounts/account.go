@@ -30,10 +30,12 @@ type AccountService struct {
 	AccountOrganizations *AccountOrganizationService
 	AccountProfile       *AccountProfileService
 	Members              *MemberService
-	Roles                *RoleService
-	Subscriptions        *SubscriptionService
-	Tokens               *TokenService
-	Logs                 *LogService
+	// Deprecated: Use the
+	// [github.com/cloudflare/cloudflare-go/v7/iam.PermissionGroupService] instead
+	Roles         *RoleService
+	Subscriptions *SubscriptionService
+	Tokens        *TokenService
+	Logs          *LogService
 }
 
 // NewAccountService generates a new service that applies the given options to each

@@ -136,6 +136,8 @@ func (r *NetworkSubnetWARPService) Get(ctx context.Context, subnetID string, que
 type Subnet struct {
 	// The UUID of the subnet.
 	ID string `json:"id" format:"uuid"`
+	// IP capacity information for the subnet.
+	Capacity SubnetCapacity `json:"capacity"`
 	// An optional description of the subnet.
 	Comment string `json:"comment"`
 	// Timestamp of when the resource was created.
@@ -158,6 +160,7 @@ type Subnet struct {
 // subnetJSON contains the JSON metadata for the struct [Subnet]
 type subnetJSON struct {
 	ID               apijson.Field
+	Capacity         apijson.Field
 	Comment          apijson.Field
 	CreatedAt        apijson.Field
 	DeletedAt        apijson.Field
@@ -177,17 +180,43 @@ func (r subnetJSON) RawJSON() string {
 	return r.raw
 }
 
+// IP capacity information for the subnet.
+type SubnetCapacity struct {
+	// Total number of assignable IPs in the subnet.
+	Total int64 `json:"total"`
+	// Number of assigned IPs in the subnet.
+	Used int64              `json:"used"`
+	JSON subnetCapacityJSON `json:"-"`
+}
+
+// subnetCapacityJSON contains the JSON metadata for the struct [SubnetCapacity]
+type subnetCapacityJSON struct {
+	Total       apijson.Field
+	Used        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubnetCapacity) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subnetCapacityJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of subnet.
 type SubnetSubnetType string
 
 const (
-	SubnetSubnetTypeCloudflareSource SubnetSubnetType = "cloudflare_source"
-	SubnetSubnetTypeWARP             SubnetSubnetType = "warp"
+	SubnetSubnetTypeCloudflareSource  SubnetSubnetType = "cloudflare_source"
+	SubnetSubnetTypeInitialResolvedIP SubnetSubnetType = "initial_resolved_ip"
+	SubnetSubnetTypeWARP              SubnetSubnetType = "warp"
 )
 
 func (r SubnetSubnetType) IsKnown() bool {
 	switch r {
-	case SubnetSubnetTypeCloudflareSource, SubnetSubnetTypeWARP:
+	case SubnetSubnetTypeCloudflareSource, SubnetSubnetTypeInitialResolvedIP, SubnetSubnetTypeWARP:
 		return true
 	}
 	return false
@@ -196,6 +225,8 @@ func (r SubnetSubnetType) IsKnown() bool {
 type NetworkSubnetWARPDeleteResponse struct {
 	// The UUID of the subnet.
 	ID string `json:"id" format:"uuid"`
+	// IP capacity information for the subnet.
+	Capacity NetworkSubnetWARPDeleteResponseCapacity `json:"capacity"`
 	// An optional description of the subnet.
 	Comment string `json:"comment"`
 	// Timestamp of when the resource was created.
@@ -219,6 +250,7 @@ type NetworkSubnetWARPDeleteResponse struct {
 // [NetworkSubnetWARPDeleteResponse]
 type networkSubnetWARPDeleteResponseJSON struct {
 	ID               apijson.Field
+	Capacity         apijson.Field
 	Comment          apijson.Field
 	CreatedAt        apijson.Field
 	DeletedAt        apijson.Field
@@ -238,17 +270,44 @@ func (r networkSubnetWARPDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// IP capacity information for the subnet.
+type NetworkSubnetWARPDeleteResponseCapacity struct {
+	// Total number of assignable IPs in the subnet.
+	Total int64 `json:"total"`
+	// Number of assigned IPs in the subnet.
+	Used int64                                       `json:"used"`
+	JSON networkSubnetWARPDeleteResponseCapacityJSON `json:"-"`
+}
+
+// networkSubnetWARPDeleteResponseCapacityJSON contains the JSON metadata for the
+// struct [NetworkSubnetWARPDeleteResponseCapacity]
+type networkSubnetWARPDeleteResponseCapacityJSON struct {
+	Total       apijson.Field
+	Used        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetWARPDeleteResponseCapacity) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetWARPDeleteResponseCapacityJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of subnet.
 type NetworkSubnetWARPDeleteResponseSubnetType string
 
 const (
-	NetworkSubnetWARPDeleteResponseSubnetTypeCloudflareSource NetworkSubnetWARPDeleteResponseSubnetType = "cloudflare_source"
-	NetworkSubnetWARPDeleteResponseSubnetTypeWARP             NetworkSubnetWARPDeleteResponseSubnetType = "warp"
+	NetworkSubnetWARPDeleteResponseSubnetTypeCloudflareSource  NetworkSubnetWARPDeleteResponseSubnetType = "cloudflare_source"
+	NetworkSubnetWARPDeleteResponseSubnetTypeInitialResolvedIP NetworkSubnetWARPDeleteResponseSubnetType = "initial_resolved_ip"
+	NetworkSubnetWARPDeleteResponseSubnetTypeWARP              NetworkSubnetWARPDeleteResponseSubnetType = "warp"
 )
 
 func (r NetworkSubnetWARPDeleteResponseSubnetType) IsKnown() bool {
 	switch r {
-	case NetworkSubnetWARPDeleteResponseSubnetTypeCloudflareSource, NetworkSubnetWARPDeleteResponseSubnetTypeWARP:
+	case NetworkSubnetWARPDeleteResponseSubnetTypeCloudflareSource, NetworkSubnetWARPDeleteResponseSubnetTypeInitialResolvedIP, NetworkSubnetWARPDeleteResponseSubnetTypeWARP:
 		return true
 	}
 	return false

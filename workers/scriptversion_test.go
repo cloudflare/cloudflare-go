@@ -60,12 +60,22 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 						Cache: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsCache{
 							Enabled: cloudflare.F(true),
 						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsStateCreated),
+						Storage:       cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
 					},
 					"default": {
 						Type: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsTypeWorker),
 						Cache: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsCache{
 							Enabled: cloudflare.F(false),
 						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsStateCreated),
+						Storage:       cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
 					},
 				}),
 				KeepBindings: cloudflare.F([]string{"string"}),

@@ -36,7 +36,7 @@ func NewConnectorEventLatestService(opts ...option.RequestOption) (r *ConnectorE
 	return
 }
 
-// Get latest Events
+// Gets latest Magic WAN Connector Telemetry Events
 func (r *ConnectorEventLatestService) List(ctx context.Context, connectorID string, query ConnectorEventLatestListParams, opts ...option.RequestOption) (res *ConnectorEventLatestListResponse, err error) {
 	var env ConnectorEventLatestListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

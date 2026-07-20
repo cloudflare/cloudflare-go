@@ -447,7 +447,7 @@ type RelayTokenNewParams struct {
 	Operations param.Field[[]RelayTokenNewParamsOperation] `json:"operations" api:"required"`
 	// Optional expiry (RFC 3339). Defaults to 1 year from creation; rejected if more
 	// than 1 year in the future.
-	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
+	Expires param.Field[time.Time] `json:"expires" format:"date-time"`
 	// Optional, customer-set label.
 	Label param.Field[string] `json:"label"`
 }

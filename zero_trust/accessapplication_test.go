@@ -108,7 +108,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				DynamicClientRegistration: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationOAuthConfigurationDynamicClientRegistration{
 					AllowAnyOnLocalhost: cloudflare.F(true),
 					AllowAnyOnLoopback:  cloudflare.F(true),
-					AllowedURIs:         cloudflare.F([]string{"https://example.com/callback"}),
+					AllowedURIs:         cloudflare.F([]string{"https://example.com/callback", "com.example.app:/oauth/callback"}),
 					Enabled:             cloudflare.F(true),
 				}),
 				Enabled: cloudflare.F(true),
@@ -259,7 +259,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					DynamicClientRegistration: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationOAuthConfigurationDynamicClientRegistration{
 						AllowAnyOnLocalhost: cloudflare.F(true),
 						AllowAnyOnLoopback:  cloudflare.F(true),
-						AllowedURIs:         cloudflare.F([]string{"https://example.com/callback"}),
+						AllowedURIs:         cloudflare.F([]string{"https://example.com/callback", "com.example.app:/oauth/callback"}),
 						Enabled:             cloudflare.F(true),
 					}),
 					Enabled: cloudflare.F(true),

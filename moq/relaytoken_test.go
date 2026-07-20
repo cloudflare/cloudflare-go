@@ -35,7 +35,7 @@ func TestRelayTokenNewWithOptionalParams(t *testing.T) {
 		moq.RelayTokenNewParams{
 			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Operations: cloudflare.F([]moq.RelayTokenNewParamsOperation{moq.RelayTokenNewParamsOperationPublish, moq.RelayTokenNewParamsOperationSubscribe}),
-			ExpiresAt:  cloudflare.F(time.Now()),
+			Expires:    cloudflare.F(time.Now()),
 			Label:      cloudflare.F("primary-encoder"),
 		},
 	)

@@ -14,8 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
-func TestThreatEventIndicatorTypeList(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism")
+func TestThreatEventIndicatorTypeListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,8 +28,9 @@ func TestThreatEventIndicatorTypeList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CloudforceOne.ThreatEvents.IndicatorTypes.List(context.TODO(), cloudforce_one.ThreatEventIndicatorTypeListParams{
-		AccountID: cloudflare.F("account_id"),
+	_, err := client.CloudforceOne.ThreatEvents.Indicators.Types.List(context.TODO(), cloudforce_one.ThreatEventIndicatorTypeListParams{
+		AccountID:  cloudflare.F("account_id"),
+		DatasetIDs: cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

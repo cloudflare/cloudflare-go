@@ -37,7 +37,9 @@ func NewConfigurationCredentialService(opts ...option.RequestOption) (r *Configu
 	return
 }
 
-// Update Token Configuration credentials
+// Update Token Configuration credentials with full replacement semantics. Key
+// identities (`{alg,kid}`) must be unique within the request. Symmetric keys
+// (`kty: "oct"`) require `k`; `k: null` is invalid.
 func (r *ConfigurationCredentialService) Update(ctx context.Context, configID string, params ConfigurationCredentialUpdateParams, opts ...option.RequestOption) (res *ConfigurationCredentialUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -137,7 +139,8 @@ func (r *ConfigurationCredentialUpdateResponseKey) UnmarshalJSON(data []byte) (e
 // Possible runtime types of the union are
 // [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyRSA],
 // [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256],
-// [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384].
+// [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384],
+// [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponse].
 func (r ConfigurationCredentialUpdateResponseKey) AsUnion() ConfigurationCredentialUpdateResponseKeysUnion {
 	return r.union
 }
@@ -146,8 +149,9 @@ func (r ConfigurationCredentialUpdateResponseKey) AsUnion() ConfigurationCredent
 //
 // Union satisfied by
 // [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyRSA],
-// [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256] or
-// [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384].
+// [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs256],
+// [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384] or
+// [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponse].
 type ConfigurationCredentialUpdateResponseKeysUnion interface {
 	implementsConfigurationCredentialUpdateResponseKey()
 }
@@ -167,6 +171,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs384{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponse{}),
 		},
 	)
 }
@@ -419,6 +427,72 @@ func (r ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyEcEs3
 	return false
 }
 
+// JSON representation of a symmetric verification key in API responses (secret
+// material is redacted).
+type ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponse struct {
+	// Algorithm
+	Alg ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlg `json:"alg" api:"required"`
+	// Key ID
+	Kid string `json:"kid" api:"required"`
+	// Key Type
+	Kty  ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseKty  `json:"kty" api:"required"`
+	JSON configurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseJSON `json:"-"`
+}
+
+// configurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseJSON
+// contains the JSON metadata for the struct
+// [ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponse]
+type configurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseJSON struct {
+	Alg         apijson.Field
+	Kid         apijson.Field
+	Kty         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponse) implementsConfigurationCredentialUpdateResponseKey() {
+}
+
+// Algorithm
+type ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlg string
+
+const (
+	ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlgHs256 ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlg = "HS256"
+	ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlgHs384 ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlg = "HS384"
+	ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlgHs512 ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlg = "HS512"
+)
+
+func (r ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlg) IsKnown() bool {
+	switch r {
+	case ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlgHs256, ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlgHs384, ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseAlgHs512:
+		return true
+	}
+	return false
+}
+
+// Key Type
+type ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseKty string
+
+const (
+	ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseKtyOct ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseKty = "oct"
+)
+
+func (r ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseKty) IsKnown() bool {
+	switch r {
+	case ConfigurationCredentialUpdateResponseKeysAPIShieldCredentialsJWTKeyOctResponseKtyOct:
+		return true
+	}
+	return false
+}
+
 // Algorithm
 type ConfigurationCredentialUpdateResponseKeysAlg string
 
@@ -431,11 +505,14 @@ const (
 	ConfigurationCredentialUpdateResponseKeysAlgPs512 ConfigurationCredentialUpdateResponseKeysAlg = "PS512"
 	ConfigurationCredentialUpdateResponseKeysAlgEs256 ConfigurationCredentialUpdateResponseKeysAlg = "ES256"
 	ConfigurationCredentialUpdateResponseKeysAlgEs384 ConfigurationCredentialUpdateResponseKeysAlg = "ES384"
+	ConfigurationCredentialUpdateResponseKeysAlgHs256 ConfigurationCredentialUpdateResponseKeysAlg = "HS256"
+	ConfigurationCredentialUpdateResponseKeysAlgHs384 ConfigurationCredentialUpdateResponseKeysAlg = "HS384"
+	ConfigurationCredentialUpdateResponseKeysAlgHs512 ConfigurationCredentialUpdateResponseKeysAlg = "HS512"
 )
 
 func (r ConfigurationCredentialUpdateResponseKeysAlg) IsKnown() bool {
 	switch r {
-	case ConfigurationCredentialUpdateResponseKeysAlgRs256, ConfigurationCredentialUpdateResponseKeysAlgRs384, ConfigurationCredentialUpdateResponseKeysAlgRs512, ConfigurationCredentialUpdateResponseKeysAlgPs256, ConfigurationCredentialUpdateResponseKeysAlgPs384, ConfigurationCredentialUpdateResponseKeysAlgPs512, ConfigurationCredentialUpdateResponseKeysAlgEs256, ConfigurationCredentialUpdateResponseKeysAlgEs384:
+	case ConfigurationCredentialUpdateResponseKeysAlgRs256, ConfigurationCredentialUpdateResponseKeysAlgRs384, ConfigurationCredentialUpdateResponseKeysAlgRs512, ConfigurationCredentialUpdateResponseKeysAlgPs256, ConfigurationCredentialUpdateResponseKeysAlgPs384, ConfigurationCredentialUpdateResponseKeysAlgPs512, ConfigurationCredentialUpdateResponseKeysAlgEs256, ConfigurationCredentialUpdateResponseKeysAlgEs384, ConfigurationCredentialUpdateResponseKeysAlgHs256, ConfigurationCredentialUpdateResponseKeysAlgHs384, ConfigurationCredentialUpdateResponseKeysAlgHs512:
 		return true
 	}
 	return false
@@ -447,11 +524,12 @@ type ConfigurationCredentialUpdateResponseKeysKty string
 const (
 	ConfigurationCredentialUpdateResponseKeysKtyRSA ConfigurationCredentialUpdateResponseKeysKty = "RSA"
 	ConfigurationCredentialUpdateResponseKeysKtyEc  ConfigurationCredentialUpdateResponseKeysKty = "EC"
+	ConfigurationCredentialUpdateResponseKeysKtyOct ConfigurationCredentialUpdateResponseKeysKty = "oct"
 )
 
 func (r ConfigurationCredentialUpdateResponseKeysKty) IsKnown() bool {
 	switch r {
-	case ConfigurationCredentialUpdateResponseKeysKtyRSA, ConfigurationCredentialUpdateResponseKeysKtyEc:
+	case ConfigurationCredentialUpdateResponseKeysKtyRSA, ConfigurationCredentialUpdateResponseKeysKtyEc, ConfigurationCredentialUpdateResponseKeysKtyOct:
 		return true
 	}
 	return false
@@ -498,7 +576,7 @@ func (r ConfigurationCredentialUpdateParams) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-// JSON representation of a JWKS key.
+// JSON representation of a JWKS key for create and PUT requests.
 type ConfigurationCredentialUpdateParamsKey struct {
 	// Algorithm
 	Alg param.Field[ConfigurationCredentialUpdateParamsKeysAlg] `json:"alg" api:"required"`
@@ -510,6 +588,8 @@ type ConfigurationCredentialUpdateParamsKey struct {
 	Crv param.Field[ConfigurationCredentialUpdateParamsKeysCrv] `json:"crv"`
 	// RSA exponent
 	E param.Field[string] `json:"e"`
+	// Symmetric key material. Required for create and PUT update requests.
+	K param.Field[string] `json:"k"`
 	// RSA modulus
 	N param.Field[string] `json:"n"`
 	// X EC coordinate
@@ -525,12 +605,13 @@ func (r ConfigurationCredentialUpdateParamsKey) MarshalJSON() (data []byte, err 
 func (r ConfigurationCredentialUpdateParamsKey) implementsConfigurationCredentialUpdateParamsKeyUnion() {
 }
 
-// JSON representation of a JWKS key.
+// JSON representation of a JWKS key for create and PUT requests.
 //
 // Satisfied by
 // [token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSA],
 // [token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256],
 // [token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs384],
+// [token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequest],
 // [ConfigurationCredentialUpdateParamsKey].
 type ConfigurationCredentialUpdateParamsKeyUnion interface {
 	implementsConfigurationCredentialUpdateParamsKeyUnion()
@@ -728,6 +809,57 @@ func (r ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs384
 	return false
 }
 
+// JSON representation of a symmetric key for create/PUT requests.
+type ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequest struct {
+	// Algorithm
+	Alg param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlg] `json:"alg" api:"required"`
+	// Symmetric key material. Required for create and PUT update requests.
+	K param.Field[string] `json:"k" api:"required"`
+	// Key ID
+	Kid param.Field[string] `json:"kid" api:"required"`
+	// Key Type
+	Kty param.Field[ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestKty] `json:"kty" api:"required"`
+}
+
+func (r ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequest) implementsConfigurationCredentialUpdateParamsKeyUnion() {
+}
+
+// Algorithm
+type ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlg string
+
+const (
+	ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlgHs256 ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlg = "HS256"
+	ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlgHs384 ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlg = "HS384"
+	ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlgHs512 ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlg = "HS512"
+)
+
+func (r ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlg) IsKnown() bool {
+	switch r {
+	case ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlgHs256, ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlgHs384, ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestAlgHs512:
+		return true
+	}
+	return false
+}
+
+// Key Type
+type ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestKty string
+
+const (
+	ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestKtyOct ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestKty = "oct"
+)
+
+func (r ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestKty) IsKnown() bool {
+	switch r {
+	case ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyOctRequestKtyOct:
+		return true
+	}
+	return false
+}
+
 // Algorithm
 type ConfigurationCredentialUpdateParamsKeysAlg string
 
@@ -740,11 +872,14 @@ const (
 	ConfigurationCredentialUpdateParamsKeysAlgPs512 ConfigurationCredentialUpdateParamsKeysAlg = "PS512"
 	ConfigurationCredentialUpdateParamsKeysAlgEs256 ConfigurationCredentialUpdateParamsKeysAlg = "ES256"
 	ConfigurationCredentialUpdateParamsKeysAlgEs384 ConfigurationCredentialUpdateParamsKeysAlg = "ES384"
+	ConfigurationCredentialUpdateParamsKeysAlgHs256 ConfigurationCredentialUpdateParamsKeysAlg = "HS256"
+	ConfigurationCredentialUpdateParamsKeysAlgHs384 ConfigurationCredentialUpdateParamsKeysAlg = "HS384"
+	ConfigurationCredentialUpdateParamsKeysAlgHs512 ConfigurationCredentialUpdateParamsKeysAlg = "HS512"
 )
 
 func (r ConfigurationCredentialUpdateParamsKeysAlg) IsKnown() bool {
 	switch r {
-	case ConfigurationCredentialUpdateParamsKeysAlgRs256, ConfigurationCredentialUpdateParamsKeysAlgRs384, ConfigurationCredentialUpdateParamsKeysAlgRs512, ConfigurationCredentialUpdateParamsKeysAlgPs256, ConfigurationCredentialUpdateParamsKeysAlgPs384, ConfigurationCredentialUpdateParamsKeysAlgPs512, ConfigurationCredentialUpdateParamsKeysAlgEs256, ConfigurationCredentialUpdateParamsKeysAlgEs384:
+	case ConfigurationCredentialUpdateParamsKeysAlgRs256, ConfigurationCredentialUpdateParamsKeysAlgRs384, ConfigurationCredentialUpdateParamsKeysAlgRs512, ConfigurationCredentialUpdateParamsKeysAlgPs256, ConfigurationCredentialUpdateParamsKeysAlgPs384, ConfigurationCredentialUpdateParamsKeysAlgPs512, ConfigurationCredentialUpdateParamsKeysAlgEs256, ConfigurationCredentialUpdateParamsKeysAlgEs384, ConfigurationCredentialUpdateParamsKeysAlgHs256, ConfigurationCredentialUpdateParamsKeysAlgHs384, ConfigurationCredentialUpdateParamsKeysAlgHs512:
 		return true
 	}
 	return false
@@ -756,11 +891,12 @@ type ConfigurationCredentialUpdateParamsKeysKty string
 const (
 	ConfigurationCredentialUpdateParamsKeysKtyRSA ConfigurationCredentialUpdateParamsKeysKty = "RSA"
 	ConfigurationCredentialUpdateParamsKeysKtyEc  ConfigurationCredentialUpdateParamsKeysKty = "EC"
+	ConfigurationCredentialUpdateParamsKeysKtyOct ConfigurationCredentialUpdateParamsKeysKty = "oct"
 )
 
 func (r ConfigurationCredentialUpdateParamsKeysKty) IsKnown() bool {
 	switch r {
-	case ConfigurationCredentialUpdateParamsKeysKtyRSA, ConfigurationCredentialUpdateParamsKeysKtyEc:
+	case ConfigurationCredentialUpdateParamsKeysKtyRSA, ConfigurationCredentialUpdateParamsKeysKtyEc, ConfigurationCredentialUpdateParamsKeysKtyOct:
 		return true
 	}
 	return false

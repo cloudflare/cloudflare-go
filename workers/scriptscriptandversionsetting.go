@@ -2626,16 +2626,39 @@ type ScriptScriptAndVersionSettingEditResponseExport struct {
 	// Cache override for this entrypoint. It applies only to `type: worker` entries
 	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
 	Cache ScriptScriptAndVersionSettingEditResponseExportsCache `json:"cache"`
-	JSON  scriptScriptAndVersionSettingEditResponseExportJSON   `json:"-"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State ScriptScriptAndVersionSettingEditResponseExportsState `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage ScriptScriptAndVersionSettingEditResponseExportsStorage `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom string                                              `json:"transfer_from"`
+	JSON         scriptScriptAndVersionSettingEditResponseExportJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingEditResponseExportJSON contains the JSON metadata
 // for the struct [ScriptScriptAndVersionSettingEditResponseExport]
 type scriptScriptAndVersionSettingEditResponseExportJSON struct {
-	Type        apijson.Field
-	Cache       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Type         apijson.Field
+	Cache        apijson.Field
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ScriptScriptAndVersionSettingEditResponseExport) UnmarshalJSON(data []byte) (err error) {
@@ -2684,6 +2707,53 @@ func (r *ScriptScriptAndVersionSettingEditResponseExportsCache) UnmarshalJSON(da
 
 func (r scriptScriptAndVersionSettingEditResponseExportsCacheJSON) RawJSON() string {
 	return r.raw
+}
+
+// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+// export) when omitted.
+//
+// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+// operations that retire, rename, or hand off a provisioned Durable Object
+// namespace. They are applied at upload and are filtered out of GET responses, so
+// a read only ever returns `created` or `expecting-transfer`.
+//
+// `expecting-transfer` is a live export whose data is being received from another
+// script via the two-phase transfer flow; it carries `storage` and
+// `transfer_from`.
+type ScriptScriptAndVersionSettingEditResponseExportsState string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseExportsStateCreated           ScriptScriptAndVersionSettingEditResponseExportsState = "created"
+	ScriptScriptAndVersionSettingEditResponseExportsStateDeleted           ScriptScriptAndVersionSettingEditResponseExportsState = "deleted"
+	ScriptScriptAndVersionSettingEditResponseExportsStateRenamed           ScriptScriptAndVersionSettingEditResponseExportsState = "renamed"
+	ScriptScriptAndVersionSettingEditResponseExportsStateTransferred       ScriptScriptAndVersionSettingEditResponseExportsState = "transferred"
+	ScriptScriptAndVersionSettingEditResponseExportsStateExpectingTransfer ScriptScriptAndVersionSettingEditResponseExportsState = "expecting-transfer"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseExportsState) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseExportsStateCreated, ScriptScriptAndVersionSettingEditResponseExportsStateDeleted, ScriptScriptAndVersionSettingEditResponseExportsStateRenamed, ScriptScriptAndVersionSettingEditResponseExportsStateTransferred, ScriptScriptAndVersionSettingEditResponseExportsStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Storage backend for a `type: durable-object` export. Required for live Durable
+// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+type ScriptScriptAndVersionSettingEditResponseExportsStorage string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseExportsStorageSqlite   ScriptScriptAndVersionSettingEditResponseExportsStorage = "sqlite"
+	ScriptScriptAndVersionSettingEditResponseExportsStorageLegacyKV ScriptScriptAndVersionSettingEditResponseExportsStorage = "legacy-kv"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseExportsStorage) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseExportsStorageSqlite, ScriptScriptAndVersionSettingEditResponseExportsStorageLegacyKV:
+		return true
+	}
+	return false
 }
 
 // Limits to apply for this Worker.
@@ -5783,16 +5853,39 @@ type ScriptScriptAndVersionSettingGetResponseExport struct {
 	// Cache override for this entrypoint. It applies only to `type: worker` entries
 	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
 	Cache ScriptScriptAndVersionSettingGetResponseExportsCache `json:"cache"`
-	JSON  scriptScriptAndVersionSettingGetResponseExportJSON   `json:"-"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State ScriptScriptAndVersionSettingGetResponseExportsState `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage ScriptScriptAndVersionSettingGetResponseExportsStorage `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom string                                             `json:"transfer_from"`
+	JSON         scriptScriptAndVersionSettingGetResponseExportJSON `json:"-"`
 }
 
 // scriptScriptAndVersionSettingGetResponseExportJSON contains the JSON metadata
 // for the struct [ScriptScriptAndVersionSettingGetResponseExport]
 type scriptScriptAndVersionSettingGetResponseExportJSON struct {
-	Type        apijson.Field
-	Cache       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Type         apijson.Field
+	Cache        apijson.Field
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ScriptScriptAndVersionSettingGetResponseExport) UnmarshalJSON(data []byte) (err error) {
@@ -5841,6 +5934,53 @@ func (r *ScriptScriptAndVersionSettingGetResponseExportsCache) UnmarshalJSON(dat
 
 func (r scriptScriptAndVersionSettingGetResponseExportsCacheJSON) RawJSON() string {
 	return r.raw
+}
+
+// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+// export) when omitted.
+//
+// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+// operations that retire, rename, or hand off a provisioned Durable Object
+// namespace. They are applied at upload and are filtered out of GET responses, so
+// a read only ever returns `created` or `expecting-transfer`.
+//
+// `expecting-transfer` is a live export whose data is being received from another
+// script via the two-phase transfer flow; it carries `storage` and
+// `transfer_from`.
+type ScriptScriptAndVersionSettingGetResponseExportsState string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseExportsStateCreated           ScriptScriptAndVersionSettingGetResponseExportsState = "created"
+	ScriptScriptAndVersionSettingGetResponseExportsStateDeleted           ScriptScriptAndVersionSettingGetResponseExportsState = "deleted"
+	ScriptScriptAndVersionSettingGetResponseExportsStateRenamed           ScriptScriptAndVersionSettingGetResponseExportsState = "renamed"
+	ScriptScriptAndVersionSettingGetResponseExportsStateTransferred       ScriptScriptAndVersionSettingGetResponseExportsState = "transferred"
+	ScriptScriptAndVersionSettingGetResponseExportsStateExpectingTransfer ScriptScriptAndVersionSettingGetResponseExportsState = "expecting-transfer"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseExportsState) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseExportsStateCreated, ScriptScriptAndVersionSettingGetResponseExportsStateDeleted, ScriptScriptAndVersionSettingGetResponseExportsStateRenamed, ScriptScriptAndVersionSettingGetResponseExportsStateTransferred, ScriptScriptAndVersionSettingGetResponseExportsStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Storage backend for a `type: durable-object` export. Required for live Durable
+// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+type ScriptScriptAndVersionSettingGetResponseExportsStorage string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseExportsStorageSqlite   ScriptScriptAndVersionSettingGetResponseExportsStorage = "sqlite"
+	ScriptScriptAndVersionSettingGetResponseExportsStorageLegacyKV ScriptScriptAndVersionSettingGetResponseExportsStorage = "legacy-kv"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseExportsStorage) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseExportsStorageSqlite, ScriptScriptAndVersionSettingGetResponseExportsStorageLegacyKV:
+		return true
+	}
+	return false
 }
 
 // Limits to apply for this Worker.
@@ -7994,6 +8134,34 @@ type ScriptScriptAndVersionSettingEditParamsSettingsExports struct {
 	// Cache override for this entrypoint. It applies only to `type: worker` entries
 	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
 	Cache param.Field[ScriptScriptAndVersionSettingEditParamsSettingsExportsCache] `json:"cache"`
+	// Destination class name for a `state: renamed` tombstone. The target must appear
+	// as a live (`created`) entry in the same `exports` map. Write-only: never present
+	// in GET responses.
+	RenamedTo param.Field[string] `json:"renamed_to"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State param.Field[ScriptScriptAndVersionSettingEditParamsSettingsExportsState] `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage param.Field[ScriptScriptAndVersionSettingEditParamsSettingsExportsStorage] `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom param.Field[string] `json:"transfer_from"`
+	// Destination script for a `state: transferred` tombstone. Must reference a script
+	// in the same account; cross-dispatch-namespace transfers are rejected.
+	// Write-only: never present in GET responses.
+	TransferredTo param.Field[string] `json:"transferred_to"`
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsExports) MarshalJSON() (data []byte, err error) {
@@ -8025,6 +8193,53 @@ type ScriptScriptAndVersionSettingEditParamsSettingsExportsCache struct {
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsExportsCache) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+// export) when omitted.
+//
+// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+// operations that retire, rename, or hand off a provisioned Durable Object
+// namespace. They are applied at upload and are filtered out of GET responses, so
+// a read only ever returns `created` or `expecting-transfer`.
+//
+// `expecting-transfer` is a live export whose data is being received from another
+// script via the two-phase transfer flow; it carries `storage` and
+// `transfer_from`.
+type ScriptScriptAndVersionSettingEditParamsSettingsExportsState string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsExportsStateCreated           ScriptScriptAndVersionSettingEditParamsSettingsExportsState = "created"
+	ScriptScriptAndVersionSettingEditParamsSettingsExportsStateDeleted           ScriptScriptAndVersionSettingEditParamsSettingsExportsState = "deleted"
+	ScriptScriptAndVersionSettingEditParamsSettingsExportsStateRenamed           ScriptScriptAndVersionSettingEditParamsSettingsExportsState = "renamed"
+	ScriptScriptAndVersionSettingEditParamsSettingsExportsStateTransferred       ScriptScriptAndVersionSettingEditParamsSettingsExportsState = "transferred"
+	ScriptScriptAndVersionSettingEditParamsSettingsExportsStateExpectingTransfer ScriptScriptAndVersionSettingEditParamsSettingsExportsState = "expecting-transfer"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsExportsState) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsExportsStateCreated, ScriptScriptAndVersionSettingEditParamsSettingsExportsStateDeleted, ScriptScriptAndVersionSettingEditParamsSettingsExportsStateRenamed, ScriptScriptAndVersionSettingEditParamsSettingsExportsStateTransferred, ScriptScriptAndVersionSettingEditParamsSettingsExportsStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Storage backend for a `type: durable-object` export. Required for live Durable
+// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+type ScriptScriptAndVersionSettingEditParamsSettingsExportsStorage string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsExportsStorageSqlite   ScriptScriptAndVersionSettingEditParamsSettingsExportsStorage = "sqlite"
+	ScriptScriptAndVersionSettingEditParamsSettingsExportsStorageLegacyKV ScriptScriptAndVersionSettingEditParamsSettingsExportsStorage = "legacy-kv"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsExportsStorage) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsExportsStorageSqlite, ScriptScriptAndVersionSettingEditParamsSettingsExportsStorageLegacyKV:
+		return true
+	}
+	return false
 }
 
 // Limits to apply for this Worker.

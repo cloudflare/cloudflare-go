@@ -25,6 +25,7 @@ import (
 // the [NewThreatEventCategoryService] method instead.
 type ThreatEventCategoryService struct {
 	Options []option.RequestOption
+	Catalog *ThreatEventCategoryCatalogService
 }
 
 // NewThreatEventCategoryService generates a new service that applies the given
@@ -33,6 +34,7 @@ type ThreatEventCategoryService struct {
 func NewThreatEventCategoryService(opts ...option.RequestOption) (r *ThreatEventCategoryService) {
 	r = &ThreatEventCategoryService{}
 	r.Options = opts
+	r.Catalog = NewThreatEventCategoryCatalogService(opts...)
 	return
 }
 

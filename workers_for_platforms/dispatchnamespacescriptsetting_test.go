@@ -54,12 +54,22 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsCache{
 							Enabled: cloudflare.F(true),
 						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsStateCreated),
+						Storage:       cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
 					},
 					"default": {
 						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsTypeWorker),
 						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsCache{
 							Enabled: cloudflare.F(false),
 						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsStateCreated),
+						Storage:       cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
 					},
 				}),
 				Limits: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsLimits{

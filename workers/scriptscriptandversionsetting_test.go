@@ -56,12 +56,22 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 						Cache: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsCache{
 							Enabled: cloudflare.F(true),
 						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsStateCreated),
+						Storage:       cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
 					},
 					"default": {
 						Type: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsTypeWorker),
 						Cache: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsCache{
 							Enabled: cloudflare.F(false),
 						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsStateCreated),
+						Storage:       cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
 					},
 				}),
 				Limits: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsLimits{

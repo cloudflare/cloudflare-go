@@ -25,9 +25,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewConnectorService] method instead.
 type ConnectorService struct {
-	Options   []option.RequestOption
-	Events    *ConnectorEventService
-	Snapshots *ConnectorSnapshotService
+	Options    []option.RequestOption
+	Interrupts *ConnectorInterruptService
+	Events     *ConnectorEventService
+	Snapshots  *ConnectorSnapshotService
 }
 
 // NewConnectorService generates a new service that applies the given options to
@@ -36,6 +37,7 @@ type ConnectorService struct {
 func NewConnectorService(opts ...option.RequestOption) (r *ConnectorService) {
 	r = &ConnectorService{}
 	r.Options = opts
+	r.Interrupts = NewConnectorInterruptService(opts...)
 	r.Events = NewConnectorEventService(opts...)
 	r.Snapshots = NewConnectorSnapshotService(opts...)
 	return
@@ -58,7 +60,7 @@ func (r *ConnectorService) New(ctx context.Context, params ConnectorNewParams, o
 	return res, nil
 }
 
-// Replaces properties of a Magic WAN Connector. May be used to re-provision a
+// Updates properties of a Magic WAN Connector. May be used to re-provision a
 // license key.
 func (r *ConnectorService) Update(ctx context.Context, connectorID string, params ConnectorUpdateParams, opts ...option.RequestOption) (res *ConnectorUpdateResponse, err error) {
 	var env ConnectorUpdateResponseEnvelope
@@ -128,8 +130,8 @@ func (r *ConnectorService) Delete(ctx context.Context, connectorID string, body 
 	return res, nil
 }
 
-// Updates properties of a Magic WAN Connector. May be used to re-provision a
-// license key.
+// Edits properties of a Magic WAN Connector. May be used to re-provision a license
+// key.
 func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params ConnectorEditParams, opts ...option.RequestOption) (res *ConnectorEditResponse, err error) {
 	var env ConnectorEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -150,7 +152,7 @@ func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params 
 	return res, nil
 }
 
-// Fetches a Magic WAN Connector.
+// Gets a Magic WAN Connector.
 func (r *ConnectorService) Get(ctx context.Context, connectorID string, query ConnectorGetParams, opts ...option.RequestOption) (res *ConnectorGetResponse, err error) {
 	var env ConnectorGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

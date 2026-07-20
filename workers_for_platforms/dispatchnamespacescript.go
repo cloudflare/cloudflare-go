@@ -185,6 +185,11 @@ type DispatchNamespaceScriptUpdateResponse struct {
 	EntryPoint string `json:"entry_point"`
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
+	// Declarative exports for the Worker's most recent version, including Durable
+	// Object classes (with their `storage` backend) and named Worker entrypoints.
+	// Tombstoned lifecycle entries are omitted, so only live exports (`created` and
+	// `expecting-transfer`) are returned.
+	Exports map[string]DispatchNamespaceScriptUpdateResponseExport `json:"exports"`
 	// The names of handlers exported as part of the default export.
 	Handlers []string `json:"handlers"`
 	// Whether a Worker contains assets.
@@ -235,6 +240,7 @@ type dispatchNamespaceScriptUpdateResponseJSON struct {
 	CreatedOn          apijson.Field
 	EntryPoint         apijson.Field
 	Etag               apijson.Field
+	Exports            apijson.Field
 	Handlers           apijson.Field
 	HasAssets          apijson.Field
 	HasModules         apijson.Field
@@ -291,6 +297,147 @@ func (r *DispatchNamespaceScriptUpdateResponseCacheOptions) UnmarshalJSON(data [
 
 func (r dispatchNamespaceScriptUpdateResponseCacheOptionsJSON) RawJSON() string {
 	return r.raw
+}
+
+// A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
+// class name, a Durable Object class name, or `default` for the Worker's default
+// export). Worker entrypoint entries set `type: worker` and may carry `cache`
+// configuration for that entrypoint. Durable Object entries set
+// `type: durable-object` and carry additional provisioning fields.
+type DispatchNamespaceScriptUpdateResponseExport struct {
+	// The kind of export.
+	Type DispatchNamespaceScriptUpdateResponseExportsType `json:"type" api:"required"`
+	// Cache override for this entrypoint. It applies only to `type: worker` entries
+	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+	Cache DispatchNamespaceScriptUpdateResponseExportsCache `json:"cache"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State DispatchNamespaceScriptUpdateResponseExportsState `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage DispatchNamespaceScriptUpdateResponseExportsStorage `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom string                                          `json:"transfer_from"`
+	JSON         dispatchNamespaceScriptUpdateResponseExportJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseExportJSON contains the JSON metadata for
+// the struct [DispatchNamespaceScriptUpdateResponseExport]
+type dispatchNamespaceScriptUpdateResponseExportJSON struct {
+	Type         apijson.Field
+	Cache        apijson.Field
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponseExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseExportJSON) RawJSON() string {
+	return r.raw
+}
+
+// The kind of export.
+type DispatchNamespaceScriptUpdateResponseExportsType string
+
+const (
+	DispatchNamespaceScriptUpdateResponseExportsTypeWorker        DispatchNamespaceScriptUpdateResponseExportsType = "worker"
+	DispatchNamespaceScriptUpdateResponseExportsTypeDurableObject DispatchNamespaceScriptUpdateResponseExportsType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptUpdateResponseExportsType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateResponseExportsTypeWorker, DispatchNamespaceScriptUpdateResponseExportsTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Cache override for this entrypoint. It applies only to `type: worker` entries
+// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
+type DispatchNamespaceScriptUpdateResponseExportsCache struct {
+	// Whether caching is enabled for this entrypoint.
+	Enabled bool                                                  `json:"enabled" api:"required"`
+	JSON    dispatchNamespaceScriptUpdateResponseExportsCacheJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseExportsCacheJSON contains the JSON metadata
+// for the struct [DispatchNamespaceScriptUpdateResponseExportsCache]
+type dispatchNamespaceScriptUpdateResponseExportsCacheJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponseExportsCache) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseExportsCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+// export) when omitted.
+//
+// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+// operations that retire, rename, or hand off a provisioned Durable Object
+// namespace. They are applied at upload and are filtered out of GET responses, so
+// a read only ever returns `created` or `expecting-transfer`.
+//
+// `expecting-transfer` is a live export whose data is being received from another
+// script via the two-phase transfer flow; it carries `storage` and
+// `transfer_from`.
+type DispatchNamespaceScriptUpdateResponseExportsState string
+
+const (
+	DispatchNamespaceScriptUpdateResponseExportsStateCreated           DispatchNamespaceScriptUpdateResponseExportsState = "created"
+	DispatchNamespaceScriptUpdateResponseExportsStateDeleted           DispatchNamespaceScriptUpdateResponseExportsState = "deleted"
+	DispatchNamespaceScriptUpdateResponseExportsStateRenamed           DispatchNamespaceScriptUpdateResponseExportsState = "renamed"
+	DispatchNamespaceScriptUpdateResponseExportsStateTransferred       DispatchNamespaceScriptUpdateResponseExportsState = "transferred"
+	DispatchNamespaceScriptUpdateResponseExportsStateExpectingTransfer DispatchNamespaceScriptUpdateResponseExportsState = "expecting-transfer"
+)
+
+func (r DispatchNamespaceScriptUpdateResponseExportsState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateResponseExportsStateCreated, DispatchNamespaceScriptUpdateResponseExportsStateDeleted, DispatchNamespaceScriptUpdateResponseExportsStateRenamed, DispatchNamespaceScriptUpdateResponseExportsStateTransferred, DispatchNamespaceScriptUpdateResponseExportsStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Storage backend for a `type: durable-object` export. Required for live Durable
+// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+type DispatchNamespaceScriptUpdateResponseExportsStorage string
+
+const (
+	DispatchNamespaceScriptUpdateResponseExportsStorageSqlite   DispatchNamespaceScriptUpdateResponseExportsStorage = "sqlite"
+	DispatchNamespaceScriptUpdateResponseExportsStorageLegacyKV DispatchNamespaceScriptUpdateResponseExportsStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptUpdateResponseExportsStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateResponseExportsStorageSqlite, DispatchNamespaceScriptUpdateResponseExportsStorageLegacyKV:
+		return true
+	}
+	return false
 }
 
 type DispatchNamespaceScriptUpdateResponseNamedHandler struct {
@@ -2410,6 +2557,34 @@ type DispatchNamespaceScriptUpdateParamsMetadataExports struct {
 	// Cache override for this entrypoint. It applies only to `type: worker` entries
 	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
 	Cache param.Field[DispatchNamespaceScriptUpdateParamsMetadataExportsCache] `json:"cache"`
+	// Destination class name for a `state: renamed` tombstone. The target must appear
+	// as a live (`created`) entry in the same `exports` map. Write-only: never present
+	// in GET responses.
+	RenamedTo param.Field[string] `json:"renamed_to"`
+	// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+	// export) when omitted.
+	//
+	// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+	// operations that retire, rename, or hand off a provisioned Durable Object
+	// namespace. They are applied at upload and are filtered out of GET responses, so
+	// a read only ever returns `created` or `expecting-transfer`.
+	//
+	// `expecting-transfer` is a live export whose data is being received from another
+	// script via the two-phase transfer flow; it carries `storage` and
+	// `transfer_from`.
+	State param.Field[DispatchNamespaceScriptUpdateParamsMetadataExportsState] `json:"state"`
+	// Storage backend for a `type: durable-object` export. Required for live Durable
+	// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+	// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+	Storage param.Field[DispatchNamespaceScriptUpdateParamsMetadataExportsStorage] `json:"storage"`
+	// Source script for a `state: expecting-transfer` entry. The namespace on this
+	// script is materialised from the source script's data via the pending-transfer
+	// flow. Present on reads for `expecting-transfer` entries.
+	TransferFrom param.Field[string] `json:"transfer_from"`
+	// Destination script for a `state: transferred` tombstone. Must reference a script
+	// in the same account; cross-dispatch-namespace transfers are rejected.
+	// Write-only: never present in GET responses.
+	TransferredTo param.Field[string] `json:"transferred_to"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataExports) MarshalJSON() (data []byte, err error) {
@@ -2441,6 +2616,53 @@ type DispatchNamespaceScriptUpdateParamsMetadataExportsCache struct {
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataExportsCache) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Lifecycle state of the export entry. Defaults to `created` (a normal, live
+// export) when omitted.
+//
+// `deleted`, `renamed`, and `transferred` are tombstones: write-only lifecycle
+// operations that retire, rename, or hand off a provisioned Durable Object
+// namespace. They are applied at upload and are filtered out of GET responses, so
+// a read only ever returns `created` or `expecting-transfer`.
+//
+// `expecting-transfer` is a live export whose data is being received from another
+// script via the two-phase transfer flow; it carries `storage` and
+// `transfer_from`.
+type DispatchNamespaceScriptUpdateParamsMetadataExportsState string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataExportsStateCreated           DispatchNamespaceScriptUpdateParamsMetadataExportsState = "created"
+	DispatchNamespaceScriptUpdateParamsMetadataExportsStateDeleted           DispatchNamespaceScriptUpdateParamsMetadataExportsState = "deleted"
+	DispatchNamespaceScriptUpdateParamsMetadataExportsStateRenamed           DispatchNamespaceScriptUpdateParamsMetadataExportsState = "renamed"
+	DispatchNamespaceScriptUpdateParamsMetadataExportsStateTransferred       DispatchNamespaceScriptUpdateParamsMetadataExportsState = "transferred"
+	DispatchNamespaceScriptUpdateParamsMetadataExportsStateExpectingTransfer DispatchNamespaceScriptUpdateParamsMetadataExportsState = "expecting-transfer"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataExportsState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataExportsStateCreated, DispatchNamespaceScriptUpdateParamsMetadataExportsStateDeleted, DispatchNamespaceScriptUpdateParamsMetadataExportsStateRenamed, DispatchNamespaceScriptUpdateParamsMetadataExportsStateTransferred, DispatchNamespaceScriptUpdateParamsMetadataExportsStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Storage backend for a `type: durable-object` export. Required for live Durable
+// Object entries (`created` and `expecting-transfer`). `sqlite` selects
+// SQLite-backed storage; `legacy-kv` selects the legacy key-value storage.
+type DispatchNamespaceScriptUpdateParamsMetadataExportsStorage string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataExportsStorageSqlite   DispatchNamespaceScriptUpdateParamsMetadataExportsStorage = "sqlite"
+	DispatchNamespaceScriptUpdateParamsMetadataExportsStorageLegacyKV DispatchNamespaceScriptUpdateParamsMetadataExportsStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataExportsStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataExportsStorageSqlite, DispatchNamespaceScriptUpdateParamsMetadataExportsStorageLegacyKV:
+		return true
+	}
+	return false
 }
 
 // Limits to apply for this Worker.

@@ -71,12 +71,22 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						Cache: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsCache{
 							Enabled: cloudflare.F(true),
 						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers.ScriptUpdateParamsMetadataExportsStateCreated),
+						Storage:       cloudflare.F(workers.ScriptUpdateParamsMetadataExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
 					},
 					"default": {
 						Type: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsTypeWorker),
 						Cache: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsCache{
 							Enabled: cloudflare.F(false),
 						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers.ScriptUpdateParamsMetadataExportsStateCreated),
+						Storage:       cloudflare.F(workers.ScriptUpdateParamsMetadataExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
 					},
 				}),
 				KeepAssets:   cloudflare.F(false),

@@ -61,6 +61,30 @@ func TestBetaWorkerVersionNewWithOptionalParams(t *testing.T) {
 				Containers: cloudflare.F([]workers.VersionContainerParam{{
 					ClassName: cloudflare.F("MyDurableObject"),
 				}}),
+				Exports: cloudflare.F(map[string]workers.VersionExportParam{
+					"Admin": {
+						Type: cloudflare.F(workers.VersionExportsTypeWorker),
+						Cache: cloudflare.F(workers.VersionExportsCacheParam{
+							Enabled: cloudflare.F(true),
+						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers.VersionExportsStateCreated),
+						Storage:       cloudflare.F(workers.VersionExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
+					},
+					"default": {
+						Type: cloudflare.F(workers.VersionExportsTypeWorker),
+						Cache: cloudflare.F(workers.VersionExportsCacheParam{
+							Enabled: cloudflare.F(false),
+						}),
+						RenamedTo:     cloudflare.F("renamed_to"),
+						State:         cloudflare.F(workers.VersionExportsStateCreated),
+						Storage:       cloudflare.F(workers.VersionExportsStorageSqlite),
+						TransferFrom:  cloudflare.F("transfer_from"),
+						TransferredTo: cloudflare.F("transferred_to"),
+					},
+				}),
 				Limits: cloudflare.F(workers.VersionLimitsParam{
 					CPUMs:       cloudflare.F(int64(50)),
 					Subrequests: cloudflare.F(int64(1000)),

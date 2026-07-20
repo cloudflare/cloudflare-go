@@ -3186,7 +3186,8 @@ type AccessApplicationNewResponseSelfHostedApplicationOAuthConfigurationDynamicC
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                             `json:"enabled"`
@@ -5286,7 +5287,8 @@ type AccessApplicationNewResponseBrowserSSHApplicationOAuthConfigurationDynamicC
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                             `json:"enabled"`
@@ -6652,7 +6654,8 @@ type AccessApplicationNewResponseBrowserVNCApplicationOAuthConfigurationDynamicC
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                             `json:"enabled"`
@@ -9750,7 +9753,8 @@ type AccessApplicationNewResponseBrowserRDPApplicationOAuthConfigurationDynamicC
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                             `json:"enabled"`
@@ -10983,7 +10987,8 @@ type AccessApplicationNewResponseMcpServerApplicationOAuthConfigurationDynamicCl
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                            `json:"enabled"`
@@ -12220,7 +12225,8 @@ type AccessApplicationNewResponseMcpServerPortalApplicationOAuthConfigurationDyn
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                                  `json:"enabled"`
@@ -13874,7 +13880,8 @@ type AccessApplicationUpdateResponseSelfHostedApplicationOAuthConfigurationDynam
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                                `json:"enabled"`
@@ -15976,7 +15983,8 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationOAuthConfigurationDynam
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                                `json:"enabled"`
@@ -17343,7 +17351,8 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationOAuthConfigurationDynam
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                                `json:"enabled"`
@@ -20445,7 +20454,8 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationOAuthConfigurationDynam
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                                `json:"enabled"`
@@ -21679,7 +21689,8 @@ type AccessApplicationUpdateResponseMcpServerApplicationOAuthConfigurationDynami
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                               `json:"enabled"`
@@ -22918,7 +22929,8 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationOAuthConfiguration
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                                     `json:"enabled"`
@@ -24572,7 +24584,8 @@ type AccessApplicationListResponseSelfHostedApplicationOAuthConfigurationDynamic
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                              `json:"enabled"`
@@ -26673,7 +26686,8 @@ type AccessApplicationListResponseBrowserSSHApplicationOAuthConfigurationDynamic
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                              `json:"enabled"`
@@ -28040,7 +28054,8 @@ type AccessApplicationListResponseBrowserVNCApplicationOAuthConfigurationDynamic
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                              `json:"enabled"`
@@ -31139,7 +31154,8 @@ type AccessApplicationListResponseBrowserRDPApplicationOAuthConfigurationDynamic
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                              `json:"enabled"`
@@ -32373,7 +32389,8 @@ type AccessApplicationListResponseMcpServerApplicationOAuthConfigurationDynamicC
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                             `json:"enabled"`
@@ -33612,7 +33629,8 @@ type AccessApplicationListResponseMcpServerPortalApplicationOAuthConfigurationDy
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                                   `json:"enabled"`
@@ -35287,7 +35305,8 @@ type AccessApplicationGetResponseSelfHostedApplicationOAuthConfigurationDynamicC
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                             `json:"enabled"`
@@ -37387,7 +37406,8 @@ type AccessApplicationGetResponseBrowserSSHApplicationOAuthConfigurationDynamicC
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                             `json:"enabled"`
@@ -38753,7 +38773,8 @@ type AccessApplicationGetResponseBrowserVNCApplicationOAuthConfigurationDynamicC
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                             `json:"enabled"`
@@ -41851,7 +41872,8 @@ type AccessApplicationGetResponseBrowserRDPApplicationOAuthConfigurationDynamicC
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                             `json:"enabled"`
@@ -43084,7 +43106,8 @@ type AccessApplicationGetResponseMcpServerApplicationOAuthConfigurationDynamicCl
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                            `json:"enabled"`
@@ -44321,7 +44344,8 @@ type AccessApplicationGetResponseMcpServerPortalApplicationOAuthConfigurationDyn
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs []string `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled bool                                                                                                  `json:"enabled"`
@@ -45537,7 +45561,8 @@ type AccessApplicationNewParamsBodySelfHostedApplicationOAuthConfigurationDynami
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -47032,7 +47057,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationOAuthConfigurationDynami
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -47994,7 +48020,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationOAuthConfigurationDynami
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -50256,7 +50283,8 @@ type AccessApplicationNewParamsBodyBrowserRDPApplicationOAuthConfigurationDynami
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -51114,7 +51142,8 @@ type AccessApplicationNewParamsBodyMcpServerApplicationOAuthConfigurationDynamic
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -51975,7 +52004,8 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplicationOAuthConfigurationD
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -53185,7 +53215,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationOAuthConfigurationDyn
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -54680,7 +54711,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationOAuthConfigurationDyn
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -55642,7 +55674,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationOAuthConfigurationDyn
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -57904,7 +57937,8 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplicationOAuthConfigurationDyn
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -58762,7 +58796,8 @@ type AccessApplicationUpdateParamsBodyMcpServerApplicationOAuthConfigurationDyna
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -59623,7 +59658,8 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationOAuthConfigurati
 	// Allows any client with redirect URIs on 127.0.0.1.
 	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
 	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// Must use the `https` protocol. Paths may end in `/*` to match all sub-paths.
+	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
+	// must be explicitly configured and match exactly.
 	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
 	// Whether dynamic client registration is enabled.
 	Enabled param.Field[bool] `json:"enabled"`

@@ -24,7 +24,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewThreatEventTargetIndustryService] method instead.
 type ThreatEventTargetIndustryService struct {
-	Options []option.RequestOption
+	Options   []option.RequestOption
+	ByDataset *ThreatEventTargetIndustryByDatasetService
+	Catalog   *ThreatEventTargetIndustryCatalogService
 }
 
 // NewThreatEventTargetIndustryService generates a new service that applies the
@@ -33,6 +35,8 @@ type ThreatEventTargetIndustryService struct {
 func NewThreatEventTargetIndustryService(opts ...option.RequestOption) (r *ThreatEventTargetIndustryService) {
 	r = &ThreatEventTargetIndustryService{}
 	r.Options = opts
+	r.ByDataset = NewThreatEventTargetIndustryByDatasetService(opts...)
+	r.Catalog = NewThreatEventTargetIndustryCatalogService(opts...)
 	return
 }
 

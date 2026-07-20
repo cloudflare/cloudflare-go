@@ -315,6 +315,7 @@ TEST_PATHS=(
 	magic_transit/sitelan_test.go
 	magic_transit/sitewan_test.go
 	magic_transit/connector_test.go
+	magic_transit/connectorinterrupt_test.go
 	magic_transit/connectorevent_test.go
 	magic_transit/connectoreventlatest_test.go
 	magic_transit/connectorsnapshot_test.go
@@ -737,16 +738,33 @@ TEST_PATHS=(
 	cloudforce_one/requestpriority_test.go
 	cloudforce_one/requestasset_test.go
 	cloudforce_one/threatevent_test.go
+	cloudforce_one/threateventaggregate_test.go
+	cloudforce_one/threateventgraphql_test.go
+	cloudforce_one/threateventgraph_test.go
+	cloudforce_one/threateventquery_test.go
+	cloudforce_one/threateventrelationship_test.go
+	cloudforce_one/threateventindicator_test.go
+	cloudforce_one/threateventindicatoraggregate_test.go
+	cloudforce_one/threateventindicatortype_test.go
+	cloudforce_one/threateventindicatorbydataset_test.go
+	cloudforce_one/threateventindicatorbydatasettag_test.go
 	cloudforce_one/threateventattacker_test.go
 	cloudforce_one/threateventcategory_test.go
+	cloudforce_one/threateventcategorycatalog_test.go
 	cloudforce_one/threateventcountry_test.go
 	cloudforce_one/threateventdataset_test.go
+	cloudforce_one/threateventdatasetevent_test.go
 	cloudforce_one/threateventindicatortype_test.go
 	cloudforce_one/threateventraw_test.go
 	cloudforce_one/threateventrelate_test.go
 	cloudforce_one/threateventtag_test.go
+	cloudforce_one/threateventtagcategory_test.go
+	cloudforce_one/threateventtagindicator_test.go
+	cloudforce_one/threateventtagindicatorbydataset_test.go
 	cloudforce_one/threateventeventtag_test.go
 	cloudforce_one/threateventtargetindustry_test.go
+	cloudforce_one/threateventtargetindustrybydataset_test.go
+	cloudforce_one/threateventtargetindustrycatalog_test.go
 	ai_gateway/aigateway_test.go
 	ai_gateway/evaluationtype_test.go
 	ai_gateway/customprovider_test.go
@@ -807,6 +825,7 @@ TEST_PATHS=(
 	ai/model_test.go
 	ai/modelschema_test.go
 	ai/tomarkdown_test.go
+	ai_audit/robot_test.go
 	ai_search/namespace_test.go
 	ai_search/namespaceinstance_test.go
 	ai_search/namespaceinstancejob_test.go
