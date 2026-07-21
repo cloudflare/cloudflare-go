@@ -324,16 +324,6 @@ Methods:
 
 - <code title="get /accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}/events/{event_id}">client.CloudforceOne.ThreatEvents.Datasets.Events.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one#ThreatEventDatasetEventService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, datasetID <a href="https://pkg.go.dev/builtin#string">string</a>, eventID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one#ThreatEventDatasetEventGetParams">ThreatEventDatasetEventGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one#ThreatEventDatasetEventGetResponse">ThreatEventDatasetEventGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-### IndicatorTypes
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one#ThreatEventIndicatorTypeListResponse">ThreatEventIndicatorTypeListResponse</a>
-
-Methods:
-
-- <code title="get /accounts/{account_id}/cloudforce-one/events/indicatorTypes">client.CloudforceOne.ThreatEvents.IndicatorTypes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one#ThreatEventIndicatorTypeService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one#ThreatEventIndicatorTypeListParams">ThreatEventIndicatorTypeListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/cloudforce_one#ThreatEventIndicatorTypeListResponse">ThreatEventIndicatorTypeListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Raw
 
 Response Types:

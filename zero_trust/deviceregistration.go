@@ -494,7 +494,8 @@ type DeviceRegistrationListParams struct {
 	// registration response. Supported values are: "policy".
 	Include param.Field[string] `query:"include"`
 	// The maximum number of devices to return in a single response.
-	PerPage param.Field[int64] `query:"per_page"`
+	PerPage param.Field[int64]                              `query:"per_page"`
+	Policy  param.Field[DeviceRegistrationListParamsPolicy] `query:"policy"`
 	// Filter by registration details.
 	Search param.Field[string] `query:"search"`
 	// Filter by the last_seen timestamp - returns only registrations last seen after
@@ -529,6 +530,20 @@ type DeviceRegistrationListParamsDevice struct {
 // URLQuery serializes [DeviceRegistrationListParamsDevice]'s query parameters as
 // `url.Values`.
 func (r DeviceRegistrationListParamsDevice) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type DeviceRegistrationListParamsPolicy struct {
+	// Filter by the ID of the device settings profile assigned to the registration.
+	ID param.Field[string] `query:"id" format:"uuid"`
+}
+
+// URLQuery serializes [DeviceRegistrationListParamsPolicy]'s query parameters as
+// `url.Values`.
+func (r DeviceRegistrationListParamsPolicy) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,

@@ -733,7 +733,7 @@ func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperat
 type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
 	// Schema active on endpoint.
 	ActiveSchema UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema `json:"active_schema"`
-	// True if a Cloudflare-provided learned schema is available for this endpoint.
+	// Deprecated. Always false.
 	LearnedAvailable bool `json:"learned_available"`
 	// Action taken on requests failing validation.
 	MitigationAction UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction `json:"mitigation_action" api:"nullable"`

@@ -486,8 +486,9 @@ type DeviceDeviceListParams struct {
 	Cursor param.Field[string] `query:"cursor"`
 	// Comma-separated list of additional information that should be included in the
 	// device response. Supported values are: "last_seen_registration.policy".
-	Include      param.Field[string]                             `query:"include"`
-	LastSeenUser param.Field[DeviceDeviceListParamsLastSeenUser] `query:"last_seen_user"`
+	Include              param.Field[string]                                     `query:"include"`
+	LastSeenRegistration param.Field[DeviceDeviceListParamsLastSeenRegistration] `query:"last_seen_registration"`
+	LastSeenUser         param.Field[DeviceDeviceListParamsLastSeenUser]         `query:"last_seen_user"`
 	// The maximum number of devices to return in a single response.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Search by device details.
@@ -528,6 +529,21 @@ func (r DeviceDeviceListParamsActiveRegistrations) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type DeviceDeviceListParamsLastSeenRegistration struct {
+	// Filter by the ID of the device settings profile assigned to the device
+	// registration.
+	Policy param.Field[string] `query:"policy" format:"uuid"`
+}
+
+// URLQuery serializes [DeviceDeviceListParamsLastSeenRegistration]'s query
+// parameters as `url.Values`.
+func (r DeviceDeviceListParamsLastSeenRegistration) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type DeviceDeviceListParamsLastSeenUser struct {

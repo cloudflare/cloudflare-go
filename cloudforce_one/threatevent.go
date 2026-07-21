@@ -37,7 +37,6 @@ type ThreatEventService struct {
 	Countries        *ThreatEventCountryService
 	Crons            *ThreatEventCronService
 	Datasets         *ThreatEventDatasetService
-	IndicatorTypes   *ThreatEventIndicatorTypeService
 	Raw              *ThreatEventRawService
 	Relate           *ThreatEventRelateService
 	Tags             *ThreatEventTagService
@@ -63,7 +62,6 @@ func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService)
 	r.Countries = NewThreatEventCountryService(opts...)
 	r.Crons = NewThreatEventCronService(opts...)
 	r.Datasets = NewThreatEventDatasetService(opts...)
-	r.IndicatorTypes = NewThreatEventIndicatorTypeService(opts...)
 	r.Raw = NewThreatEventRawService(opts...)
 	r.Relate = NewThreatEventRelateService(opts...)
 	r.Tags = NewThreatEventTagService(opts...)

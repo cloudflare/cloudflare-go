@@ -38,7 +38,8 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 	return
 }
 
-// Create a new token.
+// Create a stored Cloudflare credential for an AI Search instance to access its
+// data source.
 func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
 	var env TokenNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +56,8 @@ func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...o
 	return res, nil
 }
 
-// Update token.
+// Replace a stored AI Search credential and invalidate cached credentials for
+// instances that use it.
 func (r *TokenService) Update(ctx context.Context, id string, params TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponse, err error) {
 	var env TokenUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -76,7 +78,7 @@ func (r *TokenService) Update(ctx context.Context, id string, params TokenUpdate
 	return res, nil
 }
 
-// List tokens.
+// List stored AI Search credentials in the account without exposing their secrets.
 func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[TokenListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -98,12 +100,13 @@ func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ..
 	return res, nil
 }
 
-// List tokens.
+// List stored AI Search credentials in the account without exposing their secrets.
 func (r *TokenService) ListAutoPaging(ctx context.Context, params TokenListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[TokenListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete token.
+// Permanently delete a stored AI Search credential. Credentials in use by an
+// instance cannot be deleted.
 func (r *TokenService) Delete(ctx context.Context, id string, body TokenDeleteParams, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
 	var env TokenDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -124,7 +127,7 @@ func (r *TokenService) Delete(ctx context.Context, id string, body TokenDeletePa
 	return res, nil
 }
 
-// Read token.
+// Retrieve a stored AI Search credential without exposing its secret.
 func (r *TokenService) Read(ctx context.Context, id string, query TokenReadParams, opts ...option.RequestOption) (res *TokenReadResponse, err error) {
 	var env TokenReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

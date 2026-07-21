@@ -43,7 +43,7 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 	return
 }
 
-// Create a new namespace.
+// Create a namespace for organizing AI Search instances.
 func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *NamespaceNewResponse, err error) {
 	var env NamespaceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +60,8 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 	return res, nil
 }
 
-// Update namespace.
+// Update the description of an existing namespace. The default namespace cannot be
+// modified.
 func (r *NamespaceService) Update(ctx context.Context, name string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponse, err error) {
 	var env NamespaceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -81,7 +82,7 @@ func (r *NamespaceService) Update(ctx context.Context, name string, params Names
 	return res, nil
 }
 
-// List namespaces.
+// List namespaces in the account, including their descriptions and creation times.
 func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[NamespaceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -103,12 +104,13 @@ func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams,
 	return res, nil
 }
 
-// List namespaces.
+// List namespaces in the account, including their descriptions and creation times.
 func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[NamespaceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Permanently delete a namespace. The namespace must be empty (no instances).
+// Permanently delete a namespace. The namespace must be empty (no instances), and
+// the default namespace cannot be deleted.
 func (r *NamespaceService) Delete(ctx context.Context, name string, body NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponse, err error) {
 	var env NamespaceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -146,7 +148,7 @@ func (r *NamespaceService) ChatCompletions(ctx context.Context, name string, par
 	return res, err
 }
 
-// Read namespace.
+// Retrieve a namespace and its description.
 func (r *NamespaceService) Read(ctx context.Context, name string, query NamespaceReadParams, opts ...option.RequestOption) (res *NamespaceReadResponse, err error) {
 	var env NamespaceReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
