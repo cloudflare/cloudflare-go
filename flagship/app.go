@@ -155,8 +155,7 @@ type AppNewResponse struct {
 	CreatedAt string `json:"created_at" api:"required"`
 	Name      string `json:"name" api:"required"`
 	UpdatedAt string `json:"updated_at" api:"required"`
-	// Email of the actor who last modified the app, or `edge-gateway` for
-	// gateway-authenticated changes.
+	// Email of the actor who last modified the app, or `unknown` when unavailable.
 	UpdatedBy string             `json:"updated_by" api:"required"`
 	JSON      appNewResponseJSON `json:"-"`
 }
@@ -185,8 +184,7 @@ type AppUpdateResponse struct {
 	CreatedAt string `json:"created_at" api:"required"`
 	Name      string `json:"name" api:"required"`
 	UpdatedAt string `json:"updated_at" api:"required"`
-	// Email of the actor who last modified the app, or `edge-gateway` for
-	// gateway-authenticated changes.
+	// Email of the actor who last modified the app, or `unknown` when unavailable.
 	UpdatedBy string                `json:"updated_by" api:"required"`
 	JSON      appUpdateResponseJSON `json:"-"`
 }
@@ -216,8 +214,7 @@ type AppListResponse struct {
 	CreatedAt string `json:"created_at" api:"required"`
 	Name      string `json:"name" api:"required"`
 	UpdatedAt string `json:"updated_at" api:"required"`
-	// Email of the actor who last modified the app, or `edge-gateway` for
-	// gateway-authenticated changes.
+	// Email of the actor who last modified the app, or `unknown` when unavailable.
 	UpdatedBy string              `json:"updated_by" api:"required"`
 	JSON      appListResponseJSON `json:"-"`
 }
@@ -267,8 +264,7 @@ type AppGetResponse struct {
 	CreatedAt string `json:"created_at" api:"required"`
 	Name      string `json:"name" api:"required"`
 	UpdatedAt string `json:"updated_at" api:"required"`
-	// Email of the actor who last modified the app, or `edge-gateway` for
-	// gateway-authenticated changes.
+	// Email of the actor who last modified the app, or `unknown` when unavailable.
 	UpdatedBy string             `json:"updated_by" api:"required"`
 	JSON      appGetResponseJSON `json:"-"`
 }

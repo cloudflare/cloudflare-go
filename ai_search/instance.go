@@ -1933,103 +1933,104 @@ func (r InstanceUpdateResponseType) IsKnown() bool {
 }
 
 type InstanceListResponse struct {
-	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                             `json:"id" api:"required"`
-	CreatedAt      time.Time                          `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                          `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                             `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel  InstanceListResponseAISearchModel  `json:"ai_search_model" api:"nullable"`
-	Cache          bool                               `json:"cache"`
-	CacheThreshold InstanceListResponseCacheThreshold `json:"cache_threshold"`
-	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
-	// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
-	// (72h), 518400 (6d).
-	CacheTTL       InstanceListResponseCacheTTL         `json:"cache_ttl"`
-	ChunkOverlap   int64                                `json:"chunk_overlap"`
-	ChunkSize      int64                                `json:"chunk_size"`
-	CreatedBy      string                               `json:"created_by" api:"nullable"`
-	CustomMetadata []InstanceListResponseCustomMetadata `json:"custom_metadata"`
-	EmbeddingModel InstanceListResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
-	Enable         bool                                 `json:"enable"`
-	EngineVersion  float64                              `json:"engine_version"`
-	FusionMethod   InstanceListResponseFusionMethod     `json:"fusion_method"`
-	// Deprecated — use index_method instead.
-	//
-	// Deprecated: deprecated
-	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to
-	// vector-only.
-	IndexMethod          InstanceListResponseIndexMethod          `json:"index_method"`
-	IndexingOptions      InstanceListResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
-	LastActivity         time.Time                                `json:"last_activity" api:"nullable" format:"date-time"`
-	MaxNumResults        int64                                    `json:"max_num_results"`
-	Metadata             InstanceListResponseMetadata             `json:"metadata"`
-	ModifiedBy           string                                   `json:"modified_by" api:"nullable"`
-	Namespace            string                                   `json:"namespace" api:"nullable"`
-	Paused               bool                                     `json:"paused"`
-	PublicEndpointID     string                                   `json:"public_endpoint_id" api:"nullable"`
-	PublicEndpointParams InstanceListResponsePublicEndpointParams `json:"public_endpoint_params"`
-	Reranking            bool                                     `json:"reranking"`
-	RerankingModel       InstanceListResponseRerankingModel       `json:"reranking_model" api:"nullable"`
-	RetrievalOptions     InstanceListResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
-	RewriteModel         InstanceListResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
-	RewriteQuery         bool                                     `json:"rewrite_query"`
-	ScoreThreshold       float64                                  `json:"score_threshold"`
-	Source               string                                   `json:"source" api:"nullable"`
-	SourceParams         InstanceListResponseSourceParams         `json:"source_params" api:"nullable"`
-	Status               string                                   `json:"status"`
-	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
-	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-	SyncInterval InstanceListResponseSyncInterval `json:"sync_interval"`
-	TokenID      string                           `json:"token_id" format:"uuid"`
-	Type         InstanceListResponseType         `json:"type" api:"nullable"`
-	JSON         instanceListResponseJSON         `json:"-"`
+	ID                             string                                   `json:"id" api:"required"`
+	AIGatewayID                    string                                   `json:"ai_gateway_id" api:"required,nullable"`
+	AISearchModel                  string                                   `json:"ai_search_model" api:"required,nullable"`
+	Cache                          bool                                     `json:"cache" api:"required"`
+	CacheThreshold                 InstanceListResponseCacheThreshold       `json:"cache_threshold" api:"required,nullable"`
+	CacheTTL                       InstanceListResponseCacheTTL             `json:"cache_ttl" api:"required"`
+	Chunk                          bool                                     `json:"chunk" api:"required"`
+	ChunkOverlap                   float64                                  `json:"chunk_overlap" api:"required,nullable"`
+	ChunkSize                      float64                                  `json:"chunk_size" api:"required,nullable"`
+	CreatedAt                      time.Time                                `json:"created_at" api:"required" format:"date-time"`
+	CreatedBy                      string                                   `json:"created_by" api:"required,nullable"`
+	CustomMetadata                 []InstanceListResponseCustomMetadata     `json:"custom_metadata" api:"required,nullable"`
+	EmbeddingModel                 string                                   `json:"embedding_model" api:"required,nullable"`
+	Enable                         bool                                     `json:"enable" api:"required"`
+	EngineVersion                  float64                                  `json:"engine_version" api:"required"`
+	FusionMethod                   InstanceListResponseFusionMethod         `json:"fusion_method" api:"required"`
+	HybridSearchEnabled            bool                                     `json:"hybrid_search_enabled" api:"required"`
+	IndexMethod                    InstanceListResponseIndexMethod          `json:"index_method" api:"required"`
+	IndexingOptions                InstanceListResponseIndexingOptions      `json:"indexing_options" api:"required,nullable"`
+	LastActivity                   time.Time                                `json:"last_activity" api:"required,nullable" format:"date-time"`
+	MaxNumResults                  float64                                  `json:"max_num_results" api:"required,nullable"`
+	Metadata                       InstanceListResponseMetadata             `json:"metadata" api:"required,nullable"`
+	ModifiedAt                     time.Time                                `json:"modified_at" api:"required" format:"date-time"`
+	ModifiedBy                     string                                   `json:"modified_by" api:"required,nullable"`
+	Namespace                      string                                   `json:"namespace" api:"required"`
+	Paused                         bool                                     `json:"paused" api:"required"`
+	PublicEndpointID               string                                   `json:"public_endpoint_id" api:"required,nullable"`
+	PublicEndpointParams           InstanceListResponsePublicEndpointParams `json:"public_endpoint_params" api:"required,nullable"`
+	Reranking                      bool                                     `json:"reranking" api:"required"`
+	RerankingModel                 string                                   `json:"reranking_model" api:"required,nullable"`
+	RetrievalOptions               InstanceListResponseRetrievalOptions     `json:"retrieval_options" api:"required,nullable"`
+	RewriteModel                   string                                   `json:"rewrite_model" api:"required,nullable"`
+	RewriteQuery                   bool                                     `json:"rewrite_query" api:"required"`
+	ScoreThreshold                 float64                                  `json:"score_threshold" api:"required,nullable"`
+	Source                         string                                   `json:"source" api:"required,nullable"`
+	SourceParams                   InstanceListResponseSourceParams         `json:"source_params" api:"required,nullable"`
+	Status                         string                                   `json:"status" api:"required"`
+	Summarization                  bool                                     `json:"summarization" api:"required"`
+	SummarizationModel             string                                   `json:"summarization_model" api:"required,nullable"`
+	SyncInterval                   InstanceListResponseSyncInterval         `json:"sync_interval" api:"required"`
+	SystemPromptAISearch           string                                   `json:"system_prompt_ai_search" api:"required,nullable"`
+	SystemPromptIndexSummarization string                                   `json:"system_prompt_index_summarization" api:"required,nullable"`
+	SystemPromptRewriteQuery       string                                   `json:"system_prompt_rewrite_query" api:"required,nullable"`
+	TokenID                        string                                   `json:"token_id" api:"required,nullable"`
+	Type                           InstanceListResponseType                 `json:"type" api:"required,nullable"`
+	JSON                           instanceListResponseJSON                 `json:"-"`
 }
 
 // instanceListResponseJSON contains the JSON metadata for the struct
 // [InstanceListResponse]
 type instanceListResponseJSON struct {
-	ID                   apijson.Field
-	CreatedAt            apijson.Field
-	ModifiedAt           apijson.Field
-	AIGatewayID          apijson.Field
-	AISearchModel        apijson.Field
-	Cache                apijson.Field
-	CacheThreshold       apijson.Field
-	CacheTTL             apijson.Field
-	ChunkOverlap         apijson.Field
-	ChunkSize            apijson.Field
-	CreatedBy            apijson.Field
-	CustomMetadata       apijson.Field
-	EmbeddingModel       apijson.Field
-	Enable               apijson.Field
-	EngineVersion        apijson.Field
-	FusionMethod         apijson.Field
-	HybridSearchEnabled  apijson.Field
-	IndexMethod          apijson.Field
-	IndexingOptions      apijson.Field
-	LastActivity         apijson.Field
-	MaxNumResults        apijson.Field
-	Metadata             apijson.Field
-	ModifiedBy           apijson.Field
-	Namespace            apijson.Field
-	Paused               apijson.Field
-	PublicEndpointID     apijson.Field
-	PublicEndpointParams apijson.Field
-	Reranking            apijson.Field
-	RerankingModel       apijson.Field
-	RetrievalOptions     apijson.Field
-	RewriteModel         apijson.Field
-	RewriteQuery         apijson.Field
-	ScoreThreshold       apijson.Field
-	Source               apijson.Field
-	SourceParams         apijson.Field
-	Status               apijson.Field
-	SyncInterval         apijson.Field
-	TokenID              apijson.Field
-	Type                 apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	ID                             apijson.Field
+	AIGatewayID                    apijson.Field
+	AISearchModel                  apijson.Field
+	Cache                          apijson.Field
+	CacheThreshold                 apijson.Field
+	CacheTTL                       apijson.Field
+	Chunk                          apijson.Field
+	ChunkOverlap                   apijson.Field
+	ChunkSize                      apijson.Field
+	CreatedAt                      apijson.Field
+	CreatedBy                      apijson.Field
+	CustomMetadata                 apijson.Field
+	EmbeddingModel                 apijson.Field
+	Enable                         apijson.Field
+	EngineVersion                  apijson.Field
+	FusionMethod                   apijson.Field
+	HybridSearchEnabled            apijson.Field
+	IndexMethod                    apijson.Field
+	IndexingOptions                apijson.Field
+	LastActivity                   apijson.Field
+	MaxNumResults                  apijson.Field
+	Metadata                       apijson.Field
+	ModifiedAt                     apijson.Field
+	ModifiedBy                     apijson.Field
+	Namespace                      apijson.Field
+	Paused                         apijson.Field
+	PublicEndpointID               apijson.Field
+	PublicEndpointParams           apijson.Field
+	Reranking                      apijson.Field
+	RerankingModel                 apijson.Field
+	RetrievalOptions               apijson.Field
+	RewriteModel                   apijson.Field
+	RewriteQuery                   apijson.Field
+	ScoreThreshold                 apijson.Field
+	Source                         apijson.Field
+	SourceParams                   apijson.Field
+	Status                         apijson.Field
+	Summarization                  apijson.Field
+	SummarizationModel             apijson.Field
+	SyncInterval                   apijson.Field
+	SystemPromptAISearch           apijson.Field
+	SystemPromptIndexSummarization apijson.Field
+	SystemPromptRewriteQuery       apijson.Field
+	TokenID                        apijson.Field
+	Type                           apijson.Field
+	raw                            string
+	ExtraFields                    map[string]apijson.Field
 }
 
 func (r *InstanceListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -2038,49 +2039,6 @@ func (r *InstanceListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r instanceListResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type InstanceListResponseAISearchModel string
-
-const (
-	InstanceListResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast     InstanceListResponseAISearchModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	InstanceListResponseAISearchModelCfZaiOrgGlm4_7Flash                   InstanceListResponseAISearchModel = "@cf/zai-org/glm-4.7-flash"
-	InstanceListResponseAISearchModelCfMetaLlama3_1_8bInstructFast         InstanceListResponseAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	InstanceListResponseAISearchModelCfMetaLlama3_1_8bInstructFp8          InstanceListResponseAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	InstanceListResponseAISearchModelCfMetaLlama4Scout17b16eInstruct       InstanceListResponseAISearchModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	InstanceListResponseAISearchModelCfQwenQwen3_30bA3bFp8                 InstanceListResponseAISearchModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	InstanceListResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceListResponseAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	InstanceListResponseAISearchModelCfMoonshotaiKimiK2Instruct            InstanceListResponseAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
-	InstanceListResponseAISearchModelCfGoogleGemma3_12bIt                  InstanceListResponseAISearchModel = "@cf/google/gemma-3-12b-it"
-	InstanceListResponseAISearchModelCfGoogleGemma4_26bA4bIt               InstanceListResponseAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
-	InstanceListResponseAISearchModelCfMoonshotaiKimiK2_5                  InstanceListResponseAISearchModel = "@cf/moonshotai/kimi-k2.5"
-	InstanceListResponseAISearchModelAnthropicClaude3_7Sonnet              InstanceListResponseAISearchModel = "anthropic/claude-3-7-sonnet"
-	InstanceListResponseAISearchModelAnthropicClaudeSonnet4                InstanceListResponseAISearchModel = "anthropic/claude-sonnet-4"
-	InstanceListResponseAISearchModelAnthropicClaudeOpus4                  InstanceListResponseAISearchModel = "anthropic/claude-opus-4"
-	InstanceListResponseAISearchModelAnthropicClaude3_5Haiku               InstanceListResponseAISearchModel = "anthropic/claude-3-5-haiku"
-	InstanceListResponseAISearchModelCerebrasQwen3_235bA22bInstruct        InstanceListResponseAISearchModel = "cerebras/qwen-3-235b-a22b-instruct"
-	InstanceListResponseAISearchModelCerebrasQwen3_235bA22bThinking        InstanceListResponseAISearchModel = "cerebras/qwen-3-235b-a22b-thinking"
-	InstanceListResponseAISearchModelCerebrasLlama3_3_70b                  InstanceListResponseAISearchModel = "cerebras/llama-3.3-70b"
-	InstanceListResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct InstanceListResponseAISearchModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	InstanceListResponseAISearchModelCerebrasLlama4Scout17b16eInstruct     InstanceListResponseAISearchModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	InstanceListResponseAISearchModelCerebrasGptOSs120b                    InstanceListResponseAISearchModel = "cerebras/gpt-oss-120b"
-	InstanceListResponseAISearchModelGoogleAIStudioGemini2_5Flash          InstanceListResponseAISearchModel = "google-ai-studio/gemini-2.5-flash"
-	InstanceListResponseAISearchModelGoogleAIStudioGemini2_5Pro            InstanceListResponseAISearchModel = "google-ai-studio/gemini-2.5-pro"
-	InstanceListResponseAISearchModelGrokGrok4                             InstanceListResponseAISearchModel = "grok/grok-4"
-	InstanceListResponseAISearchModelGroqLlama3_3_70bVersatile             InstanceListResponseAISearchModel = "groq/llama-3.3-70b-versatile"
-	InstanceListResponseAISearchModelGroqLlama3_1_8bInstant                InstanceListResponseAISearchModel = "groq/llama-3.1-8b-instant"
-	InstanceListResponseAISearchModelOpenAIGpt5                            InstanceListResponseAISearchModel = "openai/gpt-5"
-	InstanceListResponseAISearchModelOpenAIGpt5Mini                        InstanceListResponseAISearchModel = "openai/gpt-5-mini"
-	InstanceListResponseAISearchModelOpenAIGpt5Nano                        InstanceListResponseAISearchModel = "openai/gpt-5-nano"
-	InstanceListResponseAISearchModelEmpty                                 InstanceListResponseAISearchModel = ""
-)
-
-func (r InstanceListResponseAISearchModel) IsKnown() bool {
-	switch r {
-	case InstanceListResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceListResponseAISearchModelCfZaiOrgGlm4_7Flash, InstanceListResponseAISearchModelCfMetaLlama3_1_8bInstructFast, InstanceListResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, InstanceListResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, InstanceListResponseAISearchModelCfQwenQwen3_30bA3bFp8, InstanceListResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceListResponseAISearchModelCfMoonshotaiKimiK2Instruct, InstanceListResponseAISearchModelCfGoogleGemma3_12bIt, InstanceListResponseAISearchModelCfGoogleGemma4_26bA4bIt, InstanceListResponseAISearchModelCfMoonshotaiKimiK2_5, InstanceListResponseAISearchModelAnthropicClaude3_7Sonnet, InstanceListResponseAISearchModelAnthropicClaudeSonnet4, InstanceListResponseAISearchModelAnthropicClaudeOpus4, InstanceListResponseAISearchModelAnthropicClaude3_5Haiku, InstanceListResponseAISearchModelCerebrasQwen3_235bA22bInstruct, InstanceListResponseAISearchModelCerebrasQwen3_235bA22bThinking, InstanceListResponseAISearchModelCerebrasLlama3_3_70b, InstanceListResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, InstanceListResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, InstanceListResponseAISearchModelCerebrasGptOSs120b, InstanceListResponseAISearchModelGoogleAIStudioGemini2_5Flash, InstanceListResponseAISearchModelGoogleAIStudioGemini2_5Pro, InstanceListResponseAISearchModelGrokGrok4, InstanceListResponseAISearchModelGroqLlama3_3_70bVersatile, InstanceListResponseAISearchModelGroqLlama3_1_8bInstant, InstanceListResponseAISearchModelOpenAIGpt5, InstanceListResponseAISearchModelOpenAIGpt5Mini, InstanceListResponseAISearchModelOpenAIGpt5Nano, InstanceListResponseAISearchModelEmpty:
-		return true
-	}
-	return false
 }
 
 type InstanceListResponseCacheThreshold string
@@ -2100,9 +2058,6 @@ func (r InstanceListResponseCacheThreshold) IsKnown() bool {
 	return false
 }
 
-// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
-// (1h), 7200 (2h), 21600 (6h), 43200 (12h), 86400 (24h), 172800 (48h), 259200
-// (72h), 518400 (6d).
 type InstanceListResponseCacheTTL float64
 
 const (
@@ -2166,30 +2121,6 @@ func (r InstanceListResponseCustomMetadataDataType) IsKnown() bool {
 	return false
 }
 
-type InstanceListResponseEmbeddingModel string
-
-const (
-	InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b              InstanceListResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	InstanceListResponseEmbeddingModelCfQwenQwen3VlEmbedding2b              InstanceListResponseEmbeddingModel = "@cf/qwen/qwen3-vl-embedding-2b"
-	InstanceListResponseEmbeddingModelCfBaaiBgeM3                           InstanceListResponseEmbeddingModel = "@cf/baai/bge-m3"
-	InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5                  InstanceListResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m            InstanceListResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      InstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview InstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
-	InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        InstanceListResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
-	InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small             InstanceListResponseEmbeddingModel = "openai/text-embedding-3-small"
-	InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large             InstanceListResponseEmbeddingModel = "openai/text-embedding-3-large"
-	InstanceListResponseEmbeddingModelEmpty                                 InstanceListResponseEmbeddingModel = ""
-)
-
-func (r InstanceListResponseEmbeddingModel) IsKnown() bool {
-	switch r {
-	case InstanceListResponseEmbeddingModelCfQwenQwen3Embedding0_6b, InstanceListResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, InstanceListResponseEmbeddingModelCfBaaiBgeM3, InstanceListResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, InstanceListResponseEmbeddingModelCfGoogleEmbeddinggemma300m, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, InstanceListResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Small, InstanceListResponseEmbeddingModelOpenAITextEmbedding3Large, InstanceListResponseEmbeddingModelEmpty:
-		return true
-	}
-	return false
-}
-
 type InstanceListResponseFusionMethod string
 
 const (
@@ -2205,14 +2136,11 @@ func (r InstanceListResponseFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to
-// vector-only.
 type InstanceListResponseIndexMethod struct {
-	// Enable keyword (BM25) storage backend.
-	Keyword bool `json:"keyword" api:"required"`
-	// Enable vector (embedding) storage backend.
-	Vector bool                                `json:"vector" api:"required"`
-	JSON   instanceListResponseIndexMethodJSON `json:"-"`
+	Keyword     bool                                `json:"keyword" api:"required"`
+	Vector      bool                                `json:"vector" api:"required"`
+	ExtraFields map[string]interface{}              `json:"-" api:"extrafields"`
+	JSON        instanceListResponseIndexMethodJSON `json:"-"`
 }
 
 // instanceListResponseIndexMethodJSON contains the JSON metadata for the struct
@@ -2233,11 +2161,8 @@ func (r instanceListResponseIndexMethodJSON) RawJSON() string {
 }
 
 type InstanceListResponseIndexingOptions struct {
-	// Tokenizer used for keyword search indexing. porter provides word-level
-	// tokenization with Porter stemming (good for natural language queries). trigram
-	// enables character-level substring matching (good for partial matches, code,
-	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer InstanceListResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	ExtraFields      map[string]interface{}                              `json:"-" api:"extrafields"`
 	JSON             instanceListResponseIndexingOptionsJSON             `json:"-"`
 }
 
@@ -2257,10 +2182,6 @@ func (r instanceListResponseIndexingOptionsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Tokenizer used for keyword search indexing. porter provides word-level
-// tokenization with Porter stemming (good for natural language queries). trigram
-// enables character-level substring matching (good for partial matches, code,
-// identifiers). Changing this triggers a full re-index. Defaults to porter.
 type InstanceListResponseIndexingOptionsKeywordTokenizer string
 
 const (
@@ -2279,6 +2200,7 @@ func (r InstanceListResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 type InstanceListResponseMetadata struct {
 	CreatedFromAISearchWizard bool                             `json:"created_from_aisearch_wizard"`
 	WorkerDomain              string                           `json:"worker_domain"`
+	ExtraFields               map[string]interface{}           `json:"-" api:"extrafields"`
 	JSON                      instanceListResponseMetadataJSON `json:"-"`
 }
 
@@ -2302,22 +2224,14 @@ func (r instanceListResponseMetadataJSON) RawJSON() string {
 type InstanceListResponsePublicEndpointParams struct {
 	AuthorizedHosts         []string                                                        `json:"authorized_hosts"`
 	ChatCompletionsEndpoint InstanceListResponsePublicEndpointParamsChatCompletionsEndpoint `json:"chat_completions_endpoint"`
-	// Custom domain hostnames that alias this public endpoint. GET and create
-	// responses return the current set; on update (PUT) this field is only echoed back
-	// when supplied in the request body, otherwise it is null (omit it to leave
-	// domains unchanged).
-	CustomDomains []string `json:"custom_domains" api:"nullable"`
-	// When false, the instance is reachable only via a registered custom domain and
-	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
-	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
-	// replaced wholesale on update, so resend default_domain_enabled on every update
-	// to keep the default host off — omitting it resets to true.
-	DefaultDomainEnabled bool                                                   `json:"default_domain_enabled"`
-	Enabled              bool                                                   `json:"enabled"`
-	Mcp                  InstanceListResponsePublicEndpointParamsMcp            `json:"mcp"`
-	RateLimit            InstanceListResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
-	SearchEndpoint       InstanceListResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
-	JSON                 instanceListResponsePublicEndpointParamsJSON           `json:"-"`
+	CustomDomains           []string                                                        `json:"custom_domains" api:"nullable"`
+	DefaultDomainEnabled    bool                                                            `json:"default_domain_enabled"`
+	Enabled                 bool                                                            `json:"enabled"`
+	Mcp                     InstanceListResponsePublicEndpointParamsMcp                     `json:"mcp"`
+	RateLimit               InstanceListResponsePublicEndpointParamsRateLimit               `json:"rate_limit"`
+	SearchEndpoint          InstanceListResponsePublicEndpointParamsSearchEndpoint          `json:"search_endpoint"`
+	ExtraFields             map[string]interface{}                                          `json:"-" api:"extrafields"`
+	JSON                    instanceListResponsePublicEndpointParamsJSON                    `json:"-"`
 }
 
 // instanceListResponsePublicEndpointParamsJSON contains the JSON metadata for the
@@ -2344,9 +2258,9 @@ func (r instanceListResponsePublicEndpointParamsJSON) RawJSON() string {
 }
 
 type InstanceListResponsePublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
-	Disabled bool                                                                `json:"disabled"`
-	JSON     instanceListResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
+	Disabled    bool                                                                `json:"disabled"`
+	ExtraFields map[string]interface{}                                              `json:"-" api:"extrafields"`
+	JSON        instanceListResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
 }
 
 // instanceListResponsePublicEndpointParamsChatCompletionsEndpointJSON contains the
@@ -2367,10 +2281,10 @@ func (r instanceListResponsePublicEndpointParamsChatCompletionsEndpointJSON) Raw
 }
 
 type InstanceListResponsePublicEndpointParamsMcp struct {
-	Description string `json:"description"`
-	// Disable MCP endpoint for this public endpoint
-	Disabled bool                                            `json:"disabled"`
-	JSON     instanceListResponsePublicEndpointParamsMcpJSON `json:"-"`
+	Description string                                          `json:"description"`
+	Disabled    bool                                            `json:"disabled"`
+	ExtraFields map[string]interface{}                          `json:"-" api:"extrafields"`
+	JSON        instanceListResponsePublicEndpointParamsMcpJSON `json:"-"`
 }
 
 // instanceListResponsePublicEndpointParamsMcpJSON contains the JSON metadata for
@@ -2391,10 +2305,11 @@ func (r instanceListResponsePublicEndpointParamsMcpJSON) RawJSON() string {
 }
 
 type InstanceListResponsePublicEndpointParamsRateLimit struct {
-	PeriodMs  int64                                                      `json:"period_ms"`
-	Requests  int64                                                      `json:"requests"`
-	Technique InstanceListResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
-	JSON      instanceListResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
+	PeriodMs    int64                                                      `json:"period_ms"`
+	Requests    int64                                                      `json:"requests"`
+	Technique   InstanceListResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
+	ExtraFields map[string]interface{}                                     `json:"-" api:"extrafields"`
+	JSON        instanceListResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
 }
 
 // instanceListResponsePublicEndpointParamsRateLimitJSON contains the JSON metadata
@@ -2431,9 +2346,9 @@ func (r InstanceListResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bo
 }
 
 type InstanceListResponsePublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
-	Disabled bool                                                       `json:"disabled"`
-	JSON     instanceListResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
+	Disabled    bool                                                       `json:"disabled"`
+	ExtraFields map[string]interface{}                                     `json:"-" api:"extrafields"`
+	JSON        instanceListResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
 }
 
 // instanceListResponsePublicEndpointParamsSearchEndpointJSON contains the JSON
@@ -2452,33 +2367,10 @@ func (r instanceListResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() st
 	return r.raw
 }
 
-type InstanceListResponseRerankingModel string
-
-const (
-	InstanceListResponseRerankingModelCfBaaiBgeRerankerBase InstanceListResponseRerankingModel = "@cf/baai/bge-reranker-base"
-	InstanceListResponseRerankingModelEmpty                 InstanceListResponseRerankingModel = ""
-)
-
-func (r InstanceListResponseRerankingModel) IsKnown() bool {
-	switch r {
-	case InstanceListResponseRerankingModelCfBaaiBgeRerankerBase, InstanceListResponseRerankingModelEmpty:
-		return true
-	}
-	return false
-}
-
 type InstanceListResponseRetrievalOptions struct {
-	// Metadata fields to boost search results by. Each entry specifies a metadata
-	// field and an optional direction. Direction defaults to 'asc' for
-	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
-	// 'timestamp' or a defined custom_metadata field.
-	BoostBy []InstanceListResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
-	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted on an
-	// update, the existing stored value is preserved; when never set, search falls
-	// back to 'and'.
+	BoostBy          []InstanceListResponseRetrievalOptionsBoostBy        `json:"boost_by"`
 	KeywordMatchMode InstanceListResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
+	ExtraFields      map[string]interface{}                               `json:"-" api:"extrafields"`
 	JSON             instanceListResponseRetrievalOptionsJSON             `json:"-"`
 }
 
@@ -2500,23 +2392,18 @@ func (r instanceListResponseRetrievalOptionsJSON) RawJSON() string {
 }
 
 type InstanceListResponseRetrievalOptionsBoostBy struct {
-	// Metadata field name to boost by. Use 'timestamp' for document freshness, or any
-	// custom_metadata field. Numeric and datetime fields support all four directions
-	// (asc, desc, exists, not_exists); text/boolean fields only support
-	// exists/not_exists.
-	Field string `json:"field" api:"required"`
-	// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
-	// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-	// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
-	// for numeric/datetime fields, 'exists' for text/boolean fields.
-	Direction InstanceListResponseRetrievalOptionsBoostByDirection `json:"direction"`
-	JSON      instanceListResponseRetrievalOptionsBoostByJSON      `json:"-"`
+	Field       string                                               `json:"field" api:"required"`
+	DataType    InstanceListResponseRetrievalOptionsBoostByDataType  `json:"dataType"`
+	Direction   InstanceListResponseRetrievalOptionsBoostByDirection `json:"direction"`
+	ExtraFields map[string]interface{}                               `json:"-" api:"extrafields"`
+	JSON        instanceListResponseRetrievalOptionsBoostByJSON      `json:"-"`
 }
 
 // instanceListResponseRetrievalOptionsBoostByJSON contains the JSON metadata for
 // the struct [InstanceListResponseRetrievalOptionsBoostBy]
 type instanceListResponseRetrievalOptionsBoostByJSON struct {
 	Field       apijson.Field
+	DataType    apijson.Field
 	Direction   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2530,10 +2417,23 @@ func (r instanceListResponseRetrievalOptionsBoostByJSON) RawJSON() string {
 	return r.raw
 }
 
-// Boost direction. 'desc' = higher values rank higher (e.g. newer timestamps).
-// 'asc' = lower values rank higher. 'exists' = boost chunks that have the field.
-// 'not_exists' = boost chunks that lack the field. Optional — defaults to 'asc'
-// for numeric/datetime fields, 'exists' for text/boolean fields.
+type InstanceListResponseRetrievalOptionsBoostByDataType string
+
+const (
+	InstanceListResponseRetrievalOptionsBoostByDataTypeNumber   InstanceListResponseRetrievalOptionsBoostByDataType = "number"
+	InstanceListResponseRetrievalOptionsBoostByDataTypeDatetime InstanceListResponseRetrievalOptionsBoostByDataType = "datetime"
+	InstanceListResponseRetrievalOptionsBoostByDataTypeText     InstanceListResponseRetrievalOptionsBoostByDataType = "text"
+	InstanceListResponseRetrievalOptionsBoostByDataTypeBoolean  InstanceListResponseRetrievalOptionsBoostByDataType = "boolean"
+)
+
+func (r InstanceListResponseRetrievalOptionsBoostByDataType) IsKnown() bool {
+	switch r {
+	case InstanceListResponseRetrievalOptionsBoostByDataTypeNumber, InstanceListResponseRetrievalOptionsBoostByDataTypeDatetime, InstanceListResponseRetrievalOptionsBoostByDataTypeText, InstanceListResponseRetrievalOptionsBoostByDataTypeBoolean:
+		return true
+	}
+	return false
+}
+
 type InstanceListResponseRetrievalOptionsBoostByDirection string
 
 const (
@@ -2551,11 +2451,6 @@ func (r InstanceListResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
-// candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted on an
-// update, the existing stored value is preserved; when never set, search falls
-// back to 'and'.
 type InstanceListResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -2571,61 +2466,13 @@ func (r InstanceListResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	return false
 }
 
-type InstanceListResponseRewriteModel string
-
-const (
-	InstanceListResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     InstanceListResponseRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	InstanceListResponseRewriteModelCfZaiOrgGlm4_7Flash                   InstanceListResponseRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	InstanceListResponseRewriteModelCfMetaLlama3_1_8bInstructFast         InstanceListResponseRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	InstanceListResponseRewriteModelCfMetaLlama3_1_8bInstructFp8          InstanceListResponseRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	InstanceListResponseRewriteModelCfMetaLlama4Scout17b16eInstruct       InstanceListResponseRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	InstanceListResponseRewriteModelCfQwenQwen3_30bA3bFp8                 InstanceListResponseRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	InstanceListResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  InstanceListResponseRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	InstanceListResponseRewriteModelCfMoonshotaiKimiK2Instruct            InstanceListResponseRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	InstanceListResponseRewriteModelCfGoogleGemma3_12bIt                  InstanceListResponseRewriteModel = "@cf/google/gemma-3-12b-it"
-	InstanceListResponseRewriteModelCfGoogleGemma4_26bA4bIt               InstanceListResponseRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	InstanceListResponseRewriteModelCfMoonshotaiKimiK2_5                  InstanceListResponseRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	InstanceListResponseRewriteModelAnthropicClaude3_7Sonnet              InstanceListResponseRewriteModel = "anthropic/claude-3-7-sonnet"
-	InstanceListResponseRewriteModelAnthropicClaudeSonnet4                InstanceListResponseRewriteModel = "anthropic/claude-sonnet-4"
-	InstanceListResponseRewriteModelAnthropicClaudeOpus4                  InstanceListResponseRewriteModel = "anthropic/claude-opus-4"
-	InstanceListResponseRewriteModelAnthropicClaude3_5Haiku               InstanceListResponseRewriteModel = "anthropic/claude-3-5-haiku"
-	InstanceListResponseRewriteModelCerebrasQwen3_235bA22bInstruct        InstanceListResponseRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	InstanceListResponseRewriteModelCerebrasQwen3_235bA22bThinking        InstanceListResponseRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	InstanceListResponseRewriteModelCerebrasLlama3_3_70b                  InstanceListResponseRewriteModel = "cerebras/llama-3.3-70b"
-	InstanceListResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct InstanceListResponseRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	InstanceListResponseRewriteModelCerebrasLlama4Scout17b16eInstruct     InstanceListResponseRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	InstanceListResponseRewriteModelCerebrasGptOSs120b                    InstanceListResponseRewriteModel = "cerebras/gpt-oss-120b"
-	InstanceListResponseRewriteModelGoogleAIStudioGemini2_5Flash          InstanceListResponseRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	InstanceListResponseRewriteModelGoogleAIStudioGemini2_5Pro            InstanceListResponseRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	InstanceListResponseRewriteModelGrokGrok4                             InstanceListResponseRewriteModel = "grok/grok-4"
-	InstanceListResponseRewriteModelGroqLlama3_3_70bVersatile             InstanceListResponseRewriteModel = "groq/llama-3.3-70b-versatile"
-	InstanceListResponseRewriteModelGroqLlama3_1_8bInstant                InstanceListResponseRewriteModel = "groq/llama-3.1-8b-instant"
-	InstanceListResponseRewriteModelOpenAIGpt5                            InstanceListResponseRewriteModel = "openai/gpt-5"
-	InstanceListResponseRewriteModelOpenAIGpt5Mini                        InstanceListResponseRewriteModel = "openai/gpt-5-mini"
-	InstanceListResponseRewriteModelOpenAIGpt5Nano                        InstanceListResponseRewriteModel = "openai/gpt-5-nano"
-	InstanceListResponseRewriteModelEmpty                                 InstanceListResponseRewriteModel = ""
-)
-
-func (r InstanceListResponseRewriteModel) IsKnown() bool {
-	switch r {
-	case InstanceListResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, InstanceListResponseRewriteModelCfZaiOrgGlm4_7Flash, InstanceListResponseRewriteModelCfMetaLlama3_1_8bInstructFast, InstanceListResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, InstanceListResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, InstanceListResponseRewriteModelCfQwenQwen3_30bA3bFp8, InstanceListResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, InstanceListResponseRewriteModelCfMoonshotaiKimiK2Instruct, InstanceListResponseRewriteModelCfGoogleGemma3_12bIt, InstanceListResponseRewriteModelCfGoogleGemma4_26bA4bIt, InstanceListResponseRewriteModelCfMoonshotaiKimiK2_5, InstanceListResponseRewriteModelAnthropicClaude3_7Sonnet, InstanceListResponseRewriteModelAnthropicClaudeSonnet4, InstanceListResponseRewriteModelAnthropicClaudeOpus4, InstanceListResponseRewriteModelAnthropicClaude3_5Haiku, InstanceListResponseRewriteModelCerebrasQwen3_235bA22bInstruct, InstanceListResponseRewriteModelCerebrasQwen3_235bA22bThinking, InstanceListResponseRewriteModelCerebrasLlama3_3_70b, InstanceListResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, InstanceListResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, InstanceListResponseRewriteModelCerebrasGptOSs120b, InstanceListResponseRewriteModelGoogleAIStudioGemini2_5Flash, InstanceListResponseRewriteModelGoogleAIStudioGemini2_5Pro, InstanceListResponseRewriteModelGrokGrok4, InstanceListResponseRewriteModelGroqLlama3_3_70bVersatile, InstanceListResponseRewriteModelGroqLlama3_1_8bInstant, InstanceListResponseRewriteModelOpenAIGpt5, InstanceListResponseRewriteModelOpenAIGpt5Mini, InstanceListResponseRewriteModelOpenAIGpt5Nano, InstanceListResponseRewriteModelEmpty:
-		return true
-	}
-	return false
-}
-
 type InstanceListResponseSourceParams struct {
-	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
-	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
-	ExcludeItems []string `json:"exclude_items"`
-	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
-	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	ExcludeItems   []string                                   `json:"exclude_items"`
 	IncludeItems   []string                                   `json:"include_items"`
 	Prefix         string                                     `json:"prefix"`
 	R2Jurisdiction string                                     `json:"r2_jurisdiction"`
 	WebCrawler     InstanceListResponseSourceParamsWebCrawler `json:"web_crawler"`
+	ExtraFields    map[string]interface{}                     `json:"-" api:"extrafields"`
 	JSON           instanceListResponseSourceParamsJSON       `json:"-"`
 }
 
@@ -2652,6 +2499,7 @@ func (r instanceListResponseSourceParamsJSON) RawJSON() string {
 type InstanceListResponseSourceParamsWebCrawler struct {
 	ParseOptions InstanceListResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
 	ParseType    InstanceListResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
+	ExtraFields  map[string]interface{}                                 `json:"-" api:"extrafields"`
 	JSON         instanceListResponseSourceParamsWebCrawlerJSON         `json:"-"`
 }
 
@@ -2673,21 +2521,13 @@ func (r instanceListResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 }
 
 type InstanceListResponseSourceParamsWebCrawlerParseOptions struct {
-	// List of path-to-selector mappings for extracting specific content from crawled
-	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
-	// the field to disable content selection — empty arrays are rejected.
-	ContentSelector []InstanceListResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
-	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
-	// token characters (no spaces, colons, or control characters); values must be
-	// HTAB + printable ASCII (no CR/LF).
-	IncludeHeaders map[string]string `json:"include_headers"`
-	IncludeImages  bool              `json:"include_images"`
-	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
-	// 'sitemap'.
-	SpecificSitemaps    []string                                                   `json:"specific_sitemaps" format:"uri"`
-	UseBrowserRendering bool                                                       `json:"use_browser_rendering"`
-	JSON                instanceListResponseSourceParamsWebCrawlerParseOptionsJSON `json:"-"`
+	ContentSelector     []InstanceListResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
+	IncludeHeaders      map[string]string                                                       `json:"include_headers"`
+	IncludeImages       bool                                                                    `json:"include_images"`
+	SpecificSitemaps    []string                                                                `json:"specific_sitemaps" format:"uri"`
+	UseBrowserRendering bool                                                                    `json:"use_browser_rendering"`
+	ExtraFields         map[string]interface{}                                                  `json:"-" api:"extrafields"`
+	JSON                instanceListResponseSourceParamsWebCrawlerParseOptionsJSON              `json:"-"`
 }
 
 // instanceListResponseSourceParamsWebCrawlerParseOptionsJSON contains the JSON
@@ -2711,14 +2551,10 @@ func (r instanceListResponseSourceParamsWebCrawlerParseOptionsJSON) RawJSON() st
 }
 
 type InstanceListResponseSourceParamsWebCrawlerParseOptionsContentSelector struct {
-	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
-	// matches within a segment, \*\* crosses directories.
-	Path string `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Must not
-	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
-	// if multiple elements match, the selector is ignored and the full page is used.
-	Selector string                                                                    `json:"selector" api:"required"`
-	JSON     instanceListResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
+	Path        string                                                                    `json:"path" api:"required"`
+	Selector    string                                                                    `json:"selector" api:"required"`
+	ExtraFields map[string]interface{}                                                    `json:"-" api:"extrafields"`
+	JSON        instanceListResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
 
 // instanceListResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON
@@ -2754,8 +2590,6 @@ func (r InstanceListResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	return false
 }
 
-// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
-// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 type InstanceListResponseSyncInterval float64
 
 const (

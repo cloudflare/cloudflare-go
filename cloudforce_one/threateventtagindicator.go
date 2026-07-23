@@ -220,7 +220,7 @@ func (r ThreatEventTagIndicatorListParams) URLQuery() (v url.Values) {
 }
 
 type ThreatEventTagIndicatorListParamsSearch struct {
-	// The indicator field to search on. Allowed: value, indicatorType.
+	// The indicator field to search on. Allowed: value, indicatorType, uuid.
 	Field param.Field[ThreatEventTagIndicatorListParamsSearchField] `query:"field" api:"required"`
 	// Search operator. Use 'in' for bulk lookup of up to 100 values at once, e.g.
 	// {field:'value', op:'in', value:['evil.com','bad.org']}.
@@ -239,17 +239,18 @@ func (r ThreatEventTagIndicatorListParamsSearch) URLQuery() (v url.Values) {
 	})
 }
 
-// The indicator field to search on. Allowed: value, indicatorType.
+// The indicator field to search on. Allowed: value, indicatorType, uuid.
 type ThreatEventTagIndicatorListParamsSearchField string
 
 const (
 	ThreatEventTagIndicatorListParamsSearchFieldValue         ThreatEventTagIndicatorListParamsSearchField = "value"
 	ThreatEventTagIndicatorListParamsSearchFieldIndicatorType ThreatEventTagIndicatorListParamsSearchField = "indicatorType"
+	ThreatEventTagIndicatorListParamsSearchFieldUUID          ThreatEventTagIndicatorListParamsSearchField = "uuid"
 )
 
 func (r ThreatEventTagIndicatorListParamsSearchField) IsKnown() bool {
 	switch r {
-	case ThreatEventTagIndicatorListParamsSearchFieldValue, ThreatEventTagIndicatorListParamsSearchFieldIndicatorType:
+	case ThreatEventTagIndicatorListParamsSearchFieldValue, ThreatEventTagIndicatorListParamsSearchFieldIndicatorType, ThreatEventTagIndicatorListParamsSearchFieldUUID:
 		return true
 	}
 	return false

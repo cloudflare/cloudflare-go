@@ -681,6 +681,9 @@ func (r ThreatEventNewParamsIndicator) MarshalJSON() (data []byte, err error) {
 type ThreatEventListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Cache strategy. 'from-graph' serves results from the graph-node KV cache when
+	// all requested UUIDs are cached; falls back to normal path on partial/zero hit.
+	Cache param.Field[ThreatEventListParamsCache] `query:"cache"`
 	// Cursor for pagination. When provided, filters are embedded in the cursor so you
 	// only need to pass cursor and pageSize. Returned in the previous response's
 	// result_info.cursor field. Use cursor-based pagination for deep pagination
@@ -712,6 +715,22 @@ func (r ThreatEventListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Cache strategy. 'from-graph' serves results from the graph-node KV cache when
+// all requested UUIDs are cached; falls back to normal path on partial/zero hit.
+type ThreatEventListParamsCache string
+
+const (
+	ThreatEventListParamsCacheFromGraph ThreatEventListParamsCache = "from-graph"
+)
+
+func (r ThreatEventListParamsCache) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsCacheFromGraph:
+		return true
+	}
+	return false
 }
 
 type ThreatEventListParamsFormat string

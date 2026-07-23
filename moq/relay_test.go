@@ -65,7 +65,7 @@ func TestRelayUpdateWithOptionalParams(t *testing.T) {
 				Upstreams: cloudflare.F(moq.RelayUpdateParamsConfigUpstreams{
 					Enabled: cloudflare.F(true),
 					Upstreams: cloudflare.F([]moq.RelayUpdateParamsConfigUpstreamsUpstream{{
-						URL: cloudflare.F("url"),
+						URL: cloudflare.F("https://example.com"),
 					}}),
 				}),
 			}),

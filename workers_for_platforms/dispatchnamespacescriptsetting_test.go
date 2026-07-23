@@ -48,28 +48,31 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
-				Exports: cloudflare.F(map[string]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExports{
-					"Admin": {
-						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsTypeWorker),
-						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsCache{
+				Exports: cloudflare.F(map[string]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsUnion{
+					"Admin": workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExport{
+						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportCache{
 							Enabled: cloudflare.F(true),
 						}),
-						RenamedTo:     cloudflare.F("renamed_to"),
-						State:         cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsStateCreated),
-						Storage:       cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsStorageSqlite),
-						TransferFrom:  cloudflare.F("transfer_from"),
-						TransferredTo: cloudflare.F("transferred_to"),
+						State: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportStateCreated),
 					},
-					"default": {
-						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsTypeWorker),
-						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsCache{
+					"Counter": workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExport{
+						Storage:   cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStorageSqlite),
+						Type:      cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportTypeDurableObject),
+						Container: cloudflare.F("my-container"),
+						State:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStateCreated),
+					},
+					"OldCounter": workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExport{
+						RenamedTo: cloudflare.F("Counter"),
+						State:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportStateRenamed),
+						Type:      cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportTypeDurableObject),
+					},
+					"default": workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExport{
+						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportCache{
 							Enabled: cloudflare.F(false),
 						}),
-						RenamedTo:     cloudflare.F("renamed_to"),
-						State:         cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsStateCreated),
-						Storage:       cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsStorageSqlite),
-						TransferFrom:  cloudflare.F("transfer_from"),
-						TransferredTo: cloudflare.F("transferred_to"),
+						State: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportStateCreated),
 					},
 				}),
 				Limits: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsLimits{

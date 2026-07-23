@@ -72,7 +72,11 @@ type SettingZoneEditResponse struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
 	FlattenAllCNAMEs bool `json:"flatten_all_cnames" api:"required"`
-	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
+	// Deprecated. Use nameservers.type to configure Advanced Nameservers.
+	//
+	// Deprecated: foundation_dns is deprecated. Use nameservers.type:
+	// cloudflare.advanced to turn on Advanced Nameservers and cloudflare.standard to
+	// turn it off. This field will be removed in a future API version.
 	FoundationDNS bool `json:"foundation_dns" api:"required"`
 	// Settings for this internal zone.
 	InternalDNS SettingZoneEditResponseInternalDNS `json:"internal_dns" api:"required"`
@@ -172,6 +176,7 @@ type SettingZoneEditResponseNameserversType string
 
 const (
 	SettingZoneEditResponseNameserversTypeCloudflareStandard SettingZoneEditResponseNameserversType = "cloudflare.standard"
+	SettingZoneEditResponseNameserversTypeCloudflareAdvanced SettingZoneEditResponseNameserversType = "cloudflare.advanced"
 	SettingZoneEditResponseNameserversTypeCustomAccount      SettingZoneEditResponseNameserversType = "custom.account"
 	SettingZoneEditResponseNameserversTypeCustomTenant       SettingZoneEditResponseNameserversType = "custom.tenant"
 	SettingZoneEditResponseNameserversTypeCustomZone         SettingZoneEditResponseNameserversType = "custom.zone"
@@ -179,7 +184,7 @@ const (
 
 func (r SettingZoneEditResponseNameserversType) IsKnown() bool {
 	switch r {
-	case SettingZoneEditResponseNameserversTypeCloudflareStandard, SettingZoneEditResponseNameserversTypeCustomAccount, SettingZoneEditResponseNameserversTypeCustomTenant, SettingZoneEditResponseNameserversTypeCustomZone:
+	case SettingZoneEditResponseNameserversTypeCloudflareStandard, SettingZoneEditResponseNameserversTypeCloudflareAdvanced, SettingZoneEditResponseNameserversTypeCustomAccount, SettingZoneEditResponseNameserversTypeCustomTenant, SettingZoneEditResponseNameserversTypeCustomZone:
 		return true
 	}
 	return false
@@ -252,7 +257,11 @@ type SettingZoneGetResponse struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
 	FlattenAllCNAMEs bool `json:"flatten_all_cnames" api:"required"`
-	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
+	// Deprecated. Use nameservers.type to configure Advanced Nameservers.
+	//
+	// Deprecated: foundation_dns is deprecated. Use nameservers.type:
+	// cloudflare.advanced to turn on Advanced Nameservers and cloudflare.standard to
+	// turn it off. This field will be removed in a future API version.
 	FoundationDNS bool `json:"foundation_dns" api:"required"`
 	// Settings for this internal zone.
 	InternalDNS SettingZoneGetResponseInternalDNS `json:"internal_dns" api:"required"`
@@ -352,6 +361,7 @@ type SettingZoneGetResponseNameserversType string
 
 const (
 	SettingZoneGetResponseNameserversTypeCloudflareStandard SettingZoneGetResponseNameserversType = "cloudflare.standard"
+	SettingZoneGetResponseNameserversTypeCloudflareAdvanced SettingZoneGetResponseNameserversType = "cloudflare.advanced"
 	SettingZoneGetResponseNameserversTypeCustomAccount      SettingZoneGetResponseNameserversType = "custom.account"
 	SettingZoneGetResponseNameserversTypeCustomTenant       SettingZoneGetResponseNameserversType = "custom.tenant"
 	SettingZoneGetResponseNameserversTypeCustomZone         SettingZoneGetResponseNameserversType = "custom.zone"
@@ -359,7 +369,7 @@ const (
 
 func (r SettingZoneGetResponseNameserversType) IsKnown() bool {
 	switch r {
-	case SettingZoneGetResponseNameserversTypeCloudflareStandard, SettingZoneGetResponseNameserversTypeCustomAccount, SettingZoneGetResponseNameserversTypeCustomTenant, SettingZoneGetResponseNameserversTypeCustomZone:
+	case SettingZoneGetResponseNameserversTypeCloudflareStandard, SettingZoneGetResponseNameserversTypeCloudflareAdvanced, SettingZoneGetResponseNameserversTypeCustomAccount, SettingZoneGetResponseNameserversTypeCustomTenant, SettingZoneGetResponseNameserversTypeCustomZone:
 		return true
 	}
 	return false
@@ -434,7 +444,7 @@ type SettingZoneEditParams struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
 	FlattenAllCNAMEs param.Field[bool] `json:"flatten_all_cnames"`
-	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
+	// Deprecated. Use nameservers.type to configure Advanced Nameservers.
 	FoundationDNS param.Field[bool] `json:"foundation_dns"`
 	// Settings for this internal zone.
 	InternalDNS param.Field[SettingZoneEditParamsInternalDNS] `json:"internal_dns"`
@@ -486,6 +496,7 @@ type SettingZoneEditParamsNameserversType string
 
 const (
 	SettingZoneEditParamsNameserversTypeCloudflareStandard SettingZoneEditParamsNameserversType = "cloudflare.standard"
+	SettingZoneEditParamsNameserversTypeCloudflareAdvanced SettingZoneEditParamsNameserversType = "cloudflare.advanced"
 	SettingZoneEditParamsNameserversTypeCustomAccount      SettingZoneEditParamsNameserversType = "custom.account"
 	SettingZoneEditParamsNameserversTypeCustomTenant       SettingZoneEditParamsNameserversType = "custom.tenant"
 	SettingZoneEditParamsNameserversTypeCustomZone         SettingZoneEditParamsNameserversType = "custom.zone"
@@ -493,7 +504,7 @@ const (
 
 func (r SettingZoneEditParamsNameserversType) IsKnown() bool {
 	switch r {
-	case SettingZoneEditParamsNameserversTypeCloudflareStandard, SettingZoneEditParamsNameserversTypeCustomAccount, SettingZoneEditParamsNameserversTypeCustomTenant, SettingZoneEditParamsNameserversTypeCustomZone:
+	case SettingZoneEditParamsNameserversTypeCloudflareStandard, SettingZoneEditParamsNameserversTypeCloudflareAdvanced, SettingZoneEditParamsNameserversTypeCustomAccount, SettingZoneEditParamsNameserversTypeCustomTenant, SettingZoneEditParamsNameserversTypeCustomZone:
 		return true
 	}
 	return false

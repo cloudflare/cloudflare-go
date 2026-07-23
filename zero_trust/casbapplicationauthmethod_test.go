@@ -30,7 +30,7 @@ func TestCasbApplicationAuthMethodList(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Casb.Applications.AuthMethods.List(
 		context.TODO(),
-		zero_trust.CasbApplicationAuthMethodListParamsApplicationIDBitbucket,
+		zero_trust.CasbApplicationAuthMethodListParamsApplicationIDAnthropic,
 		zero_trust.CasbApplicationAuthMethodListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

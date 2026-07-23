@@ -2732,8 +2732,6 @@ type MXRecord struct {
 	Comment string `json:"comment"`
 	// A valid mail server hostname.
 	Content string `json:"content" format:"hostname"`
-	// Components of a MX record.
-	Data MXRecordData `json:"data"`
 	// Required for MX and URI records; ignored for other record types (but may still
 	// be returned by the API). Records with lower priorities are preferred. This field
 	// is to be deprecated in favor of the priority field within the data map.
@@ -2755,7 +2753,6 @@ type mxRecordJSON struct {
 	Type        apijson.Field
 	Comment     apijson.Field
 	Content     apijson.Field
-	Data        apijson.Field
 	Priority    apijson.Field
 	Proxied     apijson.Field
 	Settings    apijson.Field
@@ -2785,33 +2782,6 @@ func (r MXRecordType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Components of a MX record.
-type MXRecordData struct {
-	// Required for MX and URI records; ignored for other record types (but may still
-	// be returned by the API). Records with lower priorities are preferred. This field
-	// is to be deprecated in favor of the priority field within the data map.
-	Priority float64 `json:"priority"`
-	// A valid mail server hostname, or "." for a NULL MX record.
-	Target string           `json:"target"`
-	JSON   mxRecordDataJSON `json:"-"`
-}
-
-// mxRecordDataJSON contains the JSON metadata for the struct [MXRecordData]
-type mxRecordDataJSON struct {
-	Priority    apijson.Field
-	Target      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MXRecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mxRecordDataJSON) RawJSON() string {
-	return r.raw
 }
 
 // Settings for the DNS record.
@@ -2860,8 +2830,6 @@ type MXRecordParam struct {
 	Comment param.Field[string] `json:"comment"`
 	// A valid mail server hostname.
 	Content param.Field[string] `json:"content" format:"hostname"`
-	// Components of a MX record.
-	Data param.Field[MXRecordDataParam] `json:"data"`
 	// Required for MX and URI records; ignored for other record types (but may still
 	// be returned by the API). Records with lower priorities are preferred. This field
 	// is to be deprecated in favor of the priority field within the data map.
@@ -2888,20 +2856,6 @@ func (r MXRecordParam) implementsRecordBatchParamsPostUnion() {}
 func (r MXRecordParam) implementsRecordEditParamsBodyUnion() {}
 
 func (r MXRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
-
-// Components of a MX record.
-type MXRecordDataParam struct {
-	// Required for MX and URI records; ignored for other record types (but may still
-	// be returned by the API). Records with lower priorities are preferred. This field
-	// is to be deprecated in favor of the priority field within the data map.
-	Priority param.Field[float64] `json:"priority"`
-	// A valid mail server hostname, or "." for a NULL MX record.
-	Target param.Field[string] `json:"target"`
-}
-
-func (r MXRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 // Settings for the DNS record.
 type MXRecordSettingsParam struct {
@@ -3437,10 +3391,10 @@ type RecordResponse struct {
 	Content string `json:"content" format:"ipv4"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// This field can have the runtime type of [MXRecordData], [CAARecordData],
-	// [CERTRecordData], [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData],
-	// [LOCRecordData], [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData],
-	// [SSHFPRecordData], [SVCBRecordData], [TLSARecordData], [URIRecordData].
+	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
+	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
+	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
+	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
 	// This field can have the runtime type of [RecordResponseARecordMeta],
 	// [RecordResponseAAAARecordMeta], [RecordResponseCNAMERecordMeta],
@@ -6698,10 +6652,6 @@ func (r URIRecordType) IsKnown() bool {
 
 // Components of a URI record.
 type URIRecordData struct {
-	// Required for MX and URI records; ignored for other record types (but may still
-	// be returned by the API). Records with lower priorities are preferred. This field
-	// is to be deprecated in favor of the priority field within the data map.
-	Priority float64 `json:"priority"`
 	// The record content.
 	Target string `json:"target"`
 	// The record weight.
@@ -6711,7 +6661,6 @@ type URIRecordData struct {
 
 // uriRecordDataJSON contains the JSON metadata for the struct [URIRecordData]
 type uriRecordDataJSON struct {
-	Priority    apijson.Field
 	Target      apijson.Field
 	Weight      apijson.Field
 	raw         string
@@ -6801,10 +6750,6 @@ func (r URIRecordParam) implementsRecordScanReviewParamsAcceptUnion() {}
 
 // Components of a URI record.
 type URIRecordDataParam struct {
-	// Required for MX and URI records; ignored for other record types (but may still
-	// be returned by the API). Records with lower priorities are preferred. This field
-	// is to be deprecated in favor of the priority field within the data map.
-	Priority param.Field[float64] `json:"priority"`
 	// The record content.
 	Target param.Field[string] `json:"target"`
 	// The record weight.

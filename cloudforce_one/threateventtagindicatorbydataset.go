@@ -224,7 +224,7 @@ func (r ThreatEventTagIndicatorByDatasetListParams) URLQuery() (v url.Values) {
 }
 
 type ThreatEventTagIndicatorByDatasetListParamsSearch struct {
-	// The indicator field to search on. Allowed: value, indicatorType.
+	// The indicator field to search on. Allowed: value, indicatorType, uuid.
 	Field param.Field[ThreatEventTagIndicatorByDatasetListParamsSearchField] `query:"field" api:"required"`
 	// Search operator. Use 'in' for bulk lookup of up to 100 values at once, e.g.
 	// {field:'value', op:'in', value:['evil.com','bad.org']}.
@@ -243,17 +243,18 @@ func (r ThreatEventTagIndicatorByDatasetListParamsSearch) URLQuery() (v url.Valu
 	})
 }
 
-// The indicator field to search on. Allowed: value, indicatorType.
+// The indicator field to search on. Allowed: value, indicatorType, uuid.
 type ThreatEventTagIndicatorByDatasetListParamsSearchField string
 
 const (
 	ThreatEventTagIndicatorByDatasetListParamsSearchFieldValue         ThreatEventTagIndicatorByDatasetListParamsSearchField = "value"
 	ThreatEventTagIndicatorByDatasetListParamsSearchFieldIndicatorType ThreatEventTagIndicatorByDatasetListParamsSearchField = "indicatorType"
+	ThreatEventTagIndicatorByDatasetListParamsSearchFieldUUID          ThreatEventTagIndicatorByDatasetListParamsSearchField = "uuid"
 )
 
 func (r ThreatEventTagIndicatorByDatasetListParamsSearchField) IsKnown() bool {
 	switch r {
-	case ThreatEventTagIndicatorByDatasetListParamsSearchFieldValue, ThreatEventTagIndicatorByDatasetListParamsSearchFieldIndicatorType:
+	case ThreatEventTagIndicatorByDatasetListParamsSearchFieldValue, ThreatEventTagIndicatorByDatasetListParamsSearchFieldIndicatorType, ThreatEventTagIndicatorByDatasetListParamsSearchFieldUUID:
 		return true
 	}
 	return false

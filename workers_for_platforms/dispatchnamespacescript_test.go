@@ -63,28 +63,31 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
-				Exports: cloudflare.F(map[string]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExports{
-					"Admin": {
-						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsTypeWorker),
-						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsCache{
+				Exports: cloudflare.F(map[string]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsUnion{
+					"Admin": workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExport{
+						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportCache{
 							Enabled: cloudflare.F(true),
 						}),
-						RenamedTo:     cloudflare.F("renamed_to"),
-						State:         cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsStateCreated),
-						Storage:       cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsStorageSqlite),
-						TransferFrom:  cloudflare.F("transfer_from"),
-						TransferredTo: cloudflare.F("transferred_to"),
+						State: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportStateCreated),
 					},
-					"default": {
-						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsTypeWorker),
-						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsCache{
+					"Counter": workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectExport{
+						Storage:   cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectExportStorageSqlite),
+						Type:      cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectExportTypeDurableObject),
+						Container: cloudflare.F("my-container"),
+						State:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectExportStateCreated),
+					},
+					"OldCounter": workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExport{
+						RenamedTo: cloudflare.F("Counter"),
+						State:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExportStateRenamed),
+						Type:      cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExportTypeDurableObject),
+					},
+					"default": workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExport{
+						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportCache{
 							Enabled: cloudflare.F(false),
 						}),
-						RenamedTo:     cloudflare.F("renamed_to"),
-						State:         cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsStateCreated),
-						Storage:       cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsStorageSqlite),
-						TransferFrom:  cloudflare.F("transfer_from"),
-						TransferredTo: cloudflare.F("transferred_to"),
+						State: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportStateCreated),
 					},
 				}),
 				KeepAssets:   cloudflare.F(false),

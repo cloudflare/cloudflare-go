@@ -542,7 +542,10 @@ func (r UsageGetResponseEnvelopeSuccess) IsKnown() bool {
 type UsagePaygoParams struct {
 	// Represents a Cloudflare resource identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Start date for the usage query (ISO 8601).
+	// Start date for the usage query (ISO 8601). The provided time range must include
+	// the subscription billing cycle anchor day, otherwise no usage data is returned.
+	// Subscription anchor days are provided on the response of the
+	// /accounts/{account_id}/paygo-usage-info endpoint.
 	From param.Field[time.Time] `query:"from" format:"date"`
 	// End date for the usage query (ISO 8601).
 	To param.Field[time.Time] `query:"to" format:"date"`

@@ -32,6 +32,8 @@ func TestV2QueryGetWithOptionalParams(t *testing.T) {
 	_, err := client.BrandProtection.V2.Queries.Get(context.TODO(), brand_protection.V2QueryGetParams{
 		AccountID: cloudflare.F("x"),
 		ID:        cloudflare.F("id"),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(1)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

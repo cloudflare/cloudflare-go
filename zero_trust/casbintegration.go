@@ -592,14 +592,17 @@ type CasbIntegrationNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Vendor/application slug (e.g., GOOGLE_WORKSPACE).
 	//
+	// - `ANTHROPIC` - ANTHROPIC
 	// - `BITBUCKET` - BITBUCKET
 	// - `BOX` - BOX
 	// - `CONFLUENCE` - CONFLUENCE
 	// - `DROPBOX` - DROPBOX
 	// - `GITHUB` - GITHUB
+	// - `GOOGLE_CLOUD_PLATFORM` - GOOGLE_CLOUD_PLATFORM
 	// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
 	// - `JIRA` - JIRA
 	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
+	// - `OPENAI` - OPENAI
 	// - `SALESFORCE` - SALESFORCE
 	// - `SLACK` - SLACK
 	Application param.Field[CasbIntegrationNewParamsApplication] `json:"application" api:"required"`
@@ -624,34 +627,40 @@ func (r CasbIntegrationNewParams) MarshalJSON() (data []byte, err error) {
 
 // Vendor/application slug (e.g., GOOGLE_WORKSPACE).
 //
+// - `ANTHROPIC` - ANTHROPIC
 // - `BITBUCKET` - BITBUCKET
 // - `BOX` - BOX
 // - `CONFLUENCE` - CONFLUENCE
 // - `DROPBOX` - DROPBOX
 // - `GITHUB` - GITHUB
+// - `GOOGLE_CLOUD_PLATFORM` - GOOGLE_CLOUD_PLATFORM
 // - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
 // - `JIRA` - JIRA
 // - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
+// - `OPENAI` - OPENAI
 // - `SALESFORCE` - SALESFORCE
 // - `SLACK` - SLACK
 type CasbIntegrationNewParamsApplication string
 
 const (
-	CasbIntegrationNewParamsApplicationBitbucket         CasbIntegrationNewParamsApplication = "BITBUCKET"
-	CasbIntegrationNewParamsApplicationBox               CasbIntegrationNewParamsApplication = "BOX"
-	CasbIntegrationNewParamsApplicationConfluence        CasbIntegrationNewParamsApplication = "CONFLUENCE"
-	CasbIntegrationNewParamsApplicationDropbox           CasbIntegrationNewParamsApplication = "DROPBOX"
-	CasbIntegrationNewParamsApplicationGitHub            CasbIntegrationNewParamsApplication = "GITHUB"
-	CasbIntegrationNewParamsApplicationGoogleWorkspace   CasbIntegrationNewParamsApplication = "GOOGLE_WORKSPACE"
-	CasbIntegrationNewParamsApplicationJira              CasbIntegrationNewParamsApplication = "JIRA"
-	CasbIntegrationNewParamsApplicationMicrosoftInternal CasbIntegrationNewParamsApplication = "MICROSOFT_INTERNAL"
-	CasbIntegrationNewParamsApplicationSalesforce        CasbIntegrationNewParamsApplication = "SALESFORCE"
-	CasbIntegrationNewParamsApplicationSlack             CasbIntegrationNewParamsApplication = "SLACK"
+	CasbIntegrationNewParamsApplicationAnthropic           CasbIntegrationNewParamsApplication = "ANTHROPIC"
+	CasbIntegrationNewParamsApplicationBitbucket           CasbIntegrationNewParamsApplication = "BITBUCKET"
+	CasbIntegrationNewParamsApplicationBox                 CasbIntegrationNewParamsApplication = "BOX"
+	CasbIntegrationNewParamsApplicationConfluence          CasbIntegrationNewParamsApplication = "CONFLUENCE"
+	CasbIntegrationNewParamsApplicationDropbox             CasbIntegrationNewParamsApplication = "DROPBOX"
+	CasbIntegrationNewParamsApplicationGitHub              CasbIntegrationNewParamsApplication = "GITHUB"
+	CasbIntegrationNewParamsApplicationGoogleCloudPlatform CasbIntegrationNewParamsApplication = "GOOGLE_CLOUD_PLATFORM"
+	CasbIntegrationNewParamsApplicationGoogleWorkspace     CasbIntegrationNewParamsApplication = "GOOGLE_WORKSPACE"
+	CasbIntegrationNewParamsApplicationJira                CasbIntegrationNewParamsApplication = "JIRA"
+	CasbIntegrationNewParamsApplicationMicrosoftInternal   CasbIntegrationNewParamsApplication = "MICROSOFT_INTERNAL"
+	CasbIntegrationNewParamsApplicationOpenAI              CasbIntegrationNewParamsApplication = "OPENAI"
+	CasbIntegrationNewParamsApplicationSalesforce          CasbIntegrationNewParamsApplication = "SALESFORCE"
+	CasbIntegrationNewParamsApplicationSlack               CasbIntegrationNewParamsApplication = "SLACK"
 )
 
 func (r CasbIntegrationNewParamsApplication) IsKnown() bool {
 	switch r {
-	case CasbIntegrationNewParamsApplicationBitbucket, CasbIntegrationNewParamsApplicationBox, CasbIntegrationNewParamsApplicationConfluence, CasbIntegrationNewParamsApplicationDropbox, CasbIntegrationNewParamsApplicationGitHub, CasbIntegrationNewParamsApplicationGoogleWorkspace, CasbIntegrationNewParamsApplicationJira, CasbIntegrationNewParamsApplicationMicrosoftInternal, CasbIntegrationNewParamsApplicationSalesforce, CasbIntegrationNewParamsApplicationSlack:
+	case CasbIntegrationNewParamsApplicationAnthropic, CasbIntegrationNewParamsApplicationBitbucket, CasbIntegrationNewParamsApplicationBox, CasbIntegrationNewParamsApplicationConfluence, CasbIntegrationNewParamsApplicationDropbox, CasbIntegrationNewParamsApplicationGitHub, CasbIntegrationNewParamsApplicationGoogleCloudPlatform, CasbIntegrationNewParamsApplicationGoogleWorkspace, CasbIntegrationNewParamsApplicationJira, CasbIntegrationNewParamsApplicationMicrosoftInternal, CasbIntegrationNewParamsApplicationOpenAI, CasbIntegrationNewParamsApplicationSalesforce, CasbIntegrationNewParamsApplicationSlack:
 		return true
 	}
 	return false

@@ -954,8 +954,11 @@ func (r ThreatEventTagNewParamsOriginCountryTLP) IsKnown() bool {
 
 type ThreatEventTagListParams struct {
 	// Account ID.
-	AccountID    param.Field[string] `path:"account_id" api:"required"`
-	CategoryUUID param.Field[string] `query:"categoryUuid"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Cache strategy. 'from-graph' serves results from the graph-node KV cache when
+	// all requested UUIDs are cached; falls back to normal path on partial/zero hit.
+	Cache        param.Field[ThreatEventTagListParamsCache] `query:"cache"`
+	CategoryUUID param.Field[string]                        `query:"categoryUuid"`
 	// Structured filters as a JSON array of {field, op, value} objects. Searchable
 	// fields: uuid, value, actorCategory, actorCategoryConfidence, aliasGroupNames,
 	// attributionConfidence, attributionConfidenceScore, attributionOrganization,
@@ -990,6 +993,22 @@ func (r ThreatEventTagListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Cache strategy. 'from-graph' serves results from the graph-node KV cache when
+// all requested UUIDs are cached; falls back to normal path on partial/zero hit.
+type ThreatEventTagListParamsCache string
+
+const (
+	ThreatEventTagListParamsCacheFromGraph ThreatEventTagListParamsCache = "from-graph"
+)
+
+func (r ThreatEventTagListParamsCache) IsKnown() bool {
+	switch r {
+	case ThreatEventTagListParamsCacheFromGraph:
+		return true
+	}
+	return false
 }
 
 type ThreatEventTagListParamsFilter struct {

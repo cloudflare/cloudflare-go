@@ -52,14 +52,59 @@ func (r *PDFService) New(ctx context.Context, params PDFNewParams, opts ...optio
 
 type PDFNewParams struct {
 	// Account ID.
-	AccountID param.Field[string]   `path:"account_id" api:"required"`
-	Body      PDFNewParamsBodyUnion `json:"body" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout param.Field[float64] `json:"actionTimeout"`
+	// Adds a `<script>` tag into the page with the desired URL or content.
+	AddScriptTag param.Field[[]PDFNewParamsAddScriptTag] `json:"addScriptTag"`
+	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
+	// `<style type="text/css">` tag with the content.
+	AddStyleTag param.Field[[]PDFNewParamsAddStyleTag] `json:"addStyleTag"`
+	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
+	// Only allow requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	AllowResourceTypes param.Field[[]PDFNewParamsAllowResourceType] `json:"allowResourceTypes"`
+	// Provide credentials for HTTP authentication.
+	Authenticate param.Field[PDFNewParamsAuthenticate] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt param.Field[bool] `json:"bestAttempt"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
+	Cookies          param.Field[[]PDFNewParamsCookie] `json:"cookies"`
+	EmulateMediaType param.Field[string]               `json:"emulateMediaType"`
+	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
+	GotoOptions param.Field[PDFNewParamsGotoOptions] `json:"gotoOptions"`
+	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
+	// `url` must be set.
+	HTML param.Field[string] `json:"html"`
+	// Check [options](https://pptr.dev/api/puppeteer.pdfoptions).
+	PDFOptions param.Field[PDFNewParamsPDFOptions] `json:"pdfOptions"`
+	// Block undesired requests that match the provided regex patterns, eg.
+	// '/^.\*\.(css)'.
+	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
+	// Block undesired requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	RejectResourceTypes  param.Field[[]PDFNewParamsRejectResourceType] `json:"rejectResourceTypes"`
+	SetExtraHTTPHeaders  param.Field[map[string]string]                `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]                             `json:"setJavaScriptEnabled"`
+	// URL to navigate to, eg. `https://example.com`.
+	URL       param.Field[string] `json:"url" format:"uri"`
+	UserAgent param.Field[string] `json:"userAgent"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
+	Viewport param.Field[PDFNewParamsViewport] `json:"viewport"`
+	// Wait for the selector to appear in page. Check
+	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
+	WaitForSelector param.Field[PDFNewParamsWaitForSelector] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
 }
 
 func (r PDFNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 // URLQuery serializes [PDFNewParams]'s query parameters as `url.Values`.
@@ -70,310 +115,211 @@ func (r PDFNewParams) URLQuery() (v url.Values) {
 	})
 }
 
-type PDFNewParamsBody struct {
-	// The maximum duration allowed for the browser action to complete after the page
-	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
-	// If this time limit is exceeded, the action stops and returns a timeout error.
-	ActionTimeout       param.Field[float64]     `json:"actionTimeout"`
-	AddScriptTag        param.Field[interface{}] `json:"addScriptTag"`
-	AddStyleTag         param.Field[interface{}] `json:"addStyleTag"`
-	AllowRequestPattern param.Field[interface{}] `json:"allowRequestPattern"`
-	AllowResourceTypes  param.Field[interface{}] `json:"allowResourceTypes"`
-	Authenticate        param.Field[interface{}] `json:"authenticate"`
-	// Attempt to proceed when 'awaited' events fail or timeout.
-	BestAttempt      param.Field[bool]        `json:"bestAttempt"`
-	Cookies          param.Field[interface{}] `json:"cookies"`
-	EmulateMediaType param.Field[string]      `json:"emulateMediaType"`
-	GotoOptions      param.Field[interface{}] `json:"gotoOptions"`
-	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
-	// `url` must be set.
-	HTML                 param.Field[string]      `json:"html"`
-	PDFOptions           param.Field[interface{}] `json:"pdfOptions"`
-	RejectRequestPattern param.Field[interface{}] `json:"rejectRequestPattern"`
-	RejectResourceTypes  param.Field[interface{}] `json:"rejectResourceTypes"`
-	SetExtraHTTPHeaders  param.Field[interface{}] `json:"setExtraHTTPHeaders"`
-	SetJavaScriptEnabled param.Field[bool]        `json:"setJavaScriptEnabled"`
-	// URL to navigate to, eg. `https://example.com`.
-	URL             param.Field[string]      `json:"url" format:"uri"`
-	UserAgent       param.Field[string]      `json:"userAgent"`
-	Viewport        param.Field[interface{}] `json:"viewport"`
-	WaitForSelector param.Field[interface{}] `json:"waitForSelector"`
-	// Waits for a specified timeout before continuing.
-	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
-}
-
-func (r PDFNewParamsBody) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PDFNewParamsBody) implementsPDFNewParamsBodyUnion() {}
-
-// Satisfied by [browser_rendering.PDFNewParamsBodyObject],
-// [browser_rendering.PDFNewParamsBodyObject], [PDFNewParamsBody].
-type PDFNewParamsBodyUnion interface {
-	implementsPDFNewParamsBodyUnion()
-}
-
-type PDFNewParamsBodyObject struct {
-	// URL to navigate to, eg. `https://example.com`.
-	URL param.Field[string] `json:"url" api:"required" format:"uri"`
-	// The maximum duration allowed for the browser action to complete after the page
-	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
-	// If this time limit is exceeded, the action stops and returns a timeout error.
-	ActionTimeout param.Field[float64] `json:"actionTimeout"`
-	// Adds a `<script>` tag into the page with the desired URL or content.
-	AddScriptTag param.Field[[]PDFNewParamsBodyObjectAddScriptTag] `json:"addScriptTag"`
-	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
-	// `<style type="text/css">` tag with the content.
-	AddStyleTag param.Field[[]PDFNewParamsBodyObjectAddStyleTag] `json:"addStyleTag"`
-	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
-	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
-	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	AllowResourceTypes param.Field[[]PDFNewParamsBodyObjectAllowResourceType] `json:"allowResourceTypes"`
-	// Provide credentials for HTTP authentication.
-	Authenticate param.Field[PDFNewParamsBodyObjectAuthenticate] `json:"authenticate"`
-	// Attempt to proceed when 'awaited' events fail or timeout.
-	BestAttempt param.Field[bool] `json:"bestAttempt"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
-	Cookies          param.Field[[]PDFNewParamsBodyObjectCookie] `json:"cookies"`
-	EmulateMediaType param.Field[string]                         `json:"emulateMediaType"`
-	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-	GotoOptions param.Field[PDFNewParamsBodyObjectGotoOptions] `json:"gotoOptions"`
-	// Check [options](https://pptr.dev/api/puppeteer.pdfoptions).
-	PDFOptions param.Field[PDFNewParamsBodyObjectPDFOptions] `json:"pdfOptions"`
-	// Block undesired requests that match the provided regex patterns, eg.
-	// '/^.\*\.(css)'.
-	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
-	// Block undesired requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	RejectResourceTypes  param.Field[[]PDFNewParamsBodyObjectRejectResourceType] `json:"rejectResourceTypes"`
-	SetExtraHTTPHeaders  param.Field[map[string]string]                          `json:"setExtraHTTPHeaders"`
-	SetJavaScriptEnabled param.Field[bool]                                       `json:"setJavaScriptEnabled"`
-	UserAgent            param.Field[string]                                     `json:"userAgent"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-	Viewport param.Field[PDFNewParamsBodyObjectViewport] `json:"viewport"`
-	// Wait for the selector to appear in page. Check
-	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-	WaitForSelector param.Field[PDFNewParamsBodyObjectWaitForSelector] `json:"waitForSelector"`
-	// Waits for a specified timeout before continuing.
-	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
-}
-
-func (r PDFNewParamsBodyObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PDFNewParamsBodyObject) implementsPDFNewParamsBodyUnion() {}
-
-type PDFNewParamsBodyObjectAddScriptTag struct {
+type PDFNewParamsAddScriptTag struct {
 	ID      param.Field[string] `json:"id"`
 	Content param.Field[string] `json:"content"`
 	Type    param.Field[string] `json:"type"`
 	URL     param.Field[string] `json:"url" format:"uri"`
 }
 
-func (r PDFNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err error) {
+func (r PDFNewParamsAddScriptTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PDFNewParamsBodyObjectAddStyleTag struct {
+type PDFNewParamsAddStyleTag struct {
 	Content param.Field[string] `json:"content"`
 	URL     param.Field[string] `json:"url" format:"uri"`
 }
 
-func (r PDFNewParamsBodyObjectAddStyleTag) MarshalJSON() (data []byte, err error) {
+func (r PDFNewParamsAddStyleTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PDFNewParamsBodyObjectAllowResourceType string
+type PDFNewParamsAllowResourceType string
 
 const (
-	PDFNewParamsBodyObjectAllowResourceTypeDocument           PDFNewParamsBodyObjectAllowResourceType = "document"
-	PDFNewParamsBodyObjectAllowResourceTypeStylesheet         PDFNewParamsBodyObjectAllowResourceType = "stylesheet"
-	PDFNewParamsBodyObjectAllowResourceTypeImage              PDFNewParamsBodyObjectAllowResourceType = "image"
-	PDFNewParamsBodyObjectAllowResourceTypeMedia              PDFNewParamsBodyObjectAllowResourceType = "media"
-	PDFNewParamsBodyObjectAllowResourceTypeFont               PDFNewParamsBodyObjectAllowResourceType = "font"
-	PDFNewParamsBodyObjectAllowResourceTypeScript             PDFNewParamsBodyObjectAllowResourceType = "script"
-	PDFNewParamsBodyObjectAllowResourceTypeTexttrack          PDFNewParamsBodyObjectAllowResourceType = "texttrack"
-	PDFNewParamsBodyObjectAllowResourceTypeXHR                PDFNewParamsBodyObjectAllowResourceType = "xhr"
-	PDFNewParamsBodyObjectAllowResourceTypeFetch              PDFNewParamsBodyObjectAllowResourceType = "fetch"
-	PDFNewParamsBodyObjectAllowResourceTypePrefetch           PDFNewParamsBodyObjectAllowResourceType = "prefetch"
-	PDFNewParamsBodyObjectAllowResourceTypeEventsource        PDFNewParamsBodyObjectAllowResourceType = "eventsource"
-	PDFNewParamsBodyObjectAllowResourceTypeWebsocket          PDFNewParamsBodyObjectAllowResourceType = "websocket"
-	PDFNewParamsBodyObjectAllowResourceTypeManifest           PDFNewParamsBodyObjectAllowResourceType = "manifest"
-	PDFNewParamsBodyObjectAllowResourceTypeSignedexchange     PDFNewParamsBodyObjectAllowResourceType = "signedexchange"
-	PDFNewParamsBodyObjectAllowResourceTypePing               PDFNewParamsBodyObjectAllowResourceType = "ping"
-	PDFNewParamsBodyObjectAllowResourceTypeCspviolationreport PDFNewParamsBodyObjectAllowResourceType = "cspviolationreport"
-	PDFNewParamsBodyObjectAllowResourceTypePreflight          PDFNewParamsBodyObjectAllowResourceType = "preflight"
-	PDFNewParamsBodyObjectAllowResourceTypeOther              PDFNewParamsBodyObjectAllowResourceType = "other"
+	PDFNewParamsAllowResourceTypeDocument           PDFNewParamsAllowResourceType = "document"
+	PDFNewParamsAllowResourceTypeStylesheet         PDFNewParamsAllowResourceType = "stylesheet"
+	PDFNewParamsAllowResourceTypeImage              PDFNewParamsAllowResourceType = "image"
+	PDFNewParamsAllowResourceTypeMedia              PDFNewParamsAllowResourceType = "media"
+	PDFNewParamsAllowResourceTypeFont               PDFNewParamsAllowResourceType = "font"
+	PDFNewParamsAllowResourceTypeScript             PDFNewParamsAllowResourceType = "script"
+	PDFNewParamsAllowResourceTypeTexttrack          PDFNewParamsAllowResourceType = "texttrack"
+	PDFNewParamsAllowResourceTypeXHR                PDFNewParamsAllowResourceType = "xhr"
+	PDFNewParamsAllowResourceTypeFetch              PDFNewParamsAllowResourceType = "fetch"
+	PDFNewParamsAllowResourceTypePrefetch           PDFNewParamsAllowResourceType = "prefetch"
+	PDFNewParamsAllowResourceTypeEventsource        PDFNewParamsAllowResourceType = "eventsource"
+	PDFNewParamsAllowResourceTypeWebsocket          PDFNewParamsAllowResourceType = "websocket"
+	PDFNewParamsAllowResourceTypeManifest           PDFNewParamsAllowResourceType = "manifest"
+	PDFNewParamsAllowResourceTypeSignedexchange     PDFNewParamsAllowResourceType = "signedexchange"
+	PDFNewParamsAllowResourceTypePing               PDFNewParamsAllowResourceType = "ping"
+	PDFNewParamsAllowResourceTypeCspviolationreport PDFNewParamsAllowResourceType = "cspviolationreport"
+	PDFNewParamsAllowResourceTypePreflight          PDFNewParamsAllowResourceType = "preflight"
+	PDFNewParamsAllowResourceTypeOther              PDFNewParamsAllowResourceType = "other"
 )
 
-func (r PDFNewParamsBodyObjectAllowResourceType) IsKnown() bool {
+func (r PDFNewParamsAllowResourceType) IsKnown() bool {
 	switch r {
-	case PDFNewParamsBodyObjectAllowResourceTypeDocument, PDFNewParamsBodyObjectAllowResourceTypeStylesheet, PDFNewParamsBodyObjectAllowResourceTypeImage, PDFNewParamsBodyObjectAllowResourceTypeMedia, PDFNewParamsBodyObjectAllowResourceTypeFont, PDFNewParamsBodyObjectAllowResourceTypeScript, PDFNewParamsBodyObjectAllowResourceTypeTexttrack, PDFNewParamsBodyObjectAllowResourceTypeXHR, PDFNewParamsBodyObjectAllowResourceTypeFetch, PDFNewParamsBodyObjectAllowResourceTypePrefetch, PDFNewParamsBodyObjectAllowResourceTypeEventsource, PDFNewParamsBodyObjectAllowResourceTypeWebsocket, PDFNewParamsBodyObjectAllowResourceTypeManifest, PDFNewParamsBodyObjectAllowResourceTypeSignedexchange, PDFNewParamsBodyObjectAllowResourceTypePing, PDFNewParamsBodyObjectAllowResourceTypeCspviolationreport, PDFNewParamsBodyObjectAllowResourceTypePreflight, PDFNewParamsBodyObjectAllowResourceTypeOther:
+	case PDFNewParamsAllowResourceTypeDocument, PDFNewParamsAllowResourceTypeStylesheet, PDFNewParamsAllowResourceTypeImage, PDFNewParamsAllowResourceTypeMedia, PDFNewParamsAllowResourceTypeFont, PDFNewParamsAllowResourceTypeScript, PDFNewParamsAllowResourceTypeTexttrack, PDFNewParamsAllowResourceTypeXHR, PDFNewParamsAllowResourceTypeFetch, PDFNewParamsAllowResourceTypePrefetch, PDFNewParamsAllowResourceTypeEventsource, PDFNewParamsAllowResourceTypeWebsocket, PDFNewParamsAllowResourceTypeManifest, PDFNewParamsAllowResourceTypeSignedexchange, PDFNewParamsAllowResourceTypePing, PDFNewParamsAllowResourceTypeCspviolationreport, PDFNewParamsAllowResourceTypePreflight, PDFNewParamsAllowResourceTypeOther:
 		return true
 	}
 	return false
 }
 
 // Provide credentials for HTTP authentication.
-type PDFNewParamsBodyObjectAuthenticate struct {
+type PDFNewParamsAuthenticate struct {
 	Password param.Field[string] `json:"password" api:"required"`
 	Username param.Field[string] `json:"username" api:"required"`
 }
 
-func (r PDFNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
+func (r PDFNewParamsAuthenticate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PDFNewParamsBodyObjectCookie struct {
+type PDFNewParamsCookie struct {
 	// Cookie name.
-	Name         param.Field[string]                                    `json:"name" api:"required"`
-	Value        param.Field[string]                                    `json:"value" api:"required"`
-	Domain       param.Field[string]                                    `json:"domain"`
-	Expires      param.Field[float64]                                   `json:"expires"`
-	HTTPOnly     param.Field[bool]                                      `json:"httpOnly"`
-	PartitionKey param.Field[string]                                    `json:"partitionKey"`
-	Path         param.Field[string]                                    `json:"path"`
-	Priority     param.Field[PDFNewParamsBodyObjectCookiesPriority]     `json:"priority"`
-	SameParty    param.Field[bool]                                      `json:"sameParty"`
-	SameSite     param.Field[PDFNewParamsBodyObjectCookiesSameSite]     `json:"sameSite"`
-	Secure       param.Field[bool]                                      `json:"secure"`
-	SourcePort   param.Field[float64]                                   `json:"sourcePort"`
-	SourceScheme param.Field[PDFNewParamsBodyObjectCookiesSourceScheme] `json:"sourceScheme"`
-	URL          param.Field[string]                                    `json:"url"`
+	Name         param.Field[string]                          `json:"name" api:"required"`
+	Value        param.Field[string]                          `json:"value" api:"required"`
+	Domain       param.Field[string]                          `json:"domain"`
+	Expires      param.Field[float64]                         `json:"expires"`
+	HTTPOnly     param.Field[bool]                            `json:"httpOnly"`
+	PartitionKey param.Field[string]                          `json:"partitionKey"`
+	Path         param.Field[string]                          `json:"path"`
+	Priority     param.Field[PDFNewParamsCookiesPriority]     `json:"priority"`
+	SameParty    param.Field[bool]                            `json:"sameParty"`
+	SameSite     param.Field[PDFNewParamsCookiesSameSite]     `json:"sameSite"`
+	Secure       param.Field[bool]                            `json:"secure"`
+	SourcePort   param.Field[float64]                         `json:"sourcePort"`
+	SourceScheme param.Field[PDFNewParamsCookiesSourceScheme] `json:"sourceScheme"`
+	URL          param.Field[string]                          `json:"url"`
 }
 
-func (r PDFNewParamsBodyObjectCookie) MarshalJSON() (data []byte, err error) {
+func (r PDFNewParamsCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PDFNewParamsBodyObjectCookiesPriority string
+type PDFNewParamsCookiesPriority string
 
 const (
-	PDFNewParamsBodyObjectCookiesPriorityLow    PDFNewParamsBodyObjectCookiesPriority = "Low"
-	PDFNewParamsBodyObjectCookiesPriorityMedium PDFNewParamsBodyObjectCookiesPriority = "Medium"
-	PDFNewParamsBodyObjectCookiesPriorityHigh   PDFNewParamsBodyObjectCookiesPriority = "High"
+	PDFNewParamsCookiesPriorityLow    PDFNewParamsCookiesPriority = "Low"
+	PDFNewParamsCookiesPriorityMedium PDFNewParamsCookiesPriority = "Medium"
+	PDFNewParamsCookiesPriorityHigh   PDFNewParamsCookiesPriority = "High"
 )
 
-func (r PDFNewParamsBodyObjectCookiesPriority) IsKnown() bool {
+func (r PDFNewParamsCookiesPriority) IsKnown() bool {
 	switch r {
-	case PDFNewParamsBodyObjectCookiesPriorityLow, PDFNewParamsBodyObjectCookiesPriorityMedium, PDFNewParamsBodyObjectCookiesPriorityHigh:
+	case PDFNewParamsCookiesPriorityLow, PDFNewParamsCookiesPriorityMedium, PDFNewParamsCookiesPriorityHigh:
 		return true
 	}
 	return false
 }
 
-type PDFNewParamsBodyObjectCookiesSameSite string
+type PDFNewParamsCookiesSameSite string
 
 const (
-	PDFNewParamsBodyObjectCookiesSameSiteStrict PDFNewParamsBodyObjectCookiesSameSite = "Strict"
-	PDFNewParamsBodyObjectCookiesSameSiteLax    PDFNewParamsBodyObjectCookiesSameSite = "Lax"
-	PDFNewParamsBodyObjectCookiesSameSiteNone   PDFNewParamsBodyObjectCookiesSameSite = "None"
+	PDFNewParamsCookiesSameSiteStrict PDFNewParamsCookiesSameSite = "Strict"
+	PDFNewParamsCookiesSameSiteLax    PDFNewParamsCookiesSameSite = "Lax"
+	PDFNewParamsCookiesSameSiteNone   PDFNewParamsCookiesSameSite = "None"
 )
 
-func (r PDFNewParamsBodyObjectCookiesSameSite) IsKnown() bool {
+func (r PDFNewParamsCookiesSameSite) IsKnown() bool {
 	switch r {
-	case PDFNewParamsBodyObjectCookiesSameSiteStrict, PDFNewParamsBodyObjectCookiesSameSiteLax, PDFNewParamsBodyObjectCookiesSameSiteNone:
+	case PDFNewParamsCookiesSameSiteStrict, PDFNewParamsCookiesSameSiteLax, PDFNewParamsCookiesSameSiteNone:
 		return true
 	}
 	return false
 }
 
-type PDFNewParamsBodyObjectCookiesSourceScheme string
+type PDFNewParamsCookiesSourceScheme string
 
 const (
-	PDFNewParamsBodyObjectCookiesSourceSchemeUnset     PDFNewParamsBodyObjectCookiesSourceScheme = "Unset"
-	PDFNewParamsBodyObjectCookiesSourceSchemeNonSecure PDFNewParamsBodyObjectCookiesSourceScheme = "NonSecure"
-	PDFNewParamsBodyObjectCookiesSourceSchemeSecure    PDFNewParamsBodyObjectCookiesSourceScheme = "Secure"
+	PDFNewParamsCookiesSourceSchemeUnset     PDFNewParamsCookiesSourceScheme = "Unset"
+	PDFNewParamsCookiesSourceSchemeNonSecure PDFNewParamsCookiesSourceScheme = "NonSecure"
+	PDFNewParamsCookiesSourceSchemeSecure    PDFNewParamsCookiesSourceScheme = "Secure"
 )
 
-func (r PDFNewParamsBodyObjectCookiesSourceScheme) IsKnown() bool {
+func (r PDFNewParamsCookiesSourceScheme) IsKnown() bool {
 	switch r {
-	case PDFNewParamsBodyObjectCookiesSourceSchemeUnset, PDFNewParamsBodyObjectCookiesSourceSchemeNonSecure, PDFNewParamsBodyObjectCookiesSourceSchemeSecure:
+	case PDFNewParamsCookiesSourceSchemeUnset, PDFNewParamsCookiesSourceSchemeNonSecure, PDFNewParamsCookiesSourceSchemeSecure:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-type PDFNewParamsBodyObjectGotoOptions struct {
-	Referer        param.Field[string]                                          `json:"referer"`
-	ReferrerPolicy param.Field[string]                                          `json:"referrerPolicy"`
-	Timeout        param.Field[float64]                                         `json:"timeout"`
-	WaitUntil      param.Field[PDFNewParamsBodyObjectGotoOptionsWaitUntilUnion] `json:"waitUntil"`
+type PDFNewParamsGotoOptions struct {
+	Referer        param.Field[string]                                `json:"referer"`
+	ReferrerPolicy param.Field[string]                                `json:"referrerPolicy"`
+	Timeout        param.Field[float64]                               `json:"timeout"`
+	WaitUntil      param.Field[PDFNewParamsGotoOptionsWaitUntilUnion] `json:"waitUntil"`
 }
 
-func (r PDFNewParamsBodyObjectGotoOptions) MarshalJSON() (data []byte, err error) {
+func (r PDFNewParamsGotoOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Satisfied by
-// [browser_rendering.PDFNewParamsBodyObjectGotoOptionsWaitUntilString],
-// [browser_rendering.PDFNewParamsBodyObjectGotoOptionsWaitUntilArray].
-type PDFNewParamsBodyObjectGotoOptionsWaitUntilUnion interface {
-	implementsPDFNewParamsBodyObjectGotoOptionsWaitUntilUnion()
+// Satisfied by [browser_rendering.PDFNewParamsGotoOptionsWaitUntilString],
+// [browser_rendering.PDFNewParamsGotoOptionsWaitUntilArray].
+type PDFNewParamsGotoOptionsWaitUntilUnion interface {
+	implementsPDFNewParamsGotoOptionsWaitUntilUnion()
 }
 
-type PDFNewParamsBodyObjectGotoOptionsWaitUntilString string
+type PDFNewParamsGotoOptionsWaitUntilString string
 
 const (
-	PDFNewParamsBodyObjectGotoOptionsWaitUntilStringLoad             PDFNewParamsBodyObjectGotoOptionsWaitUntilString = "load"
-	PDFNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded PDFNewParamsBodyObjectGotoOptionsWaitUntilString = "domcontentloaded"
-	PDFNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0     PDFNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle0"
-	PDFNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2     PDFNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle2"
+	PDFNewParamsGotoOptionsWaitUntilStringLoad             PDFNewParamsGotoOptionsWaitUntilString = "load"
+	PDFNewParamsGotoOptionsWaitUntilStringDomcontentloaded PDFNewParamsGotoOptionsWaitUntilString = "domcontentloaded"
+	PDFNewParamsGotoOptionsWaitUntilStringNetworkidle0     PDFNewParamsGotoOptionsWaitUntilString = "networkidle0"
+	PDFNewParamsGotoOptionsWaitUntilStringNetworkidle2     PDFNewParamsGotoOptionsWaitUntilString = "networkidle2"
 )
 
-func (r PDFNewParamsBodyObjectGotoOptionsWaitUntilString) IsKnown() bool {
+func (r PDFNewParamsGotoOptionsWaitUntilString) IsKnown() bool {
 	switch r {
-	case PDFNewParamsBodyObjectGotoOptionsWaitUntilStringLoad, PDFNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded, PDFNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0, PDFNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2:
+	case PDFNewParamsGotoOptionsWaitUntilStringLoad, PDFNewParamsGotoOptionsWaitUntilStringDomcontentloaded, PDFNewParamsGotoOptionsWaitUntilStringNetworkidle0, PDFNewParamsGotoOptionsWaitUntilStringNetworkidle2:
 		return true
 	}
 	return false
 }
 
-func (r PDFNewParamsBodyObjectGotoOptionsWaitUntilString) implementsPDFNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
-}
+func (r PDFNewParamsGotoOptionsWaitUntilString) implementsPDFNewParamsGotoOptionsWaitUntilUnion() {}
 
-type PDFNewParamsBodyObjectGotoOptionsWaitUntilArray []PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItem
+type PDFNewParamsGotoOptionsWaitUntilArray []PDFNewParamsGotoOptionsWaitUntilArrayItem
 
-func (r PDFNewParamsBodyObjectGotoOptionsWaitUntilArray) implementsPDFNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
-}
+func (r PDFNewParamsGotoOptionsWaitUntilArray) implementsPDFNewParamsGotoOptionsWaitUntilUnion() {}
 
-type PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItem string
+type PDFNewParamsGotoOptionsWaitUntilArrayItem string
 
 const (
-	PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad             PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "load"
-	PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "domcontentloaded"
-	PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0     PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle0"
-	PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2     PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle2"
+	PDFNewParamsGotoOptionsWaitUntilArrayItemLoad             PDFNewParamsGotoOptionsWaitUntilArrayItem = "load"
+	PDFNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded PDFNewParamsGotoOptionsWaitUntilArrayItem = "domcontentloaded"
+	PDFNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0     PDFNewParamsGotoOptionsWaitUntilArrayItem = "networkidle0"
+	PDFNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2     PDFNewParamsGotoOptionsWaitUntilArrayItem = "networkidle2"
 )
 
-func (r PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItem) IsKnown() bool {
+func (r PDFNewParamsGotoOptionsWaitUntilArrayItem) IsKnown() bool {
 	switch r {
-	case PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad, PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded, PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0, PDFNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2:
+	case PDFNewParamsGotoOptionsWaitUntilArrayItemLoad, PDFNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded, PDFNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0, PDFNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.pdfoptions).
-type PDFNewParamsBodyObjectPDFOptions struct {
+type PDFNewParamsPDFOptions struct {
 	// Whether to show the header and footer.
 	DisplayHeaderFooter param.Field[bool] `json:"displayHeaderFooter"`
 	// HTML template for the print footer.
 	FooterTemplate param.Field[string] `json:"footerTemplate"`
 	// Paper format. Takes priority over width and height if set.
-	Format param.Field[PDFNewParamsBodyObjectPDFOptionsFormat] `json:"format"`
+	Format param.Field[PDFNewParamsPDFOptionsFormat] `json:"format"`
 	// HTML template for the print header.
 	HeaderTemplate param.Field[string] `json:"headerTemplate"`
 	// Sets the height of paper. Can be a number or string with unit.
-	Height param.Field[PDFNewParamsBodyObjectPDFOptionsHeightUnion] `json:"height"`
+	Height param.Field[PDFNewParamsPDFOptionsHeightUnion] `json:"height"`
 	// Whether to print in landscape orientation.
 	Landscape param.Field[bool] `json:"landscape"`
 	// Set the PDF margins. Useful when setting header and footer.
-	Margin param.Field[PDFNewParamsBodyObjectPDFOptionsMargin] `json:"margin"`
+	Margin param.Field[PDFNewParamsPDFOptionsMargin] `json:"margin"`
 	// Hides default white background and allows generating pdfs with transparency.
 	OmitBackground param.Field[bool] `json:"omitBackground"`
 	// Generate document outline.
@@ -391,33 +337,33 @@ type PDFNewParamsBodyObjectPDFOptions struct {
 	// Timeout in milliseconds.
 	Timeout param.Field[float64] `json:"timeout"`
 	// Sets the width of paper. Can be a number or string with unit.
-	Width param.Field[PDFNewParamsBodyObjectPDFOptionsWidthUnion] `json:"width"`
+	Width param.Field[PDFNewParamsPDFOptionsWidthUnion] `json:"width"`
 }
 
-func (r PDFNewParamsBodyObjectPDFOptions) MarshalJSON() (data []byte, err error) {
+func (r PDFNewParamsPDFOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Paper format. Takes priority over width and height if set.
-type PDFNewParamsBodyObjectPDFOptionsFormat string
+type PDFNewParamsPDFOptionsFormat string
 
 const (
-	PDFNewParamsBodyObjectPDFOptionsFormatLetter  PDFNewParamsBodyObjectPDFOptionsFormat = "letter"
-	PDFNewParamsBodyObjectPDFOptionsFormatLegal   PDFNewParamsBodyObjectPDFOptionsFormat = "legal"
-	PDFNewParamsBodyObjectPDFOptionsFormatTabloid PDFNewParamsBodyObjectPDFOptionsFormat = "tabloid"
-	PDFNewParamsBodyObjectPDFOptionsFormatLedger  PDFNewParamsBodyObjectPDFOptionsFormat = "ledger"
-	PDFNewParamsBodyObjectPDFOptionsFormatA0      PDFNewParamsBodyObjectPDFOptionsFormat = "a0"
-	PDFNewParamsBodyObjectPDFOptionsFormatA1      PDFNewParamsBodyObjectPDFOptionsFormat = "a1"
-	PDFNewParamsBodyObjectPDFOptionsFormatA2      PDFNewParamsBodyObjectPDFOptionsFormat = "a2"
-	PDFNewParamsBodyObjectPDFOptionsFormatA3      PDFNewParamsBodyObjectPDFOptionsFormat = "a3"
-	PDFNewParamsBodyObjectPDFOptionsFormatA4      PDFNewParamsBodyObjectPDFOptionsFormat = "a4"
-	PDFNewParamsBodyObjectPDFOptionsFormatA5      PDFNewParamsBodyObjectPDFOptionsFormat = "a5"
-	PDFNewParamsBodyObjectPDFOptionsFormatA6      PDFNewParamsBodyObjectPDFOptionsFormat = "a6"
+	PDFNewParamsPDFOptionsFormatLetter  PDFNewParamsPDFOptionsFormat = "letter"
+	PDFNewParamsPDFOptionsFormatLegal   PDFNewParamsPDFOptionsFormat = "legal"
+	PDFNewParamsPDFOptionsFormatTabloid PDFNewParamsPDFOptionsFormat = "tabloid"
+	PDFNewParamsPDFOptionsFormatLedger  PDFNewParamsPDFOptionsFormat = "ledger"
+	PDFNewParamsPDFOptionsFormatA0      PDFNewParamsPDFOptionsFormat = "a0"
+	PDFNewParamsPDFOptionsFormatA1      PDFNewParamsPDFOptionsFormat = "a1"
+	PDFNewParamsPDFOptionsFormatA2      PDFNewParamsPDFOptionsFormat = "a2"
+	PDFNewParamsPDFOptionsFormatA3      PDFNewParamsPDFOptionsFormat = "a3"
+	PDFNewParamsPDFOptionsFormatA4      PDFNewParamsPDFOptionsFormat = "a4"
+	PDFNewParamsPDFOptionsFormatA5      PDFNewParamsPDFOptionsFormat = "a5"
+	PDFNewParamsPDFOptionsFormatA6      PDFNewParamsPDFOptionsFormat = "a6"
 )
 
-func (r PDFNewParamsBodyObjectPDFOptionsFormat) IsKnown() bool {
+func (r PDFNewParamsPDFOptionsFormat) IsKnown() bool {
 	switch r {
-	case PDFNewParamsBodyObjectPDFOptionsFormatLetter, PDFNewParamsBodyObjectPDFOptionsFormatLegal, PDFNewParamsBodyObjectPDFOptionsFormatTabloid, PDFNewParamsBodyObjectPDFOptionsFormatLedger, PDFNewParamsBodyObjectPDFOptionsFormatA0, PDFNewParamsBodyObjectPDFOptionsFormatA1, PDFNewParamsBodyObjectPDFOptionsFormatA2, PDFNewParamsBodyObjectPDFOptionsFormatA3, PDFNewParamsBodyObjectPDFOptionsFormatA4, PDFNewParamsBodyObjectPDFOptionsFormatA5, PDFNewParamsBodyObjectPDFOptionsFormatA6:
+	case PDFNewParamsPDFOptionsFormatLetter, PDFNewParamsPDFOptionsFormatLegal, PDFNewParamsPDFOptionsFormatTabloid, PDFNewParamsPDFOptionsFormatLedger, PDFNewParamsPDFOptionsFormatA0, PDFNewParamsPDFOptionsFormatA1, PDFNewParamsPDFOptionsFormatA2, PDFNewParamsPDFOptionsFormatA3, PDFNewParamsPDFOptionsFormatA4, PDFNewParamsPDFOptionsFormatA5, PDFNewParamsPDFOptionsFormatA6:
 		return true
 	}
 	return false
@@ -426,82 +372,82 @@ func (r PDFNewParamsBodyObjectPDFOptionsFormat) IsKnown() bool {
 // Sets the height of paper. Can be a number or string with unit.
 //
 // Satisfied by [shared.UnionString], [shared.UnionFloat].
-type PDFNewParamsBodyObjectPDFOptionsHeightUnion interface {
-	ImplementsPDFNewParamsBodyObjectPDFOptionsHeightUnion()
+type PDFNewParamsPDFOptionsHeightUnion interface {
+	ImplementsPDFNewParamsPDFOptionsHeightUnion()
 }
 
 // Set the PDF margins. Useful when setting header and footer.
-type PDFNewParamsBodyObjectPDFOptionsMargin struct {
-	Bottom param.Field[PDFNewParamsBodyObjectPDFOptionsMarginBottomUnion] `json:"bottom"`
-	Left   param.Field[PDFNewParamsBodyObjectPDFOptionsMarginLeftUnion]   `json:"left"`
-	Right  param.Field[PDFNewParamsBodyObjectPDFOptionsMarginRightUnion]  `json:"right"`
-	Top    param.Field[PDFNewParamsBodyObjectPDFOptionsMarginTopUnion]    `json:"top"`
+type PDFNewParamsPDFOptionsMargin struct {
+	Bottom param.Field[PDFNewParamsPDFOptionsMarginBottomUnion] `json:"bottom"`
+	Left   param.Field[PDFNewParamsPDFOptionsMarginLeftUnion]   `json:"left"`
+	Right  param.Field[PDFNewParamsPDFOptionsMarginRightUnion]  `json:"right"`
+	Top    param.Field[PDFNewParamsPDFOptionsMarginTopUnion]    `json:"top"`
 }
 
-func (r PDFNewParamsBodyObjectPDFOptionsMargin) MarshalJSON() (data []byte, err error) {
+func (r PDFNewParamsPDFOptionsMargin) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Satisfied by [shared.UnionString], [shared.UnionFloat].
-type PDFNewParamsBodyObjectPDFOptionsMarginBottomUnion interface {
-	ImplementsPDFNewParamsBodyObjectPDFOptionsMarginBottomUnion()
+type PDFNewParamsPDFOptionsMarginBottomUnion interface {
+	ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()
 }
 
 // Satisfied by [shared.UnionString], [shared.UnionFloat].
-type PDFNewParamsBodyObjectPDFOptionsMarginLeftUnion interface {
-	ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()
+type PDFNewParamsPDFOptionsMarginLeftUnion interface {
+	ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()
 }
 
 // Satisfied by [shared.UnionString], [shared.UnionFloat].
-type PDFNewParamsBodyObjectPDFOptionsMarginRightUnion interface {
-	ImplementsPDFNewParamsBodyObjectPDFOptionsMarginRightUnion()
+type PDFNewParamsPDFOptionsMarginRightUnion interface {
+	ImplementsPDFNewParamsPDFOptionsMarginRightUnion()
 }
 
 // Satisfied by [shared.UnionString], [shared.UnionFloat].
-type PDFNewParamsBodyObjectPDFOptionsMarginTopUnion interface {
-	ImplementsPDFNewParamsBodyObjectPDFOptionsMarginTopUnion()
+type PDFNewParamsPDFOptionsMarginTopUnion interface {
+	ImplementsPDFNewParamsPDFOptionsMarginTopUnion()
 }
 
 // Sets the width of paper. Can be a number or string with unit.
 //
 // Satisfied by [shared.UnionString], [shared.UnionFloat].
-type PDFNewParamsBodyObjectPDFOptionsWidthUnion interface {
-	ImplementsPDFNewParamsBodyObjectPDFOptionsWidthUnion()
+type PDFNewParamsPDFOptionsWidthUnion interface {
+	ImplementsPDFNewParamsPDFOptionsWidthUnion()
 }
 
-type PDFNewParamsBodyObjectRejectResourceType string
+type PDFNewParamsRejectResourceType string
 
 const (
-	PDFNewParamsBodyObjectRejectResourceTypeDocument           PDFNewParamsBodyObjectRejectResourceType = "document"
-	PDFNewParamsBodyObjectRejectResourceTypeStylesheet         PDFNewParamsBodyObjectRejectResourceType = "stylesheet"
-	PDFNewParamsBodyObjectRejectResourceTypeImage              PDFNewParamsBodyObjectRejectResourceType = "image"
-	PDFNewParamsBodyObjectRejectResourceTypeMedia              PDFNewParamsBodyObjectRejectResourceType = "media"
-	PDFNewParamsBodyObjectRejectResourceTypeFont               PDFNewParamsBodyObjectRejectResourceType = "font"
-	PDFNewParamsBodyObjectRejectResourceTypeScript             PDFNewParamsBodyObjectRejectResourceType = "script"
-	PDFNewParamsBodyObjectRejectResourceTypeTexttrack          PDFNewParamsBodyObjectRejectResourceType = "texttrack"
-	PDFNewParamsBodyObjectRejectResourceTypeXHR                PDFNewParamsBodyObjectRejectResourceType = "xhr"
-	PDFNewParamsBodyObjectRejectResourceTypeFetch              PDFNewParamsBodyObjectRejectResourceType = "fetch"
-	PDFNewParamsBodyObjectRejectResourceTypePrefetch           PDFNewParamsBodyObjectRejectResourceType = "prefetch"
-	PDFNewParamsBodyObjectRejectResourceTypeEventsource        PDFNewParamsBodyObjectRejectResourceType = "eventsource"
-	PDFNewParamsBodyObjectRejectResourceTypeWebsocket          PDFNewParamsBodyObjectRejectResourceType = "websocket"
-	PDFNewParamsBodyObjectRejectResourceTypeManifest           PDFNewParamsBodyObjectRejectResourceType = "manifest"
-	PDFNewParamsBodyObjectRejectResourceTypeSignedexchange     PDFNewParamsBodyObjectRejectResourceType = "signedexchange"
-	PDFNewParamsBodyObjectRejectResourceTypePing               PDFNewParamsBodyObjectRejectResourceType = "ping"
-	PDFNewParamsBodyObjectRejectResourceTypeCspviolationreport PDFNewParamsBodyObjectRejectResourceType = "cspviolationreport"
-	PDFNewParamsBodyObjectRejectResourceTypePreflight          PDFNewParamsBodyObjectRejectResourceType = "preflight"
-	PDFNewParamsBodyObjectRejectResourceTypeOther              PDFNewParamsBodyObjectRejectResourceType = "other"
+	PDFNewParamsRejectResourceTypeDocument           PDFNewParamsRejectResourceType = "document"
+	PDFNewParamsRejectResourceTypeStylesheet         PDFNewParamsRejectResourceType = "stylesheet"
+	PDFNewParamsRejectResourceTypeImage              PDFNewParamsRejectResourceType = "image"
+	PDFNewParamsRejectResourceTypeMedia              PDFNewParamsRejectResourceType = "media"
+	PDFNewParamsRejectResourceTypeFont               PDFNewParamsRejectResourceType = "font"
+	PDFNewParamsRejectResourceTypeScript             PDFNewParamsRejectResourceType = "script"
+	PDFNewParamsRejectResourceTypeTexttrack          PDFNewParamsRejectResourceType = "texttrack"
+	PDFNewParamsRejectResourceTypeXHR                PDFNewParamsRejectResourceType = "xhr"
+	PDFNewParamsRejectResourceTypeFetch              PDFNewParamsRejectResourceType = "fetch"
+	PDFNewParamsRejectResourceTypePrefetch           PDFNewParamsRejectResourceType = "prefetch"
+	PDFNewParamsRejectResourceTypeEventsource        PDFNewParamsRejectResourceType = "eventsource"
+	PDFNewParamsRejectResourceTypeWebsocket          PDFNewParamsRejectResourceType = "websocket"
+	PDFNewParamsRejectResourceTypeManifest           PDFNewParamsRejectResourceType = "manifest"
+	PDFNewParamsRejectResourceTypeSignedexchange     PDFNewParamsRejectResourceType = "signedexchange"
+	PDFNewParamsRejectResourceTypePing               PDFNewParamsRejectResourceType = "ping"
+	PDFNewParamsRejectResourceTypeCspviolationreport PDFNewParamsRejectResourceType = "cspviolationreport"
+	PDFNewParamsRejectResourceTypePreflight          PDFNewParamsRejectResourceType = "preflight"
+	PDFNewParamsRejectResourceTypeOther              PDFNewParamsRejectResourceType = "other"
 )
 
-func (r PDFNewParamsBodyObjectRejectResourceType) IsKnown() bool {
+func (r PDFNewParamsRejectResourceType) IsKnown() bool {
 	switch r {
-	case PDFNewParamsBodyObjectRejectResourceTypeDocument, PDFNewParamsBodyObjectRejectResourceTypeStylesheet, PDFNewParamsBodyObjectRejectResourceTypeImage, PDFNewParamsBodyObjectRejectResourceTypeMedia, PDFNewParamsBodyObjectRejectResourceTypeFont, PDFNewParamsBodyObjectRejectResourceTypeScript, PDFNewParamsBodyObjectRejectResourceTypeTexttrack, PDFNewParamsBodyObjectRejectResourceTypeXHR, PDFNewParamsBodyObjectRejectResourceTypeFetch, PDFNewParamsBodyObjectRejectResourceTypePrefetch, PDFNewParamsBodyObjectRejectResourceTypeEventsource, PDFNewParamsBodyObjectRejectResourceTypeWebsocket, PDFNewParamsBodyObjectRejectResourceTypeManifest, PDFNewParamsBodyObjectRejectResourceTypeSignedexchange, PDFNewParamsBodyObjectRejectResourceTypePing, PDFNewParamsBodyObjectRejectResourceTypeCspviolationreport, PDFNewParamsBodyObjectRejectResourceTypePreflight, PDFNewParamsBodyObjectRejectResourceTypeOther:
+	case PDFNewParamsRejectResourceTypeDocument, PDFNewParamsRejectResourceTypeStylesheet, PDFNewParamsRejectResourceTypeImage, PDFNewParamsRejectResourceTypeMedia, PDFNewParamsRejectResourceTypeFont, PDFNewParamsRejectResourceTypeScript, PDFNewParamsRejectResourceTypeTexttrack, PDFNewParamsRejectResourceTypeXHR, PDFNewParamsRejectResourceTypeFetch, PDFNewParamsRejectResourceTypePrefetch, PDFNewParamsRejectResourceTypeEventsource, PDFNewParamsRejectResourceTypeWebsocket, PDFNewParamsRejectResourceTypeManifest, PDFNewParamsRejectResourceTypeSignedexchange, PDFNewParamsRejectResourceTypePing, PDFNewParamsRejectResourceTypeCspviolationreport, PDFNewParamsRejectResourceTypePreflight, PDFNewParamsRejectResourceTypeOther:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-type PDFNewParamsBodyObjectViewport struct {
+type PDFNewParamsViewport struct {
 	Height            param.Field[float64] `json:"height" api:"required"`
 	Width             param.Field[float64] `json:"width" api:"required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
@@ -510,46 +456,46 @@ type PDFNewParamsBodyObjectViewport struct {
 	IsMobile          param.Field[bool]    `json:"isMobile"`
 }
 
-func (r PDFNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err error) {
+func (r PDFNewParamsViewport) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-type PDFNewParamsBodyObjectWaitForSelector struct {
-	Selector param.Field[string]                                       `json:"selector" api:"required"`
-	Hidden   param.Field[PDFNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
-	Timeout  param.Field[float64]                                      `json:"timeout"`
-	Visible  param.Field[PDFNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
+type PDFNewParamsWaitForSelector struct {
+	Selector param.Field[string]                             `json:"selector" api:"required"`
+	Hidden   param.Field[PDFNewParamsWaitForSelectorHidden]  `json:"hidden"`
+	Timeout  param.Field[float64]                            `json:"timeout"`
+	Visible  param.Field[PDFNewParamsWaitForSelectorVisible] `json:"visible"`
 }
 
-func (r PDFNewParamsBodyObjectWaitForSelector) MarshalJSON() (data []byte, err error) {
+func (r PDFNewParamsWaitForSelector) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PDFNewParamsBodyObjectWaitForSelectorHidden bool
+type PDFNewParamsWaitForSelectorHidden bool
 
 const (
-	PDFNewParamsBodyObjectWaitForSelectorHiddenTrue PDFNewParamsBodyObjectWaitForSelectorHidden = true
+	PDFNewParamsWaitForSelectorHiddenTrue PDFNewParamsWaitForSelectorHidden = true
 )
 
-func (r PDFNewParamsBodyObjectWaitForSelectorHidden) IsKnown() bool {
+func (r PDFNewParamsWaitForSelectorHidden) IsKnown() bool {
 	switch r {
-	case PDFNewParamsBodyObjectWaitForSelectorHiddenTrue:
+	case PDFNewParamsWaitForSelectorHiddenTrue:
 		return true
 	}
 	return false
 }
 
-type PDFNewParamsBodyObjectWaitForSelectorVisible bool
+type PDFNewParamsWaitForSelectorVisible bool
 
 const (
-	PDFNewParamsBodyObjectWaitForSelectorVisibleTrue PDFNewParamsBodyObjectWaitForSelectorVisible = true
+	PDFNewParamsWaitForSelectorVisibleTrue PDFNewParamsWaitForSelectorVisible = true
 )
 
-func (r PDFNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
+func (r PDFNewParamsWaitForSelectorVisible) IsKnown() bool {
 	switch r {
-	case PDFNewParamsBodyObjectWaitForSelectorVisibleTrue:
+	case PDFNewParamsWaitForSelectorVisibleTrue:
 		return true
 	}
 	return false

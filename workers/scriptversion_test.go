@@ -54,28 +54,31 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 				}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
-				Exports: cloudflare.F(map[string]workers.ScriptVersionNewParamsMetadataExports{
-					"Admin": {
-						Type: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsTypeWorker),
-						Cache: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsCache{
+				Exports: cloudflare.F(map[string]workers.ScriptVersionNewParamsMetadataExportsUnion{
+					"Admin": workers.ScriptVersionNewParamsMetadataExportsWorkersWorkerExport{
+						Type: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersWorkerExportCache{
 							Enabled: cloudflare.F(true),
 						}),
-						RenamedTo:     cloudflare.F("renamed_to"),
-						State:         cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsStateCreated),
-						Storage:       cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsStorageSqlite),
-						TransferFrom:  cloudflare.F("transfer_from"),
-						TransferredTo: cloudflare.F("transferred_to"),
+						State: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersWorkerExportStateCreated),
 					},
-					"default": {
-						Type: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsTypeWorker),
-						Cache: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsCache{
+					"Counter": workers.ScriptVersionNewParamsMetadataExportsWorkersDurableObjectExport{
+						Storage:   cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersDurableObjectExportStorageSqlite),
+						Type:      cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersDurableObjectExportTypeDurableObject),
+						Container: cloudflare.F("my-container"),
+						State:     cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersDurableObjectExportStateCreated),
+					},
+					"OldCounter": workers.ScriptVersionNewParamsMetadataExportsWorkersDurableObjectRenamedExport{
+						RenamedTo: cloudflare.F("Counter"),
+						State:     cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersDurableObjectRenamedExportStateRenamed),
+						Type:      cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersDurableObjectRenamedExportTypeDurableObject),
+					},
+					"default": workers.ScriptVersionNewParamsMetadataExportsWorkersWorkerExport{
+						Type: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersWorkerExportCache{
 							Enabled: cloudflare.F(false),
 						}),
-						RenamedTo:     cloudflare.F("renamed_to"),
-						State:         cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsStateCreated),
-						Storage:       cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsStorageSqlite),
-						TransferFrom:  cloudflare.F("transfer_from"),
-						TransferredTo: cloudflare.F("transferred_to"),
+						State: cloudflare.F(workers.ScriptVersionNewParamsMetadataExportsWorkersWorkerExportStateCreated),
 					},
 				}),
 				KeepBindings: cloudflare.F([]string{"string"}),

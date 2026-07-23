@@ -355,6 +355,9 @@ func (r threatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCount
 type ThreatEventIndicatorListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Cache strategy. 'from-graph' serves results from the graph-node KV cache when
+	// all requested UUIDs are cached; falls back to normal path on partial/zero hit.
+	Cache param.Field[ThreatEventIndicatorListParamsCache] `query:"cache"`
 	// Filter indicators created on or after this date. Must use ISO 8601 format (e.g.,
 	// '2024-01-15T00:00:00Z').
 	CreatedAfter param.Field[time.Time] `query:"createdAfter" format:"date-time"`
@@ -385,7 +388,7 @@ type ThreatEventIndicatorListParams struct {
 	// for none, -1 for all events.
 	RelatedEventsLimit param.Field[float64] `query:"relatedEventsLimit"`
 	// Structured search as a JSON array of {field, op, value} objects. Searchable
-	// fields: value, indicatorType. Supports operators: equals, not, contains,
+	// fields: value, indicatorType, uuid. Supports operators: equals, not, contains,
 	// startsWith, endsWith, gt, lt, gte, lte, like, in, find. Use the 'in' operator
 	// with an array value to bulk-check up to 100 indicators in a single request, e.g.
 	// search=[{"field":"value","op":"in","value":["evil.com","bad.org"]}]. Multiple
@@ -427,6 +430,22 @@ func (r ThreatEventIndicatorListParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Cache strategy. 'from-graph' serves results from the graph-node KV cache when
+// all requested UUIDs are cached; falls back to normal path on partial/zero hit.
+type ThreatEventIndicatorListParamsCache string
+
+const (
+	ThreatEventIndicatorListParamsCacheFromGraph ThreatEventIndicatorListParamsCache = "from-graph"
+)
+
+func (r ThreatEventIndicatorListParamsCache) IsKnown() bool {
+	switch r {
+	case ThreatEventIndicatorListParamsCacheFromGraph:
+		return true
+	}
+	return false
+}
+
 // Output format for indicator data. 'json' returns the default format, 'stix2'
 // returns STIX 2.1 Indicator SDOs, 'taxii' returns a TAXII 2.1 Envelope with
 // Content-Type application/taxii+json;version=2.1.
@@ -447,7 +466,7 @@ func (r ThreatEventIndicatorListParamsFormat) IsKnown() bool {
 }
 
 type ThreatEventIndicatorListParamsSearch struct {
-	// The indicator field to search on. Allowed: value, indicatorType.
+	// The indicator field to search on. Allowed: value, indicatorType, uuid.
 	Field param.Field[ThreatEventIndicatorListParamsSearchField] `query:"field" api:"required"`
 	// Search operator. Use 'in' for bulk lookup of up to 100 values at once, e.g.
 	// {field:'value', op:'in', value:['evil.com','bad.org']}.
@@ -466,17 +485,18 @@ func (r ThreatEventIndicatorListParamsSearch) URLQuery() (v url.Values) {
 	})
 }
 
-// The indicator field to search on. Allowed: value, indicatorType.
+// The indicator field to search on. Allowed: value, indicatorType, uuid.
 type ThreatEventIndicatorListParamsSearchField string
 
 const (
 	ThreatEventIndicatorListParamsSearchFieldValue         ThreatEventIndicatorListParamsSearchField = "value"
 	ThreatEventIndicatorListParamsSearchFieldIndicatorType ThreatEventIndicatorListParamsSearchField = "indicatorType"
+	ThreatEventIndicatorListParamsSearchFieldUUID          ThreatEventIndicatorListParamsSearchField = "uuid"
 )
 
 func (r ThreatEventIndicatorListParamsSearchField) IsKnown() bool {
 	switch r {
-	case ThreatEventIndicatorListParamsSearchFieldValue, ThreatEventIndicatorListParamsSearchFieldIndicatorType:
+	case ThreatEventIndicatorListParamsSearchFieldValue, ThreatEventIndicatorListParamsSearchFieldIndicatorType, ThreatEventIndicatorListParamsSearchFieldUUID:
 		return true
 	}
 	return false

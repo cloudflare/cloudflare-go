@@ -50,28 +50,31 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 				}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
-				Exports: cloudflare.F(map[string]workers.ScriptScriptAndVersionSettingEditParamsSettingsExports{
-					"Admin": {
-						Type: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsTypeWorker),
-						Cache: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsCache{
+				Exports: cloudflare.F(map[string]workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsUnion{
+					"Admin": workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersWorkerExport{
+						Type: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersWorkerExportCache{
 							Enabled: cloudflare.F(true),
 						}),
-						RenamedTo:     cloudflare.F("renamed_to"),
-						State:         cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsStateCreated),
-						Storage:       cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsStorageSqlite),
-						TransferFrom:  cloudflare.F("transfer_from"),
-						TransferredTo: cloudflare.F("transferred_to"),
+						State: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersWorkerExportStateCreated),
 					},
-					"default": {
-						Type: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsTypeWorker),
-						Cache: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsCache{
+					"Counter": workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersDurableObjectExport{
+						Storage:   cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersDurableObjectExportStorageSqlite),
+						Type:      cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersDurableObjectExportTypeDurableObject),
+						Container: cloudflare.F("my-container"),
+						State:     cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersDurableObjectExportStateCreated),
+					},
+					"OldCounter": workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExport{
+						RenamedTo: cloudflare.F("Counter"),
+						State:     cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportStateRenamed),
+						Type:      cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportTypeDurableObject),
+					},
+					"default": workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersWorkerExport{
+						Type: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersWorkerExportCache{
 							Enabled: cloudflare.F(false),
 						}),
-						RenamedTo:     cloudflare.F("renamed_to"),
-						State:         cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsStateCreated),
-						Storage:       cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsStorageSqlite),
-						TransferFrom:  cloudflare.F("transfer_from"),
-						TransferredTo: cloudflare.F("transferred_to"),
+						State: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsExportsWorkersWorkerExportStateCreated),
 					},
 				}),
 				Limits: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsLimits{

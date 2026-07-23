@@ -32,6 +32,7 @@ func TestThreatEventIndicatorListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Indicators.List(context.TODO(), cloudforce_one.ThreatEventIndicatorListParams{
 		AccountID:          cloudflare.F("account_id"),
+		Cache:              cloudflare.F(cloudforce_one.ThreatEventIndicatorListParamsCacheFromGraph),
 		CreatedAfter:       cloudflare.F(time.Now()),
 		CreatedBefore:      cloudflare.F(time.Now()),
 		DatasetIDs:         cloudflare.F([]string{"string"}),

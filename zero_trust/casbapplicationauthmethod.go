@@ -120,21 +120,24 @@ type CasbApplicationAuthMethodListParams struct {
 type CasbApplicationAuthMethodListParamsApplicationID string
 
 const (
-	CasbApplicationAuthMethodListParamsApplicationIDBitbucket         CasbApplicationAuthMethodListParamsApplicationID = "BITBUCKET"
-	CasbApplicationAuthMethodListParamsApplicationIDBox               CasbApplicationAuthMethodListParamsApplicationID = "BOX"
-	CasbApplicationAuthMethodListParamsApplicationIDConfluence        CasbApplicationAuthMethodListParamsApplicationID = "CONFLUENCE"
-	CasbApplicationAuthMethodListParamsApplicationIDDropbox           CasbApplicationAuthMethodListParamsApplicationID = "DROPBOX"
-	CasbApplicationAuthMethodListParamsApplicationIDGitHub            CasbApplicationAuthMethodListParamsApplicationID = "GITHUB"
-	CasbApplicationAuthMethodListParamsApplicationIDGoogleWorkspace   CasbApplicationAuthMethodListParamsApplicationID = "GOOGLE_WORKSPACE"
-	CasbApplicationAuthMethodListParamsApplicationIDJira              CasbApplicationAuthMethodListParamsApplicationID = "JIRA"
-	CasbApplicationAuthMethodListParamsApplicationIDMicrosoftInternal CasbApplicationAuthMethodListParamsApplicationID = "MICROSOFT_INTERNAL"
-	CasbApplicationAuthMethodListParamsApplicationIDSalesforce        CasbApplicationAuthMethodListParamsApplicationID = "SALESFORCE"
-	CasbApplicationAuthMethodListParamsApplicationIDSlack             CasbApplicationAuthMethodListParamsApplicationID = "SLACK"
+	CasbApplicationAuthMethodListParamsApplicationIDAnthropic           CasbApplicationAuthMethodListParamsApplicationID = "ANTHROPIC"
+	CasbApplicationAuthMethodListParamsApplicationIDBitbucket           CasbApplicationAuthMethodListParamsApplicationID = "BITBUCKET"
+	CasbApplicationAuthMethodListParamsApplicationIDBox                 CasbApplicationAuthMethodListParamsApplicationID = "BOX"
+	CasbApplicationAuthMethodListParamsApplicationIDConfluence          CasbApplicationAuthMethodListParamsApplicationID = "CONFLUENCE"
+	CasbApplicationAuthMethodListParamsApplicationIDDropbox             CasbApplicationAuthMethodListParamsApplicationID = "DROPBOX"
+	CasbApplicationAuthMethodListParamsApplicationIDGitHub              CasbApplicationAuthMethodListParamsApplicationID = "GITHUB"
+	CasbApplicationAuthMethodListParamsApplicationIDGoogleCloudPlatform CasbApplicationAuthMethodListParamsApplicationID = "GOOGLE_CLOUD_PLATFORM"
+	CasbApplicationAuthMethodListParamsApplicationIDGoogleWorkspace     CasbApplicationAuthMethodListParamsApplicationID = "GOOGLE_WORKSPACE"
+	CasbApplicationAuthMethodListParamsApplicationIDJira                CasbApplicationAuthMethodListParamsApplicationID = "JIRA"
+	CasbApplicationAuthMethodListParamsApplicationIDMicrosoftInternal   CasbApplicationAuthMethodListParamsApplicationID = "MICROSOFT_INTERNAL"
+	CasbApplicationAuthMethodListParamsApplicationIDOpenAI              CasbApplicationAuthMethodListParamsApplicationID = "OPENAI"
+	CasbApplicationAuthMethodListParamsApplicationIDSalesforce          CasbApplicationAuthMethodListParamsApplicationID = "SALESFORCE"
+	CasbApplicationAuthMethodListParamsApplicationIDSlack               CasbApplicationAuthMethodListParamsApplicationID = "SLACK"
 )
 
 func (r CasbApplicationAuthMethodListParamsApplicationID) IsKnown() bool {
 	switch r {
-	case CasbApplicationAuthMethodListParamsApplicationIDBitbucket, CasbApplicationAuthMethodListParamsApplicationIDBox, CasbApplicationAuthMethodListParamsApplicationIDConfluence, CasbApplicationAuthMethodListParamsApplicationIDDropbox, CasbApplicationAuthMethodListParamsApplicationIDGitHub, CasbApplicationAuthMethodListParamsApplicationIDGoogleWorkspace, CasbApplicationAuthMethodListParamsApplicationIDJira, CasbApplicationAuthMethodListParamsApplicationIDMicrosoftInternal, CasbApplicationAuthMethodListParamsApplicationIDSalesforce, CasbApplicationAuthMethodListParamsApplicationIDSlack:
+	case CasbApplicationAuthMethodListParamsApplicationIDAnthropic, CasbApplicationAuthMethodListParamsApplicationIDBitbucket, CasbApplicationAuthMethodListParamsApplicationIDBox, CasbApplicationAuthMethodListParamsApplicationIDConfluence, CasbApplicationAuthMethodListParamsApplicationIDDropbox, CasbApplicationAuthMethodListParamsApplicationIDGitHub, CasbApplicationAuthMethodListParamsApplicationIDGoogleCloudPlatform, CasbApplicationAuthMethodListParamsApplicationIDGoogleWorkspace, CasbApplicationAuthMethodListParamsApplicationIDJira, CasbApplicationAuthMethodListParamsApplicationIDMicrosoftInternal, CasbApplicationAuthMethodListParamsApplicationIDOpenAI, CasbApplicationAuthMethodListParamsApplicationIDSalesforce, CasbApplicationAuthMethodListParamsApplicationIDSlack:
 		return true
 	}
 	return false

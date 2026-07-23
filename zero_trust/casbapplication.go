@@ -67,14 +67,17 @@ func (r *CasbApplicationService) Get(ctx context.Context, applicationID CasbAppl
 type CasbApplicationListResponse struct {
 	// Vendor identifier (e.g. microsoft_internal, google_workspace).
 	//
+	// - `ANTHROPIC` - ANTHROPIC
 	// - `BITBUCKET` - BITBUCKET
 	// - `BOX` - BOX
 	// - `CONFLUENCE` - CONFLUENCE
 	// - `DROPBOX` - DROPBOX
 	// - `GITHUB` - GITHUB
+	// - `GOOGLE_CLOUD_PLATFORM` - GOOGLE_CLOUD_PLATFORM
 	// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
 	// - `JIRA` - JIRA
 	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
+	// - `OPENAI` - OPENAI
 	// - `SALESFORCE` - SALESFORCE
 	// - `SLACK` - SLACK
 	ID CasbApplicationListResponseID `json:"id" api:"required"`
@@ -126,34 +129,40 @@ func (r casbApplicationListResponseJSON) RawJSON() string {
 
 // Vendor identifier (e.g. microsoft_internal, google_workspace).
 //
+// - `ANTHROPIC` - ANTHROPIC
 // - `BITBUCKET` - BITBUCKET
 // - `BOX` - BOX
 // - `CONFLUENCE` - CONFLUENCE
 // - `DROPBOX` - DROPBOX
 // - `GITHUB` - GITHUB
+// - `GOOGLE_CLOUD_PLATFORM` - GOOGLE_CLOUD_PLATFORM
 // - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
 // - `JIRA` - JIRA
 // - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
+// - `OPENAI` - OPENAI
 // - `SALESFORCE` - SALESFORCE
 // - `SLACK` - SLACK
 type CasbApplicationListResponseID string
 
 const (
-	CasbApplicationListResponseIDBitbucket         CasbApplicationListResponseID = "BITBUCKET"
-	CasbApplicationListResponseIDBox               CasbApplicationListResponseID = "BOX"
-	CasbApplicationListResponseIDConfluence        CasbApplicationListResponseID = "CONFLUENCE"
-	CasbApplicationListResponseIDDropbox           CasbApplicationListResponseID = "DROPBOX"
-	CasbApplicationListResponseIDGitHub            CasbApplicationListResponseID = "GITHUB"
-	CasbApplicationListResponseIDGoogleWorkspace   CasbApplicationListResponseID = "GOOGLE_WORKSPACE"
-	CasbApplicationListResponseIDJira              CasbApplicationListResponseID = "JIRA"
-	CasbApplicationListResponseIDMicrosoftInternal CasbApplicationListResponseID = "MICROSOFT_INTERNAL"
-	CasbApplicationListResponseIDSalesforce        CasbApplicationListResponseID = "SALESFORCE"
-	CasbApplicationListResponseIDSlack             CasbApplicationListResponseID = "SLACK"
+	CasbApplicationListResponseIDAnthropic           CasbApplicationListResponseID = "ANTHROPIC"
+	CasbApplicationListResponseIDBitbucket           CasbApplicationListResponseID = "BITBUCKET"
+	CasbApplicationListResponseIDBox                 CasbApplicationListResponseID = "BOX"
+	CasbApplicationListResponseIDConfluence          CasbApplicationListResponseID = "CONFLUENCE"
+	CasbApplicationListResponseIDDropbox             CasbApplicationListResponseID = "DROPBOX"
+	CasbApplicationListResponseIDGitHub              CasbApplicationListResponseID = "GITHUB"
+	CasbApplicationListResponseIDGoogleCloudPlatform CasbApplicationListResponseID = "GOOGLE_CLOUD_PLATFORM"
+	CasbApplicationListResponseIDGoogleWorkspace     CasbApplicationListResponseID = "GOOGLE_WORKSPACE"
+	CasbApplicationListResponseIDJira                CasbApplicationListResponseID = "JIRA"
+	CasbApplicationListResponseIDMicrosoftInternal   CasbApplicationListResponseID = "MICROSOFT_INTERNAL"
+	CasbApplicationListResponseIDOpenAI              CasbApplicationListResponseID = "OPENAI"
+	CasbApplicationListResponseIDSalesforce          CasbApplicationListResponseID = "SALESFORCE"
+	CasbApplicationListResponseIDSlack               CasbApplicationListResponseID = "SLACK"
 )
 
 func (r CasbApplicationListResponseID) IsKnown() bool {
 	switch r {
-	case CasbApplicationListResponseIDBitbucket, CasbApplicationListResponseIDBox, CasbApplicationListResponseIDConfluence, CasbApplicationListResponseIDDropbox, CasbApplicationListResponseIDGitHub, CasbApplicationListResponseIDGoogleWorkspace, CasbApplicationListResponseIDJira, CasbApplicationListResponseIDMicrosoftInternal, CasbApplicationListResponseIDSalesforce, CasbApplicationListResponseIDSlack:
+	case CasbApplicationListResponseIDAnthropic, CasbApplicationListResponseIDBitbucket, CasbApplicationListResponseIDBox, CasbApplicationListResponseIDConfluence, CasbApplicationListResponseIDDropbox, CasbApplicationListResponseIDGitHub, CasbApplicationListResponseIDGoogleCloudPlatform, CasbApplicationListResponseIDGoogleWorkspace, CasbApplicationListResponseIDJira, CasbApplicationListResponseIDMicrosoftInternal, CasbApplicationListResponseIDOpenAI, CasbApplicationListResponseIDSalesforce, CasbApplicationListResponseIDSlack:
 		return true
 	}
 	return false
@@ -272,14 +281,17 @@ func (r casbApplicationListResponseUseCaseJSON) RawJSON() string {
 type CasbApplicationGetResponse struct {
 	// Vendor identifier.
 	//
+	// - `ANTHROPIC` - ANTHROPIC
 	// - `BITBUCKET` - BITBUCKET
 	// - `BOX` - BOX
 	// - `CONFLUENCE` - CONFLUENCE
 	// - `DROPBOX` - DROPBOX
 	// - `GITHUB` - GITHUB
+	// - `GOOGLE_CLOUD_PLATFORM` - GOOGLE_CLOUD_PLATFORM
 	// - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
 	// - `JIRA` - JIRA
 	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
+	// - `OPENAI` - OPENAI
 	// - `SALESFORCE` - SALESFORCE
 	// - `SLACK` - SLACK
 	ID CasbApplicationGetResponseID `json:"id" api:"required"`
@@ -328,34 +340,40 @@ func (r casbApplicationGetResponseJSON) RawJSON() string {
 
 // Vendor identifier.
 //
+// - `ANTHROPIC` - ANTHROPIC
 // - `BITBUCKET` - BITBUCKET
 // - `BOX` - BOX
 // - `CONFLUENCE` - CONFLUENCE
 // - `DROPBOX` - DROPBOX
 // - `GITHUB` - GITHUB
+// - `GOOGLE_CLOUD_PLATFORM` - GOOGLE_CLOUD_PLATFORM
 // - `GOOGLE_WORKSPACE` - GOOGLE_WORKSPACE
 // - `JIRA` - JIRA
 // - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
+// - `OPENAI` - OPENAI
 // - `SALESFORCE` - SALESFORCE
 // - `SLACK` - SLACK
 type CasbApplicationGetResponseID string
 
 const (
-	CasbApplicationGetResponseIDBitbucket         CasbApplicationGetResponseID = "BITBUCKET"
-	CasbApplicationGetResponseIDBox               CasbApplicationGetResponseID = "BOX"
-	CasbApplicationGetResponseIDConfluence        CasbApplicationGetResponseID = "CONFLUENCE"
-	CasbApplicationGetResponseIDDropbox           CasbApplicationGetResponseID = "DROPBOX"
-	CasbApplicationGetResponseIDGitHub            CasbApplicationGetResponseID = "GITHUB"
-	CasbApplicationGetResponseIDGoogleWorkspace   CasbApplicationGetResponseID = "GOOGLE_WORKSPACE"
-	CasbApplicationGetResponseIDJira              CasbApplicationGetResponseID = "JIRA"
-	CasbApplicationGetResponseIDMicrosoftInternal CasbApplicationGetResponseID = "MICROSOFT_INTERNAL"
-	CasbApplicationGetResponseIDSalesforce        CasbApplicationGetResponseID = "SALESFORCE"
-	CasbApplicationGetResponseIDSlack             CasbApplicationGetResponseID = "SLACK"
+	CasbApplicationGetResponseIDAnthropic           CasbApplicationGetResponseID = "ANTHROPIC"
+	CasbApplicationGetResponseIDBitbucket           CasbApplicationGetResponseID = "BITBUCKET"
+	CasbApplicationGetResponseIDBox                 CasbApplicationGetResponseID = "BOX"
+	CasbApplicationGetResponseIDConfluence          CasbApplicationGetResponseID = "CONFLUENCE"
+	CasbApplicationGetResponseIDDropbox             CasbApplicationGetResponseID = "DROPBOX"
+	CasbApplicationGetResponseIDGitHub              CasbApplicationGetResponseID = "GITHUB"
+	CasbApplicationGetResponseIDGoogleCloudPlatform CasbApplicationGetResponseID = "GOOGLE_CLOUD_PLATFORM"
+	CasbApplicationGetResponseIDGoogleWorkspace     CasbApplicationGetResponseID = "GOOGLE_WORKSPACE"
+	CasbApplicationGetResponseIDJira                CasbApplicationGetResponseID = "JIRA"
+	CasbApplicationGetResponseIDMicrosoftInternal   CasbApplicationGetResponseID = "MICROSOFT_INTERNAL"
+	CasbApplicationGetResponseIDOpenAI              CasbApplicationGetResponseID = "OPENAI"
+	CasbApplicationGetResponseIDSalesforce          CasbApplicationGetResponseID = "SALESFORCE"
+	CasbApplicationGetResponseIDSlack               CasbApplicationGetResponseID = "SLACK"
 )
 
 func (r CasbApplicationGetResponseID) IsKnown() bool {
 	switch r {
-	case CasbApplicationGetResponseIDBitbucket, CasbApplicationGetResponseIDBox, CasbApplicationGetResponseIDConfluence, CasbApplicationGetResponseIDDropbox, CasbApplicationGetResponseIDGitHub, CasbApplicationGetResponseIDGoogleWorkspace, CasbApplicationGetResponseIDJira, CasbApplicationGetResponseIDMicrosoftInternal, CasbApplicationGetResponseIDSalesforce, CasbApplicationGetResponseIDSlack:
+	case CasbApplicationGetResponseIDAnthropic, CasbApplicationGetResponseIDBitbucket, CasbApplicationGetResponseIDBox, CasbApplicationGetResponseIDConfluence, CasbApplicationGetResponseIDDropbox, CasbApplicationGetResponseIDGitHub, CasbApplicationGetResponseIDGoogleCloudPlatform, CasbApplicationGetResponseIDGoogleWorkspace, CasbApplicationGetResponseIDJira, CasbApplicationGetResponseIDMicrosoftInternal, CasbApplicationGetResponseIDOpenAI, CasbApplicationGetResponseIDSalesforce, CasbApplicationGetResponseIDSlack:
 		return true
 	}
 	return false
@@ -596,21 +614,24 @@ type CasbApplicationGetParams struct {
 type CasbApplicationGetParamsApplicationID string
 
 const (
-	CasbApplicationGetParamsApplicationIDBitbucket         CasbApplicationGetParamsApplicationID = "BITBUCKET"
-	CasbApplicationGetParamsApplicationIDBox               CasbApplicationGetParamsApplicationID = "BOX"
-	CasbApplicationGetParamsApplicationIDConfluence        CasbApplicationGetParamsApplicationID = "CONFLUENCE"
-	CasbApplicationGetParamsApplicationIDDropbox           CasbApplicationGetParamsApplicationID = "DROPBOX"
-	CasbApplicationGetParamsApplicationIDGitHub            CasbApplicationGetParamsApplicationID = "GITHUB"
-	CasbApplicationGetParamsApplicationIDGoogleWorkspace   CasbApplicationGetParamsApplicationID = "GOOGLE_WORKSPACE"
-	CasbApplicationGetParamsApplicationIDJira              CasbApplicationGetParamsApplicationID = "JIRA"
-	CasbApplicationGetParamsApplicationIDMicrosoftInternal CasbApplicationGetParamsApplicationID = "MICROSOFT_INTERNAL"
-	CasbApplicationGetParamsApplicationIDSalesforce        CasbApplicationGetParamsApplicationID = "SALESFORCE"
-	CasbApplicationGetParamsApplicationIDSlack             CasbApplicationGetParamsApplicationID = "SLACK"
+	CasbApplicationGetParamsApplicationIDAnthropic           CasbApplicationGetParamsApplicationID = "ANTHROPIC"
+	CasbApplicationGetParamsApplicationIDBitbucket           CasbApplicationGetParamsApplicationID = "BITBUCKET"
+	CasbApplicationGetParamsApplicationIDBox                 CasbApplicationGetParamsApplicationID = "BOX"
+	CasbApplicationGetParamsApplicationIDConfluence          CasbApplicationGetParamsApplicationID = "CONFLUENCE"
+	CasbApplicationGetParamsApplicationIDDropbox             CasbApplicationGetParamsApplicationID = "DROPBOX"
+	CasbApplicationGetParamsApplicationIDGitHub              CasbApplicationGetParamsApplicationID = "GITHUB"
+	CasbApplicationGetParamsApplicationIDGoogleCloudPlatform CasbApplicationGetParamsApplicationID = "GOOGLE_CLOUD_PLATFORM"
+	CasbApplicationGetParamsApplicationIDGoogleWorkspace     CasbApplicationGetParamsApplicationID = "GOOGLE_WORKSPACE"
+	CasbApplicationGetParamsApplicationIDJira                CasbApplicationGetParamsApplicationID = "JIRA"
+	CasbApplicationGetParamsApplicationIDMicrosoftInternal   CasbApplicationGetParamsApplicationID = "MICROSOFT_INTERNAL"
+	CasbApplicationGetParamsApplicationIDOpenAI              CasbApplicationGetParamsApplicationID = "OPENAI"
+	CasbApplicationGetParamsApplicationIDSalesforce          CasbApplicationGetParamsApplicationID = "SALESFORCE"
+	CasbApplicationGetParamsApplicationIDSlack               CasbApplicationGetParamsApplicationID = "SLACK"
 )
 
 func (r CasbApplicationGetParamsApplicationID) IsKnown() bool {
 	switch r {
-	case CasbApplicationGetParamsApplicationIDBitbucket, CasbApplicationGetParamsApplicationIDBox, CasbApplicationGetParamsApplicationIDConfluence, CasbApplicationGetParamsApplicationIDDropbox, CasbApplicationGetParamsApplicationIDGitHub, CasbApplicationGetParamsApplicationIDGoogleWorkspace, CasbApplicationGetParamsApplicationIDJira, CasbApplicationGetParamsApplicationIDMicrosoftInternal, CasbApplicationGetParamsApplicationIDSalesforce, CasbApplicationGetParamsApplicationIDSlack:
+	case CasbApplicationGetParamsApplicationIDAnthropic, CasbApplicationGetParamsApplicationIDBitbucket, CasbApplicationGetParamsApplicationIDBox, CasbApplicationGetParamsApplicationIDConfluence, CasbApplicationGetParamsApplicationIDDropbox, CasbApplicationGetParamsApplicationIDGitHub, CasbApplicationGetParamsApplicationIDGoogleCloudPlatform, CasbApplicationGetParamsApplicationIDGoogleWorkspace, CasbApplicationGetParamsApplicationIDJira, CasbApplicationGetParamsApplicationIDMicrosoftInternal, CasbApplicationGetParamsApplicationIDOpenAI, CasbApplicationGetParamsApplicationIDSalesforce, CasbApplicationGetParamsApplicationIDSlack:
 		return true
 	}
 	return false

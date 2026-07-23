@@ -94,6 +94,7 @@ func TestThreatEventTagListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Tags.List(context.TODO(), cloudforce_one.ThreatEventTagListParams{
 		AccountID:    cloudflare.F("account_id"),
+		Cache:        cloudflare.F(cloudforce_one.ThreatEventTagListParamsCacheFromGraph),
 		CategoryUUID: cloudflare.F("categoryUuid"),
 		Filters: cloudflare.F([]cloudforce_one.ThreatEventTagListParamsFilter{{
 			Field: cloudflare.F(cloudforce_one.ThreatEventTagListParamsFiltersFieldOriginCountryISO),

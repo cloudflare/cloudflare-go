@@ -85,6 +85,7 @@ func TestThreatEventListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.List(context.TODO(), cloudforce_one.ThreatEventListParams{
 		AccountID:    cloudflare.F("account_id"),
+		Cache:        cloudflare.F(cloudforce_one.ThreatEventListParamsCacheFromGraph),
 		Cursor:       cloudflare.F("eyJ2ZXJzaW9uIjoxLCJwb3NpdGlvbiI6eyJkYXRlIjoiMjAyNC0wMS0xMlQxMDowMDowMFoiLCJ1dWlkIjoiYWJjMTIzIn19"),
 		DatasetID:    cloudflare.F([]string{"string"}),
 		ForceRefresh: cloudflare.F(true),
