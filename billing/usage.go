@@ -185,6 +185,9 @@ type UsageGetResponse struct {
 	// The unique identifier for the billable metric in the Cloudflare catalog.
 	// Cloudflare extension; replaces FOCUS SkuId.
 	XBillableMetricID string `json:"x_BillableMetricId"`
+	// The product category the charge belongs to (e.g., "Developer", "Cloudflare
+	// One"). Cloudflare extension; replaces FOCUS ServiceCategory.
+	XProductCategoryName string `json:"x_ProductCategoryName"`
 	// The product family the charge belongs to (e.g., "R2", "Workers"). Cloudflare
 	// extension; replaces FOCUS ServiceName.
 	XProductFamilyName string `json:"x_ProductFamilyName"`
@@ -198,41 +201,42 @@ type UsageGetResponse struct {
 // usageGetResponseJSON contains the JSON metadata for the struct
 // [UsageGetResponse]
 type usageGetResponseJSON struct {
-	BillingAccountID    apijson.Field
-	BillingAccountName  apijson.Field
-	ChargeCategory      apijson.Field
-	ChargeDescription   apijson.Field
-	ChargeFrequency     apijson.Field
-	ChargePeriodEnd     apijson.Field
-	ChargePeriodStart   apijson.Field
-	ConsumedQuantity    apijson.Field
-	ConsumedUnit        apijson.Field
-	HostProviderName    apijson.Field
-	InvoiceIssuerName   apijson.Field
-	ServiceProviderName apijson.Field
-	XBillableMetricName apijson.Field
-	BilledCost          apijson.Field
-	BillingCurrency     apijson.Field
-	BillingPeriodEnd    apijson.Field
-	BillingPeriodStart  apijson.Field
-	ChargeClass         apijson.Field
-	ContractedCost      apijson.Field
-	ContractedUnitPrice apijson.Field
-	EffectiveCost       apijson.Field
-	ListCost            apijson.Field
-	ListUnitPrice       apijson.Field
-	PricingQuantity     apijson.Field
-	PricingUnit         apijson.Field
-	RegionID            apijson.Field
-	RegionName          apijson.Field
-	SubAccountID        apijson.Field
-	SubAccountName      apijson.Field
-	XBillableMetricID   apijson.Field
-	XProductFamilyName  apijson.Field
-	XZoneID             apijson.Field
-	XZoneName           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+	BillingAccountID     apijson.Field
+	BillingAccountName   apijson.Field
+	ChargeCategory       apijson.Field
+	ChargeDescription    apijson.Field
+	ChargeFrequency      apijson.Field
+	ChargePeriodEnd      apijson.Field
+	ChargePeriodStart    apijson.Field
+	ConsumedQuantity     apijson.Field
+	ConsumedUnit         apijson.Field
+	HostProviderName     apijson.Field
+	InvoiceIssuerName    apijson.Field
+	ServiceProviderName  apijson.Field
+	XBillableMetricName  apijson.Field
+	BilledCost           apijson.Field
+	BillingCurrency      apijson.Field
+	BillingPeriodEnd     apijson.Field
+	BillingPeriodStart   apijson.Field
+	ChargeClass          apijson.Field
+	ContractedCost       apijson.Field
+	ContractedUnitPrice  apijson.Field
+	EffectiveCost        apijson.Field
+	ListCost             apijson.Field
+	ListUnitPrice        apijson.Field
+	PricingQuantity      apijson.Field
+	PricingUnit          apijson.Field
+	RegionID             apijson.Field
+	RegionName           apijson.Field
+	SubAccountID         apijson.Field
+	SubAccountName       apijson.Field
+	XBillableMetricID    apijson.Field
+	XProductCategoryName apijson.Field
+	XProductFamilyName   apijson.Field
+	XZoneID              apijson.Field
+	XZoneName            apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *UsageGetResponse) UnmarshalJSON(data []byte) (err error) {

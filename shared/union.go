@@ -290,6 +290,8 @@ func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterVariationsUn
 func (UnionString) ImplementsAppFlagChangelogListResponseObjectDiffFromUnion()                     {}
 func (UnionString) ImplementsAppFlagChangelogListResponseObjectDiffToUnion()                       {}
 func (UnionString) ImplementsAppEvaluateGetResponseValueUnion()                                    {}
+func (UnionString) ImplementsWorkflowUpdateParamsDefaultRetentionErrorRetentionUnion()             {}
+func (UnionString) ImplementsWorkflowUpdateParamsDefaultRetentionSuccessRetentionUnion()           {}
 func (UnionString) ImplementsInstanceGetResponseOutputUnion()                                      {}
 func (UnionString) ImplementsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()               {}
 func (UnionString) ImplementsInstanceGetResponseStepsObjectConfigTimeoutUnion()                    {}
@@ -544,6 +546,8 @@ func (UnionInt) ImplementsPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion(
 func (UnionInt) ImplementsPageRuleEditParamsActionsCacheTTLByStatusValueUnion()          {}
 func (UnionInt) ImplementsOriginPortUnionParam()                                         {}
 func (UnionInt) ImplementsOriginPortUnion()                                              {}
+func (UnionInt) ImplementsWorkflowUpdateParamsDefaultRetentionErrorRetentionUnion()      {}
+func (UnionInt) ImplementsWorkflowUpdateParamsDefaultRetentionSuccessRetentionUnion()    {}
 func (UnionInt) ImplementsInstanceNewParamsInstanceRetentionErrorRetentionUnion()        {}
 func (UnionInt) ImplementsInstanceNewParamsInstanceRetentionSuccessRetentionUnion()      {}
 func (UnionInt) ImplementsInstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion()   {}

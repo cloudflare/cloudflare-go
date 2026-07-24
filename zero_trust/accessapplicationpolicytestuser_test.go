@@ -34,7 +34,7 @@ func TestAccessApplicationPolicyTestUserListWithOptionalParams(t *testing.T) {
 		zero_trust.AccessApplicationPolicyTestUserListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Page:      cloudflare.F(int64(0)),
-			PerPage:   cloudflare.F(int64(0)),
+			PerPage:   cloudflare.F(int64(1000)),
 			Status:    cloudflare.F(zero_trust.AccessApplicationPolicyTestUserListParamsStatusSuccess),
 		},
 	)

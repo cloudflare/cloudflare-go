@@ -92,7 +92,8 @@ func (r *SettingDomainService) Delete(ctx context.Context, domainID string, body
 	return res, nil
 }
 
-// Deprecated. Use the batch endpoint instead.
+// Removes protection from multiple email domains. Deprecated; use the batch
+// endpoint instead.
 //
 // Deprecated: deprecated
 func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingDomainBulkDeleteResponse], err error) {
@@ -116,7 +117,8 @@ func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomai
 	return res, nil
 }
 
-// Deprecated. Use the batch endpoint instead.
+// Removes protection from multiple email domains. Deprecated; use the batch
+// endpoint instead.
 //
 // Deprecated: deprecated
 func (r *SettingDomainService) BulkDeleteAutoPaging(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingDomainBulkDeleteResponse] {
@@ -169,7 +171,7 @@ func (r *SettingDomainService) Get(ctx context.Context, domainID string, query S
 }
 
 type SettingDomainListResponse struct {
-	// Domain identifier
+	// Domain identifier.
 	ID                   string                                         `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainListResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
 	Authorization        SettingDomainListResponseAuthorization         `json:"authorization"`
@@ -426,7 +428,7 @@ func (r SettingDomainListResponseStatus) IsKnown() bool {
 }
 
 type SettingDomainDeleteResponse struct {
-	// Domain identifier
+	// Domain identifier.
 	ID   string                          `json:"id" api:"required" format:"uuid"`
 	JSON settingDomainDeleteResponseJSON `json:"-"`
 }
@@ -448,7 +450,7 @@ func (r settingDomainDeleteResponseJSON) RawJSON() string {
 }
 
 type SettingDomainBulkDeleteResponse struct {
-	// Domain identifier
+	// Domain identifier.
 	ID   string                              `json:"id" api:"required" format:"uuid"`
 	JSON settingDomainBulkDeleteResponseJSON `json:"-"`
 }
@@ -470,7 +472,7 @@ func (r settingDomainBulkDeleteResponseJSON) RawJSON() string {
 }
 
 type SettingDomainEditResponse struct {
-	// Domain identifier
+	// Domain identifier.
 	ID                   string                                         `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainEditResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
 	Authorization        SettingDomainEditResponseAuthorization         `json:"authorization"`
@@ -727,7 +729,7 @@ func (r SettingDomainEditResponseStatus) IsKnown() bool {
 }
 
 type SettingDomainGetResponse struct {
-	// Domain identifier
+	// Domain identifier.
 	ID                   string                                        `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainGetResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
 	Authorization        SettingDomainGetResponseAuthorization         `json:"authorization"`
@@ -1258,7 +1260,6 @@ type SettingDomainEditParams struct {
 	// Identifier.
 	AccountID            param.Field[string]                                       `path:"account_id" api:"required"`
 	AllowedDeliveryModes param.Field[[]SettingDomainEditParamsAllowedDeliveryMode] `json:"allowed_delivery_modes"`
-	Domain               param.Field[string]                                       `json:"domain"`
 	DropDispositions     param.Field[[]SettingDomainEditParamsDropDisposition]     `json:"drop_dispositions"`
 	Folder               param.Field[SettingDomainEditParamsFolder]                `json:"folder"`
 	IntegrationID        param.Field[string]                                       `json:"integration_id" format:"uuid"`

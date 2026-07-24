@@ -84,7 +84,7 @@ type InvestigateBulkMessageListResponse struct {
 	AlertID        string                                         `json:"alert_id" api:"nullable"`
 	EmailMessageID string                                         `json:"email_message_id" api:"nullable"`
 	ProcessedAt    time.Time                                      `json:"processed_at" api:"nullable" format:"date-time"`
-	// When to retry the action if it failed
+	// When to retry the action if it failed.
 	RetryAfter    time.Time                              `json:"retry_after" api:"nullable" format:"date-time"`
 	StatusMessage string                                 `json:"status_message" api:"nullable"`
 	JSON          investigateBulkMessageListResponseJSON `json:"-"`

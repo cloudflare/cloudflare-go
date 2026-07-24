@@ -158,8 +158,8 @@ func (r *SettingSendingDomainRestrictionService) Get(ctx context.Context, sendin
 }
 
 // A sending domain restriction that enforces TLS (Transport Layer Security)
-// requirements for emails from specific domains. If TLS is required, mail without
-// TLS from the specified domain will be dropped.
+// requirements for emails from specific domains. If TLS is required, the system
+// drops mail without TLS from the specified domain.
 type SettingSendingDomainRestrictionNewResponse struct {
 	// Sending domain restriction identifier.
 	ID        string    `json:"id" format:"uuid"`
@@ -167,7 +167,7 @@ type SettingSendingDomainRestrictionNewResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Domain that requires TLS enforcement.
 	Domain string `json:"domain"`
-	// Excluded subdomains that are exempt from TLS requirements.
+	// Subdomains to exempt from TLS requirements.
 	Exclude []string `json:"exclude"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
@@ -200,8 +200,8 @@ func (r settingSendingDomainRestrictionNewResponseJSON) RawJSON() string {
 }
 
 // A sending domain restriction that enforces TLS (Transport Layer Security)
-// requirements for emails from specific domains. If TLS is required, mail without
-// TLS from the specified domain will be dropped.
+// requirements for emails from specific domains. If TLS is required, the system
+// drops mail without TLS from the specified domain.
 type SettingSendingDomainRestrictionListResponse struct {
 	// Sending domain restriction identifier.
 	ID        string    `json:"id" format:"uuid"`
@@ -209,7 +209,7 @@ type SettingSendingDomainRestrictionListResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Domain that requires TLS enforcement.
 	Domain string `json:"domain"`
-	// Excluded subdomains that are exempt from TLS requirements.
+	// Subdomains to exempt from TLS requirements.
 	Exclude []string `json:"exclude"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
@@ -264,8 +264,8 @@ func (r settingSendingDomainRestrictionDeleteResponseJSON) RawJSON() string {
 }
 
 // A sending domain restriction that enforces TLS (Transport Layer Security)
-// requirements for emails from specific domains. If TLS is required, mail without
-// TLS from the specified domain will be dropped.
+// requirements for emails from specific domains. If TLS is required, the system
+// drops mail without TLS from the specified domain.
 type SettingSendingDomainRestrictionEditResponse struct {
 	// Sending domain restriction identifier.
 	ID        string    `json:"id" format:"uuid"`
@@ -273,7 +273,7 @@ type SettingSendingDomainRestrictionEditResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Domain that requires TLS enforcement.
 	Domain string `json:"domain"`
-	// Excluded subdomains that are exempt from TLS requirements.
+	// Subdomains to exempt from TLS requirements.
 	Exclude []string `json:"exclude"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
@@ -306,8 +306,8 @@ func (r settingSendingDomainRestrictionEditResponseJSON) RawJSON() string {
 }
 
 // A sending domain restriction that enforces TLS (Transport Layer Security)
-// requirements for emails from specific domains. If TLS is required, mail without
-// TLS from the specified domain will be dropped.
+// requirements for emails from specific domains. If TLS is required, the system
+// drops mail without TLS from the specified domain.
 type SettingSendingDomainRestrictionGetResponse struct {
 	// Sending domain restriction identifier.
 	ID        string    `json:"id" format:"uuid"`
@@ -315,7 +315,7 @@ type SettingSendingDomainRestrictionGetResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Domain that requires TLS enforcement.
 	Domain string `json:"domain"`
-	// Excluded subdomains that are exempt from TLS requirements.
+	// Subdomains to exempt from TLS requirements.
 	Exclude []string `json:"exclude"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
@@ -352,7 +352,7 @@ type SettingSendingDomainRestrictionNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Domain that requires TLS enforcement.
 	Domain param.Field[string] `json:"domain" api:"required"`
-	// Excluded subdomains that are exempt from TLS requirements.
+	// Subdomains to exempt from TLS requirements.
 	Exclude  param.Field[[]string] `json:"exclude" api:"required"`
 	Comments param.Field[string]   `json:"comments"`
 }
@@ -367,8 +367,8 @@ type SettingSendingDomainRestrictionNewResponseEnvelope struct {
 	// Whether the API call was successful.
 	Success SettingSendingDomainRestrictionNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A sending domain restriction that enforces TLS (Transport Layer Security)
-	// requirements for emails from specific domains. If TLS is required, mail without
-	// TLS from the specified domain will be dropped.
+	// requirements for emails from specific domains. If TLS is required, the system
+	// drops mail without TLS from the specified domain.
 	Result SettingSendingDomainRestrictionNewResponse             `json:"result"`
 	JSON   settingSendingDomainRestrictionNewResponseEnvelopeJSON `json:"-"`
 }
@@ -717,7 +717,7 @@ type SettingSendingDomainRestrictionEditParams struct {
 	Comments  param.Field[string] `json:"comments"`
 	// Domain that requires TLS enforcement.
 	Domain param.Field[string] `json:"domain"`
-	// Excluded subdomains that are exempt from TLS requirements.
+	// Subdomains to exempt from TLS requirements.
 	Exclude param.Field[[]string] `json:"exclude"`
 }
 
@@ -731,8 +731,8 @@ type SettingSendingDomainRestrictionEditResponseEnvelope struct {
 	// Whether the API call was successful.
 	Success SettingSendingDomainRestrictionEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A sending domain restriction that enforces TLS (Transport Layer Security)
-	// requirements for emails from specific domains. If TLS is required, mail without
-	// TLS from the specified domain will be dropped.
+	// requirements for emails from specific domains. If TLS is required, the system
+	// drops mail without TLS from the specified domain.
 	Result SettingSendingDomainRestrictionEditResponse             `json:"result"`
 	JSON   settingSendingDomainRestrictionEditResponseEnvelopeJSON `json:"-"`
 }
@@ -882,8 +882,8 @@ type SettingSendingDomainRestrictionGetResponseEnvelope struct {
 	// Whether the API call was successful.
 	Success SettingSendingDomainRestrictionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A sending domain restriction that enforces TLS (Transport Layer Security)
-	// requirements for emails from specific domains. If TLS is required, mail without
-	// TLS from the specified domain will be dropped.
+	// requirements for emails from specific domains. If TLS is required, the system
+	// drops mail without TLS from the specified domain.
 	Result SettingSendingDomainRestrictionGetResponse             `json:"result"`
 	JSON   settingSendingDomainRestrictionGetResponseEnvelopeJSON `json:"-"`
 }

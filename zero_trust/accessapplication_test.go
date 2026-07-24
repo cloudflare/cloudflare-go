@@ -337,7 +337,7 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 		Exact:            cloudflare.F(true),
 		Name:             cloudflare.F("name"),
 		Page:             cloudflare.F(int64(0)),
-		PerPage:          cloudflare.F(int64(0)),
+		PerPage:          cloudflare.F(int64(1000)),
 		Search:           cloudflare.F("search"),
 		TargetAttributes: cloudflare.F("target_attributes"),
 	})

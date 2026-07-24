@@ -105,7 +105,7 @@ func (r investigateTraceGetResponseInboundJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseInboundLine struct {
-	// Line number in the trace log
+	// Line number in the trace log.
 	Lineno   int64     `json:"lineno"`
 	LoggedAt time.Time `json:"logged_at" api:"nullable" format:"date-time"`
 	Message  string    `json:"message"`
@@ -159,7 +159,7 @@ func (r investigateTraceGetResponseOutboundJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseOutboundLine struct {
-	// Line number in the trace log
+	// Line number in the trace log.
 	Lineno   int64     `json:"lineno"`
 	LoggedAt time.Time `json:"logged_at" api:"nullable" format:"date-time"`
 	Message  string    `json:"message"`

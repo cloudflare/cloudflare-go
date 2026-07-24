@@ -103,27 +103,27 @@ func (r *InvestigateMoveService) BulkAutoPaging(ctx context.Context, params Inve
 }
 
 type InvestigateMoveNewResponse struct {
-	// Whether the operation succeeded
+	// Whether the operation succeeded.
 	Success bool `json:"success" api:"required"`
-	// When the move operation completed (UTC)
+	// When the move operation completed (UTC).
 	CompletedAt time.Time `json:"completed_at" api:"nullable" format:"date-time"`
 	// Deprecated, use `completed_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `completed_at` instead.
 	CompletedTimestamp time.Time `json:"completed_timestamp" format:"date-time"`
-	// Destination folder for the message
+	// Destination folder for the message.
 	Destination string `json:"destination" api:"nullable"`
 	// Number of items moved. End of life: November 1, 2026.
 	//
 	// Deprecated: This field is deprecated.
 	ItemCount int64 `json:"item_count"`
-	// Message identifier
+	// Message identifier.
 	MessageID string `json:"message_id" api:"nullable"`
-	// Type of operation performed
+	// Type of operation performed.
 	Operation string `json:"operation" api:"nullable"`
-	// Recipient email address
+	// Recipient email address.
 	Recipient string `json:"recipient" api:"nullable"`
-	// Operation status
+	// Operation status.
 	Status string                         `json:"status" api:"nullable"`
 	JSON   investigateMoveNewResponseJSON `json:"-"`
 }
@@ -153,27 +153,27 @@ func (r investigateMoveNewResponseJSON) RawJSON() string {
 }
 
 type InvestigateMoveBulkResponse struct {
-	// Whether the operation succeeded
+	// Whether the operation succeeded.
 	Success bool `json:"success" api:"required"`
-	// When the move operation completed (UTC)
+	// When the move operation completed (UTC).
 	CompletedAt time.Time `json:"completed_at" api:"nullable" format:"date-time"`
 	// Deprecated, use `completed_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `completed_at` instead.
 	CompletedTimestamp time.Time `json:"completed_timestamp" format:"date-time"`
-	// Destination folder for the message
+	// Destination folder for the message.
 	Destination string `json:"destination" api:"nullable"`
 	// Number of items moved. End of life: November 1, 2026.
 	//
 	// Deprecated: This field is deprecated.
 	ItemCount int64 `json:"item_count"`
-	// Message identifier
+	// Message identifier.
 	MessageID string `json:"message_id" api:"nullable"`
-	// Type of operation performed
+	// Type of operation performed.
 	Operation string `json:"operation" api:"nullable"`
-	// Recipient email address
+	// Recipient email address.
 	Recipient string `json:"recipient" api:"nullable"`
-	// Operation status
+	// Operation status.
 	Status string                          `json:"status" api:"nullable"`
 	JSON   investigateMoveBulkResponseJSON `json:"-"`
 }
@@ -259,10 +259,9 @@ type InvestigateMoveBulkParams struct {
 	AccountID           param.Field[string]                                       `path:"account_id" api:"required"`
 	Destination         param.Field[InvestigateMoveBulkParamsDestination]         `json:"destination" api:"required"`
 	ExpectedDisposition param.Field[InvestigateMoveBulkParamsExpectedDisposition] `json:"expected_disposition"`
-	// List of message IDs to move
+	// List of message IDs to move.
 	IDs param.Field[[]string] `json:"ids"`
-	// Deprecated, use `ids` instead. End of life: November 1, 2026. List of message
-	// IDs to move.
+	// Deprecated, use `ids` instead. End of life: November 1, 2026.
 	PostfixIDs param.Field[[]string] `json:"postfix_ids"`
 }
 

@@ -38,7 +38,7 @@ func NewStoreSecretService(opts ...option.RequestOption) (r *StoreSecretService)
 	return
 }
 
-// Creates a secret in the account
+// Creates a secret in the account.
 func (r *StoreSecretService) New(ctx context.Context, storeID string, params StoreSecretNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[StoreSecretNewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -64,12 +64,12 @@ func (r *StoreSecretService) New(ctx context.Context, storeID string, params Sto
 	return res, nil
 }
 
-// Creates a secret in the account
+// Creates a secret in the account.
 func (r *StoreSecretService) NewAutoPaging(ctx context.Context, storeID string, params StoreSecretNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StoreSecretNewResponse] {
 	return pagination.NewSinglePageAutoPager(r.New(ctx, storeID, params, opts...))
 }
 
-// Lists all store secrets
+// Lists all store secrets.
 func (r *StoreSecretService) List(ctx context.Context, storeID string, params StoreSecretListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[StoreSecretListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -95,12 +95,12 @@ func (r *StoreSecretService) List(ctx context.Context, storeID string, params St
 	return res, nil
 }
 
-// Lists all store secrets
+// Lists all store secrets.
 func (r *StoreSecretService) ListAutoPaging(ctx context.Context, storeID string, params StoreSecretListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[StoreSecretListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, storeID, params, opts...))
 }
 
-// Deletes a single secret
+// Deletes a single secret.
 func (r *StoreSecretService) Delete(ctx context.Context, storeID string, secretID string, body StoreSecretDeleteParams, opts ...option.RequestOption) (res *StoreSecretDeleteResponse, err error) {
 	var env StoreSecretDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,7 +125,7 @@ func (r *StoreSecretService) Delete(ctx context.Context, storeID string, secretI
 	return res, nil
 }
 
-// Deletes one or more secrets
+// Deletes one or more secrets.
 func (r *StoreSecretService) BulkDelete(ctx context.Context, storeID string, body StoreSecretBulkDeleteParams, opts ...option.RequestOption) (res *StoreSecretBulkDeleteResponse, err error) {
 	var env StoreSecretBulkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -146,7 +146,7 @@ func (r *StoreSecretService) BulkDelete(ctx context.Context, storeID string, bod
 	return res, nil
 }
 
-// Duplicates the secret, keeping the value
+// Creates a duplicate of the secret, keeping the value.
 func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secretID string, params StoreSecretDuplicateParams, opts ...option.RequestOption) (res *StoreSecretDuplicateResponse, err error) {
 	var env StoreSecretDuplicateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -171,7 +171,7 @@ func (r *StoreSecretService) Duplicate(ctx context.Context, storeID string, secr
 	return res, nil
 }
 
-// Updates a single secret
+// Updates a single secret.
 func (r *StoreSecretService) Edit(ctx context.Context, storeID string, secretID string, params StoreSecretEditParams, opts ...option.RequestOption) (res *StoreSecretEditResponse, err error) {
 	var env StoreSecretEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -196,7 +196,7 @@ func (r *StoreSecretService) Edit(ctx context.Context, storeID string, secretID 
 	return res, nil
 }
 
-// Returns details of a single secret
+// Returns details of a single secret.
 func (r *StoreSecretService) Get(ctx context.Context, storeID string, secretID string, query StoreSecretGetParams, opts ...option.RequestOption) (res *StoreSecretGetResponse, err error) {
 	var env StoreSecretGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -224,20 +224,20 @@ func (r *StoreSecretService) Get(ctx context.Context, storeID string, secretID s
 type StoreSecretNewResponse struct {
 	// Secret identifier tag.
 	ID string `json:"id" api:"required"`
-	// Whenthe secret was created.
+	// When the secret was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// The name of the secret
+	// The name of the secret.
 	Name   string                       `json:"name" api:"required"`
 	Status StoreSecretNewResponseStatus `json:"status" api:"required"`
-	// Store Identifier
+	// Store Identifier.
 	StoreID string `json:"store_id" api:"required"`
-	// Freeform text describing the secret
+	// Freeform text describing the secret.
 	Comment string `json:"comment"`
 	// The list of services that can use this secret.
-	Scopes []string                   `json:"scopes"`
-	JSON   storeSecretNewResponseJSON `json:"-"`
+	Scopes []StoreSecretNewResponseScope `json:"scopes"`
+	JSON   storeSecretNewResponseJSON    `json:"-"`
 }
 
 // storeSecretNewResponseJSON contains the JSON metadata for the struct
@@ -279,23 +279,42 @@ func (r StoreSecretNewResponseStatus) IsKnown() bool {
 	return false
 }
 
+type StoreSecretNewResponseScope string
+
+const (
+	StoreSecretNewResponseScopeWorkers    StoreSecretNewResponseScope = "workers"
+	StoreSecretNewResponseScopeAIGateway  StoreSecretNewResponseScope = "ai_gateway"
+	StoreSecretNewResponseScopeDEX        StoreSecretNewResponseScope = "dex"
+	StoreSecretNewResponseScopeAccess     StoreSecretNewResponseScope = "access"
+	StoreSecretNewResponseScopeContainers StoreSecretNewResponseScope = "containers"
+	StoreSecretNewResponseScopeWebsearch  StoreSecretNewResponseScope = "websearch"
+)
+
+func (r StoreSecretNewResponseScope) IsKnown() bool {
+	switch r {
+	case StoreSecretNewResponseScopeWorkers, StoreSecretNewResponseScopeAIGateway, StoreSecretNewResponseScopeDEX, StoreSecretNewResponseScopeAccess, StoreSecretNewResponseScopeContainers, StoreSecretNewResponseScopeWebsearch:
+		return true
+	}
+	return false
+}
+
 type StoreSecretListResponse struct {
 	// Secret identifier tag.
 	ID string `json:"id" api:"required"`
-	// Whenthe secret was created.
+	// When the secret was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// The name of the secret
+	// The name of the secret.
 	Name   string                        `json:"name" api:"required"`
 	Status StoreSecretListResponseStatus `json:"status" api:"required"`
-	// Store Identifier
+	// Store Identifier.
 	StoreID string `json:"store_id" api:"required"`
-	// Freeform text describing the secret
+	// Freeform text describing the secret.
 	Comment string `json:"comment"`
 	// The list of services that can use this secret.
-	Scopes []string                    `json:"scopes"`
-	JSON   storeSecretListResponseJSON `json:"-"`
+	Scopes []StoreSecretListResponseScope `json:"scopes"`
+	JSON   storeSecretListResponseJSON    `json:"-"`
 }
 
 // storeSecretListResponseJSON contains the JSON metadata for the struct
@@ -337,6 +356,25 @@ func (r StoreSecretListResponseStatus) IsKnown() bool {
 	return false
 }
 
+type StoreSecretListResponseScope string
+
+const (
+	StoreSecretListResponseScopeWorkers    StoreSecretListResponseScope = "workers"
+	StoreSecretListResponseScopeAIGateway  StoreSecretListResponseScope = "ai_gateway"
+	StoreSecretListResponseScopeDEX        StoreSecretListResponseScope = "dex"
+	StoreSecretListResponseScopeAccess     StoreSecretListResponseScope = "access"
+	StoreSecretListResponseScopeContainers StoreSecretListResponseScope = "containers"
+	StoreSecretListResponseScopeWebsearch  StoreSecretListResponseScope = "websearch"
+)
+
+func (r StoreSecretListResponseScope) IsKnown() bool {
+	switch r {
+	case StoreSecretListResponseScopeWorkers, StoreSecretListResponseScopeAIGateway, StoreSecretListResponseScopeDEX, StoreSecretListResponseScopeAccess, StoreSecretListResponseScopeContainers, StoreSecretListResponseScopeWebsearch:
+		return true
+	}
+	return false
+}
+
 type StoreSecretDeleteResponse = interface{}
 
 type StoreSecretBulkDeleteResponse = interface{}
@@ -344,20 +382,20 @@ type StoreSecretBulkDeleteResponse = interface{}
 type StoreSecretDuplicateResponse struct {
 	// Secret identifier tag.
 	ID string `json:"id" api:"required"`
-	// Whenthe secret was created.
+	// When the secret was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// The name of the secret
+	// The name of the secret.
 	Name   string                             `json:"name" api:"required"`
 	Status StoreSecretDuplicateResponseStatus `json:"status" api:"required"`
-	// Store Identifier
+	// Store Identifier.
 	StoreID string `json:"store_id" api:"required"`
-	// Freeform text describing the secret
+	// Freeform text describing the secret.
 	Comment string `json:"comment"`
 	// The list of services that can use this secret.
-	Scopes []string                         `json:"scopes"`
-	JSON   storeSecretDuplicateResponseJSON `json:"-"`
+	Scopes []StoreSecretDuplicateResponseScope `json:"scopes"`
+	JSON   storeSecretDuplicateResponseJSON    `json:"-"`
 }
 
 // storeSecretDuplicateResponseJSON contains the JSON metadata for the struct
@@ -399,23 +437,42 @@ func (r StoreSecretDuplicateResponseStatus) IsKnown() bool {
 	return false
 }
 
+type StoreSecretDuplicateResponseScope string
+
+const (
+	StoreSecretDuplicateResponseScopeWorkers    StoreSecretDuplicateResponseScope = "workers"
+	StoreSecretDuplicateResponseScopeAIGateway  StoreSecretDuplicateResponseScope = "ai_gateway"
+	StoreSecretDuplicateResponseScopeDEX        StoreSecretDuplicateResponseScope = "dex"
+	StoreSecretDuplicateResponseScopeAccess     StoreSecretDuplicateResponseScope = "access"
+	StoreSecretDuplicateResponseScopeContainers StoreSecretDuplicateResponseScope = "containers"
+	StoreSecretDuplicateResponseScopeWebsearch  StoreSecretDuplicateResponseScope = "websearch"
+)
+
+func (r StoreSecretDuplicateResponseScope) IsKnown() bool {
+	switch r {
+	case StoreSecretDuplicateResponseScopeWorkers, StoreSecretDuplicateResponseScopeAIGateway, StoreSecretDuplicateResponseScopeDEX, StoreSecretDuplicateResponseScopeAccess, StoreSecretDuplicateResponseScopeContainers, StoreSecretDuplicateResponseScopeWebsearch:
+		return true
+	}
+	return false
+}
+
 type StoreSecretEditResponse struct {
 	// Secret identifier tag.
 	ID string `json:"id" api:"required"`
-	// Whenthe secret was created.
+	// When the secret was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// The name of the secret
+	// The name of the secret.
 	Name   string                        `json:"name" api:"required"`
 	Status StoreSecretEditResponseStatus `json:"status" api:"required"`
-	// Store Identifier
+	// Store Identifier.
 	StoreID string `json:"store_id" api:"required"`
-	// Freeform text describing the secret
+	// Freeform text describing the secret.
 	Comment string `json:"comment"`
 	// The list of services that can use this secret.
-	Scopes []string                    `json:"scopes"`
-	JSON   storeSecretEditResponseJSON `json:"-"`
+	Scopes []StoreSecretEditResponseScope `json:"scopes"`
+	JSON   storeSecretEditResponseJSON    `json:"-"`
 }
 
 // storeSecretEditResponseJSON contains the JSON metadata for the struct
@@ -457,23 +514,42 @@ func (r StoreSecretEditResponseStatus) IsKnown() bool {
 	return false
 }
 
+type StoreSecretEditResponseScope string
+
+const (
+	StoreSecretEditResponseScopeWorkers    StoreSecretEditResponseScope = "workers"
+	StoreSecretEditResponseScopeAIGateway  StoreSecretEditResponseScope = "ai_gateway"
+	StoreSecretEditResponseScopeDEX        StoreSecretEditResponseScope = "dex"
+	StoreSecretEditResponseScopeAccess     StoreSecretEditResponseScope = "access"
+	StoreSecretEditResponseScopeContainers StoreSecretEditResponseScope = "containers"
+	StoreSecretEditResponseScopeWebsearch  StoreSecretEditResponseScope = "websearch"
+)
+
+func (r StoreSecretEditResponseScope) IsKnown() bool {
+	switch r {
+	case StoreSecretEditResponseScopeWorkers, StoreSecretEditResponseScopeAIGateway, StoreSecretEditResponseScopeDEX, StoreSecretEditResponseScopeAccess, StoreSecretEditResponseScopeContainers, StoreSecretEditResponseScopeWebsearch:
+		return true
+	}
+	return false
+}
+
 type StoreSecretGetResponse struct {
 	// Secret identifier tag.
 	ID string `json:"id" api:"required"`
-	// Whenthe secret was created.
+	// When the secret was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// The name of the secret
+	// The name of the secret.
 	Name   string                       `json:"name" api:"required"`
 	Status StoreSecretGetResponseStatus `json:"status" api:"required"`
-	// Store Identifier
+	// Store Identifier.
 	StoreID string `json:"store_id" api:"required"`
-	// Freeform text describing the secret
+	// Freeform text describing the secret.
 	Comment string `json:"comment"`
 	// The list of services that can use this secret.
-	Scopes []string                   `json:"scopes"`
-	JSON   storeSecretGetResponseJSON `json:"-"`
+	Scopes []StoreSecretGetResponseScope `json:"scopes"`
+	JSON   storeSecretGetResponseJSON    `json:"-"`
 }
 
 // storeSecretGetResponseJSON contains the JSON metadata for the struct
@@ -515,8 +591,26 @@ func (r StoreSecretGetResponseStatus) IsKnown() bool {
 	return false
 }
 
+type StoreSecretGetResponseScope string
+
+const (
+	StoreSecretGetResponseScopeWorkers    StoreSecretGetResponseScope = "workers"
+	StoreSecretGetResponseScopeAIGateway  StoreSecretGetResponseScope = "ai_gateway"
+	StoreSecretGetResponseScopeDEX        StoreSecretGetResponseScope = "dex"
+	StoreSecretGetResponseScopeAccess     StoreSecretGetResponseScope = "access"
+	StoreSecretGetResponseScopeContainers StoreSecretGetResponseScope = "containers"
+	StoreSecretGetResponseScopeWebsearch  StoreSecretGetResponseScope = "websearch"
+)
+
+func (r StoreSecretGetResponseScope) IsKnown() bool {
+	switch r {
+	case StoreSecretGetResponseScopeWorkers, StoreSecretGetResponseScopeAIGateway, StoreSecretGetResponseScopeDEX, StoreSecretGetResponseScopeAccess, StoreSecretGetResponseScopeContainers, StoreSecretGetResponseScopeWebsearch:
+		return true
+	}
+	return false
+}
+
 type StoreSecretNewParams struct {
-	// Account Identifier
 	AccountID param.Field[string]        `path:"account_id" api:"required"`
 	Body      []StoreSecretNewParamsBody `json:"body" api:"required"`
 }
@@ -526,15 +620,15 @@ func (r StoreSecretNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type StoreSecretNewParamsBody struct {
-	// The name of the secret
+	// The name of the secret.
 	Name param.Field[string] `json:"name" api:"required"`
 	// The list of services that can use this secret.
-	Scopes param.Field[[]string] `json:"scopes" api:"required"`
+	Scopes param.Field[[]StoreSecretNewParamsBodyScope] `json:"scopes" api:"required"`
 	// The value of the secret. Maximum 64 KiB (65,536 bytes). Note that this is 'write
-	// only' - no API response will provide this value, it is only used to
-	// create/modify secrets.
+	// only' - the API never returns this value; it exists only to create or modify
+	// secrets.
 	Value param.Field[string] `json:"value" api:"required"`
-	// Freeform text describing the secret
+	// Freeform text describing the secret.
 	Comment param.Field[string] `json:"comment"`
 }
 
@@ -542,20 +636,38 @@ func (r StoreSecretNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type StoreSecretNewParamsBodyScope string
+
+const (
+	StoreSecretNewParamsBodyScopeWorkers    StoreSecretNewParamsBodyScope = "workers"
+	StoreSecretNewParamsBodyScopeAIGateway  StoreSecretNewParamsBodyScope = "ai_gateway"
+	StoreSecretNewParamsBodyScopeDEX        StoreSecretNewParamsBodyScope = "dex"
+	StoreSecretNewParamsBodyScopeAccess     StoreSecretNewParamsBodyScope = "access"
+	StoreSecretNewParamsBodyScopeContainers StoreSecretNewParamsBodyScope = "containers"
+	StoreSecretNewParamsBodyScopeWebsearch  StoreSecretNewParamsBodyScope = "websearch"
+)
+
+func (r StoreSecretNewParamsBodyScope) IsKnown() bool {
+	switch r {
+	case StoreSecretNewParamsBodyScopeWorkers, StoreSecretNewParamsBodyScopeAIGateway, StoreSecretNewParamsBodyScopeDEX, StoreSecretNewParamsBodyScopeAccess, StoreSecretNewParamsBodyScopeContainers, StoreSecretNewParamsBodyScopeWebsearch:
+		return true
+	}
+	return false
+}
+
 type StoreSecretListParams struct {
-	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Direction to sort objects
+	// Direction to sort objects.
 	Direction param.Field[StoreSecretListParamsDirection] `query:"direction"`
-	// Order secrets by values in the given field
+	// Order secrets by values in the given field.
 	Order param.Field[StoreSecretListParamsOrder] `query:"order"`
-	// Page number
+	// Page number.
 	Page param.Field[int64] `query:"page"`
-	// Number of objects to return per page
+	// Number of objects to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
-	// Only secrets with the given scopes will be returned
-	Scopes param.Field[[][]string] `query:"scopes"`
-	// Search secrets using a filter string, filtering across name and comment
+	// Only secrets with the given scopes will be returned.
+	Scopes param.Field[[]StoreSecretListParamsScope] `query:"scopes"`
+	// Search secrets using a filter string, filtering across name and comment.
 	Search param.Field[string] `query:"search"`
 }
 
@@ -567,7 +679,7 @@ func (r StoreSecretListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Direction to sort objects
+// Direction to sort objects.
 type StoreSecretListParamsDirection string
 
 const (
@@ -583,7 +695,7 @@ func (r StoreSecretListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Order secrets by values in the given field
+// Order secrets by values in the given field.
 type StoreSecretListParamsOrder string
 
 const (
@@ -602,8 +714,26 @@ func (r StoreSecretListParamsOrder) IsKnown() bool {
 	return false
 }
 
+type StoreSecretListParamsScope string
+
+const (
+	StoreSecretListParamsScopeWorkers    StoreSecretListParamsScope = "workers"
+	StoreSecretListParamsScopeAIGateway  StoreSecretListParamsScope = "ai_gateway"
+	StoreSecretListParamsScopeDEX        StoreSecretListParamsScope = "dex"
+	StoreSecretListParamsScopeAccess     StoreSecretListParamsScope = "access"
+	StoreSecretListParamsScopeContainers StoreSecretListParamsScope = "containers"
+	StoreSecretListParamsScopeWebsearch  StoreSecretListParamsScope = "websearch"
+)
+
+func (r StoreSecretListParamsScope) IsKnown() bool {
+	switch r {
+	case StoreSecretListParamsScopeWorkers, StoreSecretListParamsScopeAIGateway, StoreSecretListParamsScopeDEX, StoreSecretListParamsScopeAccess, StoreSecretListParamsScopeContainers, StoreSecretListParamsScopeWebsearch:
+		return true
+	}
+	return false
+}
+
 type StoreSecretDeleteParams struct {
-	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -748,7 +878,6 @@ func (r StoreSecretDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type StoreSecretBulkDeleteParams struct {
-	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -893,13 +1022,12 @@ func (r StoreSecretBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type StoreSecretDuplicateParams struct {
-	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The name of the secret
+	// The name of the secret.
 	Name param.Field[string] `json:"name" api:"required"`
 	// The list of services that can use this secret.
-	Scopes param.Field[[]string] `json:"scopes" api:"required"`
-	// Freeform text describing the secret
+	Scopes param.Field[[]StoreSecretDuplicateParamsScope] `json:"scopes" api:"required"`
+	// Freeform text describing the secret.
 	Comment param.Field[string] `json:"comment"`
 }
 
@@ -907,14 +1035,32 @@ func (r StoreSecretDuplicateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type StoreSecretDuplicateParamsScope string
+
+const (
+	StoreSecretDuplicateParamsScopeWorkers    StoreSecretDuplicateParamsScope = "workers"
+	StoreSecretDuplicateParamsScopeAIGateway  StoreSecretDuplicateParamsScope = "ai_gateway"
+	StoreSecretDuplicateParamsScopeDEX        StoreSecretDuplicateParamsScope = "dex"
+	StoreSecretDuplicateParamsScopeAccess     StoreSecretDuplicateParamsScope = "access"
+	StoreSecretDuplicateParamsScopeContainers StoreSecretDuplicateParamsScope = "containers"
+	StoreSecretDuplicateParamsScopeWebsearch  StoreSecretDuplicateParamsScope = "websearch"
+)
+
+func (r StoreSecretDuplicateParamsScope) IsKnown() bool {
+	switch r {
+	case StoreSecretDuplicateParamsScopeWorkers, StoreSecretDuplicateParamsScopeAIGateway, StoreSecretDuplicateParamsScopeDEX, StoreSecretDuplicateParamsScopeAccess, StoreSecretDuplicateParamsScopeContainers, StoreSecretDuplicateParamsScopeWebsearch:
+		return true
+	}
+	return false
+}
+
 type StoreSecretDuplicateResponseEnvelope struct {
 	Errors   []StoreSecretDuplicateResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []StoreSecretDuplicateResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    StoreSecretDuplicateResponseEnvelopeSuccess    `json:"success" api:"required"`
-	Result     StoreSecretDuplicateResponse                   `json:"result"`
-	ResultInfo StoreSecretDuplicateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       storeSecretDuplicateResponseEnvelopeJSON       `json:"-"`
+	Success StoreSecretDuplicateResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  StoreSecretDuplicateResponse                `json:"result"`
+	JSON    storeSecretDuplicateResponseEnvelopeJSON    `json:"-"`
 }
 
 // storeSecretDuplicateResponseEnvelopeJSON contains the JSON metadata for the
@@ -924,7 +1070,6 @@ type storeSecretDuplicateResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1048,50 +1193,15 @@ func (r StoreSecretDuplicateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type StoreSecretDuplicateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64 `json:"total_count"`
-	// The number of total pages in the entire result set.
-	TotalPages float64                                            `json:"total_pages"`
-	JSON       storeSecretDuplicateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// storeSecretDuplicateResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [StoreSecretDuplicateResponseEnvelopeResultInfo]
-type storeSecretDuplicateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StoreSecretDuplicateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeSecretDuplicateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type StoreSecretEditParams struct {
-	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Freeform text describing the secret
+	// Freeform text describing the secret.
 	Comment param.Field[string] `json:"comment"`
 	// The list of services that can use this secret.
-	Scopes param.Field[[]string] `json:"scopes"`
+	Scopes param.Field[[]StoreSecretEditParamsScope] `json:"scopes"`
 	// The value of the secret. Maximum 64 KiB (65,536 bytes). Note that this is 'write
-	// only' - no API response will provide this value, it is only used to
-	// create/modify secrets.
+	// only' - the API never returns this value; it exists only to create or modify
+	// secrets.
 	Value param.Field[string] `json:"value"`
 }
 
@@ -1099,14 +1209,32 @@ func (r StoreSecretEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type StoreSecretEditParamsScope string
+
+const (
+	StoreSecretEditParamsScopeWorkers    StoreSecretEditParamsScope = "workers"
+	StoreSecretEditParamsScopeAIGateway  StoreSecretEditParamsScope = "ai_gateway"
+	StoreSecretEditParamsScopeDEX        StoreSecretEditParamsScope = "dex"
+	StoreSecretEditParamsScopeAccess     StoreSecretEditParamsScope = "access"
+	StoreSecretEditParamsScopeContainers StoreSecretEditParamsScope = "containers"
+	StoreSecretEditParamsScopeWebsearch  StoreSecretEditParamsScope = "websearch"
+)
+
+func (r StoreSecretEditParamsScope) IsKnown() bool {
+	switch r {
+	case StoreSecretEditParamsScopeWorkers, StoreSecretEditParamsScopeAIGateway, StoreSecretEditParamsScopeDEX, StoreSecretEditParamsScopeAccess, StoreSecretEditParamsScopeContainers, StoreSecretEditParamsScopeWebsearch:
+		return true
+	}
+	return false
+}
+
 type StoreSecretEditResponseEnvelope struct {
 	Errors   []StoreSecretEditResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []StoreSecretEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    StoreSecretEditResponseEnvelopeSuccess    `json:"success" api:"required"`
-	Result     StoreSecretEditResponse                   `json:"result"`
-	ResultInfo StoreSecretEditResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       storeSecretEditResponseEnvelopeJSON       `json:"-"`
+	Success StoreSecretEditResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  StoreSecretEditResponse                `json:"result"`
+	JSON    storeSecretEditResponseEnvelopeJSON    `json:"-"`
 }
 
 // storeSecretEditResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1116,7 +1244,6 @@ type storeSecretEditResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1240,42 +1367,7 @@ func (r StoreSecretEditResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type StoreSecretEditResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64 `json:"total_count"`
-	// The number of total pages in the entire result set.
-	TotalPages float64                                       `json:"total_pages"`
-	JSON       storeSecretEditResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// storeSecretEditResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [StoreSecretEditResponseEnvelopeResultInfo]
-type storeSecretEditResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StoreSecretEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeSecretEditResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type StoreSecretGetParams struct {
-	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -1283,10 +1375,9 @@ type StoreSecretGetResponseEnvelope struct {
 	Errors   []StoreSecretGetResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []StoreSecretGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success    StoreSecretGetResponseEnvelopeSuccess    `json:"success" api:"required"`
-	Result     StoreSecretGetResponse                   `json:"result"`
-	ResultInfo StoreSecretGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       storeSecretGetResponseEnvelopeJSON       `json:"-"`
+	Success StoreSecretGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  StoreSecretGetResponse                `json:"result"`
+	JSON    storeSecretGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // storeSecretGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1296,7 +1387,6 @@ type storeSecretGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1418,38 +1508,4 @@ func (r StoreSecretGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type StoreSecretGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64 `json:"total_count"`
-	// The number of total pages in the entire result set.
-	TotalPages float64                                      `json:"total_pages"`
-	JSON       storeSecretGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// storeSecretGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [StoreSecretGetResponseEnvelopeResultInfo]
-type storeSecretGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StoreSecretGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r storeSecretGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

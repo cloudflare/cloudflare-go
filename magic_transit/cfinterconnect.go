@@ -167,9 +167,11 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 	// The configuration specific to GRE interconnects.
 	GRE         CfInterconnectUpdateResponseModifiedInterconnectGRE `json:"gre"`
 	HealthCheck HealthCheck                                         `json:"health_check"`
-	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
-	// of the tunnel. Select the subnet from the following private IP space:
-	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
+	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
+	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
+	// .3 host of the subnet (the fourth address overall; the network address is not
+	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -183,6 +185,12 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 	Mtu int64 `json:"mtu"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	Name string `json:"name"`
+	// Immutable interconnect version configured at creation time. One of:
+	//
+	// - "1"
+	// - "1.5"
+	// - "2"
+	Version string `json:"version"`
 	// An identifier that correlates this interconnect with the corresponding V2 CNI
 	// interconnect resource.
 	VirtualPortReservationID string                                               `json:"virtual_port_reservation_id"`
@@ -204,6 +212,7 @@ type cfInterconnectUpdateResponseModifiedInterconnectJSON struct {
 	ModifiedOn               apijson.Field
 	Mtu                      apijson.Field
 	Name                     apijson.Field
+	Version                  apijson.Field
 	VirtualPortReservationID apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -278,9 +287,11 @@ type CfInterconnectListResponseInterconnect struct {
 	// The configuration specific to GRE interconnects.
 	GRE         CfInterconnectListResponseInterconnectsGRE `json:"gre"`
 	HealthCheck HealthCheck                                `json:"health_check"`
-	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
-	// of the tunnel. Select the subnet from the following private IP space:
-	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
+	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
+	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
+	// .3 host of the subnet (the fourth address overall; the network address is not
+	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -294,6 +305,12 @@ type CfInterconnectListResponseInterconnect struct {
 	Mtu int64 `json:"mtu"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	Name string `json:"name"`
+	// Immutable interconnect version configured at creation time. One of:
+	//
+	// - "1"
+	// - "1.5"
+	// - "2"
+	Version string `json:"version"`
 	// An identifier that correlates this interconnect with the corresponding V2 CNI
 	// interconnect resource.
 	VirtualPortReservationID string                                     `json:"virtual_port_reservation_id"`
@@ -315,6 +332,7 @@ type cfInterconnectListResponseInterconnectJSON struct {
 	ModifiedOn               apijson.Field
 	Mtu                      apijson.Field
 	Name                     apijson.Field
+	Version                  apijson.Field
 	VirtualPortReservationID apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -391,9 +409,11 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 	// The configuration specific to GRE interconnects.
 	GRE         CfInterconnectBulkUpdateResponseModifiedInterconnectsGRE `json:"gre"`
 	HealthCheck HealthCheck                                              `json:"health_check"`
-	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
-	// of the tunnel. Select the subnet from the following private IP space:
-	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
+	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
+	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
+	// .3 host of the subnet (the fourth address overall; the network address is not
+	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -407,6 +427,12 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 	Mtu int64 `json:"mtu"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	Name string `json:"name"`
+	// Immutable interconnect version configured at creation time. One of:
+	//
+	// - "1"
+	// - "1.5"
+	// - "2"
+	Version string `json:"version"`
 	// An identifier that correlates this interconnect with the corresponding V2 CNI
 	// interconnect resource.
 	VirtualPortReservationID string                                                   `json:"virtual_port_reservation_id"`
@@ -428,6 +454,7 @@ type cfInterconnectBulkUpdateResponseModifiedInterconnectJSON struct {
 	ModifiedOn               apijson.Field
 	Mtu                      apijson.Field
 	Name                     apijson.Field
+	Version                  apijson.Field
 	VirtualPortReservationID apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -503,9 +530,11 @@ type CfInterconnectGetResponseInterconnect struct {
 	// The configuration specific to GRE interconnects.
 	GRE         CfInterconnectGetResponseInterconnectGRE `json:"gre"`
 	HealthCheck HealthCheck                              `json:"health_check"`
-	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
-	// of the tunnel. Select the subnet from the following private IP space:
-	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
+	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
+	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
+	// .3 host of the subnet (the fourth address overall; the network address is not
+	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -519,6 +548,12 @@ type CfInterconnectGetResponseInterconnect struct {
 	Mtu int64 `json:"mtu"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	Name string `json:"name"`
+	// Immutable interconnect version configured at creation time. One of:
+	//
+	// - "1"
+	// - "1.5"
+	// - "2"
+	Version string `json:"version"`
 	// An identifier that correlates this interconnect with the corresponding V2 CNI
 	// interconnect resource.
 	VirtualPortReservationID string                                    `json:"virtual_port_reservation_id"`
@@ -540,6 +575,7 @@ type cfInterconnectGetResponseInterconnectJSON struct {
 	ModifiedOn               apijson.Field
 	Mtu                      apijson.Field
 	Name                     apijson.Field
+	Version                  apijson.Field
 	VirtualPortReservationID apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -589,9 +625,11 @@ type CfInterconnectUpdateParams struct {
 	// The configuration specific to GRE interconnects.
 	GRE         param.Field[CfInterconnectUpdateParamsGRE] `json:"gre"`
 	HealthCheck param.Field[HealthCheckParam]              `json:"health_check"`
-	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
-	// of the tunnel. Select the subnet from the following private IP space:
-	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
+	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
+	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
+	// .3 host of the subnet (the fourth address overall; the network address is not
+	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
 	InterfaceAddress param.Field[string] `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of

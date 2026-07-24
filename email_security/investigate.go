@@ -105,7 +105,7 @@ func (r *InvestigateService) Get(ctx context.Context, investigateID string, para
 }
 
 type InvestigateListResponse struct {
-	// Unique identifier for a message retrieved from investigation
+	// Unique identifier for a message retrieved from investigation.
 	ID string `json:"id" api:"required"`
 	// Deprecated, use `GET /investigate/{investigate_id}/action_log` instead. End of
 	// life: November 1, 2026.
@@ -116,9 +116,9 @@ type InvestigateListResponse struct {
 	DetectionReasons  []string                           `json:"detection_reasons" api:"required"`
 	IsPhishSubmission bool                               `json:"is_phish_submission" api:"required"`
 	IsQuarantined     bool                               `json:"is_quarantined" api:"required"`
-	// The identifier of the message
+	// The identifier of the message.
 	PostfixID string `json:"postfix_id" api:"required"`
-	// Message processing properties
+	// Message processing properties.
 	Properties InvestigateListResponseProperties `json:"properties" api:"required"`
 	// Deprecated, use `scanned_at` instead. End of life: November 1, 2026.
 	//
@@ -142,13 +142,13 @@ type InvestigateListResponse struct {
 	FromName              string                           `json:"from_name" api:"nullable"`
 	HtmltextStructureHash string                           `json:"htmltext_structure_hash" api:"nullable"`
 	MessageID             string                           `json:"message_id" api:"nullable"`
-	// Post-delivery operations performed on this message
+	// Post-delivery operations performed on this message.
 	PostDeliveryOperations []InvestigateListResponsePostDeliveryOperation `json:"post_delivery_operations" api:"nullable"`
 	PostfixIDOutbound      string                                         `json:"postfix_id_outbound" api:"nullable"`
 	Replyto                string                                         `json:"replyto" api:"nullable"`
-	// When the message was scanned (UTC)
+	// When the message was scanned (UTC).
 	ScannedAt time.Time `json:"scanned_at" api:"nullable" format:"date-time"`
-	// When the message was sent (UTC)
+	// When the message was sent (UTC).
 	SentAt            time.Time                         `json:"sent_at" api:"nullable" format:"date-time"`
 	SentDate          string                            `json:"sent_date" api:"nullable"`
 	SmtpHeloServerIP  string                            `json:"smtp_helo_server_ip" api:"nullable"`
@@ -213,17 +213,17 @@ func (r investigateListResponseJSON) RawJSON() string {
 }
 
 type InvestigateListResponseActionLog struct {
-	// Timestamp when action completed
+	// Timestamp when action completed.
 	CompletedAt time.Time `json:"completed_at" api:"required" format:"date-time"`
-	// Type of action performed
+	// Type of action performed.
 	Operation InvestigateListResponseActionLogOperation `json:"operation" api:"required"`
 	// Deprecated, use `completed_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `completed_at` instead.
 	CompletedTimestamp string `json:"completed_timestamp"`
-	// Additional properties for the action
+	// Additional properties for the action.
 	Properties InvestigateListResponseActionLogProperties `json:"properties"`
-	// Status of the action
+	// Status of the action.
 	Status string                               `json:"status" api:"nullable"`
 	JSON   investigateListResponseActionLogJSON `json:"-"`
 }
@@ -248,7 +248,7 @@ func (r investigateListResponseActionLogJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of action performed
+// Type of action performed.
 type InvestigateListResponseActionLogOperation string
 
 const (
@@ -268,11 +268,11 @@ func (r InvestigateListResponseActionLogOperation) IsKnown() bool {
 	return false
 }
 
-// Additional properties for the action
+// Additional properties for the action.
 type InvestigateListResponseActionLogProperties struct {
-	// Target folder for move operations
+	// Target folder for move operations.
 	Folder string `json:"folder"`
-	// User who requested the action
+	// User who requested the action.
 	RequestedBy string                                         `json:"requested_by"`
 	JSON        investigateListResponseActionLogPropertiesJSON `json:"-"`
 }
@@ -294,17 +294,17 @@ func (r investigateListResponseActionLogPropertiesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Message processing properties
+// Message processing properties.
 type InvestigateListResponseProperties struct {
-	// Pattern that allowlisted this message
+	// Pattern that allowlisted this message.
 	AllowlistedPattern string `json:"allowlisted_pattern" api:"nullable"`
-	// Type of allowlist pattern
+	// Type of allowlist pattern.
 	AllowlistedPatternType InvestigateListResponsePropertiesAllowlistedPatternType `json:"allowlisted_pattern_type" api:"nullable"`
-	// Whether message was blocklisted
+	// Whether message was blocklisted.
 	BlocklistedMessage bool `json:"blocklisted_message" api:"nullable"`
-	// Pattern that blocklisted this message
+	// Pattern that blocklisted this message.
 	BlocklistedPattern string `json:"blocklisted_pattern" api:"nullable"`
-	// Legacy field for allowlist pattern type
+	// Legacy field for allowlist pattern type.
 	WhitelistedPatternType InvestigateListResponsePropertiesWhitelistedPatternType `json:"whitelisted_pattern_type" api:"nullable"`
 	JSON                   investigateListResponsePropertiesJSON                   `json:"-"`
 }
@@ -329,7 +329,7 @@ func (r investigateListResponsePropertiesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of allowlist pattern
+// Type of allowlist pattern.
 type InvestigateListResponsePropertiesAllowlistedPatternType string
 
 const (
@@ -351,7 +351,7 @@ func (r InvestigateListResponsePropertiesAllowlistedPatternType) IsKnown() bool 
 	return false
 }
 
-// Legacy field for allowlist pattern type
+// Legacy field for allowlist pattern type.
 type InvestigateListResponsePropertiesWhitelistedPatternType string
 
 const (
@@ -600,7 +600,7 @@ func (r InvestigateListResponseValidationSPF) IsKnown() bool {
 }
 
 type InvestigateGetResponse struct {
-	// Unique identifier for a message retrieved from investigation
+	// Unique identifier for a message retrieved from investigation.
 	ID string `json:"id" api:"required"`
 	// Deprecated, use `GET /investigate/{investigate_id}/action_log` instead. End of
 	// life: November 1, 2026.
@@ -611,9 +611,9 @@ type InvestigateGetResponse struct {
 	DetectionReasons  []string                          `json:"detection_reasons" api:"required"`
 	IsPhishSubmission bool                              `json:"is_phish_submission" api:"required"`
 	IsQuarantined     bool                              `json:"is_quarantined" api:"required"`
-	// The identifier of the message
+	// The identifier of the message.
 	PostfixID string `json:"postfix_id" api:"required"`
-	// Message processing properties
+	// Message processing properties.
 	Properties InvestigateGetResponseProperties `json:"properties" api:"required"`
 	// Deprecated, use `scanned_at` instead. End of life: November 1, 2026.
 	//
@@ -637,13 +637,13 @@ type InvestigateGetResponse struct {
 	FromName              string                          `json:"from_name" api:"nullable"`
 	HtmltextStructureHash string                          `json:"htmltext_structure_hash" api:"nullable"`
 	MessageID             string                          `json:"message_id" api:"nullable"`
-	// Post-delivery operations performed on this message
+	// Post-delivery operations performed on this message.
 	PostDeliveryOperations []InvestigateGetResponsePostDeliveryOperation `json:"post_delivery_operations" api:"nullable"`
 	PostfixIDOutbound      string                                        `json:"postfix_id_outbound" api:"nullable"`
 	Replyto                string                                        `json:"replyto" api:"nullable"`
-	// When the message was scanned (UTC)
+	// When the message was scanned (UTC).
 	ScannedAt time.Time `json:"scanned_at" api:"nullable" format:"date-time"`
-	// When the message was sent (UTC)
+	// When the message was sent (UTC).
 	SentAt            time.Time                        `json:"sent_at" api:"nullable" format:"date-time"`
 	SentDate          string                           `json:"sent_date" api:"nullable"`
 	SmtpHeloServerIP  string                           `json:"smtp_helo_server_ip" api:"nullable"`
@@ -708,17 +708,17 @@ func (r investigateGetResponseJSON) RawJSON() string {
 }
 
 type InvestigateGetResponseActionLog struct {
-	// Timestamp when action completed
+	// Timestamp when action completed.
 	CompletedAt time.Time `json:"completed_at" api:"required" format:"date-time"`
-	// Type of action performed
+	// Type of action performed.
 	Operation InvestigateGetResponseActionLogOperation `json:"operation" api:"required"`
 	// Deprecated, use `completed_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `completed_at` instead.
 	CompletedTimestamp string `json:"completed_timestamp"`
-	// Additional properties for the action
+	// Additional properties for the action.
 	Properties InvestigateGetResponseActionLogProperties `json:"properties"`
-	// Status of the action
+	// Status of the action.
 	Status string                              `json:"status" api:"nullable"`
 	JSON   investigateGetResponseActionLogJSON `json:"-"`
 }
@@ -743,7 +743,7 @@ func (r investigateGetResponseActionLogJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of action performed
+// Type of action performed.
 type InvestigateGetResponseActionLogOperation string
 
 const (
@@ -763,11 +763,11 @@ func (r InvestigateGetResponseActionLogOperation) IsKnown() bool {
 	return false
 }
 
-// Additional properties for the action
+// Additional properties for the action.
 type InvestigateGetResponseActionLogProperties struct {
-	// Target folder for move operations
+	// Target folder for move operations.
 	Folder string `json:"folder"`
-	// User who requested the action
+	// User who requested the action.
 	RequestedBy string                                        `json:"requested_by"`
 	JSON        investigateGetResponseActionLogPropertiesJSON `json:"-"`
 }
@@ -789,17 +789,17 @@ func (r investigateGetResponseActionLogPropertiesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Message processing properties
+// Message processing properties.
 type InvestigateGetResponseProperties struct {
-	// Pattern that allowlisted this message
+	// Pattern that allowlisted this message.
 	AllowlistedPattern string `json:"allowlisted_pattern" api:"nullable"`
-	// Type of allowlist pattern
+	// Type of allowlist pattern.
 	AllowlistedPatternType InvestigateGetResponsePropertiesAllowlistedPatternType `json:"allowlisted_pattern_type" api:"nullable"`
-	// Whether message was blocklisted
+	// Whether message was blocklisted.
 	BlocklistedMessage bool `json:"blocklisted_message" api:"nullable"`
-	// Pattern that blocklisted this message
+	// Pattern that blocklisted this message.
 	BlocklistedPattern string `json:"blocklisted_pattern" api:"nullable"`
-	// Legacy field for allowlist pattern type
+	// Legacy field for allowlist pattern type.
 	WhitelistedPatternType InvestigateGetResponsePropertiesWhitelistedPatternType `json:"whitelisted_pattern_type" api:"nullable"`
 	JSON                   investigateGetResponsePropertiesJSON                   `json:"-"`
 }
@@ -824,7 +824,7 @@ func (r investigateGetResponsePropertiesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of allowlist pattern
+// Type of allowlist pattern.
 type InvestigateGetResponsePropertiesAllowlistedPatternType string
 
 const (
@@ -846,7 +846,7 @@ func (r InvestigateGetResponsePropertiesAllowlistedPatternType) IsKnown() bool {
 	return false
 }
 
-// Legacy field for allowlist pattern type
+// Legacy field for allowlist pattern type.
 type InvestigateGetResponsePropertiesWhitelistedPatternType string
 
 const (

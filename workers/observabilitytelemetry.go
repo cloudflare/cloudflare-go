@@ -217,8 +217,8 @@ type ObservabilityTelemetryQueryResponse struct {
 	// Query performance statistics from the database. Includes execution time, rows
 	// scanned, and bytes read. Does not include network latency.
 	Statistics ObservabilityTelemetryQueryResponseStatistics `json:"statistics" api:"required"`
-	// Durable Object agent summaries. Present when the query view is 'agents'. Each
-	// entry represents an agent with its event counts and status.
+	// Agent run summaries. Present when the query view is 'agents'. Each entry
+	// represents one trace containing at least one agent invocation.
 	Agents []ObservabilityTelemetryQueryResponseAgent `json:"agents"`
 	// Aggregated calculation results. Present when the query view is 'calculations'.
 	// Contains computed metrics (count, avg, p99, etc.) with optional group-by
@@ -227,6 +227,9 @@ type ObservabilityTelemetryQueryResponse struct {
 	// Comparison calculation results from the previous time period. Present when the
 	// compare option is enabled. Same structure as calculations.
 	Compare []ObservabilityTelemetryQueryResponseCompare `json:"compare"`
+	// Bucketed 2D histogram of a numeric field over time. Present when chartType is
+	// 'distribution'.
+	Distribution ObservabilityTelemetryQueryResponseDistribution `json:"distribution"`
 	// Individual event results. Present when the query view is 'events'. Contains the
 	// matching log lines and their metadata.
 	Events ObservabilityTelemetryQueryResponseEvents `json:"events"`
@@ -249,6 +252,7 @@ type observabilityTelemetryQueryResponseJSON struct {
 	Agents       apijson.Field
 	Calculations apijson.Field
 	Compare      apijson.Field
+	Distribution apijson.Field
 	Events       apijson.Field
 	Invocations  apijson.Field
 	Traces       apijson.Field
@@ -1214,37 +1218,62 @@ func (r observabilityTelemetryQueryResponseStatisticsJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseAgent struct {
-	// Class name of the Durable Object agent.
-	AgentClass string `json:"agentClass" api:"required"`
-	// Breakdown of event counts by event type.
-	EventTypeCounts map[string]float64 `json:"eventTypeCounts" api:"required"`
-	// Timestamp of the earliest event from this agent in the queried window (Unix
-	// epoch ms).
-	FirstEventMs float64 `json:"firstEventMs" api:"required"`
-	// Whether the agent emitted any error events in the queried window.
-	HasErrors bool `json:"hasErrors" api:"required"`
-	// Timestamp of the most recent event from this agent (Unix epoch ms).
-	LastEventMs float64 `json:"lastEventMs" api:"required"`
-	// Durable Object namespace the agent belongs to.
-	Namespace string `json:"namespace" api:"required"`
-	// Worker service name that hosts this agent.
-	Service string `json:"service" api:"required"`
-	// Total number of events emitted by this agent in the queried window.
-	TotalEvents float64                                      `json:"totalEvents" api:"required"`
-	JSON        observabilityTelemetryQueryResponseAgentJSON `json:"-"`
+	// Pagination cursor derived from the first agent invocation in the run.
+	ID string `json:"id" api:"required"`
+	// Distinct errors reported by spans in the run.
+	Errors []string `json:"errors" api:"required"`
+	// Distinct models reported by chat spans across the run's trace.
+	Models []string `json:"models" api:"required"`
+	// Distinct GenAI providers reported by chat spans in the run.
+	Providers []string `json:"providers" api:"required"`
+	// Worker services represented in the run's trace.
+	Services []string `json:"services" api:"required"`
+	// Number of spans in the run's trace.
+	Spans float64 `json:"spans" api:"required"`
+	// Observed run status.
+	Status ObservabilityTelemetryQueryResponseAgentsStatus `json:"status" api:"required"`
+	// Total trace duration in milliseconds.
+	TraceDurationMs float64 `json:"traceDurationMs" api:"required"`
+	// End of the run's trace as a Unix epoch in milliseconds.
+	TraceEndMs float64 `json:"traceEndMs" api:"required"`
+	// Trace identifier for this agent run.
+	TraceID string `json:"traceId" api:"required"`
+	// Start of the run's trace as a Unix epoch in milliseconds.
+	TraceStartMs float64 `json:"traceStartMs" api:"required"`
+	// ID from the earliest agent invocation that provides one.
+	AgentID string `json:"agentId"`
+	// Name from the earliest agent invocation that provides one.
+	AgentName string `json:"agentName"`
+	// Conversation ID from the earliest invocation that provides one.
+	ConversationID string `json:"conversationId"`
+	// Input tokens summed across chat spans in the run's trace; informational, not
+	// billing data.
+	InputTokens float64 `json:"inputTokens"`
+	// Output tokens summed across chat spans in the run's trace; informational, not
+	// billing data.
+	OutputTokens float64                                      `json:"outputTokens"`
+	JSON         observabilityTelemetryQueryResponseAgentJSON `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseAgentJSON contains the JSON metadata for the
 // struct [ObservabilityTelemetryQueryResponseAgent]
 type observabilityTelemetryQueryResponseAgentJSON struct {
-	AgentClass      apijson.Field
-	EventTypeCounts apijson.Field
-	FirstEventMs    apijson.Field
-	HasErrors       apijson.Field
-	LastEventMs     apijson.Field
-	Namespace       apijson.Field
-	Service         apijson.Field
-	TotalEvents     apijson.Field
+	ID              apijson.Field
+	Errors          apijson.Field
+	Models          apijson.Field
+	Providers       apijson.Field
+	Services        apijson.Field
+	Spans           apijson.Field
+	Status          apijson.Field
+	TraceDurationMs apijson.Field
+	TraceEndMs      apijson.Field
+	TraceID         apijson.Field
+	TraceStartMs    apijson.Field
+	AgentID         apijson.Field
+	AgentName       apijson.Field
+	ConversationID  apijson.Field
+	InputTokens     apijson.Field
+	OutputTokens    apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1255,6 +1284,22 @@ func (r *ObservabilityTelemetryQueryResponseAgent) UnmarshalJSON(data []byte) (e
 
 func (r observabilityTelemetryQueryResponseAgentJSON) RawJSON() string {
 	return r.raw
+}
+
+// Observed run status.
+type ObservabilityTelemetryQueryResponseAgentsStatus string
+
+const (
+	ObservabilityTelemetryQueryResponseAgentsStatusCompleted ObservabilityTelemetryQueryResponseAgentsStatus = "completed"
+	ObservabilityTelemetryQueryResponseAgentsStatusError     ObservabilityTelemetryQueryResponseAgentsStatus = "error"
+)
+
+func (r ObservabilityTelemetryQueryResponseAgentsStatus) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseAgentsStatusCompleted, ObservabilityTelemetryQueryResponseAgentsStatusError:
+		return true
+	}
+	return false
 }
 
 type ObservabilityTelemetryQueryResponseCalculation struct {
@@ -1695,6 +1740,62 @@ func init() {
 	)
 }
 
+// Bucketed 2D histogram of a numeric field over time. Present when chartType is
+// 'distribution'.
+type ObservabilityTelemetryQueryResponseDistribution struct {
+	// Time-bucket labels (ISO-8601 strings), one per matrix column.
+	Bins []string `json:"bins" api:"required"`
+	// Raw bucket edges in the value's native unit, length buckets.length + 1. Used for
+	// the colour scale and percentile mapping.
+	BucketBoundaries []float64 `json:"bucketBoundaries" api:"required"`
+	// Bucketing scheme used to derive the boundaries. 'log' produces geometric edges;
+	// 'linear' produces fixed-width edges.
+	BucketMode ObservabilityTelemetryQueryResponseDistributionBucketMode `json:"bucketMode" api:"required"`
+	// Value-range labels, one per matrix row (e.g. '50–100ms').
+	Buckets []string `json:"buckets" api:"required"`
+	// Sampling-corrected counts. matrix[bucketIdx][binIdx] is the estimated number of
+	// events in value-bucket 'bucketIdx' during time-bin 'binIdx'.
+	Matrix [][]float64                                         `json:"matrix" api:"required"`
+	JSON   observabilityTelemetryQueryResponseDistributionJSON `json:"-"`
+}
+
+// observabilityTelemetryQueryResponseDistributionJSON contains the JSON metadata
+// for the struct [ObservabilityTelemetryQueryResponseDistribution]
+type observabilityTelemetryQueryResponseDistributionJSON struct {
+	Bins             apijson.Field
+	BucketBoundaries apijson.Field
+	BucketMode       apijson.Field
+	Buckets          apijson.Field
+	Matrix           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ObservabilityTelemetryQueryResponseDistribution) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilityTelemetryQueryResponseDistributionJSON) RawJSON() string {
+	return r.raw
+}
+
+// Bucketing scheme used to derive the boundaries. 'log' produces geometric edges;
+// 'linear' produces fixed-width edges.
+type ObservabilityTelemetryQueryResponseDistributionBucketMode string
+
+const (
+	ObservabilityTelemetryQueryResponseDistributionBucketModeLog    ObservabilityTelemetryQueryResponseDistributionBucketMode = "log"
+	ObservabilityTelemetryQueryResponseDistributionBucketModeLinear ObservabilityTelemetryQueryResponseDistributionBucketMode = "linear"
+)
+
+func (r ObservabilityTelemetryQueryResponseDistributionBucketMode) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseDistributionBucketModeLog, ObservabilityTelemetryQueryResponseDistributionBucketModeLinear:
+		return true
+	}
+	return false
+}
+
 // Individual event results. Present when the query view is 'events'. Contains the
 // matching log lines and their metadata.
 type ObservabilityTelemetryQueryResponseEvents struct {
@@ -1809,6 +1910,9 @@ type ObservabilityTelemetryQueryResponseEventsEventsMetadata struct {
 	ParentSpanID string `json:"parentSpanId"`
 	// Infrastructure provider identifier.
 	Provider string `json:"provider"`
+	// Cloudflare Ray ID from the `cf-ray` header of the request that triggered the
+	// invocation.
+	RayID string `json:"rayId"`
 	// Cloudflare data center / region that handled the request.
 	Region string `json:"region"`
 	// Cloudflare request ID that ties all logs from a single invocation together.
@@ -1861,6 +1965,7 @@ type observabilityTelemetryQueryResponseEventsEventsMetadataJSON struct {
 	Origin          apijson.Field
 	ParentSpanID    apijson.Field
 	Provider        apijson.Field
+	RayID           apijson.Field
 	Region          apijson.Field
 	RequestID       apijson.Field
 	Service         apijson.Field
@@ -2423,6 +2528,9 @@ type ObservabilityTelemetryQueryResponseInvocationsMetadata struct {
 	ParentSpanID string `json:"parentSpanId"`
 	// Infrastructure provider identifier.
 	Provider string `json:"provider"`
+	// Cloudflare Ray ID from the `cf-ray` header of the request that triggered the
+	// invocation.
+	RayID string `json:"rayId"`
 	// Cloudflare data center / region that handled the request.
 	Region string `json:"region"`
 	// Cloudflare request ID that ties all logs from a single invocation together.
@@ -2474,6 +2582,7 @@ type observabilityTelemetryQueryResponseInvocationsMetadataJSON struct {
 	Origin          apijson.Field
 	ParentSpanID    apijson.Field
 	Provider        apijson.Field
+	RayID           apijson.Field
 	Region          apijson.Field
 	RequestID       apijson.Field
 	Service         apijson.Field
@@ -4430,6 +4539,13 @@ type ObservabilityTelemetryQueryParams struct {
 	Timeframe param.Field[ObservabilityTelemetryQueryParamsTimeframe] `json:"timeframe" api:"required"`
 	// When true, includes time-series data in the response.
 	Chart param.Field[bool] `json:"chart"`
+	// Controls the SQL shape and response payload for the 'calculations' view. Omitted
+	// or 'timeseries_and_aggregate': current behaviour — both the time-series and
+	// aggregate queries. 'timeseries': time-series only. 'aggregate': aggregate only.
+	// 'distribution': a bucketed 2D histogram (time × value buckets) returned in
+	// 'distribution' instead of 'calculations'. 'distribution' is not compatible with
+	// 'compare' — combining them returns a 400.
+	ChartType param.Field[ObservabilityTelemetryQueryParamsChartType] `json:"chartType"`
 	// When true, includes a comparison dataset from the previous time period of equal
 	// length.
 	Compare param.Field[bool] `json:"compare"`
@@ -4445,8 +4561,9 @@ type ObservabilityTelemetryQueryParams struct {
 	// Maximum number of events to return when view is 'events'. Also controls the
 	// number of group-by rows when view is 'calculations'.
 	Limit param.Field[float64] `json:"limit"`
-	// Cursor for pagination in event, trace, and invocation views. Pass the
-	// $metadata.id of the last returned item to fetch the next page.
+	// Cursor for pagination in event, trace, invocation, and agent views. Pass the
+	// $metadata.id of the last event, the trace cursor, or AgentRun.id to fetch the
+	// next page.
 	Offset param.Field[string] `json:"offset"`
 	// Numeric offset for paginating grouped/pattern results (top-N lists). Use
 	// together with limit. Not used by cursor-based pagination.
@@ -4461,7 +4578,7 @@ type ObservabilityTelemetryQueryParams struct {
 	// Controls the shape of the response. 'events': individual log lines matching the
 	// query. 'calculations': aggregated metrics (count, avg, p99, etc.) with optional
 	// group-by breakdowns and time-series. 'invocations': events grouped by request
-	// ID. 'traces': distributed trace summaries. 'agents': Durable Object agent
+	// ID. 'traces': distributed trace summaries. 'agents': agent-specific trace
 	// summaries.
 	View param.Field[ObservabilityTelemetryQueryParamsView] `json:"view"`
 }
@@ -4481,6 +4598,29 @@ type ObservabilityTelemetryQueryParamsTimeframe struct {
 
 func (r ObservabilityTelemetryQueryParamsTimeframe) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Controls the SQL shape and response payload for the 'calculations' view. Omitted
+// or 'timeseries_and_aggregate': current behaviour — both the time-series and
+// aggregate queries. 'timeseries': time-series only. 'aggregate': aggregate only.
+// 'distribution': a bucketed 2D histogram (time × value buckets) returned in
+// 'distribution' instead of 'calculations'. 'distribution' is not compatible with
+// 'compare' — combining them returns a 400.
+type ObservabilityTelemetryQueryParamsChartType string
+
+const (
+	ObservabilityTelemetryQueryParamsChartTypeTimeseriesAndAggregate ObservabilityTelemetryQueryParamsChartType = "timeseries_and_aggregate"
+	ObservabilityTelemetryQueryParamsChartTypeTimeseries             ObservabilityTelemetryQueryParamsChartType = "timeseries"
+	ObservabilityTelemetryQueryParamsChartTypeAggregate              ObservabilityTelemetryQueryParamsChartType = "aggregate"
+	ObservabilityTelemetryQueryParamsChartTypeDistribution           ObservabilityTelemetryQueryParamsChartType = "distribution"
+)
+
+func (r ObservabilityTelemetryQueryParamsChartType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsChartTypeTimeseriesAndAggregate, ObservabilityTelemetryQueryParamsChartTypeTimeseries, ObservabilityTelemetryQueryParamsChartTypeAggregate, ObservabilityTelemetryQueryParamsChartTypeDistribution:
+		return true
+	}
+	return false
 }
 
 // Query parameters defining what data to retrieve — filters, calculations,
@@ -5339,7 +5479,7 @@ func (r ObservabilityTelemetryQueryParamsParametersOrderByOrder) IsKnown() bool 
 // Controls the shape of the response. 'events': individual log lines matching the
 // query. 'calculations': aggregated metrics (count, avg, p99, etc.) with optional
 // group-by breakdowns and time-series. 'invocations': events grouped by request
-// ID. 'traces': distributed trace summaries. 'agents': Durable Object agent
+// ID. 'traces': distributed trace summaries. 'agents': agent-specific trace
 // summaries.
 type ObservabilityTelemetryQueryParamsView string
 

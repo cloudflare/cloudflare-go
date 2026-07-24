@@ -36,7 +36,7 @@ func TestAccessLogSCIMUpdateListWithOptionalParams(t *testing.T) {
 		IdPResourceID:     cloudflare.F([]string{"all_employees"}),
 		Limit:             cloudflare.F(int64(10)),
 		Page:              cloudflare.F(int64(0)),
-		PerPage:           cloudflare.F(int64(0)),
+		PerPage:           cloudflare.F(int64(1000)),
 		RequestMethod:     cloudflare.F([]zero_trust.AccessLogSCIMUpdateListParamsRequestMethod{zero_trust.AccessLogSCIMUpdateListParamsRequestMethodDelete, zero_trust.AccessLogSCIMUpdateListParamsRequestMethodPatch}),
 		ResourceGroupName: cloudflare.F([]string{"ALL_EMPLOYEES"}),
 		ResourceType:      cloudflare.F([]zero_trust.AccessLogSCIMUpdateListParamsResourceType{zero_trust.AccessLogSCIMUpdateListParamsResourceTypeUser, zero_trust.AccessLogSCIMUpdateListParamsResourceTypeGroup}),

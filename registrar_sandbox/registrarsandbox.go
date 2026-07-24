@@ -82,19 +82,21 @@ import (
 //     still handle this response for consistency with the production Registrar API.
 //     Surface the premium pricing to the user, but do not proceed to
 //     `POST /registrations` for that domain.
-//  5. **Register** — call `POST /registrations` with the chosen domain name for
+//  5. **Observe the registration schema** — call `GET /extensions/:extension_name`
+//     to discover the required values for registering this extension.
+//  6. **Register** — call `POST /registrations` with the chosen domain name for
 //     supported non-premium registrations.
-//  6. **Confirm completion** — if the response is `201 Created`, registration
+//  7. **Confirm completion** — if the response is `201 Created`, registration
 //     completed within the default timeout and no polling is needed.
-//  7. **Poll when needed** — if the response is `202 Accepted`, poll `links.self`
+//  8. **Poll when needed** — if the response is `202 Accepted`, poll `links.self`
 //     from the workflow response.
-//  8. **Stop for user action** — if `state: action_required`, stop polling and
+//  9. **Stop for user action** — if `state: action_required`, stop polling and
 //     surface `context.action` to the user. The workflow will not resolve on its
 //     own.
-//  9. **Continue when blocked** — if `state: blocked`, continue polling and inform
+//  10. **Continue when blocked** — if `state: blocked`, continue polling and inform
 //     the user that a third party, such as the extension registry or losing
 //     registrar, is delaying progress.
-//  10. **Review failures before retrying** — if `state: failed`, review
+//  11. **Review failures before retrying** — if `state: failed`, review
 //     `error.code` and `error.message`, then decide whether user action or a new
 //     Check call is needed.
 //
@@ -135,6 +137,7 @@ type RegistrarSandboxService struct {
 	Registrations      *RegistrationService
 	RegistrationStatus *RegistrationStatusService
 	UpdateStatus       *UpdateStatusService
+	Extensions         *ExtensionService
 }
 
 // NewRegistrarSandboxService generates a new service that applies the given
@@ -146,6 +149,7 @@ func NewRegistrarSandboxService(opts ...option.RequestOption) (r *RegistrarSandb
 	r.Registrations = NewRegistrationService(opts...)
 	r.RegistrationStatus = NewRegistrationStatusService(opts...)
 	r.UpdateStatus = NewUpdateStatusService(opts...)
+	r.Extensions = NewExtensionService(opts...)
 	return
 }
 

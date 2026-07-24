@@ -128,26 +128,28 @@ type VersionListResponse struct {
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	HasDag    bool      `json:"has_dag" api:"required"`
 	// The programming language of the workflow implementation
-	Language   VersionListResponseLanguage `json:"language" api:"required"`
-	ModifiedOn time.Time                   `json:"modified_on" api:"required" format:"date-time"`
-	WorkflowID string                      `json:"workflow_id" api:"required" format:"uuid"`
-	Limits     VersionListResponseLimits   `json:"limits"`
-	JSON       versionListResponseJSON     `json:"-"`
+	Language         VersionListResponseLanguage         `json:"language" api:"required"`
+	ModifiedOn       time.Time                           `json:"modified_on" api:"required" format:"date-time"`
+	WorkflowID       string                              `json:"workflow_id" api:"required" format:"uuid"`
+	DefaultRetention VersionListResponseDefaultRetention `json:"default_retention"`
+	Limits           VersionListResponseLimits           `json:"limits"`
+	JSON             versionListResponseJSON             `json:"-"`
 }
 
 // versionListResponseJSON contains the JSON metadata for the struct
 // [VersionListResponse]
 type versionListResponseJSON struct {
-	ID          apijson.Field
-	ClassName   apijson.Field
-	CreatedOn   apijson.Field
-	HasDag      apijson.Field
-	Language    apijson.Field
-	ModifiedOn  apijson.Field
-	WorkflowID  apijson.Field
-	Limits      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID               apijson.Field
+	ClassName        apijson.Field
+	CreatedOn        apijson.Field
+	HasDag           apijson.Field
+	Language         apijson.Field
+	ModifiedOn       apijson.Field
+	WorkflowID       apijson.Field
+	DefaultRetention apijson.Field
+	Limits           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *VersionListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -172,6 +174,31 @@ func (r VersionListResponseLanguage) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type VersionListResponseDefaultRetention struct {
+	// Default error retention in milliseconds.
+	ErrorRetention int64 `json:"error_retention"`
+	// Default success retention in milliseconds.
+	SuccessRetention int64                                   `json:"success_retention"`
+	JSON             versionListResponseDefaultRetentionJSON `json:"-"`
+}
+
+// versionListResponseDefaultRetentionJSON contains the JSON metadata for the
+// struct [VersionListResponseDefaultRetention]
+type versionListResponseDefaultRetentionJSON struct {
+	ErrorRetention   apijson.Field
+	SuccessRetention apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *VersionListResponseDefaultRetention) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionListResponseDefaultRetentionJSON) RawJSON() string {
+	return r.raw
 }
 
 type VersionListResponseLimits struct {
@@ -201,26 +228,28 @@ type VersionGetResponse struct {
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	HasDag    bool      `json:"has_dag" api:"required"`
 	// The programming language of the workflow implementation
-	Language   VersionGetResponseLanguage `json:"language" api:"required"`
-	ModifiedOn time.Time                  `json:"modified_on" api:"required" format:"date-time"`
-	WorkflowID string                     `json:"workflow_id" api:"required" format:"uuid"`
-	Limits     VersionGetResponseLimits   `json:"limits"`
-	JSON       versionGetResponseJSON     `json:"-"`
+	Language         VersionGetResponseLanguage         `json:"language" api:"required"`
+	ModifiedOn       time.Time                          `json:"modified_on" api:"required" format:"date-time"`
+	WorkflowID       string                             `json:"workflow_id" api:"required" format:"uuid"`
+	DefaultRetention VersionGetResponseDefaultRetention `json:"default_retention"`
+	Limits           VersionGetResponseLimits           `json:"limits"`
+	JSON             versionGetResponseJSON             `json:"-"`
 }
 
 // versionGetResponseJSON contains the JSON metadata for the struct
 // [VersionGetResponse]
 type versionGetResponseJSON struct {
-	ID          apijson.Field
-	ClassName   apijson.Field
-	CreatedOn   apijson.Field
-	HasDag      apijson.Field
-	Language    apijson.Field
-	ModifiedOn  apijson.Field
-	WorkflowID  apijson.Field
-	Limits      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID               apijson.Field
+	ClassName        apijson.Field
+	CreatedOn        apijson.Field
+	HasDag           apijson.Field
+	Language         apijson.Field
+	ModifiedOn       apijson.Field
+	WorkflowID       apijson.Field
+	DefaultRetention apijson.Field
+	Limits           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *VersionGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -245,6 +274,31 @@ func (r VersionGetResponseLanguage) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type VersionGetResponseDefaultRetention struct {
+	// Default error retention in milliseconds.
+	ErrorRetention int64 `json:"error_retention"`
+	// Default success retention in milliseconds.
+	SuccessRetention int64                                  `json:"success_retention"`
+	JSON             versionGetResponseDefaultRetentionJSON `json:"-"`
+}
+
+// versionGetResponseDefaultRetentionJSON contains the JSON metadata for the struct
+// [VersionGetResponseDefaultRetention]
+type versionGetResponseDefaultRetentionJSON struct {
+	ErrorRetention   apijson.Field
+	SuccessRetention apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *VersionGetResponseDefaultRetention) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseDefaultRetentionJSON) RawJSON() string {
+	return r.raw
 }
 
 type VersionGetResponseLimits struct {

@@ -37,8 +37,8 @@ func NewInvestigateBulkCancelService(opts ...option.RequestOption) (r *Investiga
 	return
 }
 
-// Marks the job as cancelled and stops any pending message processing. The job
-// record remains visible in list and detail endpoints.
+// Cancels the job, marking it as cancelled and stopping any pending message
+// processing. The job record remains visible in list and detail endpoints.
 func (r *InvestigateBulkCancelService) New(ctx context.Context, jobID string, body InvestigateBulkCancelNewParams, opts ...option.RequestOption) (res *InvestigateBulkCancelNewResponse, err error) {
 	var env InvestigateBulkCancelNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -373,7 +373,7 @@ type InvestigateBulkCancelNewResponseSearchParams struct {
 	DeliveryStatus InvestigateBulkCancelNewResponseSearchParamsDeliveryStatus `json:"delivery_status"`
 	DetectionsOnly bool                                                       `json:"detections_only"`
 	Domain         string                                                     `json:"domain" api:"nullable"`
-	// End of search date range
+	// End of search date range.
 	End              time.Time                                                    `json:"end" format:"date-time"`
 	ExactSubject     string                                                       `json:"exact_subject" api:"nullable"`
 	FinalDisposition InvestigateBulkCancelNewResponseSearchParamsFinalDisposition `json:"final_disposition"`
@@ -383,7 +383,7 @@ type InvestigateBulkCancelNewResponseSearchParams struct {
 	Query            string                                                       `json:"query" api:"nullable"`
 	Recipient        string                                                       `json:"recipient" api:"nullable"`
 	Sender           string                                                       `json:"sender" api:"nullable"`
-	// Beginning of search date range
+	// Beginning of search date range.
 	Start       time.Time                                        `json:"start" format:"date-time"`
 	Subject     string                                           `json:"subject" api:"nullable"`
 	Submissions bool                                             `json:"submissions"`

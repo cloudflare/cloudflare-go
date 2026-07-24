@@ -94,23 +94,23 @@ func (r investigateDetectionGetResponseJSON) RawJSON() string {
 }
 
 type InvestigateDetectionGetResponseAttachment struct {
-	// Size of the attachment in bytes
+	// Size of the attachment in bytes.
 	Size int64 `json:"size" api:"required"`
-	// MIME type of the attachment
+	// MIME type of the attachment.
 	ContentType string `json:"content_type" api:"nullable"`
-	// Detection result for this attachment
+	// Detection result for this attachment.
 	Detection InvestigateDetectionGetResponseAttachmentsDetection `json:"detection" api:"nullable"`
-	// Whether the attachment is encrypted
+	// Whether the attachment is encrypted.
 	Encrypted bool `json:"encrypted" api:"nullable"`
-	// Name of the attached file
+	// Name of the attached file.
 	Filename string `json:"filename" api:"nullable"`
-	// MD5 hash of the attachment
+	// MD5 hash of the attachment.
 	Md5 string `json:"md5" api:"nullable"`
-	// Attachment name (alternative to filename)
+	// Attachment name (alternative to filename).
 	Name string `json:"name" api:"nullable"`
-	// SHA1 hash of the attachment
+	// SHA1 hash of the attachment.
 	Sha1 string `json:"sha1" api:"nullable"`
-	// SHA256 hash of the attachment
+	// SHA256 hash of the attachment.
 	Sha256 string                                        `json:"sha256" api:"nullable"`
 	JSON   investigateDetectionGetResponseAttachmentJSON `json:"-"`
 }
@@ -139,7 +139,7 @@ func (r investigateDetectionGetResponseAttachmentJSON) RawJSON() string {
 	return r.raw
 }
 
-// Detection result for this attachment
+// Detection result for this attachment.
 type InvestigateDetectionGetResponseAttachmentsDetection string
 
 const (

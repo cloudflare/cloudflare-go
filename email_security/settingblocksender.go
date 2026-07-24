@@ -154,9 +154,9 @@ func (r *SettingBlockSenderService) Get(ctx context.Context, patternID string, q
 	return res, nil
 }
 
-// A blocked sender pattern
+// A blocked sender pattern.
 type SettingBlockSenderNewResponse struct {
-	// Blocked sender pattern identifier
+	// Blocked sender pattern identifier.
 	ID        string    `json:"id" format:"uuid"`
 	Comments  string    `json:"comments" api:"nullable"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -166,22 +166,20 @@ type SettingBlockSenderNewResponse struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
-	// The pattern value to match against. Format depends on `pattern_type`:
-	//
-	//   - EMAIL: a valid email address, e.g. `user@example.com`
-	//   - DOMAIN: a valid domain name, e.g. `example.com`
-	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
-	//     loopback, link-local, and unspecified addresses are rejected.
+	// The pattern value to match. The format depends on `pattern_type`: a valid email
+	// address for EMAIL (e.g. `user@example.com`), a valid domain name for DOMAIN
+	// (e.g. `example.com`), or a plain IPv4 address or IPv4 CIDR block for IP (e.g.
+	// `1.2.3.4` or `1.2.3.0/24`); the API accepts only globally reachable IP addresses
+	// and rejects private, loopback, link-local, and unspecified addresses.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
 	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
 	//   - DOMAIN: matches a domain name (e.g. `example.com`)
 	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-	//     may be returned for existing entries.
+	//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderNewResponsePatternType `json:"pattern_type"`
 	JSON        settingBlockSenderNewResponseJSON        `json:"-"`
 }
@@ -214,9 +212,9 @@ func (r settingBlockSenderNewResponseJSON) RawJSON() string {
 //   - EMAIL: matches a full email address (e.g. `user@example.com`)
 //   - DOMAIN: matches a domain name (e.g. `example.com`)
 //   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-//     may be returned for existing entries.
+//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+//     but it may appear on existing entries.
 type SettingBlockSenderNewResponsePatternType string
 
 const (
@@ -234,9 +232,9 @@ func (r SettingBlockSenderNewResponsePatternType) IsKnown() bool {
 	return false
 }
 
-// A blocked sender pattern
+// A blocked sender pattern.
 type SettingBlockSenderListResponse struct {
-	// Blocked sender pattern identifier
+	// Blocked sender pattern identifier.
 	ID        string    `json:"id" format:"uuid"`
 	Comments  string    `json:"comments" api:"nullable"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -246,22 +244,20 @@ type SettingBlockSenderListResponse struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
-	// The pattern value to match against. Format depends on `pattern_type`:
-	//
-	//   - EMAIL: a valid email address, e.g. `user@example.com`
-	//   - DOMAIN: a valid domain name, e.g. `example.com`
-	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
-	//     loopback, link-local, and unspecified addresses are rejected.
+	// The pattern value to match. The format depends on `pattern_type`: a valid email
+	// address for EMAIL (e.g. `user@example.com`), a valid domain name for DOMAIN
+	// (e.g. `example.com`), or a plain IPv4 address or IPv4 CIDR block for IP (e.g.
+	// `1.2.3.4` or `1.2.3.0/24`); the API accepts only globally reachable IP addresses
+	// and rejects private, loopback, link-local, and unspecified addresses.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
 	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
 	//   - DOMAIN: matches a domain name (e.g. `example.com`)
 	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-	//     may be returned for existing entries.
+	//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderListResponsePatternType `json:"pattern_type"`
 	JSON        settingBlockSenderListResponseJSON        `json:"-"`
 }
@@ -294,9 +290,9 @@ func (r settingBlockSenderListResponseJSON) RawJSON() string {
 //   - EMAIL: matches a full email address (e.g. `user@example.com`)
 //   - DOMAIN: matches a domain name (e.g. `example.com`)
 //   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-//     may be returned for existing entries.
+//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+//     but it may appear on existing entries.
 type SettingBlockSenderListResponsePatternType string
 
 const (
@@ -315,7 +311,7 @@ func (r SettingBlockSenderListResponsePatternType) IsKnown() bool {
 }
 
 type SettingBlockSenderDeleteResponse struct {
-	// Blocked sender pattern identifier
+	// Blocked sender pattern identifier.
 	ID   string                               `json:"id" api:"required" format:"uuid"`
 	JSON settingBlockSenderDeleteResponseJSON `json:"-"`
 }
@@ -336,9 +332,9 @@ func (r settingBlockSenderDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A blocked sender pattern
+// A blocked sender pattern.
 type SettingBlockSenderEditResponse struct {
-	// Blocked sender pattern identifier
+	// Blocked sender pattern identifier.
 	ID        string    `json:"id" format:"uuid"`
 	Comments  string    `json:"comments" api:"nullable"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -348,22 +344,20 @@ type SettingBlockSenderEditResponse struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
-	// The pattern value to match against. Format depends on `pattern_type`:
-	//
-	//   - EMAIL: a valid email address, e.g. `user@example.com`
-	//   - DOMAIN: a valid domain name, e.g. `example.com`
-	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
-	//     loopback, link-local, and unspecified addresses are rejected.
+	// The pattern value to match. The format depends on `pattern_type`: a valid email
+	// address for EMAIL (e.g. `user@example.com`), a valid domain name for DOMAIN
+	// (e.g. `example.com`), or a plain IPv4 address or IPv4 CIDR block for IP (e.g.
+	// `1.2.3.4` or `1.2.3.0/24`); the API accepts only globally reachable IP addresses
+	// and rejects private, loopback, link-local, and unspecified addresses.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
 	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
 	//   - DOMAIN: matches a domain name (e.g. `example.com`)
 	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-	//     may be returned for existing entries.
+	//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderEditResponsePatternType `json:"pattern_type"`
 	JSON        settingBlockSenderEditResponseJSON        `json:"-"`
 }
@@ -396,9 +390,9 @@ func (r settingBlockSenderEditResponseJSON) RawJSON() string {
 //   - EMAIL: matches a full email address (e.g. `user@example.com`)
 //   - DOMAIN: matches a domain name (e.g. `example.com`)
 //   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-//     may be returned for existing entries.
+//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+//     but it may appear on existing entries.
 type SettingBlockSenderEditResponsePatternType string
 
 const (
@@ -416,9 +410,9 @@ func (r SettingBlockSenderEditResponsePatternType) IsKnown() bool {
 	return false
 }
 
-// A blocked sender pattern
+// A blocked sender pattern.
 type SettingBlockSenderGetResponse struct {
-	// Blocked sender pattern identifier
+	// Blocked sender pattern identifier.
 	ID        string    `json:"id" format:"uuid"`
 	Comments  string    `json:"comments" api:"nullable"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -428,22 +422,20 @@ type SettingBlockSenderGetResponse struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
-	// The pattern value to match against. Format depends on `pattern_type`:
-	//
-	//   - EMAIL: a valid email address, e.g. `user@example.com`
-	//   - DOMAIN: a valid domain name, e.g. `example.com`
-	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
-	//     loopback, link-local, and unspecified addresses are rejected.
+	// The pattern value to match. The format depends on `pattern_type`: a valid email
+	// address for EMAIL (e.g. `user@example.com`), a valid domain name for DOMAIN
+	// (e.g. `example.com`), or a plain IPv4 address or IPv4 CIDR block for IP (e.g.
+	// `1.2.3.4` or `1.2.3.0/24`); the API accepts only globally reachable IP addresses
+	// and rejects private, loopback, link-local, and unspecified addresses.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
 	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
 	//   - DOMAIN: matches a domain name (e.g. `example.com`)
 	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-	//     may be returned for existing entries.
+	//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderGetResponsePatternType `json:"pattern_type"`
 	JSON        settingBlockSenderGetResponseJSON        `json:"-"`
 }
@@ -476,9 +468,9 @@ func (r settingBlockSenderGetResponseJSON) RawJSON() string {
 //   - EMAIL: matches a full email address (e.g. `user@example.com`)
 //   - DOMAIN: matches a domain name (e.g. `example.com`)
 //   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-//     may be returned for existing entries.
+//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+//     but it may appear on existing entries.
 type SettingBlockSenderGetResponsePatternType string
 
 const (
@@ -500,22 +492,20 @@ type SettingBlockSenderNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	IsRegex   param.Field[bool]   `json:"is_regex" api:"required"`
-	// The pattern value to match against. Format depends on `pattern_type`:
-	//
-	//   - EMAIL: a valid email address, e.g. `user@example.com`
-	//   - DOMAIN: a valid domain name, e.g. `example.com`
-	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
-	//     loopback, link-local, and unspecified addresses are rejected.
+	// The pattern value to match. The format depends on `pattern_type`: a valid email
+	// address for EMAIL (e.g. `user@example.com`), a valid domain name for DOMAIN
+	// (e.g. `example.com`), or a plain IPv4 address or IPv4 CIDR block for IP (e.g.
+	// `1.2.3.4` or `1.2.3.0/24`); the API accepts only globally reachable IP addresses
+	// and rejects private, loopback, link-local, and unspecified addresses.
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Type of pattern matching.
 	//
 	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
 	//   - DOMAIN: matches a domain name (e.g. `example.com`)
 	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-	//     may be returned for existing entries.
+	//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType param.Field[SettingBlockSenderNewParamsPatternType] `json:"pattern_type" api:"required"`
 	Comments    param.Field[string]                                 `json:"comments"`
 }
@@ -529,9 +519,9 @@ func (r SettingBlockSenderNewParams) MarshalJSON() (data []byte, err error) {
 //   - EMAIL: matches a full email address (e.g. `user@example.com`)
 //   - DOMAIN: matches a domain name (e.g. `example.com`)
 //   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-//     may be returned for existing entries.
+//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+//     but it may appear on existing entries.
 type SettingBlockSenderNewParamsPatternType string
 
 const (
@@ -554,7 +544,7 @@ type SettingBlockSenderNewResponseEnvelope struct {
 	Messages []SettingBlockSenderNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingBlockSenderNewResponseEnvelopeSuccess `json:"success" api:"required"`
-	// A blocked sender pattern
+	// A blocked sender pattern.
 	Result SettingBlockSenderNewResponse             `json:"result"`
 	JSON   settingBlockSenderNewResponseEnvelopeJSON `json:"-"`
 }
@@ -916,22 +906,20 @@ type SettingBlockSenderEditParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Comments  param.Field[string] `json:"comments"`
 	IsRegex   param.Field[bool]   `json:"is_regex"`
-	// The pattern value to match against. Format depends on `pattern_type`:
-	//
-	//   - EMAIL: a valid email address, e.g. `user@example.com`
-	//   - DOMAIN: a valid domain name, e.g. `example.com`
-	//   - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted; private,
-	//     loopback, link-local, and unspecified addresses are rejected.
+	// The pattern value to match. The format depends on `pattern_type`: a valid email
+	// address for EMAIL (e.g. `user@example.com`), a valid domain name for DOMAIN
+	// (e.g. `example.com`), or a plain IPv4 address or IPv4 CIDR block for IP (e.g.
+	// `1.2.3.4` or `1.2.3.0/24`); the API accepts only globally reachable IP addresses
+	// and rejects private, loopback, link-local, and unspecified addresses.
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
 	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
 	//   - DOMAIN: matches a domain name (e.g. `example.com`)
 	//   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-	//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-	//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-	//     may be returned for existing entries.
+	//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType param.Field[SettingBlockSenderEditParamsPatternType] `json:"pattern_type"`
 }
 
@@ -944,9 +932,9 @@ func (r SettingBlockSenderEditParams) MarshalJSON() (data []byte, err error) {
 //   - EMAIL: matches a full email address (e.g. `user@example.com`)
 //   - DOMAIN: matches a domain name (e.g. `example.com`)
 //   - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g.
-//     `1.2.3.0/24`). Only globally reachable addresses are accepted.
-//   - UNKNOWN: deprecated, cannot be used when creating or updating policies, but
-//     may be returned for existing entries.
+//     `1.2.3.0/24`). The API accepts only globally reachable addresses.
+//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+//     but it may appear on existing entries.
 type SettingBlockSenderEditParamsPatternType string
 
 const (
@@ -969,7 +957,7 @@ type SettingBlockSenderEditResponseEnvelope struct {
 	Messages []SettingBlockSenderEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingBlockSenderEditResponseEnvelopeSuccess `json:"success" api:"required"`
-	// A blocked sender pattern
+	// A blocked sender pattern.
 	Result SettingBlockSenderEditResponse             `json:"result"`
 	JSON   settingBlockSenderEditResponseEnvelopeJSON `json:"-"`
 }
@@ -1114,7 +1102,7 @@ type SettingBlockSenderGetResponseEnvelope struct {
 	Messages []SettingBlockSenderGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingBlockSenderGetResponseEnvelopeSuccess `json:"success" api:"required"`
-	// A blocked sender pattern
+	// A blocked sender pattern.
 	Result SettingBlockSenderGetResponse             `json:"result"`
 	JSON   settingBlockSenderGetResponseEnvelopeJSON `json:"-"`
 }

@@ -143,8 +143,7 @@ func (r scrapeNewResponseResultsAttributeJSON) RawJSON() string {
 
 type ScrapeNewParams struct {
 	// Account ID.
-	AccountID param.Field[string]                   `path:"account_id" api:"required"`
-	Elements  param.Field[[]ScrapeNewParamsElement] `json:"elements" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
 	// The maximum duration allowed for the browser action to complete after the page
@@ -166,8 +165,9 @@ type ScrapeNewParams struct {
 	// Attempt to proceed when 'awaited' events fail or timeout.
 	BestAttempt param.Field[bool] `json:"bestAttempt"`
 	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
-	Cookies          param.Field[[]ScrapeNewParamsCookie] `json:"cookies"`
-	EmulateMediaType param.Field[string]                  `json:"emulateMediaType"`
+	Cookies          param.Field[[]ScrapeNewParamsCookie]  `json:"cookies"`
+	Elements         param.Field[[]ScrapeNewParamsElement] `json:"elements"`
+	EmulateMediaType param.Field[string]                   `json:"emulateMediaType"`
 	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
 	GotoOptions param.Field[ScrapeNewParamsGotoOptions] `json:"gotoOptions"`
 	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
@@ -203,14 +203,6 @@ func (r ScrapeNewParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type ScrapeNewParamsElement struct {
-	Selector param.Field[string] `json:"selector" api:"required"`
-}
-
-func (r ScrapeNewParamsElement) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type ScrapeNewParamsAddScriptTag struct {
@@ -342,6 +334,14 @@ func (r ScrapeNewParamsCookiesSourceScheme) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type ScrapeNewParamsElement struct {
+	Selector param.Field[string] `json:"selector" api:"required"`
+}
+
+func (r ScrapeNewParamsElement) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.gotooptions).

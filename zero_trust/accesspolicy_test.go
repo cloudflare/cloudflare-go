@@ -159,7 +159,7 @@ func TestAccessPolicyListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.Policies.List(context.TODO(), zero_trust.AccessPolicyListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:      cloudflare.F(int64(0)),
-		PerPage:   cloudflare.F(int64(0)),
+		PerPage:   cloudflare.F(int64(1000)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

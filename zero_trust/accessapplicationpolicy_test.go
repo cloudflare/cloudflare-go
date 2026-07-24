@@ -150,7 +150,7 @@ func TestAccessApplicationPolicyListWithOptionalParams(t *testing.T) {
 		zero_trust.AccessApplicationPolicyListParams{
 			AccountID: cloudflare.F("account_id"),
 			Page:      cloudflare.F(int64(0)),
-			PerPage:   cloudflare.F(int64(0)),
+			PerPage:   cloudflare.F(int64(1000)),
 		},
 	)
 	if err != nil {

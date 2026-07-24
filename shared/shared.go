@@ -582,8 +582,8 @@ func (r memberPoliciesPermissionGroupsMetaJSON) RawJSON() string {
 type MemberPoliciesResourceGroup struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// The scope associated to the resource group
-	Scope []MemberPoliciesResourceGroupsScope `json:"scope" api:"required"`
+	// A scope is a combination of scope objects which provides additional context.
+	Scope MemberPoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta MemberPoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.

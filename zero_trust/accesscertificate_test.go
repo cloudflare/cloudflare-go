@@ -95,7 +95,7 @@ func TestAccessCertificateListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.Certificates.List(context.TODO(), zero_trust.AccessCertificateListParams{
 		AccountID: cloudflare.F("account_id"),
 		Page:      cloudflare.F(int64(0)),
-		PerPage:   cloudflare.F(int64(0)),
+		PerPage:   cloudflare.F(int64(1000)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
