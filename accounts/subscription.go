@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
@@ -33,6 +34,37 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 	r = &SubscriptionService{}
 	r.Options = opts
 	return
+}
+
+// Creates an account or zone subscription.
+func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
+	var env SubscriptionNewResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	}
+	if params.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/subscriptions", accountOrZone, accountOrZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // Updates an account subscription.
@@ -77,6 +109,47 @@ func (r *SubscriptionService) Delete(ctx context.Context, subscriptionIdentifier
 	return res, nil
 }
 
+// Lists all of an account or zone's subscriptions.
+func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[shared.Subscription], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	}
+	if query.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/subscriptions", accountOrZone, accountOrZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all of an account or zone's subscriptions.
+func (r *SubscriptionService) GetAutoPaging(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[shared.Subscription] {
+	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
+}
+
 type SubscriptionDeleteResponse struct {
 	// Subscription identifier tag.
 	SubscriptionID string                         `json:"subscription_id"`
@@ -97,6 +170,61 @@ func (r *SubscriptionDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r subscriptionDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type SubscriptionNewParams struct {
+	Subscription shared.SubscriptionParam `json:"subscription" api:"required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
+}
+
+func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Subscription)
+}
+
+type SubscriptionNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   shared.Subscription   `json:"result" api:"required"`
+	// Whether the API call was successful
+	Success SubscriptionNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    subscriptionNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// subscriptionNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SubscriptionNewResponseEnvelope]
+type subscriptionNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubscriptionNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SubscriptionNewResponseEnvelopeSuccess bool
+
+const (
+	SubscriptionNewResponseEnvelopeSuccessTrue SubscriptionNewResponseEnvelopeSuccess = true
+)
+
+func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubscriptionNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type SubscriptionUpdateParams struct {
@@ -198,4 +326,11 @@ func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type SubscriptionGetParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 }
