@@ -35,6 +35,7 @@ func TestAccessAIControlMcpServerNewWithOptionalParams(t *testing.T) {
 		Hostname:                     cloudflare.F("https://example.com/mcp"),
 		Name:                         cloudflare.F("My MCP Server"),
 		AuthCredentials:              cloudflare.F("auth_credentials"),
+		ClientSecret:                 cloudflare.F("client_secret"),
 		Description:                  cloudflare.F("This is one remote mcp server"),
 		IsSharedOAuthCallbackEnabled: cloudflare.F(true),
 		SecureWebGateway:             cloudflare.F(false),
@@ -80,6 +81,7 @@ func TestAccessAIControlMcpServerUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.AccessAIControlMcpServerUpdateParams{
 			AccountID:                    cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 			AuthCredentials:              cloudflare.F("auth_credentials"),
+			ClientSecret:                 cloudflare.F("client_secret"),
 			Description:                  cloudflare.F("This is one remote mcp server"),
 			IsSharedOAuthCallbackEnabled: cloudflare.F(true),
 			Name:                         cloudflare.F("My MCP Server"),

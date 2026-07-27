@@ -30,11 +30,50 @@ func TestRegistrationNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Registrar.Registrations.New(context.TODO(), registrar.RegistrationNewParams{
 		AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		DomainName: cloudflare.F("my-new-startup.com"),
-		AutoRenew:  cloudflare.F(false),
+		DomainName: cloudflare.F("my-brand-example.io"),
+		Acknowledgements: cloudflare.F(map[string]interface{}{
+			"fees": "bar",
+		}),
+		AutoRenew: cloudflare.F(false),
+		ContactExtensions: cloudflare.F(map[string]interface{}{
+			"application_purpose": "bar",
+			"nexus_category":      "bar",
+		}),
 		Contacts: cloudflare.F(registrar.RegistrationNewParamsContacts{
+			Administrator: cloudflare.F(registrar.RegistrationNewParamsContactsAdministrator{
+				Email: cloudflare.F("katherine@example.io"),
+				Phone: cloudflare.F("+1.5555550102"),
+				PostalInfo: cloudflare.F(registrar.RegistrationNewParamsContactsAdministratorPostalInfo{
+					Address: cloudflare.F(registrar.RegistrationNewParamsContactsAdministratorPostalInfoAddress{
+						City:        cloudflare.F("San Francisco"),
+						CountryCode: cloudflare.F("US"),
+						PostalCode:  cloudflare.F("94103"),
+						State:       cloudflare.F("CA"),
+						Street:      cloudflare.F("789 Mission St"),
+					}),
+					Name:         cloudflare.F("Katherine Johnson"),
+					Organization: cloudflare.F("Example Admin Inc"),
+				}),
+				Fax: cloudflare.F("+1.5555555555"),
+			}),
+			Billing: cloudflare.F(registrar.RegistrationNewParamsContactsBilling{
+				Email: cloudflare.F("dorothy@example.io"),
+				Phone: cloudflare.F("+1.5555550103"),
+				PostalInfo: cloudflare.F(registrar.RegistrationNewParamsContactsBillingPostalInfo{
+					Address: cloudflare.F(registrar.RegistrationNewParamsContactsBillingPostalInfoAddress{
+						City:        cloudflare.F("San Francisco"),
+						CountryCode: cloudflare.F("US"),
+						PostalCode:  cloudflare.F("94105"),
+						State:       cloudflare.F("CA"),
+						Street:      cloudflare.F("101 Howard St"),
+					}),
+					Name:         cloudflare.F("Dorothy Vaughan"),
+					Organization: cloudflare.F("Example Billing Inc"),
+				}),
+				Fax: cloudflare.F("+1.5555555555"),
+			}),
 			Registrant: cloudflare.F(registrar.RegistrationNewParamsContactsRegistrant{
-				Email: cloudflare.F("ada@example.com"),
+				Email: cloudflare.F("ada@example.io"),
 				Phone: cloudflare.F("+1.5555555555"),
 				PostalInfo: cloudflare.F(registrar.RegistrationNewParamsContactsRegistrantPostalInfo{
 					Address: cloudflare.F(registrar.RegistrationNewParamsContactsRegistrantPostalInfoAddress{
@@ -46,6 +85,22 @@ func TestRegistrationNewWithOptionalParams(t *testing.T) {
 					}),
 					Name:         cloudflare.F("Ada Lovelace"),
 					Organization: cloudflare.F("Example Inc"),
+				}),
+				Fax: cloudflare.F("+1.5555555555"),
+			}),
+			Technical: cloudflare.F(registrar.RegistrationNewParamsContactsTechnical{
+				Email: cloudflare.F("grace@example.io"),
+				Phone: cloudflare.F("+1.5555550101"),
+				PostalInfo: cloudflare.F(registrar.RegistrationNewParamsContactsTechnicalPostalInfo{
+					Address: cloudflare.F(registrar.RegistrationNewParamsContactsTechnicalPostalInfoAddress{
+						City:        cloudflare.F("San Francisco"),
+						CountryCode: cloudflare.F("US"),
+						PostalCode:  cloudflare.F("94105"),
+						State:       cloudflare.F("CA"),
+						Street:      cloudflare.F("456 Market St"),
+					}),
+					Name:         cloudflare.F("Grace Hopper"),
+					Organization: cloudflare.F("Example Technical Inc"),
 				}),
 				Fax: cloudflare.F("+1.5555555555"),
 			}),

@@ -33,9 +33,8 @@ func TestBillingUsageGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		organizations.BillingUsageGetParams{
-			From:   cloudflare.F(time.Now()),
-			Metric: cloudflare.F("workers_standard_requests"),
-			To:     cloudflare.F(time.Now()),
+			From: cloudflare.F(time.Now()),
+			To:   cloudflare.F(time.Now()),
 		},
 	)
 	if err != nil {

@@ -404,15 +404,45 @@ func (r workflowGetResponseScheduleJSON) RawJSON() string {
 }
 
 type WorkflowUpdateParams struct {
-	AccountID  param.Field[string]                         `path:"account_id" api:"required"`
-	ClassName  param.Field[string]                         `json:"class_name" api:"required"`
-	ScriptName param.Field[string]                         `json:"script_name" api:"required"`
-	Limits     param.Field[WorkflowUpdateParamsLimits]     `json:"limits"`
-	Schedules  param.Field[[]WorkflowUpdateParamsSchedule] `json:"schedules"`
+	AccountID  param.Field[string] `path:"account_id" api:"required"`
+	ClassName  param.Field[string] `json:"class_name" api:"required"`
+	ScriptName param.Field[string] `json:"script_name" api:"required"`
+	// Default retention applied to instances of this version when they do not set
+	// their own retention.
+	DefaultRetention param.Field[WorkflowUpdateParamsDefaultRetention] `json:"default_retention"`
+	Limits           param.Field[WorkflowUpdateParamsLimits]           `json:"limits"`
+	Schedules        param.Field[[]WorkflowUpdateParamsSchedule]       `json:"schedules"`
 }
 
 func (r WorkflowUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Default retention applied to instances of this version when they do not set
+// their own retention.
+type WorkflowUpdateParamsDefaultRetention struct {
+	// Specifies the duration in milliseconds or as a string like '5 minutes'.
+	ErrorRetention param.Field[WorkflowUpdateParamsDefaultRetentionErrorRetentionUnion] `json:"error_retention"`
+	// Specifies the duration in milliseconds or as a string like '5 minutes'.
+	SuccessRetention param.Field[WorkflowUpdateParamsDefaultRetentionSuccessRetentionUnion] `json:"success_retention"`
+}
+
+func (r WorkflowUpdateParamsDefaultRetention) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Specifies the duration in milliseconds or as a string like '5 minutes'.
+//
+// Satisfied by [shared.UnionInt], [shared.UnionString].
+type WorkflowUpdateParamsDefaultRetentionErrorRetentionUnion interface {
+	ImplementsWorkflowUpdateParamsDefaultRetentionErrorRetentionUnion()
+}
+
+// Specifies the duration in milliseconds or as a string like '5 minutes'.
+//
+// Satisfied by [shared.UnionInt], [shared.UnionString].
+type WorkflowUpdateParamsDefaultRetentionSuccessRetentionUnion interface {
+	ImplementsWorkflowUpdateParamsDefaultRetentionSuccessRetentionUnion()
 }
 
 type WorkflowUpdateParamsLimits struct {

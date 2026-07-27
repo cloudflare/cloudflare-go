@@ -189,7 +189,7 @@ func (r hostnameRouteJSON) RawJSON() string {
 	return r.raw
 }
 
-// HostnameRouteTunType is the type of tunnel.
+// The type of tunnel.
 type HostnameRouteTunType string
 
 const (
@@ -253,7 +253,7 @@ func (r networkHostnameRouteNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkHostnameRouteNewResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkHostnameRouteNewResponseEnvelopeSuccess bool
 
 const (
@@ -334,7 +334,7 @@ func (r networkHostnameRouteDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkHostnameRouteDeleteResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkHostnameRouteDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -392,7 +392,7 @@ func (r networkHostnameRouteEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkHostnameRouteEditResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkHostnameRouteEditResponseEnvelopeSuccess bool
 
 const (
@@ -440,7 +440,7 @@ func (r networkHostnameRouteGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// NetworkHostnameRouteGetResponseEnvelopeSuccess indicates whether the API call was successful
+// Whether the API call was successful
 type NetworkHostnameRouteGetResponseEnvelopeSuccess bool
 
 const (

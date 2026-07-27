@@ -38,7 +38,7 @@ func NewDLPSensitivityGroupLevelService(opts ...option.RequestOption) (r *DLPSen
 	return
 }
 
-// Creates a new sensitivity level.
+// Creates a sensitivity level in a group.
 func (r *DLPSensitivityGroupLevelService) New(ctx context.Context, sensitivityGroupID string, params DLPSensitivityGroupLevelNewParams, opts ...option.RequestOption) (res *DLPSensitivityGroupLevelNewResponse, err error) {
 	var env DLPSensitivityGroupLevelNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -59,7 +59,7 @@ func (r *DLPSensitivityGroupLevelService) New(ctx context.Context, sensitivityGr
 	return res, nil
 }
 
-// Update the attributes of a single sensitivity level.
+// Updates a sensitivity level in a group.
 func (r *DLPSensitivityGroupLevelService) Update(ctx context.Context, sensitivityGroupID string, sensitivityLevelID string, params DLPSensitivityGroupLevelUpdateParams, opts ...option.RequestOption) (res *DLPSensitivityGroupLevelUpdateResponse, err error) {
 	var env DLPSensitivityGroupLevelUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -84,7 +84,7 @@ func (r *DLPSensitivityGroupLevelService) Update(ctx context.Context, sensitivit
 	return res, nil
 }
 
-// Retrieve all sensitivity levels in a sensitivity group
+// Lists sensitivity levels in a sensitivity group.
 func (r *DLPSensitivityGroupLevelService) List(ctx context.Context, sensitivityGroupID string, query DLPSensitivityGroupLevelListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DLPSensitivityGroupLevelListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -110,12 +110,12 @@ func (r *DLPSensitivityGroupLevelService) List(ctx context.Context, sensitivityG
 	return res, nil
 }
 
-// Retrieve all sensitivity levels in a sensitivity group
+// Lists sensitivity levels in a sensitivity group.
 func (r *DLPSensitivityGroupLevelService) ListAutoPaging(ctx context.Context, sensitivityGroupID string, query DLPSensitivityGroupLevelListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DLPSensitivityGroupLevelListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, sensitivityGroupID, query, opts...))
 }
 
-// Delete a single sensitivity level.
+// Deletes a sensitivity level from a group.
 func (r *DLPSensitivityGroupLevelService) Delete(ctx context.Context, sensitivityGroupID string, sensitivityLevelID string, body DLPSensitivityGroupLevelDeleteParams, opts ...option.RequestOption) (res *DLPSensitivityGroupLevelDeleteResponse, err error) {
 	var env DLPSensitivityGroupLevelDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -140,7 +140,7 @@ func (r *DLPSensitivityGroupLevelService) Delete(ctx context.Context, sensitivit
 	return res, nil
 }
 
-// Retrieve a specific sensitivity level.
+// Gets a sensitivity level from a group.
 func (r *DLPSensitivityGroupLevelService) Get(ctx context.Context, sensitivityGroupID string, sensitivityLevelID string, query DLPSensitivityGroupLevelGetParams, opts ...option.RequestOption) (res *DLPSensitivityGroupLevelGetResponse, err error) {
 	var env DLPSensitivityGroupLevelGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -419,7 +419,7 @@ func (r dlpSensitivityGroupLevelNewResponseEnvelopeMessagesSourceJSON) RawJSON()
 	return r.raw
 }
 
-// DLPSensitivityGroupLevelNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPSensitivityGroupLevelNewResponseEnvelopeSuccess bool
 
 const (
@@ -570,7 +570,7 @@ func (r dlpSensitivityGroupLevelUpdateResponseEnvelopeMessagesSourceJSON) RawJSO
 	return r.raw
 }
 
-// DLPSensitivityGroupLevelUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPSensitivityGroupLevelUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -719,7 +719,7 @@ func (r dlpSensitivityGroupLevelDeleteResponseEnvelopeMessagesSourceJSON) RawJSO
 	return r.raw
 }
 
-// DLPSensitivityGroupLevelDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPSensitivityGroupLevelDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -864,7 +864,7 @@ func (r dlpSensitivityGroupLevelGetResponseEnvelopeMessagesSourceJSON) RawJSON()
 	return r.raw
 }
 
-// DLPSensitivityGroupLevelGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPSensitivityGroupLevelGetResponseEnvelopeSuccess bool
 
 const (

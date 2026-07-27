@@ -42,7 +42,12 @@ func NewAbuseReportService(opts ...option.RequestOption) (r *AbuseReportService)
 	return
 }
 
-// Submit the Abuse Report of a particular type
+// Submit an abuse report of a particular type.
+//
+// Requires the abuse-reports entitlement on the account (Enterprise accounts have
+// it by default; other accounts must request access) and an API token with the
+// `Account > Abuse Reports > Edit` permission. If the account is not entitled, the
+// request is rejected with an HTTP `401` response (see below).
 func (r *AbuseReportService) New(ctx context.Context, reportParam string, params AbuseReportNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env AbuseReportNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

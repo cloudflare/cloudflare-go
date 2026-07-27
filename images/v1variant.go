@@ -35,7 +35,8 @@ func NewV1VariantService(opts ...option.RequestOption) (r *V1VariantService) {
 	return
 }
 
-// Specify variants that allow you to resize images for different use cases.
+// Create a CF Images variant that allows you to resize images for different use
+// cases.
 func (r *V1VariantService) New(ctx context.Context, params V1VariantNewParams, opts ...option.RequestOption) (res *V1VariantNewResponse, err error) {
 	var env V1VariantNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -52,7 +53,7 @@ func (r *V1VariantService) New(ctx context.Context, params V1VariantNewParams, o
 	return res, nil
 }
 
-// Lists existing variants.
+// List existing CF Images variants.
 func (r *V1VariantService) List(ctx context.Context, query V1VariantListParams, opts ...option.RequestOption) (res *Variant, err error) {
 	var env V1VariantListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,7 +70,8 @@ func (r *V1VariantService) List(ctx context.Context, query V1VariantListParams, 
 	return res, nil
 }
 
-// Deleting a variant purges the cache for all images associated with the variant.
+// Delete a CF Images variant. This will purge the cache for all images associated
+// with the variant.
 func (r *V1VariantService) Delete(ctx context.Context, variantID string, body V1VariantDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env V1VariantDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -90,7 +92,8 @@ func (r *V1VariantService) Delete(ctx context.Context, variantID string, body V1
 	return res, nil
 }
 
-// Updating a variant purges the cache for all images associated with the variant.
+// Update a CF Images variant. This will purge the cache for all images associated
+// with the variant.
 func (r *V1VariantService) Edit(ctx context.Context, variantID string, params V1VariantEditParams, opts ...option.RequestOption) (res *V1VariantEditResponse, err error) {
 	var env V1VariantEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -111,7 +114,7 @@ func (r *V1VariantService) Edit(ctx context.Context, variantID string, params V1
 	return res, nil
 }
 
-// Fetch details for a single variant.
+// Fetch details for a CF Images variant.
 func (r *V1VariantService) Get(ctx context.Context, variantID string, query V1VariantGetParams, opts ...option.RequestOption) (res *V1VariantGetResponse, err error) {
 	var env V1VariantGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

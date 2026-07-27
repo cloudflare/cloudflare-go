@@ -232,13 +232,35 @@ type RegistrationNewParams struct {
 	// domain cannot be registered twice, making it a natural idempotency key for
 	// registration requests.
 	DomainName param.Field[string] `json:"domain_name" api:"required"`
+	// User acknowledgements required by a specific extension or premium registration
+	// flow. The expected keys are described by the extension registration schema
+	// returned by the extension discovery endpoint.
+	Acknowledgements param.Field[map[string]interface{}] `json:"acknowledgements"`
 	// Enable or disable automatic renewal. Defaults to `false` if omitted. Setting
 	// this field to `true` is an explicit opt-in authorizing Cloudflare to charge the
 	// account's default payment method up to 30 days before domain expiry to renew the
 	// domain automatically. Renewal pricing may change over time based on registry
 	// pricing.
 	AutoRenew param.Field[bool] `json:"auto_renew"`
+	// Registry-specific contact extension values for the registrant. The required keys
+	// and allowed values vary by extension and are described by
+	// `GET /accounts/{account_id}/registrar/extensions/{extension}` in the
+	// `registration_schema.properties.contact_extensions` object.
+	//
+	// Examples include `.us` nexus fields, `.uk` registrant type fields, and `.ca`
+	// legal type fields. Omit this object for extensions whose registration schema
+	// does not include `contact_extensions`.
+	ContactExtensions param.Field[map[string]interface{}] `json:"contact_extensions"`
 	// Contact data for the registration request.
+	//
+	// The per-extension schema returned by
+	// `GET /accounts/{account_id}/registrar/extensions/{extension}` is the
+	// authoritative contract for which contact roles are accepted. Every currently
+	// supported extension requires only `contacts.registrant` from API callers.
+	// Additional roles such as `technical`, `administrator`, and `billing` may be
+	// provided when the extension schema includes them. If a registry requires one of
+	// those roles and the caller omits it, Cloudflare may derive that contact from
+	// `contacts.registrant`.
 	//
 	// If the `contacts` object is omitted entirely from the request, or if
 	// `contacts.registrant` is not provided, the system will use the account's default
@@ -275,6 +297,15 @@ func (r RegistrationNewParams) MarshalJSON() (data []byte, err error) {
 
 // Contact data for the registration request.
 //
+// The per-extension schema returned by
+// `GET /accounts/{account_id}/registrar/extensions/{extension}` is the
+// authoritative contract for which contact roles are accepted. Every currently
+// supported extension requires only `contacts.registrant` from API callers.
+// Additional roles such as `technical`, `administrator`, and `billing` may be
+// provided when the extension schema includes them. If a registry requires one of
+// those roles and the caller omits it, Cloudflare may derive that contact from
+// `contacts.registrant`.
+//
 // If the `contacts` object is omitted entirely from the request, or if
 // `contacts.registrant` is not provided, the system will use the account's default
 // address book entry as the registrant contact. This default must be
@@ -286,19 +317,161 @@ func (r RegistrationNewParams) MarshalJSON() (data []byte, err error) {
 // If no default address book entry exists and no registrant contact is provided,
 // the registration request will fail with a validation error.
 type RegistrationNewParamsContacts struct {
-	// Registrant contact data for the domain registration. This information is
-	// submitted to the domain registry and, depending on extension and privacy
-	// settings, may appear in public WHOIS records.
+	// Contact data for the domain registration. This information is submitted to the
+	// domain registry and, depending on extension and privacy settings, may appear in
+	// public WHOIS records.
+	Administrator param.Field[RegistrationNewParamsContactsAdministrator] `json:"administrator"`
+	// Contact data for the domain registration. This information is submitted to the
+	// domain registry and, depending on extension and privacy settings, may appear in
+	// public WHOIS records.
+	Billing param.Field[RegistrationNewParamsContactsBilling] `json:"billing"`
+	// Contact data for the domain registration. This information is submitted to the
+	// domain registry and, depending on extension and privacy settings, may appear in
+	// public WHOIS records.
 	Registrant param.Field[RegistrationNewParamsContactsRegistrant] `json:"registrant"`
+	// Contact data for the domain registration. This information is submitted to the
+	// domain registry and, depending on extension and privacy settings, may appear in
+	// public WHOIS records.
+	Technical param.Field[RegistrationNewParamsContactsTechnical] `json:"technical"`
 }
 
 func (r RegistrationNewParamsContacts) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Registrant contact data for the domain registration. This information is
-// submitted to the domain registry and, depending on extension and privacy
-// settings, may appear in public WHOIS records.
+// Contact data for the domain registration. This information is submitted to the
+// domain registry and, depending on extension and privacy settings, may appear in
+// public WHOIS records.
+type RegistrationNewParamsContactsAdministrator struct {
+	// Email address for the registrant. Used for domain-related communications from
+	// the registry, including ownership verification and renewal notices.
+	Email param.Field[string] `json:"email" api:"required" format:"email"`
+	// Phone number in E.164 format: `+{country_code}.{number}` with no spaces or
+	// dashes. Examples: `+1.5555555555` (US), `+44.2071234567` (UK), `+81.312345678`
+	// (Japan).
+	Phone param.Field[string] `json:"phone" api:"required"`
+	// Postal/mailing information for the contact. The `name` field is the complete
+	// contact name in one string. Some registries require a complete personal name,
+	// including a family or last name where applicable, but this API does not accept
+	// separate first-name and last-name fields for registration contacts.
+	PostalInfo param.Field[RegistrationNewParamsContactsAdministratorPostalInfo] `json:"postal_info" api:"required"`
+	// Fax number in E.164 format (e.g., `+1.5555555555`). Optional. Most registrations
+	// do not require a fax number.
+	Fax param.Field[string] `json:"fax"`
+}
+
+func (r RegistrationNewParamsContactsAdministrator) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Postal/mailing information for the contact. The `name` field is the complete
+// contact name in one string. Some registries require a complete personal name,
+// including a family or last name where applicable, but this API does not accept
+// separate first-name and last-name fields for registration contacts.
+type RegistrationNewParamsContactsAdministratorPostalInfo struct {
+	// Physical mailing address for the registrant contact.
+	Address param.Field[RegistrationNewParamsContactsAdministratorPostalInfoAddress] `json:"address" api:"required"`
+	// Full legal name of the contact, including all required name components for an
+	// individual or authorized representative. Some registries require a complete
+	// personal name that includes a family or last name where applicable. Provide the
+	// complete name in this single field, for example `Ada Lovelace`; do not send
+	// separate first-name or last-name fields.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Organization or company name. Optional for individual registrants.
+	Organization param.Field[string] `json:"organization"`
+}
+
+func (r RegistrationNewParamsContactsAdministratorPostalInfo) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Physical mailing address for the registrant contact.
+type RegistrationNewParamsContactsAdministratorPostalInfoAddress struct {
+	// City or locality name.
+	City param.Field[string] `json:"city" api:"required"`
+	// Two-letter country code per ISO 3166-1 alpha-2 (e.g., `US`, `GB`, `CA`, `DE`).
+	CountryCode param.Field[string] `json:"country_code" api:"required"`
+	// Postal or ZIP code.
+	PostalCode param.Field[string] `json:"postal_code" api:"required"`
+	// State, province, or region. Use the standard abbreviation where applicable
+	// (e.g., `TX` for Texas, `ON` for Ontario).
+	State param.Field[string] `json:"state" api:"required"`
+	// Street address including building/suite number.
+	Street param.Field[string] `json:"street" api:"required"`
+}
+
+func (r RegistrationNewParamsContactsAdministratorPostalInfoAddress) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Contact data for the domain registration. This information is submitted to the
+// domain registry and, depending on extension and privacy settings, may appear in
+// public WHOIS records.
+type RegistrationNewParamsContactsBilling struct {
+	// Email address for the registrant. Used for domain-related communications from
+	// the registry, including ownership verification and renewal notices.
+	Email param.Field[string] `json:"email" api:"required" format:"email"`
+	// Phone number in E.164 format: `+{country_code}.{number}` with no spaces or
+	// dashes. Examples: `+1.5555555555` (US), `+44.2071234567` (UK), `+81.312345678`
+	// (Japan).
+	Phone param.Field[string] `json:"phone" api:"required"`
+	// Postal/mailing information for the contact. The `name` field is the complete
+	// contact name in one string. Some registries require a complete personal name,
+	// including a family or last name where applicable, but this API does not accept
+	// separate first-name and last-name fields for registration contacts.
+	PostalInfo param.Field[RegistrationNewParamsContactsBillingPostalInfo] `json:"postal_info" api:"required"`
+	// Fax number in E.164 format (e.g., `+1.5555555555`). Optional. Most registrations
+	// do not require a fax number.
+	Fax param.Field[string] `json:"fax"`
+}
+
+func (r RegistrationNewParamsContactsBilling) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Postal/mailing information for the contact. The `name` field is the complete
+// contact name in one string. Some registries require a complete personal name,
+// including a family or last name where applicable, but this API does not accept
+// separate first-name and last-name fields for registration contacts.
+type RegistrationNewParamsContactsBillingPostalInfo struct {
+	// Physical mailing address for the registrant contact.
+	Address param.Field[RegistrationNewParamsContactsBillingPostalInfoAddress] `json:"address" api:"required"`
+	// Full legal name of the contact, including all required name components for an
+	// individual or authorized representative. Some registries require a complete
+	// personal name that includes a family or last name where applicable. Provide the
+	// complete name in this single field, for example `Ada Lovelace`; do not send
+	// separate first-name or last-name fields.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Organization or company name. Optional for individual registrants.
+	Organization param.Field[string] `json:"organization"`
+}
+
+func (r RegistrationNewParamsContactsBillingPostalInfo) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Physical mailing address for the registrant contact.
+type RegistrationNewParamsContactsBillingPostalInfoAddress struct {
+	// City or locality name.
+	City param.Field[string] `json:"city" api:"required"`
+	// Two-letter country code per ISO 3166-1 alpha-2 (e.g., `US`, `GB`, `CA`, `DE`).
+	CountryCode param.Field[string] `json:"country_code" api:"required"`
+	// Postal or ZIP code.
+	PostalCode param.Field[string] `json:"postal_code" api:"required"`
+	// State, province, or region. Use the standard abbreviation where applicable
+	// (e.g., `TX` for Texas, `ON` for Ontario).
+	State param.Field[string] `json:"state" api:"required"`
+	// Street address including building/suite number.
+	Street param.Field[string] `json:"street" api:"required"`
+}
+
+func (r RegistrationNewParamsContactsBillingPostalInfoAddress) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Contact data for the domain registration. This information is submitted to the
+// domain registry and, depending on extension and privacy settings, may appear in
+// public WHOIS records.
 type RegistrationNewParamsContactsRegistrant struct {
 	// Email address for the registrant. Used for domain-related communications from
 	// the registry, including ownership verification and renewal notices.
@@ -307,7 +480,10 @@ type RegistrationNewParamsContactsRegistrant struct {
 	// dashes. Examples: `+1.5555555555` (US), `+44.2071234567` (UK), `+81.312345678`
 	// (Japan).
 	Phone param.Field[string] `json:"phone" api:"required"`
-	// Postal/mailing information for the registrant contact.
+	// Postal/mailing information for the contact. The `name` field is the complete
+	// contact name in one string. Some registries require a complete personal name,
+	// including a family or last name where applicable, but this API does not accept
+	// separate first-name and last-name fields for registration contacts.
 	PostalInfo param.Field[RegistrationNewParamsContactsRegistrantPostalInfo] `json:"postal_info" api:"required"`
 	// Fax number in E.164 format (e.g., `+1.5555555555`). Optional. Most registrations
 	// do not require a fax number.
@@ -318,11 +494,18 @@ func (r RegistrationNewParamsContactsRegistrant) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-// Postal/mailing information for the registrant contact.
+// Postal/mailing information for the contact. The `name` field is the complete
+// contact name in one string. Some registries require a complete personal name,
+// including a family or last name where applicable, but this API does not accept
+// separate first-name and last-name fields for registration contacts.
 type RegistrationNewParamsContactsRegistrantPostalInfo struct {
 	// Physical mailing address for the registrant contact.
 	Address param.Field[RegistrationNewParamsContactsRegistrantPostalInfoAddress] `json:"address" api:"required"`
-	// Full legal name of the registrant (individual or authorized representative).
+	// Full legal name of the contact, including all required name components for an
+	// individual or authorized representative. Some registries require a complete
+	// personal name that includes a family or last name where applicable. Provide the
+	// complete name in this single field, for example `Ada Lovelace`; do not send
+	// separate first-name or last-name fields.
 	Name param.Field[string] `json:"name" api:"required"`
 	// Organization or company name. Optional for individual registrants.
 	Organization param.Field[string] `json:"organization"`
@@ -348,6 +531,71 @@ type RegistrationNewParamsContactsRegistrantPostalInfoAddress struct {
 }
 
 func (r RegistrationNewParamsContactsRegistrantPostalInfoAddress) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Contact data for the domain registration. This information is submitted to the
+// domain registry and, depending on extension and privacy settings, may appear in
+// public WHOIS records.
+type RegistrationNewParamsContactsTechnical struct {
+	// Email address for the registrant. Used for domain-related communications from
+	// the registry, including ownership verification and renewal notices.
+	Email param.Field[string] `json:"email" api:"required" format:"email"`
+	// Phone number in E.164 format: `+{country_code}.{number}` with no spaces or
+	// dashes. Examples: `+1.5555555555` (US), `+44.2071234567` (UK), `+81.312345678`
+	// (Japan).
+	Phone param.Field[string] `json:"phone" api:"required"`
+	// Postal/mailing information for the contact. The `name` field is the complete
+	// contact name in one string. Some registries require a complete personal name,
+	// including a family or last name where applicable, but this API does not accept
+	// separate first-name and last-name fields for registration contacts.
+	PostalInfo param.Field[RegistrationNewParamsContactsTechnicalPostalInfo] `json:"postal_info" api:"required"`
+	// Fax number in E.164 format (e.g., `+1.5555555555`). Optional. Most registrations
+	// do not require a fax number.
+	Fax param.Field[string] `json:"fax"`
+}
+
+func (r RegistrationNewParamsContactsTechnical) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Postal/mailing information for the contact. The `name` field is the complete
+// contact name in one string. Some registries require a complete personal name,
+// including a family or last name where applicable, but this API does not accept
+// separate first-name and last-name fields for registration contacts.
+type RegistrationNewParamsContactsTechnicalPostalInfo struct {
+	// Physical mailing address for the registrant contact.
+	Address param.Field[RegistrationNewParamsContactsTechnicalPostalInfoAddress] `json:"address" api:"required"`
+	// Full legal name of the contact, including all required name components for an
+	// individual or authorized representative. Some registries require a complete
+	// personal name that includes a family or last name where applicable. Provide the
+	// complete name in this single field, for example `Ada Lovelace`; do not send
+	// separate first-name or last-name fields.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Organization or company name. Optional for individual registrants.
+	Organization param.Field[string] `json:"organization"`
+}
+
+func (r RegistrationNewParamsContactsTechnicalPostalInfo) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Physical mailing address for the registrant contact.
+type RegistrationNewParamsContactsTechnicalPostalInfoAddress struct {
+	// City or locality name.
+	City param.Field[string] `json:"city" api:"required"`
+	// Two-letter country code per ISO 3166-1 alpha-2 (e.g., `US`, `GB`, `CA`, `DE`).
+	CountryCode param.Field[string] `json:"country_code" api:"required"`
+	// Postal or ZIP code.
+	PostalCode param.Field[string] `json:"postal_code" api:"required"`
+	// State, province, or region. Use the standard abbreviation where applicable
+	// (e.g., `TX` for Texas, `ON` for Ontario).
+	State param.Field[string] `json:"state" api:"required"`
+	// Street address including building/suite number.
+	Street param.Field[string] `json:"street" api:"required"`
+}
+
+func (r RegistrationNewParamsContactsTechnicalPostalInfoAddress) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

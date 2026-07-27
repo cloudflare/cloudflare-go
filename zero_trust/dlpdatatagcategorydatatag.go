@@ -36,7 +36,7 @@ func NewDLPDataTagCategoryDataTagService(opts ...option.RequestOption) (r *DLPDa
 	return
 }
 
-// Creates a new data tag.
+// Creates a data tag in a category.
 func (r *DLPDataTagCategoryDataTagService) New(ctx context.Context, categoryID string, params DLPDataTagCategoryDataTagNewParams, opts ...option.RequestOption) (res *DLPDataTagCategoryDataTagNewResponse, err error) {
 	var env DLPDataTagCategoryDataTagNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +57,7 @@ func (r *DLPDataTagCategoryDataTagService) New(ctx context.Context, categoryID s
 	return res, nil
 }
 
-// Update the attributes of a single data tag.
+// Updates a data tag in a category.
 func (r *DLPDataTagCategoryDataTagService) Update(ctx context.Context, categoryID string, tagID string, params DLPDataTagCategoryDataTagUpdateParams, opts ...option.RequestOption) (res *DLPDataTagCategoryDataTagUpdateResponse, err error) {
 	var env DLPDataTagCategoryDataTagUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -82,7 +82,7 @@ func (r *DLPDataTagCategoryDataTagService) Update(ctx context.Context, categoryI
 	return res, nil
 }
 
-// Retrieve all data tags in a data tag category
+// Lists data tags in a category.
 func (r *DLPDataTagCategoryDataTagService) List(ctx context.Context, categoryID string, query DLPDataTagCategoryDataTagListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DLPDataTagCategoryDataTagListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -108,12 +108,12 @@ func (r *DLPDataTagCategoryDataTagService) List(ctx context.Context, categoryID 
 	return res, nil
 }
 
-// Retrieve all data tags in a data tag category
+// Lists data tags in a category.
 func (r *DLPDataTagCategoryDataTagService) ListAutoPaging(ctx context.Context, categoryID string, query DLPDataTagCategoryDataTagListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DLPDataTagCategoryDataTagListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, categoryID, query, opts...))
 }
 
-// Delete a single data tag.
+// Deletes a data tag from a category.
 func (r *DLPDataTagCategoryDataTagService) Delete(ctx context.Context, categoryID string, tagID string, body DLPDataTagCategoryDataTagDeleteParams, opts ...option.RequestOption) (res *DLPDataTagCategoryDataTagDeleteResponse, err error) {
 	var env DLPDataTagCategoryDataTagDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -138,7 +138,7 @@ func (r *DLPDataTagCategoryDataTagService) Delete(ctx context.Context, categoryI
 	return res, nil
 }
 
-// Retrieve a specific data tag.
+// Gets a data tag from a category.
 func (r *DLPDataTagCategoryDataTagService) Get(ctx context.Context, categoryID string, tagID string, query DLPDataTagCategoryDataTagGetParams, opts ...option.RequestOption) (res *DLPDataTagCategoryDataTagGetResponse, err error) {
 	var env DLPDataTagCategoryDataTagGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -417,7 +417,7 @@ func (r dlpDataTagCategoryDataTagNewResponseEnvelopeMessagesSourceJSON) RawJSON(
 	return r.raw
 }
 
-// DLPDataTagCategoryDataTagNewResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDataTagCategoryDataTagNewResponseEnvelopeSuccess bool
 
 const (
@@ -569,7 +569,7 @@ func (r dlpDataTagCategoryDataTagUpdateResponseEnvelopeMessagesSourceJSON) RawJS
 	return r.raw
 }
 
-// DLPDataTagCategoryDataTagUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDataTagCategoryDataTagUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -719,7 +719,7 @@ func (r dlpDataTagCategoryDataTagDeleteResponseEnvelopeMessagesSourceJSON) RawJS
 	return r.raw
 }
 
-// DLPDataTagCategoryDataTagDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDataTagCategoryDataTagDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -864,7 +864,7 @@ func (r dlpDataTagCategoryDataTagGetResponseEnvelopeMessagesSourceJSON) RawJSON(
 	return r.raw
 }
 
-// DLPDataTagCategoryDataTagGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DLPDataTagCategoryDataTagGetResponseEnvelopeSuccess bool
 
 const (

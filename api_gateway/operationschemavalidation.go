@@ -23,7 +23,7 @@ import (
 // the [NewOperationSchemaValidationService] method instead.
 //
 // Deprecated: Use the
-// [github.com/cloudflare/cloudflare-go/v7/schema_validation.SettingOperationService]
+// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SettingOperationService]
 // service instead
 type OperationSchemaValidationService struct {
 	Options []option.RequestOption

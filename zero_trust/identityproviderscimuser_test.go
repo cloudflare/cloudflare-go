@@ -38,7 +38,7 @@ func TestIdentityProviderSCIMUserListWithOptionalParams(t *testing.T) {
 			IdPResourceID: cloudflare.F([]string{"john_smith_01"}),
 			Name:          cloudflare.F("John Smith"),
 			Page:          cloudflare.F(int64(0)),
-			PerPage:       cloudflare.F(int64(0)),
+			PerPage:       cloudflare.F(int64(100)),
 			Username:      cloudflare.F("John Smith"),
 		},
 	)

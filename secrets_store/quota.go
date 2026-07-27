@@ -73,9 +73,9 @@ func (r quotaGetResponseJSON) RawJSON() string {
 }
 
 type QuotaGetResponseSecrets struct {
-	// The number of secrets the account is entitlted to use
+	// The number of secrets the account is entitled to use.
 	Quota float64 `json:"quota" api:"required"`
-	// The number of secrets the account is currently using
+	// The number of secrets the account is currently using.
 	Usage float64                     `json:"usage" api:"required"`
 	JSON  quotaGetResponseSecretsJSON `json:"-"`
 }
@@ -98,7 +98,6 @@ func (r quotaGetResponseSecretsJSON) RawJSON() string {
 }
 
 type QuotaGetParams struct {
-	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

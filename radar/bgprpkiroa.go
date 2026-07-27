@@ -127,9 +127,11 @@ type BGPRPKIRoaTimeseriesParams struct {
 	// Filters results by Autonomous System Number. Specify one or more ASNs. Multiple
 	// values generate one series per ASN.
 	ASN param.Field[[]string] `query:"asn"`
-	// End of the date range (inclusive).
+	// End of the date range (inclusive). Alternative to `dateRange`; provide together
+	// with `dateStart`.
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
-	// Start of the date range (inclusive).
+	// Start of the date range (inclusive). Alternative to `dateRange`; provide
+	// together with `dateEnd`.
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[BgprpkiRoaTimeseriesParamsFormat] `query:"format"`

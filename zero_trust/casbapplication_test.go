@@ -57,7 +57,7 @@ func TestCasbApplicationGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Casb.Applications.Get(
 		context.TODO(),
-		zero_trust.CasbApplicationGetParamsSlugGitHub,
+		zero_trust.CasbApplicationGetParamsApplicationIDAnthropic,
 		zero_trust.CasbApplicationGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

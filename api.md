@@ -57,6 +57,44 @@
 
 # [ACM](acm/api.md)
 
+# AnalyticsQuery
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQuerySummaryResponse">AnalyticsQuerySummaryResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryTimeseriesResponse">AnalyticsQueryTimeseriesResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryTopNResponse">AnalyticsQueryTopNResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/analytics/query/{dataset}/summary">client.AnalyticsQuery.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryService.Summary">Summary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dataset <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQuerySummaryParams">AnalyticsQuerySummaryParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQuerySummaryResponse">AnalyticsQuerySummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/analytics/query/{dataset}/timeseries">client.AnalyticsQuery.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dataset <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryTimeseriesParams">AnalyticsQueryTimeseriesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryTimeseriesResponse">AnalyticsQueryTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/analytics/query/{dataset}/top-n">client.AnalyticsQuery.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryService.TopN">TopN</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dataset <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryTopNParams">AnalyticsQueryTopNParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryTopNResponse">AnalyticsQueryTopNResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## DataSecurity
+
+### ContentFindings
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityContentFindingTopNResponse">AnalyticsQueryDataSecurityContentFindingTopNResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/analytics/query/data-security/content-findings/top-n">client.AnalyticsQuery.DataSecurity.ContentFindings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityContentFindingService.TopN">TopN</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityContentFindingTopNParams">AnalyticsQueryDataSecurityContentFindingTopNParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityContentFindingTopNResponse">AnalyticsQueryDataSecurityContentFindingTopNResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### Findings
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityFindingSummaryResponse">AnalyticsQueryDataSecurityFindingSummaryResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityFindingTimeseriesResponse">AnalyticsQueryDataSecurityFindingTimeseriesResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/analytics/query/data-security/findings/summary">client.AnalyticsQuery.DataSecurity.Findings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityFindingService.Summary">Summary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityFindingSummaryParams">AnalyticsQueryDataSecurityFindingSummaryParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityFindingSummaryResponse">AnalyticsQueryDataSecurityFindingSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/analytics/query/data-security/findings/timeseries">client.AnalyticsQuery.DataSecurity.Findings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityFindingService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityFindingTimeseriesParams">AnalyticsQueryDataSecurityFindingTimeseriesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7#AnalyticsQueryDataSecurityFindingTimeseriesResponse">AnalyticsQueryDataSecurityFindingTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # [Argo](argo/api.md)
 
 # [CertificateAuthorities](certificate_authorities/api.md)
@@ -158,6 +196,8 @@
 # [Pages](pages/api.md)
 
 # [Registrar](registrar/api.md)
+
+# [RegistrarSandbox](registrar_sandbox/api.md)
 
 # [RequestTracers](request_tracers/api.md)
 

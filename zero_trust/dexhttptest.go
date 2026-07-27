@@ -369,7 +369,7 @@ func (r DEXHTTPTestGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// DexhttpTestGetParamsInterval time interval for aggregate time slots.
+// Time interval for aggregate time slots.
 type DexhttpTestGetParamsInterval string
 
 const (
@@ -509,7 +509,7 @@ func (r dexhttpTestGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// DexhttpTestGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DexhttpTestGetResponseEnvelopeSuccess bool
 
 const (

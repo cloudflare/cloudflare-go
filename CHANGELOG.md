@@ -1,5 +1,62 @@
 # Changelog
 
+## 7.8.0 (2026-07-24)
+
+Full Changelog: [v7.7.0...v7.8.0](https://github.com/cloudflare/cloudflare-go/compare/v7.7.0...v7.8.0)
+
+### Breaking Changes
+
+See the [v7.8.0 Migration Guide](./docs/migration-guides/v7.8.0-migration-guide.md) for before/after code examples and actions needed for each change.
+
+* **acm:** `CertificateAuthority` param and response type removed from the `acm` package. Callers referencing this type directly must update.
+* **brand_protection:** `V2.Queries.Get()` return type changed from `*[]V2QueryGetResponse` to `*V2QueryGetResponseUnion`. The `V2QueryGetResponse` type is removed; use the new union type and handle variants via `.AsUnion()`.
+* **certificate_authorities:** `HostnameAssociationParam` and `HostnameAssociation` types removed. Use `TLSHostnameAssociationParam` and the per-method response types instead.
+* **cloudforce_one:** `ThreatEvents.IndicatorTypes` sub-resource relocated to `ThreatEvents.Indicators.Types`. The endpoint path changed from `/events/indicatorTypes` to `/events/indicator-types`. The type name `ThreatEventIndicatorTypeListResponse` is unchanged.
+* **custom_certificates:** `Status` response type removed from the `custom_certificates` package.
+* **hyperdrive:** `Configs.List()` pagination type changed from `SinglePage[Hyperdrive]` to `V4PagePaginationArray[Hyperdrive]`. The second parameter name changed from `query` to `params`.
+* **moq:** `Relays.Tokens.Rotate()` method removed along with `RelayTokenRotateResponse` and `RelayTokenRotateParams`. Replaced by full CRUD: `Tokens.New()`, `Tokens.List()`, `Tokens.Delete()`.
+* **mtls_certificates:** shared `MTLSCertificate` response type removed. `List()`, `Delete()`, and `Get()` now return `MTLSCertificateListResponse`, `MTLSCertificateDeleteResponse`, and `MTLSCertificateGetResponse` respectively.
+* **ssl:** `HostParam`, `Host`, `Status`, and `ValidationMethod` types removed from the `ssl` package.
+* **zero_trust:** `Casb.Applications.SetupFlows` sub-resource renamed to `Casb.Applications.AuthMethods`. The `CasbApplicationSetupFlowListResponse` type is replaced by `CasbApplicationAuthMethodListResponse`. The path parameter on `Applications.Get()` changed from `slug` (`CasbApplicationGetParamsSlug`) to `applicationID` (`CasbApplicationGetParamsApplicationID`).
+
+### Features
+
+* **NEW SERVICE: `registrar_sandbox`** -- test domain registration flows without buying real domains
+  * `client.RegistrarSandbox.Check`, `client.RegistrarSandbox.Search`
+  * `Registrations.{New,List,Edit,Get}`
+  * `RegistrationStatus.Get`, `UpdateStatus.Get`
+  * `Extensions.{List,Get}`
+* **NEW SERVICE: `AnalyticsQuery`** -- analytics query API at the top-level client
+  * `client.AnalyticsQuery.Summary`, `client.AnalyticsQuery.Timeseries`, `client.AnalyticsQuery.TopN`
+  * `DataSecurity.ContentFindings.TopN`
+  * `DataSecurity.Findings.{Summary,Timeseries}`
+* **ai_audit:** add `Robots.BulkGet` and `Robots.Get` methods
+* **billing:** add `Usage.PaygoInfo` method (`GET /accounts/{account_id}/paygo-usage-info`)
+* **cloudforce_one:** major expansion of `ThreatEvents` sub-resources:
+  * `Aggregate.List`, `Graphql.New`, `Graph.List`
+  * `Queries.{New,List,Delete,Edit,Get}`
+  * `Relationships.List`
+  * `Indicators.{List,Aggregate,ByDataset,ByDataset.Tags}`
+  * `Categories.Catalog.List`
+  * `Datasets.{Delete,Events.Get}`
+  * `Tags.{List,Delete,Edit}` + `Tags.Categories.{New,Update,List,Delete,Get}` + `Tags.Indicators`, `Tags.Indicators.ByDataset`
+  * `TargetIndustries.{ByDataset.List,Catalog.List}`
+* **email_routing:** add `Update`, `Edit` methods on the root service; add `Rules.List` and `AccountRules.List` methods
+* **email_security:** add `Settings.Domains.BulkDelete` method
+* **magic_transit:** add `Connectors.Interrupts` sub-resource (`New`, `List`)
+* **moq:** add `Relays.Tokens.{New,List,Delete}` methods (replacing `Rotate`)
+* **registrar:** add `Extensions` sub-resource (`List`, `Get`)
+* **zero_trust:** add `Casb.Posture` sub-resource tree (~40 new methods):
+  * `Findings.{List,Export,Get,Ignore,ResetSeverity,TuneSeverity,Unignore}`
+  * `Findings.Instances.{List,Archive,Export,Get,Unarchive}`
+  * `Exports.{List,Get}`
+  * `FindingTypes.{List,Get}` + `FindingTypes.RemediationTypes.List`
+  * `Content.{List,Export}`
+  * `Remediations.Jobs.{New,List,Export}`
+  * `Webhooks.{New,Update,List,Delete,Evaluate,EvaluateExisting,Get}` + `Webhooks.Jobs.New`
+* **accounts:** `Subscriptions.New` and `Subscriptions.Get` now support both account-level and zone-level paths (`/{accounts_or_zones}/{account_or_zone_id}/subscriptions`). Params accept both `AccountID` and `ZoneID` (mutually exclusive); existing `AccountID`-only callers are unaffected.
+* **load_balancers:** endpoints now support both account-level and zone-level paths (`/{accounts_or_zones}/{account_or_zone_id}/load_balancers`). Params accept both `AccountID` and `ZoneID`; existing `ZoneID`-only callers are unaffected.
+
 ## 7.7.0 (2026-07-08)
 
 Full Changelog: [v7.6.0...v7.7.0](https://github.com/cloudflare/cloudflare-go/compare/v7.6.0...v7.7.0)

@@ -236,7 +236,7 @@ func (r gatewayListJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayListType specify the list type.
+// Specify the list type.
 type GatewayListType string
 
 const (
@@ -297,7 +297,7 @@ func (r gatewayListNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayListNewResponseType specify the list type.
+// Specify the list type.
 type GatewayListNewResponseType string
 
 const (
@@ -338,7 +338,7 @@ func (r GatewayListNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// GatewayListNewParamsType specify the list type.
+// Specify the list type.
 type GatewayListNewParamsType string
 
 const (
@@ -400,7 +400,7 @@ func (r gatewayListNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayListNewResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayListNewResponseEnvelopeSuccess bool
 
 const (
@@ -468,7 +468,7 @@ func (r gatewayListUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayListUpdateResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayListUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -497,7 +497,7 @@ func (r GatewayListListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// GatewayListListParamsType specify the list type.
+// Specify the list type.
 type GatewayListListParamsType string
 
 const (
@@ -552,7 +552,7 @@ func (r gatewayListDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayListDeleteResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayListDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -618,7 +618,7 @@ func (r gatewayListEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayListEditResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayListEditResponseEnvelopeSuccess bool
 
 const (
@@ -665,7 +665,7 @@ func (r gatewayListGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayListGetResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayListGetResponseEnvelopeSuccess bool
 
 const (

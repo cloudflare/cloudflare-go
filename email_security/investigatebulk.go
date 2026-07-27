@@ -44,7 +44,8 @@ func NewInvestigateBulkService(opts ...option.RequestOption) (r *InvestigateBulk
 	return
 }
 
-// Create a bulk action job
+// Creates a new bulk action job to move or release messages that match the
+// provided search parameters.
 func (r *InvestigateBulkService) New(ctx context.Context, params InvestigateBulkNewParams, opts ...option.RequestOption) (res *InvestigateBulkNewResponse, err error) {
 	var env InvestigateBulkNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -61,7 +62,7 @@ func (r *InvestigateBulkService) New(ctx context.Context, params InvestigateBulk
 	return res, nil
 }
 
-// List bulk action jobs
+// Returns a paginated list of bulk action jobs for the account.
 func (r *InvestigateBulkService) List(ctx context.Context, params InvestigateBulkListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InvestigateBulkListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -83,7 +84,7 @@ func (r *InvestigateBulkService) List(ctx context.Context, params InvestigateBul
 	return res, nil
 }
 
-// List bulk action jobs
+// Returns a paginated list of bulk action jobs for the account.
 func (r *InvestigateBulkService) ListAutoPaging(ctx context.Context, params InvestigateBulkListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InvestigateBulkListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -112,7 +113,7 @@ func (r *InvestigateBulkService) Delete(ctx context.Context, jobID string, body 
 	return res, nil
 }
 
-// Get bulk action job details
+// Returns the status and details of a specific bulk action job.
 func (r *InvestigateBulkService) Get(ctx context.Context, jobID string, query InvestigateBulkGetParams, opts ...option.RequestOption) (res *InvestigateBulkGetResponse, err error) {
 	var env InvestigateBulkGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -447,7 +448,7 @@ type InvestigateBulkNewResponseSearchParams struct {
 	DeliveryStatus InvestigateBulkNewResponseSearchParamsDeliveryStatus `json:"delivery_status"`
 	DetectionsOnly bool                                                 `json:"detections_only"`
 	Domain         string                                               `json:"domain" api:"nullable"`
-	// End of search date range
+	// End of search date range.
 	End              time.Time                                              `json:"end" format:"date-time"`
 	ExactSubject     string                                                 `json:"exact_subject" api:"nullable"`
 	FinalDisposition InvestigateBulkNewResponseSearchParamsFinalDisposition `json:"final_disposition"`
@@ -457,7 +458,7 @@ type InvestigateBulkNewResponseSearchParams struct {
 	Query            string                                                 `json:"query" api:"nullable"`
 	Recipient        string                                                 `json:"recipient" api:"nullable"`
 	Sender           string                                                 `json:"sender" api:"nullable"`
-	// Beginning of search date range
+	// Beginning of search date range.
 	Start       time.Time                                  `json:"start" format:"date-time"`
 	Subject     string                                     `json:"subject" api:"nullable"`
 	Submissions bool                                       `json:"submissions"`
@@ -890,7 +891,7 @@ type InvestigateBulkListResponseSearchParams struct {
 	DeliveryStatus InvestigateBulkListResponseSearchParamsDeliveryStatus `json:"delivery_status"`
 	DetectionsOnly bool                                                  `json:"detections_only"`
 	Domain         string                                                `json:"domain" api:"nullable"`
-	// End of search date range
+	// End of search date range.
 	End              time.Time                                               `json:"end" format:"date-time"`
 	ExactSubject     string                                                  `json:"exact_subject" api:"nullable"`
 	FinalDisposition InvestigateBulkListResponseSearchParamsFinalDisposition `json:"final_disposition"`
@@ -900,7 +901,7 @@ type InvestigateBulkListResponseSearchParams struct {
 	Query            string                                                  `json:"query" api:"nullable"`
 	Recipient        string                                                  `json:"recipient" api:"nullable"`
 	Sender           string                                                  `json:"sender" api:"nullable"`
-	// Beginning of search date range
+	// Beginning of search date range.
 	Start       time.Time                                   `json:"start" format:"date-time"`
 	Subject     string                                      `json:"subject" api:"nullable"`
 	Submissions bool                                        `json:"submissions"`
@@ -1354,7 +1355,7 @@ type InvestigateBulkGetResponseSearchParams struct {
 	DeliveryStatus InvestigateBulkGetResponseSearchParamsDeliveryStatus `json:"delivery_status"`
 	DetectionsOnly bool                                                 `json:"detections_only"`
 	Domain         string                                               `json:"domain" api:"nullable"`
-	// End of search date range
+	// End of search date range.
 	End              time.Time                                              `json:"end" format:"date-time"`
 	ExactSubject     string                                                 `json:"exact_subject" api:"nullable"`
 	FinalDisposition InvestigateBulkGetResponseSearchParamsFinalDisposition `json:"final_disposition"`
@@ -1364,7 +1365,7 @@ type InvestigateBulkGetResponseSearchParams struct {
 	Query            string                                                 `json:"query" api:"nullable"`
 	Recipient        string                                                 `json:"recipient" api:"nullable"`
 	Sender           string                                                 `json:"sender" api:"nullable"`
-	// Beginning of search date range
+	// Beginning of search date range.
 	Start       time.Time                                  `json:"start" format:"date-time"`
 	Subject     string                                     `json:"subject" api:"nullable"`
 	Submissions bool                                       `json:"submissions"`
@@ -1523,7 +1524,7 @@ type InvestigateBulkNewParamsSearchParams struct {
 	DeliveryStatus param.Field[InvestigateBulkNewParamsSearchParamsDeliveryStatus] `json:"delivery_status"`
 	DetectionsOnly param.Field[bool]                                               `json:"detections_only"`
 	Domain         param.Field[string]                                             `json:"domain"`
-	// End of search date range
+	// End of search date range.
 	End              param.Field[time.Time]                                            `json:"end" format:"date-time"`
 	ExactSubject     param.Field[string]                                               `json:"exact_subject"`
 	FinalDisposition param.Field[InvestigateBulkNewParamsSearchParamsFinalDisposition] `json:"final_disposition"`
@@ -1533,7 +1534,7 @@ type InvestigateBulkNewParamsSearchParams struct {
 	Query            param.Field[string]                                               `json:"query"`
 	Recipient        param.Field[string]                                               `json:"recipient"`
 	Sender           param.Field[string]                                               `json:"sender"`
-	// Beginning of search date range
+	// Beginning of search date range.
 	Start       param.Field[time.Time] `json:"start" format:"date-time"`
 	Subject     param.Field[string]    `json:"subject"`
 	Submissions param.Field[bool]      `json:"submissions"`

@@ -34,7 +34,7 @@ func TestStoreSecretNew(t *testing.T) {
 			AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
 			Body: []secrets_store.StoreSecretNewParamsBody{{
 				Name:    cloudflare.F("MY_API_KEY"),
-				Scopes:  cloudflare.F([]string{"workers", "ai_gateway", "dex", "access"}),
+				Scopes:  cloudflare.F([]secrets_store.StoreSecretNewParamsBodyScope{secrets_store.StoreSecretNewParamsBodyScopeWorkers, secrets_store.StoreSecretNewParamsBodyScopeAIGateway, secrets_store.StoreSecretNewParamsBodyScopeDEX, secrets_store.StoreSecretNewParamsBodyScopeAccess, secrets_store.StoreSecretNewParamsBodyScopeWebsearch}),
 				Value:   cloudflare.F("api-token-secret-123"),
 				Comment: cloudflare.F("info about my secret"),
 			}},
@@ -72,7 +72,7 @@ func TestStoreSecretListWithOptionalParams(t *testing.T) {
 			Order:     cloudflare.F(secrets_store.StoreSecretListParamsOrderName),
 			Page:      cloudflare.F(int64(2)),
 			PerPage:   cloudflare.F(int64(20)),
-			Scopes:    cloudflare.F([][]string{{"workers", "ai_gateway", "dex", "access"}}),
+			Scopes:    cloudflare.F([]secrets_store.StoreSecretListParamsScope{secrets_store.StoreSecretListParamsScopeWorkers}),
 			Search:    cloudflare.F("search"),
 		},
 	)
@@ -165,7 +165,7 @@ func TestStoreSecretDuplicateWithOptionalParams(t *testing.T) {
 		secrets_store.StoreSecretDuplicateParams{
 			AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("MY_API_KEY"),
-			Scopes:    cloudflare.F([]string{"workers", "ai_gateway", "dex", "access"}),
+			Scopes:    cloudflare.F([]secrets_store.StoreSecretDuplicateParamsScope{secrets_store.StoreSecretDuplicateParamsScopeWorkers, secrets_store.StoreSecretDuplicateParamsScopeAIGateway, secrets_store.StoreSecretDuplicateParamsScopeDEX, secrets_store.StoreSecretDuplicateParamsScopeAccess, secrets_store.StoreSecretDuplicateParamsScopeWebsearch}),
 			Comment:   cloudflare.F("info about my secret"),
 		},
 	)
@@ -199,7 +199,7 @@ func TestStoreSecretEditWithOptionalParams(t *testing.T) {
 		secrets_store.StoreSecretEditParams{
 			AccountID: cloudflare.F("985e105f4ecef8ad9ca31a8372d0c353"),
 			Comment:   cloudflare.F("info about my secret"),
-			Scopes:    cloudflare.F([]string{"workers", "ai_gateway", "dex", "access"}),
+			Scopes:    cloudflare.F([]secrets_store.StoreSecretEditParamsScope{secrets_store.StoreSecretEditParamsScopeWorkers, secrets_store.StoreSecretEditParamsScopeAIGateway, secrets_store.StoreSecretEditParamsScopeDEX, secrets_store.StoreSecretEditParamsScopeAccess, secrets_store.StoreSecretEditParamsScopeWebsearch}),
 			Value:     cloudflare.F("api-token-secret-123"),
 		},
 	)

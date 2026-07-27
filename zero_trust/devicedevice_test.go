@@ -35,6 +35,9 @@ func TestDeviceDeviceListWithOptionalParams(t *testing.T) {
 		ActiveRegistrations: cloudflare.F(zero_trust.DeviceDeviceListParamsActiveRegistrationsInclude),
 		Cursor:              cloudflare.F("cursor"),
 		Include:             cloudflare.F("include"),
+		LastSeenRegistration: cloudflare.F(zero_trust.DeviceDeviceListParamsLastSeenRegistration{
+			Policy: cloudflare.F("11ffb86f-3f0c-4306-b4a2-e62f872b166a"),
+		}),
 		LastSeenUser: cloudflare.F(zero_trust.DeviceDeviceListParamsLastSeenUser{
 			Email: cloudflare.F("email"),
 		}),

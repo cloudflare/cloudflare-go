@@ -183,7 +183,9 @@ type SippySource struct {
 	// Name of the bucket on the provider (AWS, GCS only).
 	Bucket string `json:"bucket" api:"nullable"`
 	// S3-compatible URL (Generic S3-compatible providers only).
-	BucketURL string              `json:"bucketUrl" api:"nullable"`
+	BucketURL string `json:"bucketUrl" api:"nullable"`
+	// Name of the Azure Blob Storage container (Azure only).
+	Container string              `json:"container" api:"nullable"`
 	Provider  SippySourceProvider `json:"provider"`
 	// Region where the bucket resides (AWS only).
 	Region string          `json:"region" api:"nullable"`
@@ -194,6 +196,7 @@ type SippySource struct {
 type sippySourceJSON struct {
 	Bucket      apijson.Field
 	BucketURL   apijson.Field
+	Container   apijson.Field
 	Provider    apijson.Field
 	Region      apijson.Field
 	raw         string
@@ -211,14 +214,15 @@ func (r sippySourceJSON) RawJSON() string {
 type SippySourceProvider string
 
 const (
-	SippySourceProviderAws SippySourceProvider = "aws"
-	SippySourceProviderGcs SippySourceProvider = "gcs"
-	SippySourceProviderS3  SippySourceProvider = "s3"
+	SippySourceProviderAws   SippySourceProvider = "aws"
+	SippySourceProviderGcs   SippySourceProvider = "gcs"
+	SippySourceProviderS3    SippySourceProvider = "s3"
+	SippySourceProviderAzure SippySourceProvider = "azure"
 )
 
 func (r SippySourceProvider) IsKnown() bool {
 	switch r {
-	case SippySourceProviderAws, SippySourceProviderGcs, SippySourceProviderS3:
+	case SippySourceProviderAws, SippySourceProviderGcs, SippySourceProviderS3, SippySourceProviderAzure:
 		return true
 	}
 	return false
@@ -284,7 +288,9 @@ func (r BucketSippyUpdateParamsBody) implementsBucketSippyUpdateParamsBodyUnion(
 
 // Satisfied by [r2.BucketSippyUpdateParamsBodyR2EnableSippyAws],
 // [r2.BucketSippyUpdateParamsBodyR2EnableSippyGcs],
-// [r2.BucketSippyUpdateParamsBodyR2EnableSippyS3], [BucketSippyUpdateParamsBody].
+// [r2.BucketSippyUpdateParamsBodyR2EnableSippyS3],
+// [r2.BucketSippyUpdateParamsBodyR2EnableSippyAzure],
+// [BucketSippyUpdateParamsBody].
 type BucketSippyUpdateParamsBodyUnion interface {
 	implementsBucketSippyUpdateParamsBodyUnion()
 }
@@ -481,6 +487,74 @@ const (
 func (r BucketSippyUpdateParamsBodyR2EnableSippyS3SourceProvider) IsKnown() bool {
 	switch r {
 	case BucketSippyUpdateParamsBodyR2EnableSippyS3SourceProviderS3:
+		return true
+	}
+	return false
+}
+
+type BucketSippyUpdateParamsBodyR2EnableSippyAzure struct {
+	// R2 bucket to copy objects to.
+	Destination param.Field[BucketSippyUpdateParamsBodyR2EnableSippyAzureDestination] `json:"destination"`
+	// Azure Blob Storage container to copy objects from.
+	Source param.Field[BucketSippyUpdateParamsBodyR2EnableSippyAzureSource] `json:"source"`
+}
+
+func (r BucketSippyUpdateParamsBodyR2EnableSippyAzure) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BucketSippyUpdateParamsBodyR2EnableSippyAzure) implementsBucketSippyUpdateParamsBodyUnion() {}
+
+// R2 bucket to copy objects to.
+type BucketSippyUpdateParamsBodyR2EnableSippyAzureDestination struct {
+	// ID of a Cloudflare API token. This is the value labelled "Access Key ID" when
+	// creating an API. token from the
+	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
+	//
+	// Sippy will use this token when writing objects to R2, so it is best to scope
+	// this token to the bucket you're enabling Sippy for.
+	AccessKeyID param.Field[string]   `json:"accessKeyId"`
+	Provider    param.Field[Provider] `json:"provider"`
+	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
+	// when creating an API. token from the
+	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
+	//
+	// Sippy will use this token when writing objects to R2, so it is best to scope
+	// this token to the bucket you're enabling Sippy for.
+	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
+}
+
+func (r BucketSippyUpdateParamsBodyR2EnableSippyAzureDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Azure Blob Storage container to copy objects from.
+type BucketSippyUpdateParamsBodyR2EnableSippyAzureSource struct {
+	// Access key for the Azure Storage account. Mutually exclusive with sasToken.
+	AccountKey param.Field[string] `json:"accountKey"`
+	// Name of the Azure Storage account.
+	AccountName param.Field[string] `json:"accountName"`
+	// Name of the Azure Blob Storage container.
+	Container param.Field[string]                                                      `json:"container"`
+	Provider  param.Field[BucketSippyUpdateParamsBodyR2EnableSippyAzureSourceProvider] `json:"provider"`
+	// Shared Access Signature token for the Azure Storage account. Mutually exclusive
+	// with accountKey.
+	SasToken param.Field[string] `json:"sasToken"`
+}
+
+func (r BucketSippyUpdateParamsBodyR2EnableSippyAzureSource) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type BucketSippyUpdateParamsBodyR2EnableSippyAzureSourceProvider string
+
+const (
+	BucketSippyUpdateParamsBodyR2EnableSippyAzureSourceProviderAzure BucketSippyUpdateParamsBodyR2EnableSippyAzureSourceProvider = "azure"
+)
+
+func (r BucketSippyUpdateParamsBodyR2EnableSippyAzureSourceProvider) IsKnown() bool {
+	switch r {
+	case BucketSippyUpdateParamsBodyR2EnableSippyAzureSourceProviderAzure:
 		return true
 	}
 	return false

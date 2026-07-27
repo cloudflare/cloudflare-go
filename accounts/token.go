@@ -81,7 +81,9 @@ func (r *TokenService) Update(ctx context.Context, tokenID string, params TokenU
 	return res, nil
 }
 
-// List all Account Owned API tokens created for this account.
+// List all Account Owned API tokens created for this account. Results include
+// active, disabled, and recently-expired tokens when include_expired is set to
+// true.
 func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.Token], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -103,7 +105,9 @@ func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ..
 	return res, nil
 }
 
-// List all Account Owned API tokens created for this account.
+// List all Account Owned API tokens created for this account. Results include
+// active, disabled, and recently-expired tokens when include_expired is set to
+// true.
 func (r *TokenService) ListAutoPaging(ctx context.Context, params TokenListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.Token] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -688,6 +692,8 @@ type TokenListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to order results.
 	Direction param.Field[TokenListParamsDirection] `query:"direction"`
+	// When true, includes recently-expired tokens in the response.
+	IncludeExpired param.Field[bool] `query:"include_expired"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page.

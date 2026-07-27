@@ -100,7 +100,7 @@ func TestAccessServiceTokenListWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("account_id"),
 		Name:      cloudflare.F("name"),
 		Page:      cloudflare.F(int64(0)),
-		PerPage:   cloudflare.F(int64(0)),
+		PerPage:   cloudflare.F(int64(1000)),
 		Search:    cloudflare.F("search"),
 	})
 	if err != nil {

@@ -162,7 +162,7 @@ type AppNewResponse struct {
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
@@ -282,7 +282,7 @@ type AppNewResponseSpectrumConfigAppConfig struct {
 	// the application type matches this property exactly.
 	TrafficType AppNewResponseSpectrumConfigAppConfigTrafficType `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
@@ -519,7 +519,7 @@ type AppUpdateResponse struct {
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
@@ -641,7 +641,7 @@ type AppUpdateResponseSpectrumConfigAppConfig struct {
 	// the application type matches this property exactly.
 	TrafficType AppUpdateResponseSpectrumConfigAppConfigTrafficType `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
@@ -878,7 +878,7 @@ type AppListResponse struct {
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
@@ -999,7 +999,7 @@ type AppListResponseSpectrumConfigAppConfig struct {
 	// the application type matches this property exactly.
 	TrafficType AppListResponseSpectrumConfigAppConfigTrafficType `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
@@ -1258,7 +1258,7 @@ type AppGetResponse struct {
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol string `json:"protocol" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
@@ -1378,7 +1378,7 @@ type AppGetResponseSpectrumConfigAppConfig struct {
 	// the application type matches this property exactly.
 	TrafficType AppGetResponseSpectrumConfigAppConfigTrafficType `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs EdgeIPs `json:"edge_ips"`
@@ -1619,7 +1619,7 @@ type AppNewParamsBody struct {
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol param.Field[string] `json:"protocol" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting param.Field[bool] `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs param.Field[EdgeIPsUnionParam] `json:"edge_ips"`
@@ -1678,7 +1678,7 @@ type AppNewParamsBodySpectrumConfigAppConfig struct {
 	// the application type matches this property exactly.
 	TrafficType param.Field[AppNewParamsBodySpectrumConfigAppConfigTrafficType] `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting param.Field[bool] `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs param.Field[EdgeIPsUnionParam] `json:"edge_ips"`
@@ -2007,7 +2007,7 @@ type AppUpdateParamsBody struct {
 	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
 	Protocol param.Field[string] `json:"protocol" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting param.Field[bool] `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs param.Field[EdgeIPsUnionParam] `json:"edge_ips"`
@@ -2067,7 +2067,7 @@ type AppUpdateParamsBodySpectrumConfigAppConfig struct {
 	// the application type matches this property exactly.
 	TrafficType param.Field[AppUpdateParamsBodySpectrumConfigAppConfigTrafficType] `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
+	// or UDP applications with traffic_type set to "direct".
 	ArgoSmartRouting param.Field[bool] `json:"argo_smart_routing"`
 	// The anycast edge IP configuration for the hostname of this application.
 	EdgeIPs param.Field[EdgeIPsUnionParam] `json:"edge_ips"`

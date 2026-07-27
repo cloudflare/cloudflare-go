@@ -40,9 +40,8 @@ func NewAppEvaluateService(opts ...option.RequestOption) (r *AppEvaluateService)
 }
 
 // Evaluates a flag against the provided context. Pass context attributes as query
-// parameters; boolean and numeric strings are coerced automatically. For
-// low-latency in-Worker evaluation, prefer the Flagship binding over this
-// endpoint.
+// parameters; values are forwarded as strings. For low-latency in-Worker
+// evaluation, prefer the Flagship binding over this endpoint.
 func (r *AppEvaluateService) Get(ctx context.Context, appID string, params AppEvaluateGetParams, opts ...option.RequestOption) (res *AppEvaluateGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

@@ -42,8 +42,9 @@ func NewRelayService(opts ...option.RequestOption) (r *RelayService) {
 
 // Provisions a new MoQ relay instance. Auto-creates a publish+subscribe token and
 // a subscribe-only token. Token values are included in the response (shown once).
-// Config is set to defaults (lingering subscribe enabled, 30s ceiling, upstreams
-// off). Use PUT to modify.
+// Config is always set to defaults (upstreams off) and cannot be supplied here —
+// sending a non-empty `config` is rejected (21014); `null` or `{}` is accepted as
+// absent. Use PUT to configure the relay after it exists.
 func (r *RelayService) New(ctx context.Context, params RelayNewParams, opts ...option.RequestOption) (res *RelayNewResponse, err error) {
 	var env RelayNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,9 +61,11 @@ func (r *RelayService) New(ctx context.Context, params RelayNewParams, opts ...o
 	return res, nil
 }
 
-// Updates a relay's name and/or configuration. Partial updates: omitted fields are
-// preserved. Config sub-objects replace as whole objects when present. upstreams
-// and lingering_subscribe are mutually exclusive.
+// Updates a relay's name and/or configuration. The relay ID goes in the URL path —
+// `PUT /accounts/{account_id}/moq/relays/{relay_id}` — not the request body; there
+// is no collection-level update endpoint. This is also the only way to set a
+// relay's config (config cannot be set at create time). Partial updates: omitted
+// fields are preserved; config sub-objects replace as whole objects when present.
 func (r *RelayService) Update(ctx context.Context, relayID string, params RelayUpdateParams, opts ...option.RequestOption) (res *RelayUpdateResponse, err error) {
 	var env RelayUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -122,7 +125,9 @@ func (r *RelayService) ListAutoPaging(ctx context.Context, params RelayListParam
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Soft-deletes a MoQ relay.
+// Soft-deletes a MoQ relay. The relay ID goes in the URL path —
+// `DELETE /accounts/{account_id}/moq/relays/{relay_id}` — not the request body;
+// there is no collection-level delete endpoint.
 func (r *RelayService) Delete(ctx context.Context, relayID string, body RelayDeleteParams, opts ...option.RequestOption) (res *RelayDeleteResponse, err error) {
 	var env RelayDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -165,17 +170,17 @@ func (r *RelayService) Get(ctx context.Context, relayID string, query RelayGetPa
 	return res, nil
 }
 
-// Relay with auto-generated tokens (shown once).
+// Relay with its auto-created default token pair (one full-access [publish,
+// subscribe] and one [subscribe]-only), each with its one-time secret, wrapped in
+// the issuers envelope.
 type RelayNewResponse struct {
-	// upstreams and lingering_subscribe are mutually exclusive.
-	Config   RelayNewResponseConfig `json:"config" api:"required"`
-	Created  time.Time              `json:"created" api:"required" format:"date-time"`
-	Modified time.Time              `json:"modified" api:"required" format:"date-time"`
-	Name     string                 `json:"name" api:"required"`
-	// Full access token (publish + subscribe). Treat as sensitive.
-	TokenPublishSubscribe string `json:"token_publish_subscribe" api:"required"`
-	// Subscribe-only token. Treat as sensitive.
-	TokenSubscribe string `json:"token_subscribe" api:"required"`
+	Config  RelayNewResponseConfig `json:"config" api:"required"`
+	Created time.Time              `json:"created" api:"required" format:"date-time"`
+	// Token collection (discriminated union on `type`). On create this holds the
+	// auto-created default pair, each including its one-time secret.
+	Issuers  []RelayNewResponseIssuer `json:"issuers" api:"required"`
+	Modified time.Time                `json:"modified" api:"required" format:"date-time"`
+	Name     string                   `json:"name" api:"required"`
 	// Server-generated unique identifier (32 hex chars).
 	UID  string               `json:"uid" api:"required"`
 	JSON relayNewResponseJSON `json:"-"`
@@ -184,15 +189,14 @@ type RelayNewResponse struct {
 // relayNewResponseJSON contains the JSON metadata for the struct
 // [RelayNewResponse]
 type relayNewResponseJSON struct {
-	Config                apijson.Field
-	Created               apijson.Field
-	Modified              apijson.Field
-	Name                  apijson.Field
-	TokenPublishSubscribe apijson.Field
-	TokenSubscribe        apijson.Field
-	UID                   apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
+	Config      apijson.Field
+	Created     apijson.Field
+	Issuers     apijson.Field
+	Modified    apijson.Field
+	Name        apijson.Field
+	UID         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *RelayNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -203,9 +207,7 @@ func (r relayNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// upstreams and lingering_subscribe are mutually exclusive.
 type RelayNewResponseConfig struct {
-	LingeringSubscribe RelayNewResponseConfigLingeringSubscribe `json:"lingering_subscribe"`
 	// Upstreams are external MOQT server publishers that a relay falls back to when it
 	// has no local publisher for a requested namespace/track.
 	Upstreams RelayNewResponseConfigUpstreams `json:"upstreams"`
@@ -215,10 +217,9 @@ type RelayNewResponseConfig struct {
 // relayNewResponseConfigJSON contains the JSON metadata for the struct
 // [RelayNewResponseConfig]
 type relayNewResponseConfigJSON struct {
-	LingeringSubscribe apijson.Field
-	Upstreams          apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	Upstreams   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *RelayNewResponseConfig) UnmarshalJSON(data []byte) (err error) {
@@ -226,30 +227,6 @@ func (r *RelayNewResponseConfig) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r relayNewResponseConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-type RelayNewResponseConfigLingeringSubscribe struct {
-	Enabled bool `json:"enabled"`
-	// Relay-level ceiling on lingering subscribe timeout (ms). Default 30000.
-	MaxTimeoutMs int64                                        `json:"max_timeout_ms"`
-	JSON         relayNewResponseConfigLingeringSubscribeJSON `json:"-"`
-}
-
-// relayNewResponseConfigLingeringSubscribeJSON contains the JSON metadata for the
-// struct [RelayNewResponseConfigLingeringSubscribe]
-type relayNewResponseConfigLingeringSubscribeJSON struct {
-	Enabled      apijson.Field
-	MaxTimeoutMs apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RelayNewResponseConfigLingeringSubscribe) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r relayNewResponseConfigLingeringSubscribeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -283,8 +260,10 @@ func (r relayNewResponseConfigUpstreamsJSON) RawJSON() string {
 
 // A single upstream MOQT server publisher.
 type RelayNewResponseConfigUpstreamsUpstream struct {
-	// Upstream MOQT server publisher URL.
-	URL  string                                      `json:"url"`
+	// Upstream MOQT server publisher URL. Must be an absolute URL with a host and a
+	// scheme crique can dial: moqt:// (raw QUIC) or https:// (WebTransport). Validated
+	// on update (PUT); rejected with 21013.
+	URL  string                                      `json:"url" api:"required" format:"uri"`
 	JSON relayNewResponseConfigUpstreamsUpstreamJSON `json:"-"`
 }
 
@@ -304,9 +283,116 @@ func (r relayNewResponseConfigUpstreamsUpstreamJSON) RawJSON() string {
 	return r.raw
 }
 
+// One arm of the discriminated-union token collection.
+type RelayNewResponseIssuer struct {
+	// Always present ([] when empty).
+	CloudflareTokens []RelayNewResponseIssuersCloudflareToken `json:"cloudflare_tokens" api:"required"`
+	Issuer           RelayNewResponseIssuersIssuer            `json:"issuer" api:"required"`
+	Type             RelayNewResponseIssuersType              `json:"type" api:"required"`
+	JSON             relayNewResponseIssuerJSON               `json:"-"`
+}
+
+// relayNewResponseIssuerJSON contains the JSON metadata for the struct
+// [RelayNewResponseIssuer]
+type relayNewResponseIssuerJSON struct {
+	CloudflareTokens apijson.Field
+	Issuer           apijson.Field
+	Type             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RelayNewResponseIssuer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r relayNewResponseIssuerJSON) RawJSON() string {
+	return r.raw
+}
+
+type RelayNewResponseIssuersCloudflareToken struct {
+	Created time.Time `json:"created" api:"required" format:"date-time"`
+	// Mandatory; no more than 1 year after `created`.
+	Expires time.Time `json:"expires" api:"required" format:"date-time"`
+	// Token identity and registry key (32 hex chars).
+	Jti string `json:"jti" api:"required"`
+	// Signed allowlist of what the token may do. V1 coarse roles; the array form
+	// extends to fine-grained MoQT message names later without a breaking change.
+	Operations []RelayNewResponseIssuersCloudflareTokensOperation `json:"operations" api:"required"`
+	// Optional, customer-set.
+	Label string `json:"label"`
+	// The signed JWT. Present ONLY in create / auto-create responses (shown once);
+	// never returned by list, never stored.
+	Secret string                                     `json:"secret"`
+	JSON   relayNewResponseIssuersCloudflareTokenJSON `json:"-"`
+}
+
+// relayNewResponseIssuersCloudflareTokenJSON contains the JSON metadata for the
+// struct [RelayNewResponseIssuersCloudflareToken]
+type relayNewResponseIssuersCloudflareTokenJSON struct {
+	Created     apijson.Field
+	Expires     apijson.Field
+	Jti         apijson.Field
+	Operations  apijson.Field
+	Label       apijson.Field
+	Secret      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RelayNewResponseIssuersCloudflareToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r relayNewResponseIssuersCloudflareTokenJSON) RawJSON() string {
+	return r.raw
+}
+
+type RelayNewResponseIssuersCloudflareTokensOperation string
+
+const (
+	RelayNewResponseIssuersCloudflareTokensOperationPublish   RelayNewResponseIssuersCloudflareTokensOperation = "publish"
+	RelayNewResponseIssuersCloudflareTokensOperationSubscribe RelayNewResponseIssuersCloudflareTokensOperation = "subscribe"
+)
+
+func (r RelayNewResponseIssuersCloudflareTokensOperation) IsKnown() bool {
+	switch r {
+	case RelayNewResponseIssuersCloudflareTokensOperationPublish, RelayNewResponseIssuersCloudflareTokensOperationSubscribe:
+		return true
+	}
+	return false
+}
+
+type RelayNewResponseIssuersIssuer string
+
+const (
+	RelayNewResponseIssuersIssuerCloudflare RelayNewResponseIssuersIssuer = "cloudflare"
+)
+
+func (r RelayNewResponseIssuersIssuer) IsKnown() bool {
+	switch r {
+	case RelayNewResponseIssuersIssuerCloudflare:
+		return true
+	}
+	return false
+}
+
+type RelayNewResponseIssuersType string
+
+const (
+	RelayNewResponseIssuersTypeCloudflareJWT RelayNewResponseIssuersType = "cloudflare_jwt"
+)
+
+func (r RelayNewResponseIssuersType) IsKnown() bool {
+	switch r {
+	case RelayNewResponseIssuersTypeCloudflareJWT:
+		return true
+	}
+	return false
+}
+
 // Full relay details (no tokens).
 type RelayUpdateResponse struct {
-	// upstreams and lingering_subscribe are mutually exclusive.
 	Config   RelayUpdateResponseConfig `json:"config" api:"required"`
 	Created  time.Time                 `json:"created" api:"required" format:"date-time"`
 	Modified time.Time                 `json:"modified" api:"required" format:"date-time"`
@@ -338,9 +424,7 @@ func (r relayUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// upstreams and lingering_subscribe are mutually exclusive.
 type RelayUpdateResponseConfig struct {
-	LingeringSubscribe RelayUpdateResponseConfigLingeringSubscribe `json:"lingering_subscribe"`
 	// Upstreams are external MOQT server publishers that a relay falls back to when it
 	// has no local publisher for a requested namespace/track.
 	Upstreams RelayUpdateResponseConfigUpstreams `json:"upstreams"`
@@ -350,10 +434,9 @@ type RelayUpdateResponseConfig struct {
 // relayUpdateResponseConfigJSON contains the JSON metadata for the struct
 // [RelayUpdateResponseConfig]
 type relayUpdateResponseConfigJSON struct {
-	LingeringSubscribe apijson.Field
-	Upstreams          apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	Upstreams   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *RelayUpdateResponseConfig) UnmarshalJSON(data []byte) (err error) {
@@ -361,30 +444,6 @@ func (r *RelayUpdateResponseConfig) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r relayUpdateResponseConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-type RelayUpdateResponseConfigLingeringSubscribe struct {
-	Enabled bool `json:"enabled"`
-	// Relay-level ceiling on lingering subscribe timeout (ms). Default 30000.
-	MaxTimeoutMs int64                                           `json:"max_timeout_ms"`
-	JSON         relayUpdateResponseConfigLingeringSubscribeJSON `json:"-"`
-}
-
-// relayUpdateResponseConfigLingeringSubscribeJSON contains the JSON metadata for
-// the struct [RelayUpdateResponseConfigLingeringSubscribe]
-type relayUpdateResponseConfigLingeringSubscribeJSON struct {
-	Enabled      apijson.Field
-	MaxTimeoutMs apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RelayUpdateResponseConfigLingeringSubscribe) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r relayUpdateResponseConfigLingeringSubscribeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -418,8 +477,10 @@ func (r relayUpdateResponseConfigUpstreamsJSON) RawJSON() string {
 
 // A single upstream MOQT server publisher.
 type RelayUpdateResponseConfigUpstreamsUpstream struct {
-	// Upstream MOQT server publisher URL.
-	URL  string                                         `json:"url"`
+	// Upstream MOQT server publisher URL. Must be an absolute URL with a host and a
+	// scheme crique can dial: moqt:// (raw QUIC) or https:// (WebTransport). Validated
+	// on update (PUT); rejected with 21013.
+	URL  string                                         `json:"url" api:"required" format:"uri"`
 	JSON relayUpdateResponseConfigUpstreamsUpstreamJSON `json:"-"`
 }
 
@@ -486,7 +547,6 @@ type RelayDeleteResponse = interface{}
 
 // Full relay details (no tokens).
 type RelayGetResponse struct {
-	// upstreams and lingering_subscribe are mutually exclusive.
 	Config   RelayGetResponseConfig `json:"config" api:"required"`
 	Created  time.Time              `json:"created" api:"required" format:"date-time"`
 	Modified time.Time              `json:"modified" api:"required" format:"date-time"`
@@ -518,9 +578,7 @@ func (r relayGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// upstreams and lingering_subscribe are mutually exclusive.
 type RelayGetResponseConfig struct {
-	LingeringSubscribe RelayGetResponseConfigLingeringSubscribe `json:"lingering_subscribe"`
 	// Upstreams are external MOQT server publishers that a relay falls back to when it
 	// has no local publisher for a requested namespace/track.
 	Upstreams RelayGetResponseConfigUpstreams `json:"upstreams"`
@@ -530,10 +588,9 @@ type RelayGetResponseConfig struct {
 // relayGetResponseConfigJSON contains the JSON metadata for the struct
 // [RelayGetResponseConfig]
 type relayGetResponseConfigJSON struct {
-	LingeringSubscribe apijson.Field
-	Upstreams          apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	Upstreams   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *RelayGetResponseConfig) UnmarshalJSON(data []byte) (err error) {
@@ -541,30 +598,6 @@ func (r *RelayGetResponseConfig) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r relayGetResponseConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-type RelayGetResponseConfigLingeringSubscribe struct {
-	Enabled bool `json:"enabled"`
-	// Relay-level ceiling on lingering subscribe timeout (ms). Default 30000.
-	MaxTimeoutMs int64                                        `json:"max_timeout_ms"`
-	JSON         relayGetResponseConfigLingeringSubscribeJSON `json:"-"`
-}
-
-// relayGetResponseConfigLingeringSubscribeJSON contains the JSON metadata for the
-// struct [RelayGetResponseConfigLingeringSubscribe]
-type relayGetResponseConfigLingeringSubscribeJSON struct {
-	Enabled      apijson.Field
-	MaxTimeoutMs apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RelayGetResponseConfigLingeringSubscribe) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r relayGetResponseConfigLingeringSubscribeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -598,8 +631,10 @@ func (r relayGetResponseConfigUpstreamsJSON) RawJSON() string {
 
 // A single upstream MOQT server publisher.
 type RelayGetResponseConfigUpstreamsUpstream struct {
-	// Upstream MOQT server publisher URL.
-	URL  string                                      `json:"url"`
+	// Upstream MOQT server publisher URL. Must be an absolute URL with a host and a
+	// scheme crique can dial: moqt:// (raw QUIC) or https:// (WebTransport). Validated
+	// on update (PUT); rejected with 21013.
+	URL  string                                      `json:"url" api:"required" format:"uri"`
 	JSON relayGetResponseConfigUpstreamsUpstreamJSON `json:"-"`
 }
 
@@ -649,7 +684,9 @@ type RelayNewResponseEnvelope struct {
 	Errors   []RelayNewResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []RelayNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	Success  bool                               `json:"success" api:"required"`
-	// Relay with auto-generated tokens (shown once).
+	// Relay with its auto-created default token pair (one full-access [publish,
+	// subscribe] and one [subscribe]-only), each with its one-time secret, wrapped in
+	// the issuers envelope.
 	Result RelayNewResponse             `json:"result"`
 	JSON   relayNewResponseEnvelopeJSON `json:"-"`
 }
@@ -721,35 +758,22 @@ func (r relayNewResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type RelayUpdateParams struct {
 	// Cloudflare account identifier.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// upstreams and lingering_subscribe are mutually exclusive.
-	Config param.Field[RelayUpdateParamsConfig] `json:"config"`
-	Name   param.Field[string]                  `json:"name"`
+	AccountID param.Field[string]                  `path:"account_id" api:"required"`
+	Config    param.Field[RelayUpdateParamsConfig] `json:"config"`
+	Name      param.Field[string]                  `json:"name"`
 }
 
 func (r RelayUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// upstreams and lingering_subscribe are mutually exclusive.
 type RelayUpdateParamsConfig struct {
-	LingeringSubscribe param.Field[RelayUpdateParamsConfigLingeringSubscribe] `json:"lingering_subscribe"`
 	// Upstreams are external MOQT server publishers that a relay falls back to when it
 	// has no local publisher for a requested namespace/track.
 	Upstreams param.Field[RelayUpdateParamsConfigUpstreams] `json:"upstreams"`
 }
 
 func (r RelayUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RelayUpdateParamsConfigLingeringSubscribe struct {
-	Enabled param.Field[bool] `json:"enabled"`
-	// Relay-level ceiling on lingering subscribe timeout (ms). Default 30000.
-	MaxTimeoutMs param.Field[int64] `json:"max_timeout_ms"`
-}
-
-func (r RelayUpdateParamsConfigLingeringSubscribe) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -769,8 +793,10 @@ func (r RelayUpdateParamsConfigUpstreams) MarshalJSON() (data []byte, err error)
 
 // A single upstream MOQT server publisher.
 type RelayUpdateParamsConfigUpstreamsUpstream struct {
-	// Upstream MOQT server publisher URL.
-	URL param.Field[string] `json:"url"`
+	// Upstream MOQT server publisher URL. Must be an absolute URL with a host and a
+	// scheme crique can dial: moqt:// (raw QUIC) or https:// (WebTransport). Validated
+	// on update (PUT); rejected with 21013.
+	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 }
 
 func (r RelayUpdateParamsConfigUpstreamsUpstream) MarshalJSON() (data []byte, err error) {

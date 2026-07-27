@@ -79,6 +79,9 @@ TEST_PATHS=(
 	ssl/verification_test.go
 	acm/totaltls_test.go
 	acm/customtruststore_test.go
+	analyticsquery_test.go
+	analyticsquerydatasecuritycontentfinding_test.go
+	analyticsquerydatasecurityfinding_test.go
 	argo/smartrouting_test.go
 	argo/tieredcaching_test.go
 	certificate_authorities/hostnameassociation_test.go
@@ -137,6 +140,7 @@ TEST_PATHS=(
 	email_routing/dns_test.go
 	email_routing/rule_test.go
 	email_routing/rulecatchall_test.go
+	email_routing/accountrule_test.go
 	email_routing/address_test.go
 	email_sending/emailsending_test.go
 	email_sending/subdomain_test.go
@@ -311,6 +315,7 @@ TEST_PATHS=(
 	magic_transit/sitelan_test.go
 	magic_transit/sitewan_test.go
 	magic_transit/connector_test.go
+	magic_transit/connectorinterrupt_test.go
 	magic_transit/connectorevent_test.go
 	magic_transit/connectoreventlatest_test.go
 	magic_transit/connectorsnapshot_test.go
@@ -359,6 +364,12 @@ TEST_PATHS=(
 	registrar/registration_test.go
 	registrar/registrationstatus_test.go
 	registrar/updatestatus_test.go
+	registrar/extension_test.go
+	registrar_sandbox/registrarsandbox_test.go
+	registrar_sandbox/registration_test.go
+	registrar_sandbox/registrationstatus_test.go
+	registrar_sandbox/updatestatus_test.go
+	registrar_sandbox/extension_test.go
 	request_tracers/trace_test.go
 	rules/list_test.go
 	rules/listbulkoperation_test.go
@@ -477,8 +488,17 @@ TEST_PATHS=(
 	zero_trust/accesstag_test.go
 	zero_trust/accesspolicy_test.go
 	zero_trust/casbapplication_test.go
-	zero_trust/casbapplicationsetupflow_test.go
+	zero_trust/casbapplicationauthmethod_test.go
 	zero_trust/casbintegration_test.go
+	zero_trust/casbposturefinding_test.go
+	zero_trust/casbposturefindinginstance_test.go
+	zero_trust/casbpostureexport_test.go
+	zero_trust/casbposturefindingtype_test.go
+	zero_trust/casbposturefindingtyperemediationtype_test.go
+	zero_trust/casbposturecontent_test.go
+	zero_trust/casbpostureremediationjob_test.go
+	zero_trust/casbposturewebhook_test.go
+	zero_trust/casbposturewebhookjob_test.go
 	zero_trust/dexwarpchangeevent_test.go
 	zero_trust/dexcommand_test.go
 	zero_trust/dexcommanddevice_test.go
@@ -720,16 +740,32 @@ TEST_PATHS=(
 	cloudforce_one/requestpriority_test.go
 	cloudforce_one/requestasset_test.go
 	cloudforce_one/threatevent_test.go
+	cloudforce_one/threateventaggregate_test.go
+	cloudforce_one/threateventgraphql_test.go
+	cloudforce_one/threateventgraph_test.go
+	cloudforce_one/threateventquery_test.go
+	cloudforce_one/threateventrelationship_test.go
+	cloudforce_one/threateventindicator_test.go
+	cloudforce_one/threateventindicatoraggregate_test.go
+	cloudforce_one/threateventindicatortype_test.go
+	cloudforce_one/threateventindicatorbydataset_test.go
+	cloudforce_one/threateventindicatorbydatasettag_test.go
 	cloudforce_one/threateventattacker_test.go
 	cloudforce_one/threateventcategory_test.go
+	cloudforce_one/threateventcategorycatalog_test.go
 	cloudforce_one/threateventcountry_test.go
 	cloudforce_one/threateventdataset_test.go
-	cloudforce_one/threateventindicatortype_test.go
+	cloudforce_one/threateventdatasetevent_test.go
 	cloudforce_one/threateventraw_test.go
 	cloudforce_one/threateventrelate_test.go
 	cloudforce_one/threateventtag_test.go
+	cloudforce_one/threateventtagcategory_test.go
+	cloudforce_one/threateventtagindicator_test.go
+	cloudforce_one/threateventtagindicatorbydataset_test.go
 	cloudforce_one/threateventeventtag_test.go
 	cloudforce_one/threateventtargetindustry_test.go
+	cloudforce_one/threateventtargetindustrybydataset_test.go
+	cloudforce_one/threateventtargetindustrycatalog_test.go
 	ai_gateway/aigateway_test.go
 	ai_gateway/evaluationtype_test.go
 	ai_gateway/customprovider_test.go
@@ -790,6 +826,7 @@ TEST_PATHS=(
 	ai/model_test.go
 	ai/modelschema_test.go
 	ai/tomarkdown_test.go
+	ai_audit/robot_test.go
 	ai_search/namespace_test.go
 	ai_search/namespaceinstance_test.go
 	ai_search/namespaceinstancejob_test.go

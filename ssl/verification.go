@@ -87,7 +87,7 @@ type Verification struct {
 	// Certificate's signature algorithm.
 	Signature VerificationSignature `json:"signature"`
 	// Validation method in use for a certificate pack order.
-	ValidationMethod ValidationMethod `json:"validation_method"`
+	ValidationMethod VerificationValidationMethod `json:"validation_method"`
 	// Certificate's required verification information.
 	VerificationInfo VerificationVerificationInfo `json:"verification_info"`
 	// Status of the required verification information, omitted if verification status
@@ -153,6 +153,23 @@ const (
 func (r VerificationSignature) IsKnown() bool {
 	switch r {
 	case VerificationSignatureEcdsaWithSha256, VerificationSignatureSha1WithRSA, VerificationSignatureSha256WithRSA:
+		return true
+	}
+	return false
+}
+
+// Validation method in use for a certificate pack order.
+type VerificationValidationMethod string
+
+const (
+	VerificationValidationMethodHTTP  VerificationValidationMethod = "http"
+	VerificationValidationMethodCNAME VerificationValidationMethod = "cname"
+	VerificationValidationMethodTXT   VerificationValidationMethod = "txt"
+)
+
+func (r VerificationValidationMethod) IsKnown() bool {
+	switch r {
+	case VerificationValidationMethodHTTP, VerificationValidationMethodCNAME, VerificationValidationMethodTXT:
 		return true
 	}
 	return false

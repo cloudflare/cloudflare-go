@@ -62,14 +62,10 @@ func TestRelayUpdateWithOptionalParams(t *testing.T) {
 		moq.RelayUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Config: cloudflare.F(moq.RelayUpdateParamsConfig{
-				LingeringSubscribe: cloudflare.F(moq.RelayUpdateParamsConfigLingeringSubscribe{
-					Enabled:      cloudflare.F(true),
-					MaxTimeoutMs: cloudflare.F(int64(0)),
-				}),
 				Upstreams: cloudflare.F(moq.RelayUpdateParamsConfigUpstreams{
 					Enabled: cloudflare.F(true),
 					Upstreams: cloudflare.F([]moq.RelayUpdateParamsConfigUpstreamsUpstream{{
-						URL: cloudflare.F("url"),
+						URL: cloudflare.F("https://example.com"),
 					}}),
 				}),
 			}),

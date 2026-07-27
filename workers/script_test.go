@@ -65,18 +65,31 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
-				Exports: cloudflare.F(map[string]workers.ScriptUpdateParamsMetadataExports{
-					"Admin": {
-						Type: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsTypeWorker),
-						Cache: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsCache{
+				Exports: cloudflare.F(map[string]workers.ScriptUpdateParamsMetadataExportsUnion{
+					"Admin": workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExport{
+						Type: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportCache{
 							Enabled: cloudflare.F(true),
 						}),
+						State: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportStateCreated),
 					},
-					"default": {
-						Type: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsTypeWorker),
-						Cache: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsCache{
+					"Counter": workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectExport{
+						Storage:   cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectExportStorageSqlite),
+						Type:      cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectExportTypeDurableObject),
+						Container: cloudflare.F("my-container"),
+						State:     cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectExportStateCreated),
+					},
+					"OldCounter": workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExport{
+						RenamedTo: cloudflare.F("Counter"),
+						State:     cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExportStateRenamed),
+						Type:      cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExportTypeDurableObject),
+					},
+					"default": workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExport{
+						Type: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportCache{
 							Enabled: cloudflare.F(false),
 						}),
+						State: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportStateCreated),
 					},
 				}),
 				KeepAssets:   cloudflare.F(false),

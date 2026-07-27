@@ -80,19 +80,19 @@ type SubmissionListResponse struct {
 	EscalatedSubmissionID string                                    `json:"escalated_submission_id" api:"nullable"`
 	OriginalDisposition   SubmissionListResponseOriginalDisposition `json:"original_disposition" api:"nullable"`
 	OriginalEdfHash       string                                    `json:"original_edf_hash" api:"nullable"`
-	// The postfix ID of the original message that was submitted
+	// The postfix ID of the original message that was submitted.
 	OriginalPostfixID    string                                     `json:"original_postfix_id" api:"nullable"`
 	Outcome              string                                     `json:"outcome" api:"nullable"`
 	OutcomeDisposition   SubmissionListResponseOutcomeDisposition   `json:"outcome_disposition" api:"nullable"`
 	RequestedBy          string                                     `json:"requested_by" api:"nullable"`
 	RequestedDisposition SubmissionListResponseRequestedDisposition `json:"requested_disposition" api:"nullable"`
-	// Deprecated, use `requested_at` instead
+	// Deprecated, use `requested_at` instead.
 	//
 	// Deprecated: Use `requested_at` instead.
 	RequestedTs string `json:"requested_ts"`
 	Status      string `json:"status" api:"nullable"`
 	Subject     string `json:"subject" api:"nullable"`
-	// Whether the submission was created by a team member or an end user.
+	// Indicates whether a team member or an end user created the submission.
 	Type SubmissionListResponseType `json:"type" api:"nullable"`
 	JSON submissionListResponseJSON `json:"-"`
 }
@@ -222,7 +222,7 @@ func (r SubmissionListResponseRequestedDisposition) IsKnown() bool {
 	return false
 }
 
-// Whether the submission was created by a team member or an end user.
+// Indicates whether a team member or an end user created the submission.
 type SubmissionListResponseType string
 
 const (

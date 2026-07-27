@@ -123,7 +123,7 @@ func (r *AppFlagService) ListAutoPaging(ctx context.Context, appID string, param
 	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, appID, params, opts...))
 }
 
-// Permanently deletes a flag. Subsequent evaluations fall back to the
+// Deletes a flag permanently. Subsequent evaluations fall back to the
 // caller-supplied default. Cannot be undone.
 func (r *AppFlagService) Delete(ctx context.Context, appID string, flagKey string, body AppFlagDeleteParams, opts ...option.RequestOption) (res *AppFlagDeleteResponse, err error) {
 	var env AppFlagDeleteResponseEnvelope
@@ -175,8 +175,8 @@ func (r *AppFlagService) Get(ctx context.Context, appID string, flagKey string, 
 }
 
 type AppFlagNewResponse struct {
-	// Variation served when no rule matches or the flag is disabled. Must be a key in
-	// `variations`.
+	// Variation the API serves when the flag is off, or when it's on but no rule
+	// matches the context. Must be a key in `variations`.
 	DefaultVariation string `json:"default_variation" api:"required"`
 	// When false, the flag bypasses all rules and always serves `default_variation`.
 	Enabled bool `json:"enabled" api:"required"`
@@ -186,13 +186,12 @@ type AppFlagNewResponse struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules []AppFlagNewResponseRule `json:"rules" api:"required"`
-	// Map of variation name to value. All values must be the same type (boolean,
-	// string, number, or JSON object/array). Each serialized value must be 10KB or
-	// smaller.
+	// Map of variation name to value. All values share the same type (boolean, string,
+	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  map[string]AppFlagNewResponseVariationsUnion `json:"variations" api:"required"`
 	Description string                                       `json:"description" api:"nullable"`
-	// Value type of the flag's variations. Inferred from the variation values on
-	// write, so it may be omitted in requests.
+	// Value type of the flag's variations. The API infers this from the variation
+	// values on write, so you can omit it in requests.
 	Type      AppFlagNewResponseType `json:"type"`
 	UpdatedAt string                 `json:"updated_at"`
 	UpdatedBy string                 `json:"updated_by"`
@@ -227,10 +226,10 @@ type AppFlagNewResponseRule struct {
 	// Conditions the context must satisfy for this rule to match. An empty array
 	// matches all contexts.
 	Conditions []AppFlagNewResponseRulesCondition `json:"conditions" api:"required"`
-	// Evaluation order; lower numbers are evaluated first. Must be unique across the
-	// flag's rules.
+	// Evaluation order: the API evaluates rules with lower numbers first. Must be
+	// unique across the flag's rules.
 	Priority int64 `json:"priority" api:"required"`
-	// Variation served when this rule matches. Must be a key in `variations`.
+	// Variation the API serves when this rule matches. Must be a key in `variations`.
 	ServeVariation string                         `json:"serve_variation" api:"required"`
 	Rollout        AppFlagNewResponseRulesRollout `json:"rollout"`
 	JSON           appFlagNewResponseRuleJSON     `json:"-"`
@@ -262,7 +261,8 @@ type AppFlagNewResponseRulesCondition struct {
 	Clauses         interface{}                                      `json:"clauses"`
 	LogicalOperator AppFlagNewResponseRulesConditionsLogicalOperator `json:"logical_operator"`
 	Operator        AppFlagNewResponseRulesConditionsOperator        `json:"operator"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of
+	// [AppFlagNewResponseRulesConditionsObjectValueUnion].
 	Value interface{}                          `json:"value"`
 	JSON  appFlagNewResponseRulesConditionJSON `json:"-"`
 	union AppFlagNewResponseRulesConditionsUnion
@@ -325,13 +325,10 @@ func init() {
 }
 
 type AppFlagNewResponseRulesConditionsObject struct {
-	Attribute string                                          `json:"attribute" api:"required"`
-	Operator  AppFlagNewResponseRulesConditionsObjectOperator `json:"operator" api:"required"`
-	// Value to compare against the context attribute. Must be an array for `in` and
-	// `not_in`; numeric and ISO-8601 datetime strings are accepted by the ordering
-	// operators.
-	Value interface{}                                 `json:"value" api:"required"`
-	JSON  appFlagNewResponseRulesConditionsObjectJSON `json:"-"`
+	Attribute string                                            `json:"attribute" api:"required"`
+	Operator  AppFlagNewResponseRulesConditionsObjectOperator   `json:"operator" api:"required"`
+	Value     AppFlagNewResponseRulesConditionsObjectValueUnion `json:"value" api:"required"`
+	JSON      appFlagNewResponseRulesConditionsObjectJSON       `json:"-"`
 }
 
 // appFlagNewResponseRulesConditionsObjectJSON contains the JSON metadata for the
@@ -376,6 +373,54 @@ func (r AppFlagNewResponseRulesConditionsObjectOperator) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [shared.UnionString], [shared.UnionFloat],
+// [shared.UnionBool], [AppFlagNewResponseRulesConditionsObjectValueMap] or
+// [AppFlagNewResponseRulesConditionsObjectValueArray].
+type AppFlagNewResponseRulesConditionsObjectValueUnion interface {
+	ImplementsAppFlagNewResponseRulesConditionsObjectValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AppFlagNewResponseRulesConditionsObjectValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AppFlagNewResponseRulesConditionsObjectValueMap{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AppFlagNewResponseRulesConditionsObjectValueArray{}),
+		},
+	)
+}
+
+type AppFlagNewResponseRulesConditionsObjectValueMap map[string]interface{}
+
+func (r AppFlagNewResponseRulesConditionsObjectValueMap) ImplementsAppFlagNewResponseRulesConditionsObjectValueUnion() {
+}
+
+type AppFlagNewResponseRulesConditionsObjectValueArray []interface{}
+
+func (r AppFlagNewResponseRulesConditionsObjectValueArray) ImplementsAppFlagNewResponseRulesConditionsObjectValueUnion() {
 }
 
 type AppFlagNewResponseRulesConditionsLogicalOperator string
@@ -490,8 +535,8 @@ type AppFlagNewResponseVariationsArray []interface{}
 
 func (r AppFlagNewResponseVariationsArray) ImplementsAppFlagNewResponseVariationsUnion() {}
 
-// Value type of the flag's variations. Inferred from the variation values on
-// write, so it may be omitted in requests.
+// Value type of the flag's variations. The API infers this from the variation
+// values on write, so you can omit it in requests.
 type AppFlagNewResponseType string
 
 const (
@@ -510,8 +555,8 @@ func (r AppFlagNewResponseType) IsKnown() bool {
 }
 
 type AppFlagUpdateResponse struct {
-	// Variation served when no rule matches or the flag is disabled. Must be a key in
-	// `variations`.
+	// Variation the API serves when the flag is off, or when it's on but no rule
+	// matches the context. Must be a key in `variations`.
 	DefaultVariation string `json:"default_variation" api:"required"`
 	// When false, the flag bypasses all rules and always serves `default_variation`.
 	Enabled bool `json:"enabled" api:"required"`
@@ -521,13 +566,12 @@ type AppFlagUpdateResponse struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules []AppFlagUpdateResponseRule `json:"rules" api:"required"`
-	// Map of variation name to value. All values must be the same type (boolean,
-	// string, number, or JSON object/array). Each serialized value must be 10KB or
-	// smaller.
+	// Map of variation name to value. All values share the same type (boolean, string,
+	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  map[string]AppFlagUpdateResponseVariationsUnion `json:"variations" api:"required"`
 	Description string                                          `json:"description" api:"nullable"`
-	// Value type of the flag's variations. Inferred from the variation values on
-	// write, so it may be omitted in requests.
+	// Value type of the flag's variations. The API infers this from the variation
+	// values on write, so you can omit it in requests.
 	Type      AppFlagUpdateResponseType `json:"type"`
 	UpdatedAt string                    `json:"updated_at"`
 	UpdatedBy string                    `json:"updated_by"`
@@ -562,10 +606,10 @@ type AppFlagUpdateResponseRule struct {
 	// Conditions the context must satisfy for this rule to match. An empty array
 	// matches all contexts.
 	Conditions []AppFlagUpdateResponseRulesCondition `json:"conditions" api:"required"`
-	// Evaluation order; lower numbers are evaluated first. Must be unique across the
-	// flag's rules.
+	// Evaluation order: the API evaluates rules with lower numbers first. Must be
+	// unique across the flag's rules.
 	Priority int64 `json:"priority" api:"required"`
-	// Variation served when this rule matches. Must be a key in `variations`.
+	// Variation the API serves when this rule matches. Must be a key in `variations`.
 	ServeVariation string                            `json:"serve_variation" api:"required"`
 	Rollout        AppFlagUpdateResponseRulesRollout `json:"rollout"`
 	JSON           appFlagUpdateResponseRuleJSON     `json:"-"`
@@ -597,7 +641,8 @@ type AppFlagUpdateResponseRulesCondition struct {
 	Clauses         interface{}                                         `json:"clauses"`
 	LogicalOperator AppFlagUpdateResponseRulesConditionsLogicalOperator `json:"logical_operator"`
 	Operator        AppFlagUpdateResponseRulesConditionsOperator        `json:"operator"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of
+	// [AppFlagUpdateResponseRulesConditionsObjectValueUnion].
 	Value interface{}                             `json:"value"`
 	JSON  appFlagUpdateResponseRulesConditionJSON `json:"-"`
 	union AppFlagUpdateResponseRulesConditionsUnion
@@ -660,13 +705,10 @@ func init() {
 }
 
 type AppFlagUpdateResponseRulesConditionsObject struct {
-	Attribute string                                             `json:"attribute" api:"required"`
-	Operator  AppFlagUpdateResponseRulesConditionsObjectOperator `json:"operator" api:"required"`
-	// Value to compare against the context attribute. Must be an array for `in` and
-	// `not_in`; numeric and ISO-8601 datetime strings are accepted by the ordering
-	// operators.
-	Value interface{}                                    `json:"value" api:"required"`
-	JSON  appFlagUpdateResponseRulesConditionsObjectJSON `json:"-"`
+	Attribute string                                               `json:"attribute" api:"required"`
+	Operator  AppFlagUpdateResponseRulesConditionsObjectOperator   `json:"operator" api:"required"`
+	Value     AppFlagUpdateResponseRulesConditionsObjectValueUnion `json:"value" api:"required"`
+	JSON      appFlagUpdateResponseRulesConditionsObjectJSON       `json:"-"`
 }
 
 // appFlagUpdateResponseRulesConditionsObjectJSON contains the JSON metadata for
@@ -711,6 +753,54 @@ func (r AppFlagUpdateResponseRulesConditionsObjectOperator) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [shared.UnionString], [shared.UnionFloat],
+// [shared.UnionBool], [AppFlagUpdateResponseRulesConditionsObjectValueMap] or
+// [AppFlagUpdateResponseRulesConditionsObjectValueArray].
+type AppFlagUpdateResponseRulesConditionsObjectValueUnion interface {
+	ImplementsAppFlagUpdateResponseRulesConditionsObjectValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AppFlagUpdateResponseRulesConditionsObjectValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AppFlagUpdateResponseRulesConditionsObjectValueMap{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AppFlagUpdateResponseRulesConditionsObjectValueArray{}),
+		},
+	)
+}
+
+type AppFlagUpdateResponseRulesConditionsObjectValueMap map[string]interface{}
+
+func (r AppFlagUpdateResponseRulesConditionsObjectValueMap) ImplementsAppFlagUpdateResponseRulesConditionsObjectValueUnion() {
+}
+
+type AppFlagUpdateResponseRulesConditionsObjectValueArray []interface{}
+
+func (r AppFlagUpdateResponseRulesConditionsObjectValueArray) ImplementsAppFlagUpdateResponseRulesConditionsObjectValueUnion() {
 }
 
 type AppFlagUpdateResponseRulesConditionsLogicalOperator string
@@ -825,8 +915,8 @@ type AppFlagUpdateResponseVariationsArray []interface{}
 
 func (r AppFlagUpdateResponseVariationsArray) ImplementsAppFlagUpdateResponseVariationsUnion() {}
 
-// Value type of the flag's variations. Inferred from the variation values on
-// write, so it may be omitted in requests.
+// Value type of the flag's variations. The API infers this from the variation
+// values on write, so you can omit it in requests.
 type AppFlagUpdateResponseType string
 
 const (
@@ -845,8 +935,8 @@ func (r AppFlagUpdateResponseType) IsKnown() bool {
 }
 
 type AppFlagListResponse struct {
-	// Variation served when no rule matches or the flag is disabled. Must be a key in
-	// `variations`.
+	// Variation the API serves when the flag is off, or when it's on but no rule
+	// matches the context. Must be a key in `variations`.
 	DefaultVariation string `json:"default_variation" api:"required"`
 	// When false, the flag bypasses all rules and always serves `default_variation`.
 	Enabled bool `json:"enabled" api:"required"`
@@ -856,13 +946,12 @@ type AppFlagListResponse struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules []AppFlagListResponseRule `json:"rules" api:"required"`
-	// Map of variation name to value. All values must be the same type (boolean,
-	// string, number, or JSON object/array). Each serialized value must be 10KB or
-	// smaller.
+	// Map of variation name to value. All values share the same type (boolean, string,
+	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  map[string]AppFlagListResponseVariationsUnion `json:"variations" api:"required"`
 	Description string                                        `json:"description" api:"nullable"`
-	// Value type of the flag's variations. Inferred from the variation values on
-	// write, so it may be omitted in requests.
+	// Value type of the flag's variations. The API infers this from the variation
+	// values on write, so you can omit it in requests.
 	Type      AppFlagListResponseType `json:"type"`
 	UpdatedAt string                  `json:"updated_at"`
 	UpdatedBy string                  `json:"updated_by"`
@@ -897,10 +986,10 @@ type AppFlagListResponseRule struct {
 	// Conditions the context must satisfy for this rule to match. An empty array
 	// matches all contexts.
 	Conditions []AppFlagListResponseRulesCondition `json:"conditions" api:"required"`
-	// Evaluation order; lower numbers are evaluated first. Must be unique across the
-	// flag's rules.
+	// Evaluation order: the API evaluates rules with lower numbers first. Must be
+	// unique across the flag's rules.
 	Priority int64 `json:"priority" api:"required"`
-	// Variation served when this rule matches. Must be a key in `variations`.
+	// Variation the API serves when this rule matches. Must be a key in `variations`.
 	ServeVariation string                          `json:"serve_variation" api:"required"`
 	Rollout        AppFlagListResponseRulesRollout `json:"rollout"`
 	JSON           appFlagListResponseRuleJSON     `json:"-"`
@@ -932,7 +1021,8 @@ type AppFlagListResponseRulesCondition struct {
 	Clauses         interface{}                                       `json:"clauses"`
 	LogicalOperator AppFlagListResponseRulesConditionsLogicalOperator `json:"logical_operator"`
 	Operator        AppFlagListResponseRulesConditionsOperator        `json:"operator"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of
+	// [AppFlagListResponseRulesConditionsObjectValueUnion].
 	Value interface{}                           `json:"value"`
 	JSON  appFlagListResponseRulesConditionJSON `json:"-"`
 	union AppFlagListResponseRulesConditionsUnion
@@ -995,13 +1085,10 @@ func init() {
 }
 
 type AppFlagListResponseRulesConditionsObject struct {
-	Attribute string                                           `json:"attribute" api:"required"`
-	Operator  AppFlagListResponseRulesConditionsObjectOperator `json:"operator" api:"required"`
-	// Value to compare against the context attribute. Must be an array for `in` and
-	// `not_in`; numeric and ISO-8601 datetime strings are accepted by the ordering
-	// operators.
-	Value interface{}                                  `json:"value" api:"required"`
-	JSON  appFlagListResponseRulesConditionsObjectJSON `json:"-"`
+	Attribute string                                             `json:"attribute" api:"required"`
+	Operator  AppFlagListResponseRulesConditionsObjectOperator   `json:"operator" api:"required"`
+	Value     AppFlagListResponseRulesConditionsObjectValueUnion `json:"value" api:"required"`
+	JSON      appFlagListResponseRulesConditionsObjectJSON       `json:"-"`
 }
 
 // appFlagListResponseRulesConditionsObjectJSON contains the JSON metadata for the
@@ -1046,6 +1133,54 @@ func (r AppFlagListResponseRulesConditionsObjectOperator) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [shared.UnionString], [shared.UnionFloat],
+// [shared.UnionBool], [AppFlagListResponseRulesConditionsObjectValueMap] or
+// [AppFlagListResponseRulesConditionsObjectValueArray].
+type AppFlagListResponseRulesConditionsObjectValueUnion interface {
+	ImplementsAppFlagListResponseRulesConditionsObjectValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AppFlagListResponseRulesConditionsObjectValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AppFlagListResponseRulesConditionsObjectValueMap{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AppFlagListResponseRulesConditionsObjectValueArray{}),
+		},
+	)
+}
+
+type AppFlagListResponseRulesConditionsObjectValueMap map[string]interface{}
+
+func (r AppFlagListResponseRulesConditionsObjectValueMap) ImplementsAppFlagListResponseRulesConditionsObjectValueUnion() {
+}
+
+type AppFlagListResponseRulesConditionsObjectValueArray []interface{}
+
+func (r AppFlagListResponseRulesConditionsObjectValueArray) ImplementsAppFlagListResponseRulesConditionsObjectValueUnion() {
 }
 
 type AppFlagListResponseRulesConditionsLogicalOperator string
@@ -1160,8 +1295,8 @@ type AppFlagListResponseVariationsArray []interface{}
 
 func (r AppFlagListResponseVariationsArray) ImplementsAppFlagListResponseVariationsUnion() {}
 
-// Value type of the flag's variations. Inferred from the variation values on
-// write, so it may be omitted in requests.
+// Value type of the flag's variations. The API infers this from the variation
+// values on write, so you can omit it in requests.
 type AppFlagListResponseType string
 
 const (
@@ -1201,8 +1336,8 @@ func (r appFlagDeleteResponseJSON) RawJSON() string {
 }
 
 type AppFlagGetResponse struct {
-	// Variation served when no rule matches or the flag is disabled. Must be a key in
-	// `variations`.
+	// Variation the API serves when the flag is off, or when it's on but no rule
+	// matches the context. Must be a key in `variations`.
 	DefaultVariation string `json:"default_variation" api:"required"`
 	// When false, the flag bypasses all rules and always serves `default_variation`.
 	Enabled bool `json:"enabled" api:"required"`
@@ -1212,13 +1347,12 @@ type AppFlagGetResponse struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules []AppFlagGetResponseRule `json:"rules" api:"required"`
-	// Map of variation name to value. All values must be the same type (boolean,
-	// string, number, or JSON object/array). Each serialized value must be 10KB or
-	// smaller.
+	// Map of variation name to value. All values share the same type (boolean, string,
+	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  map[string]AppFlagGetResponseVariationsUnion `json:"variations" api:"required"`
 	Description string                                       `json:"description" api:"nullable"`
-	// Value type of the flag's variations. Inferred from the variation values on
-	// write, so it may be omitted in requests.
+	// Value type of the flag's variations. The API infers this from the variation
+	// values on write, so you can omit it in requests.
 	Type      AppFlagGetResponseType `json:"type"`
 	UpdatedAt string                 `json:"updated_at"`
 	UpdatedBy string                 `json:"updated_by"`
@@ -1253,10 +1387,10 @@ type AppFlagGetResponseRule struct {
 	// Conditions the context must satisfy for this rule to match. An empty array
 	// matches all contexts.
 	Conditions []AppFlagGetResponseRulesCondition `json:"conditions" api:"required"`
-	// Evaluation order; lower numbers are evaluated first. Must be unique across the
-	// flag's rules.
+	// Evaluation order: the API evaluates rules with lower numbers first. Must be
+	// unique across the flag's rules.
 	Priority int64 `json:"priority" api:"required"`
-	// Variation served when this rule matches. Must be a key in `variations`.
+	// Variation the API serves when this rule matches. Must be a key in `variations`.
 	ServeVariation string                         `json:"serve_variation" api:"required"`
 	Rollout        AppFlagGetResponseRulesRollout `json:"rollout"`
 	JSON           appFlagGetResponseRuleJSON     `json:"-"`
@@ -1288,7 +1422,8 @@ type AppFlagGetResponseRulesCondition struct {
 	Clauses         interface{}                                      `json:"clauses"`
 	LogicalOperator AppFlagGetResponseRulesConditionsLogicalOperator `json:"logical_operator"`
 	Operator        AppFlagGetResponseRulesConditionsOperator        `json:"operator"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of
+	// [AppFlagGetResponseRulesConditionsObjectValueUnion].
 	Value interface{}                          `json:"value"`
 	JSON  appFlagGetResponseRulesConditionJSON `json:"-"`
 	union AppFlagGetResponseRulesConditionsUnion
@@ -1351,13 +1486,10 @@ func init() {
 }
 
 type AppFlagGetResponseRulesConditionsObject struct {
-	Attribute string                                          `json:"attribute" api:"required"`
-	Operator  AppFlagGetResponseRulesConditionsObjectOperator `json:"operator" api:"required"`
-	// Value to compare against the context attribute. Must be an array for `in` and
-	// `not_in`; numeric and ISO-8601 datetime strings are accepted by the ordering
-	// operators.
-	Value interface{}                                 `json:"value" api:"required"`
-	JSON  appFlagGetResponseRulesConditionsObjectJSON `json:"-"`
+	Attribute string                                            `json:"attribute" api:"required"`
+	Operator  AppFlagGetResponseRulesConditionsObjectOperator   `json:"operator" api:"required"`
+	Value     AppFlagGetResponseRulesConditionsObjectValueUnion `json:"value" api:"required"`
+	JSON      appFlagGetResponseRulesConditionsObjectJSON       `json:"-"`
 }
 
 // appFlagGetResponseRulesConditionsObjectJSON contains the JSON metadata for the
@@ -1402,6 +1534,54 @@ func (r AppFlagGetResponseRulesConditionsObjectOperator) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [shared.UnionString], [shared.UnionFloat],
+// [shared.UnionBool], [AppFlagGetResponseRulesConditionsObjectValueMap] or
+// [AppFlagGetResponseRulesConditionsObjectValueArray].
+type AppFlagGetResponseRulesConditionsObjectValueUnion interface {
+	ImplementsAppFlagGetResponseRulesConditionsObjectValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AppFlagGetResponseRulesConditionsObjectValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AppFlagGetResponseRulesConditionsObjectValueMap{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AppFlagGetResponseRulesConditionsObjectValueArray{}),
+		},
+	)
+}
+
+type AppFlagGetResponseRulesConditionsObjectValueMap map[string]interface{}
+
+func (r AppFlagGetResponseRulesConditionsObjectValueMap) ImplementsAppFlagGetResponseRulesConditionsObjectValueUnion() {
+}
+
+type AppFlagGetResponseRulesConditionsObjectValueArray []interface{}
+
+func (r AppFlagGetResponseRulesConditionsObjectValueArray) ImplementsAppFlagGetResponseRulesConditionsObjectValueUnion() {
 }
 
 type AppFlagGetResponseRulesConditionsLogicalOperator string
@@ -1516,8 +1696,8 @@ type AppFlagGetResponseVariationsArray []interface{}
 
 func (r AppFlagGetResponseVariationsArray) ImplementsAppFlagGetResponseVariationsUnion() {}
 
-// Value type of the flag's variations. Inferred from the variation values on
-// write, so it may be omitted in requests.
+// Value type of the flag's variations. The API infers this from the variation
+// values on write, so you can omit it in requests.
 type AppFlagGetResponseType string
 
 const (
@@ -1538,8 +1718,8 @@ func (r AppFlagGetResponseType) IsKnown() bool {
 type AppFlagNewParams struct {
 	// Cloudflare account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Variation served when no rule matches or the flag is disabled. Must be a key in
-	// `variations`.
+	// Variation the API serves when the flag is off, or when it's on but no rule
+	// matches the context. Must be a key in `variations`.
 	DefaultVariation param.Field[string] `json:"default_variation" api:"required"`
 	// When false, the flag bypasses all rules and always serves `default_variation`.
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
@@ -1549,13 +1729,12 @@ type AppFlagNewParams struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules param.Field[[]AppFlagNewParamsRule] `json:"rules" api:"required"`
-	// Map of variation name to value. All values must be the same type (boolean,
-	// string, number, or JSON object/array). Each serialized value must be 10KB or
-	// smaller.
+	// Map of variation name to value. All values share the same type (boolean, string,
+	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  param.Field[map[string]AppFlagNewParamsVariationsUnion] `json:"variations" api:"required"`
 	Description param.Field[string]                                     `json:"description"`
-	// Value type of the flag's variations. Inferred from the variation values on
-	// write, so it may be omitted in requests.
+	// Value type of the flag's variations. The API infers this from the variation
+	// values on write, so you can omit it in requests.
 	Type param.Field[AppFlagNewParamsType] `json:"type"`
 }
 
@@ -1567,10 +1746,10 @@ type AppFlagNewParamsRule struct {
 	// Conditions the context must satisfy for this rule to match. An empty array
 	// matches all contexts.
 	Conditions param.Field[[]AppFlagNewParamsRulesConditionUnion] `json:"conditions" api:"required"`
-	// Evaluation order; lower numbers are evaluated first. Must be unique across the
-	// flag's rules.
+	// Evaluation order: the API evaluates rules with lower numbers first. Must be
+	// unique across the flag's rules.
 	Priority param.Field[int64] `json:"priority" api:"required"`
-	// Variation served when this rule matches. Must be a key in `variations`.
+	// Variation the API serves when this rule matches. Must be a key in `variations`.
 	ServeVariation param.Field[string]                       `json:"serve_variation" api:"required"`
 	Rollout        param.Field[AppFlagNewParamsRulesRollout] `json:"rollout"`
 }
@@ -1601,12 +1780,9 @@ type AppFlagNewParamsRulesConditionUnion interface {
 }
 
 type AppFlagNewParamsRulesConditionsObject struct {
-	Attribute param.Field[string]                                        `json:"attribute" api:"required"`
-	Operator  param.Field[AppFlagNewParamsRulesConditionsObjectOperator] `json:"operator" api:"required"`
-	// Value to compare against the context attribute. Must be an array for `in` and
-	// `not_in`; numeric and ISO-8601 datetime strings are accepted by the ordering
-	// operators.
-	Value param.Field[interface{}] `json:"value" api:"required"`
+	Attribute param.Field[string]                                          `json:"attribute" api:"required"`
+	Operator  param.Field[AppFlagNewParamsRulesConditionsObjectOperator]   `json:"operator" api:"required"`
+	Value     param.Field[AppFlagNewParamsRulesConditionsObjectValueUnion] `json:"value" api:"required"`
 }
 
 func (r AppFlagNewParamsRulesConditionsObject) MarshalJSON() (data []byte, err error) {
@@ -1637,6 +1813,23 @@ func (r AppFlagNewParamsRulesConditionsObjectOperator) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool],
+// [flagship.AppFlagNewParamsRulesConditionsObjectValueMap],
+// [flagship.AppFlagNewParamsRulesConditionsObjectValueArray].
+type AppFlagNewParamsRulesConditionsObjectValueUnion interface {
+	ImplementsAppFlagNewParamsRulesConditionsObjectValueUnion()
+}
+
+type AppFlagNewParamsRulesConditionsObjectValueMap map[string]interface{}
+
+func (r AppFlagNewParamsRulesConditionsObjectValueMap) ImplementsAppFlagNewParamsRulesConditionsObjectValueUnion() {
+}
+
+type AppFlagNewParamsRulesConditionsObjectValueArray []interface{}
+
+func (r AppFlagNewParamsRulesConditionsObjectValueArray) ImplementsAppFlagNewParamsRulesConditionsObjectValueUnion() {
 }
 
 type AppFlagNewParamsRulesConditionsLogicalOperator string
@@ -1706,8 +1899,8 @@ type AppFlagNewParamsVariationsArray []interface{}
 
 func (r AppFlagNewParamsVariationsArray) ImplementsAppFlagNewParamsVariationsUnion() {}
 
-// Value type of the flag's variations. Inferred from the variation values on
-// write, so it may be omitted in requests.
+// Value type of the flag's variations. The API infers this from the variation
+// values on write, so you can omit it in requests.
 type AppFlagNewParamsType string
 
 const (
@@ -1797,8 +1990,8 @@ func (r appFlagNewResponseEnvelopeMessagesJSON) RawJSON() string {
 type AppFlagUpdateParams struct {
 	// Cloudflare account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Variation served when no rule matches or the flag is disabled. Must be a key in
-	// `variations`.
+	// Variation the API serves when the flag is off, or when it's on but no rule
+	// matches the context. Must be a key in `variations`.
 	DefaultVariation param.Field[string] `json:"default_variation" api:"required"`
 	// When false, the flag bypasses all rules and always serves `default_variation`.
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
@@ -1808,13 +2001,12 @@ type AppFlagUpdateParams struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules param.Field[[]AppFlagUpdateParamsRule] `json:"rules" api:"required"`
-	// Map of variation name to value. All values must be the same type (boolean,
-	// string, number, or JSON object/array). Each serialized value must be 10KB or
-	// smaller.
+	// Map of variation name to value. All values share the same type (boolean, string,
+	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  param.Field[map[string]AppFlagUpdateParamsVariationsUnion] `json:"variations" api:"required"`
 	Description param.Field[string]                                        `json:"description"`
-	// Value type of the flag's variations. Inferred from the variation values on
-	// write, so it may be omitted in requests.
+	// Value type of the flag's variations. The API infers this from the variation
+	// values on write, so you can omit it in requests.
 	Type param.Field[AppFlagUpdateParamsType] `json:"type"`
 }
 
@@ -1826,10 +2018,10 @@ type AppFlagUpdateParamsRule struct {
 	// Conditions the context must satisfy for this rule to match. An empty array
 	// matches all contexts.
 	Conditions param.Field[[]AppFlagUpdateParamsRulesConditionUnion] `json:"conditions" api:"required"`
-	// Evaluation order; lower numbers are evaluated first. Must be unique across the
-	// flag's rules.
+	// Evaluation order: the API evaluates rules with lower numbers first. Must be
+	// unique across the flag's rules.
 	Priority param.Field[int64] `json:"priority" api:"required"`
-	// Variation served when this rule matches. Must be a key in `variations`.
+	// Variation the API serves when this rule matches. Must be a key in `variations`.
 	ServeVariation param.Field[string]                          `json:"serve_variation" api:"required"`
 	Rollout        param.Field[AppFlagUpdateParamsRulesRollout] `json:"rollout"`
 }
@@ -1860,12 +2052,9 @@ type AppFlagUpdateParamsRulesConditionUnion interface {
 }
 
 type AppFlagUpdateParamsRulesConditionsObject struct {
-	Attribute param.Field[string]                                           `json:"attribute" api:"required"`
-	Operator  param.Field[AppFlagUpdateParamsRulesConditionsObjectOperator] `json:"operator" api:"required"`
-	// Value to compare against the context attribute. Must be an array for `in` and
-	// `not_in`; numeric and ISO-8601 datetime strings are accepted by the ordering
-	// operators.
-	Value param.Field[interface{}] `json:"value" api:"required"`
+	Attribute param.Field[string]                                             `json:"attribute" api:"required"`
+	Operator  param.Field[AppFlagUpdateParamsRulesConditionsObjectOperator]   `json:"operator" api:"required"`
+	Value     param.Field[AppFlagUpdateParamsRulesConditionsObjectValueUnion] `json:"value" api:"required"`
 }
 
 func (r AppFlagUpdateParamsRulesConditionsObject) MarshalJSON() (data []byte, err error) {
@@ -1897,6 +2086,23 @@ func (r AppFlagUpdateParamsRulesConditionsObjectOperator) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool],
+// [flagship.AppFlagUpdateParamsRulesConditionsObjectValueMap],
+// [flagship.AppFlagUpdateParamsRulesConditionsObjectValueArray].
+type AppFlagUpdateParamsRulesConditionsObjectValueUnion interface {
+	ImplementsAppFlagUpdateParamsRulesConditionsObjectValueUnion()
+}
+
+type AppFlagUpdateParamsRulesConditionsObjectValueMap map[string]interface{}
+
+func (r AppFlagUpdateParamsRulesConditionsObjectValueMap) ImplementsAppFlagUpdateParamsRulesConditionsObjectValueUnion() {
+}
+
+type AppFlagUpdateParamsRulesConditionsObjectValueArray []interface{}
+
+func (r AppFlagUpdateParamsRulesConditionsObjectValueArray) ImplementsAppFlagUpdateParamsRulesConditionsObjectValueUnion() {
 }
 
 type AppFlagUpdateParamsRulesConditionsLogicalOperator string
@@ -1966,8 +2172,8 @@ type AppFlagUpdateParamsVariationsArray []interface{}
 
 func (r AppFlagUpdateParamsVariationsArray) ImplementsAppFlagUpdateParamsVariationsUnion() {}
 
-// Value type of the flag's variations. Inferred from the variation values on
-// write, so it may be omitted in requests.
+// Value type of the flag's variations. The API infers this from the variation
+// values on write, so you can omit it in requests.
 type AppFlagUpdateParamsType string
 
 const (

@@ -20,11 +20,11 @@ type APIGatewayService struct {
 	Operations     *OperationService
 	Schemas        *SchemaService
 	// Deprecated: Use the
-	// [github.com/cloudflare/cloudflare-go/v7/schema_validation.SettingService]
+	// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SettingService]
 	// service instead
 	Settings *SettingService
 	// Deprecated: Use the
-	// [github.com/cloudflare/cloudflare-go/v7/schema_validation.SchemaService] service
+	// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SchemaService] service
 	// instead
 	UserSchemas        *UserSchemaService
 	ExpressionTemplate *ExpressionTemplateService

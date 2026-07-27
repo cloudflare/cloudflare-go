@@ -1065,10 +1065,7 @@ func (r AIGatewayNewResponseSpendLimitsRulesLimitType) IsKnown() bool {
 }
 
 type AIGatewayNewResponseSpendLimitsRulesMetadata struct {
-	// This field can have the runtime type of
-	// [AIGatewayNewResponseSpendLimitsRulesMetadataModeMode],
-	// [AIGatewayNewResponseSpendLimitsRulesMetadataObjectMode].
-	Mode interface{} `json:"mode" api:"required"`
+	Mode AIGatewayNewResponseSpendLimitsRulesMetadataMode `json:"mode" api:"required"`
 	// This field can have the runtime type of [[]string].
 	Values interface{}                                      `json:"values"`
 	JSON   aiGatewayNewResponseSpendLimitsRulesMetadataJSON `json:"-"`
@@ -2256,10 +2253,7 @@ func (r AIGatewayUpdateResponseSpendLimitsRulesLimitType) IsKnown() bool {
 }
 
 type AIGatewayUpdateResponseSpendLimitsRulesMetadata struct {
-	// This field can have the runtime type of
-	// [AIGatewayUpdateResponseSpendLimitsRulesMetadataModeMode],
-	// [AIGatewayUpdateResponseSpendLimitsRulesMetadataObjectMode].
-	Mode interface{} `json:"mode" api:"required"`
+	Mode AIGatewayUpdateResponseSpendLimitsRulesMetadataMode `json:"mode" api:"required"`
 	// This field can have the runtime type of [[]string].
 	Values interface{}                                         `json:"values"`
 	JSON   aiGatewayUpdateResponseSpendLimitsRulesMetadataJSON `json:"-"`
@@ -3447,10 +3441,7 @@ func (r AIGatewayListResponseSpendLimitsRulesLimitType) IsKnown() bool {
 }
 
 type AIGatewayListResponseSpendLimitsRulesMetadata struct {
-	// This field can have the runtime type of
-	// [AIGatewayListResponseSpendLimitsRulesMetadataModeMode],
-	// [AIGatewayListResponseSpendLimitsRulesMetadataObjectMode].
-	Mode interface{} `json:"mode" api:"required"`
+	Mode AIGatewayListResponseSpendLimitsRulesMetadataMode `json:"mode" api:"required"`
 	// This field can have the runtime type of [[]string].
 	Values interface{}                                       `json:"values"`
 	JSON   aiGatewayListResponseSpendLimitsRulesMetadataJSON `json:"-"`
@@ -4638,10 +4629,7 @@ func (r AIGatewayDeleteResponseSpendLimitsRulesLimitType) IsKnown() bool {
 }
 
 type AIGatewayDeleteResponseSpendLimitsRulesMetadata struct {
-	// This field can have the runtime type of
-	// [AIGatewayDeleteResponseSpendLimitsRulesMetadataModeMode],
-	// [AIGatewayDeleteResponseSpendLimitsRulesMetadataObjectMode].
-	Mode interface{} `json:"mode" api:"required"`
+	Mode AIGatewayDeleteResponseSpendLimitsRulesMetadataMode `json:"mode" api:"required"`
 	// This field can have the runtime type of [[]string].
 	Values interface{}                                         `json:"values"`
 	JSON   aiGatewayDeleteResponseSpendLimitsRulesMetadataJSON `json:"-"`
@@ -5828,10 +5816,7 @@ func (r AIGatewayGetResponseSpendLimitsRulesLimitType) IsKnown() bool {
 }
 
 type AIGatewayGetResponseSpendLimitsRulesMetadata struct {
-	// This field can have the runtime type of
-	// [AIGatewayGetResponseSpendLimitsRulesMetadataModeMode],
-	// [AIGatewayGetResponseSpendLimitsRulesMetadataObjectMode].
-	Mode interface{} `json:"mode" api:"required"`
+	Mode AIGatewayGetResponseSpendLimitsRulesMetadataMode `json:"mode" api:"required"`
 	// This field can have the runtime type of [[]string].
 	Values interface{}                                      `json:"values"`
 	JSON   aiGatewayGetResponseSpendLimitsRulesMetadataJSON `json:"-"`

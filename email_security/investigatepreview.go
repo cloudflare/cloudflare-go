@@ -122,7 +122,7 @@ func (r investigatePreviewGetResponseJSON) RawJSON() string {
 type InvestigatePreviewNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The identifier of the message
+	// The identifier of the message.
 	PostfixID param.Field[string] `json:"postfix_id" api:"required"`
 }
 

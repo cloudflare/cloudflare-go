@@ -39,8 +39,6 @@ func NewLOADocumentService(opts ...option.RequestOption) (r *LOADocumentService)
 }
 
 // Submit LOA document (pdf format) under the account.
-//
-// Deprecated: This is API is deprecated and will be removed in a future release.
 func (r *LOADocumentService) New(ctx context.Context, params LOADocumentNewParams, opts ...option.RequestOption) (res *LOADocumentNewResponse, err error) {
 	var env LOADocumentNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

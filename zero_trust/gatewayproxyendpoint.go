@@ -202,7 +202,7 @@ func (r ProxyEndpoint) AsUnion() ProxyEndpointUnion {
 	return r.union
 }
 
-// ProxyEndpointUnion is satisfied by [ProxyEndpointZeroTrustGatewayProxyEndpointIP] or
+// Union satisfied by [ProxyEndpointZeroTrustGatewayProxyEndpointIP] or
 // [ProxyEndpointZeroTrustGatewayProxyEndpointIdentity].
 type ProxyEndpointUnion interface {
 	implementsProxyEndpoint()
@@ -264,7 +264,7 @@ func (r proxyEndpointZeroTrustGatewayProxyEndpointIPJSON) RawJSON() string {
 
 func (r ProxyEndpointZeroTrustGatewayProxyEndpointIP) implementsProxyEndpoint() {}
 
-// ProxyEndpointZeroTrustGatewayProxyEndpointIPKind is the proxy endpoint kind
+// The proxy endpoint kind
 type ProxyEndpointZeroTrustGatewayProxyEndpointIPKind string
 
 const (
@@ -315,7 +315,7 @@ func (r proxyEndpointZeroTrustGatewayProxyEndpointIdentityJSON) RawJSON() string
 
 func (r ProxyEndpointZeroTrustGatewayProxyEndpointIdentity) implementsProxyEndpoint() {}
 
-// ProxyEndpointZeroTrustGatewayProxyEndpointIdentityKind is the proxy endpoint kind
+// The proxy endpoint kind
 type ProxyEndpointZeroTrustGatewayProxyEndpointIdentityKind string
 
 const (
@@ -330,7 +330,7 @@ func (r ProxyEndpointZeroTrustGatewayProxyEndpointIdentityKind) IsKnown() bool {
 	return false
 }
 
-// ProxyEndpointKind is the proxy endpoint kind
+// The proxy endpoint kind
 type ProxyEndpointKind string
 
 const (
@@ -370,7 +370,7 @@ func (r GatewayProxyEndpointNewParamsBody) MarshalJSON() (data []byte, err error
 
 func (r GatewayProxyEndpointNewParamsBody) implementsGatewayProxyEndpointNewParamsBodyUnion() {}
 
-// GatewayProxyEndpointNewParamsBodyUnion satisfied by
+// Satisfied by
 // [zero_trust.GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIPCreate],
 // [zero_trust.GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIdentityCreate],
 // [GatewayProxyEndpointNewParamsBody].
@@ -392,7 +392,7 @@ func (r GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIPCreate) 
 func (r GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIPCreate) implementsGatewayProxyEndpointNewParamsBodyUnion() {
 }
 
-// GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIPCreateKind is the proxy endpoint kind
+// The proxy endpoint kind
 type GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIPCreateKind string
 
 const (
@@ -421,7 +421,7 @@ func (r GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIdentityCr
 func (r GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIdentityCreate) implementsGatewayProxyEndpointNewParamsBodyUnion() {
 }
 
-// GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIdentityCreateKind is the proxy endpoint kind
+// The proxy endpoint kind
 type GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIdentityCreateKind string
 
 const (
@@ -436,7 +436,7 @@ func (r GatewayProxyEndpointNewParamsBodyZeroTrustGatewayProxyEndpointIdentityCr
 	return false
 }
 
-// GatewayProxyEndpointNewParamsBodyKind is the proxy endpoint kind
+// The proxy endpoint kind
 type GatewayProxyEndpointNewParamsBodyKind string
 
 const (
@@ -480,7 +480,7 @@ func (r gatewayProxyEndpointNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayProxyEndpointNewResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayProxyEndpointNewResponseEnvelopeSuccess bool
 
 const (
@@ -531,7 +531,7 @@ func (r gatewayProxyEndpointDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayProxyEndpointDeleteResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayProxyEndpointDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -586,7 +586,7 @@ func (r gatewayProxyEndpointEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayProxyEndpointEditResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayProxyEndpointEditResponseEnvelopeSuccess bool
 
 const (
@@ -633,7 +633,7 @@ func (r gatewayProxyEndpointGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayProxyEndpointGetResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayProxyEndpointGetResponseEnvelopeSuccess bool
 
 const (

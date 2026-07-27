@@ -41,7 +41,7 @@ func TestAppFlagNewWithOptionalParams(t *testing.T) {
 				Conditions: cloudflare.F([]flagship.AppFlagNewParamsRulesConditionUnion{flagship.AppFlagNewParamsRulesConditionsObject{
 					Attribute: cloudflare.F("x"),
 					Operator:  cloudflare.F(flagship.AppFlagNewParamsRulesConditionsObjectOperatorEquals),
-					Value:     cloudflare.F[any](map[string]interface{}{}),
+					Value:     cloudflare.F[flagship.AppFlagNewParamsRulesConditionsObjectValueUnion](shared.UnionString("string")),
 				}}),
 				Priority:       cloudflare.F(int64(1)),
 				ServeVariation: cloudflare.F("x"),
@@ -93,7 +93,7 @@ func TestAppFlagUpdateWithOptionalParams(t *testing.T) {
 				Conditions: cloudflare.F([]flagship.AppFlagUpdateParamsRulesConditionUnion{flagship.AppFlagUpdateParamsRulesConditionsObject{
 					Attribute: cloudflare.F("x"),
 					Operator:  cloudflare.F(flagship.AppFlagUpdateParamsRulesConditionsObjectOperatorEquals),
-					Value:     cloudflare.F[any](map[string]interface{}{}),
+					Value:     cloudflare.F[flagship.AppFlagUpdateParamsRulesConditionsObjectValueUnion](shared.UnionString("string")),
 				}}),
 				Priority:       cloudflare.F(int64(1)),
 				ServeVariation: cloudflare.F("x"),

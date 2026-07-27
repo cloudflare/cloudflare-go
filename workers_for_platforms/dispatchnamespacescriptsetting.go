@@ -109,6 +109,11 @@ type DispatchNamespaceScriptSettingEditResponse struct {
 	// enable upcoming features or opt in or out of specific changes not included in a
 	// `compatibility_date`.
 	CompatibilityFlags []string `json:"compatibility_flags"`
+	// Summary of the declarative exports reconciliation that ran on this upload.
+	// Populated only when the uploaded metadata included an `exports` block. Durable
+	// Object entries drive reconciliation; `type: worker` entries do not contribute to
+	// this summary.
+	ExportsReconciliation DispatchNamespaceScriptSettingEditResponseExportsReconciliation `json:"exports_reconciliation"`
 	// Limits to apply for this Worker.
 	Limits DispatchNamespaceScriptSettingEditResponseLimits `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
@@ -131,19 +136,20 @@ type DispatchNamespaceScriptSettingEditResponse struct {
 // dispatchNamespaceScriptSettingEditResponseJSON contains the JSON metadata for
 // the struct [DispatchNamespaceScriptSettingEditResponse]
 type dispatchNamespaceScriptSettingEditResponseJSON struct {
-	Bindings           apijson.Field
-	CacheOptions       apijson.Field
-	CompatibilityDate  apijson.Field
-	CompatibilityFlags apijson.Field
-	Limits             apijson.Field
-	Logpush            apijson.Field
-	Observability      apijson.Field
-	Placement          apijson.Field
-	Tags               apijson.Field
-	TailConsumers      apijson.Field
-	UsageModel         apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	Bindings              apijson.Field
+	CacheOptions          apijson.Field
+	CompatibilityDate     apijson.Field
+	CompatibilityFlags    apijson.Field
+	ExportsReconciliation apijson.Field
+	Limits                apijson.Field
+	Logpush               apijson.Field
+	Observability         apijson.Field
+	Placement             apijson.Field
+	Tags                  apijson.Field
+	TailConsumers         apijson.Field
+	UsageModel            apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceScriptSettingEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -2592,36 +2598,614 @@ func (r dispatchNamespaceScriptSettingEditResponseCacheOptionsJSON) RawJSON() st
 
 // A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
 // class name, a Durable Object class name, or `default` for the Worker's default
-// export). Worker entrypoint entries set `type: worker` and may carry `cache`
-// configuration for that entrypoint. Durable Object entries set
-// `type: durable-object` and carry additional provisioning fields.
+// export). The `type` discriminator selects the top-level shape: `worker`
+// entrypoint entries may carry `cache` configuration, while `durable-object`
+// entries are further refined by the optional `state` field (default `created`).
+// Tombstone states (`deleted`, `renamed`, `transferred`) express destructive
+// lifecycle operations declaratively; `expecting-transfer` is the live target side
+// of a transfer. The server validates the exact per-(type, state) field
+// combinations; fields not listed for a variant are rejected.
 type DispatchNamespaceScriptSettingEditResponseExport struct {
-	// The kind of export.
+	// Marks this entry as a Worker entrypoint export.
 	Type DispatchNamespaceScriptSettingEditResponseExportsType `json:"type" api:"required"`
-	// Cache override for this entrypoint. It applies only to `type: worker` entries
-	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
-	Cache DispatchNamespaceScriptSettingEditResponseExportsCache `json:"cache"`
-	JSON  dispatchNamespaceScriptSettingEditResponseExportJSON   `json:"-"`
+	// This field can have the runtime type of
+	// [DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportCache].
+	Cache interface{} `json:"cache"`
+	// Name of the container (declared in the upload's `metadata.containers`) that
+	// backs this Durable Object. When set, the namespace is container-enabled. Valid
+	// only on live entries.
+	Container string `json:"container"`
+	// Live export. May be omitted; defaults to `created`.
+	State DispatchNamespaceScriptSettingEditResponseExportsState `json:"state"`
+	// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+	// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+	// already exists as KV-backed; the `exports` flow never provisions a new
+	// `legacy-kv` namespace.
+	Storage DispatchNamespaceScriptSettingEditResponseExportsStorage `json:"storage"`
+	// The source script name to receive the namespace from. Must be in the same
+	// account and dispatch-namespace context. Present on reads for
+	// `expecting-transfer` entries.
+	TransferFrom string                                               `json:"transfer_from"`
+	JSON         dispatchNamespaceScriptSettingEditResponseExportJSON `json:"-"`
+	union        DispatchNamespaceScriptSettingEditResponseExportsUnion
 }
 
 // dispatchNamespaceScriptSettingEditResponseExportJSON contains the JSON metadata
 // for the struct [DispatchNamespaceScriptSettingEditResponseExport]
 type dispatchNamespaceScriptSettingEditResponseExportJSON struct {
-	Type        apijson.Field
-	Cache       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptSettingEditResponseExport) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+	Type         apijson.Field
+	Cache        apijson.Field
+	Container    apijson.Field
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r dispatchNamespaceScriptSettingEditResponseExportJSON) RawJSON() string {
 	return r.raw
 }
 
-// The kind of export.
+func (r *DispatchNamespaceScriptSettingEditResponseExport) UnmarshalJSON(data []byte) (err error) {
+	*r = DispatchNamespaceScriptSettingEditResponseExport{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [DispatchNamespaceScriptSettingEditResponseExportsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExport],
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExport],
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExport],
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExport],
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExport],
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExport].
+func (r DispatchNamespaceScriptSettingEditResponseExport) AsUnion() DispatchNamespaceScriptSettingEditResponseExportsUnion {
+	return r.union
+}
+
+// A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
+// class name, a Durable Object class name, or `default` for the Worker's default
+// export). The `type` discriminator selects the top-level shape: `worker`
+// entrypoint entries may carry `cache` configuration, while `durable-object`
+// entries are further refined by the optional `state` field (default `created`).
+// Tombstone states (`deleted`, `renamed`, `transferred`) express destructive
+// lifecycle operations declaratively; `expecting-transfer` is the live target side
+// of a transfer. The server validates the exact per-(type, state) field
+// combinations; fields not listed for a variant are rejected.
+//
+// Union satisfied by
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExport],
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExport],
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExport],
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExport],
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExport]
+// or
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExport].
+type DispatchNamespaceScriptSettingEditResponseExportsUnion interface {
+	implementsDispatchNamespaceScriptSettingEditResponseExport()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DispatchNamespaceScriptSettingEditResponseExportsUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExport{}),
+			DiscriminatorValue: "worker",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExport{}),
+			DiscriminatorValue: "durable-object",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExport{}),
+			DiscriminatorValue: "durable-object",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExport{}),
+			DiscriminatorValue: "durable-object",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExport{}),
+			DiscriminatorValue: "durable-object",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExport{}),
+			DiscriminatorValue: "durable-object",
+		},
+	)
+}
+
+// A named Worker entrypoint export (`type: worker`). Worker entrypoints are always
+// live (`state: created`) and carry no storage or lifecycle fields. The optional
+// `cache` block overrides the Worker's global `cache_options.enabled` for this
+// entrypoint.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExport struct {
+	// Marks this entry as a Worker entrypoint export.
+	Type DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportType `json:"type" api:"required"`
+	// Cache override for this entrypoint. Overrides the Worker's global
+	// `cache_options.enabled` for this entrypoint only.
+	Cache DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportCache `json:"cache"`
+	// Live export. May be omitted; defaults to `created`.
+	State DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportState `json:"state"`
+	JSON  dispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportJSON  `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExport]
+type dispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportJSON struct {
+	Type        apijson.Field
+	Cache       apijson.Field
+	State       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExport) implementsDispatchNamespaceScriptSettingEditResponseExport() {
+}
+
+// Marks this entry as a Worker entrypoint export.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportTypeWorker DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportType = "worker"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportTypeWorker:
+		return true
+	}
+	return false
+}
+
+// Cache override for this entrypoint. Overrides the Worker's global
+// `cache_options.enabled` for this entrypoint only.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportCache struct {
+	// Whether caching is enabled for this entrypoint.
+	Enabled bool                                                                          `json:"enabled" api:"required"`
+	JSON    dispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportCacheJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportCacheJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportCache]
+type dispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportCacheJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportCache) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+// Live export. May be omitted; defaults to `created`.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportStateCreated DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportState = "created"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersWorkerExportStateCreated:
+		return true
+	}
+	return false
+}
+
+// A live Durable Object export (`state: created`, the default). The platform
+// auto-provisions the namespace on first deploy, matches it on subsequent deploys,
+// and never mutates or deletes it as a side effect of a code-only change.
+// `storage` is required; `renamed_to`, `transferred_to` and `transfer_from` are
+// not allowed on a live entry.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExport struct {
+	// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+	// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+	// already exists as KV-backed; the `exports` flow never provisions a new
+	// `legacy-kv` namespace.
+	Storage DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStorage `json:"storage" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportType `json:"type" api:"required"`
+	// Name of the container (declared in the upload's `metadata.containers`) that
+	// backs this Durable Object. When set, the namespace is container-enabled. Valid
+	// only on live entries.
+	Container string `json:"container"`
+	// Live export. May be omitted; defaults to `created`.
+	State DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportState `json:"state"`
+	JSON  dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportJSON  `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExport]
+type dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportJSON struct {
+	Storage     apijson.Field
+	Type        apijson.Field
+	Container   apijson.Field
+	State       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExport) implementsDispatchNamespaceScriptSettingEditResponseExport() {
+}
+
+// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+// already exists as KV-backed; the `exports` flow never provisions a new
+// `legacy-kv` namespace.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStorage string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStorageSqlite   DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStorage = "sqlite"
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStorageLegacyKV DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStorageSqlite, DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStorageLegacyKV:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportTypeDurableObject DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Live export. May be omitted; defaults to `created`.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStateCreated DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportState = "created"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExportStateCreated:
+		return true
+	}
+	return false
+}
+
+// A `deleted` tombstone: retires the provisioned namespace for this class and all
+// of its data. The class must be absent from the uploaded code and no other Worker
+// in the account may bind to the namespace, otherwise the deploy is rejected. No
+// other fields are allowed. Deletion is irreversible.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExport struct {
+	// Tombstone that deletes the namespace.
+	State DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportState `json:"state" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportType `json:"type" api:"required"`
+	JSON dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExport]
+type dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportJSON struct {
+	State       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExport) implementsDispatchNamespaceScriptSettingEditResponseExport() {
+}
+
+// Tombstone that deletes the namespace.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportStateDeleted DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportState = "deleted"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportStateDeleted:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportTypeDurableObject DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectDeletedExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// A `renamed` tombstone: rewrites the provisioned namespace's class name from this
+// map key to `renamed_to`. The source class may stay in code during the rollout
+// window (an info notice is emitted). `storage`, `transferred_to` and
+// `transfer_from` are not allowed.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExport struct {
+	// Tombstone that renames the namespace's class.
+	State DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportState `json:"state" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportType `json:"type" api:"required"`
+	JSON dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExport]
+type dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportJSON struct {
+	State       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExport) implementsDispatchNamespaceScriptSettingEditResponseExport() {
+}
+
+// Tombstone that renames the namespace's class.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportStateRenamed DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportState = "renamed"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportStateRenamed:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportTypeDurableObject DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectRenamedExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// A `transferred` tombstone (source side of a two-phase transfer): hands ownership
+// of the provisioned namespace to another script in the same account, named by
+// `transferred_to`. The target must have already deployed a matching
+// `expecting-transfer` entry. The source class may stay in code during the rollout
+// window (an info notice is emitted). `storage`, `renamed_to` and `transfer_from`
+// are not allowed.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExport struct {
+	// Tombstone that transfers the namespace to another script.
+	State DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportState `json:"state" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportType `json:"type" api:"required"`
+	JSON dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExport]
+type dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportJSON struct {
+	State       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExport) implementsDispatchNamespaceScriptSettingEditResponseExport() {
+}
+
+// Tombstone that transfers the namespace to another script.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportStateTransferred DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportState = "transferred"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportStateTransferred:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportTypeDurableObject DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectTransferredExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// The target side of a two-phase transfer (`state: expecting-transfer`). Declares
+// that this script expects to receive a namespace for this class from the
+// `transfer_from` script. This is a live entry, not a tombstone: bindings resolve
+// through the source's namespace until the source commits with a `transferred`
+// tombstone. `storage` and `transfer_from` are required; `renamed_to` and
+// `transferred_to` are not allowed.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExport struct {
+	// Target side of a two-phase transfer.
+	State DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportState `json:"state" api:"required"`
+	// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+	// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+	// already exists as KV-backed; the `exports` flow never provisions a new
+	// `legacy-kv` namespace.
+	Storage DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStorage `json:"storage" api:"required"`
+	// The source script name to receive the namespace from. Must be in the same
+	// account and dispatch-namespace context. Present on reads for
+	// `expecting-transfer` entries.
+	TransferFrom string `json:"transfer_from" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportType `json:"type" api:"required"`
+	// Name of the container (declared in the upload's `metadata.containers`) that
+	// backs this Durable Object once the transfer settles. Valid only on live entries.
+	Container string                                                                                           `json:"container"`
+	JSON      dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExport]
+type dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportJSON struct {
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	Type         apijson.Field
+	Container    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExport) implementsDispatchNamespaceScriptSettingEditResponseExport() {
+}
+
+// Target side of a two-phase transfer.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStateExpectingTransfer DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportState = "expecting-transfer"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+// already exists as KV-backed; the `exports` flow never provisions a new
+// `legacy-kv` namespace.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStorage string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStorageSqlite   DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStorage = "sqlite"
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStorageLegacyKV DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStorageSqlite, DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportStorageLegacyKV:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportTypeDurableObject DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsWorkersDurableObjectExpectingTransferExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Worker entrypoint export.
 type DispatchNamespaceScriptSettingEditResponseExportsType string
 
 const (
@@ -2637,28 +3221,373 @@ func (r DispatchNamespaceScriptSettingEditResponseExportsType) IsKnown() bool {
 	return false
 }
 
-// Cache override for this entrypoint. It applies only to `type: worker` entries
-// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
-type DispatchNamespaceScriptSettingEditResponseExportsCache struct {
-	// Whether caching is enabled for this entrypoint.
-	Enabled bool                                                       `json:"enabled" api:"required"`
-	JSON    dispatchNamespaceScriptSettingEditResponseExportsCacheJSON `json:"-"`
+// Live export. May be omitted; defaults to `created`.
+type DispatchNamespaceScriptSettingEditResponseExportsState string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsStateCreated           DispatchNamespaceScriptSettingEditResponseExportsState = "created"
+	DispatchNamespaceScriptSettingEditResponseExportsStateDeleted           DispatchNamespaceScriptSettingEditResponseExportsState = "deleted"
+	DispatchNamespaceScriptSettingEditResponseExportsStateRenamed           DispatchNamespaceScriptSettingEditResponseExportsState = "renamed"
+	DispatchNamespaceScriptSettingEditResponseExportsStateTransferred       DispatchNamespaceScriptSettingEditResponseExportsState = "transferred"
+	DispatchNamespaceScriptSettingEditResponseExportsStateExpectingTransfer DispatchNamespaceScriptSettingEditResponseExportsState = "expecting-transfer"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsStateCreated, DispatchNamespaceScriptSettingEditResponseExportsStateDeleted, DispatchNamespaceScriptSettingEditResponseExportsStateRenamed, DispatchNamespaceScriptSettingEditResponseExportsStateTransferred, DispatchNamespaceScriptSettingEditResponseExportsStateExpectingTransfer:
+		return true
+	}
+	return false
 }
 
-// dispatchNamespaceScriptSettingEditResponseExportsCacheJSON contains the JSON
-// metadata for the struct [DispatchNamespaceScriptSettingEditResponseExportsCache]
-type dispatchNamespaceScriptSettingEditResponseExportsCacheJSON struct {
-	Enabled     apijson.Field
+// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+// already exists as KV-backed; the `exports` flow never provisions a new
+// `legacy-kv` namespace.
+type DispatchNamespaceScriptSettingEditResponseExportsStorage string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsStorageSqlite   DispatchNamespaceScriptSettingEditResponseExportsStorage = "sqlite"
+	DispatchNamespaceScriptSettingEditResponseExportsStorageLegacyKV DispatchNamespaceScriptSettingEditResponseExportsStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsStorageSqlite, DispatchNamespaceScriptSettingEditResponseExportsStorageLegacyKV:
+		return true
+	}
+	return false
+}
+
+// Summary of the declarative exports reconciliation that ran on this upload.
+// Populated only when the uploaded metadata included an `exports` block. Durable
+// Object entries drive reconciliation; `type: worker` entries do not contribute to
+// this summary.
+type DispatchNamespaceScriptSettingEditResponseExportsReconciliation struct {
+	// Class names for which a new namespace was provisioned.
+	Created []string `json:"created" api:"required"`
+	// Class names whose namespace was deleted by a `deleted` tombstone.
+	Deleted []string `json:"deleted" api:"required"`
+	// Non-blocking info entries (stale tombstones, tombstone applied with class still
+	// in code). See `exports_reconciliation_info`.
+	Info []DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfo `json:"info" api:"required"`
+	// Source class names whose tombstone entry is now stale and safe to delete from
+	// `exports` (no remaining referencing scripts).
+	RemovableEntries []string `json:"removable_entries" api:"required"`
+	// Applied `renamed` tombstones.
+	Renamed []DispatchNamespaceScriptSettingEditResponseExportsReconciliationRenamed `json:"renamed" api:"required"`
+	// Phase-1 transfer hints recorded on the target side.
+	TransferPending []DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferPending `json:"transfer_pending" api:"required"`
+	// Committed `transferred` tombstones (phase-2).
+	Transferred []DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferred `json:"transferred" api:"required"`
+	// Class names whose provisioned namespace was mutated in place.
+	Updated []string `json:"updated" api:"required"`
+	// Non-blocking warnings. See `exports_reconciliation_warning`.
+	Warnings []DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarning `json:"warnings" api:"required"`
+	JSON     dispatchNamespaceScriptSettingEditResponseExportsReconciliationJSON      `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsReconciliationJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsReconciliation]
+type dispatchNamespaceScriptSettingEditResponseExportsReconciliationJSON struct {
+	Created          apijson.Field
+	Deleted          apijson.Field
+	Info             apijson.Field
+	RemovableEntries apijson.Field
+	Renamed          apijson.Field
+	TransferPending  apijson.Field
+	Transferred      apijson.Field
+	Updated          apijson.Field
+	Warnings         apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsReconciliation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsReconciliationJSON) RawJSON() string {
+	return r.raw
+}
+
+// A non-blocking reconciliation info entry. Emitted for stale tombstones (a no-op
+// on this deploy) and for tombstones applied with the source class still in code
+// (the supported zero-downtime rollout pattern).
+type DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfo struct {
+	// The class name the info entry is about.
+	Class string `json:"class" api:"required"`
+	// Human-readable explanation.
+	Message string `json:"message" api:"required"`
+	// Stable, machine-readable tag identifying which reconciliation scenario produced
+	// an error, warning, or info entry. Clients may branch on this value instead of
+	// parsing `message`.
+	Scenario DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario `json:"scenario" api:"required"`
+	// The provisioned namespace the entry relates to, when applicable.
+	NamespaceID string `json:"namespace_id" format:"uuid"`
+	// Other Workers in the account that still bind to the affected class. Advisory:
+	// while non-empty the tombstone is not yet safe to remove — redeploy these Workers
+	// with bindings re-pointed first.
+	ReferencingScripts []string                                                                `json:"referencing_scripts"`
+	JSON               dispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoJSON contains
+// the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfo]
+type dispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoJSON struct {
+	Class              apijson.Field
+	Message            apijson.Field
+	Scenario           apijson.Field
+	NamespaceID        apijson.Field
+	ReferencingScripts apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Stable, machine-readable tag identifying which reconciliation scenario produced
+// an error, warning, or info entry. Clients may branch on this value instead of
+// parsing `message`.
+type DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioCodeClassNotInExports                     DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "code_class_not_in_exports"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioProvisionedClassMissingFromConfig         DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "provisioned_class_missing_from_config"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioConfigExportNotInCode                     DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "config_export_not_in_code"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioConfigReferencesNonexistentClass          DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "config_references_nonexistent_class"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioOrphanedProvisionedNamespace              DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "orphaned_provisioned_namespace"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioStorageTypeMismatch                       DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "storage_type_mismatch"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioFreeTierRequiresSqlite                    DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "free_tier_requires_sqlite"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioInvalidExport                             DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "invalid_export"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTombstoneDeleteClassStillInCode           DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "tombstone_delete_class_still_in_code"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTombstoneDeleteBlockedByExternalBindings  DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "tombstone_delete_blocked_by_external_bindings"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTombstoneRenamedToOccupied                DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "tombstone_renamed_to_occupied"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferredPendingNotFound                DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "transferred_pending_not_found"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferredTargetMissing                  DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "transferred_target_missing"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferredTargetMismatch                 DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "transferred_target_mismatch"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceMissing             DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "phase_one_transfer_source_missing"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceNamespaceMissing    DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "phase_one_transfer_source_namespace_missing"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferTargetClassProvisioned    DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "phase_one_transfer_target_class_provisioned"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferAfterCommitMismatch       DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "phase_one_transfer_after_commit_mismatch"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferDuplicate                 DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "phase_one_transfer_duplicate"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferTargetInDispatchNamespace DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "phase_one_transfer_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceInDispatchNamespace DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "phase_one_transfer_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferredSourceInDispatchNamespace      DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "transferred_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferredTargetInDispatchNamespace      DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "transferred_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioContainerUndeclaredReference              DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "container_undeclared_reference"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioContainerClassNotDurableObject            DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "container_class_not_durable_object"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioContainerWiringInconsistent               DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "container_wiring_inconsistent"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioContainerMultipleDurableObjects           DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "container_multiple_durable_objects"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferContainerParityMismatch           DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "transfer_container_parity_mismatch"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferContainerParityMismatchOnCommit   DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "transfer_container_parity_mismatch_on_commit"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTombstoneClassStillInCode                 DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "tombstone_class_still_in_code"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioStaleTombstone                            DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "stale_tombstone"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferReceiveAlreadyApplied             DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "transfer_receive_already_applied"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferReceiveCleanupComplete            DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario = "transfer_receive_cleanup_complete"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenario) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioCodeClassNotInExports, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioProvisionedClassMissingFromConfig, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioConfigExportNotInCode, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioConfigReferencesNonexistentClass, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioOrphanedProvisionedNamespace, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioStorageTypeMismatch, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioFreeTierRequiresSqlite, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioInvalidExport, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTombstoneDeleteClassStillInCode, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTombstoneDeleteBlockedByExternalBindings, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTombstoneRenamedToOccupied, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferredPendingNotFound, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferredTargetMissing, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferredTargetMismatch, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceMissing, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceNamespaceMissing, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferTargetClassProvisioned, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferAfterCommitMismatch, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferDuplicate, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferTargetInDispatchNamespace, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceInDispatchNamespace, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferredSourceInDispatchNamespace, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferredTargetInDispatchNamespace, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioContainerUndeclaredReference, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioContainerClassNotDurableObject, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioContainerWiringInconsistent, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioContainerMultipleDurableObjects, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferContainerParityMismatch, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferContainerParityMismatchOnCommit, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTombstoneClassStillInCode, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioStaleTombstone, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferReceiveAlreadyApplied, DispatchNamespaceScriptSettingEditResponseExportsReconciliationInfoScenarioTransferReceiveCleanupComplete:
+		return true
+	}
+	return false
+}
+
+// A single applied `renamed` tombstone.
+type DispatchNamespaceScriptSettingEditResponseExportsReconciliationRenamed struct {
+	// The original (source) class name.
+	From string `json:"from" api:"required"`
+	// The new class name (`renamed_to`).
+	To   string                                                                     `json:"to" api:"required"`
+	JSON dispatchNamespaceScriptSettingEditResponseExportsReconciliationRenamedJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsReconciliationRenamedJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsReconciliationRenamed]
+type dispatchNamespaceScriptSettingEditResponseExportsReconciliationRenamedJSON struct {
+	From        apijson.Field
+	To          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DispatchNamespaceScriptSettingEditResponseExportsCache) UnmarshalJSON(data []byte) (err error) {
+func (r *DispatchNamespaceScriptSettingEditResponseExportsReconciliationRenamed) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dispatchNamespaceScriptSettingEditResponseExportsCacheJSON) RawJSON() string {
+func (r dispatchNamespaceScriptSettingEditResponseExportsReconciliationRenamedJSON) RawJSON() string {
 	return r.raw
+}
+
+// A single phase-1 transfer hint recorded on the target side (a live
+// `expecting-transfer` entry).
+type DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferPending struct {
+	// The target-side class name awaiting transfer.
+	Class string `json:"class" api:"required"`
+	// The source script the namespace will be transferred from.
+	From string                                                                             `json:"from" api:"required"`
+	JSON dispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferPendingJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferPendingJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferPending]
+type dispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferPendingJSON struct {
+	Class       apijson.Field
+	From        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferPending) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferPendingJSON) RawJSON() string {
+	return r.raw
+}
+
+// A single committed `transferred` tombstone (phase-2 commit).
+type DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferred struct {
+	// The source class name that was transferred.
+	Class string `json:"class" api:"required"`
+	// The transfer phase. Currently always `committed`.
+	Phase DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferredPhase `json:"phase" api:"required"`
+	// The destination script that now owns the namespace.
+	To   string                                                                         `json:"to" api:"required"`
+	JSON dispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferredJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferredJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferred]
+type dispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferredJSON struct {
+	Class       apijson.Field
+	Phase       apijson.Field
+	To          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferred) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferredJSON) RawJSON() string {
+	return r.raw
+}
+
+// The transfer phase. Currently always `committed`.
+type DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferredPhase string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferredPhaseCommitted DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferredPhase = "committed"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferredPhase) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsReconciliationTransferredPhaseCommitted:
+		return true
+	}
+	return false
+}
+
+// A non-blocking reconciliation warning. Reserved: no scenario populates this
+// array today (`code_class_not_in_exports` is surfaced as info and
+// `provisioned_class_missing_from_config` is a hard error). Clients should still
+// surface any entries that appear.
+type DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarning struct {
+	// The class name the warning is about.
+	Class string `json:"class" api:"required"`
+	// Human-readable explanation of the warning.
+	Message string `json:"message" api:"required"`
+	// Stable, machine-readable tag identifying which reconciliation scenario produced
+	// an error, warning, or info entry. Clients may branch on this value instead of
+	// parsing `message`.
+	Scenario DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario `json:"scenario" api:"required"`
+	// The provisioned namespace the warning relates to, when applicable.
+	NamespaceID string                                                                     `json:"namespace_id" format:"uuid"`
+	JSON        dispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarning]
+type dispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningJSON struct {
+	Class       apijson.Field
+	Message     apijson.Field
+	Scenario    apijson.Field
+	NamespaceID apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarning) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningJSON) RawJSON() string {
+	return r.raw
+}
+
+// Stable, machine-readable tag identifying which reconciliation scenario produced
+// an error, warning, or info entry. Clients may branch on this value instead of
+// parsing `message`.
+type DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioCodeClassNotInExports                     DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "code_class_not_in_exports"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioProvisionedClassMissingFromConfig         DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "provisioned_class_missing_from_config"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioConfigExportNotInCode                     DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "config_export_not_in_code"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioConfigReferencesNonexistentClass          DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "config_references_nonexistent_class"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioOrphanedProvisionedNamespace              DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "orphaned_provisioned_namespace"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioStorageTypeMismatch                       DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "storage_type_mismatch"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioFreeTierRequiresSqlite                    DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "free_tier_requires_sqlite"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioInvalidExport                             DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "invalid_export"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTombstoneDeleteClassStillInCode           DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "tombstone_delete_class_still_in_code"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTombstoneDeleteBlockedByExternalBindings  DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "tombstone_delete_blocked_by_external_bindings"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTombstoneRenamedToOccupied                DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "tombstone_renamed_to_occupied"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferredPendingNotFound                DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "transferred_pending_not_found"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferredTargetMissing                  DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "transferred_target_missing"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferredTargetMismatch                 DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "transferred_target_mismatch"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceMissing             DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "phase_one_transfer_source_missing"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceNamespaceMissing    DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "phase_one_transfer_source_namespace_missing"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferTargetClassProvisioned    DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "phase_one_transfer_target_class_provisioned"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferAfterCommitMismatch       DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "phase_one_transfer_after_commit_mismatch"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferDuplicate                 DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "phase_one_transfer_duplicate"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferTargetInDispatchNamespace DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "phase_one_transfer_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceInDispatchNamespace DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "phase_one_transfer_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferredSourceInDispatchNamespace      DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "transferred_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferredTargetInDispatchNamespace      DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "transferred_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioContainerUndeclaredReference              DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "container_undeclared_reference"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioContainerClassNotDurableObject            DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "container_class_not_durable_object"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioContainerWiringInconsistent               DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "container_wiring_inconsistent"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioContainerMultipleDurableObjects           DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "container_multiple_durable_objects"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferContainerParityMismatch           DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "transfer_container_parity_mismatch"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferContainerParityMismatchOnCommit   DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "transfer_container_parity_mismatch_on_commit"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTombstoneClassStillInCode                 DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "tombstone_class_still_in_code"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioStaleTombstone                            DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "stale_tombstone"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferReceiveAlreadyApplied             DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "transfer_receive_already_applied"
+	DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferReceiveCleanupComplete            DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario = "transfer_receive_cleanup_complete"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenario) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioCodeClassNotInExports, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioProvisionedClassMissingFromConfig, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioConfigExportNotInCode, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioConfigReferencesNonexistentClass, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioOrphanedProvisionedNamespace, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioStorageTypeMismatch, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioFreeTierRequiresSqlite, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioInvalidExport, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTombstoneDeleteClassStillInCode, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTombstoneDeleteBlockedByExternalBindings, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTombstoneRenamedToOccupied, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferredPendingNotFound, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferredTargetMissing, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferredTargetMismatch, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceMissing, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceNamespaceMissing, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferTargetClassProvisioned, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferAfterCommitMismatch, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferDuplicate, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferTargetInDispatchNamespace, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceInDispatchNamespace, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferredSourceInDispatchNamespace, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferredTargetInDispatchNamespace, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioContainerUndeclaredReference, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioContainerClassNotDurableObject, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioContainerWiringInconsistent, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioContainerMultipleDurableObjects, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferContainerParityMismatch, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferContainerParityMismatchOnCommit, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTombstoneClassStillInCode, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioStaleTombstone, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferReceiveAlreadyApplied, DispatchNamespaceScriptSettingEditResponseExportsReconciliationWarningsScenarioTransferReceiveCleanupComplete:
+		return true
+	}
+	return false
 }
 
 // Limits to apply for this Worker.
@@ -2930,7 +3859,7 @@ type DispatchNamespaceScriptSettingEditResponsePlacement struct {
 	Hostname string `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode DispatchNamespaceScriptSettingEditResponsePlacementModeMode `json:"mode"`
+	Mode DispatchNamespaceScriptSettingEditResponsePlacementMode `json:"mode"`
 	// Cloud region for targeted placement in format 'provider:region'.
 	Region string `json:"region"`
 	// This field can have the runtime type of
@@ -3237,6 +4166,11 @@ type DispatchNamespaceScriptSettingGetResponse struct {
 	// enable upcoming features or opt in or out of specific changes not included in a
 	// `compatibility_date`.
 	CompatibilityFlags []string `json:"compatibility_flags"`
+	// Summary of the declarative exports reconciliation that ran on this upload.
+	// Populated only when the uploaded metadata included an `exports` block. Durable
+	// Object entries drive reconciliation; `type: worker` entries do not contribute to
+	// this summary.
+	ExportsReconciliation DispatchNamespaceScriptSettingGetResponseExportsReconciliation `json:"exports_reconciliation"`
 	// Limits to apply for this Worker.
 	Limits DispatchNamespaceScriptSettingGetResponseLimits `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
@@ -3259,19 +4193,20 @@ type DispatchNamespaceScriptSettingGetResponse struct {
 // dispatchNamespaceScriptSettingGetResponseJSON contains the JSON metadata for the
 // struct [DispatchNamespaceScriptSettingGetResponse]
 type dispatchNamespaceScriptSettingGetResponseJSON struct {
-	Bindings           apijson.Field
-	CacheOptions       apijson.Field
-	CompatibilityDate  apijson.Field
-	CompatibilityFlags apijson.Field
-	Limits             apijson.Field
-	Logpush            apijson.Field
-	Observability      apijson.Field
-	Placement          apijson.Field
-	Tags               apijson.Field
-	TailConsumers      apijson.Field
-	UsageModel         apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	Bindings              apijson.Field
+	CacheOptions          apijson.Field
+	CompatibilityDate     apijson.Field
+	CompatibilityFlags    apijson.Field
+	ExportsReconciliation apijson.Field
+	Limits                apijson.Field
+	Logpush               apijson.Field
+	Observability         apijson.Field
+	Placement             apijson.Field
+	Tags                  apijson.Field
+	TailConsumers         apijson.Field
+	UsageModel            apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceScriptSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -5720,36 +6655,614 @@ func (r dispatchNamespaceScriptSettingGetResponseCacheOptionsJSON) RawJSON() str
 
 // A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
 // class name, a Durable Object class name, or `default` for the Worker's default
-// export). Worker entrypoint entries set `type: worker` and may carry `cache`
-// configuration for that entrypoint. Durable Object entries set
-// `type: durable-object` and carry additional provisioning fields.
+// export). The `type` discriminator selects the top-level shape: `worker`
+// entrypoint entries may carry `cache` configuration, while `durable-object`
+// entries are further refined by the optional `state` field (default `created`).
+// Tombstone states (`deleted`, `renamed`, `transferred`) express destructive
+// lifecycle operations declaratively; `expecting-transfer` is the live target side
+// of a transfer. The server validates the exact per-(type, state) field
+// combinations; fields not listed for a variant are rejected.
 type DispatchNamespaceScriptSettingGetResponseExport struct {
-	// The kind of export.
+	// Marks this entry as a Worker entrypoint export.
 	Type DispatchNamespaceScriptSettingGetResponseExportsType `json:"type" api:"required"`
-	// Cache override for this entrypoint. It applies only to `type: worker` entries
-	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
-	Cache DispatchNamespaceScriptSettingGetResponseExportsCache `json:"cache"`
-	JSON  dispatchNamespaceScriptSettingGetResponseExportJSON   `json:"-"`
+	// This field can have the runtime type of
+	// [DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportCache].
+	Cache interface{} `json:"cache"`
+	// Name of the container (declared in the upload's `metadata.containers`) that
+	// backs this Durable Object. When set, the namespace is container-enabled. Valid
+	// only on live entries.
+	Container string `json:"container"`
+	// Live export. May be omitted; defaults to `created`.
+	State DispatchNamespaceScriptSettingGetResponseExportsState `json:"state"`
+	// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+	// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+	// already exists as KV-backed; the `exports` flow never provisions a new
+	// `legacy-kv` namespace.
+	Storage DispatchNamespaceScriptSettingGetResponseExportsStorage `json:"storage"`
+	// The source script name to receive the namespace from. Must be in the same
+	// account and dispatch-namespace context. Present on reads for
+	// `expecting-transfer` entries.
+	TransferFrom string                                              `json:"transfer_from"`
+	JSON         dispatchNamespaceScriptSettingGetResponseExportJSON `json:"-"`
+	union        DispatchNamespaceScriptSettingGetResponseExportsUnion
 }
 
 // dispatchNamespaceScriptSettingGetResponseExportJSON contains the JSON metadata
 // for the struct [DispatchNamespaceScriptSettingGetResponseExport]
 type dispatchNamespaceScriptSettingGetResponseExportJSON struct {
-	Type        apijson.Field
-	Cache       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptSettingGetResponseExport) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+	Type         apijson.Field
+	Cache        apijson.Field
+	Container    apijson.Field
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r dispatchNamespaceScriptSettingGetResponseExportJSON) RawJSON() string {
 	return r.raw
 }
 
-// The kind of export.
+func (r *DispatchNamespaceScriptSettingGetResponseExport) UnmarshalJSON(data []byte) (err error) {
+	*r = DispatchNamespaceScriptSettingGetResponseExport{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [DispatchNamespaceScriptSettingGetResponseExportsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExport],
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExport],
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExport],
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExport],
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExport],
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExport].
+func (r DispatchNamespaceScriptSettingGetResponseExport) AsUnion() DispatchNamespaceScriptSettingGetResponseExportsUnion {
+	return r.union
+}
+
+// A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
+// class name, a Durable Object class name, or `default` for the Worker's default
+// export). The `type` discriminator selects the top-level shape: `worker`
+// entrypoint entries may carry `cache` configuration, while `durable-object`
+// entries are further refined by the optional `state` field (default `created`).
+// Tombstone states (`deleted`, `renamed`, `transferred`) express destructive
+// lifecycle operations declaratively; `expecting-transfer` is the live target side
+// of a transfer. The server validates the exact per-(type, state) field
+// combinations; fields not listed for a variant are rejected.
+//
+// Union satisfied by
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExport],
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExport],
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExport],
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExport],
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExport]
+// or
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExport].
+type DispatchNamespaceScriptSettingGetResponseExportsUnion interface {
+	implementsDispatchNamespaceScriptSettingGetResponseExport()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DispatchNamespaceScriptSettingGetResponseExportsUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExport{}),
+			DiscriminatorValue: "worker",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExport{}),
+			DiscriminatorValue: "durable-object",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExport{}),
+			DiscriminatorValue: "durable-object",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExport{}),
+			DiscriminatorValue: "durable-object",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExport{}),
+			DiscriminatorValue: "durable-object",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExport{}),
+			DiscriminatorValue: "durable-object",
+		},
+	)
+}
+
+// A named Worker entrypoint export (`type: worker`). Worker entrypoints are always
+// live (`state: created`) and carry no storage or lifecycle fields. The optional
+// `cache` block overrides the Worker's global `cache_options.enabled` for this
+// entrypoint.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExport struct {
+	// Marks this entry as a Worker entrypoint export.
+	Type DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportType `json:"type" api:"required"`
+	// Cache override for this entrypoint. Overrides the Worker's global
+	// `cache_options.enabled` for this entrypoint only.
+	Cache DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportCache `json:"cache"`
+	// Live export. May be omitted; defaults to `created`.
+	State DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportState `json:"state"`
+	JSON  dispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportJSON  `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportJSON contains
+// the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExport]
+type dispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportJSON struct {
+	Type        apijson.Field
+	Cache       apijson.Field
+	State       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExport) implementsDispatchNamespaceScriptSettingGetResponseExport() {
+}
+
+// Marks this entry as a Worker entrypoint export.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportType string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportTypeWorker DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportType = "worker"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportTypeWorker:
+		return true
+	}
+	return false
+}
+
+// Cache override for this entrypoint. Overrides the Worker's global
+// `cache_options.enabled` for this entrypoint only.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportCache struct {
+	// Whether caching is enabled for this entrypoint.
+	Enabled bool                                                                         `json:"enabled" api:"required"`
+	JSON    dispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportCacheJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportCacheJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportCache]
+type dispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportCacheJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportCache) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+// Live export. May be omitted; defaults to `created`.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportState string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportStateCreated DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportState = "created"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersWorkerExportStateCreated:
+		return true
+	}
+	return false
+}
+
+// A live Durable Object export (`state: created`, the default). The platform
+// auto-provisions the namespace on first deploy, matches it on subsequent deploys,
+// and never mutates or deletes it as a side effect of a code-only change.
+// `storage` is required; `renamed_to`, `transferred_to` and `transfer_from` are
+// not allowed on a live entry.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExport struct {
+	// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+	// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+	// already exists as KV-backed; the `exports` flow never provisions a new
+	// `legacy-kv` namespace.
+	Storage DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStorage `json:"storage" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportType `json:"type" api:"required"`
+	// Name of the container (declared in the upload's `metadata.containers`) that
+	// backs this Durable Object. When set, the namespace is container-enabled. Valid
+	// only on live entries.
+	Container string `json:"container"`
+	// Live export. May be omitted; defaults to `created`.
+	State DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportState `json:"state"`
+	JSON  dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportJSON  `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExport]
+type dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportJSON struct {
+	Storage     apijson.Field
+	Type        apijson.Field
+	Container   apijson.Field
+	State       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExport) implementsDispatchNamespaceScriptSettingGetResponseExport() {
+}
+
+// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+// already exists as KV-backed; the `exports` flow never provisions a new
+// `legacy-kv` namespace.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStorage string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStorageSqlite   DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStorage = "sqlite"
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStorageLegacyKV DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStorageSqlite, DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStorageLegacyKV:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportType string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportTypeDurableObject DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Live export. May be omitted; defaults to `created`.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportState string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStateCreated DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportState = "created"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExportStateCreated:
+		return true
+	}
+	return false
+}
+
+// A `deleted` tombstone: retires the provisioned namespace for this class and all
+// of its data. The class must be absent from the uploaded code and no other Worker
+// in the account may bind to the namespace, otherwise the deploy is rejected. No
+// other fields are allowed. Deletion is irreversible.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExport struct {
+	// Tombstone that deletes the namespace.
+	State DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportState `json:"state" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportType `json:"type" api:"required"`
+	JSON dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExport]
+type dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportJSON struct {
+	State       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExport) implementsDispatchNamespaceScriptSettingGetResponseExport() {
+}
+
+// Tombstone that deletes the namespace.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportState string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportStateDeleted DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportState = "deleted"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportStateDeleted:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportType string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportTypeDurableObject DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectDeletedExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// A `renamed` tombstone: rewrites the provisioned namespace's class name from this
+// map key to `renamed_to`. The source class may stay in code during the rollout
+// window (an info notice is emitted). `storage`, `transferred_to` and
+// `transfer_from` are not allowed.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExport struct {
+	// Tombstone that renames the namespace's class.
+	State DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportState `json:"state" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportType `json:"type" api:"required"`
+	JSON dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExport]
+type dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportJSON struct {
+	State       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExport) implementsDispatchNamespaceScriptSettingGetResponseExport() {
+}
+
+// Tombstone that renames the namespace's class.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportState string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportStateRenamed DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportState = "renamed"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportStateRenamed:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportType string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportTypeDurableObject DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectRenamedExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// A `transferred` tombstone (source side of a two-phase transfer): hands ownership
+// of the provisioned namespace to another script in the same account, named by
+// `transferred_to`. The target must have already deployed a matching
+// `expecting-transfer` entry. The source class may stay in code during the rollout
+// window (an info notice is emitted). `storage`, `renamed_to` and `transfer_from`
+// are not allowed.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExport struct {
+	// Tombstone that transfers the namespace to another script.
+	State DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportState `json:"state" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportType `json:"type" api:"required"`
+	JSON dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExport]
+type dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportJSON struct {
+	State       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExport) implementsDispatchNamespaceScriptSettingGetResponseExport() {
+}
+
+// Tombstone that transfers the namespace to another script.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportState string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportStateTransferred DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportState = "transferred"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportStateTransferred:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportType string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportTypeDurableObject DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectTransferredExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// The target side of a two-phase transfer (`state: expecting-transfer`). Declares
+// that this script expects to receive a namespace for this class from the
+// `transfer_from` script. This is a live entry, not a tombstone: bindings resolve
+// through the source's namespace until the source commits with a `transferred`
+// tombstone. `storage` and `transfer_from` are required; `renamed_to` and
+// `transferred_to` are not allowed.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExport struct {
+	// Target side of a two-phase transfer.
+	State DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportState `json:"state" api:"required"`
+	// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+	// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+	// already exists as KV-backed; the `exports` flow never provisions a new
+	// `legacy-kv` namespace.
+	Storage DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStorage `json:"storage" api:"required"`
+	// The source script name to receive the namespace from. Must be in the same
+	// account and dispatch-namespace context. Present on reads for
+	// `expecting-transfer` entries.
+	TransferFrom string `json:"transfer_from" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportType `json:"type" api:"required"`
+	// Name of the container (declared in the upload's `metadata.containers`) that
+	// backs this Durable Object once the transfer settles. Valid only on live entries.
+	Container string                                                                                          `json:"container"`
+	JSON      dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExport]
+type dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportJSON struct {
+	State        apijson.Field
+	Storage      apijson.Field
+	TransferFrom apijson.Field
+	Type         apijson.Field
+	Container    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExport) implementsDispatchNamespaceScriptSettingGetResponseExport() {
+}
+
+// Target side of a two-phase transfer.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportState string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStateExpectingTransfer DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportState = "expecting-transfer"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+// already exists as KV-backed; the `exports` flow never provisions a new
+// `legacy-kv` namespace.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStorage string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStorageSqlite   DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStorage = "sqlite"
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStorageLegacyKV DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStorageSqlite, DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportStorageLegacyKV:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportType string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportTypeDurableObject DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsWorkersDurableObjectExpectingTransferExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Worker entrypoint export.
 type DispatchNamespaceScriptSettingGetResponseExportsType string
 
 const (
@@ -5765,28 +7278,373 @@ func (r DispatchNamespaceScriptSettingGetResponseExportsType) IsKnown() bool {
 	return false
 }
 
-// Cache override for this entrypoint. It applies only to `type: worker` entries
-// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
-type DispatchNamespaceScriptSettingGetResponseExportsCache struct {
-	// Whether caching is enabled for this entrypoint.
-	Enabled bool                                                      `json:"enabled" api:"required"`
-	JSON    dispatchNamespaceScriptSettingGetResponseExportsCacheJSON `json:"-"`
+// Live export. May be omitted; defaults to `created`.
+type DispatchNamespaceScriptSettingGetResponseExportsState string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsStateCreated           DispatchNamespaceScriptSettingGetResponseExportsState = "created"
+	DispatchNamespaceScriptSettingGetResponseExportsStateDeleted           DispatchNamespaceScriptSettingGetResponseExportsState = "deleted"
+	DispatchNamespaceScriptSettingGetResponseExportsStateRenamed           DispatchNamespaceScriptSettingGetResponseExportsState = "renamed"
+	DispatchNamespaceScriptSettingGetResponseExportsStateTransferred       DispatchNamespaceScriptSettingGetResponseExportsState = "transferred"
+	DispatchNamespaceScriptSettingGetResponseExportsStateExpectingTransfer DispatchNamespaceScriptSettingGetResponseExportsState = "expecting-transfer"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsStateCreated, DispatchNamespaceScriptSettingGetResponseExportsStateDeleted, DispatchNamespaceScriptSettingGetResponseExportsStateRenamed, DispatchNamespaceScriptSettingGetResponseExportsStateTransferred, DispatchNamespaceScriptSettingGetResponseExportsStateExpectingTransfer:
+		return true
+	}
+	return false
 }
 
-// dispatchNamespaceScriptSettingGetResponseExportsCacheJSON contains the JSON
-// metadata for the struct [DispatchNamespaceScriptSettingGetResponseExportsCache]
-type dispatchNamespaceScriptSettingGetResponseExportsCacheJSON struct {
-	Enabled     apijson.Field
+// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+// already exists as KV-backed; the `exports` flow never provisions a new
+// `legacy-kv` namespace.
+type DispatchNamespaceScriptSettingGetResponseExportsStorage string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsStorageSqlite   DispatchNamespaceScriptSettingGetResponseExportsStorage = "sqlite"
+	DispatchNamespaceScriptSettingGetResponseExportsStorageLegacyKV DispatchNamespaceScriptSettingGetResponseExportsStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsStorageSqlite, DispatchNamespaceScriptSettingGetResponseExportsStorageLegacyKV:
+		return true
+	}
+	return false
+}
+
+// Summary of the declarative exports reconciliation that ran on this upload.
+// Populated only when the uploaded metadata included an `exports` block. Durable
+// Object entries drive reconciliation; `type: worker` entries do not contribute to
+// this summary.
+type DispatchNamespaceScriptSettingGetResponseExportsReconciliation struct {
+	// Class names for which a new namespace was provisioned.
+	Created []string `json:"created" api:"required"`
+	// Class names whose namespace was deleted by a `deleted` tombstone.
+	Deleted []string `json:"deleted" api:"required"`
+	// Non-blocking info entries (stale tombstones, tombstone applied with class still
+	// in code). See `exports_reconciliation_info`.
+	Info []DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfo `json:"info" api:"required"`
+	// Source class names whose tombstone entry is now stale and safe to delete from
+	// `exports` (no remaining referencing scripts).
+	RemovableEntries []string `json:"removable_entries" api:"required"`
+	// Applied `renamed` tombstones.
+	Renamed []DispatchNamespaceScriptSettingGetResponseExportsReconciliationRenamed `json:"renamed" api:"required"`
+	// Phase-1 transfer hints recorded on the target side.
+	TransferPending []DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferPending `json:"transfer_pending" api:"required"`
+	// Committed `transferred` tombstones (phase-2).
+	Transferred []DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferred `json:"transferred" api:"required"`
+	// Class names whose provisioned namespace was mutated in place.
+	Updated []string `json:"updated" api:"required"`
+	// Non-blocking warnings. See `exports_reconciliation_warning`.
+	Warnings []DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarning `json:"warnings" api:"required"`
+	JSON     dispatchNamespaceScriptSettingGetResponseExportsReconciliationJSON      `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsReconciliationJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsReconciliation]
+type dispatchNamespaceScriptSettingGetResponseExportsReconciliationJSON struct {
+	Created          apijson.Field
+	Deleted          apijson.Field
+	Info             apijson.Field
+	RemovableEntries apijson.Field
+	Renamed          apijson.Field
+	TransferPending  apijson.Field
+	Transferred      apijson.Field
+	Updated          apijson.Field
+	Warnings         apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsReconciliation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsReconciliationJSON) RawJSON() string {
+	return r.raw
+}
+
+// A non-blocking reconciliation info entry. Emitted for stale tombstones (a no-op
+// on this deploy) and for tombstones applied with the source class still in code
+// (the supported zero-downtime rollout pattern).
+type DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfo struct {
+	// The class name the info entry is about.
+	Class string `json:"class" api:"required"`
+	// Human-readable explanation.
+	Message string `json:"message" api:"required"`
+	// Stable, machine-readable tag identifying which reconciliation scenario produced
+	// an error, warning, or info entry. Clients may branch on this value instead of
+	// parsing `message`.
+	Scenario DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario `json:"scenario" api:"required"`
+	// The provisioned namespace the entry relates to, when applicable.
+	NamespaceID string `json:"namespace_id" format:"uuid"`
+	// Other Workers in the account that still bind to the affected class. Advisory:
+	// while non-empty the tombstone is not yet safe to remove — redeploy these Workers
+	// with bindings re-pointed first.
+	ReferencingScripts []string                                                               `json:"referencing_scripts"`
+	JSON               dispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoJSON contains
+// the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfo]
+type dispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoJSON struct {
+	Class              apijson.Field
+	Message            apijson.Field
+	Scenario           apijson.Field
+	NamespaceID        apijson.Field
+	ReferencingScripts apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Stable, machine-readable tag identifying which reconciliation scenario produced
+// an error, warning, or info entry. Clients may branch on this value instead of
+// parsing `message`.
+type DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioCodeClassNotInExports                     DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "code_class_not_in_exports"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioProvisionedClassMissingFromConfig         DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "provisioned_class_missing_from_config"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioConfigExportNotInCode                     DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "config_export_not_in_code"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioConfigReferencesNonexistentClass          DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "config_references_nonexistent_class"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioOrphanedProvisionedNamespace              DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "orphaned_provisioned_namespace"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioStorageTypeMismatch                       DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "storage_type_mismatch"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioFreeTierRequiresSqlite                    DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "free_tier_requires_sqlite"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioInvalidExport                             DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "invalid_export"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTombstoneDeleteClassStillInCode           DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "tombstone_delete_class_still_in_code"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTombstoneDeleteBlockedByExternalBindings  DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "tombstone_delete_blocked_by_external_bindings"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTombstoneRenamedToOccupied                DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "tombstone_renamed_to_occupied"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferredPendingNotFound                DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "transferred_pending_not_found"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferredTargetMissing                  DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "transferred_target_missing"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferredTargetMismatch                 DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "transferred_target_mismatch"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceMissing             DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "phase_one_transfer_source_missing"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceNamespaceMissing    DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "phase_one_transfer_source_namespace_missing"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferTargetClassProvisioned    DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "phase_one_transfer_target_class_provisioned"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferAfterCommitMismatch       DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "phase_one_transfer_after_commit_mismatch"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferDuplicate                 DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "phase_one_transfer_duplicate"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferTargetInDispatchNamespace DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "phase_one_transfer_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceInDispatchNamespace DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "phase_one_transfer_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferredSourceInDispatchNamespace      DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "transferred_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferredTargetInDispatchNamespace      DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "transferred_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioContainerUndeclaredReference              DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "container_undeclared_reference"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioContainerClassNotDurableObject            DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "container_class_not_durable_object"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioContainerWiringInconsistent               DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "container_wiring_inconsistent"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioContainerMultipleDurableObjects           DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "container_multiple_durable_objects"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferContainerParityMismatch           DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "transfer_container_parity_mismatch"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferContainerParityMismatchOnCommit   DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "transfer_container_parity_mismatch_on_commit"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTombstoneClassStillInCode                 DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "tombstone_class_still_in_code"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioStaleTombstone                            DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "stale_tombstone"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferReceiveAlreadyApplied             DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "transfer_receive_already_applied"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferReceiveCleanupComplete            DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario = "transfer_receive_cleanup_complete"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenario) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioCodeClassNotInExports, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioProvisionedClassMissingFromConfig, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioConfigExportNotInCode, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioConfigReferencesNonexistentClass, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioOrphanedProvisionedNamespace, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioStorageTypeMismatch, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioFreeTierRequiresSqlite, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioInvalidExport, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTombstoneDeleteClassStillInCode, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTombstoneDeleteBlockedByExternalBindings, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTombstoneRenamedToOccupied, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferredPendingNotFound, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferredTargetMissing, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferredTargetMismatch, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceMissing, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceNamespaceMissing, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferTargetClassProvisioned, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferAfterCommitMismatch, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferDuplicate, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferTargetInDispatchNamespace, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioPhaseOneTransferSourceInDispatchNamespace, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferredSourceInDispatchNamespace, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferredTargetInDispatchNamespace, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioContainerUndeclaredReference, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioContainerClassNotDurableObject, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioContainerWiringInconsistent, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioContainerMultipleDurableObjects, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferContainerParityMismatch, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferContainerParityMismatchOnCommit, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTombstoneClassStillInCode, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioStaleTombstone, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferReceiveAlreadyApplied, DispatchNamespaceScriptSettingGetResponseExportsReconciliationInfoScenarioTransferReceiveCleanupComplete:
+		return true
+	}
+	return false
+}
+
+// A single applied `renamed` tombstone.
+type DispatchNamespaceScriptSettingGetResponseExportsReconciliationRenamed struct {
+	// The original (source) class name.
+	From string `json:"from" api:"required"`
+	// The new class name (`renamed_to`).
+	To   string                                                                    `json:"to" api:"required"`
+	JSON dispatchNamespaceScriptSettingGetResponseExportsReconciliationRenamedJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsReconciliationRenamedJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsReconciliationRenamed]
+type dispatchNamespaceScriptSettingGetResponseExportsReconciliationRenamedJSON struct {
+	From        apijson.Field
+	To          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DispatchNamespaceScriptSettingGetResponseExportsCache) UnmarshalJSON(data []byte) (err error) {
+func (r *DispatchNamespaceScriptSettingGetResponseExportsReconciliationRenamed) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dispatchNamespaceScriptSettingGetResponseExportsCacheJSON) RawJSON() string {
+func (r dispatchNamespaceScriptSettingGetResponseExportsReconciliationRenamedJSON) RawJSON() string {
 	return r.raw
+}
+
+// A single phase-1 transfer hint recorded on the target side (a live
+// `expecting-transfer` entry).
+type DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferPending struct {
+	// The target-side class name awaiting transfer.
+	Class string `json:"class" api:"required"`
+	// The source script the namespace will be transferred from.
+	From string                                                                            `json:"from" api:"required"`
+	JSON dispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferPendingJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferPendingJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferPending]
+type dispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferPendingJSON struct {
+	Class       apijson.Field
+	From        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferPending) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferPendingJSON) RawJSON() string {
+	return r.raw
+}
+
+// A single committed `transferred` tombstone (phase-2 commit).
+type DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferred struct {
+	// The source class name that was transferred.
+	Class string `json:"class" api:"required"`
+	// The transfer phase. Currently always `committed`.
+	Phase DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferredPhase `json:"phase" api:"required"`
+	// The destination script that now owns the namespace.
+	To   string                                                                        `json:"to" api:"required"`
+	JSON dispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferredJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferredJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferred]
+type dispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferredJSON struct {
+	Class       apijson.Field
+	Phase       apijson.Field
+	To          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferred) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferredJSON) RawJSON() string {
+	return r.raw
+}
+
+// The transfer phase. Currently always `committed`.
+type DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferredPhase string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferredPhaseCommitted DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferredPhase = "committed"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferredPhase) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsReconciliationTransferredPhaseCommitted:
+		return true
+	}
+	return false
+}
+
+// A non-blocking reconciliation warning. Reserved: no scenario populates this
+// array today (`code_class_not_in_exports` is surfaced as info and
+// `provisioned_class_missing_from_config` is a hard error). Clients should still
+// surface any entries that appear.
+type DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarning struct {
+	// The class name the warning is about.
+	Class string `json:"class" api:"required"`
+	// Human-readable explanation of the warning.
+	Message string `json:"message" api:"required"`
+	// Stable, machine-readable tag identifying which reconciliation scenario produced
+	// an error, warning, or info entry. Clients may branch on this value instead of
+	// parsing `message`.
+	Scenario DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario `json:"scenario" api:"required"`
+	// The provisioned namespace the warning relates to, when applicable.
+	NamespaceID string                                                                    `json:"namespace_id" format:"uuid"`
+	JSON        dispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarning]
+type dispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningJSON struct {
+	Class       apijson.Field
+	Message     apijson.Field
+	Scenario    apijson.Field
+	NamespaceID apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarning) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningJSON) RawJSON() string {
+	return r.raw
+}
+
+// Stable, machine-readable tag identifying which reconciliation scenario produced
+// an error, warning, or info entry. Clients may branch on this value instead of
+// parsing `message`.
+type DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioCodeClassNotInExports                     DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "code_class_not_in_exports"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioProvisionedClassMissingFromConfig         DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "provisioned_class_missing_from_config"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioConfigExportNotInCode                     DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "config_export_not_in_code"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioConfigReferencesNonexistentClass          DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "config_references_nonexistent_class"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioOrphanedProvisionedNamespace              DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "orphaned_provisioned_namespace"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioStorageTypeMismatch                       DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "storage_type_mismatch"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioFreeTierRequiresSqlite                    DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "free_tier_requires_sqlite"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioInvalidExport                             DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "invalid_export"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTombstoneDeleteClassStillInCode           DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "tombstone_delete_class_still_in_code"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTombstoneDeleteBlockedByExternalBindings  DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "tombstone_delete_blocked_by_external_bindings"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTombstoneRenamedToOccupied                DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "tombstone_renamed_to_occupied"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferredPendingNotFound                DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "transferred_pending_not_found"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferredTargetMissing                  DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "transferred_target_missing"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferredTargetMismatch                 DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "transferred_target_mismatch"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceMissing             DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "phase_one_transfer_source_missing"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceNamespaceMissing    DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "phase_one_transfer_source_namespace_missing"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferTargetClassProvisioned    DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "phase_one_transfer_target_class_provisioned"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferAfterCommitMismatch       DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "phase_one_transfer_after_commit_mismatch"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferDuplicate                 DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "phase_one_transfer_duplicate"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferTargetInDispatchNamespace DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "phase_one_transfer_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceInDispatchNamespace DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "phase_one_transfer_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferredSourceInDispatchNamespace      DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "transferred_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferredTargetInDispatchNamespace      DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "transferred_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioContainerUndeclaredReference              DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "container_undeclared_reference"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioContainerClassNotDurableObject            DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "container_class_not_durable_object"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioContainerWiringInconsistent               DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "container_wiring_inconsistent"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioContainerMultipleDurableObjects           DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "container_multiple_durable_objects"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferContainerParityMismatch           DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "transfer_container_parity_mismatch"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferContainerParityMismatchOnCommit   DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "transfer_container_parity_mismatch_on_commit"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTombstoneClassStillInCode                 DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "tombstone_class_still_in_code"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioStaleTombstone                            DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "stale_tombstone"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferReceiveAlreadyApplied             DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "transfer_receive_already_applied"
+	DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferReceiveCleanupComplete            DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario = "transfer_receive_cleanup_complete"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenario) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioCodeClassNotInExports, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioProvisionedClassMissingFromConfig, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioConfigExportNotInCode, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioConfigReferencesNonexistentClass, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioOrphanedProvisionedNamespace, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioStorageTypeMismatch, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioFreeTierRequiresSqlite, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioInvalidExport, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTombstoneDeleteClassStillInCode, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTombstoneDeleteBlockedByExternalBindings, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTombstoneRenamedToOccupied, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferredPendingNotFound, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferredTargetMissing, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferredTargetMismatch, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceMissing, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceNamespaceMissing, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferTargetClassProvisioned, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferAfterCommitMismatch, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferDuplicate, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferTargetInDispatchNamespace, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioPhaseOneTransferSourceInDispatchNamespace, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferredSourceInDispatchNamespace, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferredTargetInDispatchNamespace, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioContainerUndeclaredReference, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioContainerClassNotDurableObject, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioContainerWiringInconsistent, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioContainerMultipleDurableObjects, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferContainerParityMismatch, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferContainerParityMismatchOnCommit, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTombstoneClassStillInCode, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioStaleTombstone, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferReceiveAlreadyApplied, DispatchNamespaceScriptSettingGetResponseExportsReconciliationWarningsScenarioTransferReceiveCleanupComplete:
+		return true
+	}
+	return false
 }
 
 // Limits to apply for this Worker.
@@ -6057,7 +7915,7 @@ type DispatchNamespaceScriptSettingGetResponsePlacement struct {
 	Hostname string `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode DispatchNamespaceScriptSettingGetResponsePlacementModeMode `json:"mode"`
+	Mode DispatchNamespaceScriptSettingGetResponsePlacementMode `json:"mode"`
 	// Cloud region for targeted placement in format 'provider:region'.
 	Region string `json:"region"`
 	// This field can have the runtime type of
@@ -6355,7 +8213,7 @@ type DispatchNamespaceScriptSettingEditParams struct {
 func (r DispatchNamespaceScriptSettingEditParams) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRootWithJSON(r, writer)
+	err = apiform.MarshalRoot(r, writer)
 	if err != nil {
 		writer.Close()
 		return nil, "", err
@@ -6388,7 +8246,7 @@ type DispatchNamespaceScriptSettingEditParamsSettings struct {
 	CompatibilityFlags param.Field[[]string] `json:"compatibility_flags"`
 	// Declarative exports for the Worker. Worker entrypoint entries (`type: worker`)
 	// carry cache configuration for that entrypoint.
-	Exports param.Field[map[string]DispatchNamespaceScriptSettingEditParamsSettingsExports] `json:"exports"`
+	Exports param.Field[map[string]DispatchNamespaceScriptSettingEditParamsSettingsExportsUnion] `json:"exports"`
 	// Limits to apply for this Worker.
 	Limits param.Field[DispatchNamespaceScriptSettingEditParamsSettingsLimits] `json:"limits"`
 	// Whether Logpush is turned on for the Worker.
@@ -7921,22 +9779,446 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsCacheOptions) MarshalJSO
 
 // A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
 // class name, a Durable Object class name, or `default` for the Worker's default
-// export). Worker entrypoint entries set `type: worker` and may carry `cache`
-// configuration for that entrypoint. Durable Object entries set
-// `type: durable-object` and carry additional provisioning fields.
+// export). The `type` discriminator selects the top-level shape: `worker`
+// entrypoint entries may carry `cache` configuration, while `durable-object`
+// entries are further refined by the optional `state` field (default `created`).
+// Tombstone states (`deleted`, `renamed`, `transferred`) express destructive
+// lifecycle operations declaratively; `expecting-transfer` is the live target side
+// of a transfer. The server validates the exact per-(type, state) field
+// combinations; fields not listed for a variant are rejected.
 type DispatchNamespaceScriptSettingEditParamsSettingsExports struct {
-	// The kind of export.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsType] `json:"type" api:"required"`
-	// Cache override for this entrypoint. It applies only to `type: worker` entries
-	// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
-	Cache param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsCache] `json:"cache"`
+	// Marks this entry as a Worker entrypoint export.
+	Type  param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsType] `json:"type" api:"required"`
+	Cache param.Field[interface{}]                                                 `json:"cache"`
+	// Name of the container (declared in the upload's `metadata.containers`) that
+	// backs this Durable Object. When set, the namespace is container-enabled. Valid
+	// only on live entries.
+	Container param.Field[string] `json:"container"`
+	// The destination class name. Must differ from the source class (the map key) and
+	// must be declared as a live (`created`) entry in the same `exports` map.
+	// Write-only: never present in GET responses.
+	RenamedTo param.Field[string] `json:"renamed_to"`
+	// Live export. May be omitted; defaults to `created`.
+	State param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsState] `json:"state"`
+	// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+	// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+	// already exists as KV-backed; the `exports` flow never provisions a new
+	// `legacy-kv` namespace.
+	Storage param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsStorage] `json:"storage"`
+	// The source script name to receive the namespace from. Must be in the same
+	// account and dispatch-namespace context. Present on reads for
+	// `expecting-transfer` entries.
+	TransferFrom param.Field[string] `json:"transfer_from"`
+	// The destination script name. Must be in the same account and the same
+	// dispatch-namespace context (or both non-dispatch). Cross-dispatch-namespace
+	// transfers are rejected. Write-only: never present in GET responses.
+	TransferredTo param.Field[string] `json:"transferred_to"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsExports) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The kind of export.
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExports) implementsDispatchNamespaceScriptSettingEditParamsSettingsExportsUnion() {
+}
+
+// A single entry in the `exports` map, keyed by export name (a `WorkerEntrypoint`
+// class name, a Durable Object class name, or `default` for the Worker's default
+// export). The `type` discriminator selects the top-level shape: `worker`
+// entrypoint entries may carry `cache` configuration, while `durable-object`
+// entries are further refined by the optional `state` field (default `created`).
+// Tombstone states (`deleted`, `renamed`, `transferred`) express destructive
+// lifecycle operations declaratively; `expecting-transfer` is the live target side
+// of a transfer. The server validates the exact per-(type, state) field
+// combinations; fields not listed for a variant are rejected.
+//
+// Satisfied by
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExport],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExport],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExport],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExport],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExport],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExport],
+// [DispatchNamespaceScriptSettingEditParamsSettingsExports].
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsUnion interface {
+	implementsDispatchNamespaceScriptSettingEditParamsSettingsExportsUnion()
+}
+
+// A named Worker entrypoint export (`type: worker`). Worker entrypoints are always
+// live (`state: created`) and carry no storage or lifecycle fields. The optional
+// `cache` block overrides the Worker's global `cache_options.enabled` for this
+// entrypoint.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExport struct {
+	// Marks this entry as a Worker entrypoint export.
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportType] `json:"type" api:"required"`
+	// Cache override for this entrypoint. Overrides the Worker's global
+	// `cache_options.enabled` for this entrypoint only.
+	Cache param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportCache] `json:"cache"`
+	// Live export. May be omitted; defaults to `created`.
+	State param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportState] `json:"state"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExport) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExport) implementsDispatchNamespaceScriptSettingEditParamsSettingsExportsUnion() {
+}
+
+// Marks this entry as a Worker entrypoint export.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportTypeWorker DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportType = "worker"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportTypeWorker:
+		return true
+	}
+	return false
+}
+
+// Cache override for this entrypoint. Overrides the Worker's global
+// `cache_options.enabled` for this entrypoint only.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportCache struct {
+	// Whether caching is enabled for this entrypoint.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportCache) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Live export. May be omitted; defaults to `created`.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportStateCreated DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportState = "created"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersWorkerExportStateCreated:
+		return true
+	}
+	return false
+}
+
+// A live Durable Object export (`state: created`, the default). The platform
+// auto-provisions the namespace on first deploy, matches it on subsequent deploys,
+// and never mutates or deletes it as a side effect of a code-only change.
+// `storage` is required; `renamed_to`, `transferred_to` and `transfer_from` are
+// not allowed on a live entry.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExport struct {
+	// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+	// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+	// already exists as KV-backed; the `exports` flow never provisions a new
+	// `legacy-kv` namespace.
+	Storage param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStorage] `json:"storage" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportType] `json:"type" api:"required"`
+	// Name of the container (declared in the upload's `metadata.containers`) that
+	// backs this Durable Object. When set, the namespace is container-enabled. Valid
+	// only on live entries.
+	Container param.Field[string] `json:"container"`
+	// Live export. May be omitted; defaults to `created`.
+	State param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportState] `json:"state"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExport) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExport) implementsDispatchNamespaceScriptSettingEditParamsSettingsExportsUnion() {
+}
+
+// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+// already exists as KV-backed; the `exports` flow never provisions a new
+// `legacy-kv` namespace.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStorage string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStorageSqlite   DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStorage = "sqlite"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStorageLegacyKV DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStorageSqlite, DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStorageLegacyKV:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportTypeDurableObject DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Live export. May be omitted; defaults to `created`.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStateCreated DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportState = "created"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExportStateCreated:
+		return true
+	}
+	return false
+}
+
+// A `deleted` tombstone: retires the provisioned namespace for this class and all
+// of its data. The class must be absent from the uploaded code and no other Worker
+// in the account may bind to the namespace, otherwise the deploy is rejected. No
+// other fields are allowed. Deletion is irreversible.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExport struct {
+	// Tombstone that deletes the namespace.
+	State param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportState] `json:"state" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportType] `json:"type" api:"required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExport) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExport) implementsDispatchNamespaceScriptSettingEditParamsSettingsExportsUnion() {
+}
+
+// Tombstone that deletes the namespace.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportStateDeleted DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportState = "deleted"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportStateDeleted:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportTypeDurableObject DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectDeletedExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// A `renamed` tombstone: rewrites the provisioned namespace's class name from this
+// map key to `renamed_to`. The source class may stay in code during the rollout
+// window (an info notice is emitted). `storage`, `transferred_to` and
+// `transfer_from` are not allowed.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExport struct {
+	// The destination class name. Must differ from the source class (the map key) and
+	// must be declared as a live (`created`) entry in the same `exports` map.
+	// Write-only: never present in GET responses.
+	RenamedTo param.Field[string] `json:"renamed_to" api:"required"`
+	// Tombstone that renames the namespace's class.
+	State param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportState] `json:"state" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportType] `json:"type" api:"required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExport) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExport) implementsDispatchNamespaceScriptSettingEditParamsSettingsExportsUnion() {
+}
+
+// Tombstone that renames the namespace's class.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportStateRenamed DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportState = "renamed"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportStateRenamed:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportTypeDurableObject DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectRenamedExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// A `transferred` tombstone (source side of a two-phase transfer): hands ownership
+// of the provisioned namespace to another script in the same account, named by
+// `transferred_to`. The target must have already deployed a matching
+// `expecting-transfer` entry. The source class may stay in code during the rollout
+// window (an info notice is emitted). `storage`, `renamed_to` and `transfer_from`
+// are not allowed.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExport struct {
+	// Tombstone that transfers the namespace to another script.
+	State param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportState] `json:"state" api:"required"`
+	// The destination script name. Must be in the same account and the same
+	// dispatch-namespace context (or both non-dispatch). Cross-dispatch-namespace
+	// transfers are rejected. Write-only: never present in GET responses.
+	TransferredTo param.Field[string] `json:"transferred_to" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportType] `json:"type" api:"required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExport) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExport) implementsDispatchNamespaceScriptSettingEditParamsSettingsExportsUnion() {
+}
+
+// Tombstone that transfers the namespace to another script.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportStateTransferred DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportState = "transferred"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportStateTransferred:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportTypeDurableObject DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectTransferredExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// The target side of a two-phase transfer (`state: expecting-transfer`). Declares
+// that this script expects to receive a namespace for this class from the
+// `transfer_from` script. This is a live entry, not a tombstone: bindings resolve
+// through the source's namespace until the source commits with a `transferred`
+// tombstone. `storage` and `transfer_from` are required; `renamed_to` and
+// `transferred_to` are not allowed.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExport struct {
+	// Target side of a two-phase transfer.
+	State param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportState] `json:"state" api:"required"`
+	// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+	// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+	// already exists as KV-backed; the `exports` flow never provisions a new
+	// `legacy-kv` namespace.
+	Storage param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStorage] `json:"storage" api:"required"`
+	// The source script name to receive the namespace from. Must be in the same
+	// account and dispatch-namespace context. Present on reads for
+	// `expecting-transfer` entries.
+	TransferFrom param.Field[string] `json:"transfer_from" api:"required"`
+	// Marks this entry as a Durable Object export.
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportType] `json:"type" api:"required"`
+	// Name of the container (declared in the upload's `metadata.containers`) that
+	// backs this Durable Object once the transfer settles. Valid only on live entries.
+	Container param.Field[string] `json:"container"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExport) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExport) implementsDispatchNamespaceScriptSettingEditParamsSettingsExportsUnion() {
+}
+
+// Target side of a two-phase transfer.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportState string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStateExpectingTransfer DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportState = "expecting-transfer"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStateExpectingTransfer:
+		return true
+	}
+	return false
+}
+
+// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+// already exists as KV-backed; the `exports` flow never provisions a new
+// `legacy-kv` namespace.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStorage string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStorageSqlite   DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStorage = "sqlite"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStorageLegacyKV DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStorageSqlite, DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportStorageLegacyKV:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Durable Object export.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportType string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportTypeDurableObject DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportType = "durable-object"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsWorkersDurableObjectExpectingTransferExportTypeDurableObject:
+		return true
+	}
+	return false
+}
+
+// Marks this entry as a Worker entrypoint export.
 type DispatchNamespaceScriptSettingEditParamsSettingsExportsType string
 
 const (
@@ -7952,15 +10234,270 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsType) IsKnown() b
 	return false
 }
 
-// Cache override for this entrypoint. It applies only to `type: worker` entries
-// and overrides the Worker's global `cache_options.enabled` for that entrypoint.
-type DispatchNamespaceScriptSettingEditParamsSettingsExportsCache struct {
-	// Whether caching is enabled for this entrypoint.
-	Enabled param.Field[bool] `json:"enabled" api:"required"`
+// Live export. May be omitted; defaults to `created`.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsState string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsStateCreated           DispatchNamespaceScriptSettingEditParamsSettingsExportsState = "created"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsStateDeleted           DispatchNamespaceScriptSettingEditParamsSettingsExportsState = "deleted"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsStateRenamed           DispatchNamespaceScriptSettingEditParamsSettingsExportsState = "renamed"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsStateTransferred       DispatchNamespaceScriptSettingEditParamsSettingsExportsState = "transferred"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsStateExpectingTransfer DispatchNamespaceScriptSettingEditParamsSettingsExportsState = "expecting-transfer"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsState) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsStateCreated, DispatchNamespaceScriptSettingEditParamsSettingsExportsStateDeleted, DispatchNamespaceScriptSettingEditParamsSettingsExportsStateRenamed, DispatchNamespaceScriptSettingEditParamsSettingsExportsStateTransferred, DispatchNamespaceScriptSettingEditParamsSettingsExportsStateExpectingTransfer:
+		return true
+	}
+	return false
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsCache) MarshalJSON() (data []byte, err error) {
+// Durable Object storage backend. `sqlite` is the recommended (and only) backend
+// for new namespaces. `legacy-kv` is accepted only for a class whose namespace
+// already exists as KV-backed; the `exports` flow never provisions a new
+// `legacy-kv` namespace.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsStorage string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsStorageSqlite   DispatchNamespaceScriptSettingEditParamsSettingsExportsStorage = "sqlite"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsStorageLegacyKV DispatchNamespaceScriptSettingEditParamsSettingsExportsStorage = "legacy-kv"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsStorage) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsStorageSqlite, DispatchNamespaceScriptSettingEditParamsSettingsExportsStorageLegacyKV:
+		return true
+	}
+	return false
+}
+
+// Summary of the declarative exports reconciliation that ran on this upload.
+// Populated only when the uploaded metadata included an `exports` block. Durable
+// Object entries drive reconciliation; `type: worker` entries do not contribute to
+// this summary.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliation struct {
+	// Class names for which a new namespace was provisioned.
+	Created param.Field[[]string] `json:"created" api:"required"`
+	// Class names whose namespace was deleted by a `deleted` tombstone.
+	Deleted param.Field[[]string] `json:"deleted" api:"required"`
+	// Non-blocking info entries (stale tombstones, tombstone applied with class still
+	// in code). See `exports_reconciliation_info`.
+	Info param.Field[[]DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfo] `json:"info" api:"required"`
+	// Source class names whose tombstone entry is now stale and safe to delete from
+	// `exports` (no remaining referencing scripts).
+	RemovableEntries param.Field[[]string] `json:"removable_entries" api:"required"`
+	// Applied `renamed` tombstones.
+	Renamed param.Field[[]DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationRenamed] `json:"renamed" api:"required"`
+	// Phase-1 transfer hints recorded on the target side.
+	TransferPending param.Field[[]DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferPending] `json:"transfer_pending" api:"required"`
+	// Committed `transferred` tombstones (phase-2).
+	Transferred param.Field[[]DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferred] `json:"transferred" api:"required"`
+	// Class names whose provisioned namespace was mutated in place.
+	Updated param.Field[[]string] `json:"updated" api:"required"`
+	// Non-blocking warnings. See `exports_reconciliation_warning`.
+	Warnings param.Field[[]DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarning] `json:"warnings" api:"required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliation) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// A non-blocking reconciliation info entry. Emitted for stale tombstones (a no-op
+// on this deploy) and for tombstones applied with the source class still in code
+// (the supported zero-downtime rollout pattern).
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfo struct {
+	// The class name the info entry is about.
+	Class param.Field[string] `json:"class" api:"required"`
+	// Human-readable explanation.
+	Message param.Field[string] `json:"message" api:"required"`
+	// Stable, machine-readable tag identifying which reconciliation scenario produced
+	// an error, warning, or info entry. Clients may branch on this value instead of
+	// parsing `message`.
+	Scenario param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario] `json:"scenario" api:"required"`
+	// The provisioned namespace the entry relates to, when applicable.
+	NamespaceID param.Field[string] `json:"namespace_id" format:"uuid"`
+	// Other Workers in the account that still bind to the affected class. Advisory:
+	// while non-empty the tombstone is not yet safe to remove — redeploy these Workers
+	// with bindings re-pointed first.
+	ReferencingScripts param.Field[[]string] `json:"referencing_scripts"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfo) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Stable, machine-readable tag identifying which reconciliation scenario produced
+// an error, warning, or info entry. Clients may branch on this value instead of
+// parsing `message`.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioCodeClassNotInExports                     DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "code_class_not_in_exports"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioProvisionedClassMissingFromConfig         DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "provisioned_class_missing_from_config"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioConfigExportNotInCode                     DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "config_export_not_in_code"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioConfigReferencesNonexistentClass          DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "config_references_nonexistent_class"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioOrphanedProvisionedNamespace              DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "orphaned_provisioned_namespace"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioStorageTypeMismatch                       DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "storage_type_mismatch"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioFreeTierRequiresSqlite                    DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "free_tier_requires_sqlite"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioInvalidExport                             DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "invalid_export"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTombstoneDeleteClassStillInCode           DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "tombstone_delete_class_still_in_code"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTombstoneDeleteBlockedByExternalBindings  DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "tombstone_delete_blocked_by_external_bindings"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTombstoneRenamedToOccupied                DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "tombstone_renamed_to_occupied"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferredPendingNotFound                DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "transferred_pending_not_found"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferredTargetMissing                  DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "transferred_target_missing"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferredTargetMismatch                 DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "transferred_target_mismatch"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferSourceMissing             DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "phase_one_transfer_source_missing"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferSourceNamespaceMissing    DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "phase_one_transfer_source_namespace_missing"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferTargetClassProvisioned    DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "phase_one_transfer_target_class_provisioned"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferAfterCommitMismatch       DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "phase_one_transfer_after_commit_mismatch"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferDuplicate                 DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "phase_one_transfer_duplicate"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferTargetInDispatchNamespace DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "phase_one_transfer_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferSourceInDispatchNamespace DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "phase_one_transfer_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferredSourceInDispatchNamespace      DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "transferred_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferredTargetInDispatchNamespace      DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "transferred_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioContainerUndeclaredReference              DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "container_undeclared_reference"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioContainerClassNotDurableObject            DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "container_class_not_durable_object"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioContainerWiringInconsistent               DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "container_wiring_inconsistent"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioContainerMultipleDurableObjects           DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "container_multiple_durable_objects"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferContainerParityMismatch           DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "transfer_container_parity_mismatch"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferContainerParityMismatchOnCommit   DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "transfer_container_parity_mismatch_on_commit"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTombstoneClassStillInCode                 DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "tombstone_class_still_in_code"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioStaleTombstone                            DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "stale_tombstone"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferReceiveAlreadyApplied             DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "transfer_receive_already_applied"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferReceiveCleanupComplete            DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario = "transfer_receive_cleanup_complete"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenario) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioCodeClassNotInExports, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioProvisionedClassMissingFromConfig, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioConfigExportNotInCode, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioConfigReferencesNonexistentClass, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioOrphanedProvisionedNamespace, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioStorageTypeMismatch, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioFreeTierRequiresSqlite, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioInvalidExport, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTombstoneDeleteClassStillInCode, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTombstoneDeleteBlockedByExternalBindings, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTombstoneRenamedToOccupied, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferredPendingNotFound, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferredTargetMissing, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferredTargetMismatch, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferSourceMissing, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferSourceNamespaceMissing, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferTargetClassProvisioned, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferAfterCommitMismatch, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferDuplicate, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferTargetInDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioPhaseOneTransferSourceInDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferredSourceInDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferredTargetInDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioContainerUndeclaredReference, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioContainerClassNotDurableObject, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioContainerWiringInconsistent, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioContainerMultipleDurableObjects, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferContainerParityMismatch, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferContainerParityMismatchOnCommit, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTombstoneClassStillInCode, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioStaleTombstone, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferReceiveAlreadyApplied, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationInfoScenarioTransferReceiveCleanupComplete:
+		return true
+	}
+	return false
+}
+
+// A single applied `renamed` tombstone.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationRenamed struct {
+	// The original (source) class name.
+	From param.Field[string] `json:"from" api:"required"`
+	// The new class name (`renamed_to`).
+	To param.Field[string] `json:"to" api:"required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationRenamed) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A single phase-1 transfer hint recorded on the target side (a live
+// `expecting-transfer` entry).
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferPending struct {
+	// The target-side class name awaiting transfer.
+	Class param.Field[string] `json:"class" api:"required"`
+	// The source script the namespace will be transferred from.
+	From param.Field[string] `json:"from" api:"required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferPending) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A single committed `transferred` tombstone (phase-2 commit).
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferred struct {
+	// The source class name that was transferred.
+	Class param.Field[string] `json:"class" api:"required"`
+	// The transfer phase. Currently always `committed`.
+	Phase param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferredPhase] `json:"phase" api:"required"`
+	// The destination script that now owns the namespace.
+	To param.Field[string] `json:"to" api:"required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferred) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The transfer phase. Currently always `committed`.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferredPhase string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferredPhaseCommitted DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferredPhase = "committed"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferredPhase) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationTransferredPhaseCommitted:
+		return true
+	}
+	return false
+}
+
+// A non-blocking reconciliation warning. Reserved: no scenario populates this
+// array today (`code_class_not_in_exports` is surfaced as info and
+// `provisioned_class_missing_from_config` is a hard error). Clients should still
+// surface any entries that appear.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarning struct {
+	// The class name the warning is about.
+	Class param.Field[string] `json:"class" api:"required"`
+	// Human-readable explanation of the warning.
+	Message param.Field[string] `json:"message" api:"required"`
+	// Stable, machine-readable tag identifying which reconciliation scenario produced
+	// an error, warning, or info entry. Clients may branch on this value instead of
+	// parsing `message`.
+	Scenario param.Field[DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario] `json:"scenario" api:"required"`
+	// The provisioned namespace the warning relates to, when applicable.
+	NamespaceID param.Field[string] `json:"namespace_id" format:"uuid"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarning) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Stable, machine-readable tag identifying which reconciliation scenario produced
+// an error, warning, or info entry. Clients may branch on this value instead of
+// parsing `message`.
+type DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioCodeClassNotInExports                     DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "code_class_not_in_exports"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioProvisionedClassMissingFromConfig         DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "provisioned_class_missing_from_config"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioConfigExportNotInCode                     DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "config_export_not_in_code"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioConfigReferencesNonexistentClass          DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "config_references_nonexistent_class"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioOrphanedProvisionedNamespace              DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "orphaned_provisioned_namespace"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioStorageTypeMismatch                       DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "storage_type_mismatch"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioFreeTierRequiresSqlite                    DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "free_tier_requires_sqlite"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioInvalidExport                             DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "invalid_export"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTombstoneDeleteClassStillInCode           DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "tombstone_delete_class_still_in_code"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTombstoneDeleteBlockedByExternalBindings  DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "tombstone_delete_blocked_by_external_bindings"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTombstoneRenamedToOccupied                DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "tombstone_renamed_to_occupied"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferredPendingNotFound                DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "transferred_pending_not_found"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferredTargetMissing                  DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "transferred_target_missing"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferredTargetMismatch                 DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "transferred_target_mismatch"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferSourceMissing             DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "phase_one_transfer_source_missing"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferSourceNamespaceMissing    DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "phase_one_transfer_source_namespace_missing"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferTargetClassProvisioned    DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "phase_one_transfer_target_class_provisioned"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferAfterCommitMismatch       DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "phase_one_transfer_after_commit_mismatch"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferDuplicate                 DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "phase_one_transfer_duplicate"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferTargetInDispatchNamespace DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "phase_one_transfer_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferSourceInDispatchNamespace DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "phase_one_transfer_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferredSourceInDispatchNamespace      DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "transferred_source_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferredTargetInDispatchNamespace      DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "transferred_target_in_dispatch_namespace"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioContainerUndeclaredReference              DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "container_undeclared_reference"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioContainerClassNotDurableObject            DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "container_class_not_durable_object"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioContainerWiringInconsistent               DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "container_wiring_inconsistent"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioContainerMultipleDurableObjects           DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "container_multiple_durable_objects"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferContainerParityMismatch           DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "transfer_container_parity_mismatch"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferContainerParityMismatchOnCommit   DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "transfer_container_parity_mismatch_on_commit"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTombstoneClassStillInCode                 DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "tombstone_class_still_in_code"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioStaleTombstone                            DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "stale_tombstone"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferReceiveAlreadyApplied             DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "transfer_receive_already_applied"
+	DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferReceiveCleanupComplete            DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario = "transfer_receive_cleanup_complete"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenario) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioCodeClassNotInExports, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioProvisionedClassMissingFromConfig, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioConfigExportNotInCode, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioConfigReferencesNonexistentClass, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioOrphanedProvisionedNamespace, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioStorageTypeMismatch, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioFreeTierRequiresSqlite, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioInvalidExport, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTombstoneDeleteClassStillInCode, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTombstoneDeleteBlockedByExternalBindings, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTombstoneRenamedToOccupied, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferredPendingNotFound, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferredTargetMissing, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferredTargetMismatch, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferSourceMissing, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferSourceNamespaceMissing, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferTargetClassProvisioned, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferAfterCommitMismatch, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferDuplicate, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferTargetInDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioPhaseOneTransferSourceInDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferredSourceInDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferredTargetInDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioContainerUndeclaredReference, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioContainerClassNotDurableObject, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioContainerWiringInconsistent, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioContainerMultipleDurableObjects, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferContainerParityMismatch, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferContainerParityMismatchOnCommit, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTombstoneClassStillInCode, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioStaleTombstone, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferReceiveAlreadyApplied, DispatchNamespaceScriptSettingEditParamsSettingsExportsReconciliationWarningsScenarioTransferReceiveCleanupComplete:
+		return true
+	}
+	return false
 }
 
 // Limits to apply for this Worker.

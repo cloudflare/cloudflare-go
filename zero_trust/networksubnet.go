@@ -107,7 +107,7 @@ func (r NetworkSubnetListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// NetworkSubnetListParamsAddressFamily if set, only include subnets in the given address family - `v4` or `v6`
+// If set, only include subnets in the given address family - `v4` or `v6`
 type NetworkSubnetListParamsAddressFamily string
 
 const (
@@ -123,7 +123,7 @@ func (r NetworkSubnetListParamsAddressFamily) IsKnown() bool {
 	return false
 }
 
-// NetworkSubnetListParamsSortOrder sort order of the results. `asc` means oldest to newest, `desc` means newest to
+// Sort order of the results. `asc` means oldest to newest, `desc` means newest to
 // oldest. If not set, they will not be in any particular order.
 type NetworkSubnetListParamsSortOrder string
 
@@ -140,17 +140,18 @@ func (r NetworkSubnetListParamsSortOrder) IsKnown() bool {
 	return false
 }
 
-// NetworkSubnetListParamsSubnetTypes if set, the types of subnets to include, separated by comma.
+// If set, the types of subnets to include, separated by comma.
 type NetworkSubnetListParamsSubnetTypes string
 
 const (
-	NetworkSubnetListParamsSubnetTypesCloudflareSource NetworkSubnetListParamsSubnetTypes = "cloudflare_source"
-	NetworkSubnetListParamsSubnetTypesWARP             NetworkSubnetListParamsSubnetTypes = "warp"
+	NetworkSubnetListParamsSubnetTypesCloudflareSource  NetworkSubnetListParamsSubnetTypes = "cloudflare_source"
+	NetworkSubnetListParamsSubnetTypesInitialResolvedIP NetworkSubnetListParamsSubnetTypes = "initial_resolved_ip"
+	NetworkSubnetListParamsSubnetTypesWARP              NetworkSubnetListParamsSubnetTypes = "warp"
 )
 
 func (r NetworkSubnetListParamsSubnetTypes) IsKnown() bool {
 	switch r {
-	case NetworkSubnetListParamsSubnetTypesCloudflareSource, NetworkSubnetListParamsSubnetTypesWARP:
+	case NetworkSubnetListParamsSubnetTypesCloudflareSource, NetworkSubnetListParamsSubnetTypesInitialResolvedIP, NetworkSubnetListParamsSubnetTypesWARP:
 		return true
 	}
 	return false

@@ -31,13 +31,12 @@ func TestConfigurationNew(t *testing.T) {
 	_, err := client.TokenValidation.Configuration.New(context.TODO(), token_validation.ConfigurationNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Credentials: cloudflare.F(token_validation.ConfigurationNewParamsCredentials{
-			Keys: cloudflare.F([]token_validation.ConfigurationNewParamsCredentialsKeyUnion{token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256{
-				Alg: cloudflare.F(token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256AlgEs256),
-				Crv: cloudflare.F(token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256CrvP256),
-				Kid: cloudflare.F("38013f13-c266-4eec-a72a-92ec92779f21"),
-				Kty: cloudflare.F(token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyEcEs256KtyEc),
-				X:   cloudflare.F("KN53JRwN3wCjm2o39bvZUX2VdrsHzS8pxOAGjm8m7EQ"),
-				Y:   cloudflare.F("lnkkzIxaveggz-HFhcMWW15nxvOj0Z_uQsXbpK0GFcY"),
+			Keys: cloudflare.F([]token_validation.ConfigurationNewParamsCredentialsKeyUnion{token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSA{
+				Alg: cloudflare.F(token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSAAlgRs256),
+				E:   cloudflare.F("e"),
+				Kid: cloudflare.F("kid"),
+				Kty: cloudflare.F(token_validation.ConfigurationNewParamsCredentialsKeysAPIShieldCredentialsJWTKeyRSAKtyRSA),
+				N:   cloudflare.F("n"),
 			}}),
 		}),
 		Description:  cloudflare.F("Long description for Token Validation Configuration"),

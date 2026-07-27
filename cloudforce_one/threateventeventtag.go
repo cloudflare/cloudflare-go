@@ -34,7 +34,7 @@ func NewThreatEventEventTagService(opts ...option.RequestOption) (r *ThreatEvent
 	return
 }
 
-// Adds a tag to an event
+// Add one or more tags to an event.
 func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, params ThreatEventEventTagNewParams, opts ...option.RequestOption) (res *ThreatEventEventTagNewResponse, err error) {
 	var env ThreatEventEventTagNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +55,7 @@ func (r *ThreatEventEventTagService) New(ctx context.Context, eventID string, pa
 	return res, nil
 }
 
-// Removes a tag from an event
+// Remove one or more tags from an event.
 func (r *ThreatEventEventTagService) Delete(ctx context.Context, eventID string, body ThreatEventEventTagDeleteParams, opts ...option.RequestOption) (res *ThreatEventEventTagDeleteResponse, err error) {
 	var env ThreatEventEventTagDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

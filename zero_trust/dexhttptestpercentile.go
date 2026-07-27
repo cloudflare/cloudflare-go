@@ -284,7 +284,7 @@ func (r dexhttpTestPercentileGetResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// DexhttpTestPercentileGetResponseEnvelopeSuccess indicates whether the API call was successful.
+// Whether the API call was successful.
 type DexhttpTestPercentileGetResponseEnvelopeSuccess bool
 
 const (

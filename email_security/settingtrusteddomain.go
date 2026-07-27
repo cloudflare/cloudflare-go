@@ -154,9 +154,9 @@ func (r *SettingTrustedDomainService) Get(ctx context.Context, trustedDomainID s
 	return res, nil
 }
 
-// A trusted email domain
+// A trusted email domain.
 type SettingTrustedDomainNewResponse struct {
-	// Trusted domain identifier
+	// Trusted domain identifier.
 	ID        string    `json:"id" format:"uuid"`
 	Comments  string    `json:"comments" api:"nullable"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -200,9 +200,9 @@ func (r settingTrustedDomainNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A trusted email domain
+// A trusted email domain.
 type SettingTrustedDomainListResponse struct {
-	// Trusted domain identifier
+	// Trusted domain identifier.
 	ID        string    `json:"id" format:"uuid"`
 	Comments  string    `json:"comments" api:"nullable"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -247,7 +247,7 @@ func (r settingTrustedDomainListResponseJSON) RawJSON() string {
 }
 
 type SettingTrustedDomainDeleteResponse struct {
-	// Trusted domain identifier
+	// Trusted domain identifier.
 	ID   string                                 `json:"id" api:"required" format:"uuid"`
 	JSON settingTrustedDomainDeleteResponseJSON `json:"-"`
 }
@@ -268,9 +268,9 @@ func (r settingTrustedDomainDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A trusted email domain
+// A trusted email domain.
 type SettingTrustedDomainEditResponse struct {
-	// Trusted domain identifier
+	// Trusted domain identifier.
 	ID        string    `json:"id" format:"uuid"`
 	Comments  string    `json:"comments" api:"nullable"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -314,9 +314,9 @@ func (r settingTrustedDomainEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A trusted email domain
+// A trusted email domain.
 type SettingTrustedDomainGetResponse struct {
-	// Trusted domain identifier
+	// Trusted domain identifier.
 	ID        string    `json:"id" format:"uuid"`
 	Comments  string    `json:"comments" api:"nullable"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -383,7 +383,7 @@ type SettingTrustedDomainNewResponseEnvelope struct {
 	Messages []SettingTrustedDomainNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingTrustedDomainNewResponseEnvelopeSuccess `json:"success" api:"required"`
-	// A trusted email domain
+	// A trusted email domain.
 	Result SettingTrustedDomainNewResponse             `json:"result"`
 	JSON   settingTrustedDomainNewResponseEnvelopeJSON `json:"-"`
 }
@@ -749,7 +749,7 @@ type SettingTrustedDomainEditResponseEnvelope struct {
 	Messages []SettingTrustedDomainEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingTrustedDomainEditResponseEnvelopeSuccess `json:"success" api:"required"`
-	// A trusted email domain
+	// A trusted email domain.
 	Result SettingTrustedDomainEditResponse             `json:"result"`
 	JSON   settingTrustedDomainEditResponseEnvelopeJSON `json:"-"`
 }
@@ -894,7 +894,7 @@ type SettingTrustedDomainGetResponseEnvelope struct {
 	Messages []SettingTrustedDomainGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingTrustedDomainGetResponseEnvelopeSuccess `json:"success" api:"required"`
-	// A trusted email domain
+	// A trusted email domain.
 	Result SettingTrustedDomainGetResponse             `json:"result"`
 	JSON   settingTrustedDomainGetResponseEnvelopeJSON `json:"-"`
 }

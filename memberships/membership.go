@@ -399,8 +399,8 @@ func (r membershipUpdateResponsePoliciesPermissionGroupsMetaJSON) RawJSON() stri
 type MembershipUpdateResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// The scope associated to the resource group
-	Scope []MembershipUpdateResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
+	// A scope is a combination of scope objects which provides additional context.
+	Scope MembershipUpdateResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta MembershipUpdateResponsePoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.
@@ -732,8 +732,8 @@ func (r membershipGetResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string 
 type MembershipGetResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// The scope associated to the resource group
-	Scope []MembershipGetResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
+	// A scope is a combination of scope objects which provides additional context.
+	Scope MembershipGetResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta MembershipGetResponsePoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.

@@ -27,10 +27,12 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewZoneService] method instead.
 type ZoneService struct {
-	Options         []option.RequestOption
-	ActivationCheck *ActivationCheckService
-	Settings        *SettingService
-	Environments    *EnvironmentService
+	Options                       []option.RequestOption
+	ActivationCheck               *ActivationCheckService
+	Settings                      *SettingService
+	TransformationsAllowedOrigins *TransformationsAllowedOriginService
+	TransformationsC2pa           *TransformationsC2paService
+	Environments                  *EnvironmentService
 	// Deprecated: Use DNS settings API instead.
 	CustomNameservers *CustomNameserverService
 	Holds             *HoldService
@@ -48,6 +50,8 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r.Options = opts
 	r.ActivationCheck = NewActivationCheckService(opts...)
 	r.Settings = NewSettingService(opts...)
+	r.TransformationsAllowedOrigins = NewTransformationsAllowedOriginService(opts...)
+	r.TransformationsC2pa = NewTransformationsC2paService(opts...)
 	r.Environments = NewEnvironmentService(opts...)
 	r.CustomNameservers = NewCustomNameserverService(opts...)
 	r.Holds = NewHoldService(opts...)
@@ -58,7 +62,11 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	return
 }
 
-// Create Zone
+// Creates a new zone (domain) in your Cloudflare account.
+//
+// The zone is created in a pending state and must be activated by updating your
+// domain's nameservers to point to Cloudflare, or by completing the verification
+// process for partial (CNAME) setups.
 func (r *ZoneService) New(ctx context.Context, body ZoneNewParams, opts ...option.RequestOption) (res *Zone, err error) {
 	var env ZoneNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -130,7 +138,9 @@ func (r *ZoneService) Edit(ctx context.Context, params ZoneEditParams, opts ...o
 	return res, nil
 }
 
-// Zone Details
+// Retrieves detailed information about a specific zone identified by its zone ID.
+//
+// Returns zone configuration, status, nameservers, and associated metadata.
 func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...option.RequestOption) (res *Zone, err error) {
 	var env ZoneGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

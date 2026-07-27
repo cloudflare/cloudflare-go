@@ -300,7 +300,7 @@ func (r DNSResolverSettingsV6Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// GatewayFilter specify the protocol or layer to use.
+// Specify the protocol or layer to use.
 type GatewayFilter string
 
 const (
@@ -419,7 +419,7 @@ func (r gatewayRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayRuleAction specify the action to perform when the associated traffic, identity, and device
+// Specify the action to perform when the associated traffic, identity, and device
 // posture expressions either absent or evaluate to `true`.
 type GatewayRuleAction string
 
@@ -450,7 +450,7 @@ func (r GatewayRuleAction) IsKnown() bool {
 	return false
 }
 
-// GatewayRuleExpiration defines the expiration time stamp and default duration of a DNS policy. Takes
+// Defines the expiration time stamp and default duration of a DNS policy. Takes
 // precedence over the policy's `schedule` configuration, if any. This does not
 // apply to HTTP or network policies. Settable only for `dns` rules.
 type GatewayRuleExpiration struct {
@@ -486,14 +486,18 @@ func (r gatewayRuleExpirationJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSetting defines settings for this rule. Settings apply only to specific rule types and
+// Defines settings for this rule. Settings apply only to specific rule types and
 // must use compatible selectors. If Terraform detects drift, confirm the setting
 // supports your rule type and check whether the API modifies the value. Use
 // API-returned values in your configuration to prevent drift.
 type RuleSetting struct {
 	// Add custom headers to allowed requests as key-value pairs. Use header names as
-	// keys that map to arrays of header values. Settable only for `http` rules with
-	// the action set to `allow`.
+	// keys that map to arrays of header values. Header values may contain
+	// `@{selector.name}` variable references that are interpolated at the edge. Use
+	// `@@{` to escape a literal `@{`. A maximum of 20 header operations (add + set +
+	// delete) is allowed per policy. Each header name may not exceed 256 bytes and
+	// each header value may not exceed 4 KB. Settable only for `http` rules with the
+	// action set to `allow`.
 	AddHeaders map[string][]string `json:"add_headers" api:"nullable"`
 	// Set to enable MSP children to bypass this rule. Only parent MSP accounts can set
 	// this. this rule. Settable for all types of rules.
@@ -519,6 +523,10 @@ type RuleSetting struct {
 	// Configure session check behavior. Settable only for `l4` and `http` rules with
 	// the action set to `allow`.
 	CheckSession RuleSettingCheckSession `json:"check_session" api:"nullable"`
+	// Remove headers from allowed requests by name. A maximum of 20 header operations
+	// (add + set + delete) is allowed per policy. Each header name may not exceed 256
+	// bytes. Settable only for `http` rules with the action set to `allow`.
+	DeleteHeaders []string `json:"delete_headers" api:"nullable"`
 	// Configure custom resolvers to route queries that match the resolver policy.
 	// Unused with 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
 	// settings. DNS queries get routed to the address closest to their origin. Only
@@ -577,6 +585,14 @@ type RuleSetting struct {
 	// is set. Only valid when a rule's action set to 'resolve'. Settable only for
 	// `dns_resolver` rules.
 	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare" api:"nullable"`
+	// Replace existing headers on allowed requests with the specified key-value pairs.
+	// If a header does not exist, it is added. Header values may contain
+	// `@{selector.name}` variable references that are interpolated at the edge. Use
+	// `@@{` to escape a literal `@{`. A maximum of 20 header operations (add + set +
+	// delete) is allowed per policy. Each header name may not exceed 256 bytes and
+	// each header value may not exceed 4 KB. Settable only for `http` rules with the
+	// action set to `allow`.
+	SetHeaders map[string][]string `json:"set_headers" api:"nullable"`
 	// Configure behavior when an upstream certificate is invalid or an SSL error
 	// occurs. Settable only for `http` rules with the action set to `allow`.
 	UntrustedCERT RuleSettingUntrustedCERT `json:"untrusted_cert" api:"nullable"`
@@ -594,6 +610,7 @@ type ruleSettingJSON struct {
 	BlockReason                     apijson.Field
 	BypassParentRule                apijson.Field
 	CheckSession                    apijson.Field
+	DeleteHeaders                   apijson.Field
 	DNSResolvers                    apijson.Field
 	Egress                          apijson.Field
 	ForensicCopy                    apijson.Field
@@ -610,6 +627,7 @@ type ruleSettingJSON struct {
 	Redirect                        apijson.Field
 	ResolveDNSInternally            apijson.Field
 	ResolveDNSThroughCloudflare     apijson.Field
+	SetHeaders                      apijson.Field
 	UntrustedCERT                   apijson.Field
 	raw                             string
 	ExtraFields                     map[string]apijson.Field
@@ -623,7 +641,7 @@ func (r ruleSettingJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingAuditSSH define the settings for the Audit SSH action. Settable only for `l4` rules with
+// Define the settings for the Audit SSH action. Settable only for `l4` rules with
 // `audit_ssh` action.
 type RuleSettingAuditSSH struct {
 	// Enable SSH command logging.
@@ -647,7 +665,7 @@ func (r ruleSettingAuditSSHJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingBISOAdminControls configure browser isolation behavior. Settable only for `http` rules with the
+// Configure browser isolation behavior. Settable only for `http` rules with the
 // action set to `isolate`.
 type RuleSettingBISOAdminControls struct {
 	// Configure copy behavior. If set to remote_only, users cannot copy isolated
@@ -717,7 +735,7 @@ func (r ruleSettingBISOAdminControlsJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingBISOAdminControlsCopy configure copy behavior. If set to remote_only, users cannot copy isolated
+// Configure copy behavior. If set to remote_only, users cannot copy isolated
 // content from the remote browser to the local clipboard. If this field is absent,
 // copying remains enabled. Applies only when version == "v2".
 type RuleSettingBISOAdminControlsCopy string
@@ -736,7 +754,7 @@ func (r RuleSettingBISOAdminControlsCopy) IsKnown() bool {
 	return false
 }
 
-// RuleSettingBISOAdminControlsDownload configure download behavior. When set to remote_only, users can view downloads
+// Configure download behavior. When set to remote_only, users can view downloads
 // but cannot save them. If this field is absent, downloading remains enabled.
 // Applies only when version == "v2".
 type RuleSettingBISOAdminControlsDownload string
@@ -755,7 +773,7 @@ func (r RuleSettingBISOAdminControlsDownload) IsKnown() bool {
 	return false
 }
 
-// RuleSettingBISOAdminControlsKeyboard configure keyboard usage behavior. If this field is absent, keyboard usage
+// Configure keyboard usage behavior. If this field is absent, keyboard usage
 // remains enabled. Applies only when version == "v2".
 type RuleSettingBISOAdminControlsKeyboard string
 
@@ -772,7 +790,7 @@ func (r RuleSettingBISOAdminControlsKeyboard) IsKnown() bool {
 	return false
 }
 
-// RuleSettingBISOAdminControlsPaste configure paste behavior. If set to remote_only, users cannot paste content from
+// Configure paste behavior. If set to remote_only, users cannot paste content from
 // the local clipboard into isolated pages. If this field is absent, pasting
 // remains enabled. Applies only when version == "v2".
 type RuleSettingBISOAdminControlsPaste string
@@ -791,7 +809,7 @@ func (r RuleSettingBISOAdminControlsPaste) IsKnown() bool {
 	return false
 }
 
-// RuleSettingBISOAdminControlsPrinting configure print behavior. Default, Printing is enabled. Applies only when
+// Configure print behavior. Default, Printing is enabled. Applies only when
 // version == "v2".
 type RuleSettingBISOAdminControlsPrinting string
 
@@ -808,7 +826,7 @@ func (r RuleSettingBISOAdminControlsPrinting) IsKnown() bool {
 	return false
 }
 
-// RuleSettingBISOAdminControlsUpload configure upload behavior. If this field is absent, uploading remains enabled.
+// Configure upload behavior. If this field is absent, uploading remains enabled.
 // Applies only when version == "v2".
 type RuleSettingBISOAdminControlsUpload string
 
@@ -825,7 +843,7 @@ func (r RuleSettingBISOAdminControlsUpload) IsKnown() bool {
 	return false
 }
 
-// RuleSettingBISOAdminControlsVersion indicate which version of the browser isolation controls should apply.
+// Indicate which version of the browser isolation controls should apply.
 type RuleSettingBISOAdminControlsVersion string
 
 const (
@@ -841,7 +859,7 @@ func (r RuleSettingBISOAdminControlsVersion) IsKnown() bool {
 	return false
 }
 
-// RuleSettingBlockPage configure custom block page settings. If missing or null, use the account
+// Configure custom block page settings. If missing or null, use the account
 // settings. Settable only for `http` rules with the action set to `block`.
 type RuleSettingBlockPage struct {
 	// Specify the URI to which the user is redirected.
@@ -868,7 +886,7 @@ func (r ruleSettingBlockPageJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingCheckSession configure session check behavior. Settable only for `l4` and `http` rules with
+// Configure session check behavior. Settable only for `l4` and `http` rules with
 // the action set to `allow`.
 type RuleSettingCheckSession struct {
 	// Sets the required session freshness threshold. The API returns a normalized
@@ -896,7 +914,7 @@ func (r ruleSettingCheckSessionJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingDNSResolvers configure custom resolvers to route queries that match the resolver policy.
+// Configure custom resolvers to route queries that match the resolver policy.
 // Unused with 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
 // settings. DNS queries get routed to the address closest to their origin. Only
 // valid when a rule's action set to 'resolve'. Settable only for `dns_resolver`
@@ -924,7 +942,7 @@ func (r ruleSettingDNSResolversJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingEgress configure how Gateway Proxy traffic egresses. You can enable this setting for
+// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 // rules with Egress actions and filters, or omit it to indicate local egress via
 // WARP IPs. Settable only for `egress` rules.
 type RuleSettingEgress struct {
@@ -956,7 +974,7 @@ func (r ruleSettingEgressJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingForensicCopy configure whether a copy of the HTTP request will be sent to storage when the
+// Configure whether a copy of the HTTP request will be sent to storage when the
 // rule matches.
 type RuleSettingForensicCopy struct {
 	// Enable sending the copy to storage.
@@ -980,7 +998,7 @@ func (r ruleSettingForensicCopyJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingL4override send matching traffic to the supplied destination IP address and port. Settable
+// Send matching traffic to the supplied destination IP address and port. Settable
 // only for `l4` rules with the action set to `l4_override`.
 type RuleSettingL4override struct {
 	// Defines the IPv4 or IPv6 address.
@@ -1007,7 +1025,7 @@ func (r ruleSettingL4overrideJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingNotificationSettings configure a notification to display on the user's device when this rule matched.
+// Configure a notification to display on the user's device when this rule matched.
 // Settable for all types of rules with the action set to `block`.
 type RuleSettingNotificationSettings struct {
 	// Enable notification.
@@ -1041,7 +1059,7 @@ func (r ruleSettingNotificationSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingPayloadLog configure DLP payload logging. Settable only for `http` rules.
+// Configure DLP payload logging. Settable only for `http` rules.
 type RuleSettingPayloadLog struct {
 	// Enable DLP payload logging for this rule.
 	Enabled bool                      `json:"enabled"`
@@ -1064,7 +1082,7 @@ func (r ruleSettingPayloadLogJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingQuarantine configure settings that apply to quarantine rules. Settable only for `http`
+// Configure settings that apply to quarantine rules. Settable only for `http`
 // rules.
 type RuleSettingQuarantine struct {
 	// Specify the types of files to sandbox.
@@ -1114,7 +1132,7 @@ func (r RuleSettingQuarantineFileType) IsKnown() bool {
 	return false
 }
 
-// RuleSettingRedirect apply settings to redirect rules. Settable only for `http` rules with the action
+// Apply settings to redirect rules. Settable only for `http` rules with the action
 // set to `redirect`.
 type RuleSettingRedirect struct {
 	// Specify the URI to which the user is redirected.
@@ -1145,7 +1163,7 @@ func (r ruleSettingRedirectJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingResolveDNSInternally configure to forward the query to the internal DNS service, passing the
+// Configure to forward the query to the internal DNS service, passing the
 // specified 'view_id' as input. Not used when 'dns_resolvers' is specified or
 // 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action set to
 // 'resolve'. Settable only for `dns_resolver` rules.
@@ -1176,7 +1194,7 @@ func (r ruleSettingResolveDNSInternallyJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingResolveDNSInternallyFallback specify the fallback behavior to apply when the internal DNS response code
+// Specify the fallback behavior to apply when the internal DNS response code
 // differs from 'NOERROR' or when the response data contains only CNAME records for
 // 'A' or 'AAAA' queries.
 type RuleSettingResolveDNSInternallyFallback string
@@ -1194,7 +1212,7 @@ func (r RuleSettingResolveDNSInternallyFallback) IsKnown() bool {
 	return false
 }
 
-// RuleSettingUntrustedCERT configure behavior when an upstream certificate is invalid or an SSL error
+// Configure behavior when an upstream certificate is invalid or an SSL error
 // occurs. Settable only for `http` rules with the action set to `allow`.
 type RuleSettingUntrustedCERT struct {
 	// Defines the action performed when an untrusted certificate seen. The default
@@ -1219,7 +1237,7 @@ func (r ruleSettingUntrustedCERTJSON) RawJSON() string {
 	return r.raw
 }
 
-// RuleSettingUntrustedCERTAction defines the action performed when an untrusted certificate seen. The default
+// Defines the action performed when an untrusted certificate seen. The default
 // action an error with HTTP code 526.
 type RuleSettingUntrustedCERTAction string
 
@@ -1237,14 +1255,18 @@ func (r RuleSettingUntrustedCERTAction) IsKnown() bool {
 	return false
 }
 
-// RuleSettingParam defines settings for this rule. Settings apply only to specific rule types and
+// Defines settings for this rule. Settings apply only to specific rule types and
 // must use compatible selectors. If Terraform detects drift, confirm the setting
 // supports your rule type and check whether the API modifies the value. Use
 // API-returned values in your configuration to prevent drift.
 type RuleSettingParam struct {
 	// Add custom headers to allowed requests as key-value pairs. Use header names as
-	// keys that map to arrays of header values. Settable only for `http` rules with
-	// the action set to `allow`.
+	// keys that map to arrays of header values. Header values may contain
+	// `@{selector.name}` variable references that are interpolated at the edge. Use
+	// `@@{` to escape a literal `@{`. A maximum of 20 header operations (add + set +
+	// delete) is allowed per policy. Each header name may not exceed 256 bytes and
+	// each header value may not exceed 4 KB. Settable only for `http` rules with the
+	// action set to `allow`.
 	AddHeaders param.Field[map[string][]string] `json:"add_headers"`
 	// Set to enable MSP children to bypass this rule. Only parent MSP accounts can set
 	// this. this rule. Settable for all types of rules.
@@ -1270,6 +1292,10 @@ type RuleSettingParam struct {
 	// Configure session check behavior. Settable only for `l4` and `http` rules with
 	// the action set to `allow`.
 	CheckSession param.Field[RuleSettingCheckSessionParam] `json:"check_session"`
+	// Remove headers from allowed requests by name. A maximum of 20 header operations
+	// (add + set + delete) is allowed per policy. Each header name may not exceed 256
+	// bytes. Settable only for `http` rules with the action set to `allow`.
+	DeleteHeaders param.Field[[]string] `json:"delete_headers"`
 	// Configure custom resolvers to route queries that match the resolver policy.
 	// Unused with 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
 	// settings. DNS queries get routed to the address closest to their origin. Only
@@ -1328,6 +1354,14 @@ type RuleSettingParam struct {
 	// is set. Only valid when a rule's action set to 'resolve'. Settable only for
 	// `dns_resolver` rules.
 	ResolveDNSThroughCloudflare param.Field[bool] `json:"resolve_dns_through_cloudflare"`
+	// Replace existing headers on allowed requests with the specified key-value pairs.
+	// If a header does not exist, it is added. Header values may contain
+	// `@{selector.name}` variable references that are interpolated at the edge. Use
+	// `@@{` to escape a literal `@{`. A maximum of 20 header operations (add + set +
+	// delete) is allowed per policy. Each header name may not exceed 256 bytes and
+	// each header value may not exceed 4 KB. Settable only for `http` rules with the
+	// action set to `allow`.
+	SetHeaders param.Field[map[string][]string] `json:"set_headers"`
 	// Configure behavior when an upstream certificate is invalid or an SSL error
 	// occurs. Settable only for `http` rules with the action set to `allow`.
 	UntrustedCERT param.Field[RuleSettingUntrustedCERTParam] `json:"untrusted_cert"`
@@ -1337,7 +1371,7 @@ func (r RuleSettingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingAuditSSHParam define the settings for the Audit SSH action. Settable only for `l4` rules with
+// Define the settings for the Audit SSH action. Settable only for `l4` rules with
 // `audit_ssh` action.
 type RuleSettingAuditSSHParam struct {
 	// Enable SSH command logging.
@@ -1348,7 +1382,7 @@ func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingBISOAdminControlsParam configure browser isolation behavior. Settable only for `http` rules with the
+// Configure browser isolation behavior. Settable only for `http` rules with the
 // action set to `isolate`.
 type RuleSettingBISOAdminControlsParam struct {
 	// Configure copy behavior. If set to remote_only, users cannot copy isolated
@@ -1393,7 +1427,7 @@ func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingBlockPageParam configure custom block page settings. If missing or null, use the account
+// Configure custom block page settings. If missing or null, use the account
 // settings. Settable only for `http` rules with the action set to `block`.
 type RuleSettingBlockPageParam struct {
 	// Specify the URI to which the user is redirected.
@@ -1406,7 +1440,7 @@ func (r RuleSettingBlockPageParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingCheckSessionParam configure session check behavior. Settable only for `l4` and `http` rules with
+// Configure session check behavior. Settable only for `l4` and `http` rules with
 // the action set to `allow`.
 type RuleSettingCheckSessionParam struct {
 	// Sets the required session freshness threshold. The API returns a normalized
@@ -1420,7 +1454,7 @@ func (r RuleSettingCheckSessionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingDNSResolversParam configure custom resolvers to route queries that match the resolver policy.
+// Configure custom resolvers to route queries that match the resolver policy.
 // Unused with 'resolve_dns_through_cloudflare' or 'resolve_dns_internally'
 // settings. DNS queries get routed to the address closest to their origin. Only
 // valid when a rule's action set to 'resolve'. Settable only for `dns_resolver`
@@ -1434,7 +1468,7 @@ func (r RuleSettingDNSResolversParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingEgressParam configure how Gateway Proxy traffic egresses. You can enable this setting for
+// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 // rules with Egress actions and filters, or omit it to indicate local egress via
 // WARP IPs. Settable only for `egress` rules.
 type RuleSettingEgressParam struct {
@@ -1451,7 +1485,7 @@ func (r RuleSettingEgressParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingForensicCopyParam configure whether a copy of the HTTP request will be sent to storage when the
+// Configure whether a copy of the HTTP request will be sent to storage when the
 // rule matches.
 type RuleSettingForensicCopyParam struct {
 	// Enable sending the copy to storage.
@@ -1462,7 +1496,7 @@ func (r RuleSettingForensicCopyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingL4overrideParam send matching traffic to the supplied destination IP address and port. Settable
+// Send matching traffic to the supplied destination IP address and port. Settable
 // only for `l4` rules with the action set to `l4_override`.
 type RuleSettingL4overrideParam struct {
 	// Defines the IPv4 or IPv6 address.
@@ -1475,7 +1509,7 @@ func (r RuleSettingL4overrideParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingNotificationSettingsParam configure a notification to display on the user's device when this rule matched.
+// Configure a notification to display on the user's device when this rule matched.
 // Settable for all types of rules with the action set to `block`.
 type RuleSettingNotificationSettingsParam struct {
 	// Enable notification.
@@ -1493,7 +1527,7 @@ func (r RuleSettingNotificationSettingsParam) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingPayloadLogParam configure DLP payload logging. Settable only for `http` rules.
+// Configure DLP payload logging. Settable only for `http` rules.
 type RuleSettingPayloadLogParam struct {
 	// Enable DLP payload logging for this rule.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -1503,7 +1537,7 @@ func (r RuleSettingPayloadLogParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingQuarantineParam configure settings that apply to quarantine rules. Settable only for `http`
+// Configure settings that apply to quarantine rules. Settable only for `http`
 // rules.
 type RuleSettingQuarantineParam struct {
 	// Specify the types of files to sandbox.
@@ -1514,7 +1548,7 @@ func (r RuleSettingQuarantineParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingRedirectParam apply settings to redirect rules. Settable only for `http` rules with the action
+// Apply settings to redirect rules. Settable only for `http` rules with the action
 // set to `redirect`.
 type RuleSettingRedirectParam struct {
 	// Specify the URI to which the user is redirected.
@@ -1530,7 +1564,7 @@ func (r RuleSettingRedirectParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingResolveDNSInternallyParam configure to forward the query to the internal DNS service, passing the
+// Configure to forward the query to the internal DNS service, passing the
 // specified 'view_id' as input. Not used when 'dns_resolvers' is specified or
 // 'resolve_dns_through_cloudflare' is set. Only valid when a rule's action set to
 // 'resolve'. Settable only for `dns_resolver` rules.
@@ -1547,7 +1581,7 @@ func (r RuleSettingResolveDNSInternallyParam) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-// RuleSettingUntrustedCERTParam configure behavior when an upstream certificate is invalid or an SSL error
+// Configure behavior when an upstream certificate is invalid or an SSL error
 // occurs. Settable only for `http` rules with the action set to `allow`.
 type RuleSettingUntrustedCERTParam struct {
 	// Defines the action performed when an untrusted certificate seen. The default
@@ -1559,7 +1593,7 @@ func (r RuleSettingUntrustedCERTParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Schedule defines the schedule for activating DNS policies. Settable only for `dns` and
+// Defines the schedule for activating DNS policies. Settable only for `dns` and
 // `dns_resolver` rules.
 type Schedule struct {
 	// Specify the time intervals when the rule is active on Fridays, in the increasing
@@ -1629,7 +1663,7 @@ func (r scheduleJSON) RawJSON() string {
 	return r.raw
 }
 
-// ScheduleParam defines the schedule for activating DNS policies. Settable only for `dns` and
+// Defines the schedule for activating DNS policies. Settable only for `dns` and
 // `dns_resolver` rules.
 type ScheduleParam struct {
 	// Specify the time intervals when the rule is active on Fridays, in the increasing
@@ -1735,7 +1769,7 @@ func (r GatewayRuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// GatewayRuleNewParamsAction specify the action to perform when the associated traffic, identity, and device
+// Specify the action to perform when the associated traffic, identity, and device
 // posture expressions either absent or evaluate to `true`.
 type GatewayRuleNewParamsAction string
 
@@ -1766,7 +1800,7 @@ func (r GatewayRuleNewParamsAction) IsKnown() bool {
 	return false
 }
 
-// GatewayRuleNewParamsExpiration defines the expiration time stamp and default duration of a DNS policy. Takes
+// Defines the expiration time stamp and default duration of a DNS policy. Takes
 // precedence over the policy's `schedule` configuration, if any. This does not
 // apply to HTTP or network policies. Settable only for `dns` rules.
 type GatewayRuleNewParamsExpiration struct {
@@ -1813,7 +1847,7 @@ func (r gatewayRuleNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayRuleNewResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayRuleNewResponseEnvelopeSuccess bool
 
 const (
@@ -1881,7 +1915,7 @@ func (r GatewayRuleUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// GatewayRuleUpdateParamsAction specify the action to perform when the associated traffic, identity, and device
+// Specify the action to perform when the associated traffic, identity, and device
 // posture expressions either absent or evaluate to `true`.
 type GatewayRuleUpdateParamsAction string
 
@@ -1912,7 +1946,7 @@ func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 	return false
 }
 
-// GatewayRuleUpdateParamsExpiration defines the expiration time stamp and default duration of a DNS policy. Takes
+// Defines the expiration time stamp and default duration of a DNS policy. Takes
 // precedence over the policy's `schedule` configuration, if any. This does not
 // apply to HTTP or network policies. Settable only for `dns` rules.
 type GatewayRuleUpdateParamsExpiration struct {
@@ -1959,7 +1993,7 @@ func (r gatewayRuleUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayRuleUpdateResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayRuleUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -2010,7 +2044,7 @@ func (r gatewayRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayRuleDeleteResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayRuleDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -2057,7 +2091,7 @@ func (r gatewayRuleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayRuleGetResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayRuleGetResponseEnvelopeSuccess bool
 
 const (
@@ -2108,7 +2142,7 @@ func (r gatewayRuleResetExpirationResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayRuleResetExpirationResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayRuleResetExpirationResponseEnvelopeSuccess bool
 
 const (

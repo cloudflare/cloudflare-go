@@ -124,7 +124,7 @@ func (r *AccessAIControlMcpPortalService) Delete(ctx context.Context, id string,
 	return res, nil
 }
 
-// Read details of an MCP Portal
+// Read the details of a single MCP Portal, including its configured servers.
 func (r *AccessAIControlMcpPortalService) Read(ctx context.Context, id string, query AccessAIControlMcpPortalReadParams, opts ...option.RequestOption) (res *AccessAIControlMcpPortalReadResponse, err error) {
 	var env AccessAIControlMcpPortalReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -197,14 +197,18 @@ type AccessAIControlMcpPortalNewResponseServer struct {
 	Name     string                                             `json:"name" api:"required"`
 	Prompts  []map[string]interface{}                           `json:"prompts" api:"required"`
 	// server id
-	ServerID        string                                                 `json:"server_id" api:"required"`
-	Tools           []map[string]interface{}                               `json:"tools" api:"required"`
-	CreatedAt       time.Time                                              `json:"created_at" format:"date-time"`
-	CreatedBy       string                                                 `json:"created_by"`
-	DefaultDisabled bool                                                   `json:"default_disabled"`
-	Description     string                                                 `json:"description" api:"nullable"`
-	Error           string                                                 `json:"error"`
-	ErrorDetails    AccessAIControlMcpPortalNewResponseServersErrorDetails `json:"error_details"`
+	ServerID string                   `json:"server_id" api:"required"`
+	Tools    []map[string]interface{} `json:"tools" api:"required"`
+	// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
+	// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
+	// endpoints + client_id for manual servers. Never includes the secret value.
+	AuthConfigSummary AccessAIControlMcpPortalNewResponseServersAuthConfigSummary `json:"auth_config_summary"`
+	CreatedAt         time.Time                                                   `json:"created_at" format:"date-time"`
+	CreatedBy         string                                                      `json:"created_by"`
+	DefaultDisabled   bool                                                        `json:"default_disabled"`
+	Description       string                                                      `json:"description" api:"nullable"`
+	Error             string                                                      `json:"error"`
+	ErrorDetails      AccessAIControlMcpPortalNewResponseServersErrorDetails      `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
 	// customer portal hostname. Defaults to false (off); opt in per server by setting
@@ -217,11 +221,12 @@ type AccessAIControlMcpPortalNewResponseServer struct {
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                      `json:"secure_web_gateway"`
-	Status           string                                                    `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpPortalNewResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpPortalNewResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpPortalNewResponseServerJSON             `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpPortalNewResponseServersStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpPortalNewResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpPortalNewResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpPortalNewResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalNewResponseServerJSON contains the JSON metadata for the
@@ -234,6 +239,7 @@ type accessAIControlMcpPortalNewResponseServerJSON struct {
 	Prompts                      apijson.Field
 	ServerID                     apijson.Field
 	Tools                        apijson.Field
+	AuthConfigSummary            apijson.Field
 	CreatedAt                    apijson.Field
 	CreatedBy                    apijson.Field
 	DefaultDisabled              apijson.Field
@@ -278,6 +284,112 @@ func (r AccessAIControlMcpPortalNewResponseServersAuthType) IsKnown() bool {
 	return false
 }
 
+// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
+// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
+// endpoints + client_id for manual servers. Never includes the secret value.
+type AccessAIControlMcpPortalNewResponseServersAuthConfigSummary struct {
+	AuthMode            AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryAuthMode         `json:"auth_mode"`
+	ClientSecretVersion float64                                                                     `json:"client_secret_version"`
+	Config              AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryConfig           `json:"config"`
+	HasClientSecret     bool                                                                        `json:"has_client_secret"`
+	RegistrationInfo    AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryRegistrationInfo `json:"registration_info"`
+	JSON                accessAIControlMcpPortalNewResponseServersAuthConfigSummaryJSON             `json:"-"`
+}
+
+// accessAIControlMcpPortalNewResponseServersAuthConfigSummaryJSON contains the
+// JSON metadata for the struct
+// [AccessAIControlMcpPortalNewResponseServersAuthConfigSummary]
+type accessAIControlMcpPortalNewResponseServersAuthConfigSummaryJSON struct {
+	AuthMode            apijson.Field
+	ClientSecretVersion apijson.Field
+	Config              apijson.Field
+	HasClientSecret     apijson.Field
+	RegistrationInfo    apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalNewResponseServersAuthConfigSummary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalNewResponseServersAuthConfigSummaryJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryAuthMode string
+
+const (
+	AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryAuthModeDcr    AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryAuthMode = "dcr"
+	AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryAuthModeManual AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryAuthMode = "manual"
+)
+
+func (r AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryAuthMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryAuthModeDcr, AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryAuthModeManual:
+		return true
+	}
+	return false
+}
+
+type AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryConfig struct {
+	AuthorizationEndpoint string                                                                `json:"authorization_endpoint"`
+	Issuer                string                                                                `json:"issuer"`
+	Resource              string                                                                `json:"resource"`
+	RevocationEndpoint    string                                                                `json:"revocation_endpoint"`
+	TokenEndpoint         string                                                                `json:"token_endpoint"`
+	JSON                  accessAIControlMcpPortalNewResponseServersAuthConfigSummaryConfigJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalNewResponseServersAuthConfigSummaryConfigJSON contains
+// the JSON metadata for the struct
+// [AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryConfig]
+type accessAIControlMcpPortalNewResponseServersAuthConfigSummaryConfigJSON struct {
+	AuthorizationEndpoint apijson.Field
+	Issuer                apijson.Field
+	Resource              apijson.Field
+	RevocationEndpoint    apijson.Field
+	TokenEndpoint         apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalNewResponseServersAuthConfigSummaryConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryRegistrationInfo struct {
+	ClientID                string                                                                          `json:"client_id"`
+	RedirectURIs            []string                                                                        `json:"redirect_uris"`
+	Scope                   string                                                                          `json:"scope"`
+	TokenEndpointAuthMethod string                                                                          `json:"token_endpoint_auth_method"`
+	JSON                    accessAIControlMcpPortalNewResponseServersAuthConfigSummaryRegistrationInfoJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalNewResponseServersAuthConfigSummaryRegistrationInfoJSON
+// contains the JSON metadata for the struct
+// [AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryRegistrationInfo]
+type accessAIControlMcpPortalNewResponseServersAuthConfigSummaryRegistrationInfoJSON struct {
+	ClientID                apijson.Field
+	RedirectURIs            apijson.Field
+	Scope                   apijson.Field
+	TokenEndpointAuthMethod apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalNewResponseServersAuthConfigSummaryRegistrationInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalNewResponseServersAuthConfigSummaryRegistrationInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpPortalNewResponseServersErrorDetails struct {
 	// Underlying error message
 	Cause string `json:"cause"`
@@ -310,6 +422,24 @@ func (r *AccessAIControlMcpPortalNewResponseServersErrorDetails) UnmarshalJSON(d
 
 func (r accessAIControlMcpPortalNewResponseServersErrorDetailsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Current sync state of the server
+type AccessAIControlMcpPortalNewResponseServersStatus string
+
+const (
+	AccessAIControlMcpPortalNewResponseServersStatusWaiting AccessAIControlMcpPortalNewResponseServersStatus = "waiting"
+	AccessAIControlMcpPortalNewResponseServersStatusReady   AccessAIControlMcpPortalNewResponseServersStatus = "ready"
+	AccessAIControlMcpPortalNewResponseServersStatusStale   AccessAIControlMcpPortalNewResponseServersStatus = "stale"
+	AccessAIControlMcpPortalNewResponseServersStatusError   AccessAIControlMcpPortalNewResponseServersStatus = "error"
+)
+
+func (r AccessAIControlMcpPortalNewResponseServersStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalNewResponseServersStatusWaiting, AccessAIControlMcpPortalNewResponseServersStatusReady, AccessAIControlMcpPortalNewResponseServersStatusStale, AccessAIControlMcpPortalNewResponseServersStatusError:
+		return true
+	}
+	return false
 }
 
 type AccessAIControlMcpPortalNewResponseServersUpdatedPrompt struct {
@@ -427,14 +557,18 @@ type AccessAIControlMcpPortalUpdateResponseServer struct {
 	Name     string                                                `json:"name" api:"required"`
 	Prompts  []map[string]interface{}                              `json:"prompts" api:"required"`
 	// server id
-	ServerID        string                                                    `json:"server_id" api:"required"`
-	Tools           []map[string]interface{}                                  `json:"tools" api:"required"`
-	CreatedAt       time.Time                                                 `json:"created_at" format:"date-time"`
-	CreatedBy       string                                                    `json:"created_by"`
-	DefaultDisabled bool                                                      `json:"default_disabled"`
-	Description     string                                                    `json:"description" api:"nullable"`
-	Error           string                                                    `json:"error"`
-	ErrorDetails    AccessAIControlMcpPortalUpdateResponseServersErrorDetails `json:"error_details"`
+	ServerID string                   `json:"server_id" api:"required"`
+	Tools    []map[string]interface{} `json:"tools" api:"required"`
+	// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
+	// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
+	// endpoints + client_id for manual servers. Never includes the secret value.
+	AuthConfigSummary AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummary `json:"auth_config_summary"`
+	CreatedAt         time.Time                                                      `json:"created_at" format:"date-time"`
+	CreatedBy         string                                                         `json:"created_by"`
+	DefaultDisabled   bool                                                           `json:"default_disabled"`
+	Description       string                                                         `json:"description" api:"nullable"`
+	Error             string                                                         `json:"error"`
+	ErrorDetails      AccessAIControlMcpPortalUpdateResponseServersErrorDetails      `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
 	// customer portal hostname. Defaults to false (off); opt in per server by setting
@@ -447,11 +581,12 @@ type AccessAIControlMcpPortalUpdateResponseServer struct {
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                         `json:"secure_web_gateway"`
-	Status           string                                                       `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpPortalUpdateResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpPortalUpdateResponseServerJSON             `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpPortalUpdateResponseServersStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpPortalUpdateResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpPortalUpdateResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalUpdateResponseServerJSON contains the JSON metadata for
@@ -464,6 +599,7 @@ type accessAIControlMcpPortalUpdateResponseServerJSON struct {
 	Prompts                      apijson.Field
 	ServerID                     apijson.Field
 	Tools                        apijson.Field
+	AuthConfigSummary            apijson.Field
 	CreatedAt                    apijson.Field
 	CreatedBy                    apijson.Field
 	DefaultDisabled              apijson.Field
@@ -508,6 +644,112 @@ func (r AccessAIControlMcpPortalUpdateResponseServersAuthType) IsKnown() bool {
 	return false
 }
 
+// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
+// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
+// endpoints + client_id for manual servers. Never includes the secret value.
+type AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummary struct {
+	AuthMode            AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryAuthMode         `json:"auth_mode"`
+	ClientSecretVersion float64                                                                        `json:"client_secret_version"`
+	Config              AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryConfig           `json:"config"`
+	HasClientSecret     bool                                                                           `json:"has_client_secret"`
+	RegistrationInfo    AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryRegistrationInfo `json:"registration_info"`
+	JSON                accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryJSON             `json:"-"`
+}
+
+// accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryJSON contains the
+// JSON metadata for the struct
+// [AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummary]
+type accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryJSON struct {
+	AuthMode            apijson.Field
+	ClientSecretVersion apijson.Field
+	Config              apijson.Field
+	HasClientSecret     apijson.Field
+	RegistrationInfo    apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryAuthMode string
+
+const (
+	AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryAuthModeDcr    AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryAuthMode = "dcr"
+	AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryAuthModeManual AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryAuthMode = "manual"
+)
+
+func (r AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryAuthMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryAuthModeDcr, AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryAuthModeManual:
+		return true
+	}
+	return false
+}
+
+type AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryConfig struct {
+	AuthorizationEndpoint string                                                                   `json:"authorization_endpoint"`
+	Issuer                string                                                                   `json:"issuer"`
+	Resource              string                                                                   `json:"resource"`
+	RevocationEndpoint    string                                                                   `json:"revocation_endpoint"`
+	TokenEndpoint         string                                                                   `json:"token_endpoint"`
+	JSON                  accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryConfigJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryConfigJSON
+// contains the JSON metadata for the struct
+// [AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryConfig]
+type accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryConfigJSON struct {
+	AuthorizationEndpoint apijson.Field
+	Issuer                apijson.Field
+	Resource              apijson.Field
+	RevocationEndpoint    apijson.Field
+	TokenEndpoint         apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryRegistrationInfo struct {
+	ClientID                string                                                                             `json:"client_id"`
+	RedirectURIs            []string                                                                           `json:"redirect_uris"`
+	Scope                   string                                                                             `json:"scope"`
+	TokenEndpointAuthMethod string                                                                             `json:"token_endpoint_auth_method"`
+	JSON                    accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryRegistrationInfoJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryRegistrationInfoJSON
+// contains the JSON metadata for the struct
+// [AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryRegistrationInfo]
+type accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryRegistrationInfoJSON struct {
+	ClientID                apijson.Field
+	RedirectURIs            apijson.Field
+	Scope                   apijson.Field
+	TokenEndpointAuthMethod apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryRegistrationInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryRegistrationInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpPortalUpdateResponseServersErrorDetails struct {
 	// Underlying error message
 	Cause string `json:"cause"`
@@ -541,6 +783,24 @@ func (r *AccessAIControlMcpPortalUpdateResponseServersErrorDetails) UnmarshalJSO
 
 func (r accessAIControlMcpPortalUpdateResponseServersErrorDetailsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Current sync state of the server
+type AccessAIControlMcpPortalUpdateResponseServersStatus string
+
+const (
+	AccessAIControlMcpPortalUpdateResponseServersStatusWaiting AccessAIControlMcpPortalUpdateResponseServersStatus = "waiting"
+	AccessAIControlMcpPortalUpdateResponseServersStatusReady   AccessAIControlMcpPortalUpdateResponseServersStatus = "ready"
+	AccessAIControlMcpPortalUpdateResponseServersStatusStale   AccessAIControlMcpPortalUpdateResponseServersStatus = "stale"
+	AccessAIControlMcpPortalUpdateResponseServersStatusError   AccessAIControlMcpPortalUpdateResponseServersStatus = "error"
+)
+
+func (r AccessAIControlMcpPortalUpdateResponseServersStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalUpdateResponseServersStatusWaiting, AccessAIControlMcpPortalUpdateResponseServersStatusReady, AccessAIControlMcpPortalUpdateResponseServersStatusStale, AccessAIControlMcpPortalUpdateResponseServersStatusError:
+		return true
+	}
+	return false
 }
 
 type AccessAIControlMcpPortalUpdateResponseServersUpdatedPrompt struct {
@@ -659,14 +919,18 @@ type AccessAIControlMcpPortalListResponseServer struct {
 	Name     string                                              `json:"name" api:"required"`
 	Prompts  []map[string]interface{}                            `json:"prompts" api:"required"`
 	// server id
-	ServerID        string                                                  `json:"server_id" api:"required"`
-	Tools           []map[string]interface{}                                `json:"tools" api:"required"`
-	CreatedAt       time.Time                                               `json:"created_at" format:"date-time"`
-	CreatedBy       string                                                  `json:"created_by"`
-	DefaultDisabled bool                                                    `json:"default_disabled"`
-	Description     string                                                  `json:"description" api:"nullable"`
-	Error           string                                                  `json:"error"`
-	ErrorDetails    AccessAIControlMcpPortalListResponseServersErrorDetails `json:"error_details"`
+	ServerID string                   `json:"server_id" api:"required"`
+	Tools    []map[string]interface{} `json:"tools" api:"required"`
+	// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
+	// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
+	// endpoints + client_id for manual servers. Never includes the secret value.
+	AuthConfigSummary AccessAIControlMcpPortalListResponseServersAuthConfigSummary `json:"auth_config_summary"`
+	CreatedAt         time.Time                                                    `json:"created_at" format:"date-time"`
+	CreatedBy         string                                                       `json:"created_by"`
+	DefaultDisabled   bool                                                         `json:"default_disabled"`
+	Description       string                                                       `json:"description" api:"nullable"`
+	Error             string                                                       `json:"error"`
+	ErrorDetails      AccessAIControlMcpPortalListResponseServersErrorDetails      `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
 	// customer portal hostname. Defaults to false (off); opt in per server by setting
@@ -679,11 +943,12 @@ type AccessAIControlMcpPortalListResponseServer struct {
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                       `json:"secure_web_gateway"`
-	Status           string                                                     `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpPortalListResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpPortalListResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpPortalListResponseServerJSON             `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpPortalListResponseServersStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpPortalListResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpPortalListResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpPortalListResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalListResponseServerJSON contains the JSON metadata for
@@ -696,6 +961,7 @@ type accessAIControlMcpPortalListResponseServerJSON struct {
 	Prompts                      apijson.Field
 	ServerID                     apijson.Field
 	Tools                        apijson.Field
+	AuthConfigSummary            apijson.Field
 	CreatedAt                    apijson.Field
 	CreatedBy                    apijson.Field
 	DefaultDisabled              apijson.Field
@@ -740,6 +1006,112 @@ func (r AccessAIControlMcpPortalListResponseServersAuthType) IsKnown() bool {
 	return false
 }
 
+// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
+// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
+// endpoints + client_id for manual servers. Never includes the secret value.
+type AccessAIControlMcpPortalListResponseServersAuthConfigSummary struct {
+	AuthMode            AccessAIControlMcpPortalListResponseServersAuthConfigSummaryAuthMode         `json:"auth_mode"`
+	ClientSecretVersion float64                                                                      `json:"client_secret_version"`
+	Config              AccessAIControlMcpPortalListResponseServersAuthConfigSummaryConfig           `json:"config"`
+	HasClientSecret     bool                                                                         `json:"has_client_secret"`
+	RegistrationInfo    AccessAIControlMcpPortalListResponseServersAuthConfigSummaryRegistrationInfo `json:"registration_info"`
+	JSON                accessAIControlMcpPortalListResponseServersAuthConfigSummaryJSON             `json:"-"`
+}
+
+// accessAIControlMcpPortalListResponseServersAuthConfigSummaryJSON contains the
+// JSON metadata for the struct
+// [AccessAIControlMcpPortalListResponseServersAuthConfigSummary]
+type accessAIControlMcpPortalListResponseServersAuthConfigSummaryJSON struct {
+	AuthMode            apijson.Field
+	ClientSecretVersion apijson.Field
+	Config              apijson.Field
+	HasClientSecret     apijson.Field
+	RegistrationInfo    apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalListResponseServersAuthConfigSummary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalListResponseServersAuthConfigSummaryJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpPortalListResponseServersAuthConfigSummaryAuthMode string
+
+const (
+	AccessAIControlMcpPortalListResponseServersAuthConfigSummaryAuthModeDcr    AccessAIControlMcpPortalListResponseServersAuthConfigSummaryAuthMode = "dcr"
+	AccessAIControlMcpPortalListResponseServersAuthConfigSummaryAuthModeManual AccessAIControlMcpPortalListResponseServersAuthConfigSummaryAuthMode = "manual"
+)
+
+func (r AccessAIControlMcpPortalListResponseServersAuthConfigSummaryAuthMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalListResponseServersAuthConfigSummaryAuthModeDcr, AccessAIControlMcpPortalListResponseServersAuthConfigSummaryAuthModeManual:
+		return true
+	}
+	return false
+}
+
+type AccessAIControlMcpPortalListResponseServersAuthConfigSummaryConfig struct {
+	AuthorizationEndpoint string                                                                 `json:"authorization_endpoint"`
+	Issuer                string                                                                 `json:"issuer"`
+	Resource              string                                                                 `json:"resource"`
+	RevocationEndpoint    string                                                                 `json:"revocation_endpoint"`
+	TokenEndpoint         string                                                                 `json:"token_endpoint"`
+	JSON                  accessAIControlMcpPortalListResponseServersAuthConfigSummaryConfigJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalListResponseServersAuthConfigSummaryConfigJSON contains
+// the JSON metadata for the struct
+// [AccessAIControlMcpPortalListResponseServersAuthConfigSummaryConfig]
+type accessAIControlMcpPortalListResponseServersAuthConfigSummaryConfigJSON struct {
+	AuthorizationEndpoint apijson.Field
+	Issuer                apijson.Field
+	Resource              apijson.Field
+	RevocationEndpoint    apijson.Field
+	TokenEndpoint         apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalListResponseServersAuthConfigSummaryConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalListResponseServersAuthConfigSummaryConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpPortalListResponseServersAuthConfigSummaryRegistrationInfo struct {
+	ClientID                string                                                                           `json:"client_id"`
+	RedirectURIs            []string                                                                         `json:"redirect_uris"`
+	Scope                   string                                                                           `json:"scope"`
+	TokenEndpointAuthMethod string                                                                           `json:"token_endpoint_auth_method"`
+	JSON                    accessAIControlMcpPortalListResponseServersAuthConfigSummaryRegistrationInfoJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalListResponseServersAuthConfigSummaryRegistrationInfoJSON
+// contains the JSON metadata for the struct
+// [AccessAIControlMcpPortalListResponseServersAuthConfigSummaryRegistrationInfo]
+type accessAIControlMcpPortalListResponseServersAuthConfigSummaryRegistrationInfoJSON struct {
+	ClientID                apijson.Field
+	RedirectURIs            apijson.Field
+	Scope                   apijson.Field
+	TokenEndpointAuthMethod apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalListResponseServersAuthConfigSummaryRegistrationInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalListResponseServersAuthConfigSummaryRegistrationInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpPortalListResponseServersErrorDetails struct {
 	// Underlying error message
 	Cause string `json:"cause"`
@@ -773,6 +1145,24 @@ func (r *AccessAIControlMcpPortalListResponseServersErrorDetails) UnmarshalJSON(
 
 func (r accessAIControlMcpPortalListResponseServersErrorDetailsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Current sync state of the server
+type AccessAIControlMcpPortalListResponseServersStatus string
+
+const (
+	AccessAIControlMcpPortalListResponseServersStatusWaiting AccessAIControlMcpPortalListResponseServersStatus = "waiting"
+	AccessAIControlMcpPortalListResponseServersStatusReady   AccessAIControlMcpPortalListResponseServersStatus = "ready"
+	AccessAIControlMcpPortalListResponseServersStatusStale   AccessAIControlMcpPortalListResponseServersStatus = "stale"
+	AccessAIControlMcpPortalListResponseServersStatusError   AccessAIControlMcpPortalListResponseServersStatus = "error"
+)
+
+func (r AccessAIControlMcpPortalListResponseServersStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalListResponseServersStatusWaiting, AccessAIControlMcpPortalListResponseServersStatusReady, AccessAIControlMcpPortalListResponseServersStatusStale, AccessAIControlMcpPortalListResponseServersStatusError:
+		return true
+	}
+	return false
 }
 
 type AccessAIControlMcpPortalListResponseServersUpdatedPrompt struct {
@@ -932,14 +1322,18 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	Name     string                                              `json:"name" api:"required"`
 	Prompts  []map[string]interface{}                            `json:"prompts" api:"required"`
 	// server id
-	ServerID        string                                                  `json:"server_id" api:"required"`
-	Tools           []map[string]interface{}                                `json:"tools" api:"required"`
-	CreatedAt       time.Time                                               `json:"created_at" format:"date-time"`
-	CreatedBy       string                                                  `json:"created_by"`
-	DefaultDisabled bool                                                    `json:"default_disabled"`
-	Description     string                                                  `json:"description" api:"nullable"`
-	Error           string                                                  `json:"error"`
-	ErrorDetails    AccessAIControlMcpPortalReadResponseServersErrorDetails `json:"error_details"`
+	ServerID string                   `json:"server_id" api:"required"`
+	Tools    []map[string]interface{} `json:"tools" api:"required"`
+	// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
+	// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
+	// endpoints + client_id for manual servers. Never includes the secret value.
+	AuthConfigSummary AccessAIControlMcpPortalReadResponseServersAuthConfigSummary `json:"auth_config_summary"`
+	CreatedAt         time.Time                                                    `json:"created_at" format:"date-time"`
+	CreatedBy         string                                                       `json:"created_by"`
+	DefaultDisabled   bool                                                         `json:"default_disabled"`
+	Description       string                                                       `json:"description" api:"nullable"`
+	Error             string                                                       `json:"error"`
+	ErrorDetails      AccessAIControlMcpPortalReadResponseServersErrorDetails      `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
 	// customer portal hostname. Defaults to false (off); opt in per server by setting
@@ -952,11 +1346,12 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
-	SecureWebGateway bool                                                       `json:"secure_web_gateway"`
-	Status           string                                                     `json:"status"`
-	UpdatedPrompts   []AccessAIControlMcpPortalReadResponseServersUpdatedPrompt `json:"updated_prompts"`
-	UpdatedTools     []AccessAIControlMcpPortalReadResponseServersUpdatedTool   `json:"updated_tools"`
-	JSON             accessAIControlMcpPortalReadResponseServerJSON             `json:"-"`
+	SecureWebGateway bool `json:"secure_web_gateway"`
+	// Current sync state of the server
+	Status         AccessAIControlMcpPortalReadResponseServersStatus          `json:"status"`
+	UpdatedPrompts []AccessAIControlMcpPortalReadResponseServersUpdatedPrompt `json:"updated_prompts"`
+	UpdatedTools   []AccessAIControlMcpPortalReadResponseServersUpdatedTool   `json:"updated_tools"`
+	JSON           accessAIControlMcpPortalReadResponseServerJSON             `json:"-"`
 }
 
 // accessAIControlMcpPortalReadResponseServerJSON contains the JSON metadata for
@@ -969,6 +1364,7 @@ type accessAIControlMcpPortalReadResponseServerJSON struct {
 	Prompts                      apijson.Field
 	ServerID                     apijson.Field
 	Tools                        apijson.Field
+	AuthConfigSummary            apijson.Field
 	CreatedAt                    apijson.Field
 	CreatedBy                    apijson.Field
 	DefaultDisabled              apijson.Field
@@ -1013,6 +1409,112 @@ func (r AccessAIControlMcpPortalReadResponseServersAuthType) IsKnown() bool {
 	return false
 }
 
+// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
+// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
+// endpoints + client_id for manual servers. Never includes the secret value.
+type AccessAIControlMcpPortalReadResponseServersAuthConfigSummary struct {
+	AuthMode            AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryAuthMode         `json:"auth_mode"`
+	ClientSecretVersion float64                                                                      `json:"client_secret_version"`
+	Config              AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryConfig           `json:"config"`
+	HasClientSecret     bool                                                                         `json:"has_client_secret"`
+	RegistrationInfo    AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryRegistrationInfo `json:"registration_info"`
+	JSON                accessAIControlMcpPortalReadResponseServersAuthConfigSummaryJSON             `json:"-"`
+}
+
+// accessAIControlMcpPortalReadResponseServersAuthConfigSummaryJSON contains the
+// JSON metadata for the struct
+// [AccessAIControlMcpPortalReadResponseServersAuthConfigSummary]
+type accessAIControlMcpPortalReadResponseServersAuthConfigSummaryJSON struct {
+	AuthMode            apijson.Field
+	ClientSecretVersion apijson.Field
+	Config              apijson.Field
+	HasClientSecret     apijson.Field
+	RegistrationInfo    apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalReadResponseServersAuthConfigSummary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalReadResponseServersAuthConfigSummaryJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryAuthMode string
+
+const (
+	AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryAuthModeDcr    AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryAuthMode = "dcr"
+	AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryAuthModeManual AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryAuthMode = "manual"
+)
+
+func (r AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryAuthMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryAuthModeDcr, AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryAuthModeManual:
+		return true
+	}
+	return false
+}
+
+type AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryConfig struct {
+	AuthorizationEndpoint string                                                                 `json:"authorization_endpoint"`
+	Issuer                string                                                                 `json:"issuer"`
+	Resource              string                                                                 `json:"resource"`
+	RevocationEndpoint    string                                                                 `json:"revocation_endpoint"`
+	TokenEndpoint         string                                                                 `json:"token_endpoint"`
+	JSON                  accessAIControlMcpPortalReadResponseServersAuthConfigSummaryConfigJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalReadResponseServersAuthConfigSummaryConfigJSON contains
+// the JSON metadata for the struct
+// [AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryConfig]
+type accessAIControlMcpPortalReadResponseServersAuthConfigSummaryConfigJSON struct {
+	AuthorizationEndpoint apijson.Field
+	Issuer                apijson.Field
+	Resource              apijson.Field
+	RevocationEndpoint    apijson.Field
+	TokenEndpoint         apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalReadResponseServersAuthConfigSummaryConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryRegistrationInfo struct {
+	ClientID                string                                                                           `json:"client_id"`
+	RedirectURIs            []string                                                                         `json:"redirect_uris"`
+	Scope                   string                                                                           `json:"scope"`
+	TokenEndpointAuthMethod string                                                                           `json:"token_endpoint_auth_method"`
+	JSON                    accessAIControlMcpPortalReadResponseServersAuthConfigSummaryRegistrationInfoJSON `json:"-"`
+}
+
+// accessAIControlMcpPortalReadResponseServersAuthConfigSummaryRegistrationInfoJSON
+// contains the JSON metadata for the struct
+// [AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryRegistrationInfo]
+type accessAIControlMcpPortalReadResponseServersAuthConfigSummaryRegistrationInfoJSON struct {
+	ClientID                apijson.Field
+	RedirectURIs            apijson.Field
+	Scope                   apijson.Field
+	TokenEndpointAuthMethod apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *AccessAIControlMcpPortalReadResponseServersAuthConfigSummaryRegistrationInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessAIControlMcpPortalReadResponseServersAuthConfigSummaryRegistrationInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessAIControlMcpPortalReadResponseServersErrorDetails struct {
 	// Underlying error message
 	Cause string `json:"cause"`
@@ -1046,6 +1548,24 @@ func (r *AccessAIControlMcpPortalReadResponseServersErrorDetails) UnmarshalJSON(
 
 func (r accessAIControlMcpPortalReadResponseServersErrorDetailsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Current sync state of the server
+type AccessAIControlMcpPortalReadResponseServersStatus string
+
+const (
+	AccessAIControlMcpPortalReadResponseServersStatusWaiting AccessAIControlMcpPortalReadResponseServersStatus = "waiting"
+	AccessAIControlMcpPortalReadResponseServersStatusReady   AccessAIControlMcpPortalReadResponseServersStatus = "ready"
+	AccessAIControlMcpPortalReadResponseServersStatusStale   AccessAIControlMcpPortalReadResponseServersStatus = "stale"
+	AccessAIControlMcpPortalReadResponseServersStatusError   AccessAIControlMcpPortalReadResponseServersStatus = "error"
+)
+
+func (r AccessAIControlMcpPortalReadResponseServersStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalReadResponseServersStatusWaiting, AccessAIControlMcpPortalReadResponseServersStatusReady, AccessAIControlMcpPortalReadResponseServersStatusStale, AccessAIControlMcpPortalReadResponseServersStatusError:
+		return true
+	}
+	return false
 }
 
 type AccessAIControlMcpPortalReadResponseServersUpdatedPrompt struct {

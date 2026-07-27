@@ -158,7 +158,7 @@ func (r gatewayAuditSSHSettingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -205,7 +205,7 @@ func (r gatewayAuditSSHSettingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayAuditSSHSettingGetResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayAuditSSHSettingGetResponseEnvelopeSuccess bool
 
 const (
@@ -252,7 +252,7 @@ func (r gatewayAuditSSHSettingRotateSeedResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// GatewayAuditSSHSettingRotateSeedResponseEnvelopeSuccess indicate whether the API call was successful.
+// Indicate whether the API call was successful.
 type GatewayAuditSSHSettingRotateSeedResponseEnvelopeSuccess bool
 
 const (

@@ -49,15 +49,29 @@ func NewLoadBalancerService(opts ...option.RequestOption) (r *LoadBalancerServic
 	return
 }
 
-// Create a new load balancer.
+// Create a new account or zone-scoped load balancer.
 func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
 	}
-	path := fmt.Sprintf("zones/%s/load_balancers", params.ZoneID)
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	}
+	if params.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/load_balancers", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -66,19 +80,33 @@ func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewPar
 	return res, nil
 }
 
-// Update a configured load balancer.
+// Update a configured account or zone-scoped load balancer.
 func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string, params LoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	}
+	if params.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
+	path := fmt.Sprintf("%s/%s/load_balancers/%s", accountOrZone, accountOrZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -87,16 +115,30 @@ func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string,
 	return res, nil
 }
 
-// List configured load balancers.
+// List configured account or zone-scoped load balancers.
 func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LoadBalancer], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
 	}
-	path := fmt.Sprintf("zones/%s/load_balancers", query.ZoneID)
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	}
+	if query.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/load_balancers", accountOrZone, accountOrZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -109,24 +151,38 @@ func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListPa
 	return res, nil
 }
 
-// List configured load balancers.
+// List configured account or zone-scoped load balancers.
 func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LoadBalancer] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a configured load balancer.
+// Delete a configured account or zone-scoped load balancer.
 func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, body LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
 	var env LoadBalancerDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if body.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if body.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = body.AccountID
+	}
+	if body.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = body.ZoneID
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", body.ZoneID, loadBalancerID)
+	path := fmt.Sprintf("%s/%s/load_balancers/%s", accountOrZone, accountOrZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -135,19 +191,34 @@ func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string,
 	return res, nil
 }
 
-// Apply changes to an existing load balancer, overwriting the supplied properties.
+// Apply changes to an existing account or zone-scoped load balancer, overwriting
+// the supplied properties.
 func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, params LoadBalancerEditParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if params.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	}
+	if params.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
+	path := fmt.Sprintf("%s/%s/load_balancers/%s", accountOrZone, accountOrZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -156,19 +227,33 @@ func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, p
 	return res, nil
 }
 
-// Fetch a single configured load balancer.
+// Fetch a single configured account or zone-scoped load balancer.
 func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, query LoadBalancerGetParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	var env LoadBalancerGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if query.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+		err = errors.New("account ID and zone ID are mutually exclusive")
+		return
+	}
+	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+		err = errors.New("either account ID or zone ID must be provided")
+		return
+	}
+	if query.AccountID.Value != "" {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	}
+	if query.ZoneID.Value != "" {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
 	}
 	if loadBalancerID == "" {
 		err = errors.New("missing required load_balancer_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", query.ZoneID, loadBalancerID)
+	path := fmt.Sprintf("%s/%s/load_balancers/%s", accountOrZone, accountOrZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -380,6 +465,13 @@ type LoadBalancer struct {
 	Name string `json:"name"`
 	// List of networks where Load Balancer or Pool is enabled.
 	Networks []string `json:"networks"`
+	// An optional list of pool sets, evaluated in array order with first match wins.
+	// Pool sets are independent from the standard steering fields (`region_pools` /
+	// `country_pools` / `pop_pools` / `default_pools` / `steering_policy` /
+	// `random_steering` / `fallback_pool` / `rules`). On a PATCH, an empty array
+	// (`pool_sets: []`) clears all pool sets, while omitting the field leaves existing
+	// pool sets unchanged.
+	PoolSets []LoadBalancerPoolSet `json:"pool_sets"`
 	// Enterprise only: A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -480,6 +572,7 @@ type loadBalancerJSON struct {
 	ModifiedOn                apijson.Field
 	Name                      apijson.Field
 	Networks                  apijson.Field
+	PoolSets                  apijson.Field
 	POPPools                  apijson.Field
 	Proxied                   apijson.Field
 	RandomSteering            apijson.Field
@@ -500,6 +593,212 @@ func (r *LoadBalancer) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r loadBalancerJSON) RawJSON() string {
+	return r.raw
+}
+
+// One entry in a load balancer's `pool_sets`. Pool sets are evaluated in array
+// order; the first whose `match` succeeds applies its `overrides` (or
+// `fixed_response`), and evaluation stops there.
+type LoadBalancerPoolSet struct {
+	// Disable this specific pool set. It will no longer be evaluated.
+	Disabled bool `json:"disabled"`
+	// A collection of fields used to directly respond to the client instead of routing
+	// to a pool. When supplied on a rule, that rule stops further rule evaluation.
+	FixedResponse LoadBalancerPoolSetsFixedResponse `json:"fixed_response"`
+	// Determines which requests a pool set applies to. Set `topology` to match by
+	// location or `default: true` to match all requests; the two are mutually
+	// exclusive. A pool set with no `match` matches all requests.
+	Match LoadBalancerPoolSetsMatch `json:"match"`
+	// A human-readable name for this pool set.
+	Name string `json:"name"`
+	// The behavior a pool set applies when its `match` succeeds. A strict subset of a
+	// rule's `overrides`: a pool set replaces the topology wholesale with a flat pool
+	// list (`pools`), so only the declarative pool-routing fields plus `fallback_pool`
+	// and `steering_policy` are settable. All fields are optional.
+	Overrides LoadBalancerPoolSetsOverrides `json:"overrides"`
+	JSON      loadBalancerPoolSetJSON       `json:"-"`
+}
+
+// loadBalancerPoolSetJSON contains the JSON metadata for the struct
+// [LoadBalancerPoolSet]
+type loadBalancerPoolSetJSON struct {
+	Disabled      apijson.Field
+	FixedResponse apijson.Field
+	Match         apijson.Field
+	Name          apijson.Field
+	Overrides     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *LoadBalancerPoolSet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolSetJSON) RawJSON() string {
+	return r.raw
+}
+
+// A collection of fields used to directly respond to the client instead of routing
+// to a pool. When supplied on a rule, that rule stops further rule evaluation.
+type LoadBalancerPoolSetsFixedResponse struct {
+	// The http 'Content-Type' header to include in the response.
+	ContentType string `json:"content_type"`
+	// The http 'Location' header to include in the response.
+	Location string `json:"location"`
+	// Text to include as the http body.
+	MessageBody string `json:"message_body"`
+	// The http status code to respond with.
+	StatusCode int64                                 `json:"status_code"`
+	JSON       loadBalancerPoolSetsFixedResponseJSON `json:"-"`
+}
+
+// loadBalancerPoolSetsFixedResponseJSON contains the JSON metadata for the struct
+// [LoadBalancerPoolSetsFixedResponse]
+type loadBalancerPoolSetsFixedResponseJSON struct {
+	ContentType apijson.Field
+	Location    apijson.Field
+	MessageBody apijson.Field
+	StatusCode  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerPoolSetsFixedResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolSetsFixedResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Determines which requests a pool set applies to. Set `topology` to match by
+// location or `default: true` to match all requests; the two are mutually
+// exclusive. A pool set with no `match` matches all requests.
+type LoadBalancerPoolSetsMatch struct {
+	// When true, matches every request. Cannot be combined with `topology`.
+	Default bool `json:"default"`
+	// Matches requests by location. Set any combination of `pops`, `countries`, and
+	// `regions` (at least one is required); a request matches when its value appears
+	// in any populated list (e.g. `regions: ["WNAM"]` with `countries: ["US"]` matches
+	// a request in either WNAM or the US).
+	Topology LoadBalancerPoolSetsMatchTopology `json:"topology"`
+	JSON     loadBalancerPoolSetsMatchJSON     `json:"-"`
+}
+
+// loadBalancerPoolSetsMatchJSON contains the JSON metadata for the struct
+// [LoadBalancerPoolSetsMatch]
+type loadBalancerPoolSetsMatchJSON struct {
+	Default     apijson.Field
+	Topology    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerPoolSetsMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolSetsMatchJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches requests by location. Set any combination of `pops`, `countries`, and
+// `regions` (at least one is required); a request matches when its value appears
+// in any populated list (e.g. `regions: ["WNAM"]` with `countries: ["US"]` matches
+// a request in either WNAM or the US).
+type LoadBalancerPoolSetsMatchTopology struct {
+	// A list of ISO 3166-1 alpha-2 country codes. Matches when the request's country
+	// is in this list.
+	Countries []string `json:"countries"`
+	// A list of Cloudflare PoP codes. Matches when the request's PoP is in this list.
+	POPs []string `json:"pops"`
+	// A list of Cloudflare region codes (e.g. `WNAM`, `ENAM`, `WEU`). Matches when the
+	// request's region is in this list.
+	Regions []string                              `json:"regions"`
+	JSON    loadBalancerPoolSetsMatchTopologyJSON `json:"-"`
+}
+
+// loadBalancerPoolSetsMatchTopologyJSON contains the JSON metadata for the struct
+// [LoadBalancerPoolSetsMatchTopology]
+type loadBalancerPoolSetsMatchTopologyJSON struct {
+	Countries   apijson.Field
+	POPs        apijson.Field
+	Regions     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerPoolSetsMatchTopology) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolSetsMatchTopologyJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior a pool set applies when its `match` succeeds. A strict subset of a
+// rule's `overrides`: a pool set replaces the topology wholesale with a flat pool
+// list (`pools`), so only the declarative pool-routing fields plus `fallback_pool`
+// and `steering_policy` are settable. All fields are optional.
+type LoadBalancerPoolSetsOverrides struct {
+	// The pool ID to use when all other pools are detected as unhealthy.
+	FallbackPool string `json:"fallback_pool"`
+	// The default weight for pools not listed in `pool_weights`. The declarative
+	// alternative to `random_steering.default_weight`; mutually exclusive with
+	// `random_steering`.
+	PoolDefaultWeight float64 `json:"pool_default_weight"`
+	// A mapping of pool IDs to custom weights, relative to the other pools. The
+	// declarative alternative to `random_steering.pool_weights`; mutually exclusive
+	// with `random_steering`.
+	PoolWeights map[string]float64 `json:"pool_weights"`
+	// A flat, ordered list of pool IDs to route the matched audience to. Replaces the
+	// resolved topology with exactly these pools. Mutually exclusive with
+	// `fixed_response`.
+	Pools []string `json:"pools"`
+	// Steering Policy for this load balancer.
+	//
+	//   - `"off"`: Use `default_pools`.
+	//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//     requests, the country for `country_pools` is determined by
+	//     `location_strategy`.
+	//   - `"random"`: Select a pool randomly.
+	//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//     default_pools (requires pool health checks).
+	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//     pool using the Cloudflare PoP location for proxied requests or the location
+	//     determined by `location_strategy` for non-proxied requests.
+	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//     `random_steering` weights, as well as each pool's number of outstanding
+	//     requests. Pools with more pending requests are weighted proportionately less
+	//     relative to others.
+	//   - `"least_connections"`: Select a pool by taking into consideration
+	//     `random_steering` weights, as well as each pool's number of open connections.
+	//     Pools with more open connections are weighted proportionately less relative to
+	//     others. Supported for HTTP/1 and HTTP/2 connections.
+	//   - `""`: Will map to `"geo"` if you use
+	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	SteeringPolicy SteeringPolicy                    `json:"steering_policy"`
+	JSON           loadBalancerPoolSetsOverridesJSON `json:"-"`
+}
+
+// loadBalancerPoolSetsOverridesJSON contains the JSON metadata for the struct
+// [LoadBalancerPoolSetsOverrides]
+type loadBalancerPoolSetsOverridesJSON struct {
+	FallbackPool      apijson.Field
+	PoolDefaultWeight apijson.Field
+	PoolWeights       apijson.Field
+	Pools             apijson.Field
+	SteeringPolicy    apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *LoadBalancerPoolSetsOverrides) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolSetsOverridesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1009,14 +1308,13 @@ type Rules struct {
 	// Disable this specific rule. It will no longer be evaluated by this load
 	// balancer.
 	Disabled bool `json:"disabled"`
-	// A collection of fields used to directly respond to the eyeball instead of
-	// routing to a pool. If a fixed_response is supplied the rule will be marked as
-	// terminates.
+	// A collection of fields used to directly respond to the client instead of routing
+	// to a pool. When supplied on a rule, that rule stops further rule evaluation.
 	FixedResponse RulesFixedResponse `json:"fixed_response"`
 	// Name of this rule. Only used for human readability.
 	Name string `json:"name"`
-	// A collection of overrides to apply to the load balancer when this rule's
-	// condition is true. All fields are optional.
+	// A collection of overrides to apply when this rule's condition (or a pool set's
+	// `match`) is true. All fields are optional.
 	Overrides RulesOverrides `json:"overrides"`
 	// The order in which rules should be executed in relation to each other. Lower
 	// values are executed first. Values do not need to be sequential. If no value is
@@ -1050,9 +1348,8 @@ func (r rulesJSON) RawJSON() string {
 	return r.raw
 }
 
-// A collection of fields used to directly respond to the eyeball instead of
-// routing to a pool. If a fixed_response is supplied the rule will be marked as
-// terminates.
+// A collection of fields used to directly respond to the client instead of routing
+// to a pool. When supplied on a rule, that rule stops further rule evaluation.
 type RulesFixedResponse struct {
 	// The http 'Content-Type' header to include in the response.
 	ContentType string `json:"content_type"`
@@ -1084,8 +1381,8 @@ func (r rulesFixedResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A collection of overrides to apply to the load balancer when this rule's
-// condition is true. All fields are optional.
+// A collection of overrides to apply when this rule's condition (or a pool set's
+// `match`) is true. All fields are optional.
 type RulesOverrides struct {
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
@@ -1107,6 +1404,18 @@ type RulesOverrides struct {
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy LocationStrategy `json:"location_strategy"`
+	// The default weight for pools not listed in `pool_weights`. The declarative
+	// alternative to `random_steering.default_weight`; mutually exclusive with
+	// `random_steering`.
+	PoolDefaultWeight float64 `json:"pool_default_weight"`
+	// A mapping of pool IDs to custom weights, relative to the other pools. The
+	// declarative alternative to `random_steering.pool_weights`; mutually exclusive
+	// with `random_steering`.
+	PoolWeights map[string]float64 `json:"pool_weights"`
+	// A flat, ordered list of pool IDs to route the matched audience to. Replaces the
+	// resolved topology with exactly these pools. Mutually exclusive with
+	// `fixed_response`.
+	Pools []string `json:"pools"`
 	// Enterprise only: A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -1194,6 +1503,9 @@ type rulesOverridesJSON struct {
 	DefaultPools              apijson.Field
 	FallbackPool              apijson.Field
 	LocationStrategy          apijson.Field
+	PoolDefaultWeight         apijson.Field
+	PoolWeights               apijson.Field
+	Pools                     apijson.Field
 	POPPools                  apijson.Field
 	RandomSteering            apijson.Field
 	RegionPools               apijson.Field
@@ -1225,14 +1537,13 @@ type RulesParam struct {
 	// Disable this specific rule. It will no longer be evaluated by this load
 	// balancer.
 	Disabled param.Field[bool] `json:"disabled"`
-	// A collection of fields used to directly respond to the eyeball instead of
-	// routing to a pool. If a fixed_response is supplied the rule will be marked as
-	// terminates.
+	// A collection of fields used to directly respond to the client instead of routing
+	// to a pool. When supplied on a rule, that rule stops further rule evaluation.
 	FixedResponse param.Field[RulesFixedResponseParam] `json:"fixed_response"`
 	// Name of this rule. Only used for human readability.
 	Name param.Field[string] `json:"name"`
-	// A collection of overrides to apply to the load balancer when this rule's
-	// condition is true. All fields are optional.
+	// A collection of overrides to apply when this rule's condition (or a pool set's
+	// `match`) is true. All fields are optional.
 	Overrides param.Field[RulesOverridesParam] `json:"overrides"`
 	// The order in which rules should be executed in relation to each other. Lower
 	// values are executed first. Values do not need to be sequential. If no value is
@@ -1248,9 +1559,8 @@ func (r RulesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A collection of fields used to directly respond to the eyeball instead of
-// routing to a pool. If a fixed_response is supplied the rule will be marked as
-// terminates.
+// A collection of fields used to directly respond to the client instead of routing
+// to a pool. When supplied on a rule, that rule stops further rule evaluation.
 type RulesFixedResponseParam struct {
 	// The http 'Content-Type' header to include in the response.
 	ContentType param.Field[string] `json:"content_type"`
@@ -1266,8 +1576,8 @@ func (r RulesFixedResponseParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A collection of overrides to apply to the load balancer when this rule's
-// condition is true. All fields are optional.
+// A collection of overrides to apply when this rule's condition (or a pool set's
+// `match`) is true. All fields are optional.
 type RulesOverridesParam struct {
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
@@ -1289,6 +1599,18 @@ type RulesOverridesParam struct {
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
+	// The default weight for pools not listed in `pool_weights`. The declarative
+	// alternative to `random_steering.default_weight`; mutually exclusive with
+	// `random_steering`.
+	PoolDefaultWeight param.Field[float64] `json:"pool_default_weight"`
+	// A mapping of pool IDs to custom weights, relative to the other pools. The
+	// declarative alternative to `random_steering.pool_weights`; mutually exclusive
+	// with `random_steering`.
+	PoolWeights param.Field[map[string]float64] `json:"pool_weights"`
+	// A flat, ordered list of pool IDs to route the matched audience to. Replaces the
+	// resolved topology with exactly these pools. Mutually exclusive with
+	// `fixed_response`.
+	Pools param.Field[[]string] `json:"pools"`
 	// Enterprise only: A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -1651,7 +1973,6 @@ func (r loadBalancerDeleteResponseJSON) RawJSON() string {
 }
 
 type LoadBalancerNewParams struct {
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools" api:"required"`
@@ -1661,6 +1982,10 @@ type LoadBalancerNewParams struct {
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
 	Name param.Field[string] `json:"name" api:"required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -1675,6 +2000,8 @@ type LoadBalancerNewParams struct {
 	CountryPools param.Field[map[string][]string] `json:"country_pools"`
 	// Object description.
 	Description param.Field[string] `json:"description"`
+	// Whether to enable (the default) this load balancer.
+	Enabled param.Field[bool] `json:"enabled"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
@@ -1812,7 +2139,6 @@ func (r LoadBalancerNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerUpdateParams struct {
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools" api:"required"`
@@ -1822,6 +2148,10 @@ type LoadBalancerUpdateParams struct {
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
 	Name param.Field[string] `json:"name" api:"required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -1975,11 +2305,17 @@ func (r LoadBalancerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerListParams struct {
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type LoadBalancerDeleteParams struct {
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type LoadBalancerDeleteResponseEnvelope struct {
@@ -2026,7 +2362,10 @@ func (r LoadBalancerDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerEditParams struct {
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -2055,6 +2394,8 @@ type LoadBalancerEditParams struct {
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
 	Name param.Field[string] `json:"name"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks param.Field[[]string] `json:"networks"`
 	// Enterprise only: A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -2187,7 +2528,10 @@ func (r LoadBalancerEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerGetParams struct {
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type LoadBalancerGetResponseEnvelope struct {

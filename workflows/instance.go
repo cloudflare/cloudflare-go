@@ -1059,7 +1059,8 @@ type InstanceNewParams struct {
 	AccountID         param.Field[string]                             `path:"account_id" api:"required"`
 	InstanceID        param.Field[string]                             `json:"instance_id"`
 	InstanceRetention param.Field[InstanceNewParamsInstanceRetention] `json:"instance_retention"`
-	Params            param.Field[interface{}]                        `json:"params"`
+	// JSON-encoded event payload passed into the new instance.
+	Params param.Field[string] `json:"params"`
 }
 
 func (r InstanceNewParams) MarshalJSON() (data []byte, err error) {
@@ -1285,7 +1286,8 @@ func (r InstanceBulkParams) MarshalJSON() (data []byte, err error) {
 type InstanceBulkParamsBody struct {
 	InstanceID        param.Field[string]                                  `json:"instance_id"`
 	InstanceRetention param.Field[InstanceBulkParamsBodyInstanceRetention] `json:"instance_retention"`
-	Params            param.Field[interface{}]                             `json:"params"`
+	// JSON-encoded event payload passed into the new instance.
+	Params param.Field[string] `json:"params"`
 }
 
 func (r InstanceBulkParamsBody) MarshalJSON() (data []byte, err error) {

@@ -61,6 +61,33 @@ func TestBetaWorkerVersionNewWithOptionalParams(t *testing.T) {
 				Containers: cloudflare.F([]workers.VersionContainerParam{{
 					ClassName: cloudflare.F("MyDurableObject"),
 				}}),
+				Exports: cloudflare.F(map[string]workers.VersionExportsUnionParam{
+					"Admin": workers.VersionExportsWorkersWorkerExportParam{
+						Type: cloudflare.F(workers.VersionExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers.VersionExportsWorkersWorkerExportCacheParam{
+							Enabled: cloudflare.F(true),
+						}),
+						State: cloudflare.F(workers.VersionExportsWorkersWorkerExportStateCreated),
+					},
+					"Counter": workers.VersionExportsWorkersDurableObjectExportParam{
+						Storage:   cloudflare.F(workers.VersionExportsWorkersDurableObjectExportStorageSqlite),
+						Type:      cloudflare.F(workers.VersionExportsWorkersDurableObjectExportTypeDurableObject),
+						Container: cloudflare.F("my-container"),
+						State:     cloudflare.F(workers.VersionExportsWorkersDurableObjectExportStateCreated),
+					},
+					"OldCounter": workers.VersionExportsWorkersDurableObjectRenamedExportParam{
+						RenamedTo: cloudflare.F("Counter"),
+						State:     cloudflare.F(workers.VersionExportsWorkersDurableObjectRenamedExportStateRenamed),
+						Type:      cloudflare.F(workers.VersionExportsWorkersDurableObjectRenamedExportTypeDurableObject),
+					},
+					"default": workers.VersionExportsWorkersWorkerExportParam{
+						Type: cloudflare.F(workers.VersionExportsWorkersWorkerExportTypeWorker),
+						Cache: cloudflare.F(workers.VersionExportsWorkersWorkerExportCacheParam{
+							Enabled: cloudflare.F(false),
+						}),
+						State: cloudflare.F(workers.VersionExportsWorkersWorkerExportStateCreated),
+					},
+				}),
 				Limits: cloudflare.F(workers.VersionLimitsParam{
 					CPUMs:       cloudflare.F(int64(50)),
 					Subrequests: cloudflare.F(int64(1000)),
