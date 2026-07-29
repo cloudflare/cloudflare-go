@@ -1,0 +1,33 @@
+acm/totaltls_test.go
+  s_2b2484d7f0649b::t_464fc442784547 34,62
+browser_rendering/accessibilitytree.go
+  s_2b2484d7f0649b::t_03eccd51190aca 328-329
+browser_rendering/json.go
+  s_2b2484d7f0649b::t_df46306562712e 126-127
+browser_rendering/link.go
+  s_2b2484d7f0649b::t_1d149deb097dd3 122-123
+browser_rendering/pdf.go
+  s_2b2484d7f0649b::t_bf5f55ee8eb38b 118-119
+browser_rendering/scrape.go
+  s_2b2484d7f0649b::t_d90fcc6b23b501 210-211
+browser_rendering/screenshot.go
+  s_2b2484d7f0649b::t_d3200a013d58f4 169-170
+browser_rendering/snapshot.go
+  s_2b2484d7f0649b::t_d8572f1bbf246f 334-335
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "ebd62ba49fde4a17ee8c2058b78f35882cf5917a",
+  "prompts": {},
+  "sessions": {
+    "s_2b2484d7f0649b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_098f55189ffeA9XYaFfBNc1j26",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
