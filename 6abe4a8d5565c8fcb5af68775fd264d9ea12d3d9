@@ -1,0 +1,19 @@
+dns/record.go
+  s_50c1f4fd26c235::t_a471230bc2c1c4 2735-2736,2758,2790-2816,2863-2864,2892-2905,3440-3443,6701-6704,6714,6804-6807
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6abe4a8d5565c8fcb5af68775fd264d9ea12d3d9",
+  "prompts": {},
+  "sessions": {
+    "s_50c1f4fd26c235": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_06fa6e41cffeTj1u0tekt3erlP",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
