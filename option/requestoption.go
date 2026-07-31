@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strings"
 	"time"
 
@@ -295,5 +296,19 @@ func WithUserServiceKey(value string) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
 		r.UserServiceKey = value
 		return r.Apply(WithHeader("X-Auth-User-Service-Key", r.UserServiceKey))
+	})
+}
+
+var apiVersionRegex = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}\.[a-zA-Z][a-zA-Z0-9-]*$`)
+
+// WithAPIVersion sets the API version sent in the "API-Version" header.
+// Empty string omits the header. Format: YYYY-MM-DD.{train_name}.
+func WithAPIVersion(value string) RequestOption {
+	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
+		if value != "" && !apiVersionRegex.MatchString(value) {
+			return fmt.Errorf("requestoption: invalid api version format %q, expected YYYY-MM-DD.{train_name}", value)
+		}
+		r.APIVersion = value
+		return nil
 	})
 }

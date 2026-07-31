@@ -64,6 +64,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/iam"
 	"github.com/cloudflare/cloudflare-go/v7/images"
 	"github.com/cloudflare/cloudflare-go/v7/intel"
+	"github.com/cloudflare/cloudflare-go/v7/internal"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/ips"
 	"github.com/cloudflare/cloudflare-go/v7/keyless_certificates"
@@ -472,11 +473,16 @@ type Client struct {
 
 // DefaultClientOptions read from the environment (CLOUDFLARE_API_KEY,
 // CLOUDFLARE_API_USER_SERVICE_KEY, CLOUDFLARE_API_TOKEN, CLOUDFLARE_EMAIL,
-// CLOUDFLARE_BASE_URL). This should be used to initialize new clients.
+// CLOUDFLARE_BASE_URL, CLOUDFLARE_API_VERSION). This should be used to initialize new clients.
 func DefaultClientOptions() []option.RequestOption {
 	defaults := []option.RequestOption{option.WithHTTPClient(defaultHTTPClient()), option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("CLOUDFLARE_BASE_URL"); ok {
 		defaults = append(defaults, option.WithBaseURL(o))
+	}
+	if o, ok := os.LookupEnv("CLOUDFLARE_API_VERSION"); ok {
+		defaults = append(defaults, option.WithAPIVersion(o))
+	} else if internal.APIVersion != "" {
+		defaults = append(defaults, option.WithAPIVersion(internal.APIVersion))
 	}
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_TOKEN"); ok {
 		defaults = append(defaults, option.WithAPIToken(o))
