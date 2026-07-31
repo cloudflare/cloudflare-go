@@ -4,14 +4,18 @@ package cloudflare_test
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/internal"
+	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/zones"
 )
@@ -295,6 +299,360 @@ func TestContextDeadline(t *testing.T) {
 	case <-testDone:
 		if diff := time.Since(deadline); diff < -30*time.Millisecond || 30*time.Millisecond < diff {
 			t.Fatalf("client did not return within 30ms of context deadline, got %s", diff)
+		}
+	}
+}
+
+// TestRetryOnUnexpectedEOF verifies that io.ErrUnexpectedEOF triggers retries.
+// This test validates the fix for APIX-435 where transport-level errors like
+// "unexpected EOF" should be retried automatically.
+func TestRetryOnUnexpectedEOF(t *testing.T) {
+	retryCountHeaders := make([]string, 0)
+	attemptCount := 0
+
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithMaxRetries(3), // Reduce retries for faster test
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
+					attemptCount++
+
+					// Fail first 2 attempts with unexpected EOF, succeed on 3rd
+					if attemptCount < 3 {
+						return nil, io.ErrUnexpectedEOF
+					}
+
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(`{"result":{"id":"test","name":"example.com"},"success":true}`)),
+						Header:     http.Header{"Content-Type": []string{"application/json"}},
+					}, nil
+				},
+			},
+		}),
+	)
+
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+
+	if err != nil {
+		t.Errorf("Expected request to succeed after retries, got error: %v", err)
+	}
+
+	if attemptCount != 3 {
+		t.Errorf("Expected 3 attempts, got %d", attemptCount)
+	}
+
+	expectedRetryCountHeaders := []string{"0", "1", "2"}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
+	}
+}
+
+// TestNoRetryOnContextCanceled verifies that context.Canceled does NOT trigger retries.
+// This ensures that intentional cancellations are respected and not retried.
+func TestNoRetryOnContextCanceled(t *testing.T) {
+	retryCountHeaders := make([]string, 0)
+	attemptCount := 0
+
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
+					attemptCount++
+					return nil, context.Canceled
+				},
+			},
+		}),
+	)
+
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+
+	if err == nil {
+		t.Error("Expected context.Canceled error, got nil")
+	}
+
+	if !errors.Is(err, context.Canceled) {
+		t.Errorf("Expected context.Canceled error, got: %v", err)
+	}
+
+	if attemptCount != 1 {
+		t.Errorf("Expected exactly 1 attempt (no retries), got %d", attemptCount)
+	}
+
+	expectedRetryCountHeaders := []string{"0"}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
+	}
+}
+
+// TestNoRetryOnContextDeadlineExceeded verifies that context.DeadlineExceeded does NOT trigger retries.
+// This ensures that timeout errors are respected and not retried.
+func TestNoRetryOnContextDeadlineExceeded(t *testing.T) {
+	retryCountHeaders := make([]string, 0)
+	attemptCount := 0
+
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
+					attemptCount++
+					return nil, context.DeadlineExceeded
+				},
+			},
+		}),
+	)
+
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+
+	if err == nil {
+		t.Error("Expected context.DeadlineExceeded error, got nil")
+	}
+
+	if !errors.Is(err, context.DeadlineExceeded) {
+		t.Errorf("Expected context.DeadlineExceeded error, got: %v", err)
+	}
+
+	if attemptCount != 1 {
+		t.Errorf("Expected exactly 1 attempt (no retries), got %d", attemptCount)
+	}
+
+	expectedRetryCountHeaders := []string{"0"}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
+	}
+}
+
+// TestRetryExhaustsMaxRetriesOnTransportError verifies that transport errors
+// are retried up to MaxRetries and then fail with the original error.
+// This validates that retry exhaustion works correctly for APIX-435.
+func TestRetryExhaustsMaxRetriesOnTransportError(t *testing.T) {
+	retryCountHeaders := make([]string, 0)
+	attemptCount := 0
+
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithMaxRetries(3), // Use 3 retries for faster test
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
+					attemptCount++
+					// Always return unexpected EOF to exhaust retries
+					return nil, io.ErrUnexpectedEOF
+				},
+			},
+		}),
+	)
+
+	_, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+
+	if err == nil {
+		t.Error("Expected io.ErrUnexpectedEOF error, got nil")
+	}
+
+	if !errors.Is(err, io.ErrUnexpectedEOF) {
+		t.Errorf("Expected io.ErrUnexpectedEOF error, got: %v", err)
+	}
+
+	// Should make initial attempt + 3 retries = 4 total attempts
+	if attemptCount != 4 {
+		t.Errorf("Expected 4 attempts (initial + 3 retries), got %d", attemptCount)
+	}
+
+	expectedRetryCountHeaders := []string{"0", "1", "2", "3"}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
+	}
+}
+
+func TestAPIVersionHeaderSentWhenSet(t *testing.T) {
+	var apiVersionHeader string
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithAPIVersion("2027-02-01.air"),
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					if vals := req.Header["API-Version"]; len(vals) > 0 {
+						apiVersionHeader = vals[0]
+					}
+					return &http.Response{
+						StatusCode: http.StatusOK,
+					}, nil
+				},
+			},
+		}),
+	)
+	_, _ = client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+	if apiVersionHeader != "2027-02-01.air" {
+		t.Errorf("Expected API-Version header to be %q, got %q", "2027-02-01.air", apiVersionHeader)
+	}
+}
+
+func TestAPIVersionHeaderOmittedWhenEmpty(t *testing.T) {
+	headerPresent := false
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					if _, ok := req.Header["API-Version"]; ok {
+						headerPresent = true
+					}
+					return &http.Response{
+						StatusCode: http.StatusOK,
+					}, nil
+				},
+			},
+		}),
+	)
+	_, _ = client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+	if headerPresent {
+		t.Error("Expected API-Version header to be absent when APIVersion is empty, but it was present")
+	}
+}
+
+func TestAPIVersionEnvVarOverridesDefault(t *testing.T) {
+	t.Setenv("CLOUDFLARE_API_VERSION", "2099-01-01.envtest")
+	t.Setenv("CLOUDFLARE_API_KEY", "144c9defac04969c7bfad8efaa8ea194")
+	t.Setenv("CLOUDFLARE_EMAIL", "user@example.com")
+
+	var apiVersionHeader string
+	client := cloudflare.NewClient(
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					if vals := req.Header["API-Version"]; len(vals) > 0 {
+						apiVersionHeader = vals[0]
+					}
+					return &http.Response{StatusCode: http.StatusOK}, nil
+				},
+			},
+		}),
+	)
+	_, _ = client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+	if apiVersionHeader != "2099-01-01.envtest" {
+		t.Errorf("Expected env var to set API-Version to %q, got %q", "2099-01-01.envtest", apiVersionHeader)
+	}
+}
+
+func TestAPIVersionExplicitOptionOverridesEnvVar(t *testing.T) {
+	t.Setenv("CLOUDFLARE_API_VERSION", "2099-01-01.envtest")
+
+	var apiVersionHeader string
+	client := cloudflare.NewClient(
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithAPIVersion("2027-02-01.air"),
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					if vals := req.Header["API-Version"]; len(vals) > 0 {
+						apiVersionHeader = vals[0]
+					}
+					return &http.Response{StatusCode: http.StatusOK}, nil
+				},
+			},
+		}),
+	)
+	_, _ = client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+	if apiVersionHeader != "2027-02-01.air" {
+		t.Errorf("Expected explicit option to override env var, got %q", apiVersionHeader)
+	}
+}
+
+func TestAPIVersionRejectsInvalidFormat(t *testing.T) {
+	invalid := []string{
+		"not-a-version",
+		"2027-02-01",
+		"2027-02-01.",
+		"2027-02-01.1bad",
+		"20270201.air",
+		"v2027-02-01.air",
+	}
+	for _, v := range invalid {
+		err := option.WithAPIVersion(v).Apply(&requestconfig.RequestConfig{
+			Request: &http.Request{Header: http.Header{}},
+		})
+		if err == nil {
+			t.Errorf("Expected error for invalid api version %q, got nil", v)
+		}
+	}
+}
+
+func TestAPIVersionAcceptsValidFormats(t *testing.T) {
+	valid := []string{
+		"2027-02-01.air",
+		"2024-09-01.beta",
+		"2099-12-31.long-train-name",
+		"",
+	}
+	for _, v := range valid {
+		err := option.WithAPIVersion(v).Apply(&requestconfig.RequestConfig{
+			Request: &http.Request{Header: http.Header{}},
+		})
+		if err != nil {
+			t.Errorf("Expected no error for valid api version %q, got: %v", v, err)
 		}
 	}
 }
