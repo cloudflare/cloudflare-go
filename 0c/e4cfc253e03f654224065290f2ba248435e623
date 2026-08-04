@@ -1,0 +1,23 @@
+zero_trust/casbapplication.go
+  s_a2f7cd62c438ee::t_b4cd906cb0efca 317,326,380,389,400,409,666,675
+zero_trust/casbapplicationauthmethod.go
+  s_a2f7cd62c438ee::t_f49860c75632bb 162,171
+zero_trust/casbintegration.go
+  s_a2f7cd62c438ee::t_8302083b8056a5 680,689,719,728,739,748
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "0ce4cfc253e03f654224065290f2ba248435e623",
+  "prompts": {},
+  "sessions": {
+    "s_a2f7cd62c438ee": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0321447a2ffeA8t2aU86Mqvewk",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
