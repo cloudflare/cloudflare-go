@@ -221,7 +221,7 @@ func (r gatewayCertificateNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate the read-only deployment status of the certificate on Cloudflare's
+// GatewayCertificateNewResponseBindingStatus indicate the read-only deployment status of the certificate on Cloudflare's
 // edge. Gateway TLS interception can use certificates in the 'available'
 // (previously called 'active') state.
 type GatewayCertificateNewResponseBindingStatus string
@@ -241,7 +241,7 @@ func (r GatewayCertificateNewResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
+// GatewayCertificateNewResponseType indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 type GatewayCertificateNewResponseType string
 
 const (
@@ -312,7 +312,7 @@ func (r gatewayCertificateListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate the read-only deployment status of the certificate on Cloudflare's
+// GatewayCertificateListResponseBindingStatus indicate the read-only deployment status of the certificate on Cloudflare's
 // edge. Gateway TLS interception can use certificates in the 'available'
 // (previously called 'active') state.
 type GatewayCertificateListResponseBindingStatus string
@@ -332,7 +332,7 @@ func (r GatewayCertificateListResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
+// GatewayCertificateListResponseType indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 type GatewayCertificateListResponseType string
 
 const (
@@ -403,7 +403,7 @@ func (r gatewayCertificateDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate the read-only deployment status of the certificate on Cloudflare's
+// GatewayCertificateDeleteResponseBindingStatus indicate the read-only deployment status of the certificate on Cloudflare's
 // edge. Gateway TLS interception can use certificates in the 'available'
 // (previously called 'active') state.
 type GatewayCertificateDeleteResponseBindingStatus string
@@ -423,7 +423,7 @@ func (r GatewayCertificateDeleteResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
+// GatewayCertificateDeleteResponseType indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 type GatewayCertificateDeleteResponseType string
 
 const (
@@ -494,7 +494,7 @@ func (r gatewayCertificateActivateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate the read-only deployment status of the certificate on Cloudflare's
+// GatewayCertificateActivateResponseBindingStatus indicate the read-only deployment status of the certificate on Cloudflare's
 // edge. Gateway TLS interception can use certificates in the 'available'
 // (previously called 'active') state.
 type GatewayCertificateActivateResponseBindingStatus string
@@ -514,7 +514,7 @@ func (r GatewayCertificateActivateResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
+// GatewayCertificateActivateResponseType indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 type GatewayCertificateActivateResponseType string
 
 const (
@@ -585,7 +585,7 @@ func (r gatewayCertificateDeactivateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate the read-only deployment status of the certificate on Cloudflare's
+// GatewayCertificateDeactivateResponseBindingStatus indicate the read-only deployment status of the certificate on Cloudflare's
 // edge. Gateway TLS interception can use certificates in the 'available'
 // (previously called 'active') state.
 type GatewayCertificateDeactivateResponseBindingStatus string
@@ -605,7 +605,7 @@ func (r GatewayCertificateDeactivateResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
+// GatewayCertificateDeactivateResponseType indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 type GatewayCertificateDeactivateResponseType string
 
 const (
@@ -676,7 +676,7 @@ func (r gatewayCertificateGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate the read-only deployment status of the certificate on Cloudflare's
+// GatewayCertificateGetResponseBindingStatus indicate the read-only deployment status of the certificate on Cloudflare's
 // edge. Gateway TLS interception can use certificates in the 'available'
 // (previously called 'active') state.
 type GatewayCertificateGetResponseBindingStatus string
@@ -696,7 +696,7 @@ func (r GatewayCertificateGetResponseBindingStatus) IsKnown() bool {
 	return false
 }
 
-// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
+// GatewayCertificateGetResponseType indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 type GatewayCertificateGetResponseType string
 
 const (
@@ -753,7 +753,7 @@ func (r gatewayCertificateNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayCertificateNewResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayCertificateNewResponseEnvelopeSuccess bool
 
 const (
@@ -804,7 +804,7 @@ func (r gatewayCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayCertificateDeleteResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayCertificateDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -856,7 +856,7 @@ func (r gatewayCertificateActivateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayCertificateActivateResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayCertificateActivateResponseEnvelopeSuccess bool
 
 const (
@@ -908,7 +908,7 @@ func (r gatewayCertificateDeactivateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayCertificateDeactivateResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayCertificateDeactivateResponseEnvelopeSuccess bool
 
 const (
@@ -955,7 +955,7 @@ func (r gatewayCertificateGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayCertificateGetResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayCertificateGetResponseEnvelopeSuccess bool
 
 const (

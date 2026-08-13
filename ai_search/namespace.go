@@ -43,7 +43,7 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 	return
 }
 
-// Create a namespace for organizing AI Search instances.
+// Create a new namespace.
 func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *NamespaceNewResponse, err error) {
 	var env NamespaceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,8 +60,7 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 	return res, nil
 }
 
-// Update the description of an existing namespace. The default namespace cannot be
-// modified.
+// Update namespace.
 func (r *NamespaceService) Update(ctx context.Context, name string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponse, err error) {
 	var env NamespaceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -82,7 +81,7 @@ func (r *NamespaceService) Update(ctx context.Context, name string, params Names
 	return res, nil
 }
 
-// List namespaces in the account, including their descriptions and creation times.
+// List namespaces.
 func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[NamespaceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -104,13 +103,12 @@ func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams,
 	return res, nil
 }
 
-// List namespaces in the account, including their descriptions and creation times.
+// List namespaces.
 func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[NamespaceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Permanently delete a namespace. The namespace must be empty (no instances), and
-// the default namespace cannot be deleted.
+// Delete namespace.
 func (r *NamespaceService) Delete(ctx context.Context, name string, body NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponse, err error) {
 	var env NamespaceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -148,7 +146,7 @@ func (r *NamespaceService) ChatCompletions(ctx context.Context, name string, par
 	return res, err
 }
 
-// Retrieve a namespace and its description.
+// Read namespace.
 func (r *NamespaceService) Read(ctx context.Context, name string, query NamespaceReadParams, opts ...option.RequestOption) (res *NamespaceReadResponse, err error) {
 	var env NamespaceReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -169,8 +167,7 @@ func (r *NamespaceService) Read(ctx context.Context, name string, query Namespac
 	return res, nil
 }
 
-// Performs a semantic search query against multiple AI Search instances in
-// parallel, merging the retrieved results into a single ranked response.
+// Multi-Instance Search
 func (r *NamespaceService) Search(ctx context.Context, name string, params NamespaceSearchParams, opts ...option.RequestOption) (res *NamespaceSearchResponse, err error) {
 	var env NamespaceSearchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -379,9 +376,6 @@ func (r NamespaceChatCompletionsResponseChoicesMessageContentArray) ImplementsNa
 type NamespaceChatCompletionsResponseChoicesMessageContentArrayItem struct {
 	Type NamespaceChatCompletionsResponseChoicesMessageContentArrayType `json:"type" api:"required"`
 	// This field can have the runtime type of
-	// [NamespaceChatCompletionsResponseChoicesMessageContentArrayObjectFile].
-	File interface{} `json:"file"`
-	// This field can have the runtime type of
 	// [NamespaceChatCompletionsResponseChoicesMessageContentArrayObjectImageURL].
 	ImageURL interface{}                                                        `json:"image_url"`
 	Text     string                                                             `json:"text"`
@@ -394,7 +388,6 @@ type NamespaceChatCompletionsResponseChoicesMessageContentArrayItem struct {
 // [NamespaceChatCompletionsResponseChoicesMessageContentArrayItem]
 type namespaceChatCompletionsResponseChoicesMessageContentArrayItemJSON struct {
 	Type        apijson.Field
-	File        apijson.Field
 	ImageURL    apijson.Field
 	Text        apijson.Field
 	raw         string
@@ -420,14 +413,12 @@ func (r *NamespaceChatCompletionsResponseChoicesMessageContentArrayItem) Unmarsh
 //
 // Possible runtime types of the union are
 // [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject],
-// [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject],
 // [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject].
 func (r NamespaceChatCompletionsResponseChoicesMessageContentArrayItem) AsUnion() NamespaceChatCompletionsResponseChoicesMessageContentArrayUnionItem {
 	return r.union
 }
 
 // Union satisfied by
-// [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject],
 // [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject] or
 // [NamespaceChatCompletionsResponseChoicesMessageContentArrayObject].
 type NamespaceChatCompletionsResponseChoicesMessageContentArrayUnionItem interface {
@@ -438,10 +429,6 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*NamespaceChatCompletionsResponseChoicesMessageContentArrayUnionItem)(nil)).Elem(),
 		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NamespaceChatCompletionsResponseChoicesMessageContentArrayObject{}),
-		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(NamespaceChatCompletionsResponseChoicesMessageContentArrayObject{}),
@@ -499,12 +486,11 @@ type NamespaceChatCompletionsResponseChoicesMessageContentArrayType string
 const (
 	NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeText     NamespaceChatCompletionsResponseChoicesMessageContentArrayType = "text"
 	NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeImageURL NamespaceChatCompletionsResponseChoicesMessageContentArrayType = "image_url"
-	NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeFile     NamespaceChatCompletionsResponseChoicesMessageContentArrayType = "file"
 )
 
 func (r NamespaceChatCompletionsResponseChoicesMessageContentArrayType) IsKnown() bool {
 	switch r {
-	case NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeText, NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeImageURL, NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeFile:
+	case NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeText, NamespaceChatCompletionsResponseChoicesMessageContentArrayTypeImageURL:
 		return true
 	}
 	return false
@@ -1269,7 +1255,6 @@ func (r NamespaceChatCompletionsParamsMessagesContentArray) ImplementsNamespaceC
 
 type NamespaceChatCompletionsParamsMessagesContentArrayItem struct {
 	Type     param.Field[NamespaceChatCompletionsParamsMessagesContentArrayType] `json:"type" api:"required"`
-	File     param.Field[interface{}]                                            `json:"file"`
 	ImageURL param.Field[interface{}]                                            `json:"image_url"`
 	Text     param.Field[string]                                                 `json:"text"`
 }
@@ -1282,7 +1267,6 @@ func (r NamespaceChatCompletionsParamsMessagesContentArrayItem) implementsNamesp
 }
 
 // Satisfied by
-// [ai_search.NamespaceChatCompletionsParamsMessagesContentArrayObject],
 // [ai_search.NamespaceChatCompletionsParamsMessagesContentArrayObject],
 // [ai_search.NamespaceChatCompletionsParamsMessagesContentArrayObject],
 // [NamespaceChatCompletionsParamsMessagesContentArrayItem].
@@ -1321,12 +1305,11 @@ type NamespaceChatCompletionsParamsMessagesContentArrayType string
 const (
 	NamespaceChatCompletionsParamsMessagesContentArrayTypeText     NamespaceChatCompletionsParamsMessagesContentArrayType = "text"
 	NamespaceChatCompletionsParamsMessagesContentArrayTypeImageURL NamespaceChatCompletionsParamsMessagesContentArrayType = "image_url"
-	NamespaceChatCompletionsParamsMessagesContentArrayTypeFile     NamespaceChatCompletionsParamsMessagesContentArrayType = "file"
 )
 
 func (r NamespaceChatCompletionsParamsMessagesContentArrayType) IsKnown() bool {
 	switch r {
-	case NamespaceChatCompletionsParamsMessagesContentArrayTypeText, NamespaceChatCompletionsParamsMessagesContentArrayTypeImageURL, NamespaceChatCompletionsParamsMessagesContentArrayTypeFile:
+	case NamespaceChatCompletionsParamsMessagesContentArrayTypeText, NamespaceChatCompletionsParamsMessagesContentArrayTypeImageURL:
 		return true
 	}
 	return false
@@ -1703,7 +1686,6 @@ func (r NamespaceSearchParamsMessagesContentArray) ImplementsNamespaceSearchPara
 
 type NamespaceSearchParamsMessagesContentArrayItem struct {
 	Type     param.Field[NamespaceSearchParamsMessagesContentArrayType] `json:"type" api:"required"`
-	File     param.Field[interface{}]                                   `json:"file"`
 	ImageURL param.Field[interface{}]                                   `json:"image_url"`
 	Text     param.Field[string]                                        `json:"text"`
 }
@@ -1716,7 +1698,6 @@ func (r NamespaceSearchParamsMessagesContentArrayItem) implementsNamespaceSearch
 }
 
 // Satisfied by [ai_search.NamespaceSearchParamsMessagesContentArrayObject],
-// [ai_search.NamespaceSearchParamsMessagesContentArrayObject],
 // [ai_search.NamespaceSearchParamsMessagesContentArrayObject],
 // [NamespaceSearchParamsMessagesContentArrayItem].
 type NamespaceSearchParamsMessagesContentArrayItemUnion interface {
@@ -1754,12 +1735,11 @@ type NamespaceSearchParamsMessagesContentArrayType string
 const (
 	NamespaceSearchParamsMessagesContentArrayTypeText     NamespaceSearchParamsMessagesContentArrayType = "text"
 	NamespaceSearchParamsMessagesContentArrayTypeImageURL NamespaceSearchParamsMessagesContentArrayType = "image_url"
-	NamespaceSearchParamsMessagesContentArrayTypeFile     NamespaceSearchParamsMessagesContentArrayType = "file"
 )
 
 func (r NamespaceSearchParamsMessagesContentArrayType) IsKnown() bool {
 	switch r {
-	case NamespaceSearchParamsMessagesContentArrayTypeText, NamespaceSearchParamsMessagesContentArrayTypeImageURL, NamespaceSearchParamsMessagesContentArrayTypeFile:
+	case NamespaceSearchParamsMessagesContentArrayTypeText, NamespaceSearchParamsMessagesContentArrayTypeImageURL:
 		return true
 	}
 	return false

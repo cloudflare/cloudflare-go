@@ -67,7 +67,7 @@ func (r *TunnelWARPConnectorConnectionService) GetAutoPaging(ctx context.Context
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, tunnelID, query, opts...))
 }
 
-// A WARP Connector client that maintains a connection to a Cloudflare data center.
+// TunnelWARPConnectorConnectionGetResponse is a WARP Connector client that maintains a connection to a Cloudflare data center.
 type TunnelWARPConnectorConnectionGetResponse struct {
 	// UUID of the Cloudflare Tunnel connector.
 	ID string `json:"id" format:"uuid"`
@@ -145,7 +145,7 @@ func (r tunnelWARPConnectorConnectionGetResponseConnJSON) RawJSON() string {
 	return r.raw
 }
 
-// The HA status of a WARP Connector client.
+// TunnelWARPConnectorConnectionGetResponseHaStatus is the HA status of a WARP Connector client.
 type TunnelWARPConnectorConnectionGetResponseHaStatus string
 
 const (

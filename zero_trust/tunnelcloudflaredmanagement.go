@@ -67,7 +67,7 @@ func (r TunnelCloudflaredManagementNewParams) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-// Management resources the token will have access to.
+// TunnelCloudflaredManagementNewParamsResource management resources the token will have access to.
 type TunnelCloudflaredManagementNewParamsResource string
 
 const (
@@ -112,7 +112,7 @@ func (r tunnelCloudflaredManagementNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelCloudflaredManagementNewResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelCloudflaredManagementNewResponseEnvelopeSuccess bool
 
 const (

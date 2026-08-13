@@ -32,7 +32,7 @@ func TestUsageGetWithOptionalParams(t *testing.T) {
 	_, err := client.Billing.Usage.Get(context.TODO(), billing.UsageGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		From:      cloudflare.F(time.Now()),
-		MetricID:  cloudflare.F([]string{"workers_standard_requests", "http_transferred_bytes"}),
+		Metric:    cloudflare.F("workers_standard_requests"),
 		To:        cloudflare.F(time.Now()),
 	})
 	if err != nil {
@@ -62,32 +62,6 @@ func TestUsagePaygoWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		From:      cloudflare.F(time.Now()),
 		To:        cloudflare.F(time.Now()),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestUsagePaygoInfo(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Billing.Usage.PaygoInfo(context.TODO(), billing.UsagePaygoInfoParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

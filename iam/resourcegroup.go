@@ -148,8 +148,8 @@ func (r *ResourceGroupService) Get(ctx context.Context, resourceGroupID string, 
 type ResourceGroupNewResponse struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
-	Scope ResourceGroupNewResponseScope `json:"scope" api:"required"`
+	// The scope associated to the resource group
+	Scope []ResourceGroupNewResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupNewResponseMeta `json:"meta"`
 	// Name of the resource group.
@@ -256,8 +256,8 @@ func (r resourceGroupNewResponseMetaJSON) RawJSON() string {
 type ResourceGroupUpdateResponse struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
-	Scope ResourceGroupUpdateResponseScope `json:"scope" api:"required"`
+	// The scope associated to the resource group
+	Scope []ResourceGroupUpdateResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupUpdateResponseMeta `json:"meta"`
 	// Name of the resource group.
@@ -364,8 +364,8 @@ func (r resourceGroupUpdateResponseMetaJSON) RawJSON() string {
 type ResourceGroupListResponse struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
-	Scope ResourceGroupListResponseScope `json:"scope" api:"required"`
+	// The scope associated to the resource group
+	Scope []ResourceGroupListResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupListResponseMeta `json:"meta"`
 	// Name of the resource group.
@@ -494,8 +494,8 @@ func (r resourceGroupDeleteResponseJSON) RawJSON() string {
 type ResourceGroupGetResponse struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
-	Scope ResourceGroupGetResponseScope `json:"scope" api:"required"`
+	// The scope associated to the resource group
+	Scope []ResourceGroupGetResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupGetResponseMeta `json:"meta"`
 	// Name of the resource group.

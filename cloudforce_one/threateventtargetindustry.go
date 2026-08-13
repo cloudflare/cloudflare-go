@@ -24,9 +24,7 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewThreatEventTargetIndustryService] method instead.
 type ThreatEventTargetIndustryService struct {
-	Options   []option.RequestOption
-	ByDataset *ThreatEventTargetIndustryByDatasetService
-	Catalog   *ThreatEventTargetIndustryCatalogService
+	Options []option.RequestOption
 }
 
 // NewThreatEventTargetIndustryService generates a new service that applies the
@@ -35,12 +33,10 @@ type ThreatEventTargetIndustryService struct {
 func NewThreatEventTargetIndustryService(opts ...option.RequestOption) (r *ThreatEventTargetIndustryService) {
 	r = &ThreatEventTargetIndustryService{}
 	r.Options = opts
-	r.ByDataset = NewThreatEventTargetIndustryByDatasetService(opts...)
-	r.Catalog = NewThreatEventTargetIndustryCatalogService(opts...)
 	return
 }
 
-// List target industries referenced in events across one or more datasets.
+// Lists target industries across multiple datasets
 func (r *ThreatEventTargetIndustryService) List(ctx context.Context, params ThreatEventTargetIndustryListParams, opts ...option.RequestOption) (res *ThreatEventTargetIndustryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

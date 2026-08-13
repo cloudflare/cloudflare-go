@@ -61,7 +61,7 @@ func (r *ConnectorEventService) List(ctx context.Context, connectorID string, pa
 	return res, nil
 }
 
-// Gets Magic WAN Connector Telemetry Event
+// Get Event
 func (r *ConnectorEventService) Get(ctx context.Context, connectorID string, eventT float64, eventN float64, query ConnectorEventGetParams, opts ...option.RequestOption) (res *ConnectorEventGetResponse, err error) {
 	var env ConnectorEventGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -228,7 +228,7 @@ func (r networkVirtualNetworkNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// NetworkVirtualNetworkNewResponseEnvelopeSuccess indicates whether the API call was successful
 type NetworkVirtualNetworkNewResponseEnvelopeSuccess bool
 
 const (
@@ -303,7 +303,7 @@ func (r networkVirtualNetworkDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// NetworkVirtualNetworkDeleteResponseEnvelopeSuccess indicates whether the API call was successful
 type NetworkVirtualNetworkDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -361,7 +361,7 @@ func (r networkVirtualNetworkEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// NetworkVirtualNetworkEditResponseEnvelopeSuccess indicates whether the API call was successful
 type NetworkVirtualNetworkEditResponseEnvelopeSuccess bool
 
 const (
@@ -409,7 +409,7 @@ func (r networkVirtualNetworkGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// NetworkVirtualNetworkGetResponseEnvelopeSuccess indicates whether the API call was successful
 type NetworkVirtualNetworkGetResponseEnvelopeSuccess bool
 
 const (

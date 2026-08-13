@@ -38,7 +38,7 @@ func NewDEXFleetStatusService(opts ...option.RequestOption) (r *DEXFleetStatusSe
 	return
 }
 
-// Get details for live (up to 60 minutes) devices using WARP.
+// List details for live (up to 60 minutes) devices using WARP.
 func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusLiveParams, opts ...option.RequestOption) (res *DEXFleetStatusLiveResponse, err error) {
 	var env DEXFleetStatusLiveResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +55,7 @@ func (r *DEXFleetStatusService) Live(ctx context.Context, params DEXFleetStatusL
 	return res, nil
 }
 
-// Get aggregate details for devices using WARP, up to 7 days.
+// List details for devices using WARP, up to 7 days.
 func (r *DEXFleetStatusService) OverTime(ctx context.Context, params DEXFleetStatusOverTimeParams, opts ...option.RequestOption) (res *DEXFleetStatusOverTimeResponse, err error) {
 	var env DEXFleetStatusOverTimeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -387,7 +387,7 @@ func (r dexFleetStatusLiveResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DEXFleetStatusLiveResponseEnvelopeSuccess indicates whether the API call was successful.
 type DEXFleetStatusLiveResponseEnvelopeSuccess bool
 
 const (
@@ -430,9 +430,10 @@ type DEXFleetStatusOverTimeResponseEnvelope struct {
 	Errors   []DEXFleetStatusOverTimeResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []DEXFleetStatusOverTimeResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
-	Success DEXFleetStatusOverTimeResponseEnvelopeSuccess `json:"success" api:"required"`
-	Result  DEXFleetStatusOverTimeResponse                `json:"result"`
-	JSON    dexFleetStatusOverTimeResponseEnvelopeJSON    `json:"-"`
+	Success    DEXFleetStatusOverTimeResponseEnvelopeSuccess    `json:"success" api:"required"`
+	Result     DEXFleetStatusOverTimeResponse                   `json:"result"`
+	ResultInfo DEXFleetStatusOverTimeResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dexFleetStatusOverTimeResponseEnvelopeJSON       `json:"-"`
 }
 
 // dexFleetStatusOverTimeResponseEnvelopeJSON contains the JSON metadata for the
@@ -442,6 +443,7 @@ type dexFleetStatusOverTimeResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -550,7 +552,7 @@ func (r dexFleetStatusOverTimeResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DEXFleetStatusOverTimeResponseEnvelopeSuccess indicates whether the API call was successful.
 type DEXFleetStatusOverTimeResponseEnvelopeSuccess bool
 
 const (
@@ -563,4 +565,38 @@ func (r DEXFleetStatusOverTimeResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type DEXFleetStatusOverTimeResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service.
+	Count float64 `json:"count"`
+	// Current page within paginated list of results.
+	Page float64 `json:"page"`
+	// Number of results per page of results.
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters.
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                                              `json:"total_pages"`
+	JSON       dexFleetStatusOverTimeResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// dexFleetStatusOverTimeResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [DEXFleetStatusOverTimeResponseEnvelopeResultInfo]
+type dexFleetStatusOverTimeResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	TotalPages  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DEXFleetStatusOverTimeResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dexFleetStatusOverTimeResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

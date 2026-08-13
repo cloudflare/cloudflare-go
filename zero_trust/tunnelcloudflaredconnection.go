@@ -94,7 +94,7 @@ func (r *TunnelCloudflaredConnectionService) GetAutoPaging(ctx context.Context, 
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, tunnelID, query, opts...))
 }
 
-// A client (typically cloudflared) that maintains connections to a Cloudflare data
+// Client is a client (typically cloudflared) that maintains connections to a Cloudflare data
 // center.
 type Client struct {
 	// UUID of the Cloudflare Tunnel connection.
@@ -227,7 +227,7 @@ func (r tunnelCloudflaredConnectionDeleteResponseEnvelopeJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelCloudflaredConnectionDeleteResponseEnvelopeSuccess bool
 
 const (

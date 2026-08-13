@@ -116,7 +116,7 @@ func (r DEXColoListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Type of usage that colos should be sorted by. If unspecified, returns all
+// DEXColoListParamsSortBy type of usage that colos should be sorted by. If unspecified, returns all
 // Cloudflare colos sorted alphabetically.
 type DEXColoListParamsSortBy string
 

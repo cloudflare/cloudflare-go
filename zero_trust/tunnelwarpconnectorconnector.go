@@ -61,7 +61,7 @@ func (r *TunnelWARPConnectorConnectorService) Get(ctx context.Context, tunnelID 
 	return res, nil
 }
 
-// A WARP Connector client that maintains a connection to a Cloudflare data center.
+// TunnelWARPConnectorConnectorGetResponse is a WARP Connector client that maintains a connection to a Cloudflare data center.
 type TunnelWARPConnectorConnectorGetResponse struct {
 	// UUID of the Cloudflare Tunnel connector.
 	ID string `json:"id" format:"uuid"`
@@ -139,7 +139,7 @@ func (r tunnelWARPConnectorConnectorGetResponseConnJSON) RawJSON() string {
 	return r.raw
 }
 
-// The HA status of a WARP Connector client.
+// TunnelWARPConnectorConnectorGetResponseHaStatus is the HA status of a WARP Connector client.
 type TunnelWARPConnectorConnectorGetResponseHaStatus string
 
 const (
@@ -190,7 +190,7 @@ func (r tunnelWARPConnectorConnectorGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelWARPConnectorConnectorGetResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelWARPConnectorConnectorGetResponseEnvelopeSuccess bool
 
 const (

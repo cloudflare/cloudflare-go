@@ -78,7 +78,6 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				Duration: cloudflare.F("300s"),
 				Enforce:  cloudflare.F(true),
 			}),
-			DeleteHeaders: cloudflare.F([]string{"X-Old-Header", "X-Remove-Me"}),
 			DNSResolvers: cloudflare.F(zero_trust.RuleSettingDNSResolversParam{
 				IPV4: cloudflare.F([]zero_trust.DNSResolverSettingsV4Param{{
 					IP:                         cloudflare.F("2.2.2.2"),
@@ -133,9 +132,6 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				ViewID:   cloudflare.F("view_id"),
 			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
-			SetHeaders: cloudflare.F(map[string][]string{
-				"X-User-Identity": {"user=@{identity.name}"},
-			}),
 			UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
 				Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionError),
 			}),
@@ -227,7 +223,6 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					Duration: cloudflare.F("300s"),
 					Enforce:  cloudflare.F(true),
 				}),
-				DeleteHeaders: cloudflare.F([]string{"X-Old-Header", "X-Remove-Me"}),
 				DNSResolvers: cloudflare.F(zero_trust.RuleSettingDNSResolversParam{
 					IPV4: cloudflare.F([]zero_trust.DNSResolverSettingsV4Param{{
 						IP:                         cloudflare.F("2.2.2.2"),
@@ -282,9 +277,6 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					ViewID:   cloudflare.F("view_id"),
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
-				SetHeaders: cloudflare.F(map[string][]string{
-					"X-User-Identity": {"user=@{identity.name}"},
-				}),
 				UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
 					Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionError),
 				}),

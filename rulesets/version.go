@@ -260,8 +260,7 @@ type VersionGetResponseRule struct {
 	// [VersionGetResponseRulesRulesetsSetCacheControlRuleActionParameters],
 	// [SetCacheSettingsRuleActionParameters],
 	// [VersionGetResponseRulesRulesetsSetCacheTagsRuleActionParameters],
-	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [VersionGetResponseRulesRulesetsTransformResponseHTMLRuleActionParameters].
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories"`
@@ -283,8 +282,7 @@ type VersionGetResponseRule struct {
 	// [VersionGetResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck],
 	// [SetCacheSettingsRuleExposedCredentialCheck],
 	// [VersionGetResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck],
-	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck],
-	// [VersionGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck].
+	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
@@ -301,8 +299,7 @@ type VersionGetResponseRule struct {
 	// [VersionGetResponseRulesRulesetsSetCacheControlRuleRatelimit],
 	// [SetCacheSettingsRuleRatelimit],
 	// [VersionGetResponseRulesRulesetsSetCacheTagsRuleRatelimit],
-	// [SetConfigRuleRatelimit], [SkipRuleRatelimit],
-	// [VersionGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimit].
+	// [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
 	// The reference of the rule (the rule's ID by default).
 	Ref   string                     `json:"ref"`
@@ -353,8 +350,7 @@ func (r *VersionGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 // [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule], [RewriteRule],
 // [RouteRule], [ScoreRule], [ServeErrorRule],
 // [VersionGetResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
-// [VersionGetResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule], [SkipRule],
-// [VersionGetResponseRulesRulesetsTransformResponseHTMLRule].
+// [VersionGetResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule], [SkipRule].
 func (r VersionGetResponseRule) AsUnion() VersionGetResponseRulesUnion {
 	return r.union
 }
@@ -365,8 +361,8 @@ func (r VersionGetResponseRule) AsUnion() VersionGetResponseRulesUnion {
 // [LogRule], [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule],
 // [RewriteRule], [RouteRule], [ScoreRule], [ServeErrorRule],
 // [VersionGetResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
-// [VersionGetResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule], [SkipRule]
-// or [VersionGetResponseRulesRulesetsTransformResponseHTMLRule].
+// [VersionGetResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule] or
+// [SkipRule].
 type VersionGetResponseRulesUnion interface {
 	implementsVersionGetResponseRule()
 }
@@ -474,11 +470,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesRulesetsTransformResponseHTMLRule{}),
-			DiscriminatorValue: "transform_response_html",
 		},
 	)
 }
@@ -3906,215 +3897,35 @@ func (r versionGetResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON) RawJSON() 
 	return r.raw
 }
 
-type VersionGetResponseRulesRulesetsTransformResponseHTMLRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version" api:"required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action VersionGetResponseRulesRulesetsTransformResponseHTMLRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters VersionGetResponseRulesRulesetsTransformResponseHTMLRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// Configuration for exposed credential checking.
-	ExposedCredentialCheck VersionGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck `json:"exposed_credential_check"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// An object configuring the rule's rate limit behavior.
-	Ratelimit VersionGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule's ID by default).
-	Ref  string                                                       `json:"ref"`
-	JSON versionGetResponseRulesRulesetsTransformResponseHTMLRuleJSON `json:"-"`
-}
-
-// versionGetResponseRulesRulesetsTransformResponseHTMLRuleJSON contains the JSON
-// metadata for the struct
-// [VersionGetResponseRulesRulesetsTransformResponseHTMLRule]
-type versionGetResponseRulesRulesetsTransformResponseHTMLRuleJSON struct {
-	LastUpdated            apijson.Field
-	Version                apijson.Field
-	ID                     apijson.Field
-	Action                 apijson.Field
-	ActionParameters       apijson.Field
-	Categories             apijson.Field
-	Description            apijson.Field
-	Enabled                apijson.Field
-	ExposedCredentialCheck apijson.Field
-	Expression             apijson.Field
-	Logging                apijson.Field
-	Ratelimit              apijson.Field
-	Ref                    apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesRulesetsTransformResponseHTMLRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesRulesetsTransformResponseHTMLRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesRulesetsTransformResponseHTMLRule) implementsVersionGetResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type VersionGetResponseRulesRulesetsTransformResponseHTMLRuleAction string
-
-const (
-	VersionGetResponseRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML VersionGetResponseRulesRulesetsTransformResponseHTMLRuleAction = "transform_response_html"
-)
-
-func (r VersionGetResponseRulesRulesetsTransformResponseHTMLRuleAction) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type VersionGetResponseRulesRulesetsTransformResponseHTMLRuleActionParameters struct {
-	// Enables the link maze transformation on the response.
-	LinkMaze interface{}                                                                  `json:"link_maze" api:"required"`
-	JSON     versionGetResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON `json:"-"`
-}
-
-// versionGetResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesRulesetsTransformResponseHTMLRuleActionParameters]
-type versionGetResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON struct {
-	LinkMaze    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesRulesetsTransformResponseHTMLRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// Configuration for exposed credential checking.
-type VersionGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck struct {
-	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression" api:"required"`
-	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                             `json:"username_expression" api:"required"`
-	JSON               versionGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON `json:"-"`
-}
-
-// versionGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck]
-type versionGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON struct {
-	PasswordExpression apijson.Field
-	UsernameExpression apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON) RawJSON() string {
-	return r.raw
-}
-
-// An object configuring the rule's rate limit behavior.
-type VersionGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimit struct {
-	// Characteristics of the request on which the rate limit counter will be
-	// incremented.
-	Characteristics []string `json:"characteristics" api:"required"`
-	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period" api:"required"`
-	// An expression that defines when the rate limit counter should be incremented. It
-	// defaults to the same as the rule's expression.
-	CountingExpression string `json:"counting_expression"`
-	// Period of time in seconds after which the action will be disabled following its
-	// first execution.
-	MitigationTimeout int64 `json:"mitigation_timeout"`
-	// The threshold of requests per period after which the action will be executed for
-	// the first time.
-	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Whether counting is only performed when an origin is reached.
-	RequestsToOrigin bool `json:"requests_to_origin"`
-	// The score threshold per period for which the action will be executed the first
-	// time.
-	ScorePerPeriod int64 `json:"score_per_period"`
-	// A response header name provided by the origin, which contains the score to
-	// increment rate limit counter with.
-	ScoreResponseHeaderName string                                                                `json:"score_response_header_name"`
-	JSON                    versionGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON `json:"-"`
-}
-
-// versionGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON contains
-// the JSON metadata for the struct
-// [VersionGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimit]
-type versionGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON struct {
-	Characteristics         apijson.Field
-	Period                  apijson.Field
-	CountingExpression      apijson.Field
-	MitigationTimeout       apijson.Field
-	RequestsPerPeriod       apijson.Field
-	RequestsToOrigin        apijson.Field
-	ScorePerPeriod          apijson.Field
-	ScoreResponseHeaderName apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON) RawJSON() string {
-	return r.raw
-}
-
 // The action to perform when the rule matches.
 type VersionGetResponseRulesAction string
 
 const (
-	VersionGetResponseRulesActionBlock                 VersionGetResponseRulesAction = "block"
-	VersionGetResponseRulesActionChallenge             VersionGetResponseRulesAction = "challenge"
-	VersionGetResponseRulesActionCompressResponse      VersionGetResponseRulesAction = "compress_response"
-	VersionGetResponseRulesActionDDoSDynamic           VersionGetResponseRulesAction = "ddos_dynamic"
-	VersionGetResponseRulesActionExecute               VersionGetResponseRulesAction = "execute"
-	VersionGetResponseRulesActionForceConnectionClose  VersionGetResponseRulesAction = "force_connection_close"
-	VersionGetResponseRulesActionJSChallenge           VersionGetResponseRulesAction = "js_challenge"
-	VersionGetResponseRulesActionLog                   VersionGetResponseRulesAction = "log"
-	VersionGetResponseRulesActionLogCustomField        VersionGetResponseRulesAction = "log_custom_field"
-	VersionGetResponseRulesActionManagedChallenge      VersionGetResponseRulesAction = "managed_challenge"
-	VersionGetResponseRulesActionRedirect              VersionGetResponseRulesAction = "redirect"
-	VersionGetResponseRulesActionRewrite               VersionGetResponseRulesAction = "rewrite"
-	VersionGetResponseRulesActionRoute                 VersionGetResponseRulesAction = "route"
-	VersionGetResponseRulesActionScore                 VersionGetResponseRulesAction = "score"
-	VersionGetResponseRulesActionServeError            VersionGetResponseRulesAction = "serve_error"
-	VersionGetResponseRulesActionSetCacheControl       VersionGetResponseRulesAction = "set_cache_control"
-	VersionGetResponseRulesActionSetCacheSettings      VersionGetResponseRulesAction = "set_cache_settings"
-	VersionGetResponseRulesActionSetCacheTags          VersionGetResponseRulesAction = "set_cache_tags"
-	VersionGetResponseRulesActionSetConfig             VersionGetResponseRulesAction = "set_config"
-	VersionGetResponseRulesActionSkip                  VersionGetResponseRulesAction = "skip"
-	VersionGetResponseRulesActionTransformResponseHTML VersionGetResponseRulesAction = "transform_response_html"
+	VersionGetResponseRulesActionBlock                VersionGetResponseRulesAction = "block"
+	VersionGetResponseRulesActionChallenge            VersionGetResponseRulesAction = "challenge"
+	VersionGetResponseRulesActionCompressResponse     VersionGetResponseRulesAction = "compress_response"
+	VersionGetResponseRulesActionDDoSDynamic          VersionGetResponseRulesAction = "ddos_dynamic"
+	VersionGetResponseRulesActionExecute              VersionGetResponseRulesAction = "execute"
+	VersionGetResponseRulesActionForceConnectionClose VersionGetResponseRulesAction = "force_connection_close"
+	VersionGetResponseRulesActionJSChallenge          VersionGetResponseRulesAction = "js_challenge"
+	VersionGetResponseRulesActionLog                  VersionGetResponseRulesAction = "log"
+	VersionGetResponseRulesActionLogCustomField       VersionGetResponseRulesAction = "log_custom_field"
+	VersionGetResponseRulesActionManagedChallenge     VersionGetResponseRulesAction = "managed_challenge"
+	VersionGetResponseRulesActionRedirect             VersionGetResponseRulesAction = "redirect"
+	VersionGetResponseRulesActionRewrite              VersionGetResponseRulesAction = "rewrite"
+	VersionGetResponseRulesActionRoute                VersionGetResponseRulesAction = "route"
+	VersionGetResponseRulesActionScore                VersionGetResponseRulesAction = "score"
+	VersionGetResponseRulesActionServeError           VersionGetResponseRulesAction = "serve_error"
+	VersionGetResponseRulesActionSetCacheControl      VersionGetResponseRulesAction = "set_cache_control"
+	VersionGetResponseRulesActionSetCacheSettings     VersionGetResponseRulesAction = "set_cache_settings"
+	VersionGetResponseRulesActionSetCacheTags         VersionGetResponseRulesAction = "set_cache_tags"
+	VersionGetResponseRulesActionSetConfig            VersionGetResponseRulesAction = "set_config"
+	VersionGetResponseRulesActionSkip                 VersionGetResponseRulesAction = "skip"
 )
 
 func (r VersionGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case VersionGetResponseRulesActionBlock, VersionGetResponseRulesActionChallenge, VersionGetResponseRulesActionCompressResponse, VersionGetResponseRulesActionDDoSDynamic, VersionGetResponseRulesActionExecute, VersionGetResponseRulesActionForceConnectionClose, VersionGetResponseRulesActionJSChallenge, VersionGetResponseRulesActionLog, VersionGetResponseRulesActionLogCustomField, VersionGetResponseRulesActionManagedChallenge, VersionGetResponseRulesActionRedirect, VersionGetResponseRulesActionRewrite, VersionGetResponseRulesActionRoute, VersionGetResponseRulesActionScore, VersionGetResponseRulesActionServeError, VersionGetResponseRulesActionSetCacheControl, VersionGetResponseRulesActionSetCacheSettings, VersionGetResponseRulesActionSetCacheTags, VersionGetResponseRulesActionSetConfig, VersionGetResponseRulesActionSkip, VersionGetResponseRulesActionTransformResponseHTML:
+	case VersionGetResponseRulesActionBlock, VersionGetResponseRulesActionChallenge, VersionGetResponseRulesActionCompressResponse, VersionGetResponseRulesActionDDoSDynamic, VersionGetResponseRulesActionExecute, VersionGetResponseRulesActionForceConnectionClose, VersionGetResponseRulesActionJSChallenge, VersionGetResponseRulesActionLog, VersionGetResponseRulesActionLogCustomField, VersionGetResponseRulesActionManagedChallenge, VersionGetResponseRulesActionRedirect, VersionGetResponseRulesActionRewrite, VersionGetResponseRulesActionRoute, VersionGetResponseRulesActionScore, VersionGetResponseRulesActionServeError, VersionGetResponseRulesActionSetCacheControl, VersionGetResponseRulesActionSetCacheSettings, VersionGetResponseRulesActionSetCacheTags, VersionGetResponseRulesActionSetConfig, VersionGetResponseRulesActionSkip:
 		return true
 	}
 	return false

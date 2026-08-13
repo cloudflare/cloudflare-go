@@ -58,42 +58,11 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					Text: cloudflare.F("my_data"),
 					Type: cloudflare.F(workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText),
 				}}),
-				BodyPart: cloudflare.F("worker.js"),
-				CacheOptions: cloudflare.F(workers.ScriptUpdateParamsMetadataCacheOptions{
-					Enabled:           cloudflare.F(true),
-					CrossVersionCache: cloudflare.F(true),
-				}),
+				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
-				Exports: cloudflare.F(map[string]workers.ScriptUpdateParamsMetadataExportsUnion{
-					"Admin": workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExport{
-						Type: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportTypeWorker),
-						Cache: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportCache{
-							Enabled: cloudflare.F(true),
-						}),
-						State: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportStateCreated),
-					},
-					"Counter": workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectExport{
-						Storage:   cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectExportStorageSqlite),
-						Type:      cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectExportTypeDurableObject),
-						Container: cloudflare.F("my-container"),
-						State:     cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectExportStateCreated),
-					},
-					"OldCounter": workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExport{
-						RenamedTo: cloudflare.F("Counter"),
-						State:     cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExportStateRenamed),
-						Type:      cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExportTypeDurableObject),
-					},
-					"default": workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExport{
-						Type: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportTypeWorker),
-						Cache: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportCache{
-							Enabled: cloudflare.F(false),
-						}),
-						State: cloudflare.F(workers.ScriptUpdateParamsMetadataExportsWorkersWorkerExportStateCreated),
-					},
-				}),
-				KeepAssets:   cloudflare.F(false),
-				KeepBindings: cloudflare.F([]string{"string"}),
+				KeepAssets:         cloudflare.F(false),
+				KeepBindings:       cloudflare.F([]string{"string"}),
 				Limits: cloudflare.F(workers.ScriptUpdateParamsMetadataLimits{
 					CPUMs:       cloudflare.F(int64(50)),
 					Subrequests: cloudflare.F(int64(1000)),
@@ -134,11 +103,6 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						PropagationPolicy: cloudflare.F(workers.ScriptUpdateParamsMetadataObservabilityTracesPropagationPolicyAuthenticated),
 					}),
 				}),
-				PackageDependencies: cloudflare.F([]workers.ScriptUpdateParamsMetadataPackageDependency{{
-					InstalledVersion:   cloudflare.F("4.17.22"),
-					Name:               cloudflare.F("lodash"),
-					PackageJsonVersion: cloudflare.F("^4.17.21"),
-				}}),
 				Placement: cloudflare.F[workers.ScriptUpdateParamsMetadataPlacementUnion](workers.ScriptUpdateParamsMetadataPlacementObject{
 					Mode: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacementObjectModeSmart),
 				}),

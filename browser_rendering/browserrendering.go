@@ -13,18 +13,17 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewBrowserRenderingService] method instead.
 type BrowserRenderingService struct {
-	Options           []option.RequestOption
-	Content           *ContentService
-	PDF               *PDFService
-	Scrape            *ScrapeService
-	Screenshot        *ScreenshotService
-	Snapshot          *SnapshotService
-	Json              *JsonService
-	Links             *LinkService
-	Markdown          *MarkdownService
-	AccessibilityTree *AccessibilityTreeService
-	Crawl             *CrawlService
-	Devtools          *DevtoolService
+	Options    []option.RequestOption
+	Content    *ContentService
+	PDF        *PDFService
+	Scrape     *ScrapeService
+	Screenshot *ScreenshotService
+	Snapshot   *SnapshotService
+	Json       *JsonService
+	Links      *LinkService
+	Markdown   *MarkdownService
+	Crawl      *CrawlService
+	Devtools   *DevtoolService
 }
 
 // NewBrowserRenderingService generates a new service that applies the given
@@ -41,7 +40,6 @@ func NewBrowserRenderingService(opts ...option.RequestOption) (r *BrowserRenderi
 	r.Json = NewJsonService(opts...)
 	r.Links = NewLinkService(opts...)
 	r.Markdown = NewMarkdownService(opts...)
-	r.AccessibilityTree = NewAccessibilityTreeService(opts...)
 	r.Crawl = NewCrawlService(opts...)
 	r.Devtools = NewDevtoolService(opts...)
 	return

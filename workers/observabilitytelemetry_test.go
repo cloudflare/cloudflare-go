@@ -150,7 +150,6 @@ func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
 			To:   cloudflare.F(0.000000),
 		}),
 		Chart:           cloudflare.F(true),
-		ChartType:       cloudflare.F(workers.ObservabilityTelemetryQueryParamsChartTypeTimeseriesAndAggregate),
 		Compare:         cloudflare.F(true),
 		Dry:             cloudflare.F(true),
 		Granularity:     cloudflare.F(0.000000),

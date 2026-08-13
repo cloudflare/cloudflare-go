@@ -78,7 +78,7 @@ type DMARCReportEditResponse struct {
 	ApprovedSources []DMARCReportEditResponseApprovedSource `json:"approved_sources"`
 	// Deprecated, use created_at
 	//
-	// Deprecated: Use `created_at` instead.
+	// Deprecated: deprecated
 	Created time.Time `json:"created" format:"date-time"`
 	// Creation timestamp
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -86,7 +86,7 @@ type DMARCReportEditResponse struct {
 	Enabled bool `json:"enabled"`
 	// Deprecated, use modified_at
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Last modification timestamp
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
@@ -100,7 +100,7 @@ type DMARCReportEditResponse struct {
 	Status DMARCReportEditResponseStatus `json:"status"`
 	// Use `zone_id` instead
 	//
-	// Deprecated: Use `zone_id` instead.
+	// Deprecated: deprecated
 	Tag string `json:"tag"`
 	// Zone identifier
 	ZoneID string                      `json:"zone_id"`
@@ -138,7 +138,7 @@ func (r dmarcReportEditResponseJSON) RawJSON() string {
 type DMARCReportEditResponseApprovedSource struct {
 	// Deprecated, use created_at
 	//
-	// Deprecated: Use `created_at` instead.
+	// Deprecated: deprecated
 	Created time.Time `json:"created" format:"date-time"`
 	// Creation timestamp
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -148,7 +148,7 @@ type DMARCReportEditResponseApprovedSource struct {
 	IPs []string `json:"ips"`
 	// Deprecated, use modified_at
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Last modification timestamp
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
@@ -495,7 +495,7 @@ type DMARCReportGetResponse struct {
 	ApprovedSources []DMARCReportGetResponseApprovedSource `json:"approved_sources"`
 	// Deprecated, use created_at
 	//
-	// Deprecated: Use `created_at` instead.
+	// Deprecated: deprecated
 	Created time.Time `json:"created" format:"date-time"`
 	// Creation timestamp
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -503,7 +503,7 @@ type DMARCReportGetResponse struct {
 	Enabled bool `json:"enabled"`
 	// Deprecated, use modified_at
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Last modification timestamp
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
@@ -517,7 +517,7 @@ type DMARCReportGetResponse struct {
 	Status DMARCReportGetResponseStatus `json:"status"`
 	// Use `zone_id` instead
 	//
-	// Deprecated: Use `zone_id` instead.
+	// Deprecated: deprecated
 	Tag string `json:"tag"`
 	// Zone identifier
 	ZoneID string                     `json:"zone_id"`
@@ -555,7 +555,7 @@ func (r dmarcReportGetResponseJSON) RawJSON() string {
 type DMARCReportGetResponseApprovedSource struct {
 	// Deprecated, use created_at
 	//
-	// Deprecated: Use `created_at` instead.
+	// Deprecated: deprecated
 	Created time.Time `json:"created" format:"date-time"`
 	// Creation timestamp
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -565,7 +565,7 @@ type DMARCReportGetResponseApprovedSource struct {
 	IPs []string `json:"ips"`
 	// Deprecated, use modified_at
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Last modification timestamp
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`

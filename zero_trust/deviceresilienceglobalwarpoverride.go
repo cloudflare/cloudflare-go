@@ -162,7 +162,7 @@ func (r deviceResilienceGlobalWARPOverrideNewResponseEnvelopeJSON) RawJSON() str
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DeviceResilienceGlobalWARPOverrideNewResponseEnvelopeSuccess bool
 
 const (
@@ -209,7 +209,7 @@ func (r deviceResilienceGlobalWARPOverrideGetResponseEnvelopeJSON) RawJSON() str
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DeviceResilienceGlobalWARPOverrideGetResponseEnvelopeSuccess bool
 
 const (

@@ -26,17 +26,12 @@ import (
 // the [NewThreatEventService] method instead.
 type ThreatEventService struct {
 	Options          []option.RequestOption
-	Aggregate        *ThreatEventAggregateService
-	Graphql          *ThreatEventGraphqlService
-	Graph            *ThreatEventGraphService
-	Queries          *ThreatEventQueryService
-	Relationships    *ThreatEventRelationshipService
-	Indicators       *ThreatEventIndicatorService
 	Attackers        *ThreatEventAttackerService
 	Categories       *ThreatEventCategoryService
 	Countries        *ThreatEventCountryService
 	Crons            *ThreatEventCronService
 	Datasets         *ThreatEventDatasetService
+	IndicatorTypes   *ThreatEventIndicatorTypeService
 	Raw              *ThreatEventRawService
 	Relate           *ThreatEventRelateService
 	Tags             *ThreatEventTagService
@@ -51,17 +46,12 @@ type ThreatEventService struct {
 func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService) {
 	r = &ThreatEventService{}
 	r.Options = opts
-	r.Aggregate = NewThreatEventAggregateService(opts...)
-	r.Graphql = NewThreatEventGraphqlService(opts...)
-	r.Graph = NewThreatEventGraphService(opts...)
-	r.Queries = NewThreatEventQueryService(opts...)
-	r.Relationships = NewThreatEventRelationshipService(opts...)
-	r.Indicators = NewThreatEventIndicatorService(opts...)
 	r.Attackers = NewThreatEventAttackerService(opts...)
 	r.Categories = NewThreatEventCategoryService(opts...)
 	r.Countries = NewThreatEventCountryService(opts...)
 	r.Crons = NewThreatEventCronService(opts...)
 	r.Datasets = NewThreatEventDatasetService(opts...)
+	r.IndicatorTypes = NewThreatEventIndicatorTypeService(opts...)
 	r.Raw = NewThreatEventRawService(opts...)
 	r.Relate = NewThreatEventRelateService(opts...)
 	r.Tags = NewThreatEventTagService(opts...)
@@ -87,7 +77,7 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 }
 
 // Use `datasetId=all` or `datasetId=*` to query all event datasets for the account
-// (limited to 50). When `datasetId` is unspecified, events are listed from the
+// (limited to 10). When `datasetId` is unspecified, events are listed from the
 // default Cloudforce One Threat Events dataset. To list existing datasets, use the
 // [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
 // endpoint.
@@ -117,21 +107,7 @@ func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulk
 	return res, err
 }
 
-// This method is deprecated. Please use `event_create_bulk` instead
-//
-// Deprecated: This endpoint is deprecated and will be removed in a future version.
-func (r *ThreatEventService) BulkNewRelationships(ctx context.Context, params ThreatEventBulkNewRelationshipsParams, opts ...option.RequestOption) (res *ThreatEventBulkNewRelationshipsResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/create/bulk/relationships", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return res, err
-}
-
-// Update an existing event by its identifier.
+// Updates an event
 func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params ThreatEventEditParams, opts ...option.RequestOption) (res *ThreatEventEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -150,8 +126,7 @@ func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params Th
 // This Method is deprecated. Please use
 // /events/dataset/:dataset_id/events/:event_id instead.
 //
-// Deprecated: Use datasets.events.get instead (GET
-// /accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}/events/{event_id}).
+// Deprecated: deprecated
 func (r *ThreatEventService) Get(ctx context.Context, eventID string, query ThreatEventGetParams, opts ...option.RequestOption) (res *ThreatEventGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -416,66 +391,6 @@ func (r threatEventBulkNewResponseErrorJSON) RawJSON() string {
 	return r.raw
 }
 
-// Result of bulk relationship creation operation
-type ThreatEventBulkNewRelationshipsResponse struct {
-	// Number of events created
-	CreatedEventsCount float64 `json:"createdEventsCount" api:"required"`
-	// Number of indicators created
-	CreatedIndicatorsCount float64 `json:"createdIndicatorsCount" api:"required"`
-	// Number of relationships created
-	CreatedRelationshipsCount float64 `json:"createdRelationshipsCount" api:"required"`
-	// Number of errors encountered
-	ErrorCount float64 `json:"errorCount" api:"required"`
-	// Array of error details
-	Errors []ThreatEventBulkNewRelationshipsResponseError `json:"errors"`
-	JSON   threatEventBulkNewRelationshipsResponseJSON    `json:"-"`
-}
-
-// threatEventBulkNewRelationshipsResponseJSON contains the JSON metadata for the
-// struct [ThreatEventBulkNewRelationshipsResponse]
-type threatEventBulkNewRelationshipsResponseJSON struct {
-	CreatedEventsCount        apijson.Field
-	CreatedIndicatorsCount    apijson.Field
-	CreatedRelationshipsCount apijson.Field
-	ErrorCount                apijson.Field
-	Errors                    apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *ThreatEventBulkNewRelationshipsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r threatEventBulkNewRelationshipsResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ThreatEventBulkNewRelationshipsResponseError struct {
-	// Error message
-	Error string `json:"error" api:"required"`
-	// Index of the event that caused the error
-	EventIndex float64                                          `json:"eventIndex" api:"required"`
-	JSON       threatEventBulkNewRelationshipsResponseErrorJSON `json:"-"`
-}
-
-// threatEventBulkNewRelationshipsResponseErrorJSON contains the JSON metadata for
-// the struct [ThreatEventBulkNewRelationshipsResponseError]
-type threatEventBulkNewRelationshipsResponseErrorJSON struct {
-	Error       apijson.Field
-	EventIndex  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ThreatEventBulkNewRelationshipsResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r threatEventBulkNewRelationshipsResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
 type ThreatEventEditResponse struct {
 	Attacker              string                      `json:"attacker" api:"required"`
 	AttackerCountry       string                      `json:"attackerCountry" api:"required"`
@@ -681,9 +596,6 @@ func (r ThreatEventNewParamsIndicator) MarshalJSON() (data []byte, err error) {
 type ThreatEventListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Cache strategy. 'from-graph' serves results from the graph-node KV cache when
-	// all requested UUIDs are cached; falls back to normal path on partial/zero hit.
-	Cache param.Field[ThreatEventListParamsCache] `query:"cache"`
 	// Cursor for pagination. When provided, filters are embedded in the cursor so you
 	// only need to pass cursor and pageSize. Returned in the previous response's
 	// result_info.cursor field. Use cursor-based pagination for deep pagination
@@ -703,10 +615,6 @@ type ThreatEventListParams struct {
 	// Number of results per page. Maximum 25,000.
 	PageSize param.Field[float64]                       `query:"pageSize"`
 	Search   param.Field[[]ThreatEventListParamsSearch] `query:"search"`
-	// Read backend. 'do' (default) reads Durable Object storage. 'r2catalog' reads R2
-	// Data Catalog (admin-only, experimental; supports a subset of search fields — no
-	// 'tags').
-	Source param.Field[ThreatEventListParamsSource] `query:"source"`
 }
 
 // URLQuery serializes [ThreatEventListParams]'s query parameters as `url.Values`.
@@ -715,22 +623,6 @@ func (r ThreatEventListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Cache strategy. 'from-graph' serves results from the graph-node KV cache when
-// all requested UUIDs are cached; falls back to normal path on partial/zero hit.
-type ThreatEventListParamsCache string
-
-const (
-	ThreatEventListParamsCacheFromGraph ThreatEventListParamsCache = "from-graph"
-)
-
-func (r ThreatEventListParamsCache) IsKnown() bool {
-	switch r {
-	case ThreatEventListParamsCacheFromGraph:
-		return true
-	}
-	return false
 }
 
 type ThreatEventListParamsFormat string
@@ -831,24 +723,6 @@ type ThreatEventListParamsSearchValueArrayItemUnion interface {
 	ImplementsThreatEventListParamsSearchValueArrayItemUnion()
 }
 
-// Read backend. 'do' (default) reads Durable Object storage. 'r2catalog' reads R2
-// Data Catalog (admin-only, experimental; supports a subset of search fields — no
-// 'tags').
-type ThreatEventListParamsSource string
-
-const (
-	ThreatEventListParamsSourceDo        ThreatEventListParamsSource = "do"
-	ThreatEventListParamsSourceR2catalog ThreatEventListParamsSource = "r2catalog"
-)
-
-func (r ThreatEventListParamsSource) IsKnown() bool {
-	switch r {
-	case ThreatEventListParamsSourceDo, ThreatEventListParamsSourceR2catalog:
-		return true
-	}
-	return false
-}
-
 type ThreatEventBulkNewParams struct {
 	// Account ID.
 	AccountID param.Field[string]                         `path:"account_id" api:"required"`
@@ -906,63 +780,6 @@ type ThreatEventBulkNewParamsDataIndicator struct {
 }
 
 func (r ThreatEventBulkNewParamsDataIndicator) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ThreatEventBulkNewRelationshipsParams struct {
-	// Account ID.
-	AccountID param.Field[string]                                      `path:"account_id" api:"required"`
-	Data      param.Field[[]ThreatEventBulkNewRelationshipsParamsData] `json:"data" api:"required"`
-	DatasetID param.Field[string]                                      `json:"datasetId" api:"required"`
-}
-
-func (r ThreatEventBulkNewRelationshipsParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ThreatEventBulkNewRelationshipsParamsData struct {
-	Category        param.Field[string]                                       `json:"category" api:"required"`
-	Date            param.Field[time.Time]                                    `json:"date" api:"required" format:"date-time"`
-	Event           param.Field[string]                                       `json:"event" api:"required"`
-	Raw             param.Field[ThreatEventBulkNewRelationshipsParamsDataRaw] `json:"raw" api:"required"`
-	TLP             param.Field[string]                                       `json:"tlp" api:"required"`
-	AccountID       param.Field[float64]                                      `json:"accountId"`
-	Attacker        param.Field[string]                                       `json:"attacker"`
-	AttackerCountry param.Field[string]                                       `json:"attackerCountry"`
-	DatasetID       param.Field[string]                                       `json:"datasetId"`
-	Indicator       param.Field[string]                                       `json:"indicator"`
-	// Array of indicators for this event. Supports multiple indicators per event for
-	// complex scenarios.
-	Indicators     param.Field[[]ThreatEventBulkNewRelationshipsParamsDataIndicator] `json:"indicators"`
-	IndicatorType  param.Field[string]                                               `json:"indicatorType"`
-	Insight        param.Field[string]                                               `json:"insight"`
-	Tags           param.Field[[]string]                                             `json:"tags"`
-	TargetCountry  param.Field[string]                                               `json:"targetCountry"`
-	TargetIndustry param.Field[string]                                               `json:"targetIndustry"`
-}
-
-func (r ThreatEventBulkNewRelationshipsParamsData) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ThreatEventBulkNewRelationshipsParamsDataRaw struct {
-	Data   param.Field[map[string]interface{}] `json:"data" api:"required"`
-	Source param.Field[string]                 `json:"source"`
-	TLP    param.Field[string]                 `json:"tlp"`
-}
-
-func (r ThreatEventBulkNewRelationshipsParamsDataRaw) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ThreatEventBulkNewRelationshipsParamsDataIndicator struct {
-	// The type of indicator (e.g., DOMAIN, IP, JA3, HASH)
-	IndicatorType param.Field[string] `json:"indicatorType" api:"required"`
-	// The indicator value (e.g., domain name, IP address, hash)
-	Value param.Field[string] `json:"value" api:"required"`
-}
-
-func (r ThreatEventBulkNewRelationshipsParamsDataIndicator) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

@@ -25,7 +25,6 @@ import (
 // the [NewThreatEventCategoryService] method instead.
 type ThreatEventCategoryService struct {
 	Options []option.RequestOption
-	Catalog *ThreatEventCategoryCatalogService
 }
 
 // NewThreatEventCategoryService generates a new service that applies the given
@@ -34,11 +33,10 @@ type ThreatEventCategoryService struct {
 func NewThreatEventCategoryService(opts ...option.RequestOption) (r *ThreatEventCategoryService) {
 	r = &ThreatEventCategoryService{}
 	r.Options = opts
-	r.Catalog = NewThreatEventCategoryCatalogService(opts...)
 	return
 }
 
-// Create a new event category for the account.
+// Creates a new category
 func (r *ThreatEventCategoryService) New(ctx context.Context, params ThreatEventCategoryNewParams, opts ...option.RequestOption) (res *ThreatEventCategoryNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -50,7 +48,7 @@ func (r *ThreatEventCategoryService) New(ctx context.Context, params ThreatEvent
 	return res, err
 }
 
-// List categories across one or more datasets for the account.
+// Lists categories across multiple datasets
 func (r *ThreatEventCategoryService) List(ctx context.Context, params ThreatEventCategoryListParams, opts ...option.RequestOption) (res *[]ThreatEventCategoryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -62,7 +60,7 @@ func (r *ThreatEventCategoryService) List(ctx context.Context, params ThreatEven
 	return res, err
 }
 
-// Delete a category by its identifier.
+// Deletes a category
 func (r *ThreatEventCategoryService) Delete(ctx context.Context, categoryID string, body ThreatEventCategoryDeleteParams, opts ...option.RequestOption) (res *ThreatEventCategoryDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -78,7 +76,7 @@ func (r *ThreatEventCategoryService) Delete(ctx context.Context, categoryID stri
 	return res, err
 }
 
-// Update an existing category by its identifier.
+// Updates a category
 func (r *ThreatEventCategoryService) Edit(ctx context.Context, categoryID string, params ThreatEventCategoryEditParams, opts ...option.RequestOption) (res *ThreatEventCategoryEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -94,7 +92,7 @@ func (r *ThreatEventCategoryService) Edit(ctx context.Context, categoryID string
 	return res, err
 }
 
-// Retrieve a single category by its identifier.
+// Reads a category
 func (r *ThreatEventCategoryService) Get(ctx context.Context, categoryID string, query ThreatEventCategoryGetParams, opts ...option.RequestOption) (res *ThreatEventCategoryGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

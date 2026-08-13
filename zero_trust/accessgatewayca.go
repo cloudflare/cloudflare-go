@@ -301,7 +301,7 @@ func (r accessGatewayCANewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessGatewayCANewResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessGatewayCANewResponseEnvelopeSuccess bool
 
 const (
@@ -450,7 +450,7 @@ func (r accessGatewayCADeleteResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessGatewayCADeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessGatewayCADeleteResponseEnvelopeSuccess bool
 
 const (

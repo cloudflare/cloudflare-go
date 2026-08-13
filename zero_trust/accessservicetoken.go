@@ -266,9 +266,8 @@ type ServiceToken struct {
 	// `CF-Access-Client-ID` request header.
 	ClientID string `json:"client_id"`
 	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens.
-	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
-	// hours (8760h).
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
 	Duration  string    `json:"duration"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
 	// The name of the service token.
@@ -305,9 +304,8 @@ type AccessServiceTokenNewResponse struct {
 	// `CF-Access-Client-Secret` request header.
 	ClientSecret string `json:"client_secret"`
 	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens.
-	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
-	// hours (8760h).
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
 	Name string                            `json:"name"`
@@ -344,9 +342,8 @@ type AccessServiceTokenRotateResponse struct {
 	// `CF-Access-Client-Secret` request header.
 	ClientSecret string `json:"client_secret"`
 	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens.
-	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
-	// hours (8760h).
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
 	Name string                               `json:"name"`
@@ -386,9 +383,8 @@ type AccessServiceTokenNewParams struct {
 	// `previous_client_secret_expires_at`.
 	ClientSecretVersion param.Field[float64] `json:"client_secret_version"`
 	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens.
-	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
-	// hours (8760h).
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
 	Duration param.Field[string] `json:"duration"`
 	// The expiration of the previous `client_secret`. This can be modified at any
 	// point after a rotation. For example, you may extend it further into the future
@@ -525,7 +521,7 @@ func (r accessServiceTokenNewResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessServiceTokenNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessServiceTokenNewResponseEnvelopeSuccess bool
 
 const (
@@ -551,9 +547,8 @@ type AccessServiceTokenUpdateParams struct {
 	// `previous_client_secret_expires_at`.
 	ClientSecretVersion param.Field[float64] `json:"client_secret_version"`
 	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens.
-	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
-	// hours (8760h).
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
 	Duration param.Field[string] `json:"duration"`
 	// The name of the service token.
 	Name param.Field[string] `json:"name"`
@@ -692,7 +687,7 @@ func (r accessServiceTokenUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessServiceTokenUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessServiceTokenUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -862,7 +857,7 @@ func (r accessServiceTokenDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessServiceTokenDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessServiceTokenDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1008,7 +1003,7 @@ func (r accessServiceTokenGetResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessServiceTokenGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessServiceTokenGetResponseEnvelopeSuccess bool
 
 const (
@@ -1153,7 +1148,7 @@ func (r accessServiceTokenRefreshResponseEnvelopeMessagesSourceJSON) RawJSON() s
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessServiceTokenRefreshResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessServiceTokenRefreshResponseEnvelopeSuccess bool
 
 const (
@@ -1304,7 +1299,7 @@ func (r accessServiceTokenRotateResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessServiceTokenRotateResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessServiceTokenRotateResponseEnvelopeSuccess bool
 
 const (

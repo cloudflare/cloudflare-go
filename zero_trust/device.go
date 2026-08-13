@@ -431,7 +431,7 @@ func (r deviceGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DeviceGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DeviceGetResponseEnvelopeSuccess bool
 
 const (

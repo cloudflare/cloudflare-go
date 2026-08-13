@@ -35,8 +35,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 	return
 }
 
-// Updates Cloud Connector rules for a zone, replacing the existing rule
-// configuration.
+// Put Rules
 func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[RuleUpdateResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -58,14 +57,12 @@ func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts 
 	return res, nil
 }
 
-// Updates Cloud Connector rules for a zone, replacing the existing rule
-// configuration.
+// Put Rules
 func (r *RuleService) UpdateAutoPaging(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RuleUpdateResponse] {
 	return pagination.NewSinglePageAutoPager(r.Update(ctx, params, opts...))
 }
 
-// Retrieves the Cloud Connector rules configured for a zone. Rules define how
-// traffic is routed to cloud services.
+// Rules
 func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RuleListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -87,8 +84,7 @@ func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...op
 	return res, nil
 }
 
-// Retrieves the Cloud Connector rules configured for a zone. Rules define how
-// traffic is routed to cloud services.
+// Rules
 func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RuleListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }

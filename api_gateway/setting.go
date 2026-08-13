@@ -15,7 +15,7 @@ import (
 // the [NewSettingService] method instead.
 //
 // Deprecated: Use the
-// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SettingService]
+// [github.com/cloudflare/cloudflare-go/v7/schema_validation.SettingService]
 // service instead
 type SettingService struct {
 	Options          []option.RequestOption

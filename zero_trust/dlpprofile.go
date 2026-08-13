@@ -92,7 +92,7 @@ func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLP
 	return res, nil
 }
 
-// Scan the context of predefined entries to only return matches surrounded by
+// ContextAwareness scan the context of predefined entries to only return matches surrounded by
 // keywords.
 //
 // Deprecated: deprecated
@@ -122,7 +122,7 @@ func (r contextAwarenessJSON) RawJSON() string {
 	return r.raw
 }
 
-// Scan the context of predefined entries to only return matches surrounded by
+// ContextAwarenessParam scan the context of predefined entries to only return matches surrounded by
 // keywords.
 //
 // Deprecated: deprecated
@@ -224,7 +224,7 @@ func (r Profile) AsUnion() ProfileUnion {
 	return r.union
 }
 
-// Union satisfied by [ProfileCustomProfile], [ProfilePredefinedProfile] or
+// ProfileUnion is satisfied by [ProfileCustomProfile], [ProfilePredefinedProfile] or
 // [ProfileIntegrationProfile].
 type ProfileUnion interface {
 	implementsProfile()
@@ -424,7 +424,7 @@ func (r ProfileCustomProfileEntry) AsUnion() ProfileCustomProfileEntriesUnion {
 	return r.union
 }
 
-// Union satisfied by [ProfileCustomProfileEntriesCustomEntry],
+// ProfileCustomProfileEntriesUnion is satisfied by [ProfileCustomProfileEntriesCustomEntry],
 // [ProfileCustomProfileEntriesCustomPromptTopicEntry],
 // [ProfileCustomProfileEntriesPredefinedEntry],
 // [ProfileCustomProfileEntriesIntegrationEntry],
@@ -653,7 +653,7 @@ func (r ProfileCustomProfileEntriesPredefinedEntryType) IsKnown() bool {
 	return false
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileCustomProfileEntriesPredefinedEntryVariant is a Predefined AI prompt classification topic entry.
 type ProfileCustomProfileEntriesPredefinedEntryVariant struct {
 	Type ProfileCustomProfileEntriesPredefinedEntryVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -697,7 +697,7 @@ func (r ProfileCustomProfileEntriesPredefinedEntryVariant) AsUnion() ProfileCust
 	return r.union
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileCustomProfileEntriesPredefinedEntryVariantUnion is a Predefined AI prompt classification topic entry.
 //
 // Union satisfied by [ProfileCustomProfileEntriesPredefinedEntryVariantObject] or
 // [ProfileCustomProfileEntriesPredefinedEntryVariantObject].
@@ -720,7 +720,7 @@ func init() {
 	)
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileCustomProfileEntriesPredefinedEntryVariantObject is a Predefined AI prompt classification topic entry.
 type ProfileCustomProfileEntriesPredefinedEntryVariantObject struct {
 	TopicType ProfileCustomProfileEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      ProfileCustomProfileEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
@@ -1037,7 +1037,7 @@ func (r ProfileCustomProfileEntriesType) IsKnown() bool {
 	return false
 }
 
-// A reference pairing a sensitivity group with a specific level within that group.
+// ProfileCustomProfileSensitivityLevel is a reference pairing a sensitivity group with a specific level within that group.
 type ProfileCustomProfileSensitivityLevel struct {
 	GroupID string                                   `json:"group_id" api:"required" format:"uuid"`
 	LevelID string                                   `json:"level_id" api:"required" format:"uuid"`
@@ -1138,7 +1138,7 @@ func (r ProfileCustomProfileSharedEntry) AsUnion() ProfileCustomProfileSharedEnt
 	return r.union
 }
 
-// Union satisfied by [ProfileCustomProfileSharedEntriesCustomEntry],
+// ProfileCustomProfileSharedEntriesUnion is satisfied by [ProfileCustomProfileSharedEntriesCustomEntry],
 // [ProfileCustomProfileSharedEntriesCustomPromptTopicEntry],
 // [ProfileCustomProfileSharedEntriesPredefinedEntry],
 // [ProfileCustomProfileSharedEntriesIntegrationEntry],
@@ -1371,7 +1371,7 @@ func (r ProfileCustomProfileSharedEntriesPredefinedEntryType) IsKnown() bool {
 	return false
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileCustomProfileSharedEntriesPredefinedEntryVariant is a Predefined AI prompt classification topic entry.
 type ProfileCustomProfileSharedEntriesPredefinedEntryVariant struct {
 	Type ProfileCustomProfileSharedEntriesPredefinedEntryVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -1416,7 +1416,7 @@ func (r ProfileCustomProfileSharedEntriesPredefinedEntryVariant) AsUnion() Profi
 	return r.union
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileCustomProfileSharedEntriesPredefinedEntryVariantUnion is a predefined AI prompt classification topic entry.
 //
 // Union satisfied by
 // [ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject] or
@@ -1440,7 +1440,7 @@ func init() {
 	)
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject is a predefined AI prompt classification topic entry.
 type ProfileCustomProfileSharedEntriesPredefinedEntryVariantObject struct {
 	TopicType ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      ProfileCustomProfileSharedEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
@@ -1887,7 +1887,7 @@ func (r ProfilePredefinedProfileEntry) AsUnion() ProfilePredefinedProfileEntries
 	return r.union
 }
 
-// Union satisfied by [ProfilePredefinedProfileEntriesCustomEntry],
+// ProfilePredefinedProfileEntriesUnion is satisfied by [ProfilePredefinedProfileEntriesCustomEntry],
 // [ProfilePredefinedProfileEntriesCustomPromptTopicEntry],
 // [ProfilePredefinedProfileEntriesPredefinedEntry],
 // [ProfilePredefinedProfileEntriesIntegrationEntry],
@@ -2118,7 +2118,7 @@ func (r ProfilePredefinedProfileEntriesPredefinedEntryType) IsKnown() bool {
 	return false
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfilePredefinedProfileEntriesPredefinedEntryVariant is a predefined AI prompt classification topic entry.
 type ProfilePredefinedProfileEntriesPredefinedEntryVariant struct {
 	Type ProfilePredefinedProfileEntriesPredefinedEntryVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -2162,7 +2162,7 @@ func (r ProfilePredefinedProfileEntriesPredefinedEntryVariant) AsUnion() Profile
 	return r.union
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfilePredefinedProfileEntriesPredefinedEntryVariantUnion is a predefined AI prompt classification topic entry.
 //
 // Union satisfied by [ProfilePredefinedProfileEntriesPredefinedEntryVariantObject]
 // or [ProfilePredefinedProfileEntriesPredefinedEntryVariantObject].
@@ -2185,7 +2185,7 @@ func init() {
 	)
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfilePredefinedProfileEntriesPredefinedEntryVariantObject is a predefined AI prompt classification topic entry.
 type ProfilePredefinedProfileEntriesPredefinedEntryVariantObject struct {
 	TopicType ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      ProfilePredefinedProfileEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
@@ -2651,7 +2651,7 @@ func (r ProfileIntegrationProfileEntry) AsUnion() ProfileIntegrationProfileEntri
 	return r.union
 }
 
-// Union satisfied by [ProfileIntegrationProfileEntriesCustomEntry],
+// ProfileIntegrationProfileEntriesUnion is satisfied by [ProfileIntegrationProfileEntriesCustomEntry],
 // [ProfileIntegrationProfileEntriesCustomPromptTopicEntry],
 // [ProfileIntegrationProfileEntriesPredefinedEntry],
 // [ProfileIntegrationProfileEntriesIntegrationEntry],
@@ -2882,7 +2882,7 @@ func (r ProfileIntegrationProfileEntriesPredefinedEntryType) IsKnown() bool {
 	return false
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileIntegrationProfileEntriesPredefinedEntryVariant is a predefined AI prompt classification topic entry.
 type ProfileIntegrationProfileEntriesPredefinedEntryVariant struct {
 	Type ProfileIntegrationProfileEntriesPredefinedEntryVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -2926,7 +2926,7 @@ func (r ProfileIntegrationProfileEntriesPredefinedEntryVariant) AsUnion() Profil
 	return r.union
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileIntegrationProfileEntriesPredefinedEntryVariantUnion is a predefined AI prompt classification topic entry.
 //
 // Union satisfied by
 // [ProfileIntegrationProfileEntriesPredefinedEntryVariantObject] or
@@ -2950,7 +2950,7 @@ func init() {
 	)
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileIntegrationProfileEntriesPredefinedEntryVariantObject is a predefined AI prompt classification topic entry.
 type ProfileIntegrationProfileEntriesPredefinedEntryVariantObject struct {
 	TopicType ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      ProfileIntegrationProfileEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
@@ -3347,7 +3347,7 @@ func (r ProfileIntegrationProfileSharedEntry) AsUnion() ProfileIntegrationProfil
 	return r.union
 }
 
-// Union satisfied by [ProfileIntegrationProfileSharedEntriesCustomEntry],
+// ProfileIntegrationProfileSharedEntriesUnion is satisfied by [ProfileIntegrationProfileSharedEntriesCustomEntry],
 // [ProfileIntegrationProfileSharedEntriesCustomPromptTopicEntry],
 // [ProfileIntegrationProfileSharedEntriesPredefinedEntry],
 // [ProfileIntegrationProfileSharedEntriesIntegrationEntry],
@@ -3581,7 +3581,7 @@ func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryType) IsKnown() boo
 	return false
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant is a Predefined AI prompt classification topic entry.
 type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant struct {
 	Type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -3627,7 +3627,7 @@ func (r ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant) AsUnion() 
 	return r.union
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantUnion is a Predefined AI prompt classification topic entry.
 //
 // Union satisfied by
 // [ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject] or
@@ -3651,7 +3651,7 @@ func init() {
 	)
 }
 
-// A Predefined AI prompt classification topic entry.
+// ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject is a Predefined AI prompt classification topic entry.
 type ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObject struct {
 	TopicType ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      ProfileIntegrationProfileSharedEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
@@ -4020,7 +4020,7 @@ func (r ProfileConfidenceThreshold) IsKnown() bool {
 	return false
 }
 
-// Content types to exclude from context analysis and return all matches.
+// SkipConfiguration content types to exclude from context analysis and return all matches.
 type SkipConfiguration struct {
 	// If the content type is a file, skip context analysis and return all matches.
 	Files bool                  `json:"files" api:"required"`
@@ -4043,7 +4043,7 @@ func (r skipConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Content types to exclude from context analysis and return all matches.
+// SkipConfigurationParam content types to exclude from context analysis and return all matches.
 type SkipConfigurationParam struct {
 	// If the content type is a file, skip context analysis and return all matches.
 	Files param.Field[bool] `json:"files" api:"required"`
@@ -4196,7 +4196,7 @@ func (r dlpProfileGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPProfileGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPProfileGetResponseEnvelopeSuccess bool
 
 const (

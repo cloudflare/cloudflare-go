@@ -67,9 +67,7 @@ func TestNamespaceInstanceNewWithOptionalParams(t *testing.T) {
 				ChatCompletionsEndpoint: cloudflare.F(ai_search.NamespaceInstanceNewParamsPublicEndpointParamsChatCompletionsEndpoint{
 					Disabled: cloudflare.F(true),
 				}),
-				CustomDomains:        cloudflare.F([]string{"search.example.com"}),
-				DefaultDomainEnabled: cloudflare.F(true),
-				Enabled:              cloudflare.F(true),
+				Enabled: cloudflare.F(true),
 				Mcp: cloudflare.F(ai_search.NamespaceInstanceNewParamsPublicEndpointParamsMcp{
 					Description: cloudflare.F("description"),
 					Disabled:    cloudflare.F(true),
@@ -186,9 +184,7 @@ func TestNamespaceInstanceUpdateWithOptionalParams(t *testing.T) {
 				ChatCompletionsEndpoint: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint{
 					Disabled: cloudflare.F(true),
 				}),
-				CustomDomains:        cloudflare.F([]string{"search.example.com"}),
-				DefaultDomainEnabled: cloudflare.F(true),
-				Enabled:              cloudflare.F(true),
+				Enabled: cloudflare.F(true),
 				Mcp: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsPublicEndpointParamsMcp{
 					Description: cloudflare.F("description"),
 					Disabled:    cloudflare.F(true),

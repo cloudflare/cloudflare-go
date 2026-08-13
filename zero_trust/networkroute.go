@@ -240,7 +240,7 @@ func (r teamnetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The type of tunnel.
+// TeamnetTunType is the type of tunnel.
 type TeamnetTunType string
 
 const (
@@ -306,7 +306,7 @@ func (r networkRouteNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// NetworkRouteNewResponseEnvelopeSuccess indicates whether the API call was successful
 type NetworkRouteNewResponseEnvelopeSuccess bool
 
 const (
@@ -358,7 +358,7 @@ func (r NetworkRouteListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// The type of tunnel.
+// NetworkRouteListParamsTunType is the type of tunnel.
 type NetworkRouteListParamsTunType string
 
 const (
@@ -412,7 +412,7 @@ func (r networkRouteDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// NetworkRouteDeleteResponseEnvelopeSuccess indicates whether the API call was successful
 type NetworkRouteDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -472,7 +472,7 @@ func (r networkRouteEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// NetworkRouteEditResponseEnvelopeSuccess indicates whether the API call was successful
 type NetworkRouteEditResponseEnvelopeSuccess bool
 
 const (
@@ -520,7 +520,7 @@ func (r networkRouteGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// NetworkRouteGetResponseEnvelopeSuccess indicates whether the API call was successful
 type NetworkRouteGetResponseEnvelopeSuccess bool
 
 const (

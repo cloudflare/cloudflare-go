@@ -293,7 +293,7 @@ func (r resourceLibraryCategoryGetResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// Indicates whether the API call was successful.
+// ResourceLibraryCategoryGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type ResourceLibraryCategoryGetResponseEnvelopeSuccess bool
 
 const (

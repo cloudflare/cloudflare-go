@@ -43,11 +43,15 @@ func NewLogExplorerDatasetService(opts ...option.RequestOption) (r *LogExplorerD
 
 // Create a new Log Explorer dataset for the account or zone.
 //
-// List available account or zone datasets to see the dataset types and fields you
-// can use.
+// Use the
+// `/account or zones/{account or zone_id}/logs/explorer/datasets/available`
+// endpoint to list dataset types you can create along with their available fields.
 //
 // The `fields` property is optional. If not specified, all available fields will
 // be enabled.
+//
+// For zone-level datasets use the zone-scoped endpoint: POST
+// /zones/{zone_id}/logs/explorer/datasets
 //
 // For dataset field definitions, see:
 // https://developers.cloudflare.com/logs/logpush/logpush-job/datasets/

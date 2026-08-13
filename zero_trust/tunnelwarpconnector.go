@@ -156,7 +156,7 @@ func (r *TunnelWARPConnectorService) Get(ctx context.Context, tunnelID string, q
 	return res, nil
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelWARPConnectorNewResponse is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorNewResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -265,7 +265,7 @@ func (r tunnelWARPConnectorNewResponseConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorNewResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -286,7 +286,7 @@ func (r TunnelWARPConnectorNewResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelWARPConnectorNewResponseTunType is the type of tunnel.
 type TunnelWARPConnectorNewResponseTunType string
 
 const (
@@ -307,7 +307,7 @@ func (r TunnelWARPConnectorNewResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelWARPConnectorListResponse is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorListResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -416,7 +416,7 @@ func (r tunnelWARPConnectorListResponseConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorListResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -437,7 +437,7 @@ func (r TunnelWARPConnectorListResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelWARPConnectorListResponseTunType is the type of tunnel.
 type TunnelWARPConnectorListResponseTunType string
 
 const (
@@ -458,7 +458,7 @@ func (r TunnelWARPConnectorListResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelWARPConnectorDeleteResponse is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorDeleteResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -567,7 +567,7 @@ func (r tunnelWARPConnectorDeleteResponseConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorDeleteResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -588,7 +588,7 @@ func (r TunnelWARPConnectorDeleteResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelWARPConnectorDeleteResponseTunType is the type of tunnel.
 type TunnelWARPConnectorDeleteResponseTunType string
 
 const (
@@ -609,7 +609,7 @@ func (r TunnelWARPConnectorDeleteResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelWARPConnectorEditResponse is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorEditResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -718,7 +718,7 @@ func (r tunnelWARPConnectorEditResponseConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorEditResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -739,7 +739,7 @@ func (r TunnelWARPConnectorEditResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelWARPConnectorEditResponseTunType is the type of tunnel.
 type TunnelWARPConnectorEditResponseTunType string
 
 const (
@@ -760,7 +760,7 @@ func (r TunnelWARPConnectorEditResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelWARPConnectorGetResponse is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorGetResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -869,7 +869,7 @@ func (r tunnelWARPConnectorGetResponseConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorGetResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -890,7 +890,7 @@ func (r TunnelWARPConnectorGetResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelWARPConnectorGetResponseTunType is the type of tunnel.
 type TunnelWARPConnectorGetResponseTunType string
 
 const (
@@ -954,7 +954,7 @@ func (r tunnelWARPConnectorNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelWARPConnectorNewResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelWARPConnectorNewResponseEnvelopeSuccess bool
 
 const (
@@ -1006,7 +1006,7 @@ func (r TunnelWARPConnectorListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorListParamsStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -1061,7 +1061,7 @@ func (r tunnelWARPConnectorDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelWARPConnectorDeleteResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelWARPConnectorDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1119,7 +1119,7 @@ func (r tunnelWARPConnectorEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelWARPConnectorEditResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelWARPConnectorEditResponseEnvelopeSuccess bool
 
 const (
@@ -1168,7 +1168,7 @@ func (r tunnelWARPConnectorGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelWARPConnectorGetResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelWARPConnectorGetResponseEnvelopeSuccess bool
 
 const (

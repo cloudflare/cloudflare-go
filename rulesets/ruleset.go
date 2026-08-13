@@ -337,8 +337,7 @@ type RulesetNewResponseRule struct {
 	// [RulesetNewResponseRulesRulesetsSetCacheControlRuleActionParameters],
 	// [SetCacheSettingsRuleActionParameters],
 	// [RulesetNewResponseRulesRulesetsSetCacheTagsRuleActionParameters],
-	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionParameters].
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories"`
@@ -360,8 +359,7 @@ type RulesetNewResponseRule struct {
 	// [RulesetNewResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck],
 	// [SetCacheSettingsRuleExposedCredentialCheck],
 	// [RulesetNewResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck],
-	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck],
-	// [RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck].
+	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
@@ -378,8 +376,7 @@ type RulesetNewResponseRule struct {
 	// [RulesetNewResponseRulesRulesetsSetCacheControlRuleRatelimit],
 	// [SetCacheSettingsRuleRatelimit],
 	// [RulesetNewResponseRulesRulesetsSetCacheTagsRuleRatelimit],
-	// [SetConfigRuleRatelimit], [SkipRuleRatelimit],
-	// [RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleRatelimit].
+	// [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
 	// The reference of the rule (the rule's ID by default).
 	Ref   string                     `json:"ref"`
@@ -430,8 +427,7 @@ func (r *RulesetNewResponseRule) UnmarshalJSON(data []byte) (err error) {
 // [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule], [RewriteRule],
 // [RouteRule], [ScoreRule], [ServeErrorRule],
 // [RulesetNewResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
-// [RulesetNewResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule], [SkipRule],
-// [RulesetNewResponseRulesRulesetsTransformResponseHTMLRule].
+// [RulesetNewResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule], [SkipRule].
 func (r RulesetNewResponseRule) AsUnion() RulesetNewResponseRulesUnion {
 	return r.union
 }
@@ -442,8 +438,8 @@ func (r RulesetNewResponseRule) AsUnion() RulesetNewResponseRulesUnion {
 // [LogRule], [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule],
 // [RewriteRule], [RouteRule], [ScoreRule], [ServeErrorRule],
 // [RulesetNewResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
-// [RulesetNewResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule], [SkipRule]
-// or [RulesetNewResponseRulesRulesetsTransformResponseHTMLRule].
+// [RulesetNewResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule] or
+// [SkipRule].
 type RulesetNewResponseRulesUnion interface {
 	implementsRulesetNewResponseRule()
 }
@@ -551,11 +547,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetNewResponseRulesRulesetsTransformResponseHTMLRule{}),
-			DiscriminatorValue: "transform_response_html",
 		},
 	)
 }
@@ -3983,215 +3974,35 @@ func (r rulesetNewResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON) RawJSON() 
 	return r.raw
 }
 
-type RulesetNewResponseRulesRulesetsTransformResponseHTMLRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version" api:"required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// Configuration for exposed credential checking.
-	ExposedCredentialCheck RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck `json:"exposed_credential_check"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// An object configuring the rule's rate limit behavior.
-	Ratelimit RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule's ID by default).
-	Ref  string                                                       `json:"ref"`
-	JSON rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleJSON `json:"-"`
-}
-
-// rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleJSON contains the JSON
-// metadata for the struct
-// [RulesetNewResponseRulesRulesetsTransformResponseHTMLRule]
-type rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleJSON struct {
-	LastUpdated            apijson.Field
-	Version                apijson.Field
-	ID                     apijson.Field
-	Action                 apijson.Field
-	ActionParameters       apijson.Field
-	Categories             apijson.Field
-	Description            apijson.Field
-	Enabled                apijson.Field
-	ExposedCredentialCheck apijson.Field
-	Expression             apijson.Field
-	Logging                apijson.Field
-	Ratelimit              apijson.Field
-	Ref                    apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *RulesetNewResponseRulesRulesetsTransformResponseHTMLRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RulesetNewResponseRulesRulesetsTransformResponseHTMLRule) implementsRulesetNewResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleAction string
-
-const (
-	RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleAction = "transform_response_html"
-)
-
-func (r RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionParameters struct {
-	// Enables the link maze transformation on the response.
-	LinkMaze interface{}                                                                  `json:"link_maze" api:"required"`
-	JSON     rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON `json:"-"`
-}
-
-// rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON
-// contains the JSON metadata for the struct
-// [RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionParameters]
-type rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON struct {
-	LinkMaze    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// Configuration for exposed credential checking.
-type RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck struct {
-	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression" api:"required"`
-	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                             `json:"username_expression" api:"required"`
-	JSON               rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON `json:"-"`
-}
-
-// rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON
-// contains the JSON metadata for the struct
-// [RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck]
-type rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON struct {
-	PasswordExpression apijson.Field
-	UsernameExpression apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON) RawJSON() string {
-	return r.raw
-}
-
-// An object configuring the rule's rate limit behavior.
-type RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleRatelimit struct {
-	// Characteristics of the request on which the rate limit counter will be
-	// incremented.
-	Characteristics []string `json:"characteristics" api:"required"`
-	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period" api:"required"`
-	// An expression that defines when the rate limit counter should be incremented. It
-	// defaults to the same as the rule's expression.
-	CountingExpression string `json:"counting_expression"`
-	// Period of time in seconds after which the action will be disabled following its
-	// first execution.
-	MitigationTimeout int64 `json:"mitigation_timeout"`
-	// The threshold of requests per period after which the action will be executed for
-	// the first time.
-	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Whether counting is only performed when an origin is reached.
-	RequestsToOrigin bool `json:"requests_to_origin"`
-	// The score threshold per period for which the action will be executed the first
-	// time.
-	ScorePerPeriod int64 `json:"score_per_period"`
-	// A response header name provided by the origin, which contains the score to
-	// increment rate limit counter with.
-	ScoreResponseHeaderName string                                                                `json:"score_response_header_name"`
-	JSON                    rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON `json:"-"`
-}
-
-// rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON contains
-// the JSON metadata for the struct
-// [RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleRatelimit]
-type rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON struct {
-	Characteristics         apijson.Field
-	Period                  apijson.Field
-	CountingExpression      apijson.Field
-	MitigationTimeout       apijson.Field
-	RequestsPerPeriod       apijson.Field
-	RequestsToOrigin        apijson.Field
-	ScorePerPeriod          apijson.Field
-	ScoreResponseHeaderName apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *RulesetNewResponseRulesRulesetsTransformResponseHTMLRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetNewResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON) RawJSON() string {
-	return r.raw
-}
-
 // The action to perform when the rule matches.
 type RulesetNewResponseRulesAction string
 
 const (
-	RulesetNewResponseRulesActionBlock                 RulesetNewResponseRulesAction = "block"
-	RulesetNewResponseRulesActionChallenge             RulesetNewResponseRulesAction = "challenge"
-	RulesetNewResponseRulesActionCompressResponse      RulesetNewResponseRulesAction = "compress_response"
-	RulesetNewResponseRulesActionDDoSDynamic           RulesetNewResponseRulesAction = "ddos_dynamic"
-	RulesetNewResponseRulesActionExecute               RulesetNewResponseRulesAction = "execute"
-	RulesetNewResponseRulesActionForceConnectionClose  RulesetNewResponseRulesAction = "force_connection_close"
-	RulesetNewResponseRulesActionJSChallenge           RulesetNewResponseRulesAction = "js_challenge"
-	RulesetNewResponseRulesActionLog                   RulesetNewResponseRulesAction = "log"
-	RulesetNewResponseRulesActionLogCustomField        RulesetNewResponseRulesAction = "log_custom_field"
-	RulesetNewResponseRulesActionManagedChallenge      RulesetNewResponseRulesAction = "managed_challenge"
-	RulesetNewResponseRulesActionRedirect              RulesetNewResponseRulesAction = "redirect"
-	RulesetNewResponseRulesActionRewrite               RulesetNewResponseRulesAction = "rewrite"
-	RulesetNewResponseRulesActionRoute                 RulesetNewResponseRulesAction = "route"
-	RulesetNewResponseRulesActionScore                 RulesetNewResponseRulesAction = "score"
-	RulesetNewResponseRulesActionServeError            RulesetNewResponseRulesAction = "serve_error"
-	RulesetNewResponseRulesActionSetCacheControl       RulesetNewResponseRulesAction = "set_cache_control"
-	RulesetNewResponseRulesActionSetCacheSettings      RulesetNewResponseRulesAction = "set_cache_settings"
-	RulesetNewResponseRulesActionSetCacheTags          RulesetNewResponseRulesAction = "set_cache_tags"
-	RulesetNewResponseRulesActionSetConfig             RulesetNewResponseRulesAction = "set_config"
-	RulesetNewResponseRulesActionSkip                  RulesetNewResponseRulesAction = "skip"
-	RulesetNewResponseRulesActionTransformResponseHTML RulesetNewResponseRulesAction = "transform_response_html"
+	RulesetNewResponseRulesActionBlock                RulesetNewResponseRulesAction = "block"
+	RulesetNewResponseRulesActionChallenge            RulesetNewResponseRulesAction = "challenge"
+	RulesetNewResponseRulesActionCompressResponse     RulesetNewResponseRulesAction = "compress_response"
+	RulesetNewResponseRulesActionDDoSDynamic          RulesetNewResponseRulesAction = "ddos_dynamic"
+	RulesetNewResponseRulesActionExecute              RulesetNewResponseRulesAction = "execute"
+	RulesetNewResponseRulesActionForceConnectionClose RulesetNewResponseRulesAction = "force_connection_close"
+	RulesetNewResponseRulesActionJSChallenge          RulesetNewResponseRulesAction = "js_challenge"
+	RulesetNewResponseRulesActionLog                  RulesetNewResponseRulesAction = "log"
+	RulesetNewResponseRulesActionLogCustomField       RulesetNewResponseRulesAction = "log_custom_field"
+	RulesetNewResponseRulesActionManagedChallenge     RulesetNewResponseRulesAction = "managed_challenge"
+	RulesetNewResponseRulesActionRedirect             RulesetNewResponseRulesAction = "redirect"
+	RulesetNewResponseRulesActionRewrite              RulesetNewResponseRulesAction = "rewrite"
+	RulesetNewResponseRulesActionRoute                RulesetNewResponseRulesAction = "route"
+	RulesetNewResponseRulesActionScore                RulesetNewResponseRulesAction = "score"
+	RulesetNewResponseRulesActionServeError           RulesetNewResponseRulesAction = "serve_error"
+	RulesetNewResponseRulesActionSetCacheControl      RulesetNewResponseRulesAction = "set_cache_control"
+	RulesetNewResponseRulesActionSetCacheSettings     RulesetNewResponseRulesAction = "set_cache_settings"
+	RulesetNewResponseRulesActionSetCacheTags         RulesetNewResponseRulesAction = "set_cache_tags"
+	RulesetNewResponseRulesActionSetConfig            RulesetNewResponseRulesAction = "set_config"
+	RulesetNewResponseRulesActionSkip                 RulesetNewResponseRulesAction = "skip"
 )
 
 func (r RulesetNewResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetNewResponseRulesActionBlock, RulesetNewResponseRulesActionChallenge, RulesetNewResponseRulesActionCompressResponse, RulesetNewResponseRulesActionDDoSDynamic, RulesetNewResponseRulesActionExecute, RulesetNewResponseRulesActionForceConnectionClose, RulesetNewResponseRulesActionJSChallenge, RulesetNewResponseRulesActionLog, RulesetNewResponseRulesActionLogCustomField, RulesetNewResponseRulesActionManagedChallenge, RulesetNewResponseRulesActionRedirect, RulesetNewResponseRulesActionRewrite, RulesetNewResponseRulesActionRoute, RulesetNewResponseRulesActionScore, RulesetNewResponseRulesActionServeError, RulesetNewResponseRulesActionSetCacheControl, RulesetNewResponseRulesActionSetCacheSettings, RulesetNewResponseRulesActionSetCacheTags, RulesetNewResponseRulesActionSetConfig, RulesetNewResponseRulesActionSkip, RulesetNewResponseRulesActionTransformResponseHTML:
+	case RulesetNewResponseRulesActionBlock, RulesetNewResponseRulesActionChallenge, RulesetNewResponseRulesActionCompressResponse, RulesetNewResponseRulesActionDDoSDynamic, RulesetNewResponseRulesActionExecute, RulesetNewResponseRulesActionForceConnectionClose, RulesetNewResponseRulesActionJSChallenge, RulesetNewResponseRulesActionLog, RulesetNewResponseRulesActionLogCustomField, RulesetNewResponseRulesActionManagedChallenge, RulesetNewResponseRulesActionRedirect, RulesetNewResponseRulesActionRewrite, RulesetNewResponseRulesActionRoute, RulesetNewResponseRulesActionScore, RulesetNewResponseRulesActionServeError, RulesetNewResponseRulesActionSetCacheControl, RulesetNewResponseRulesActionSetCacheSettings, RulesetNewResponseRulesActionSetCacheTags, RulesetNewResponseRulesActionSetConfig, RulesetNewResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -4259,8 +4070,7 @@ type RulesetUpdateResponseRule struct {
 	// [RulesetUpdateResponseRulesRulesetsSetCacheControlRuleActionParameters],
 	// [SetCacheSettingsRuleActionParameters],
 	// [RulesetUpdateResponseRulesRulesetsSetCacheTagsRuleActionParameters],
-	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionParameters].
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories"`
@@ -4282,8 +4092,7 @@ type RulesetUpdateResponseRule struct {
 	// [RulesetUpdateResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck],
 	// [SetCacheSettingsRuleExposedCredentialCheck],
 	// [RulesetUpdateResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck],
-	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck],
-	// [RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck].
+	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
@@ -4301,8 +4110,7 @@ type RulesetUpdateResponseRule struct {
 	// [RulesetUpdateResponseRulesRulesetsSetCacheControlRuleRatelimit],
 	// [SetCacheSettingsRuleRatelimit],
 	// [RulesetUpdateResponseRulesRulesetsSetCacheTagsRuleRatelimit],
-	// [SetConfigRuleRatelimit], [SkipRuleRatelimit],
-	// [RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleRatelimit].
+	// [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
 	// The reference of the rule (the rule's ID by default).
 	Ref   string                        `json:"ref"`
@@ -4354,7 +4162,7 @@ func (r *RulesetUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
 // [RouteRule], [ScoreRule], [ServeErrorRule],
 // [RulesetUpdateResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
 // [RulesetUpdateResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule],
-// [SkipRule], [RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRule].
+// [SkipRule].
 func (r RulesetUpdateResponseRule) AsUnion() RulesetUpdateResponseRulesUnion {
 	return r.union
 }
@@ -4366,8 +4174,8 @@ func (r RulesetUpdateResponseRule) AsUnion() RulesetUpdateResponseRulesUnion {
 // [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule], [RewriteRule],
 // [RouteRule], [ScoreRule], [ServeErrorRule],
 // [RulesetUpdateResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
-// [RulesetUpdateResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule],
-// [SkipRule] or [RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRule].
+// [RulesetUpdateResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule] or
+// [SkipRule].
 type RulesetUpdateResponseRulesUnion interface {
 	implementsRulesetUpdateResponseRule()
 }
@@ -4475,11 +4283,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRule{}),
-			DiscriminatorValue: "transform_response_html",
 		},
 	)
 }
@@ -7909,215 +7712,35 @@ func (r rulesetUpdateResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON) RawJSON
 	return r.raw
 }
 
-type RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version" api:"required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// Configuration for exposed credential checking.
-	ExposedCredentialCheck RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck `json:"exposed_credential_check"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// An object configuring the rule's rate limit behavior.
-	Ratelimit RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule's ID by default).
-	Ref  string                                                          `json:"ref"`
-	JSON rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleJSON `json:"-"`
-}
-
-// rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleJSON contains the
-// JSON metadata for the struct
-// [RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRule]
-type rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleJSON struct {
-	LastUpdated            apijson.Field
-	Version                apijson.Field
-	ID                     apijson.Field
-	Action                 apijson.Field
-	ActionParameters       apijson.Field
-	Categories             apijson.Field
-	Description            apijson.Field
-	Enabled                apijson.Field
-	ExposedCredentialCheck apijson.Field
-	Expression             apijson.Field
-	Logging                apijson.Field
-	Ratelimit              apijson.Field
-	Ref                    apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRule) implementsRulesetUpdateResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleAction string
-
-const (
-	RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleAction = "transform_response_html"
-)
-
-func (r RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionParameters struct {
-	// Enables the link maze transformation on the response.
-	LinkMaze interface{}                                                                     `json:"link_maze" api:"required"`
-	JSON     rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON `json:"-"`
-}
-
-// rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON
-// contains the JSON metadata for the struct
-// [RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionParameters]
-type rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON struct {
-	LinkMaze    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// Configuration for exposed credential checking.
-type RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck struct {
-	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression" api:"required"`
-	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                                `json:"username_expression" api:"required"`
-	JSON               rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON `json:"-"`
-}
-
-// rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON
-// contains the JSON metadata for the struct
-// [RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck]
-type rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON struct {
-	PasswordExpression apijson.Field
-	UsernameExpression apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON) RawJSON() string {
-	return r.raw
-}
-
-// An object configuring the rule's rate limit behavior.
-type RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleRatelimit struct {
-	// Characteristics of the request on which the rate limit counter will be
-	// incremented.
-	Characteristics []string `json:"characteristics" api:"required"`
-	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period" api:"required"`
-	// An expression that defines when the rate limit counter should be incremented. It
-	// defaults to the same as the rule's expression.
-	CountingExpression string `json:"counting_expression"`
-	// Period of time in seconds after which the action will be disabled following its
-	// first execution.
-	MitigationTimeout int64 `json:"mitigation_timeout"`
-	// The threshold of requests per period after which the action will be executed for
-	// the first time.
-	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Whether counting is only performed when an origin is reached.
-	RequestsToOrigin bool `json:"requests_to_origin"`
-	// The score threshold per period for which the action will be executed the first
-	// time.
-	ScorePerPeriod int64 `json:"score_per_period"`
-	// A response header name provided by the origin, which contains the score to
-	// increment rate limit counter with.
-	ScoreResponseHeaderName string                                                                   `json:"score_response_header_name"`
-	JSON                    rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON `json:"-"`
-}
-
-// rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON
-// contains the JSON metadata for the struct
-// [RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleRatelimit]
-type rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON struct {
-	Characteristics         apijson.Field
-	Period                  apijson.Field
-	CountingExpression      apijson.Field
-	MitigationTimeout       apijson.Field
-	RequestsPerPeriod       apijson.Field
-	RequestsToOrigin        apijson.Field
-	ScorePerPeriod          apijson.Field
-	ScoreResponseHeaderName apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *RulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetUpdateResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON) RawJSON() string {
-	return r.raw
-}
-
 // The action to perform when the rule matches.
 type RulesetUpdateResponseRulesAction string
 
 const (
-	RulesetUpdateResponseRulesActionBlock                 RulesetUpdateResponseRulesAction = "block"
-	RulesetUpdateResponseRulesActionChallenge             RulesetUpdateResponseRulesAction = "challenge"
-	RulesetUpdateResponseRulesActionCompressResponse      RulesetUpdateResponseRulesAction = "compress_response"
-	RulesetUpdateResponseRulesActionDDoSDynamic           RulesetUpdateResponseRulesAction = "ddos_dynamic"
-	RulesetUpdateResponseRulesActionExecute               RulesetUpdateResponseRulesAction = "execute"
-	RulesetUpdateResponseRulesActionForceConnectionClose  RulesetUpdateResponseRulesAction = "force_connection_close"
-	RulesetUpdateResponseRulesActionJSChallenge           RulesetUpdateResponseRulesAction = "js_challenge"
-	RulesetUpdateResponseRulesActionLog                   RulesetUpdateResponseRulesAction = "log"
-	RulesetUpdateResponseRulesActionLogCustomField        RulesetUpdateResponseRulesAction = "log_custom_field"
-	RulesetUpdateResponseRulesActionManagedChallenge      RulesetUpdateResponseRulesAction = "managed_challenge"
-	RulesetUpdateResponseRulesActionRedirect              RulesetUpdateResponseRulesAction = "redirect"
-	RulesetUpdateResponseRulesActionRewrite               RulesetUpdateResponseRulesAction = "rewrite"
-	RulesetUpdateResponseRulesActionRoute                 RulesetUpdateResponseRulesAction = "route"
-	RulesetUpdateResponseRulesActionScore                 RulesetUpdateResponseRulesAction = "score"
-	RulesetUpdateResponseRulesActionServeError            RulesetUpdateResponseRulesAction = "serve_error"
-	RulesetUpdateResponseRulesActionSetCacheControl       RulesetUpdateResponseRulesAction = "set_cache_control"
-	RulesetUpdateResponseRulesActionSetCacheSettings      RulesetUpdateResponseRulesAction = "set_cache_settings"
-	RulesetUpdateResponseRulesActionSetCacheTags          RulesetUpdateResponseRulesAction = "set_cache_tags"
-	RulesetUpdateResponseRulesActionSetConfig             RulesetUpdateResponseRulesAction = "set_config"
-	RulesetUpdateResponseRulesActionSkip                  RulesetUpdateResponseRulesAction = "skip"
-	RulesetUpdateResponseRulesActionTransformResponseHTML RulesetUpdateResponseRulesAction = "transform_response_html"
+	RulesetUpdateResponseRulesActionBlock                RulesetUpdateResponseRulesAction = "block"
+	RulesetUpdateResponseRulesActionChallenge            RulesetUpdateResponseRulesAction = "challenge"
+	RulesetUpdateResponseRulesActionCompressResponse     RulesetUpdateResponseRulesAction = "compress_response"
+	RulesetUpdateResponseRulesActionDDoSDynamic          RulesetUpdateResponseRulesAction = "ddos_dynamic"
+	RulesetUpdateResponseRulesActionExecute              RulesetUpdateResponseRulesAction = "execute"
+	RulesetUpdateResponseRulesActionForceConnectionClose RulesetUpdateResponseRulesAction = "force_connection_close"
+	RulesetUpdateResponseRulesActionJSChallenge          RulesetUpdateResponseRulesAction = "js_challenge"
+	RulesetUpdateResponseRulesActionLog                  RulesetUpdateResponseRulesAction = "log"
+	RulesetUpdateResponseRulesActionLogCustomField       RulesetUpdateResponseRulesAction = "log_custom_field"
+	RulesetUpdateResponseRulesActionManagedChallenge     RulesetUpdateResponseRulesAction = "managed_challenge"
+	RulesetUpdateResponseRulesActionRedirect             RulesetUpdateResponseRulesAction = "redirect"
+	RulesetUpdateResponseRulesActionRewrite              RulesetUpdateResponseRulesAction = "rewrite"
+	RulesetUpdateResponseRulesActionRoute                RulesetUpdateResponseRulesAction = "route"
+	RulesetUpdateResponseRulesActionScore                RulesetUpdateResponseRulesAction = "score"
+	RulesetUpdateResponseRulesActionServeError           RulesetUpdateResponseRulesAction = "serve_error"
+	RulesetUpdateResponseRulesActionSetCacheControl      RulesetUpdateResponseRulesAction = "set_cache_control"
+	RulesetUpdateResponseRulesActionSetCacheSettings     RulesetUpdateResponseRulesAction = "set_cache_settings"
+	RulesetUpdateResponseRulesActionSetCacheTags         RulesetUpdateResponseRulesAction = "set_cache_tags"
+	RulesetUpdateResponseRulesActionSetConfig            RulesetUpdateResponseRulesAction = "set_config"
+	RulesetUpdateResponseRulesActionSkip                 RulesetUpdateResponseRulesAction = "skip"
 )
 
 func (r RulesetUpdateResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetUpdateResponseRulesActionBlock, RulesetUpdateResponseRulesActionChallenge, RulesetUpdateResponseRulesActionCompressResponse, RulesetUpdateResponseRulesActionDDoSDynamic, RulesetUpdateResponseRulesActionExecute, RulesetUpdateResponseRulesActionForceConnectionClose, RulesetUpdateResponseRulesActionJSChallenge, RulesetUpdateResponseRulesActionLog, RulesetUpdateResponseRulesActionLogCustomField, RulesetUpdateResponseRulesActionManagedChallenge, RulesetUpdateResponseRulesActionRedirect, RulesetUpdateResponseRulesActionRewrite, RulesetUpdateResponseRulesActionRoute, RulesetUpdateResponseRulesActionScore, RulesetUpdateResponseRulesActionServeError, RulesetUpdateResponseRulesActionSetCacheControl, RulesetUpdateResponseRulesActionSetCacheSettings, RulesetUpdateResponseRulesActionSetCacheTags, RulesetUpdateResponseRulesActionSetConfig, RulesetUpdateResponseRulesActionSkip, RulesetUpdateResponseRulesActionTransformResponseHTML:
+	case RulesetUpdateResponseRulesActionBlock, RulesetUpdateResponseRulesActionChallenge, RulesetUpdateResponseRulesActionCompressResponse, RulesetUpdateResponseRulesActionDDoSDynamic, RulesetUpdateResponseRulesActionExecute, RulesetUpdateResponseRulesActionForceConnectionClose, RulesetUpdateResponseRulesActionJSChallenge, RulesetUpdateResponseRulesActionLog, RulesetUpdateResponseRulesActionLogCustomField, RulesetUpdateResponseRulesActionManagedChallenge, RulesetUpdateResponseRulesActionRedirect, RulesetUpdateResponseRulesActionRewrite, RulesetUpdateResponseRulesActionRoute, RulesetUpdateResponseRulesActionScore, RulesetUpdateResponseRulesActionServeError, RulesetUpdateResponseRulesActionSetCacheControl, RulesetUpdateResponseRulesActionSetCacheSettings, RulesetUpdateResponseRulesActionSetCacheTags, RulesetUpdateResponseRulesActionSetConfig, RulesetUpdateResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -8226,8 +7849,7 @@ type RulesetGetResponseRule struct {
 	// [RulesetGetResponseRulesRulesetsSetCacheControlRuleActionParameters],
 	// [SetCacheSettingsRuleActionParameters],
 	// [RulesetGetResponseRulesRulesetsSetCacheTagsRuleActionParameters],
-	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionParameters].
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories"`
@@ -8249,8 +7871,7 @@ type RulesetGetResponseRule struct {
 	// [RulesetGetResponseRulesRulesetsSetCacheControlRuleExposedCredentialCheck],
 	// [SetCacheSettingsRuleExposedCredentialCheck],
 	// [RulesetGetResponseRulesRulesetsSetCacheTagsRuleExposedCredentialCheck],
-	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck],
-	// [RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck].
+	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
@@ -8267,8 +7888,7 @@ type RulesetGetResponseRule struct {
 	// [RulesetGetResponseRulesRulesetsSetCacheControlRuleRatelimit],
 	// [SetCacheSettingsRuleRatelimit],
 	// [RulesetGetResponseRulesRulesetsSetCacheTagsRuleRatelimit],
-	// [SetConfigRuleRatelimit], [SkipRuleRatelimit],
-	// [RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimit].
+	// [SetConfigRuleRatelimit], [SkipRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
 	// The reference of the rule (the rule's ID by default).
 	Ref   string                     `json:"ref"`
@@ -8319,8 +7939,7 @@ func (r *RulesetGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 // [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule], [RewriteRule],
 // [RouteRule], [ScoreRule], [ServeErrorRule],
 // [RulesetGetResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
-// [RulesetGetResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule], [SkipRule],
-// [RulesetGetResponseRulesRulesetsTransformResponseHTMLRule].
+// [RulesetGetResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule], [SkipRule].
 func (r RulesetGetResponseRule) AsUnion() RulesetGetResponseRulesUnion {
 	return r.union
 }
@@ -8331,8 +7950,8 @@ func (r RulesetGetResponseRule) AsUnion() RulesetGetResponseRulesUnion {
 // [LogRule], [LogCustomFieldRule], [ManagedChallengeRule], [RedirectRule],
 // [RewriteRule], [RouteRule], [ScoreRule], [ServeErrorRule],
 // [RulesetGetResponseRulesRulesetsSetCacheControlRule], [SetCacheSettingsRule],
-// [RulesetGetResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule], [SkipRule]
-// or [RulesetGetResponseRulesRulesetsTransformResponseHTMLRule].
+// [RulesetGetResponseRulesRulesetsSetCacheTagsRule], [SetConfigRule] or
+// [SkipRule].
 type RulesetGetResponseRulesUnion interface {
 	implementsRulesetGetResponseRule()
 }
@@ -8440,11 +8059,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(SkipRule{}),
 			DiscriminatorValue: "skip",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetGetResponseRulesRulesetsTransformResponseHTMLRule{}),
-			DiscriminatorValue: "transform_response_html",
 		},
 	)
 }
@@ -11872,215 +11486,35 @@ func (r rulesetGetResponseRulesRulesetsSetCacheTagsRuleRatelimitJSON) RawJSON() 
 	return r.raw
 }
 
-type RulesetGetResponseRulesRulesetsTransformResponseHTMLRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version" api:"required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// Configuration for exposed credential checking.
-	ExposedCredentialCheck RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck `json:"exposed_credential_check"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// An object configuring the rule's rate limit behavior.
-	Ratelimit RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimit `json:"ratelimit"`
-	// The reference of the rule (the rule's ID by default).
-	Ref  string                                                       `json:"ref"`
-	JSON rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleJSON `json:"-"`
-}
-
-// rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleJSON contains the JSON
-// metadata for the struct
-// [RulesetGetResponseRulesRulesetsTransformResponseHTMLRule]
-type rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleJSON struct {
-	LastUpdated            apijson.Field
-	Version                apijson.Field
-	ID                     apijson.Field
-	Action                 apijson.Field
-	ActionParameters       apijson.Field
-	Categories             apijson.Field
-	Description            apijson.Field
-	Enabled                apijson.Field
-	ExposedCredentialCheck apijson.Field
-	Expression             apijson.Field
-	Logging                apijson.Field
-	Ratelimit              apijson.Field
-	Ref                    apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *RulesetGetResponseRulesRulesetsTransformResponseHTMLRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RulesetGetResponseRulesRulesetsTransformResponseHTMLRule) implementsRulesetGetResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleAction string
-
-const (
-	RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleAction = "transform_response_html"
-)
-
-func (r RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionParameters struct {
-	// Enables the link maze transformation on the response.
-	LinkMaze interface{}                                                                  `json:"link_maze" api:"required"`
-	JSON     rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON `json:"-"`
-}
-
-// rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON
-// contains the JSON metadata for the struct
-// [RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionParameters]
-type rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON struct {
-	LinkMaze    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// Configuration for exposed credential checking.
-type RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck struct {
-	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression" api:"required"`
-	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                             `json:"username_expression" api:"required"`
-	JSON               rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON `json:"-"`
-}
-
-// rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON
-// contains the JSON metadata for the struct
-// [RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck]
-type rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON struct {
-	PasswordExpression apijson.Field
-	UsernameExpression apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheckJSON) RawJSON() string {
-	return r.raw
-}
-
-// An object configuring the rule's rate limit behavior.
-type RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimit struct {
-	// Characteristics of the request on which the rate limit counter will be
-	// incremented.
-	Characteristics []string `json:"characteristics" api:"required"`
-	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period" api:"required"`
-	// An expression that defines when the rate limit counter should be incremented. It
-	// defaults to the same as the rule's expression.
-	CountingExpression string `json:"counting_expression"`
-	// Period of time in seconds after which the action will be disabled following its
-	// first execution.
-	MitigationTimeout int64 `json:"mitigation_timeout"`
-	// The threshold of requests per period after which the action will be executed for
-	// the first time.
-	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Whether counting is only performed when an origin is reached.
-	RequestsToOrigin bool `json:"requests_to_origin"`
-	// The score threshold per period for which the action will be executed the first
-	// time.
-	ScorePerPeriod int64 `json:"score_per_period"`
-	// A response header name provided by the origin, which contains the score to
-	// increment rate limit counter with.
-	ScoreResponseHeaderName string                                                                `json:"score_response_header_name"`
-	JSON                    rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON `json:"-"`
-}
-
-// rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON contains
-// the JSON metadata for the struct
-// [RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimit]
-type rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON struct {
-	Characteristics         apijson.Field
-	Period                  apijson.Field
-	CountingExpression      apijson.Field
-	MitigationTimeout       apijson.Field
-	RequestsPerPeriod       apijson.Field
-	RequestsToOrigin        apijson.Field
-	ScorePerPeriod          apijson.Field
-	ScoreResponseHeaderName apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *RulesetGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetGetResponseRulesRulesetsTransformResponseHTMLRuleRatelimitJSON) RawJSON() string {
-	return r.raw
-}
-
 // The action to perform when the rule matches.
 type RulesetGetResponseRulesAction string
 
 const (
-	RulesetGetResponseRulesActionBlock                 RulesetGetResponseRulesAction = "block"
-	RulesetGetResponseRulesActionChallenge             RulesetGetResponseRulesAction = "challenge"
-	RulesetGetResponseRulesActionCompressResponse      RulesetGetResponseRulesAction = "compress_response"
-	RulesetGetResponseRulesActionDDoSDynamic           RulesetGetResponseRulesAction = "ddos_dynamic"
-	RulesetGetResponseRulesActionExecute               RulesetGetResponseRulesAction = "execute"
-	RulesetGetResponseRulesActionForceConnectionClose  RulesetGetResponseRulesAction = "force_connection_close"
-	RulesetGetResponseRulesActionJSChallenge           RulesetGetResponseRulesAction = "js_challenge"
-	RulesetGetResponseRulesActionLog                   RulesetGetResponseRulesAction = "log"
-	RulesetGetResponseRulesActionLogCustomField        RulesetGetResponseRulesAction = "log_custom_field"
-	RulesetGetResponseRulesActionManagedChallenge      RulesetGetResponseRulesAction = "managed_challenge"
-	RulesetGetResponseRulesActionRedirect              RulesetGetResponseRulesAction = "redirect"
-	RulesetGetResponseRulesActionRewrite               RulesetGetResponseRulesAction = "rewrite"
-	RulesetGetResponseRulesActionRoute                 RulesetGetResponseRulesAction = "route"
-	RulesetGetResponseRulesActionScore                 RulesetGetResponseRulesAction = "score"
-	RulesetGetResponseRulesActionServeError            RulesetGetResponseRulesAction = "serve_error"
-	RulesetGetResponseRulesActionSetCacheControl       RulesetGetResponseRulesAction = "set_cache_control"
-	RulesetGetResponseRulesActionSetCacheSettings      RulesetGetResponseRulesAction = "set_cache_settings"
-	RulesetGetResponseRulesActionSetCacheTags          RulesetGetResponseRulesAction = "set_cache_tags"
-	RulesetGetResponseRulesActionSetConfig             RulesetGetResponseRulesAction = "set_config"
-	RulesetGetResponseRulesActionSkip                  RulesetGetResponseRulesAction = "skip"
-	RulesetGetResponseRulesActionTransformResponseHTML RulesetGetResponseRulesAction = "transform_response_html"
+	RulesetGetResponseRulesActionBlock                RulesetGetResponseRulesAction = "block"
+	RulesetGetResponseRulesActionChallenge            RulesetGetResponseRulesAction = "challenge"
+	RulesetGetResponseRulesActionCompressResponse     RulesetGetResponseRulesAction = "compress_response"
+	RulesetGetResponseRulesActionDDoSDynamic          RulesetGetResponseRulesAction = "ddos_dynamic"
+	RulesetGetResponseRulesActionExecute              RulesetGetResponseRulesAction = "execute"
+	RulesetGetResponseRulesActionForceConnectionClose RulesetGetResponseRulesAction = "force_connection_close"
+	RulesetGetResponseRulesActionJSChallenge          RulesetGetResponseRulesAction = "js_challenge"
+	RulesetGetResponseRulesActionLog                  RulesetGetResponseRulesAction = "log"
+	RulesetGetResponseRulesActionLogCustomField       RulesetGetResponseRulesAction = "log_custom_field"
+	RulesetGetResponseRulesActionManagedChallenge     RulesetGetResponseRulesAction = "managed_challenge"
+	RulesetGetResponseRulesActionRedirect             RulesetGetResponseRulesAction = "redirect"
+	RulesetGetResponseRulesActionRewrite              RulesetGetResponseRulesAction = "rewrite"
+	RulesetGetResponseRulesActionRoute                RulesetGetResponseRulesAction = "route"
+	RulesetGetResponseRulesActionScore                RulesetGetResponseRulesAction = "score"
+	RulesetGetResponseRulesActionServeError           RulesetGetResponseRulesAction = "serve_error"
+	RulesetGetResponseRulesActionSetCacheControl      RulesetGetResponseRulesAction = "set_cache_control"
+	RulesetGetResponseRulesActionSetCacheSettings     RulesetGetResponseRulesAction = "set_cache_settings"
+	RulesetGetResponseRulesActionSetCacheTags         RulesetGetResponseRulesAction = "set_cache_tags"
+	RulesetGetResponseRulesActionSetConfig            RulesetGetResponseRulesAction = "set_config"
+	RulesetGetResponseRulesActionSkip                 RulesetGetResponseRulesAction = "skip"
 )
 
 func (r RulesetGetResponseRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetGetResponseRulesActionBlock, RulesetGetResponseRulesActionChallenge, RulesetGetResponseRulesActionCompressResponse, RulesetGetResponseRulesActionDDoSDynamic, RulesetGetResponseRulesActionExecute, RulesetGetResponseRulesActionForceConnectionClose, RulesetGetResponseRulesActionJSChallenge, RulesetGetResponseRulesActionLog, RulesetGetResponseRulesActionLogCustomField, RulesetGetResponseRulesActionManagedChallenge, RulesetGetResponseRulesActionRedirect, RulesetGetResponseRulesActionRewrite, RulesetGetResponseRulesActionRoute, RulesetGetResponseRulesActionScore, RulesetGetResponseRulesActionServeError, RulesetGetResponseRulesActionSetCacheControl, RulesetGetResponseRulesActionSetCacheSettings, RulesetGetResponseRulesActionSetCacheTags, RulesetGetResponseRulesActionSetConfig, RulesetGetResponseRulesActionSkip, RulesetGetResponseRulesActionTransformResponseHTML:
+	case RulesetGetResponseRulesActionBlock, RulesetGetResponseRulesActionChallenge, RulesetGetResponseRulesActionCompressResponse, RulesetGetResponseRulesActionDDoSDynamic, RulesetGetResponseRulesActionExecute, RulesetGetResponseRulesActionForceConnectionClose, RulesetGetResponseRulesActionJSChallenge, RulesetGetResponseRulesActionLog, RulesetGetResponseRulesActionLogCustomField, RulesetGetResponseRulesActionManagedChallenge, RulesetGetResponseRulesActionRedirect, RulesetGetResponseRulesActionRewrite, RulesetGetResponseRulesActionRoute, RulesetGetResponseRulesActionScore, RulesetGetResponseRulesActionServeError, RulesetGetResponseRulesActionSetCacheControl, RulesetGetResponseRulesActionSetCacheSettings, RulesetGetResponseRulesActionSetCacheTags, RulesetGetResponseRulesActionSetConfig, RulesetGetResponseRulesActionSkip:
 		return true
 	}
 	return false
@@ -12146,9 +11580,7 @@ func (r RulesetNewParamsRule) implementsRulesetNewParamsRuleUnion() {}
 // [rulesets.RulesetNewParamsRulesRulesetsSetCacheControlRule],
 // [rulesets.SetCacheSettingsRuleParam],
 // [rulesets.RulesetNewParamsRulesRulesetsSetCacheTagsRule],
-// [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam],
-// [rulesets.RulesetNewParamsRulesRulesetsTransformResponseHTMLRule],
-// [RulesetNewParamsRule].
+// [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam], [RulesetNewParamsRule].
 type RulesetNewParamsRuleUnion interface {
 	implementsRulesetNewParamsRuleUnion()
 }
@@ -14151,133 +13583,35 @@ func (r RulesetNewParamsRulesRulesetsSetCacheTagsRuleRatelimit) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-type RulesetNewParamsRulesRulesetsTransformResponseHTMLRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleActionParameters] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Configuration for exposed credential checking.
-	ExposedCredentialCheck param.Field[RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck] `json:"exposed_credential_check"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// An object configuring the rule's rate limit behavior.
-	Ratelimit param.Field[RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleRatelimit] `json:"ratelimit"`
-	// The reference of the rule (the rule's ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetNewParamsRulesRulesetsTransformResponseHTMLRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RulesetNewParamsRulesRulesetsTransformResponseHTMLRule) implementsRulesetNewParamsRuleUnion() {
-}
-
-// The action to perform when the rule matches.
-type RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleAction string
-
-const (
-	RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleAction = "transform_response_html"
-)
-
-func (r RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleActionParameters struct {
-	// Enables the link maze transformation on the response.
-	LinkMaze param.Field[interface{}] `json:"link_maze" api:"required"`
-}
-
-func (r RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleActionParameters) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configuration for exposed credential checking.
-type RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck struct {
-	// An expression that selects the password used in the credentials check.
-	PasswordExpression param.Field[string] `json:"password_expression" api:"required"`
-	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression param.Field[string] `json:"username_expression" api:"required"`
-}
-
-func (r RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// An object configuring the rule's rate limit behavior.
-type RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleRatelimit struct {
-	// Characteristics of the request on which the rate limit counter will be
-	// incremented.
-	Characteristics param.Field[[]string] `json:"characteristics" api:"required"`
-	// Period in seconds over which the counter is being incremented.
-	Period param.Field[int64] `json:"period" api:"required"`
-	// An expression that defines when the rate limit counter should be incremented. It
-	// defaults to the same as the rule's expression.
-	CountingExpression param.Field[string] `json:"counting_expression"`
-	// Period of time in seconds after which the action will be disabled following its
-	// first execution.
-	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
-	// The threshold of requests per period after which the action will be executed for
-	// the first time.
-	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
-	// Whether counting is only performed when an origin is reached.
-	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
-	// The score threshold per period for which the action will be executed the first
-	// time.
-	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
-	// A response header name provided by the origin, which contains the score to
-	// increment rate limit counter with.
-	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
-}
-
-func (r RulesetNewParamsRulesRulesetsTransformResponseHTMLRuleRatelimit) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // The action to perform when the rule matches.
 type RulesetNewParamsRulesAction string
 
 const (
-	RulesetNewParamsRulesActionBlock                 RulesetNewParamsRulesAction = "block"
-	RulesetNewParamsRulesActionChallenge             RulesetNewParamsRulesAction = "challenge"
-	RulesetNewParamsRulesActionCompressResponse      RulesetNewParamsRulesAction = "compress_response"
-	RulesetNewParamsRulesActionDDoSDynamic           RulesetNewParamsRulesAction = "ddos_dynamic"
-	RulesetNewParamsRulesActionExecute               RulesetNewParamsRulesAction = "execute"
-	RulesetNewParamsRulesActionForceConnectionClose  RulesetNewParamsRulesAction = "force_connection_close"
-	RulesetNewParamsRulesActionJSChallenge           RulesetNewParamsRulesAction = "js_challenge"
-	RulesetNewParamsRulesActionLog                   RulesetNewParamsRulesAction = "log"
-	RulesetNewParamsRulesActionLogCustomField        RulesetNewParamsRulesAction = "log_custom_field"
-	RulesetNewParamsRulesActionManagedChallenge      RulesetNewParamsRulesAction = "managed_challenge"
-	RulesetNewParamsRulesActionRedirect              RulesetNewParamsRulesAction = "redirect"
-	RulesetNewParamsRulesActionRewrite               RulesetNewParamsRulesAction = "rewrite"
-	RulesetNewParamsRulesActionRoute                 RulesetNewParamsRulesAction = "route"
-	RulesetNewParamsRulesActionScore                 RulesetNewParamsRulesAction = "score"
-	RulesetNewParamsRulesActionServeError            RulesetNewParamsRulesAction = "serve_error"
-	RulesetNewParamsRulesActionSetCacheControl       RulesetNewParamsRulesAction = "set_cache_control"
-	RulesetNewParamsRulesActionSetCacheSettings      RulesetNewParamsRulesAction = "set_cache_settings"
-	RulesetNewParamsRulesActionSetCacheTags          RulesetNewParamsRulesAction = "set_cache_tags"
-	RulesetNewParamsRulesActionSetConfig             RulesetNewParamsRulesAction = "set_config"
-	RulesetNewParamsRulesActionSkip                  RulesetNewParamsRulesAction = "skip"
-	RulesetNewParamsRulesActionTransformResponseHTML RulesetNewParamsRulesAction = "transform_response_html"
+	RulesetNewParamsRulesActionBlock                RulesetNewParamsRulesAction = "block"
+	RulesetNewParamsRulesActionChallenge            RulesetNewParamsRulesAction = "challenge"
+	RulesetNewParamsRulesActionCompressResponse     RulesetNewParamsRulesAction = "compress_response"
+	RulesetNewParamsRulesActionDDoSDynamic          RulesetNewParamsRulesAction = "ddos_dynamic"
+	RulesetNewParamsRulesActionExecute              RulesetNewParamsRulesAction = "execute"
+	RulesetNewParamsRulesActionForceConnectionClose RulesetNewParamsRulesAction = "force_connection_close"
+	RulesetNewParamsRulesActionJSChallenge          RulesetNewParamsRulesAction = "js_challenge"
+	RulesetNewParamsRulesActionLog                  RulesetNewParamsRulesAction = "log"
+	RulesetNewParamsRulesActionLogCustomField       RulesetNewParamsRulesAction = "log_custom_field"
+	RulesetNewParamsRulesActionManagedChallenge     RulesetNewParamsRulesAction = "managed_challenge"
+	RulesetNewParamsRulesActionRedirect             RulesetNewParamsRulesAction = "redirect"
+	RulesetNewParamsRulesActionRewrite              RulesetNewParamsRulesAction = "rewrite"
+	RulesetNewParamsRulesActionRoute                RulesetNewParamsRulesAction = "route"
+	RulesetNewParamsRulesActionScore                RulesetNewParamsRulesAction = "score"
+	RulesetNewParamsRulesActionServeError           RulesetNewParamsRulesAction = "serve_error"
+	RulesetNewParamsRulesActionSetCacheControl      RulesetNewParamsRulesAction = "set_cache_control"
+	RulesetNewParamsRulesActionSetCacheSettings     RulesetNewParamsRulesAction = "set_cache_settings"
+	RulesetNewParamsRulesActionSetCacheTags         RulesetNewParamsRulesAction = "set_cache_tags"
+	RulesetNewParamsRulesActionSetConfig            RulesetNewParamsRulesAction = "set_config"
+	RulesetNewParamsRulesActionSkip                 RulesetNewParamsRulesAction = "skip"
 )
 
 func (r RulesetNewParamsRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetNewParamsRulesActionBlock, RulesetNewParamsRulesActionChallenge, RulesetNewParamsRulesActionCompressResponse, RulesetNewParamsRulesActionDDoSDynamic, RulesetNewParamsRulesActionExecute, RulesetNewParamsRulesActionForceConnectionClose, RulesetNewParamsRulesActionJSChallenge, RulesetNewParamsRulesActionLog, RulesetNewParamsRulesActionLogCustomField, RulesetNewParamsRulesActionManagedChallenge, RulesetNewParamsRulesActionRedirect, RulesetNewParamsRulesActionRewrite, RulesetNewParamsRulesActionRoute, RulesetNewParamsRulesActionScore, RulesetNewParamsRulesActionServeError, RulesetNewParamsRulesActionSetCacheControl, RulesetNewParamsRulesActionSetCacheSettings, RulesetNewParamsRulesActionSetCacheTags, RulesetNewParamsRulesActionSetConfig, RulesetNewParamsRulesActionSkip, RulesetNewParamsRulesActionTransformResponseHTML:
+	case RulesetNewParamsRulesActionBlock, RulesetNewParamsRulesActionChallenge, RulesetNewParamsRulesActionCompressResponse, RulesetNewParamsRulesActionDDoSDynamic, RulesetNewParamsRulesActionExecute, RulesetNewParamsRulesActionForceConnectionClose, RulesetNewParamsRulesActionJSChallenge, RulesetNewParamsRulesActionLog, RulesetNewParamsRulesActionLogCustomField, RulesetNewParamsRulesActionManagedChallenge, RulesetNewParamsRulesActionRedirect, RulesetNewParamsRulesActionRewrite, RulesetNewParamsRulesActionRoute, RulesetNewParamsRulesActionScore, RulesetNewParamsRulesActionServeError, RulesetNewParamsRulesActionSetCacheControl, RulesetNewParamsRulesActionSetCacheSettings, RulesetNewParamsRulesActionSetCacheTags, RulesetNewParamsRulesActionSetConfig, RulesetNewParamsRulesActionSkip:
 		return true
 	}
 	return false
@@ -14495,7 +13829,6 @@ func (r RulesetUpdateParamsRule) implementsRulesetUpdateParamsRuleUnion() {}
 // [rulesets.SetCacheSettingsRuleParam],
 // [rulesets.RulesetUpdateParamsRulesRulesetsSetCacheTagsRule],
 // [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam],
-// [rulesets.RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRule],
 // [RulesetUpdateParamsRule].
 type RulesetUpdateParamsRuleUnion interface {
 	implementsRulesetUpdateParamsRuleUnion()
@@ -16500,133 +15833,35 @@ func (r RulesetUpdateParamsRulesRulesetsSetCacheTagsRuleRatelimit) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-type RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleActionParameters] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Configuration for exposed credential checking.
-	ExposedCredentialCheck param.Field[RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck] `json:"exposed_credential_check"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// An object configuring the rule's rate limit behavior.
-	Ratelimit param.Field[RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleRatelimit] `json:"ratelimit"`
-	// The reference of the rule (the rule's ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRule) implementsRulesetUpdateParamsRuleUnion() {
-}
-
-// The action to perform when the rule matches.
-type RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleAction string
-
-const (
-	RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleAction = "transform_response_html"
-)
-
-func (r RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleAction) IsKnown() bool {
-	switch r {
-	case RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleActionTransformResponseHTML:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleActionParameters struct {
-	// Enables the link maze transformation on the response.
-	LinkMaze param.Field[interface{}] `json:"link_maze" api:"required"`
-}
-
-func (r RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleActionParameters) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configuration for exposed credential checking.
-type RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck struct {
-	// An expression that selects the password used in the credentials check.
-	PasswordExpression param.Field[string] `json:"password_expression" api:"required"`
-	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression param.Field[string] `json:"username_expression" api:"required"`
-}
-
-func (r RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// An object configuring the rule's rate limit behavior.
-type RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleRatelimit struct {
-	// Characteristics of the request on which the rate limit counter will be
-	// incremented.
-	Characteristics param.Field[[]string] `json:"characteristics" api:"required"`
-	// Period in seconds over which the counter is being incremented.
-	Period param.Field[int64] `json:"period" api:"required"`
-	// An expression that defines when the rate limit counter should be incremented. It
-	// defaults to the same as the rule's expression.
-	CountingExpression param.Field[string] `json:"counting_expression"`
-	// Period of time in seconds after which the action will be disabled following its
-	// first execution.
-	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
-	// The threshold of requests per period after which the action will be executed for
-	// the first time.
-	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
-	// Whether counting is only performed when an origin is reached.
-	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
-	// The score threshold per period for which the action will be executed the first
-	// time.
-	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
-	// A response header name provided by the origin, which contains the score to
-	// increment rate limit counter with.
-	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
-}
-
-func (r RulesetUpdateParamsRulesRulesetsTransformResponseHTMLRuleRatelimit) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // The action to perform when the rule matches.
 type RulesetUpdateParamsRulesAction string
 
 const (
-	RulesetUpdateParamsRulesActionBlock                 RulesetUpdateParamsRulesAction = "block"
-	RulesetUpdateParamsRulesActionChallenge             RulesetUpdateParamsRulesAction = "challenge"
-	RulesetUpdateParamsRulesActionCompressResponse      RulesetUpdateParamsRulesAction = "compress_response"
-	RulesetUpdateParamsRulesActionDDoSDynamic           RulesetUpdateParamsRulesAction = "ddos_dynamic"
-	RulesetUpdateParamsRulesActionExecute               RulesetUpdateParamsRulesAction = "execute"
-	RulesetUpdateParamsRulesActionForceConnectionClose  RulesetUpdateParamsRulesAction = "force_connection_close"
-	RulesetUpdateParamsRulesActionJSChallenge           RulesetUpdateParamsRulesAction = "js_challenge"
-	RulesetUpdateParamsRulesActionLog                   RulesetUpdateParamsRulesAction = "log"
-	RulesetUpdateParamsRulesActionLogCustomField        RulesetUpdateParamsRulesAction = "log_custom_field"
-	RulesetUpdateParamsRulesActionManagedChallenge      RulesetUpdateParamsRulesAction = "managed_challenge"
-	RulesetUpdateParamsRulesActionRedirect              RulesetUpdateParamsRulesAction = "redirect"
-	RulesetUpdateParamsRulesActionRewrite               RulesetUpdateParamsRulesAction = "rewrite"
-	RulesetUpdateParamsRulesActionRoute                 RulesetUpdateParamsRulesAction = "route"
-	RulesetUpdateParamsRulesActionScore                 RulesetUpdateParamsRulesAction = "score"
-	RulesetUpdateParamsRulesActionServeError            RulesetUpdateParamsRulesAction = "serve_error"
-	RulesetUpdateParamsRulesActionSetCacheControl       RulesetUpdateParamsRulesAction = "set_cache_control"
-	RulesetUpdateParamsRulesActionSetCacheSettings      RulesetUpdateParamsRulesAction = "set_cache_settings"
-	RulesetUpdateParamsRulesActionSetCacheTags          RulesetUpdateParamsRulesAction = "set_cache_tags"
-	RulesetUpdateParamsRulesActionSetConfig             RulesetUpdateParamsRulesAction = "set_config"
-	RulesetUpdateParamsRulesActionSkip                  RulesetUpdateParamsRulesAction = "skip"
-	RulesetUpdateParamsRulesActionTransformResponseHTML RulesetUpdateParamsRulesAction = "transform_response_html"
+	RulesetUpdateParamsRulesActionBlock                RulesetUpdateParamsRulesAction = "block"
+	RulesetUpdateParamsRulesActionChallenge            RulesetUpdateParamsRulesAction = "challenge"
+	RulesetUpdateParamsRulesActionCompressResponse     RulesetUpdateParamsRulesAction = "compress_response"
+	RulesetUpdateParamsRulesActionDDoSDynamic          RulesetUpdateParamsRulesAction = "ddos_dynamic"
+	RulesetUpdateParamsRulesActionExecute              RulesetUpdateParamsRulesAction = "execute"
+	RulesetUpdateParamsRulesActionForceConnectionClose RulesetUpdateParamsRulesAction = "force_connection_close"
+	RulesetUpdateParamsRulesActionJSChallenge          RulesetUpdateParamsRulesAction = "js_challenge"
+	RulesetUpdateParamsRulesActionLog                  RulesetUpdateParamsRulesAction = "log"
+	RulesetUpdateParamsRulesActionLogCustomField       RulesetUpdateParamsRulesAction = "log_custom_field"
+	RulesetUpdateParamsRulesActionManagedChallenge     RulesetUpdateParamsRulesAction = "managed_challenge"
+	RulesetUpdateParamsRulesActionRedirect             RulesetUpdateParamsRulesAction = "redirect"
+	RulesetUpdateParamsRulesActionRewrite              RulesetUpdateParamsRulesAction = "rewrite"
+	RulesetUpdateParamsRulesActionRoute                RulesetUpdateParamsRulesAction = "route"
+	RulesetUpdateParamsRulesActionScore                RulesetUpdateParamsRulesAction = "score"
+	RulesetUpdateParamsRulesActionServeError           RulesetUpdateParamsRulesAction = "serve_error"
+	RulesetUpdateParamsRulesActionSetCacheControl      RulesetUpdateParamsRulesAction = "set_cache_control"
+	RulesetUpdateParamsRulesActionSetCacheSettings     RulesetUpdateParamsRulesAction = "set_cache_settings"
+	RulesetUpdateParamsRulesActionSetCacheTags         RulesetUpdateParamsRulesAction = "set_cache_tags"
+	RulesetUpdateParamsRulesActionSetConfig            RulesetUpdateParamsRulesAction = "set_config"
+	RulesetUpdateParamsRulesActionSkip                 RulesetUpdateParamsRulesAction = "skip"
 )
 
 func (r RulesetUpdateParamsRulesAction) IsKnown() bool {
 	switch r {
-	case RulesetUpdateParamsRulesActionBlock, RulesetUpdateParamsRulesActionChallenge, RulesetUpdateParamsRulesActionCompressResponse, RulesetUpdateParamsRulesActionDDoSDynamic, RulesetUpdateParamsRulesActionExecute, RulesetUpdateParamsRulesActionForceConnectionClose, RulesetUpdateParamsRulesActionJSChallenge, RulesetUpdateParamsRulesActionLog, RulesetUpdateParamsRulesActionLogCustomField, RulesetUpdateParamsRulesActionManagedChallenge, RulesetUpdateParamsRulesActionRedirect, RulesetUpdateParamsRulesActionRewrite, RulesetUpdateParamsRulesActionRoute, RulesetUpdateParamsRulesActionScore, RulesetUpdateParamsRulesActionServeError, RulesetUpdateParamsRulesActionSetCacheControl, RulesetUpdateParamsRulesActionSetCacheSettings, RulesetUpdateParamsRulesActionSetCacheTags, RulesetUpdateParamsRulesActionSetConfig, RulesetUpdateParamsRulesActionSkip, RulesetUpdateParamsRulesActionTransformResponseHTML:
+	case RulesetUpdateParamsRulesActionBlock, RulesetUpdateParamsRulesActionChallenge, RulesetUpdateParamsRulesActionCompressResponse, RulesetUpdateParamsRulesActionDDoSDynamic, RulesetUpdateParamsRulesActionExecute, RulesetUpdateParamsRulesActionForceConnectionClose, RulesetUpdateParamsRulesActionJSChallenge, RulesetUpdateParamsRulesActionLog, RulesetUpdateParamsRulesActionLogCustomField, RulesetUpdateParamsRulesActionManagedChallenge, RulesetUpdateParamsRulesActionRedirect, RulesetUpdateParamsRulesActionRewrite, RulesetUpdateParamsRulesActionRoute, RulesetUpdateParamsRulesActionScore, RulesetUpdateParamsRulesActionServeError, RulesetUpdateParamsRulesActionSetCacheControl, RulesetUpdateParamsRulesActionSetCacheSettings, RulesetUpdateParamsRulesActionSetCacheTags, RulesetUpdateParamsRulesActionSetConfig, RulesetUpdateParamsRulesActionSkip:
 		return true
 	}
 	return false

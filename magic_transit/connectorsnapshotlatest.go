@@ -34,7 +34,7 @@ func NewConnectorSnapshotLatestService(opts ...option.RequestOption) (r *Connect
 	return
 }
 
-// Gets latest Magic WAN Connector Telemetry Snapshots
+// Get latest Snapshots
 func (r *ConnectorSnapshotLatestService) List(ctx context.Context, connectorID string, query ConnectorSnapshotLatestListParams, opts ...option.RequestOption) (res *ConnectorSnapshotLatestListResponse, err error) {
 	var env ConnectorSnapshotLatestListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -983,12 +983,6 @@ type ConnectorSnapshotLatestListResponseItemsTunnel struct {
 	InterfaceName string `json:"interface_name" api:"required"`
 	// Tunnel identifier
 	TunnelID string `json:"tunnel_id" api:"required"`
-	// Public socket address returned by the NAT detector
-	NatdResult string `json:"natd_result"`
-	// Numeric NAT detector state (0 = detected, 1 = missing result, 2 = stale result)
-	NatdState float64 `json:"natd_state"`
-	// Target socket address probed by the NAT detector, using the detector source port
-	NatdTarget string `json:"natd_target"`
 	// MTU as measured between the two ends of the tunnel
 	ProbedMtu float64 `json:"probed_mtu"`
 	// Number of recent healthy pings for this tunnel
@@ -1005,9 +999,6 @@ type connectorSnapshotLatestListResponseItemsTunnelJSON struct {
 	HealthValue          apijson.Field
 	InterfaceName        apijson.Field
 	TunnelID             apijson.Field
-	NatdResult           apijson.Field
-	NatdState            apijson.Field
-	NatdTarget           apijson.Field
 	ProbedMtu            apijson.Field
 	RecentHealthyPings   apijson.Field
 	RecentUnhealthyPings apijson.Field

@@ -109,10 +109,6 @@ Methods:
 - <code title="patch /zones/{zone_id}/settings/{setting_id}">client.Zones.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#SettingService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, settingID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#SettingEditParams">SettingEditParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#SettingEditResponse">SettingEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/settings/{setting_id}">client.Zones.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#SettingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, settingID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#SettingGetParams">SettingGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#SettingGetResponse">SettingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## TransformationsAllowedOrigins
-
-## TransformationsC2pa
-
 ## Environments
 
 Response Types:

@@ -36,7 +36,7 @@ func NewSchemaService(opts ...option.RequestOption) (r *SchemaService) {
 	return
 }
 
-// Retrieves API operations and their features exported as OpenAPI schemas.
+// Retrieve operations and features as OpenAPI schemas
 func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) (res *SchemaListResponse, err error) {
 	var env SchemaListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -85,8 +85,6 @@ type SchemaListParams struct {
 	Feature param.Field[[]SchemaListParamsFeature] `query:"feature"`
 	// Receive schema only for the given host(s).
 	Host param.Field[[]string] `query:"host"`
-	// Schema kinds to include in exported OpenAPI schemas.
-	IncludeSchemaKind param.Field[[]SchemaListParamsIncludeSchemaKind] `query:"include_schema_kind"`
 }
 
 // URLQuery serializes [SchemaListParams]'s query parameters as `url.Values`.
@@ -108,20 +106,6 @@ const (
 func (r SchemaListParamsFeature) IsKnown() bool {
 	switch r {
 	case SchemaListParamsFeatureThresholds, SchemaListParamsFeatureParameterSchemas, SchemaListParamsFeatureSchemaInfo:
-		return true
-	}
-	return false
-}
-
-type SchemaListParamsIncludeSchemaKind string
-
-const (
-	SchemaListParamsIncludeSchemaKindLearned SchemaListParamsIncludeSchemaKind = "learned"
-)
-
-func (r SchemaListParamsIncludeSchemaKind) IsKnown() bool {
-	switch r {
-	case SchemaListParamsIncludeSchemaKindLearned:
 		return true
 	}
 	return false

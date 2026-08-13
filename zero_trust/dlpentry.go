@@ -264,7 +264,7 @@ func (r DLPEntryUpdateResponse) AsUnion() DLPEntryUpdateResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [DLPEntryUpdateResponseCustomEntry],
+// DLPEntryUpdateResponseUnion is satisfied by [DLPEntryUpdateResponseCustomEntry],
 // [DLPEntryUpdateResponseCustomPromptTopicEntry],
 // [DLPEntryUpdateResponsePredefinedEntry],
 // [DLPEntryUpdateResponseIntegrationEntry],
@@ -493,7 +493,7 @@ func (r DLPEntryUpdateResponsePredefinedEntryType) IsKnown() bool {
 	return false
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryUpdateResponsePredefinedEntryVariant is a Predefined AI prompt classification topic entry.
 type DLPEntryUpdateResponsePredefinedEntryVariant struct {
 	Type DLPEntryUpdateResponsePredefinedEntryVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -537,7 +537,7 @@ func (r DLPEntryUpdateResponsePredefinedEntryVariant) AsUnion() DLPEntryUpdateRe
 	return r.union
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryUpdateResponsePredefinedEntryVariantUnion is a Predefined AI prompt classification topic entry.
 //
 // Union satisfied by [DLPEntryUpdateResponsePredefinedEntryVariantObject] or
 // [DLPEntryUpdateResponsePredefinedEntryVariantObject].
@@ -560,7 +560,7 @@ func init() {
 	)
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryUpdateResponsePredefinedEntryVariantObject is a Predefined AI prompt classification topic entry.
 type DLPEntryUpdateResponsePredefinedEntryVariantObject struct {
 	TopicType DLPEntryUpdateResponsePredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      DLPEntryUpdateResponsePredefinedEntryVariantObjectType      `json:"type" api:"required"`
@@ -949,7 +949,7 @@ func (r DLPEntryListResponse) AsUnion() DLPEntryListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [DLPEntryListResponseObject], [DLPEntryListResponseObject],
+// DLPEntryListResponseUnion is satisfied by [DLPEntryListResponseObject], [DLPEntryListResponseObject],
 // [DLPEntryListResponseObject], [DLPEntryListResponseObject],
 // [DLPEntryListResponseObject], [DLPEntryListResponseObject] or
 // [DLPEntryListResponseObject].
@@ -1185,7 +1185,7 @@ func (r DLPEntryGetResponse) AsUnion() DLPEntryGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [DLPEntryGetResponseObject], [DLPEntryGetResponseObject],
+// DLPEntryGetResponseUnion is satisfied by [DLPEntryGetResponseObject], [DLPEntryGetResponseObject],
 // [DLPEntryGetResponseObject], [DLPEntryGetResponseObject],
 // [DLPEntryGetResponseObject], [DLPEntryGetResponseObject] or
 // [DLPEntryGetResponseObject].
@@ -1287,7 +1287,7 @@ func (r DLPEntryGetResponseObjectType) IsKnown() bool {
 	return false
 }
 
-// Computed entry field for a profile that an entry is shared into.
+// DLPEntryGetResponseObjectProfile computed entry field for a profile that an entry is shared into.
 type DLPEntryGetResponseObjectProfile struct {
 	ID   string                               `json:"id" api:"required" format:"uuid"`
 	Name string                               `json:"name" api:"required"`
@@ -1506,7 +1506,7 @@ func (r dlpEntryNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryNewResponseEnvelopeSuccess bool
 
 const (
@@ -1544,7 +1544,7 @@ func (r DLPEntryUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r DLPEntryUpdateParamsBody) implementsDLPEntryUpdateParamsBodyUnion() {}
 
-// Satisfied by [zero_trust.DLPEntryUpdateParamsBodyCustom],
+// DLPEntryUpdateParamsBodyUnion satisfied by [zero_trust.DLPEntryUpdateParamsBodyCustom],
 // [zero_trust.DLPEntryUpdateParamsBodyPredefined],
 // [zero_trust.DLPEntryUpdateParamsBodyIntegration], [DLPEntryUpdateParamsBody].
 type DLPEntryUpdateParamsBodyUnion interface {
@@ -1769,7 +1769,7 @@ func (r dlpEntryUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1916,7 +1916,7 @@ func (r dlpEntryDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -2059,7 +2059,7 @@ func (r dlpEntryGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryGetResponseEnvelopeSuccess bool
 
 const (

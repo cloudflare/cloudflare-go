@@ -168,6 +168,7 @@ func TestSessionGetSessionParticipantDetailsWithOptionalParams(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGetSessionParticipantDetailsParams{
 			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Filters:           cloudflare.F(realtime_kit.SessionGetSessionParticipantDetailsParamsFiltersDeviceInfo),
 			IncludePeerEvents: cloudflare.F(true),
 		},
 	)

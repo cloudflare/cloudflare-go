@@ -36,7 +36,7 @@ func NewThreatEventAttackerService(opts ...option.RequestOption) (r *ThreatEvent
 	return
 }
 
-// List attacker names referenced in events across one or more datasets.
+// Lists attackers across multiple datasets
 func (r *ThreatEventAttackerService) List(ctx context.Context, params ThreatEventAttackerListParams, opts ...option.RequestOption) (res *ThreatEventAttackerListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

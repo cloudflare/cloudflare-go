@@ -107,7 +107,7 @@ func (r networkRouteIPGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// NetworkRouteIPGetResponseEnvelopeSuccess indicates whether the API call was successful
 type NetworkRouteIPGetResponseEnvelopeSuccess bool
 
 const (

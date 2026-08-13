@@ -245,7 +245,7 @@ func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, 
 	return res, nil
 }
 
-// Enforces a device posture rule has run successfully
+// AccessDevicePostureRule enforces a device posture rule has run successfully.
 type AccessDevicePostureRule struct {
 	DevicePosture AccessDevicePostureRuleDevicePosture `json:"device_posture" api:"required"`
 	JSON          accessDevicePostureRuleJSON          `json:"-"`
@@ -291,7 +291,7 @@ func (r accessDevicePostureRuleDevicePostureJSON) RawJSON() string {
 	return r.raw
 }
 
-// Enforces a device posture rule has run successfully
+// AccessDevicePostureRuleParam enforces a device posture rule has run successfully.
 type AccessDevicePostureRuleParam struct {
 	DevicePosture param.Field[AccessDevicePostureRuleDevicePostureParam] `json:"device_posture" api:"required"`
 }
@@ -311,7 +311,7 @@ func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an Access group.
+// AccessRule matches an Access group.
 type AccessRule struct {
 	// This field can have the runtime type of
 	// [AnyValidServiceTokenRuleAnyValidServiceToken].
@@ -440,7 +440,7 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
 }
 
-// Matches an Access group.
+// AccessRuleUnion matches an Access group.
 //
 // Union satisfied by [GroupRule], [AnyValidServiceTokenRule],
 // [AccessRuleAccessAuthContextRule], [AuthenticationMethodRule], [AzureGroupRule],
@@ -567,7 +567,7 @@ func init() {
 	)
 }
 
-// Matches an Azure Authentication Context. Requires an Azure identity provider.
+// AccessRuleAccessAuthContextRule matches an Azure Authentication Context. Requires an Azure identity provider.
 type AccessRuleAccessAuthContextRule struct {
 	AuthContext AccessRuleAccessAuthContextRuleAuthContext `json:"auth_context" api:"required"`
 	JSON        accessRuleAccessAuthContextRuleJSON        `json:"-"`
@@ -619,7 +619,7 @@ func (r accessRuleAccessAuthContextRuleAuthContextJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a specific common name.
+// AccessRuleAccessCommonNameRule matches a specific common name.
 type AccessRuleAccessCommonNameRule struct {
 	CommonName AccessRuleAccessCommonNameRuleCommonName `json:"common_name" api:"required"`
 	JSON       accessRuleAccessCommonNameRuleJSON       `json:"-"`
@@ -665,7 +665,7 @@ func (r accessRuleAccessCommonNameRuleCommonNameJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a specific identity provider id.
+// AccessRuleAccessLoginMethodRule matches a specific identity provider id.
 type AccessRuleAccessLoginMethodRule struct {
 	LoginMethod AccessRuleAccessLoginMethodRuleLoginMethod `json:"login_method" api:"required"`
 	JSON        accessRuleAccessLoginMethodRuleJSON        `json:"-"`
@@ -711,7 +711,7 @@ func (r accessRuleAccessLoginMethodRuleLoginMethodJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an OIDC claim. Requires an OIDC identity provider.
+// AccessRuleAccessOIDCClaimRule matches an OIDC claim. Requires an OIDC identity provider.
 type AccessRuleAccessOIDCClaimRule struct {
 	OIDC AccessRuleAccessOIDCClaimRuleOIDC `json:"oidc" api:"required"`
 	JSON accessRuleAccessOIDCClaimRuleJSON `json:"-"`
@@ -763,7 +763,7 @@ func (r accessRuleAccessOIDCClaimRuleOIDCJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
+// AccessRuleAccessLinkedAppTokenRule matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
 // application. Only compatible with non_identity and bypass decisions.
 type AccessRuleAccessLinkedAppTokenRule struct {
 	LinkedAppToken AccessRuleAccessLinkedAppTokenRuleLinkedAppToken `json:"linked_app_token" api:"required"`
@@ -810,7 +810,7 @@ func (r accessRuleAccessLinkedAppTokenRuleLinkedAppTokenJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a user's risk score.
+// AccessRuleAccessUserRiskScoreRule matches a user's risk score.
 type AccessRuleAccessUserRiskScoreRule struct {
 	UserRiskScore AccessRuleAccessUserRiskScoreRuleUserRiskScore `json:"user_risk_score" api:"required"`
 	JSON          accessRuleAccessUserRiskScoreRuleJSON          `json:"-"`
@@ -874,7 +874,7 @@ func (r AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore) IsKnown() b
 	return false
 }
 
-// Matches users who are members of a specific Cloudflare account. Requires a
+// AccessRuleAccessCloudflareAccountMemberRule matches users who are members of a specific Cloudflare account. Requires a
 // Cloudflare identity provider.
 type AccessRuleAccessCloudflareAccountMemberRule struct {
 	CloudflareAccountMember AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMember `json:"cloudflare_account_member" api:"required"`
@@ -922,7 +922,7 @@ func (r accessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberJSON) 
 	return r.raw
 }
 
-// Matches an Access group.
+// AccessRuleParam matches an Access group.
 type AccessRuleParam struct {
 	AnyValidServiceToken    param.Field[interface{}] `json:"any_valid_service_token"`
 	AuthContext             param.Field[interface{}] `json:"auth_context"`
@@ -958,7 +958,7 @@ func (r AccessRuleParam) MarshalJSON() (data []byte, err error) {
 
 func (r AccessRuleParam) implementsAccessRuleUnionParam() {}
 
-// Matches an Access group.
+// AccessRuleUnionParam matches an Access group.
 //
 // Satisfied by [zero_trust.GroupRuleParam],
 // [zero_trust.AnyValidServiceTokenRuleParam],
@@ -983,7 +983,7 @@ type AccessRuleUnionParam interface {
 	implementsAccessRuleUnionParam()
 }
 
-// Matches an Azure Authentication Context. Requires an Azure identity provider.
+// AccessRuleAccessAuthContextRuleParam matches an Azure Authentication Context. Requires an Azure identity provider.
 type AccessRuleAccessAuthContextRuleParam struct {
 	AuthContext param.Field[AccessRuleAccessAuthContextRuleAuthContextParam] `json:"auth_context" api:"required"`
 }
@@ -1007,7 +1007,7 @@ func (r AccessRuleAccessAuthContextRuleAuthContextParam) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific common name.
+// AccessRuleAccessCommonNameRuleParam matches a specific common name.
 type AccessRuleAccessCommonNameRuleParam struct {
 	CommonName param.Field[AccessRuleAccessCommonNameRuleCommonNameParam] `json:"common_name" api:"required"`
 }
@@ -1027,7 +1027,7 @@ func (r AccessRuleAccessCommonNameRuleCommonNameParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific identity provider id.
+// AccessRuleAccessLoginMethodRuleParam matches a specific identity provider id.
 type AccessRuleAccessLoginMethodRuleParam struct {
 	LoginMethod param.Field[AccessRuleAccessLoginMethodRuleLoginMethodParam] `json:"login_method" api:"required"`
 }
@@ -1047,7 +1047,7 @@ func (r AccessRuleAccessLoginMethodRuleLoginMethodParam) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an OIDC claim. Requires an OIDC identity provider.
+// AccessRuleAccessOIDCClaimRuleParam matches an OIDC claim. Requires an OIDC identity provider.
 type AccessRuleAccessOIDCClaimRuleParam struct {
 	OIDC param.Field[AccessRuleAccessOIDCClaimRuleOIDCParam] `json:"oidc" api:"required"`
 }
@@ -1071,7 +1071,7 @@ func (r AccessRuleAccessOIDCClaimRuleOIDCParam) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-// Matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
+// AccessRuleAccessLinkedAppTokenRuleParam matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
 // application. Only compatible with non_identity and bypass decisions.
 type AccessRuleAccessLinkedAppTokenRuleParam struct {
 	LinkedAppToken param.Field[AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam] `json:"linked_app_token" api:"required"`
@@ -1092,7 +1092,7 @@ func (r AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a user's risk score.
+// AccessRuleAccessUserRiskScoreRuleParam matches a user's risk score.
 type AccessRuleAccessUserRiskScoreRuleParam struct {
 	UserRiskScore param.Field[AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam] `json:"user_risk_score" api:"required"`
 }
@@ -1113,7 +1113,7 @@ func (r AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-// Matches users who are members of a specific Cloudflare account. Requires a
+// AccessRuleAccessCloudflareAccountMemberRuleParam matches users who are members of a specific Cloudflare account. Requires a
 // Cloudflare identity provider.
 type AccessRuleAccessCloudflareAccountMemberRuleParam struct {
 	CloudflareAccountMember param.Field[AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberParam] `json:"cloudflare_account_member" api:"required"`
@@ -1134,7 +1134,7 @@ func (r AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberParam)
 	return apijson.MarshalRoot(r)
 }
 
-// Matches any valid Access Service Token
+// AnyValidServiceTokenRule matches any valid Access Service Token
 type AnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
 	AnyValidServiceToken AnyValidServiceTokenRuleAnyValidServiceToken `json:"any_valid_service_token" api:"required"`
@@ -1159,7 +1159,7 @@ func (r anyValidServiceTokenRuleJSON) RawJSON() string {
 
 func (r AnyValidServiceTokenRule) implementsAccessRule() {}
 
-// An empty object which matches on all service tokens.
+// AnyValidServiceTokenRuleAnyValidServiceToken is an empty object which matches on all service tokens.
 type AnyValidServiceTokenRuleAnyValidServiceToken struct {
 	JSON anyValidServiceTokenRuleAnyValidServiceTokenJSON `json:"-"`
 }
@@ -1179,7 +1179,7 @@ func (r anyValidServiceTokenRuleAnyValidServiceTokenJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches any valid Access Service Token
+// AnyValidServiceTokenRuleParam matches any valid Access Service Token
 type AnyValidServiceTokenRuleParam struct {
 	// An empty object which matches on all service tokens.
 	AnyValidServiceToken param.Field[AnyValidServiceTokenRuleAnyValidServiceTokenParam] `json:"any_valid_service_token" api:"required"`
@@ -1191,7 +1191,7 @@ func (r AnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
 
 func (r AnyValidServiceTokenRuleParam) implementsAccessRuleUnionParam() {}
 
-// An empty object which matches on all service tokens.
+// AnyValidServiceTokenRuleAnyValidServiceTokenParam is an empty object which matches on all service tokens.
 type AnyValidServiceTokenRuleAnyValidServiceTokenParam struct {
 }
 
@@ -1199,7 +1199,7 @@ func (r AnyValidServiceTokenRuleAnyValidServiceTokenParam) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-// Enforce different MFA options
+// AuthenticationMethodRule enforce different MFA options
 type AuthenticationMethodRule struct {
 	AuthMethod AuthenticationMethodRuleAuthMethod `json:"auth_method" api:"required"`
 	JSON       authenticationMethodRuleJSON       `json:"-"`
@@ -1246,7 +1246,7 @@ func (r authenticationMethodRuleAuthMethodJSON) RawJSON() string {
 	return r.raw
 }
 
-// Enforce different MFA options
+// AuthenticationMethodRuleParam enforce different MFA options
 type AuthenticationMethodRuleParam struct {
 	AuthMethod param.Field[AuthenticationMethodRuleAuthMethodParam] `json:"auth_method" api:"required"`
 }
@@ -1267,7 +1267,7 @@ func (r AuthenticationMethodRuleAuthMethodParam) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an Azure group. Requires an Azure identity provider.
+// AzureGroupRule matches an Azure group. Requires an Azure identity provider.
 type AzureGroupRule struct {
 	AzureAD AzureGroupRuleAzureAD `json:"azureAD" api:"required"`
 	JSON    azureGroupRuleJSON    `json:"-"`
@@ -1315,7 +1315,7 @@ func (r azureGroupRuleAzureADJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an Azure group. Requires an Azure identity provider.
+// AzureGroupRuleParam matches an Azure group. Requires an Azure identity provider.
 type AzureGroupRuleParam struct {
 	AzureAD param.Field[AzureGroupRuleAzureADParam] `json:"azureAD" api:"required"`
 }
@@ -1337,7 +1337,7 @@ func (r AzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches any valid client certificate.
+// CertificateRule matches any valid client certificate.
 type CertificateRule struct {
 	Certificate CertificateRuleCertificate `json:"certificate" api:"required"`
 	JSON        certificateRuleJSON        `json:"-"`
@@ -1379,7 +1379,7 @@ func (r certificateRuleCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches any valid client certificate.
+// CertificateRuleParam matches any valid client certificate.
 type CertificateRuleParam struct {
 	Certificate param.Field[CertificateRuleCertificateParam] `json:"certificate" api:"required"`
 }
@@ -1397,7 +1397,7 @@ func (r CertificateRuleCertificateParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific country
+// CountryRule matches a specific country
 type CountryRule struct {
 	Geo  CountryRuleGeo  `json:"geo" api:"required"`
 	JSON countryRuleJSON `json:"-"`
@@ -1441,7 +1441,7 @@ func (r countryRuleGeoJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a specific country
+// CountryRuleParam matches a specific country
 type CountryRuleParam struct {
 	Geo param.Field[CountryRuleGeoParam] `json:"geo" api:"required"`
 }
@@ -1461,7 +1461,7 @@ func (r CountryRuleGeoParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Match an entire email domain.
+// DomainRule match an entire email domain.
 type DomainRule struct {
 	EmailDomain DomainRuleEmailDomain `json:"email_domain" api:"required"`
 	JSON        domainRuleJSON        `json:"-"`
@@ -1506,7 +1506,7 @@ func (r domainRuleEmailDomainJSON) RawJSON() string {
 	return r.raw
 }
 
-// Match an entire email domain.
+// DomainRuleParam match an entire email domain.
 type DomainRuleParam struct {
 	EmailDomain param.Field[DomainRuleEmailDomainParam] `json:"email_domain" api:"required"`
 }
@@ -1526,7 +1526,7 @@ func (r DomainRuleEmailDomainParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an email address from a list.
+// EmailListRule matches an email address from a list.
 type EmailListRule struct {
 	EmailList EmailListRuleEmailList `json:"email_list" api:"required"`
 	JSON      emailListRuleJSON      `json:"-"`
@@ -1571,7 +1571,7 @@ func (r emailListRuleEmailListJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an email address from a list.
+// EmailListRuleParam matches an email address from a list.
 type EmailListRuleParam struct {
 	EmailList param.Field[EmailListRuleEmailListParam] `json:"email_list" api:"required"`
 }
@@ -1591,7 +1591,7 @@ func (r EmailListRuleEmailListParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific email.
+// EmailRule matches a specific email.
 type EmailRule struct {
 	Email EmailRuleEmail `json:"email" api:"required"`
 	JSON  emailRuleJSON  `json:"-"`
@@ -1635,7 +1635,7 @@ func (r emailRuleEmailJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a specific email.
+// EmailRuleParam matches a specific email.
 type EmailRuleParam struct {
 	Email param.Field[EmailRuleEmailParam] `json:"email" api:"required"`
 }
@@ -1655,7 +1655,7 @@ func (r EmailRuleEmailParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches everyone.
+// EveryoneRule matches everyone.
 type EveryoneRule struct {
 	// An empty object which matches on all users.
 	Everyone EveryoneRuleEveryone `json:"everyone" api:"required"`
@@ -1679,7 +1679,7 @@ func (r everyoneRuleJSON) RawJSON() string {
 
 func (r EveryoneRule) implementsAccessRule() {}
 
-// An empty object which matches on all users.
+// EveryoneRuleEveryone is an empty object which matches on all users.
 type EveryoneRuleEveryone struct {
 	JSON everyoneRuleEveryoneJSON `json:"-"`
 }
@@ -1699,7 +1699,7 @@ func (r everyoneRuleEveryoneJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches everyone.
+// EveryoneRuleParam matches everyone.
 type EveryoneRuleParam struct {
 	// An empty object which matches on all users.
 	Everyone param.Field[EveryoneRuleEveryoneParam] `json:"everyone" api:"required"`
@@ -1711,7 +1711,7 @@ func (r EveryoneRuleParam) MarshalJSON() (data []byte, err error) {
 
 func (r EveryoneRuleParam) implementsAccessRuleUnionParam() {}
 
-// An empty object which matches on all users.
+// EveryoneRuleEveryoneParam is an empty object which matches on all users.
 type EveryoneRuleEveryoneParam struct {
 }
 
@@ -1719,7 +1719,7 @@ func (r EveryoneRuleEveryoneParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Create Allow or Block policies which evaluate the user based on custom criteria.
+// ExternalEvaluationRule create Allow or Block policies which evaluate the user based on custom criteria.
 type ExternalEvaluationRule struct {
 	ExternalEvaluation ExternalEvaluationRuleExternalEvaluation `json:"external_evaluation" api:"required"`
 	JSON               externalEvaluationRuleJSON               `json:"-"`
@@ -1769,7 +1769,7 @@ func (r externalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Create Allow or Block policies which evaluate the user based on custom criteria.
+// ExternalEvaluationRuleParam create Allow or Block policies which evaluate the user based on custom criteria.
 type ExternalEvaluationRuleParam struct {
 	ExternalEvaluation param.Field[ExternalEvaluationRuleExternalEvaluationParam] `json:"external_evaluation" api:"required"`
 }
@@ -1792,7 +1792,7 @@ func (r ExternalEvaluationRuleExternalEvaluationParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a Github organization. Requires a Github identity provider.
+// GitHubOrganizationRule matches a Github organization. Requires a Github identity provider.
 type GitHubOrganizationRule struct {
 	GitHubOrganization GitHubOrganizationRuleGitHubOrganization `json:"github-organization" api:"required"`
 	JSON               githubOrganizationRuleJSON               `json:"-"`
@@ -1844,7 +1844,7 @@ func (r githubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a Github organization. Requires a Github identity provider.
+// GitHubOrganizationRuleParam matches a Github organization. Requires a Github identity provider.
 type GitHubOrganizationRuleParam struct {
 	GitHubOrganization param.Field[GitHubOrganizationRuleGitHubOrganizationParam] `json:"github-organization" api:"required"`
 }
@@ -1868,7 +1868,7 @@ func (r GitHubOrganizationRuleGitHubOrganizationParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an Access group.
+// GroupRule matches an Access group.
 type GroupRule struct {
 	Group GroupRuleGroup `json:"group" api:"required"`
 	JSON  groupRuleJSON  `json:"-"`
@@ -1912,7 +1912,7 @@ func (r groupRuleGroupJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an Access group.
+// GroupRuleParam matches an Access group.
 type GroupRuleParam struct {
 	Group param.Field[GroupRuleGroupParam] `json:"group" api:"required"`
 }
@@ -1932,7 +1932,7 @@ func (r GroupRuleGroupParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a group in Google Workspace. Requires a Google Workspace identity
+// GSuiteGroupRule matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type GSuiteGroupRule struct {
 	GSuite GSuiteGroupRuleGSuite `json:"gsuite" api:"required"`
@@ -1981,7 +1981,7 @@ func (r GSuiteGroupRuleGSuiteJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a group in Google Workspace. Requires a Google Workspace identity
+// GSuiteGroupRuleParam matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type GSuiteGroupRuleParam struct {
 	GSuite param.Field[GSuiteGroupRuleGSuiteParam] `json:"gsuite" api:"required"`
@@ -2004,7 +2004,7 @@ func (r GSuiteGroupRuleGSuiteParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an IP address from a list.
+// IPListRule matches an IP address from a list.
 type IPListRule struct {
 	IPList IPListRuleIPList `json:"ip_list" api:"required"`
 	JSON   ipListRuleJSON   `json:"-"`
@@ -2049,7 +2049,7 @@ func (r ipListRuleIPListJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an IP address from a list.
+// IPListRuleParam matches an IP address from a list.
 type IPListRuleParam struct {
 	IPList param.Field[IPListRuleIPListParam] `json:"ip_list" api:"required"`
 }
@@ -2069,7 +2069,7 @@ func (r IPListRuleIPListParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an IP address block.
+// IPRule matches an IP address block.
 type IPRule struct {
 	IP   IPRuleIP   `json:"ip" api:"required"`
 	JSON ipRuleJSON `json:"-"`
@@ -2113,7 +2113,7 @@ func (r ipRuleIPJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an IP address block.
+// IPRuleParam matches an IP address block.
 type IPRuleParam struct {
 	IP param.Field[IPRuleIPParam] `json:"ip" api:"required"`
 }
@@ -2133,7 +2133,7 @@ func (r IPRuleIPParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an Okta group. Requires an Okta identity provider.
+// OktaGroupRule matches an Okta group. Requires an Okta identity provider.
 type OktaGroupRule struct {
 	Okta OktaGroupRuleOkta `json:"okta" api:"required"`
 	JSON oktaGroupRuleJSON `json:"-"`
@@ -2181,7 +2181,7 @@ func (r oktaGroupRuleOktaJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an Okta group. Requires an Okta identity provider.
+// OktaGroupRuleParam matches an Okta group. Requires an Okta identity provider.
 type OktaGroupRuleParam struct {
 	Okta param.Field[OktaGroupRuleOktaParam] `json:"okta" api:"required"`
 }
@@ -2203,7 +2203,7 @@ func (r OktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a SAML group. Requires a SAML identity provider.
+// SAMLGroupRule matches a SAML group. Requires a SAML identity provider.
 type SAMLGroupRule struct {
 	SAML SAMLGroupRuleSAML `json:"saml" api:"required"`
 	JSON samlGroupRuleJSON `json:"-"`
@@ -2254,7 +2254,7 @@ func (r samlGroupRuleSAMLJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a SAML group. Requires a SAML identity provider.
+// SAMLGroupRuleParam matches a SAML group. Requires a SAML identity provider.
 type SAMLGroupRuleParam struct {
 	SAML param.Field[SAMLGroupRuleSAMLParam] `json:"saml" api:"required"`
 }
@@ -2278,7 +2278,7 @@ func (r SAMLGroupRuleSAMLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific Access Service Token
+// ServiceTokenRule matches a specific Access Service Token
 type ServiceTokenRule struct {
 	ServiceToken ServiceTokenRuleServiceToken `json:"service_token" api:"required"`
 	JSON         serviceTokenRuleJSON         `json:"-"`
@@ -2324,7 +2324,7 @@ func (r serviceTokenRuleServiceTokenJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a specific Access Service Token
+// ServiceTokenRuleParam matches a specific Access Service Token
 type ServiceTokenRuleParam struct {
 	ServiceToken param.Field[ServiceTokenRuleServiceTokenParam] `json:"service_token" api:"required"`
 }
@@ -2423,7 +2423,7 @@ func (r accessApplicationPolicyNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyNewResponseConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
 type AccessApplicationPolicyNewResponseConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
@@ -2447,7 +2447,7 @@ func (r accessApplicationPolicyNewResponseConnectionRulesJSON) RawJSON() string 
 	return r.raw
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
+// AccessApplicationPolicyNewResponseConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
 type AccessApplicationPolicyNewResponseConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
 	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
@@ -2473,39 +2473,37 @@ func (r accessApplicationPolicyNewResponseConnectionRulesRDPJSON) RawJSON() stri
 	return r.raw
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
 type AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
 	AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
 )
 
 func (r AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
 type AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
 	AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
 )
 
 func (r AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
+// AccessApplicationPolicyNewResponseMfaConfig configures multi-factor authentication (MFA) settings.
 type AccessApplicationPolicyNewResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
@@ -2631,7 +2629,7 @@ func (r accessApplicationPolicyUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyUpdateResponseConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
 type AccessApplicationPolicyUpdateResponseConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
@@ -2655,7 +2653,7 @@ func (r accessApplicationPolicyUpdateResponseConnectionRulesJSON) RawJSON() stri
 	return r.raw
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
+// AccessApplicationPolicyUpdateResponseConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
 type AccessApplicationPolicyUpdateResponseConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
 	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
@@ -2682,39 +2680,37 @@ func (r accessApplicationPolicyUpdateResponseConnectionRulesRDPJSON) RawJSON() s
 	return r.raw
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
 type AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
 	AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
 )
 
 func (r AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
 type AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
 	AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
 )
 
 func (r AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
+// AccessApplicationPolicyUpdateResponseMfaConfig configures multi-factor authentication (MFA) settings.
 type AccessApplicationPolicyUpdateResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
@@ -2840,7 +2836,7 @@ func (r accessApplicationPolicyListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyListResponseConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
 type AccessApplicationPolicyListResponseConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
@@ -2864,7 +2860,7 @@ func (r accessApplicationPolicyListResponseConnectionRulesJSON) RawJSON() string
 	return r.raw
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
+// AccessApplicationPolicyListResponseConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
 type AccessApplicationPolicyListResponseConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
 	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
@@ -2890,39 +2886,37 @@ func (r accessApplicationPolicyListResponseConnectionRulesRDPJSON) RawJSON() str
 	return r.raw
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
 type AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
 	AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
 )
 
 func (r AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
 type AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
 	AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
 )
 
 func (r AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
+// AccessApplicationPolicyListResponseMfaConfig configures multi-factor authentication (MFA) settings.
 type AccessApplicationPolicyListResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
@@ -3070,7 +3064,7 @@ func (r accessApplicationPolicyGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyGetResponseConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
 type AccessApplicationPolicyGetResponseConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
@@ -3094,7 +3088,7 @@ func (r accessApplicationPolicyGetResponseConnectionRulesJSON) RawJSON() string 
 	return r.raw
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
+// AccessApplicationPolicyGetResponseConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
 type AccessApplicationPolicyGetResponseConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
 	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
@@ -3120,39 +3114,37 @@ func (r accessApplicationPolicyGetResponseConnectionRulesRDPJSON) RawJSON() stri
 	return r.raw
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
 type AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
 	AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
 )
 
 func (r AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
 type AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
 	AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
 )
 
 func (r AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
+// AccessApplicationPolicyGetResponseMfaConfig configures multi-factor authentication (MFA) settings.
 type AccessApplicationPolicyGetResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
@@ -3235,7 +3227,7 @@ func (r AccessApplicationPolicyNewParams) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyNewParamsConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
 type AccessApplicationPolicyNewParamsConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
@@ -3246,7 +3238,7 @@ func (r AccessApplicationPolicyNewParamsConnectionRules) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
+// AccessApplicationPolicyNewParamsConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
 type AccessApplicationPolicyNewParamsConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
 	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
@@ -3258,39 +3250,37 @@ func (r AccessApplicationPolicyNewParamsConnectionRulesRDP) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
 type AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
 	AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
 )
 
 func (r AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
 type AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
 	AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
 )
 
 func (r AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
+// AccessApplicationPolicyNewParamsMfaConfig configures multi-factor authentication (MFA) settings.
 type AccessApplicationPolicyNewParamsMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
@@ -3447,7 +3437,7 @@ func (r accessApplicationPolicyNewResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationPolicyNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationPolicyNewResponseEnvelopeSuccess bool
 
 const (
@@ -3498,7 +3488,7 @@ func (r AccessApplicationPolicyUpdateParams) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyUpdateParamsConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
 type AccessApplicationPolicyUpdateParamsConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
@@ -3509,7 +3499,7 @@ func (r AccessApplicationPolicyUpdateParamsConnectionRules) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
+// AccessApplicationPolicyUpdateParamsConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
 type AccessApplicationPolicyUpdateParamsConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
 	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
@@ -3521,39 +3511,37 @@ func (r AccessApplicationPolicyUpdateParamsConnectionRulesRDP) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
 type AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
 	AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
 )
 
 func (r AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
 type AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
 	AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
 )
 
 func (r AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
+// AccessApplicationPolicyUpdateParamsMfaConfig configures multi-factor authentication (MFA) settings.
 type AccessApplicationPolicyUpdateParamsMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
@@ -3711,7 +3699,7 @@ func (r accessApplicationPolicyUpdateResponseEnvelopeMessagesSourceJSON) RawJSON
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationPolicyUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationPolicyUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -3879,7 +3867,7 @@ func (r accessApplicationPolicyDeleteResponseEnvelopeMessagesSourceJSON) RawJSON
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationPolicyDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationPolicyDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -4026,7 +4014,7 @@ func (r accessApplicationPolicyGetResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationPolicyGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationPolicyGetResponseEnvelopeSuccess bool
 
 const (

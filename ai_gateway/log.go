@@ -38,8 +38,7 @@ func NewLogService(opts ...option.RequestOption) (r *LogService) {
 	return
 }
 
-// Lists request/response log entries for the AI gateway with filtering and
-// pagination.
+// List Gateway Logs
 func (r *LogService) List(ctx context.Context, gatewayID string, params LogListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[LogListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -65,13 +64,12 @@ func (r *LogService) List(ctx context.Context, gatewayID string, params LogListP
 	return res, nil
 }
 
-// Lists request/response log entries for the AI gateway with filtering and
-// pagination.
+// List Gateway Logs
 func (r *LogService) ListAutoPaging(ctx context.Context, gatewayID string, params LogListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[LogListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, gatewayID, params, opts...))
 }
 
-// Deletes gateway log entries matching the specified criteria.
+// Delete Gateway Logs
 func (r *LogService) Delete(ctx context.Context, gatewayID string, params LogDeleteParams, opts ...option.RequestOption) (res *LogDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

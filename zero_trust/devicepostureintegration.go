@@ -177,7 +177,7 @@ func (r integrationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The configuration object containing third-party integration information.
+// IntegrationConfig is the configuration object containing third-party integration information.
 type IntegrationConfig struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
 	APIURL string `json:"api_url" api:"required"`
@@ -206,7 +206,7 @@ func (r integrationConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The type of device posture integration.
+// IntegrationType is the type of device posture integration.
 type IntegrationType string
 
 const (
@@ -245,7 +245,7 @@ func (r DevicePostureIntegrationNewParams) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-// The configuration object containing third-party integration information.
+// DevicePostureIntegrationNewParamsConfig is the configuration object containing third-party integration information.
 type DevicePostureIntegrationNewParamsConfig struct {
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
 	// hitting the `api_url`.
@@ -274,7 +274,7 @@ func (r DevicePostureIntegrationNewParamsConfig) MarshalJSON() (data []byte, err
 func (r DevicePostureIntegrationNewParamsConfig) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
-// The configuration object containing third-party integration information.
+// DevicePostureIntegrationNewParamsConfigUnion is the configuration object containing third-party integration information.
 //
 // Satisfied by
 // [zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest],
@@ -426,7 +426,7 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigReques
 func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest) implementsDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
-// The type of device posture integration.
+// DevicePostureIntegrationNewParamsType is the type of device posture integration.
 type DevicePostureIntegrationNewParamsType string
 
 const (
@@ -476,7 +476,7 @@ func (r devicePostureIntegrationNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DevicePostureIntegrationNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DevicePostureIntegrationNewResponseEnvelopeSuccess bool
 
 const (
@@ -527,7 +527,7 @@ func (r devicePostureIntegrationDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DevicePostureIntegrationDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type DevicePostureIntegrationDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -559,7 +559,7 @@ func (r DevicePostureIntegrationEditParams) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-// The configuration object containing third-party integration information.
+// DevicePostureIntegrationEditParamsConfig is the configuration object containing third-party integration information.
 type DevicePostureIntegrationEditParamsConfig struct {
 	// If present, this id will be passed in the `CF-Access-Client-ID` header when
 	// hitting the `api_url`.
@@ -588,7 +588,7 @@ func (r DevicePostureIntegrationEditParamsConfig) MarshalJSON() (data []byte, er
 func (r DevicePostureIntegrationEditParamsConfig) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
-// The configuration object containing third-party integration information.
+// DevicePostureIntegrationEditParamsConfigUnion is the configuration object containing third-party integration information.
 //
 // Satisfied by
 // [zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest],
@@ -740,7 +740,7 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigReque
 func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest) implementsDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
-// The type of device posture integration.
+// DevicePostureIntegrationEditParamsType is the type of device posture integration.
 type DevicePostureIntegrationEditParamsType string
 
 const (
@@ -790,7 +790,7 @@ func (r devicePostureIntegrationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DevicePostureIntegrationEditResponseEnvelopeSuccess indicates whether the API call was successful.
 type DevicePostureIntegrationEditResponseEnvelopeSuccess bool
 
 const (
@@ -837,7 +837,7 @@ func (r devicePostureIntegrationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DevicePostureIntegrationGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DevicePostureIntegrationGetResponseEnvelopeSuccess bool
 
 const (

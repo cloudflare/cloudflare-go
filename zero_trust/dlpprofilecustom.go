@@ -206,7 +206,7 @@ func (r DLPProfileCustomNewParamsEntry) MarshalJSON() (data []byte, err error) {
 
 func (r DLPProfileCustomNewParamsEntry) implementsDLPProfileCustomNewParamsEntryUnion() {}
 
-// Satisfied by [zero_trust.DLPProfileCustomNewParamsEntriesDLPNewCustomEntry],
+// DLPProfileCustomNewParamsEntryUnion satisfied by [zero_trust.DLPProfileCustomNewParamsEntriesDLPNewCustomEntry],
 // [zero_trust.DLPProfileCustomNewParamsEntriesDLPNewWordListEntry],
 // [DLPProfileCustomNewParamsEntry].
 type DLPProfileCustomNewParamsEntryUnion interface {
@@ -240,7 +240,7 @@ func (r DLPProfileCustomNewParamsEntriesDLPNewWordListEntry) MarshalJSON() (data
 func (r DLPProfileCustomNewParamsEntriesDLPNewWordListEntry) implementsDLPProfileCustomNewParamsEntryUnion() {
 }
 
-// A reference pairing a sensitivity group with a specific level within that group.
+// DLPProfileCustomNewParamsSensitivityLevel is a reference pairing a sensitivity group with a specific level within that group.
 type DLPProfileCustomNewParamsSensitivityLevel struct {
 	GroupID param.Field[string] `json:"group_id" api:"required" format:"uuid"`
 	LevelID param.Field[string] `json:"level_id" api:"required" format:"uuid"`
@@ -383,7 +383,7 @@ func (r dlpProfileCustomNewResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPProfileCustomNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPProfileCustomNewResponseEnvelopeSuccess bool
 
 const (
@@ -444,7 +444,7 @@ func (r DLPProfileCustomUpdateParamsEntry) MarshalJSON() (data []byte, err error
 
 func (r DLPProfileCustomUpdateParamsEntry) implementsDLPProfileCustomUpdateParamsEntryUnion() {}
 
-// Satisfied by
+// DLPProfileCustomUpdateParamsEntryUnion satisfied by
 // [zero_trust.DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID],
 // [zero_trust.DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry],
 // [DLPProfileCustomUpdateParamsEntry].
@@ -481,7 +481,7 @@ func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry) MarshalJSON() (dat
 func (r DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntry) implementsDLPProfileCustomUpdateParamsEntryUnion() {
 }
 
-// A reference pairing a sensitivity group with a specific level within that group.
+// DLPProfileCustomUpdateParamsSensitivityLevel is a reference pairing a sensitivity group with a specific level within that group.
 type DLPProfileCustomUpdateParamsSensitivityLevel struct {
 	GroupID param.Field[string] `json:"group_id" api:"required" format:"uuid"`
 	LevelID param.Field[string] `json:"level_id" api:"required" format:"uuid"`
@@ -624,7 +624,7 @@ func (r dlpProfileCustomUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPProfileCustomUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPProfileCustomUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -767,7 +767,7 @@ func (r dlpProfileCustomDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPProfileCustomDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPProfileCustomDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -910,7 +910,7 @@ func (r dlpProfileCustomGetResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPProfileCustomGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPProfileCustomGetResponseEnvelopeSuccess bool
 
 const (

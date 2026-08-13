@@ -135,8 +135,6 @@ type SubdomainNewResponse struct {
 	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
-	// Whether sent messages from this subdomain can be previewed in the activity log.
-	PreviewEnabled bool `json:"preview_enabled"`
 	// The return-path domain used for bounce handling.
 	ReturnPathDomain string                   `json:"return_path_domain"`
 	JSON             subdomainNewResponseJSON `json:"-"`
@@ -151,7 +149,6 @@ type subdomainNewResponseJSON struct {
 	Created          apijson.Field
 	DKIMSelector     apijson.Field
 	Modified         apijson.Field
-	PreviewEnabled   apijson.Field
 	ReturnPathDomain apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -178,8 +175,6 @@ type SubdomainListResponse struct {
 	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
-	// Whether sent messages from this subdomain can be previewed in the activity log.
-	PreviewEnabled bool `json:"preview_enabled"`
 	// The return-path domain used for bounce handling.
 	ReturnPathDomain string                    `json:"return_path_domain"`
 	JSON             subdomainListResponseJSON `json:"-"`
@@ -194,7 +189,6 @@ type subdomainListResponseJSON struct {
 	Created          apijson.Field
 	DKIMSelector     apijson.Field
 	Modified         apijson.Field
-	PreviewEnabled   apijson.Field
 	ReturnPathDomain apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -358,8 +352,6 @@ type SubdomainGetResponse struct {
 	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
-	// Whether sent messages from this subdomain can be previewed in the activity log.
-	PreviewEnabled bool `json:"preview_enabled"`
 	// The return-path domain used for bounce handling.
 	ReturnPathDomain string                   `json:"return_path_domain"`
 	JSON             subdomainGetResponseJSON `json:"-"`
@@ -374,7 +366,6 @@ type subdomainGetResponseJSON struct {
 	Created          apijson.Field
 	DKIMSelector     apijson.Field
 	Modified         apijson.Field
-	PreviewEnabled   apijson.Field
 	ReturnPathDomain apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field

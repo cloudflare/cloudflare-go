@@ -232,7 +232,7 @@ func (r accessInfrastructureTargetNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The IPv4/IPv6 address that identifies where to reach a target
+// AccessInfrastructureTargetNewResponseIP is the IPv4/IPv6 address that identifies where to reach a target.
 type AccessInfrastructureTargetNewResponseIP struct {
 	// The target's IPv4 address
 	IPV4 AccessInfrastructureTargetNewResponseIPIPV4 `json:"ipv4"`
@@ -258,7 +258,7 @@ func (r accessInfrastructureTargetNewResponseIPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The target's IPv4 address
+// AccessInfrastructureTargetNewResponseIPIPV4 is the target's IPv4 address.
 type AccessInfrastructureTargetNewResponseIPIPV4 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
@@ -285,7 +285,7 @@ func (r accessInfrastructureTargetNewResponseIpipv4JSON) RawJSON() string {
 	return r.raw
 }
 
-// The target's IPv6 address
+// AccessInfrastructureTargetNewResponseIPIPV6 is the target's IPv6 address.
 type AccessInfrastructureTargetNewResponseIPIPV6 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
@@ -346,7 +346,7 @@ func (r accessInfrastructureTargetUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The IPv4/IPv6 address that identifies where to reach a target
+// AccessInfrastructureTargetUpdateResponseIP is the IPv4/IPv6 address that identifies where to reach a target
 type AccessInfrastructureTargetUpdateResponseIP struct {
 	// The target's IPv4 address
 	IPV4 AccessInfrastructureTargetUpdateResponseIPIPV4 `json:"ipv4"`
@@ -372,7 +372,7 @@ func (r accessInfrastructureTargetUpdateResponseIPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The target's IPv4 address
+// AccessInfrastructureTargetUpdateResponseIPIPV4 is the target's IPv4 address
 type AccessInfrastructureTargetUpdateResponseIPIPV4 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
@@ -399,7 +399,7 @@ func (r accessInfrastructureTargetUpdateResponseIpipv4JSON) RawJSON() string {
 	return r.raw
 }
 
-// The target's IPv6 address
+// AccessInfrastructureTargetUpdateResponseIPIPV6 is the target's IPv6 address
 type AccessInfrastructureTargetUpdateResponseIPIPV6 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
@@ -460,7 +460,7 @@ func (r accessInfrastructureTargetListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The IPv4/IPv6 address that identifies where to reach a target
+// AccessInfrastructureTargetListResponseIP is the IPv4/IPv6 address that identifies where to reach a target
 type AccessInfrastructureTargetListResponseIP struct {
 	// The target's IPv4 address
 	IPV4 AccessInfrastructureTargetListResponseIPIPV4 `json:"ipv4"`
@@ -486,7 +486,7 @@ func (r accessInfrastructureTargetListResponseIPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The target's IPv4 address
+// AccessInfrastructureTargetListResponseIPIPV4 is the target's IPv4 address
 type AccessInfrastructureTargetListResponseIPIPV4 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
@@ -513,7 +513,7 @@ func (r accessInfrastructureTargetListResponseIpipv4JSON) RawJSON() string {
 	return r.raw
 }
 
-// The target's IPv6 address
+// AccessInfrastructureTargetListResponseIPIPV6 is the target's IPv6 address
 type AccessInfrastructureTargetListResponseIPIPV6 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
@@ -574,7 +574,7 @@ func (r accessInfrastructureTargetBulkUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The IPv4/IPv6 address that identifies where to reach a target
+// AccessInfrastructureTargetBulkUpdateResponseIP is the IPv4/IPv6 address that identifies where to reach a target
 type AccessInfrastructureTargetBulkUpdateResponseIP struct {
 	// The target's IPv4 address
 	IPV4 AccessInfrastructureTargetBulkUpdateResponseIPIPV4 `json:"ipv4"`
@@ -600,7 +600,7 @@ func (r accessInfrastructureTargetBulkUpdateResponseIPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The target's IPv4 address
+// AccessInfrastructureTargetBulkUpdateResponseIPIPV4 is the target's IPv4 address
 type AccessInfrastructureTargetBulkUpdateResponseIPIPV4 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
@@ -627,7 +627,7 @@ func (r accessInfrastructureTargetBulkUpdateResponseIpipv4JSON) RawJSON() string
 	return r.raw
 }
 
-// The target's IPv6 address
+// AccessInfrastructureTargetBulkUpdateResponseIPIPV6 is the target's IPv6 address
 type AccessInfrastructureTargetBulkUpdateResponseIPIPV6 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
@@ -688,7 +688,7 @@ func (r accessInfrastructureTargetGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The IPv4/IPv6 address that identifies where to reach a target
+// AccessInfrastructureTargetGetResponseIP is the IPv4/IPv6 address that identifies where to reach a target
 type AccessInfrastructureTargetGetResponseIP struct {
 	// The target's IPv4 address
 	IPV4 AccessInfrastructureTargetGetResponseIPIPV4 `json:"ipv4"`
@@ -714,7 +714,7 @@ func (r accessInfrastructureTargetGetResponseIPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The target's IPv4 address
+// AccessInfrastructureTargetGetResponseIPIPV4 is the target's IPv4 address
 type AccessInfrastructureTargetGetResponseIPIPV4 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
@@ -741,7 +741,7 @@ func (r accessInfrastructureTargetGetResponseIpipv4JSON) RawJSON() string {
 	return r.raw
 }
 
-// The target's IPv6 address
+// AccessInfrastructureTargetGetResponseIPIPV6 is the target's IPv6 address
 type AccessInfrastructureTargetGetResponseIPIPV6 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
@@ -783,7 +783,7 @@ func (r AccessInfrastructureTargetNewParams) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-// The IPv4/IPv6 address that identifies where to reach a target
+// AccessInfrastructureTargetNewParamsIP is the IPv4/IPv6 address that identifies where to reach a target
 type AccessInfrastructureTargetNewParamsIP struct {
 	// The target's IPv4 address
 	IPV4 param.Field[AccessInfrastructureTargetNewParamsIPIPV4] `json:"ipv4"`
@@ -795,7 +795,7 @@ func (r AccessInfrastructureTargetNewParamsIP) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-// The target's IPv4 address
+// AccessInfrastructureTargetNewParamsIPIPV4 is the target's IPv4 address
 type AccessInfrastructureTargetNewParamsIPIPV4 struct {
 	// IP address of the target
 	IPAddr param.Field[string] `json:"ip_addr"`
@@ -808,7 +808,7 @@ func (r AccessInfrastructureTargetNewParamsIPIPV4) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// The target's IPv6 address
+// AccessInfrastructureTargetNewParamsIPIPV6 is the target's IPv6 address
 type AccessInfrastructureTargetNewParamsIPIPV6 struct {
 	// IP address of the target
 	IPAddr param.Field[string] `json:"ip_addr"`
@@ -947,7 +947,7 @@ func (r accessInfrastructureTargetNewResponseEnvelopeMessagesSourceJSON) RawJSON
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessInfrastructureTargetNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessInfrastructureTargetNewResponseEnvelopeSuccess bool
 
 const (
@@ -977,7 +977,7 @@ func (r AccessInfrastructureTargetUpdateParams) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-// The IPv4/IPv6 address that identifies where to reach a target
+// AccessInfrastructureTargetUpdateParamsIP is the IPv4/IPv6 address that identifies where to reach a target
 type AccessInfrastructureTargetUpdateParamsIP struct {
 	// The target's IPv4 address
 	IPV4 param.Field[AccessInfrastructureTargetUpdateParamsIPIPV4] `json:"ipv4"`
@@ -989,7 +989,7 @@ func (r AccessInfrastructureTargetUpdateParamsIP) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-// The target's IPv4 address
+// AccessInfrastructureTargetUpdateParamsIPIPV4 is the target's IPv4 address
 type AccessInfrastructureTargetUpdateParamsIPIPV4 struct {
 	// IP address of the target
 	IPAddr param.Field[string] `json:"ip_addr"`
@@ -1002,7 +1002,7 @@ func (r AccessInfrastructureTargetUpdateParamsIPIPV4) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-// The target's IPv6 address
+// AccessInfrastructureTargetUpdateParamsIPIPV6 is the target's IPv6 address
 type AccessInfrastructureTargetUpdateParamsIPIPV6 struct {
 	// IP address of the target
 	IPAddr param.Field[string] `json:"ip_addr"`
@@ -1142,7 +1142,7 @@ func (r accessInfrastructureTargetUpdateResponseEnvelopeMessagesSourceJSON) RawJ
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessInfrastructureTargetUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessInfrastructureTargetUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1218,7 +1218,7 @@ func (r AccessInfrastructureTargetListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// The sorting direction.
+// AccessInfrastructureTargetListParamsDirection is the sorting direction.
 type AccessInfrastructureTargetListParamsDirection string
 
 const (
@@ -1234,7 +1234,7 @@ func (r AccessInfrastructureTargetListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// The field to sort by.
+// AccessInfrastructureTargetListParamsOrder is the field to sort by.
 type AccessInfrastructureTargetListParamsOrder string
 
 const (
@@ -1294,7 +1294,7 @@ func (r AccessInfrastructureTargetBulkUpdateParamsBody) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-// The IPv4/IPv6 address that identifies where to reach a target
+// AccessInfrastructureTargetBulkUpdateParamsBodyIP is the IPv4/IPv6 address that identifies where to reach a target
 type AccessInfrastructureTargetBulkUpdateParamsBodyIP struct {
 	// The target's IPv4 address
 	IPV4 param.Field[AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV4] `json:"ipv4"`
@@ -1306,7 +1306,7 @@ func (r AccessInfrastructureTargetBulkUpdateParamsBodyIP) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-// The target's IPv4 address
+// AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV4 is the target's IPv4 address
 type AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV4 struct {
 	// IP address of the target
 	IPAddr param.Field[string] `json:"ip_addr"`
@@ -1319,7 +1319,7 @@ func (r AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV4) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-// The target's IPv6 address
+// AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV6 is the target's IPv6 address
 type AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV6 struct {
 	// IP address of the target
 	IPAddr param.Field[string] `json:"ip_addr"`
@@ -1463,7 +1463,7 @@ func (r accessInfrastructureTargetGetResponseEnvelopeMessagesSourceJSON) RawJSON
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessInfrastructureTargetGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessInfrastructureTargetGetResponseEnvelopeSuccess bool
 
 const (

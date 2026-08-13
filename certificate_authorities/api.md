@@ -4,10 +4,12 @@
 
 Params Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/certificate_authorities">certificate_authorities</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/certificate_authorities#HostnameAssociationParam">HostnameAssociationParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/certificate_authorities">certificate_authorities</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/certificate_authorities#TLSHostnameAssociationParam">TLSHostnameAssociationParam</a>
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/certificate_authorities">certificate_authorities</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/certificate_authorities#HostnameAssociation">HostnameAssociation</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/certificate_authorities">certificate_authorities</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/certificate_authorities#HostnameAssociationUpdateResponse">HostnameAssociationUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/certificate_authorities">certificate_authorities</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/certificate_authorities#HostnameAssociationGetResponse">HostnameAssociationGetResponse</a>
 

@@ -113,7 +113,7 @@ func (r AppType) AsUnion() AppTypeUnion {
 	return r.union
 }
 
-// Union satisfied by [AppTypeZeroTrustGatewayApplication] or
+// AppTypeUnion is satisfied by [AppTypeZeroTrustGatewayApplication] or
 // [AppTypeZeroTrustGatewayApplicationType].
 type AppTypeUnion interface {
 	implementsAppType()

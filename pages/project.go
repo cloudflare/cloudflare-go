@@ -206,8 +206,6 @@ type Deployment struct {
 	Stages []Stage `json:"stages" api:"required"`
 	// The live URL to view this deployment.
 	URL string `json:"url" api:"required"`
-	// Why the deployment was skipped.
-	SkipReason DeploymentSkipReason `json:"skip_reason" api:"nullable"`
 	// Whether the deployment uses functions.
 	UsesFunctions bool           `json:"uses_functions" api:"nullable"`
 	JSON          deploymentJSON `json:"-"`
@@ -231,7 +229,6 @@ type deploymentJSON struct {
 	Source            apijson.Field
 	Stages            apijson.Field
 	URL               apijson.Field
-	SkipReason        apijson.Field
 	UsesFunctions     apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -658,26 +655,6 @@ const (
 func (r DeploymentSourceType) IsKnown() bool {
 	switch r {
 	case DeploymentSourceTypeGitHub, DeploymentSourceTypeGitlab:
-		return true
-	}
-	return false
-}
-
-// Why the deployment was skipped.
-type DeploymentSkipReason string
-
-const (
-	DeploymentSkipReasonCommitMessage                 DeploymentSkipReason = "commit_message"
-	DeploymentSkipReasonPreviewDeploymentsDisabled    DeploymentSkipReason = "preview_deployments_disabled"
-	DeploymentSkipReasonProductionDeploymentsDisabled DeploymentSkipReason = "production_deployments_disabled"
-	DeploymentSkipReasonPathConfig                    DeploymentSkipReason = "path_config"
-	DeploymentSkipReasonBranchConfig                  DeploymentSkipReason = "branch_config"
-	DeploymentSkipReasonPagesToWorkersConversion      DeploymentSkipReason = "pages_to_workers_conversion"
-)
-
-func (r DeploymentSkipReason) IsKnown() bool {
-	switch r {
-	case DeploymentSkipReasonCommitMessage, DeploymentSkipReasonPreviewDeploymentsDisabled, DeploymentSkipReasonProductionDeploymentsDisabled, DeploymentSkipReasonPathConfig, DeploymentSkipReasonBranchConfig, DeploymentSkipReasonPagesToWorkersConversion:
 		return true
 	}
 	return false

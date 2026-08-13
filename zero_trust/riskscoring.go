@@ -306,7 +306,7 @@ func (r riskScoringGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// RiskScoringGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type RiskScoringGetResponseEnvelopeSuccess bool
 
 const (
@@ -483,7 +483,7 @@ func (r riskScoringResetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// RiskScoringResetResponseEnvelopeSuccess indicates whether the API call was successful.
 type RiskScoringResetResponseEnvelopeSuccess bool
 
 const (

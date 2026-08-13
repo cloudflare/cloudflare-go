@@ -15,7 +15,6 @@ import (
 )
 
 func TestLogExplorerDatasetNewWithOptionalParams(t *testing.T) {
-	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -49,7 +48,6 @@ func TestLogExplorerDatasetNewWithOptionalParams(t *testing.T) {
 }
 
 func TestLogExplorerDatasetUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -87,7 +85,6 @@ func TestLogExplorerDatasetUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestLogExplorerDatasetListWithOptionalParams(t *testing.T) {
-	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -115,7 +112,6 @@ func TestLogExplorerDatasetListWithOptionalParams(t *testing.T) {
 }
 
 func TestLogExplorerDatasetGetWithOptionalParams(t *testing.T) {
-	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

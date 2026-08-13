@@ -72,7 +72,7 @@ func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListPar
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+// TunnelListResponse is a Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelListResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -158,7 +158,7 @@ func (r TunnelListResponse) AsUnion() TunnelListResponseUnion {
 	return r.union
 }
 
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+// TunnelListResponseUnion is a Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
 // Union satisfied by [shared.CloudflareTunnel] or
 // [TunnelListResponseTunnelWARPConnectorTunnel].
@@ -181,7 +181,7 @@ func init() {
 	)
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelListResponseTunnelWARPConnectorTunnel is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelListResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -292,7 +292,7 @@ func (r tunnelListResponseTunnelWARPConnectorTunnelConnectionJSON) RawJSON() str
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelListResponseTunnelWARPConnectorTunnelStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -313,7 +313,7 @@ func (r TunnelListResponseTunnelWARPConnectorTunnelStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelListResponseTunnelWARPConnectorTunnelTunType is the type of tunnel.
 type TunnelListResponseTunnelWARPConnectorTunnelTunType string
 
 const (
@@ -334,7 +334,7 @@ func (r TunnelListResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	return false
 }
 
-// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// TunnelListResponseConfigSrc indicates if this is a locally or remotely configured tunnel. If `local`, manage
 // the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 // tunnel on the Zero Trust dashboard.
 type TunnelListResponseConfigSrc string
@@ -352,7 +352,7 @@ func (r TunnelListResponseConfigSrc) IsKnown() bool {
 	return false
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelListResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -373,7 +373,7 @@ func (r TunnelListResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelListResponseTunType is the type of tunnel.
 type TunnelListResponseTunType string
 
 const (
@@ -432,7 +432,7 @@ func (r TunnelListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelListParamsStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -453,7 +453,7 @@ func (r TunnelListParamsStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelListParamsTunType is the type of tunnel.
 type TunnelListParamsTunType string
 
 const (
