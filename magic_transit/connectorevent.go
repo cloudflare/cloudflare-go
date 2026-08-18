@@ -1297,6 +1297,7 @@ const (
 	ConnectorEventGetResponseEKConfigureCloudflaredTunnel  ConnectorEventGetResponseEK = "ConfigureCloudflaredTunnel"
 	ConnectorEventGetResponseEKRekeyInstallBoth            ConnectorEventGetResponseEK = "RekeyInstallBoth"
 	ConnectorEventGetResponseEKRekeyStart                  ConnectorEventGetResponseEK = "RekeyStart"
+	ConnectorEventGetResponseEKRekeyRestart                ConnectorEventGetResponseEK = "RekeyRestart"
 	ConnectorEventGetResponseEKRekeyAdvance                ConnectorEventGetResponseEK = "RekeyAdvance"
 	ConnectorEventGetResponseEKRekeyComplete               ConnectorEventGetResponseEK = "RekeyComplete"
 	ConnectorEventGetResponseEKRekeyReset                  ConnectorEventGetResponseEK = "RekeyReset"
