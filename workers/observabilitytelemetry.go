@@ -419,6 +419,7 @@ type ObservabilityTelemetryQueryResponseRunQueryParametersCalculation struct {
 	Key      string                                                                    `json:"key"`
 	KeyType  ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsKeyType  `json:"keyType"`
 	JSON     observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON      `json:"-"`
+	union    ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsUnion
 }
 
 // observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON contains
@@ -433,19 +434,302 @@ type observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON struct
 	ExtraFields map[string]apijson.Field
 }
 
+func (r observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *ObservabilityTelemetryQueryResponseRunQueryParametersCalculation) UnmarshalJSON(data []byte) (err error) {
+	*r = ObservabilityTelemetryQueryResponseRunQueryParametersCalculation{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject],
+// [ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject].
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersCalculation) AsUnion() ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsUnion {
+	return r.union
+}
+
+// Union satisfied by
+// [ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject] or
+// [ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject].
+type ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsUnion interface {
+	implementsObservabilityTelemetryQueryResponseRunQueryParametersCalculation()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsUnion)(nil)).Elem(),
+		"operator",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "count",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "COUNT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "uniq",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "max",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "min",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "sum",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "avg",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "median",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p001",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p01",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p05",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p10",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p25",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p75",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p90",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p95",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p99",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p999",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "stddev",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "variance",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "COUNT_DISTINCT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "MAX",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "MIN",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "SUM",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "AVG",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "MEDIAN",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P001",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P01",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P05",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P10",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P25",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P75",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P90",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P95",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P99",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P999",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "STDDEV",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "VARIANCE",
+		},
+	)
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject struct {
+	Operator ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectOperator `json:"operator" api:"required"`
+	Alias    string                                                                          `json:"alias"`
+	Key      string                                                                          `json:"key"`
+	KeyType  ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyType  `json:"keyType"`
+	JSON     observabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectJSON     `json:"-"`
+}
+
+// observabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectJSON
+// contains the JSON metadata for the struct
+// [ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject]
+type observabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectJSON struct {
+	Operator    apijson.Field
+	Alias       apijson.Field
+	Key         apijson.Field
+	KeyType     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observabilityTelemetryQueryResponseRunQueryParametersCalculationJSON) RawJSON() string {
+func (r observabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObject) implementsObservabilityTelemetryQueryResponseRunQueryParametersCalculation() {
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectOperator string
+
+const (
+	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectOperatorCount          ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectOperator = "count"
+	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectOperatorCountUppercase ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectOperator = "COUNT"
+)
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectOperator) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectOperatorCount, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectOperatorCountUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyType string
+
+const (
+	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyTypeString  ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyType = "string"
+	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyTypeNumber  ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyType = "number"
+	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyTypeBoolean ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyType = "boolean"
+)
+
+func (r ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyTypeString, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyTypeNumber, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsObjectKeyTypeBoolean:
+		return true
+	}
+	return false
 }
 
 type ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator string
 
 const (
-	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorUniq              ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "uniq"
 	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorCount             ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "count"
+	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorCountUppercase    ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "COUNT"
+	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorUniq              ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "uniq"
 	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMax               ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "max"
 	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMin               ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "min"
 	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorSum               ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "sum"
@@ -464,7 +748,6 @@ const (
 	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorStddev            ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "stddev"
 	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorVariance          ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "variance"
 	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorCountDistinct     ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "COUNT_DISTINCT"
-	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorCountUppercase    ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "COUNT"
 	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMaxUppercase      ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "MAX"
 	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMinUppercase      ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "MIN"
 	ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorSumUppercase      ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator = "SUM"
@@ -486,7 +769,7 @@ const (
 
 func (r ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperator) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorUniq, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorCount, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMax, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMin, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorSum, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorAvg, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMedian, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP001, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP01, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP05, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP10, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP25, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP75, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP90, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP95, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP99, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP999, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorStddev, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorVariance, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorCountDistinct, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorCountUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMaxUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMinUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorSumUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorAvgUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMedianUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP001Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP01Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP05Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP10Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP25Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP75Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP90Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP95Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP99Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP999Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorStddevUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorVarianceUppercase:
+	case ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorCount, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorCountUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorUniq, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMax, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMin, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorSum, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorAvg, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMedian, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP001, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP01, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP05, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP10, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP25, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP75, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP90, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP95, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP99, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP999, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorStddev, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorVariance, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorCountDistinct, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMaxUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMinUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorSumUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorAvgUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorMedianUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP001Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP01Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP05Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP10Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP25Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP75Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP90Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP95Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP99Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorP999Uppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorStddevUppercase, ObservabilityTelemetryQueryResponseRunQueryParametersCalculationsOperatorVarianceUppercase:
 		return true
 	}
 	return false
@@ -4630,7 +4913,7 @@ func (r ObservabilityTelemetryQueryParamsChartType) IsKnown() bool {
 type ObservabilityTelemetryQueryParamsParameters struct {
 	// Aggregation calculations to compute (e.g. count, avg, p99). Each calculation
 	// produces aggregate values and optional time-series data.
-	Calculations param.Field[[]ObservabilityTelemetryQueryParamsParametersCalculation] `json:"calculations"`
+	Calculations param.Field[[]ObservabilityTelemetryQueryParamsParametersCalculationUnion] `json:"calculations"`
 	// Datasets to query. Leave empty to query all available datasets.
 	Datasets param.Field[[]string] `json:"datasets"`
 	// Logical operator for combining top-level filters: 'and' (all must match) or 'or'
@@ -4669,7 +4952,8 @@ type ObservabilityTelemetryQueryParamsParametersCalculation struct {
 	// multiple calculations.
 	Alias param.Field[string] `json:"alias"`
 	// Field name to calculate over. Must exist in the data — verify with the keys
-	// endpoint. Omit for operators that don't require a key (e.g. count).
+	// endpoint. Required for every operator except `count`, which aggregates whole
+	// rows and may omit it.
 	Key param.Field[string] `json:"key"`
 	// Data type of the key. Required when key is provided to ensure correct
 	// aggregation.
@@ -4680,13 +4964,83 @@ func (r ObservabilityTelemetryQueryParamsParametersCalculation) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
+func (r ObservabilityTelemetryQueryParamsParametersCalculation) implementsObservabilityTelemetryQueryParamsParametersCalculationUnion() {
+}
+
+// Satisfied by
+// [workers.ObservabilityTelemetryQueryParamsParametersCalculationsObject],
+// [workers.ObservabilityTelemetryQueryParamsParametersCalculationsObject],
+// [ObservabilityTelemetryQueryParamsParametersCalculation].
+type ObservabilityTelemetryQueryParamsParametersCalculationUnion interface {
+	implementsObservabilityTelemetryQueryParamsParametersCalculationUnion()
+}
+
+type ObservabilityTelemetryQueryParamsParametersCalculationsObject struct {
+	// Aggregation operator to apply. Examples: count, avg, sum, min, max, median, p90,
+	// p95, p99, uniq, stddev, variance.
+	Operator param.Field[ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperator] `json:"operator" api:"required"`
+	// Custom label for this calculation in the results. Useful for distinguishing
+	// multiple calculations.
+	Alias param.Field[string] `json:"alias"`
+	// Field name to calculate over. Must exist in the data — verify with the keys
+	// endpoint. Required for every operator except `count`, which aggregates whole
+	// rows and may omit it.
+	Key param.Field[string] `json:"key"`
+	// Data type of the key. Required when key is provided to ensure correct
+	// aggregation.
+	KeyType param.Field[ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyType] `json:"keyType"`
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersCalculationsObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityTelemetryQueryParamsParametersCalculationsObject) implementsObservabilityTelemetryQueryParamsParametersCalculationUnion() {
+}
+
+// Aggregation operator to apply. Examples: count, avg, sum, min, max, median, p90,
+// p95, p99, uniq, stddev, variance.
+type ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperator string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperatorCount          ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperator = "count"
+	ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperatorCountUppercase ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperator = "COUNT"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperator) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperatorCount, ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperatorCountUppercase:
+		return true
+	}
+	return false
+}
+
+// Data type of the key. Required when key is provided to ensure correct
+// aggregation.
+type ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyType string
+
+const (
+	ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyTypeString  ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyType = "string"
+	ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyTypeNumber  ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyType = "number"
+	ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyTypeBoolean ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyType = "boolean"
+)
+
+func (r ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyType) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyTypeString, ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyTypeNumber, ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyTypeBoolean:
+		return true
+	}
+	return false
+}
+
 // Aggregation operator to apply. Examples: count, avg, sum, min, max, median, p90,
 // p95, p99, uniq, stddev, variance.
 type ObservabilityTelemetryQueryParamsParametersCalculationsOperator string
 
 const (
-	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorUniq              ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "uniq"
 	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorCount             ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "count"
+	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorCountUppercase    ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "COUNT"
+	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorUniq              ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "uniq"
 	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMax               ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "max"
 	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMin               ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "min"
 	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorSum               ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "sum"
@@ -4705,7 +5059,6 @@ const (
 	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorStddev            ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "stddev"
 	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorVariance          ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "variance"
 	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorCountDistinct     ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "COUNT_DISTINCT"
-	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorCountUppercase    ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "COUNT"
 	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMaxUppercase      ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "MAX"
 	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMinUppercase      ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "MIN"
 	ObservabilityTelemetryQueryParamsParametersCalculationsOperatorSumUppercase      ObservabilityTelemetryQueryParamsParametersCalculationsOperator = "SUM"
@@ -4727,7 +5080,7 @@ const (
 
 func (r ObservabilityTelemetryQueryParamsParametersCalculationsOperator) IsKnown() bool {
 	switch r {
-	case ObservabilityTelemetryQueryParamsParametersCalculationsOperatorUniq, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorCount, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMax, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMin, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorSum, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorAvg, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMedian, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP001, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP01, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP05, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP10, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP25, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP75, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP90, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP95, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP99, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP999, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorStddev, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorVariance, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorCountDistinct, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorCountUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMaxUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMinUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorSumUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorAvgUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMedianUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP001Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP01Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP05Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP10Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP25Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP75Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP90Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP95Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP99Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP999Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorStddevUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorVarianceUppercase:
+	case ObservabilityTelemetryQueryParamsParametersCalculationsOperatorCount, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorCountUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorUniq, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMax, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMin, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorSum, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorAvg, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMedian, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP001, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP01, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP05, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP10, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP25, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP75, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP90, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP95, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP99, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP999, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorStddev, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorVariance, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorCountDistinct, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMaxUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMinUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorSumUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorAvgUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorMedianUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP001Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP01Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP05Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP10Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP25Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP75Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP90Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP95Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP99Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorP999Uppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorStddevUppercase, ObservabilityTelemetryQueryParamsParametersCalculationsOperatorVarianceUppercase:
 		return true
 	}
 	return false

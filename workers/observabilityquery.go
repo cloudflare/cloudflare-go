@@ -176,6 +176,7 @@ type ObservabilityQueryNewResponseParametersCalculation struct {
 	Key      string                                                      `json:"key"`
 	KeyType  ObservabilityQueryNewResponseParametersCalculationsKeyType  `json:"keyType"`
 	JSON     observabilityQueryNewResponseParametersCalculationJSON      `json:"-"`
+	union    ObservabilityQueryNewResponseParametersCalculationsUnion
 }
 
 // observabilityQueryNewResponseParametersCalculationJSON contains the JSON
@@ -189,19 +190,300 @@ type observabilityQueryNewResponseParametersCalculationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
+func (r observabilityQueryNewResponseParametersCalculationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *ObservabilityQueryNewResponseParametersCalculation) UnmarshalJSON(data []byte) (err error) {
+	*r = ObservabilityQueryNewResponseParametersCalculation{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ObservabilityQueryNewResponseParametersCalculationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ObservabilityQueryNewResponseParametersCalculationsObject],
+// [ObservabilityQueryNewResponseParametersCalculationsObject].
+func (r ObservabilityQueryNewResponseParametersCalculation) AsUnion() ObservabilityQueryNewResponseParametersCalculationsUnion {
+	return r.union
+}
+
+// Union satisfied by [ObservabilityQueryNewResponseParametersCalculationsObject]
+// or [ObservabilityQueryNewResponseParametersCalculationsObject].
+type ObservabilityQueryNewResponseParametersCalculationsUnion interface {
+	implementsObservabilityQueryNewResponseParametersCalculation()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilityQueryNewResponseParametersCalculationsUnion)(nil)).Elem(),
+		"operator",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "count",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "COUNT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "uniq",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "max",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "min",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "sum",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "avg",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "median",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p001",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p01",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p05",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p10",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p25",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p75",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p90",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p95",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p99",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p999",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "stddev",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "variance",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "COUNT_DISTINCT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "MAX",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "MIN",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "SUM",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "AVG",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "MEDIAN",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P001",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P01",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P05",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P10",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P25",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P75",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P90",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P95",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P99",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P999",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "STDDEV",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryNewResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "VARIANCE",
+		},
+	)
+}
+
+type ObservabilityQueryNewResponseParametersCalculationsObject struct {
+	Operator ObservabilityQueryNewResponseParametersCalculationsObjectOperator `json:"operator" api:"required"`
+	Alias    string                                                            `json:"alias"`
+	Key      string                                                            `json:"key"`
+	KeyType  ObservabilityQueryNewResponseParametersCalculationsObjectKeyType  `json:"keyType"`
+	JSON     observabilityQueryNewResponseParametersCalculationsObjectJSON     `json:"-"`
+}
+
+// observabilityQueryNewResponseParametersCalculationsObjectJSON contains the JSON
+// metadata for the struct
+// [ObservabilityQueryNewResponseParametersCalculationsObject]
+type observabilityQueryNewResponseParametersCalculationsObjectJSON struct {
+	Operator    apijson.Field
+	Alias       apijson.Field
+	Key         apijson.Field
+	KeyType     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ObservabilityQueryNewResponseParametersCalculationsObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observabilityQueryNewResponseParametersCalculationJSON) RawJSON() string {
+func (r observabilityQueryNewResponseParametersCalculationsObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ObservabilityQueryNewResponseParametersCalculationsObject) implementsObservabilityQueryNewResponseParametersCalculation() {
+}
+
+type ObservabilityQueryNewResponseParametersCalculationsObjectOperator string
+
+const (
+	ObservabilityQueryNewResponseParametersCalculationsObjectOperatorCount          ObservabilityQueryNewResponseParametersCalculationsObjectOperator = "count"
+	ObservabilityQueryNewResponseParametersCalculationsObjectOperatorCountUppercase ObservabilityQueryNewResponseParametersCalculationsObjectOperator = "COUNT"
+)
+
+func (r ObservabilityQueryNewResponseParametersCalculationsObjectOperator) IsKnown() bool {
+	switch r {
+	case ObservabilityQueryNewResponseParametersCalculationsObjectOperatorCount, ObservabilityQueryNewResponseParametersCalculationsObjectOperatorCountUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityQueryNewResponseParametersCalculationsObjectKeyType string
+
+const (
+	ObservabilityQueryNewResponseParametersCalculationsObjectKeyTypeString  ObservabilityQueryNewResponseParametersCalculationsObjectKeyType = "string"
+	ObservabilityQueryNewResponseParametersCalculationsObjectKeyTypeNumber  ObservabilityQueryNewResponseParametersCalculationsObjectKeyType = "number"
+	ObservabilityQueryNewResponseParametersCalculationsObjectKeyTypeBoolean ObservabilityQueryNewResponseParametersCalculationsObjectKeyType = "boolean"
+)
+
+func (r ObservabilityQueryNewResponseParametersCalculationsObjectKeyType) IsKnown() bool {
+	switch r {
+	case ObservabilityQueryNewResponseParametersCalculationsObjectKeyTypeString, ObservabilityQueryNewResponseParametersCalculationsObjectKeyTypeNumber, ObservabilityQueryNewResponseParametersCalculationsObjectKeyTypeBoolean:
+		return true
+	}
+	return false
 }
 
 type ObservabilityQueryNewResponseParametersCalculationsOperator string
 
 const (
-	ObservabilityQueryNewResponseParametersCalculationsOperatorUniq              ObservabilityQueryNewResponseParametersCalculationsOperator = "uniq"
 	ObservabilityQueryNewResponseParametersCalculationsOperatorCount             ObservabilityQueryNewResponseParametersCalculationsOperator = "count"
+	ObservabilityQueryNewResponseParametersCalculationsOperatorCountUppercase    ObservabilityQueryNewResponseParametersCalculationsOperator = "COUNT"
+	ObservabilityQueryNewResponseParametersCalculationsOperatorUniq              ObservabilityQueryNewResponseParametersCalculationsOperator = "uniq"
 	ObservabilityQueryNewResponseParametersCalculationsOperatorMax               ObservabilityQueryNewResponseParametersCalculationsOperator = "max"
 	ObservabilityQueryNewResponseParametersCalculationsOperatorMin               ObservabilityQueryNewResponseParametersCalculationsOperator = "min"
 	ObservabilityQueryNewResponseParametersCalculationsOperatorSum               ObservabilityQueryNewResponseParametersCalculationsOperator = "sum"
@@ -220,7 +502,6 @@ const (
 	ObservabilityQueryNewResponseParametersCalculationsOperatorStddev            ObservabilityQueryNewResponseParametersCalculationsOperator = "stddev"
 	ObservabilityQueryNewResponseParametersCalculationsOperatorVariance          ObservabilityQueryNewResponseParametersCalculationsOperator = "variance"
 	ObservabilityQueryNewResponseParametersCalculationsOperatorCountDistinct     ObservabilityQueryNewResponseParametersCalculationsOperator = "COUNT_DISTINCT"
-	ObservabilityQueryNewResponseParametersCalculationsOperatorCountUppercase    ObservabilityQueryNewResponseParametersCalculationsOperator = "COUNT"
 	ObservabilityQueryNewResponseParametersCalculationsOperatorMaxUppercase      ObservabilityQueryNewResponseParametersCalculationsOperator = "MAX"
 	ObservabilityQueryNewResponseParametersCalculationsOperatorMinUppercase      ObservabilityQueryNewResponseParametersCalculationsOperator = "MIN"
 	ObservabilityQueryNewResponseParametersCalculationsOperatorSumUppercase      ObservabilityQueryNewResponseParametersCalculationsOperator = "SUM"
@@ -242,7 +523,7 @@ const (
 
 func (r ObservabilityQueryNewResponseParametersCalculationsOperator) IsKnown() bool {
 	switch r {
-	case ObservabilityQueryNewResponseParametersCalculationsOperatorUniq, ObservabilityQueryNewResponseParametersCalculationsOperatorCount, ObservabilityQueryNewResponseParametersCalculationsOperatorMax, ObservabilityQueryNewResponseParametersCalculationsOperatorMin, ObservabilityQueryNewResponseParametersCalculationsOperatorSum, ObservabilityQueryNewResponseParametersCalculationsOperatorAvg, ObservabilityQueryNewResponseParametersCalculationsOperatorMedian, ObservabilityQueryNewResponseParametersCalculationsOperatorP001, ObservabilityQueryNewResponseParametersCalculationsOperatorP01, ObservabilityQueryNewResponseParametersCalculationsOperatorP05, ObservabilityQueryNewResponseParametersCalculationsOperatorP10, ObservabilityQueryNewResponseParametersCalculationsOperatorP25, ObservabilityQueryNewResponseParametersCalculationsOperatorP75, ObservabilityQueryNewResponseParametersCalculationsOperatorP90, ObservabilityQueryNewResponseParametersCalculationsOperatorP95, ObservabilityQueryNewResponseParametersCalculationsOperatorP99, ObservabilityQueryNewResponseParametersCalculationsOperatorP999, ObservabilityQueryNewResponseParametersCalculationsOperatorStddev, ObservabilityQueryNewResponseParametersCalculationsOperatorVariance, ObservabilityQueryNewResponseParametersCalculationsOperatorCountDistinct, ObservabilityQueryNewResponseParametersCalculationsOperatorCountUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorMaxUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorMinUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorSumUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorAvgUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorMedianUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP001Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP01Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP05Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP10Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP25Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP75Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP90Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP95Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP99Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP999Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorStddevUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorVarianceUppercase:
+	case ObservabilityQueryNewResponseParametersCalculationsOperatorCount, ObservabilityQueryNewResponseParametersCalculationsOperatorCountUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorUniq, ObservabilityQueryNewResponseParametersCalculationsOperatorMax, ObservabilityQueryNewResponseParametersCalculationsOperatorMin, ObservabilityQueryNewResponseParametersCalculationsOperatorSum, ObservabilityQueryNewResponseParametersCalculationsOperatorAvg, ObservabilityQueryNewResponseParametersCalculationsOperatorMedian, ObservabilityQueryNewResponseParametersCalculationsOperatorP001, ObservabilityQueryNewResponseParametersCalculationsOperatorP01, ObservabilityQueryNewResponseParametersCalculationsOperatorP05, ObservabilityQueryNewResponseParametersCalculationsOperatorP10, ObservabilityQueryNewResponseParametersCalculationsOperatorP25, ObservabilityQueryNewResponseParametersCalculationsOperatorP75, ObservabilityQueryNewResponseParametersCalculationsOperatorP90, ObservabilityQueryNewResponseParametersCalculationsOperatorP95, ObservabilityQueryNewResponseParametersCalculationsOperatorP99, ObservabilityQueryNewResponseParametersCalculationsOperatorP999, ObservabilityQueryNewResponseParametersCalculationsOperatorStddev, ObservabilityQueryNewResponseParametersCalculationsOperatorVariance, ObservabilityQueryNewResponseParametersCalculationsOperatorCountDistinct, ObservabilityQueryNewResponseParametersCalculationsOperatorMaxUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorMinUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorSumUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorAvgUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorMedianUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP001Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP01Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP05Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP10Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP25Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP75Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP90Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP95Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP99Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorP999Uppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorStddevUppercase, ObservabilityQueryNewResponseParametersCalculationsOperatorVarianceUppercase:
 		return true
 	}
 	return false
@@ -956,6 +1237,7 @@ type ObservabilityQueryListResponseParametersCalculation struct {
 	Key      string                                                       `json:"key"`
 	KeyType  ObservabilityQueryListResponseParametersCalculationsKeyType  `json:"keyType"`
 	JSON     observabilityQueryListResponseParametersCalculationJSON      `json:"-"`
+	union    ObservabilityQueryListResponseParametersCalculationsUnion
 }
 
 // observabilityQueryListResponseParametersCalculationJSON contains the JSON
@@ -969,19 +1251,300 @@ type observabilityQueryListResponseParametersCalculationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
+func (r observabilityQueryListResponseParametersCalculationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *ObservabilityQueryListResponseParametersCalculation) UnmarshalJSON(data []byte) (err error) {
+	*r = ObservabilityQueryListResponseParametersCalculation{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ObservabilityQueryListResponseParametersCalculationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ObservabilityQueryListResponseParametersCalculationsObject],
+// [ObservabilityQueryListResponseParametersCalculationsObject].
+func (r ObservabilityQueryListResponseParametersCalculation) AsUnion() ObservabilityQueryListResponseParametersCalculationsUnion {
+	return r.union
+}
+
+// Union satisfied by [ObservabilityQueryListResponseParametersCalculationsObject]
+// or [ObservabilityQueryListResponseParametersCalculationsObject].
+type ObservabilityQueryListResponseParametersCalculationsUnion interface {
+	implementsObservabilityQueryListResponseParametersCalculation()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilityQueryListResponseParametersCalculationsUnion)(nil)).Elem(),
+		"operator",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "count",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "COUNT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "uniq",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "max",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "min",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "sum",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "avg",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "median",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p001",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p01",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p05",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p10",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p25",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p75",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p90",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p95",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p99",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "p999",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "stddev",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "variance",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "COUNT_DISTINCT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "MAX",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "MIN",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "SUM",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "AVG",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "MEDIAN",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P001",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P01",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P05",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P10",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P25",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P75",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P90",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P95",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P99",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "P999",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "STDDEV",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilityQueryListResponseParametersCalculationsObject{}),
+			DiscriminatorValue: "VARIANCE",
+		},
+	)
+}
+
+type ObservabilityQueryListResponseParametersCalculationsObject struct {
+	Operator ObservabilityQueryListResponseParametersCalculationsObjectOperator `json:"operator" api:"required"`
+	Alias    string                                                             `json:"alias"`
+	Key      string                                                             `json:"key"`
+	KeyType  ObservabilityQueryListResponseParametersCalculationsObjectKeyType  `json:"keyType"`
+	JSON     observabilityQueryListResponseParametersCalculationsObjectJSON     `json:"-"`
+}
+
+// observabilityQueryListResponseParametersCalculationsObjectJSON contains the JSON
+// metadata for the struct
+// [ObservabilityQueryListResponseParametersCalculationsObject]
+type observabilityQueryListResponseParametersCalculationsObjectJSON struct {
+	Operator    apijson.Field
+	Alias       apijson.Field
+	Key         apijson.Field
+	KeyType     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ObservabilityQueryListResponseParametersCalculationsObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observabilityQueryListResponseParametersCalculationJSON) RawJSON() string {
+func (r observabilityQueryListResponseParametersCalculationsObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ObservabilityQueryListResponseParametersCalculationsObject) implementsObservabilityQueryListResponseParametersCalculation() {
+}
+
+type ObservabilityQueryListResponseParametersCalculationsObjectOperator string
+
+const (
+	ObservabilityQueryListResponseParametersCalculationsObjectOperatorCount          ObservabilityQueryListResponseParametersCalculationsObjectOperator = "count"
+	ObservabilityQueryListResponseParametersCalculationsObjectOperatorCountUppercase ObservabilityQueryListResponseParametersCalculationsObjectOperator = "COUNT"
+)
+
+func (r ObservabilityQueryListResponseParametersCalculationsObjectOperator) IsKnown() bool {
+	switch r {
+	case ObservabilityQueryListResponseParametersCalculationsObjectOperatorCount, ObservabilityQueryListResponseParametersCalculationsObjectOperatorCountUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityQueryListResponseParametersCalculationsObjectKeyType string
+
+const (
+	ObservabilityQueryListResponseParametersCalculationsObjectKeyTypeString  ObservabilityQueryListResponseParametersCalculationsObjectKeyType = "string"
+	ObservabilityQueryListResponseParametersCalculationsObjectKeyTypeNumber  ObservabilityQueryListResponseParametersCalculationsObjectKeyType = "number"
+	ObservabilityQueryListResponseParametersCalculationsObjectKeyTypeBoolean ObservabilityQueryListResponseParametersCalculationsObjectKeyType = "boolean"
+)
+
+func (r ObservabilityQueryListResponseParametersCalculationsObjectKeyType) IsKnown() bool {
+	switch r {
+	case ObservabilityQueryListResponseParametersCalculationsObjectKeyTypeString, ObservabilityQueryListResponseParametersCalculationsObjectKeyTypeNumber, ObservabilityQueryListResponseParametersCalculationsObjectKeyTypeBoolean:
+		return true
+	}
+	return false
 }
 
 type ObservabilityQueryListResponseParametersCalculationsOperator string
 
 const (
-	ObservabilityQueryListResponseParametersCalculationsOperatorUniq              ObservabilityQueryListResponseParametersCalculationsOperator = "uniq"
 	ObservabilityQueryListResponseParametersCalculationsOperatorCount             ObservabilityQueryListResponseParametersCalculationsOperator = "count"
+	ObservabilityQueryListResponseParametersCalculationsOperatorCountUppercase    ObservabilityQueryListResponseParametersCalculationsOperator = "COUNT"
+	ObservabilityQueryListResponseParametersCalculationsOperatorUniq              ObservabilityQueryListResponseParametersCalculationsOperator = "uniq"
 	ObservabilityQueryListResponseParametersCalculationsOperatorMax               ObservabilityQueryListResponseParametersCalculationsOperator = "max"
 	ObservabilityQueryListResponseParametersCalculationsOperatorMin               ObservabilityQueryListResponseParametersCalculationsOperator = "min"
 	ObservabilityQueryListResponseParametersCalculationsOperatorSum               ObservabilityQueryListResponseParametersCalculationsOperator = "sum"
@@ -1000,7 +1563,6 @@ const (
 	ObservabilityQueryListResponseParametersCalculationsOperatorStddev            ObservabilityQueryListResponseParametersCalculationsOperator = "stddev"
 	ObservabilityQueryListResponseParametersCalculationsOperatorVariance          ObservabilityQueryListResponseParametersCalculationsOperator = "variance"
 	ObservabilityQueryListResponseParametersCalculationsOperatorCountDistinct     ObservabilityQueryListResponseParametersCalculationsOperator = "COUNT_DISTINCT"
-	ObservabilityQueryListResponseParametersCalculationsOperatorCountUppercase    ObservabilityQueryListResponseParametersCalculationsOperator = "COUNT"
 	ObservabilityQueryListResponseParametersCalculationsOperatorMaxUppercase      ObservabilityQueryListResponseParametersCalculationsOperator = "MAX"
 	ObservabilityQueryListResponseParametersCalculationsOperatorMinUppercase      ObservabilityQueryListResponseParametersCalculationsOperator = "MIN"
 	ObservabilityQueryListResponseParametersCalculationsOperatorSumUppercase      ObservabilityQueryListResponseParametersCalculationsOperator = "SUM"
@@ -1022,7 +1584,7 @@ const (
 
 func (r ObservabilityQueryListResponseParametersCalculationsOperator) IsKnown() bool {
 	switch r {
-	case ObservabilityQueryListResponseParametersCalculationsOperatorUniq, ObservabilityQueryListResponseParametersCalculationsOperatorCount, ObservabilityQueryListResponseParametersCalculationsOperatorMax, ObservabilityQueryListResponseParametersCalculationsOperatorMin, ObservabilityQueryListResponseParametersCalculationsOperatorSum, ObservabilityQueryListResponseParametersCalculationsOperatorAvg, ObservabilityQueryListResponseParametersCalculationsOperatorMedian, ObservabilityQueryListResponseParametersCalculationsOperatorP001, ObservabilityQueryListResponseParametersCalculationsOperatorP01, ObservabilityQueryListResponseParametersCalculationsOperatorP05, ObservabilityQueryListResponseParametersCalculationsOperatorP10, ObservabilityQueryListResponseParametersCalculationsOperatorP25, ObservabilityQueryListResponseParametersCalculationsOperatorP75, ObservabilityQueryListResponseParametersCalculationsOperatorP90, ObservabilityQueryListResponseParametersCalculationsOperatorP95, ObservabilityQueryListResponseParametersCalculationsOperatorP99, ObservabilityQueryListResponseParametersCalculationsOperatorP999, ObservabilityQueryListResponseParametersCalculationsOperatorStddev, ObservabilityQueryListResponseParametersCalculationsOperatorVariance, ObservabilityQueryListResponseParametersCalculationsOperatorCountDistinct, ObservabilityQueryListResponseParametersCalculationsOperatorCountUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorMaxUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorMinUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorSumUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorAvgUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorMedianUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP001Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP01Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP05Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP10Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP25Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP75Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP90Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP95Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP99Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP999Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorStddevUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorVarianceUppercase:
+	case ObservabilityQueryListResponseParametersCalculationsOperatorCount, ObservabilityQueryListResponseParametersCalculationsOperatorCountUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorUniq, ObservabilityQueryListResponseParametersCalculationsOperatorMax, ObservabilityQueryListResponseParametersCalculationsOperatorMin, ObservabilityQueryListResponseParametersCalculationsOperatorSum, ObservabilityQueryListResponseParametersCalculationsOperatorAvg, ObservabilityQueryListResponseParametersCalculationsOperatorMedian, ObservabilityQueryListResponseParametersCalculationsOperatorP001, ObservabilityQueryListResponseParametersCalculationsOperatorP01, ObservabilityQueryListResponseParametersCalculationsOperatorP05, ObservabilityQueryListResponseParametersCalculationsOperatorP10, ObservabilityQueryListResponseParametersCalculationsOperatorP25, ObservabilityQueryListResponseParametersCalculationsOperatorP75, ObservabilityQueryListResponseParametersCalculationsOperatorP90, ObservabilityQueryListResponseParametersCalculationsOperatorP95, ObservabilityQueryListResponseParametersCalculationsOperatorP99, ObservabilityQueryListResponseParametersCalculationsOperatorP999, ObservabilityQueryListResponseParametersCalculationsOperatorStddev, ObservabilityQueryListResponseParametersCalculationsOperatorVariance, ObservabilityQueryListResponseParametersCalculationsOperatorCountDistinct, ObservabilityQueryListResponseParametersCalculationsOperatorMaxUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorMinUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorSumUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorAvgUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorMedianUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP001Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP01Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP05Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP10Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP25Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP75Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP90Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP95Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP99Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorP999Uppercase, ObservabilityQueryListResponseParametersCalculationsOperatorStddevUppercase, ObservabilityQueryListResponseParametersCalculationsOperatorVarianceUppercase:
 		return true
 	}
 	return false
@@ -1658,7 +2220,7 @@ func (r ObservabilityQueryNewParams) MarshalJSON() (data []byte, err error) {
 
 type ObservabilityQueryNewParamsParameters struct {
 	// Create Calculations to compute as part of the query.
-	Calculations param.Field[[]ObservabilityQueryNewParamsParametersCalculation] `json:"calculations"`
+	Calculations param.Field[[]ObservabilityQueryNewParamsParametersCalculationUnion] `json:"calculations"`
 	// Set the Datasets to query. Leave it empty to query all the datasets.
 	Datasets param.Field[[]string] `json:"datasets"`
 	// Set a Flag to describe how to combine the filters on the query.
@@ -1693,11 +2255,67 @@ func (r ObservabilityQueryNewParamsParametersCalculation) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
+func (r ObservabilityQueryNewParamsParametersCalculation) implementsObservabilityQueryNewParamsParametersCalculationUnion() {
+}
+
+// Satisfied by [workers.ObservabilityQueryNewParamsParametersCalculationsObject],
+// [workers.ObservabilityQueryNewParamsParametersCalculationsObject],
+// [ObservabilityQueryNewParamsParametersCalculation].
+type ObservabilityQueryNewParamsParametersCalculationUnion interface {
+	implementsObservabilityQueryNewParamsParametersCalculationUnion()
+}
+
+type ObservabilityQueryNewParamsParametersCalculationsObject struct {
+	Operator param.Field[ObservabilityQueryNewParamsParametersCalculationsObjectOperator] `json:"operator" api:"required"`
+	Alias    param.Field[string]                                                          `json:"alias"`
+	Key      param.Field[string]                                                          `json:"key"`
+	KeyType  param.Field[ObservabilityQueryNewParamsParametersCalculationsObjectKeyType]  `json:"keyType"`
+}
+
+func (r ObservabilityQueryNewParamsParametersCalculationsObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilityQueryNewParamsParametersCalculationsObject) implementsObservabilityQueryNewParamsParametersCalculationUnion() {
+}
+
+type ObservabilityQueryNewParamsParametersCalculationsObjectOperator string
+
+const (
+	ObservabilityQueryNewParamsParametersCalculationsObjectOperatorCount          ObservabilityQueryNewParamsParametersCalculationsObjectOperator = "count"
+	ObservabilityQueryNewParamsParametersCalculationsObjectOperatorCountUppercase ObservabilityQueryNewParamsParametersCalculationsObjectOperator = "COUNT"
+)
+
+func (r ObservabilityQueryNewParamsParametersCalculationsObjectOperator) IsKnown() bool {
+	switch r {
+	case ObservabilityQueryNewParamsParametersCalculationsObjectOperatorCount, ObservabilityQueryNewParamsParametersCalculationsObjectOperatorCountUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilityQueryNewParamsParametersCalculationsObjectKeyType string
+
+const (
+	ObservabilityQueryNewParamsParametersCalculationsObjectKeyTypeString  ObservabilityQueryNewParamsParametersCalculationsObjectKeyType = "string"
+	ObservabilityQueryNewParamsParametersCalculationsObjectKeyTypeNumber  ObservabilityQueryNewParamsParametersCalculationsObjectKeyType = "number"
+	ObservabilityQueryNewParamsParametersCalculationsObjectKeyTypeBoolean ObservabilityQueryNewParamsParametersCalculationsObjectKeyType = "boolean"
+)
+
+func (r ObservabilityQueryNewParamsParametersCalculationsObjectKeyType) IsKnown() bool {
+	switch r {
+	case ObservabilityQueryNewParamsParametersCalculationsObjectKeyTypeString, ObservabilityQueryNewParamsParametersCalculationsObjectKeyTypeNumber, ObservabilityQueryNewParamsParametersCalculationsObjectKeyTypeBoolean:
+		return true
+	}
+	return false
+}
+
 type ObservabilityQueryNewParamsParametersCalculationsOperator string
 
 const (
-	ObservabilityQueryNewParamsParametersCalculationsOperatorUniq              ObservabilityQueryNewParamsParametersCalculationsOperator = "uniq"
 	ObservabilityQueryNewParamsParametersCalculationsOperatorCount             ObservabilityQueryNewParamsParametersCalculationsOperator = "count"
+	ObservabilityQueryNewParamsParametersCalculationsOperatorCountUppercase    ObservabilityQueryNewParamsParametersCalculationsOperator = "COUNT"
+	ObservabilityQueryNewParamsParametersCalculationsOperatorUniq              ObservabilityQueryNewParamsParametersCalculationsOperator = "uniq"
 	ObservabilityQueryNewParamsParametersCalculationsOperatorMax               ObservabilityQueryNewParamsParametersCalculationsOperator = "max"
 	ObservabilityQueryNewParamsParametersCalculationsOperatorMin               ObservabilityQueryNewParamsParametersCalculationsOperator = "min"
 	ObservabilityQueryNewParamsParametersCalculationsOperatorSum               ObservabilityQueryNewParamsParametersCalculationsOperator = "sum"
@@ -1716,7 +2334,6 @@ const (
 	ObservabilityQueryNewParamsParametersCalculationsOperatorStddev            ObservabilityQueryNewParamsParametersCalculationsOperator = "stddev"
 	ObservabilityQueryNewParamsParametersCalculationsOperatorVariance          ObservabilityQueryNewParamsParametersCalculationsOperator = "variance"
 	ObservabilityQueryNewParamsParametersCalculationsOperatorCountDistinct     ObservabilityQueryNewParamsParametersCalculationsOperator = "COUNT_DISTINCT"
-	ObservabilityQueryNewParamsParametersCalculationsOperatorCountUppercase    ObservabilityQueryNewParamsParametersCalculationsOperator = "COUNT"
 	ObservabilityQueryNewParamsParametersCalculationsOperatorMaxUppercase      ObservabilityQueryNewParamsParametersCalculationsOperator = "MAX"
 	ObservabilityQueryNewParamsParametersCalculationsOperatorMinUppercase      ObservabilityQueryNewParamsParametersCalculationsOperator = "MIN"
 	ObservabilityQueryNewParamsParametersCalculationsOperatorSumUppercase      ObservabilityQueryNewParamsParametersCalculationsOperator = "SUM"
@@ -1738,7 +2355,7 @@ const (
 
 func (r ObservabilityQueryNewParamsParametersCalculationsOperator) IsKnown() bool {
 	switch r {
-	case ObservabilityQueryNewParamsParametersCalculationsOperatorUniq, ObservabilityQueryNewParamsParametersCalculationsOperatorCount, ObservabilityQueryNewParamsParametersCalculationsOperatorMax, ObservabilityQueryNewParamsParametersCalculationsOperatorMin, ObservabilityQueryNewParamsParametersCalculationsOperatorSum, ObservabilityQueryNewParamsParametersCalculationsOperatorAvg, ObservabilityQueryNewParamsParametersCalculationsOperatorMedian, ObservabilityQueryNewParamsParametersCalculationsOperatorP001, ObservabilityQueryNewParamsParametersCalculationsOperatorP01, ObservabilityQueryNewParamsParametersCalculationsOperatorP05, ObservabilityQueryNewParamsParametersCalculationsOperatorP10, ObservabilityQueryNewParamsParametersCalculationsOperatorP25, ObservabilityQueryNewParamsParametersCalculationsOperatorP75, ObservabilityQueryNewParamsParametersCalculationsOperatorP90, ObservabilityQueryNewParamsParametersCalculationsOperatorP95, ObservabilityQueryNewParamsParametersCalculationsOperatorP99, ObservabilityQueryNewParamsParametersCalculationsOperatorP999, ObservabilityQueryNewParamsParametersCalculationsOperatorStddev, ObservabilityQueryNewParamsParametersCalculationsOperatorVariance, ObservabilityQueryNewParamsParametersCalculationsOperatorCountDistinct, ObservabilityQueryNewParamsParametersCalculationsOperatorCountUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorMaxUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorMinUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorSumUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorAvgUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorMedianUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP001Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP01Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP05Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP10Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP25Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP75Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP90Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP95Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP99Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP999Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorStddevUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorVarianceUppercase:
+	case ObservabilityQueryNewParamsParametersCalculationsOperatorCount, ObservabilityQueryNewParamsParametersCalculationsOperatorCountUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorUniq, ObservabilityQueryNewParamsParametersCalculationsOperatorMax, ObservabilityQueryNewParamsParametersCalculationsOperatorMin, ObservabilityQueryNewParamsParametersCalculationsOperatorSum, ObservabilityQueryNewParamsParametersCalculationsOperatorAvg, ObservabilityQueryNewParamsParametersCalculationsOperatorMedian, ObservabilityQueryNewParamsParametersCalculationsOperatorP001, ObservabilityQueryNewParamsParametersCalculationsOperatorP01, ObservabilityQueryNewParamsParametersCalculationsOperatorP05, ObservabilityQueryNewParamsParametersCalculationsOperatorP10, ObservabilityQueryNewParamsParametersCalculationsOperatorP25, ObservabilityQueryNewParamsParametersCalculationsOperatorP75, ObservabilityQueryNewParamsParametersCalculationsOperatorP90, ObservabilityQueryNewParamsParametersCalculationsOperatorP95, ObservabilityQueryNewParamsParametersCalculationsOperatorP99, ObservabilityQueryNewParamsParametersCalculationsOperatorP999, ObservabilityQueryNewParamsParametersCalculationsOperatorStddev, ObservabilityQueryNewParamsParametersCalculationsOperatorVariance, ObservabilityQueryNewParamsParametersCalculationsOperatorCountDistinct, ObservabilityQueryNewParamsParametersCalculationsOperatorMaxUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorMinUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorSumUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorAvgUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorMedianUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP001Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP01Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP05Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP10Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP25Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP75Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP90Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP95Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP99Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorP999Uppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorStddevUppercase, ObservabilityQueryNewParamsParametersCalculationsOperatorVarianceUppercase:
 		return true
 	}
 	return false

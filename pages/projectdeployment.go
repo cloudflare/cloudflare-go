@@ -31,6 +31,7 @@ import (
 type ProjectDeploymentService struct {
 	Options []option.RequestOption
 	History *ProjectDeploymentHistoryService
+	Tails   *ProjectDeploymentTailService
 }
 
 // NewProjectDeploymentService generates a new service that applies the given
@@ -40,6 +41,7 @@ func NewProjectDeploymentService(opts ...option.RequestOption) (r *ProjectDeploy
 	r = &ProjectDeploymentService{}
 	r.Options = opts
 	r.History = NewProjectDeploymentHistoryService(opts...)
+	r.Tails = NewProjectDeploymentTailService(opts...)
 	return
 }
 

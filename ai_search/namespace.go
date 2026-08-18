@@ -60,8 +60,9 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 	return res, nil
 }
 
-// Update the description of an existing namespace. The default namespace cannot be
-// modified.
+// Update the description and/or the public endpoint configuration of an existing
+// namespace. The default namespace's description cannot be modified, but its
+// public endpoint can.
 func (r *NamespaceService) Update(ctx context.Context, name string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponse, err error) {
 	var env NamespaceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -195,18 +196,22 @@ type NamespaceNewResponse struct {
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
-	Description string                   `json:"description" api:"nullable"`
-	JSON        namespaceNewResponseJSON `json:"-"`
+	Description          string                                   `json:"description" api:"nullable"`
+	PublicEndpointID     string                                   `json:"public_endpoint_id" api:"nullable"`
+	PublicEndpointParams NamespaceNewResponsePublicEndpointParams `json:"public_endpoint_params" api:"nullable"`
+	JSON                 namespaceNewResponseJSON                 `json:"-"`
 }
 
 // namespaceNewResponseJSON contains the JSON metadata for the struct
 // [NamespaceNewResponse]
 type namespaceNewResponseJSON struct {
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	CreatedAt            apijson.Field
+	Name                 apijson.Field
+	Description          apijson.Field
+	PublicEndpointID     apijson.Field
+	PublicEndpointParams apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *NamespaceNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -217,22 +222,184 @@ func (r namespaceNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type NamespaceNewResponsePublicEndpointParams struct {
+	AuthorizedHosts         []string                                                        `json:"authorized_hosts"`
+	ChatCompletionsEndpoint NamespaceNewResponsePublicEndpointParamsChatCompletionsEndpoint `json:"chat_completions_endpoint"`
+	// Custom domain hostnames that alias this public endpoint. GET and create
+	// responses return the current set; on update (PUT) this field is only echoed back
+	// when supplied in the request body, otherwise it is null (omit it to leave
+	// domains unchanged).
+	CustomDomains []string `json:"custom_domains" api:"nullable"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled bool `json:"default_domain_enabled"`
+	Enabled              bool `json:"enabled"`
+	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
+	// is searchable. Every ID must be an existing instance in this namespace, and the
+	// list cannot exceed the account's multi-instance search limit.
+	InstancesAllowed []string                                               `json:"instances_allowed"`
+	Mcp              NamespaceNewResponsePublicEndpointParamsMcp            `json:"mcp"`
+	RateLimit        NamespaceNewResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
+	SearchEndpoint   NamespaceNewResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
+	JSON             namespaceNewResponsePublicEndpointParamsJSON           `json:"-"`
+}
+
+// namespaceNewResponsePublicEndpointParamsJSON contains the JSON metadata for the
+// struct [NamespaceNewResponsePublicEndpointParams]
+type namespaceNewResponsePublicEndpointParamsJSON struct {
+	AuthorizedHosts         apijson.Field
+	ChatCompletionsEndpoint apijson.Field
+	CustomDomains           apijson.Field
+	DefaultDomainEnabled    apijson.Field
+	Enabled                 apijson.Field
+	InstancesAllowed        apijson.Field
+	Mcp                     apijson.Field
+	RateLimit               apijson.Field
+	SearchEndpoint          apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *NamespaceNewResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceNewResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceNewResponsePublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled bool                                                                `json:"disabled"`
+	JSON     namespaceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
+}
+
+// namespaceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON contains the
+// JSON metadata for the struct
+// [NamespaceNewResponsePublicEndpointParamsChatCompletionsEndpoint]
+type namespaceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceNewResponsePublicEndpointParamsChatCompletionsEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceNewResponsePublicEndpointParamsMcp struct {
+	Description string `json:"description"`
+	// Disable MCP endpoint for this public endpoint
+	Disabled bool                                            `json:"disabled"`
+	JSON     namespaceNewResponsePublicEndpointParamsMcpJSON `json:"-"`
+}
+
+// namespaceNewResponsePublicEndpointParamsMcpJSON contains the JSON metadata for
+// the struct [NamespaceNewResponsePublicEndpointParamsMcp]
+type namespaceNewResponsePublicEndpointParamsMcpJSON struct {
+	Description apijson.Field
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceNewResponsePublicEndpointParamsMcp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceNewResponsePublicEndpointParamsMcpJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceNewResponsePublicEndpointParamsRateLimit struct {
+	PeriodMs  int64                                                      `json:"period_ms"`
+	Requests  int64                                                      `json:"requests"`
+	Technique NamespaceNewResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
+	JSON      namespaceNewResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
+}
+
+// namespaceNewResponsePublicEndpointParamsRateLimitJSON contains the JSON metadata
+// for the struct [NamespaceNewResponsePublicEndpointParamsRateLimit]
+type namespaceNewResponsePublicEndpointParamsRateLimitJSON struct {
+	PeriodMs    apijson.Field
+	Requests    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceNewResponsePublicEndpointParamsRateLimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceNewResponsePublicEndpointParamsRateLimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceNewResponsePublicEndpointParamsRateLimitTechnique string
+
+const (
+	NamespaceNewResponsePublicEndpointParamsRateLimitTechniqueFixed   NamespaceNewResponsePublicEndpointParamsRateLimitTechnique = "fixed"
+	NamespaceNewResponsePublicEndpointParamsRateLimitTechniqueSliding NamespaceNewResponsePublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r NamespaceNewResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case NamespaceNewResponsePublicEndpointParamsRateLimitTechniqueFixed, NamespaceNewResponsePublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type NamespaceNewResponsePublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled bool                                                       `json:"disabled"`
+	JSON     namespaceNewResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
+}
+
+// namespaceNewResponsePublicEndpointParamsSearchEndpointJSON contains the JSON
+// metadata for the struct [NamespaceNewResponsePublicEndpointParamsSearchEndpoint]
+type namespaceNewResponsePublicEndpointParamsSearchEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceNewResponsePublicEndpointParamsSearchEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceNewResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
 type NamespaceUpdateResponse struct {
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
-	Description string                      `json:"description" api:"nullable"`
-	JSON        namespaceUpdateResponseJSON `json:"-"`
+	Description          string                                      `json:"description" api:"nullable"`
+	PublicEndpointID     string                                      `json:"public_endpoint_id" api:"nullable"`
+	PublicEndpointParams NamespaceUpdateResponsePublicEndpointParams `json:"public_endpoint_params" api:"nullable"`
+	JSON                 namespaceUpdateResponseJSON                 `json:"-"`
 }
 
 // namespaceUpdateResponseJSON contains the JSON metadata for the struct
 // [NamespaceUpdateResponse]
 type namespaceUpdateResponseJSON struct {
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	CreatedAt            apijson.Field
+	Name                 apijson.Field
+	Description          apijson.Field
+	PublicEndpointID     apijson.Field
+	PublicEndpointParams apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *NamespaceUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -243,22 +410,185 @@ func (r namespaceUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type NamespaceUpdateResponsePublicEndpointParams struct {
+	AuthorizedHosts         []string                                                           `json:"authorized_hosts"`
+	ChatCompletionsEndpoint NamespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpoint `json:"chat_completions_endpoint"`
+	// Custom domain hostnames that alias this public endpoint. GET and create
+	// responses return the current set; on update (PUT) this field is only echoed back
+	// when supplied in the request body, otherwise it is null (omit it to leave
+	// domains unchanged).
+	CustomDomains []string `json:"custom_domains" api:"nullable"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled bool `json:"default_domain_enabled"`
+	Enabled              bool `json:"enabled"`
+	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
+	// is searchable. Every ID must be an existing instance in this namespace, and the
+	// list cannot exceed the account's multi-instance search limit.
+	InstancesAllowed []string                                                  `json:"instances_allowed"`
+	Mcp              NamespaceUpdateResponsePublicEndpointParamsMcp            `json:"mcp"`
+	RateLimit        NamespaceUpdateResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
+	SearchEndpoint   NamespaceUpdateResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
+	JSON             namespaceUpdateResponsePublicEndpointParamsJSON           `json:"-"`
+}
+
+// namespaceUpdateResponsePublicEndpointParamsJSON contains the JSON metadata for
+// the struct [NamespaceUpdateResponsePublicEndpointParams]
+type namespaceUpdateResponsePublicEndpointParamsJSON struct {
+	AuthorizedHosts         apijson.Field
+	ChatCompletionsEndpoint apijson.Field
+	CustomDomains           apijson.Field
+	DefaultDomainEnabled    apijson.Field
+	Enabled                 apijson.Field
+	InstancesAllowed        apijson.Field
+	Mcp                     apijson.Field
+	RateLimit               apijson.Field
+	SearchEndpoint          apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *NamespaceUpdateResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceUpdateResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled bool                                                                   `json:"disabled"`
+	JSON     namespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
+}
+
+// namespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON contains
+// the JSON metadata for the struct
+// [NamespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpoint]
+type namespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceUpdateResponsePublicEndpointParamsMcp struct {
+	Description string `json:"description"`
+	// Disable MCP endpoint for this public endpoint
+	Disabled bool                                               `json:"disabled"`
+	JSON     namespaceUpdateResponsePublicEndpointParamsMcpJSON `json:"-"`
+}
+
+// namespaceUpdateResponsePublicEndpointParamsMcpJSON contains the JSON metadata
+// for the struct [NamespaceUpdateResponsePublicEndpointParamsMcp]
+type namespaceUpdateResponsePublicEndpointParamsMcpJSON struct {
+	Description apijson.Field
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceUpdateResponsePublicEndpointParamsMcp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceUpdateResponsePublicEndpointParamsMcpJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceUpdateResponsePublicEndpointParamsRateLimit struct {
+	PeriodMs  int64                                                         `json:"period_ms"`
+	Requests  int64                                                         `json:"requests"`
+	Technique NamespaceUpdateResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
+	JSON      namespaceUpdateResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
+}
+
+// namespaceUpdateResponsePublicEndpointParamsRateLimitJSON contains the JSON
+// metadata for the struct [NamespaceUpdateResponsePublicEndpointParamsRateLimit]
+type namespaceUpdateResponsePublicEndpointParamsRateLimitJSON struct {
+	PeriodMs    apijson.Field
+	Requests    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceUpdateResponsePublicEndpointParamsRateLimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceUpdateResponsePublicEndpointParamsRateLimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceUpdateResponsePublicEndpointParamsRateLimitTechnique string
+
+const (
+	NamespaceUpdateResponsePublicEndpointParamsRateLimitTechniqueFixed   NamespaceUpdateResponsePublicEndpointParamsRateLimitTechnique = "fixed"
+	NamespaceUpdateResponsePublicEndpointParamsRateLimitTechniqueSliding NamespaceUpdateResponsePublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r NamespaceUpdateResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case NamespaceUpdateResponsePublicEndpointParamsRateLimitTechniqueFixed, NamespaceUpdateResponsePublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type NamespaceUpdateResponsePublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled bool                                                          `json:"disabled"`
+	JSON     namespaceUpdateResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
+}
+
+// namespaceUpdateResponsePublicEndpointParamsSearchEndpointJSON contains the JSON
+// metadata for the struct
+// [NamespaceUpdateResponsePublicEndpointParamsSearchEndpoint]
+type namespaceUpdateResponsePublicEndpointParamsSearchEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceUpdateResponsePublicEndpointParamsSearchEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceUpdateResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
 type NamespaceListResponse struct {
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
-	Description string                    `json:"description" api:"nullable"`
-	JSON        namespaceListResponseJSON `json:"-"`
+	Description          string                                    `json:"description" api:"nullable"`
+	PublicEndpointID     string                                    `json:"public_endpoint_id" api:"nullable"`
+	PublicEndpointParams NamespaceListResponsePublicEndpointParams `json:"public_endpoint_params" api:"nullable"`
+	JSON                 namespaceListResponseJSON                 `json:"-"`
 }
 
 // namespaceListResponseJSON contains the JSON metadata for the struct
 // [NamespaceListResponse]
 type namespaceListResponseJSON struct {
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	CreatedAt            apijson.Field
+	Name                 apijson.Field
+	Description          apijson.Field
+	PublicEndpointID     apijson.Field
+	PublicEndpointParams apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *NamespaceListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -266,6 +596,165 @@ func (r *NamespaceListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r namespaceListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceListResponsePublicEndpointParams struct {
+	AuthorizedHosts         []string                                                         `json:"authorized_hosts"`
+	ChatCompletionsEndpoint NamespaceListResponsePublicEndpointParamsChatCompletionsEndpoint `json:"chat_completions_endpoint"`
+	// Custom domain hostnames that alias this public endpoint. GET and create
+	// responses return the current set; on update (PUT) this field is only echoed back
+	// when supplied in the request body, otherwise it is null (omit it to leave
+	// domains unchanged).
+	CustomDomains []string `json:"custom_domains" api:"nullable"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled bool `json:"default_domain_enabled"`
+	Enabled              bool `json:"enabled"`
+	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
+	// is searchable. Every ID must be an existing instance in this namespace, and the
+	// list cannot exceed the account's multi-instance search limit.
+	InstancesAllowed []string                                                `json:"instances_allowed"`
+	Mcp              NamespaceListResponsePublicEndpointParamsMcp            `json:"mcp"`
+	RateLimit        NamespaceListResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
+	SearchEndpoint   NamespaceListResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
+	JSON             namespaceListResponsePublicEndpointParamsJSON           `json:"-"`
+}
+
+// namespaceListResponsePublicEndpointParamsJSON contains the JSON metadata for the
+// struct [NamespaceListResponsePublicEndpointParams]
+type namespaceListResponsePublicEndpointParamsJSON struct {
+	AuthorizedHosts         apijson.Field
+	ChatCompletionsEndpoint apijson.Field
+	CustomDomains           apijson.Field
+	DefaultDomainEnabled    apijson.Field
+	Enabled                 apijson.Field
+	InstancesAllowed        apijson.Field
+	Mcp                     apijson.Field
+	RateLimit               apijson.Field
+	SearchEndpoint          apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *NamespaceListResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceListResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceListResponsePublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled bool                                                                 `json:"disabled"`
+	JSON     namespaceListResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
+}
+
+// namespaceListResponsePublicEndpointParamsChatCompletionsEndpointJSON contains
+// the JSON metadata for the struct
+// [NamespaceListResponsePublicEndpointParamsChatCompletionsEndpoint]
+type namespaceListResponsePublicEndpointParamsChatCompletionsEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceListResponsePublicEndpointParamsChatCompletionsEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceListResponsePublicEndpointParamsChatCompletionsEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceListResponsePublicEndpointParamsMcp struct {
+	Description string `json:"description"`
+	// Disable MCP endpoint for this public endpoint
+	Disabled bool                                             `json:"disabled"`
+	JSON     namespaceListResponsePublicEndpointParamsMcpJSON `json:"-"`
+}
+
+// namespaceListResponsePublicEndpointParamsMcpJSON contains the JSON metadata for
+// the struct [NamespaceListResponsePublicEndpointParamsMcp]
+type namespaceListResponsePublicEndpointParamsMcpJSON struct {
+	Description apijson.Field
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceListResponsePublicEndpointParamsMcp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceListResponsePublicEndpointParamsMcpJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceListResponsePublicEndpointParamsRateLimit struct {
+	PeriodMs  int64                                                       `json:"period_ms"`
+	Requests  int64                                                       `json:"requests"`
+	Technique NamespaceListResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
+	JSON      namespaceListResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
+}
+
+// namespaceListResponsePublicEndpointParamsRateLimitJSON contains the JSON
+// metadata for the struct [NamespaceListResponsePublicEndpointParamsRateLimit]
+type namespaceListResponsePublicEndpointParamsRateLimitJSON struct {
+	PeriodMs    apijson.Field
+	Requests    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceListResponsePublicEndpointParamsRateLimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceListResponsePublicEndpointParamsRateLimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceListResponsePublicEndpointParamsRateLimitTechnique string
+
+const (
+	NamespaceListResponsePublicEndpointParamsRateLimitTechniqueFixed   NamespaceListResponsePublicEndpointParamsRateLimitTechnique = "fixed"
+	NamespaceListResponsePublicEndpointParamsRateLimitTechniqueSliding NamespaceListResponsePublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r NamespaceListResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case NamespaceListResponsePublicEndpointParamsRateLimitTechniqueFixed, NamespaceListResponsePublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type NamespaceListResponsePublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled bool                                                        `json:"disabled"`
+	JSON     namespaceListResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
+}
+
+// namespaceListResponsePublicEndpointParamsSearchEndpointJSON contains the JSON
+// metadata for the struct
+// [NamespaceListResponsePublicEndpointParamsSearchEndpoint]
+type namespaceListResponsePublicEndpointParamsSearchEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceListResponsePublicEndpointParamsSearchEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceListResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -659,18 +1148,22 @@ type NamespaceReadResponse struct {
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
-	Description string                    `json:"description" api:"nullable"`
-	JSON        namespaceReadResponseJSON `json:"-"`
+	Description          string                                    `json:"description" api:"nullable"`
+	PublicEndpointID     string                                    `json:"public_endpoint_id" api:"nullable"`
+	PublicEndpointParams NamespaceReadResponsePublicEndpointParams `json:"public_endpoint_params" api:"nullable"`
+	JSON                 namespaceReadResponseJSON                 `json:"-"`
 }
 
 // namespaceReadResponseJSON contains the JSON metadata for the struct
 // [NamespaceReadResponse]
 type namespaceReadResponseJSON struct {
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	CreatedAt            apijson.Field
+	Name                 apijson.Field
+	Description          apijson.Field
+	PublicEndpointID     apijson.Field
+	PublicEndpointParams apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *NamespaceReadResponse) UnmarshalJSON(data []byte) (err error) {
@@ -678,6 +1171,165 @@ func (r *NamespaceReadResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r namespaceReadResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceReadResponsePublicEndpointParams struct {
+	AuthorizedHosts         []string                                                         `json:"authorized_hosts"`
+	ChatCompletionsEndpoint NamespaceReadResponsePublicEndpointParamsChatCompletionsEndpoint `json:"chat_completions_endpoint"`
+	// Custom domain hostnames that alias this public endpoint. GET and create
+	// responses return the current set; on update (PUT) this field is only echoed back
+	// when supplied in the request body, otherwise it is null (omit it to leave
+	// domains unchanged).
+	CustomDomains []string `json:"custom_domains" api:"nullable"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled bool `json:"default_domain_enabled"`
+	Enabled              bool `json:"enabled"`
+	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
+	// is searchable. Every ID must be an existing instance in this namespace, and the
+	// list cannot exceed the account's multi-instance search limit.
+	InstancesAllowed []string                                                `json:"instances_allowed"`
+	Mcp              NamespaceReadResponsePublicEndpointParamsMcp            `json:"mcp"`
+	RateLimit        NamespaceReadResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
+	SearchEndpoint   NamespaceReadResponsePublicEndpointParamsSearchEndpoint `json:"search_endpoint"`
+	JSON             namespaceReadResponsePublicEndpointParamsJSON           `json:"-"`
+}
+
+// namespaceReadResponsePublicEndpointParamsJSON contains the JSON metadata for the
+// struct [NamespaceReadResponsePublicEndpointParams]
+type namespaceReadResponsePublicEndpointParamsJSON struct {
+	AuthorizedHosts         apijson.Field
+	ChatCompletionsEndpoint apijson.Field
+	CustomDomains           apijson.Field
+	DefaultDomainEnabled    apijson.Field
+	Enabled                 apijson.Field
+	InstancesAllowed        apijson.Field
+	Mcp                     apijson.Field
+	RateLimit               apijson.Field
+	SearchEndpoint          apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *NamespaceReadResponsePublicEndpointParams) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceReadResponsePublicEndpointParamsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceReadResponsePublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled bool                                                                 `json:"disabled"`
+	JSON     namespaceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
+}
+
+// namespaceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON contains
+// the JSON metadata for the struct
+// [NamespaceReadResponsePublicEndpointParamsChatCompletionsEndpoint]
+type namespaceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceReadResponsePublicEndpointParamsChatCompletionsEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceReadResponsePublicEndpointParamsMcp struct {
+	Description string `json:"description"`
+	// Disable MCP endpoint for this public endpoint
+	Disabled bool                                             `json:"disabled"`
+	JSON     namespaceReadResponsePublicEndpointParamsMcpJSON `json:"-"`
+}
+
+// namespaceReadResponsePublicEndpointParamsMcpJSON contains the JSON metadata for
+// the struct [NamespaceReadResponsePublicEndpointParamsMcp]
+type namespaceReadResponsePublicEndpointParamsMcpJSON struct {
+	Description apijson.Field
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceReadResponsePublicEndpointParamsMcp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceReadResponsePublicEndpointParamsMcpJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceReadResponsePublicEndpointParamsRateLimit struct {
+	PeriodMs  int64                                                       `json:"period_ms"`
+	Requests  int64                                                       `json:"requests"`
+	Technique NamespaceReadResponsePublicEndpointParamsRateLimitTechnique `json:"technique"`
+	JSON      namespaceReadResponsePublicEndpointParamsRateLimitJSON      `json:"-"`
+}
+
+// namespaceReadResponsePublicEndpointParamsRateLimitJSON contains the JSON
+// metadata for the struct [NamespaceReadResponsePublicEndpointParamsRateLimit]
+type namespaceReadResponsePublicEndpointParamsRateLimitJSON struct {
+	PeriodMs    apijson.Field
+	Requests    apijson.Field
+	Technique   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceReadResponsePublicEndpointParamsRateLimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceReadResponsePublicEndpointParamsRateLimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceReadResponsePublicEndpointParamsRateLimitTechnique string
+
+const (
+	NamespaceReadResponsePublicEndpointParamsRateLimitTechniqueFixed   NamespaceReadResponsePublicEndpointParamsRateLimitTechnique = "fixed"
+	NamespaceReadResponsePublicEndpointParamsRateLimitTechniqueSliding NamespaceReadResponsePublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r NamespaceReadResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case NamespaceReadResponsePublicEndpointParamsRateLimitTechniqueFixed, NamespaceReadResponsePublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type NamespaceReadResponsePublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled bool                                                        `json:"disabled"`
+	JSON     namespaceReadResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
+}
+
+// namespaceReadResponsePublicEndpointParamsSearchEndpointJSON contains the JSON
+// metadata for the struct
+// [NamespaceReadResponsePublicEndpointParamsSearchEndpoint]
+type namespaceReadResponsePublicEndpointParamsSearchEndpointJSON struct {
+	Disabled    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceReadResponsePublicEndpointParamsSearchEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceReadResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -855,10 +1507,92 @@ type NamespaceNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Name      param.Field[string] `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
-	Description param.Field[string] `json:"description"`
+	Description          param.Field[string]                                 `json:"description"`
+	PublicEndpointParams param.Field[NamespaceNewParamsPublicEndpointParams] `json:"public_endpoint_params"`
 }
 
 func (r NamespaceNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceNewParamsPublicEndpointParams struct {
+	AuthorizedHosts         param.Field[[]string]                                                      `json:"authorized_hosts"`
+	ChatCompletionsEndpoint param.Field[NamespaceNewParamsPublicEndpointParamsChatCompletionsEndpoint] `json:"chat_completions_endpoint"`
+	// Custom domain hostnames that alias this public endpoint. GET and create
+	// responses return the current set; on update (PUT) this field is only echoed back
+	// when supplied in the request body, otherwise it is null (omit it to leave
+	// domains unchanged).
+	CustomDomains param.Field[[]string] `json:"custom_domains"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled param.Field[bool] `json:"default_domain_enabled"`
+	Enabled              param.Field[bool] `json:"enabled"`
+	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
+	// is searchable. Every ID must be an existing instance in this namespace, and the
+	// list cannot exceed the account's multi-instance search limit.
+	InstancesAllowed param.Field[[]string]                                             `json:"instances_allowed"`
+	Mcp              param.Field[NamespaceNewParamsPublicEndpointParamsMcp]            `json:"mcp"`
+	RateLimit        param.Field[NamespaceNewParamsPublicEndpointParamsRateLimit]      `json:"rate_limit"`
+	SearchEndpoint   param.Field[NamespaceNewParamsPublicEndpointParamsSearchEndpoint] `json:"search_endpoint"`
+}
+
+func (r NamespaceNewParamsPublicEndpointParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceNewParamsPublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r NamespaceNewParamsPublicEndpointParamsChatCompletionsEndpoint) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceNewParamsPublicEndpointParamsMcp struct {
+	Description param.Field[string] `json:"description"`
+	// Disable MCP endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r NamespaceNewParamsPublicEndpointParamsMcp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceNewParamsPublicEndpointParamsRateLimit struct {
+	PeriodMs  param.Field[int64]                                                    `json:"period_ms"`
+	Requests  param.Field[int64]                                                    `json:"requests"`
+	Technique param.Field[NamespaceNewParamsPublicEndpointParamsRateLimitTechnique] `json:"technique"`
+}
+
+func (r NamespaceNewParamsPublicEndpointParamsRateLimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceNewParamsPublicEndpointParamsRateLimitTechnique string
+
+const (
+	NamespaceNewParamsPublicEndpointParamsRateLimitTechniqueFixed   NamespaceNewParamsPublicEndpointParamsRateLimitTechnique = "fixed"
+	NamespaceNewParamsPublicEndpointParamsRateLimitTechniqueSliding NamespaceNewParamsPublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r NamespaceNewParamsPublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case NamespaceNewParamsPublicEndpointParamsRateLimitTechniqueFixed, NamespaceNewParamsPublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type NamespaceNewParamsPublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r NamespaceNewParamsPublicEndpointParamsSearchEndpoint) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -902,10 +1636,92 @@ func (r NamespaceNewResponseEnvelopeSuccess) IsKnown() bool {
 type NamespaceUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
-	Description param.Field[string] `json:"description"`
+	Description          param.Field[string]                                    `json:"description"`
+	PublicEndpointParams param.Field[NamespaceUpdateParamsPublicEndpointParams] `json:"public_endpoint_params"`
 }
 
 func (r NamespaceUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceUpdateParamsPublicEndpointParams struct {
+	AuthorizedHosts         param.Field[[]string]                                                         `json:"authorized_hosts"`
+	ChatCompletionsEndpoint param.Field[NamespaceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint] `json:"chat_completions_endpoint"`
+	// Custom domain hostnames that alias this public endpoint. GET and create
+	// responses return the current set; on update (PUT) this field is only echoed back
+	// when supplied in the request body, otherwise it is null (omit it to leave
+	// domains unchanged).
+	CustomDomains param.Field[[]string] `json:"custom_domains"`
+	// When false, the instance is reachable only via a registered custom domain and
+	// the default <public_endpoint_id>.search.ai.cloudflare.com host returns 404.
+	// Requires at least one custom domain. Defaults to true. public_endpoint_params is
+	// replaced wholesale on update, so resend default_domain_enabled on every update
+	// to keep the default host off — omitting it resets to true.
+	DefaultDomainEnabled param.Field[bool] `json:"default_domain_enabled"`
+	Enabled              param.Field[bool] `json:"enabled"`
+	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
+	// is searchable. Every ID must be an existing instance in this namespace, and the
+	// list cannot exceed the account's multi-instance search limit.
+	InstancesAllowed param.Field[[]string]                                                `json:"instances_allowed"`
+	Mcp              param.Field[NamespaceUpdateParamsPublicEndpointParamsMcp]            `json:"mcp"`
+	RateLimit        param.Field[NamespaceUpdateParamsPublicEndpointParamsRateLimit]      `json:"rate_limit"`
+	SearchEndpoint   param.Field[NamespaceUpdateParamsPublicEndpointParamsSearchEndpoint] `json:"search_endpoint"`
+}
+
+func (r NamespaceUpdateParamsPublicEndpointParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint struct {
+	// Disable chat completions endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r NamespaceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceUpdateParamsPublicEndpointParamsMcp struct {
+	Description param.Field[string] `json:"description"`
+	// Disable MCP endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r NamespaceUpdateParamsPublicEndpointParamsMcp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceUpdateParamsPublicEndpointParamsRateLimit struct {
+	PeriodMs  param.Field[int64]                                                       `json:"period_ms"`
+	Requests  param.Field[int64]                                                       `json:"requests"`
+	Technique param.Field[NamespaceUpdateParamsPublicEndpointParamsRateLimitTechnique] `json:"technique"`
+}
+
+func (r NamespaceUpdateParamsPublicEndpointParamsRateLimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceUpdateParamsPublicEndpointParamsRateLimitTechnique string
+
+const (
+	NamespaceUpdateParamsPublicEndpointParamsRateLimitTechniqueFixed   NamespaceUpdateParamsPublicEndpointParamsRateLimitTechnique = "fixed"
+	NamespaceUpdateParamsPublicEndpointParamsRateLimitTechniqueSliding NamespaceUpdateParamsPublicEndpointParamsRateLimitTechnique = "sliding"
+)
+
+func (r NamespaceUpdateParamsPublicEndpointParamsRateLimitTechnique) IsKnown() bool {
+	switch r {
+	case NamespaceUpdateParamsPublicEndpointParamsRateLimitTechniqueFixed, NamespaceUpdateParamsPublicEndpointParamsRateLimitTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type NamespaceUpdateParamsPublicEndpointParamsSearchEndpoint struct {
+	// Disable search endpoint for this public endpoint
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r NamespaceUpdateParamsPublicEndpointParamsSearchEndpoint) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

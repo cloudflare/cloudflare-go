@@ -39,8 +39,12 @@ func NewRecipientService(opts ...option.RequestOption) (r *RecipientService) {
 	return
 }
 
-// Adds a recipient to a resource share, granting them access to the shared
-// resources.
+// Adds a single recipient to an account-targeted resource share, granting them
+// access to the shared resources. The recipient account must belong to the same
+// organization as the share owner.
+//
+// To replace the entire recipient list in one call, use
+// `PUT /accounts/{account_id}/shares/{share_id}/recipients` instead.
 func (r *RecipientService) New(ctx context.Context, shareID string, params RecipientNewParams, opts ...option.RequestOption) (res *RecipientNewResponse, err error) {
 	var env RecipientNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -61,7 +65,10 @@ func (r *RecipientService) New(ctx context.Context, shareID string, params Recip
 	return res, nil
 }
 
-// List share recipients by share ID.
+// List share recipients by share ID. Returns **all** recipients regardless of
+// their `association_status` (associating, associated, disassociating,
+// disassociated). Callers that want only "active" recipients must filter
+// client-side on the `association_status` field.
 func (r *RecipientService) List(ctx context.Context, shareID string, params RecipientListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RecipientListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -87,13 +94,24 @@ func (r *RecipientService) List(ctx context.Context, shareID string, params Reci
 	return res, nil
 }
 
-// List share recipients by share ID.
+// List share recipients by share ID. Returns **all** recipients regardless of
+// their `association_status` (associating, associated, disassociating,
+// disassociated). Callers that want only "active" recipients must filter
+// client-side on the `association_status` field.
 func (r *RecipientService) ListAutoPaging(ctx context.Context, shareID string, params RecipientListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[RecipientListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, shareID, params, opts...))
 }
 
-// Deletion is not immediate, an updated share recipient object with a new status
-// will be returned.
+// Performs a **soft delete**: sets the recipient's `desired_association_status` to
+// `disassociated`, which signals the background reconciliation workflow (Temporal)
+// to remove the shared resources from the recipient account. The recipient record
+// remains in the database for audit purposes and is still returned by
+// `GET /accounts/{account_id}/shares/{share_id}/recipients` with its updated
+// status.
+//
+// Resource access is not fully removed until the workflow completes and
+// `current_association_status` transitions to `disassociated`. The recipient
+// record itself is never physically deleted.
 func (r *RecipientService) Delete(ctx context.Context, shareID string, recipientID string, body RecipientDeleteParams, opts ...option.RequestOption) (res *RecipientDeleteResponse, err error) {
 	var env RecipientDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -143,12 +161,28 @@ func (r *RecipientService) Get(ctx context.Context, shareID string, recipientID 
 	return res, nil
 }
 
+// A recipient of a share. The `association_status` field tracks the lifecycle of
+// the shared resources in the recipient account. All recipients are returned by
+// the list endpoint regardless of status; filter client-side if only active
+// recipients are needed.
 type RecipientNewResponse struct {
 	// Share Recipient identifier tag.
 	ID string `json:"id" api:"required"`
 	// Account identifier.
 	AccountID string `json:"account_id" api:"required"`
-	// Share Recipient association status.
+	// The current state of the recipient relative to the share. The
+	// `desired_association_status` (not exposed in the response) tracks the target
+	// state set by the API; the background reconciliation workflow drives
+	// `current_association_status` toward it.
+	//
+	//   - `associating` — The recipient was recently added; the workflow is pushing
+	//     shared resources into the recipient account.
+	//   - `associated` — Shared resources have been successfully applied to the
+	//     recipient account.
+	//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+	//     the workflow is removing shared resources from the recipient account.
+	//   - `disassociated` — Shared resources have been removed from the recipient
+	//     account. The recipient record remains in the database.
 	AssociationStatus RecipientNewResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
@@ -179,7 +213,19 @@ func (r recipientNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Share Recipient association status.
+// The current state of the recipient relative to the share. The
+// `desired_association_status` (not exposed in the response) tracks the target
+// state set by the API; the background reconciliation workflow drives
+// `current_association_status` toward it.
+//
+//   - `associating` — The recipient was recently added; the workflow is pushing
+//     shared resources into the recipient account.
+//   - `associated` — Shared resources have been successfully applied to the
+//     recipient account.
+//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+//     the workflow is removing shared resources from the recipient account.
+//   - `disassociated` — Shared resources have been removed from the recipient
+//     account. The recipient record remains in the database.
 type RecipientNewResponseAssociationStatus string
 
 const (
@@ -228,12 +274,28 @@ func (r recipientNewResponseResourceJSON) RawJSON() string {
 	return r.raw
 }
 
+// A recipient of a share. The `association_status` field tracks the lifecycle of
+// the shared resources in the recipient account. All recipients are returned by
+// the list endpoint regardless of status; filter client-side if only active
+// recipients are needed.
 type RecipientListResponse struct {
 	// Share Recipient identifier tag.
 	ID string `json:"id" api:"required"`
 	// Account identifier.
 	AccountID string `json:"account_id" api:"required"`
-	// Share Recipient association status.
+	// The current state of the recipient relative to the share. The
+	// `desired_association_status` (not exposed in the response) tracks the target
+	// state set by the API; the background reconciliation workflow drives
+	// `current_association_status` toward it.
+	//
+	//   - `associating` — The recipient was recently added; the workflow is pushing
+	//     shared resources into the recipient account.
+	//   - `associated` — Shared resources have been successfully applied to the
+	//     recipient account.
+	//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+	//     the workflow is removing shared resources from the recipient account.
+	//   - `disassociated` — Shared resources have been removed from the recipient
+	//     account. The recipient record remains in the database.
 	AssociationStatus RecipientListResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
@@ -264,7 +326,19 @@ func (r recipientListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Share Recipient association status.
+// The current state of the recipient relative to the share. The
+// `desired_association_status` (not exposed in the response) tracks the target
+// state set by the API; the background reconciliation workflow drives
+// `current_association_status` toward it.
+//
+//   - `associating` — The recipient was recently added; the workflow is pushing
+//     shared resources into the recipient account.
+//   - `associated` — Shared resources have been successfully applied to the
+//     recipient account.
+//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+//     the workflow is removing shared resources from the recipient account.
+//   - `disassociated` — Shared resources have been removed from the recipient
+//     account. The recipient record remains in the database.
 type RecipientListResponseAssociationStatus string
 
 const (
@@ -313,12 +387,28 @@ func (r recipientListResponseResourceJSON) RawJSON() string {
 	return r.raw
 }
 
+// A recipient of a share. The `association_status` field tracks the lifecycle of
+// the shared resources in the recipient account. All recipients are returned by
+// the list endpoint regardless of status; filter client-side if only active
+// recipients are needed.
 type RecipientDeleteResponse struct {
 	// Share Recipient identifier tag.
 	ID string `json:"id" api:"required"`
 	// Account identifier.
 	AccountID string `json:"account_id" api:"required"`
-	// Share Recipient association status.
+	// The current state of the recipient relative to the share. The
+	// `desired_association_status` (not exposed in the response) tracks the target
+	// state set by the API; the background reconciliation workflow drives
+	// `current_association_status` toward it.
+	//
+	//   - `associating` — The recipient was recently added; the workflow is pushing
+	//     shared resources into the recipient account.
+	//   - `associated` — Shared resources have been successfully applied to the
+	//     recipient account.
+	//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+	//     the workflow is removing shared resources from the recipient account.
+	//   - `disassociated` — Shared resources have been removed from the recipient
+	//     account. The recipient record remains in the database.
 	AssociationStatus RecipientDeleteResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
@@ -349,7 +439,19 @@ func (r recipientDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Share Recipient association status.
+// The current state of the recipient relative to the share. The
+// `desired_association_status` (not exposed in the response) tracks the target
+// state set by the API; the background reconciliation workflow drives
+// `current_association_status` toward it.
+//
+//   - `associating` — The recipient was recently added; the workflow is pushing
+//     shared resources into the recipient account.
+//   - `associated` — Shared resources have been successfully applied to the
+//     recipient account.
+//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+//     the workflow is removing shared resources from the recipient account.
+//   - `disassociated` — Shared resources have been removed from the recipient
+//     account. The recipient record remains in the database.
 type RecipientDeleteResponseAssociationStatus string
 
 const (
@@ -398,12 +500,28 @@ func (r recipientDeleteResponseResourceJSON) RawJSON() string {
 	return r.raw
 }
 
+// A recipient of a share. The `association_status` field tracks the lifecycle of
+// the shared resources in the recipient account. All recipients are returned by
+// the list endpoint regardless of status; filter client-side if only active
+// recipients are needed.
 type RecipientGetResponse struct {
 	// Share Recipient identifier tag.
 	ID string `json:"id" api:"required"`
 	// Account identifier.
 	AccountID string `json:"account_id" api:"required"`
-	// Share Recipient association status.
+	// The current state of the recipient relative to the share. The
+	// `desired_association_status` (not exposed in the response) tracks the target
+	// state set by the API; the background reconciliation workflow drives
+	// `current_association_status` toward it.
+	//
+	//   - `associating` — The recipient was recently added; the workflow is pushing
+	//     shared resources into the recipient account.
+	//   - `associated` — Shared resources have been successfully applied to the
+	//     recipient account.
+	//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+	//     the workflow is removing shared resources from the recipient account.
+	//   - `disassociated` — Shared resources have been removed from the recipient
+	//     account. The recipient record remains in the database.
 	AssociationStatus RecipientGetResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
@@ -434,7 +552,19 @@ func (r recipientGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Share Recipient association status.
+// The current state of the recipient relative to the share. The
+// `desired_association_status` (not exposed in the response) tracks the target
+// state set by the API; the background reconciliation workflow drives
+// `current_association_status` toward it.
+//
+//   - `associating` — The recipient was recently added; the workflow is pushing
+//     shared resources into the recipient account.
+//   - `associated` — Shared resources have been successfully applied to the
+//     recipient account.
+//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+//     the workflow is removing shared resources from the recipient account.
+//   - `disassociated` — Shared resources have been removed from the recipient
+//     account. The recipient record remains in the database.
 type RecipientGetResponseAssociationStatus string
 
 const (
@@ -505,9 +635,13 @@ func (r RecipientNewParams) MarshalJSON() (data []byte, err error) {
 type RecipientNewResponseEnvelope struct {
 	Errors []shared.ResponseInfo `json:"errors" api:"required"`
 	// Whether the API call was successful.
-	Success bool                             `json:"success" api:"required"`
-	Result  RecipientNewResponse             `json:"result"`
-	JSON    recipientNewResponseEnvelopeJSON `json:"-"`
+	Success bool `json:"success" api:"required"`
+	// A recipient of a share. The `association_status` field tracks the lifecycle of
+	// the shared resources in the recipient account. All recipients are returned by
+	// the list endpoint regardless of status; filter client-side if only active
+	// recipients are needed.
+	Result RecipientNewResponse             `json:"result"`
+	JSON   recipientNewResponseEnvelopeJSON `json:"-"`
 }
 
 // recipientNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -558,9 +692,13 @@ type RecipientDeleteParams struct {
 type RecipientDeleteResponseEnvelope struct {
 	Errors []shared.ResponseInfo `json:"errors" api:"required"`
 	// Whether the API call was successful.
-	Success bool                                `json:"success" api:"required"`
-	Result  RecipientDeleteResponse             `json:"result"`
-	JSON    recipientDeleteResponseEnvelopeJSON `json:"-"`
+	Success bool `json:"success" api:"required"`
+	// A recipient of a share. The `association_status` field tracks the lifecycle of
+	// the shared resources in the recipient account. All recipients are returned by
+	// the list endpoint regardless of status; filter client-side if only active
+	// recipients are needed.
+	Result RecipientDeleteResponse             `json:"result"`
+	JSON   recipientDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // recipientDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -599,9 +737,13 @@ func (r RecipientGetParams) URLQuery() (v url.Values) {
 type RecipientGetResponseEnvelope struct {
 	Errors []shared.ResponseInfo `json:"errors" api:"required"`
 	// Whether the API call was successful.
-	Success bool                             `json:"success" api:"required"`
-	Result  RecipientGetResponse             `json:"result"`
-	JSON    recipientGetResponseEnvelopeJSON `json:"-"`
+	Success bool `json:"success" api:"required"`
+	// A recipient of a share. The `association_status` field tracks the lifecycle of
+	// the shared resources in the recipient account. All recipients are returned by
+	// the list endpoint regardless of status; filter client-side if only active
+	// recipients are needed.
+	Result RecipientGetResponse             `json:"result"`
+	JSON   recipientGetResponseEnvelopeJSON `json:"-"`
 }
 
 // recipientGetResponseEnvelopeJSON contains the JSON metadata for the struct

@@ -336,6 +336,8 @@ type ConnectorSnapshotGetResponse struct {
 	Netdevs             []ConnectorSnapshotGetResponseNetdev `json:"netdevs"`
 	// Platform identifier
 	Platform string `json:"platform"`
+	// Site identifier
+	SiteID string `json:"site_id"`
 	// Number of ICMP Address Mask Reply messages received
 	SnmpIcmpInAddrMaskReps float64 `json:"snmp_icmp_in_addr_mask_reps"`
 	// Number of ICMP Address Mask Request messages received
@@ -588,6 +590,7 @@ type connectorSnapshotGetResponseJSON struct {
 	Mounts                         apijson.Field
 	Netdevs                        apijson.Field
 	Platform                       apijson.Field
+	SiteID                         apijson.Field
 	SnmpIcmpInAddrMaskReps         apijson.Field
 	SnmpIcmpInAddrMasks            apijson.Field
 	SnmpIcmpInCsumErrors           apijson.Field
@@ -1034,6 +1037,10 @@ type ConnectorSnapshotGetResponseTunnel struct {
 	InterfaceName string `json:"interface_name" api:"required"`
 	// Tunnel identifier
 	TunnelID string `json:"tunnel_id" api:"required"`
+	// Tunnel round-trip latency variation in milliseconds
+	JitterMs float64 `json:"jitter_ms"`
+	// 50th percentile tunnel round-trip latency in milliseconds
+	LatencyMs float64 `json:"latency_ms"`
 	// Public socket address returned by the NAT detector
 	NatdResult string `json:"natd_result"`
 	// Numeric NAT detector state (0 = detected, 1 = missing result, 2 = stale result)
@@ -1056,6 +1063,8 @@ type connectorSnapshotGetResponseTunnelJSON struct {
 	HealthValue          apijson.Field
 	InterfaceName        apijson.Field
 	TunnelID             apijson.Field
+	JitterMs             apijson.Field
+	LatencyMs            apijson.Field
 	NatdResult           apijson.Field
 	NatdState            apijson.Field
 	NatdTarget           apijson.Field

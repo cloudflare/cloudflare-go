@@ -15,6 +15,7 @@ import (
 type PageService struct {
 	Options  []option.RequestOption
 	Projects *ProjectService
+	Assets   *AssetService
 }
 
 // NewPageService generates a new service that applies the given options to each
@@ -24,5 +25,6 @@ func NewPageService(opts ...option.RequestOption) (r *PageService) {
 	r = &PageService{}
 	r.Options = opts
 	r.Projects = NewProjectService(opts...)
+	r.Assets = NewAssetService(opts...)
 	return
 }

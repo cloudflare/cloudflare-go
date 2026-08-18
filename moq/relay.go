@@ -261,8 +261,8 @@ func (r relayNewResponseConfigUpstreamsJSON) RawJSON() string {
 // A single upstream MOQT server publisher.
 type RelayNewResponseConfigUpstreamsUpstream struct {
 	// Upstream MOQT server publisher URL. Must be an absolute URL with a host and a
-	// scheme crique can dial: moqt:// (raw QUIC) or https:// (WebTransport). Validated
-	// on update (PUT); rejected with 21013.
+	// scheme the relay can dial: moqt:// (raw QUIC) or https:// (WebTransport).
+	// Validated on update (PUT); rejected with 21013.
 	URL  string                                      `json:"url" api:"required" format:"uri"`
 	JSON relayNewResponseConfigUpstreamsUpstreamJSON `json:"-"`
 }
@@ -478,8 +478,8 @@ func (r relayUpdateResponseConfigUpstreamsJSON) RawJSON() string {
 // A single upstream MOQT server publisher.
 type RelayUpdateResponseConfigUpstreamsUpstream struct {
 	// Upstream MOQT server publisher URL. Must be an absolute URL with a host and a
-	// scheme crique can dial: moqt:// (raw QUIC) or https:// (WebTransport). Validated
-	// on update (PUT); rejected with 21013.
+	// scheme the relay can dial: moqt:// (raw QUIC) or https:// (WebTransport).
+	// Validated on update (PUT); rejected with 21013.
 	URL  string                                         `json:"url" api:"required" format:"uri"`
 	JSON relayUpdateResponseConfigUpstreamsUpstreamJSON `json:"-"`
 }
@@ -632,8 +632,8 @@ func (r relayGetResponseConfigUpstreamsJSON) RawJSON() string {
 // A single upstream MOQT server publisher.
 type RelayGetResponseConfigUpstreamsUpstream struct {
 	// Upstream MOQT server publisher URL. Must be an absolute URL with a host and a
-	// scheme crique can dial: moqt:// (raw QUIC) or https:// (WebTransport). Validated
-	// on update (PUT); rejected with 21013.
+	// scheme the relay can dial: moqt:// (raw QUIC) or https:// (WebTransport).
+	// Validated on update (PUT); rejected with 21013.
 	URL  string                                      `json:"url" api:"required" format:"uri"`
 	JSON relayGetResponseConfigUpstreamsUpstreamJSON `json:"-"`
 }
@@ -794,8 +794,8 @@ func (r RelayUpdateParamsConfigUpstreams) MarshalJSON() (data []byte, err error)
 // A single upstream MOQT server publisher.
 type RelayUpdateParamsConfigUpstreamsUpstream struct {
 	// Upstream MOQT server publisher URL. Must be an absolute URL with a host and a
-	// scheme crique can dial: moqt:// (raw QUIC) or https:// (WebTransport). Validated
-	// on update (PUT); rejected with 21013.
+	// scheme the relay can dial: moqt:// (raw QUIC) or https:// (WebTransport).
+	// Validated on update (PUT); rejected with 21013.
 	URL param.Field[string] `json:"url" api:"required" format:"uri"`
 }
 
@@ -891,7 +891,8 @@ type RelayListParams struct {
 	// timestamp (typically the `created` value of the first item on the current page,
 	// to fetch the previous page).
 	CreatedBefore param.Field[time.Time] `query:"created_before" format:"date-time"`
-	// Maximum number of relays to return per page.
+	// Maximum number of relays to return per page. Values above the maximum are
+	// clamped to it rather than rejected.
 	PerPage param.Field[int64] `query:"per_page"`
 }
 

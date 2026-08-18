@@ -2,7 +2,4 @@
 
 package internal
 
-const PackageVersion = "7.7.0"
-
-// APIVersion is set by codegen; empty string omits the header.
-const APIVersion = ""
+const PackageVersion = "7.7.0" // x-release-please-version

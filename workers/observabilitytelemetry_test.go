@@ -160,11 +160,11 @@ func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
 		OffsetBy:        cloudflare.F(0.000000),
 		OffsetDirection: cloudflare.F("offsetDirection"),
 		Parameters: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParameters{
-			Calculations: cloudflare.F([]workers.ObservabilityTelemetryQueryParamsParametersCalculation{{
-				Operator: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersCalculationsOperatorUniq),
+			Calculations: cloudflare.F([]workers.ObservabilityTelemetryQueryParamsParametersCalculationUnion{workers.ObservabilityTelemetryQueryParamsParametersCalculationsObject{
+				Operator: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperatorCount),
 				Alias:    cloudflare.F("alias"),
 				Key:      cloudflare.F("key"),
-				KeyType:  cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersCalculationsKeyTypeString),
+				KeyType:  cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyTypeString),
 			}}),
 			Datasets:          cloudflare.F([]string{"string"}),
 			FilterCombination: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFilterCombinationAnd),

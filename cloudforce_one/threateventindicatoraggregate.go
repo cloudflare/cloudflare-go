@@ -110,10 +110,12 @@ type ThreatEventIndicatorAggregateListParams struct {
 	// Column(s) to aggregate by - single column or comma-separated list (e.g.,
 	// 'indicatorType', 'value', 'indicatorType,value')
 	AggregateBy param.Field[string] `query:"aggregateBy" api:"required"`
-	// Filter indicators created after this date (ISO 8601 format, e.g., '2024-01-01')
-	CreatedAfter param.Field[string] `query:"createdAfter"`
-	// Filter indicators created before this date (ISO 8601 format, e.g., '2024-12-31')
-	CreatedBefore param.Field[string] `query:"createdBefore"`
+	// Filter indicators created after this date/datetime (ISO 8601, e.g., '2024-01-01'
+	// or '2024-01-01T00:00:00Z')
+	CreatedAfter param.Field[ThreatEventIndicatorAggregateListParamsCreatedAfterUnion] `query:"createdAfter" format:"date-time"`
+	// Filter indicators created before this date/datetime (ISO 8601, e.g.,
+	// '2024-12-31' or '2024-12-31T23:59:59Z')
+	CreatedBefore param.Field[ThreatEventIndicatorAggregateListParamsCreatedBeforeUnion] `query:"createdBefore" format:"date-time"`
 	// Dataset ID(s) to filter by. Can be a single dataset ID or comma-separated list.
 	// If not provided, aggregates across all accessible datasets
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
@@ -141,6 +143,22 @@ func (r ThreatEventIndicatorAggregateListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Filter indicators created after this date/datetime (ISO 8601, e.g., '2024-01-01'
+// or '2024-01-01T00:00:00Z')
+//
+// Satisfied by [shared.UnionTime], [shared.UnionString].
+type ThreatEventIndicatorAggregateListParamsCreatedAfterUnion interface {
+	ImplementsThreatEventIndicatorAggregateListParamsCreatedAfterUnion()
+}
+
+// Filter indicators created before this date/datetime (ISO 8601, e.g.,
+// '2024-12-31' or '2024-12-31T23:59:59Z')
+//
+// Satisfied by [shared.UnionTime], [shared.UnionString].
+type ThreatEventIndicatorAggregateListParamsCreatedBeforeUnion interface {
+	ImplementsThreatEventIndicatorAggregateListParamsCreatedBeforeUnion()
 }
 
 // What to count per group: 'indicators' (catalog rows, default) or 'relationships'

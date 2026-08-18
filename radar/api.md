@@ -246,6 +246,26 @@ Methods:
 - <code title="get /radar/bgp/routes/realtime">client.Radar.BGP.Routes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRouteService.Realtime">Realtime</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRouteRealtimeParams">BGPRouteRealtimeParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRouteRealtimeResponse">BGPRouteRealtimeResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/bgp/routes/stats">client.Radar.BGP.Routes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRouteService.Stats">Stats</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRouteStatsParams">BGPRouteStatsParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRouteStatsResponse">BGPRouteStatsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+#### Upstreams
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRouteUpstreamTimeseriesResponse">BGPRouteUpstreamTimeseriesResponse</a>
+
+Methods:
+
+- <code title="get /radar/bgp/routes/upstreams/{asn}/timeseries">client.Radar.BGP.Routes.Upstreams.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRouteUpstreamService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/builtin#int64">int64</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRouteUpstreamTimeseriesParams">BGPRouteUpstreamTimeseriesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRouteUpstreamTimeseriesResponse">BGPRouteUpstreamTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+#### Paths
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRoutePathListResponse">BGPRoutePathListResponse</a>
+
+Methods:
+
+- <code title="get /radar/bgp/routes/paths/{asn}">client.Radar.BGP.Routes.Paths.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRoutePathService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, asn <a href="https://pkg.go.dev/builtin#int64">int64</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRoutePathListParams">BGPRoutePathListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/radar#BGPRoutePathListResponse">BGPRoutePathListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### IPs
 
 Response Types:

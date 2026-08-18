@@ -86,6 +86,7 @@ func TestCNIUpdateWithOptionalParams(t *testing.T) {
 				ExtraPrefixes: cloudflare.F([]string{"string"}),
 				Md5Key:        cloudflare.F("md5_key"),
 			}),
+			BGPMode: cloudflare.F(network_interconnects.CNIUpdateParamsBGPModeDynamicRouteExchange),
 		},
 	)
 	if err != nil {

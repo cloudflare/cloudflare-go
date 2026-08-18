@@ -7,11 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -84,26 +86,26 @@ func (r *VersionService) ListAutoPaging(ctx context.Context, rulesetID string, q
 }
 
 // Deletes an existing version of an account or zone ruleset.
-func (r *VersionService) Delete(ctx context.Context, rulesetID string, rulesetVersion string, body VersionDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *VersionService) Delete(ctx context.Context, rulesetID string, rulesetVersion string, params VersionDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
 		err = errors.New("account ID and zone ID are mutually exclusive")
 		return
 	}
-	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
 		err = errors.New("either account ID or zone ID must be provided")
 		return
 	}
-	if body.AccountID.Value != "" {
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
-		accountOrZoneID = body.AccountID
+		accountOrZoneID = params.AccountID
 	}
-	if body.ZoneID.Value != "" {
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
-		accountOrZoneID = body.ZoneID
+		accountOrZoneID = params.ZoneID
 	}
 	if rulesetID == "" {
 		err = errors.New("missing required ruleset_id parameter")
@@ -114,7 +116,7 @@ func (r *VersionService) Delete(ctx context.Context, rulesetID string, rulesetVe
 		return err
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions/%s", accountOrZone, accountOrZoneID, rulesetID, rulesetVersion)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
 	return err
 }
 
@@ -4132,6 +4134,18 @@ type VersionDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// Validates the request without persisting changes when set to `true`. Responses
+	// that normally return 200 return `result: null`; endpoints that normally return
+	// 204 continue to return 204.
+	DryRun param.Field[bool] `query:"dry_run"`
+}
+
+// URLQuery serializes [VersionDeleteParams]'s query parameters as `url.Values`.
+func (r VersionDeleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type VersionGetParams struct {

@@ -185,7 +185,7 @@ func (r *PipelineService) Get(ctx context.Context, pipelineName string, query Pi
 	return res, nil
 }
 
-// Get Pipelines Details.
+// Get Pipeline details.
 func (r *PipelineService) GetV1(ctx context.Context, pipelineID string, query PipelineGetV1Params, opts ...option.RequestOption) (res *PipelineGetV1Response, err error) {
 	var env PipelineGetV1ResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -233,7 +233,7 @@ func (r *PipelineService) ListV1AutoPaging(ctx context.Context, params PipelineL
 	return pagination.NewV4PagePaginationArrayAutoPager(r.ListV1(ctx, params, opts...))
 }
 
-// Validate Arroyo SQL.
+// Validates that the Pipelines SQL is correct.
 func (r *PipelineService) ValidateSql(ctx context.Context, params PipelineValidateSqlParams, opts ...option.RequestOption) (res *PipelineValidateSqlResponse, err error) {
 	var env PipelineValidateSqlResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

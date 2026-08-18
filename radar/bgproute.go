@@ -22,7 +22,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewBGPRouteService] method instead.
 type BGPRouteService struct {
-	Options []option.RequestOption
+	Options   []option.RequestOption
+	Upstreams *BGPRouteUpstreamService
+	Paths     *BGPRoutePathService
 }
 
 // NewBGPRouteService generates a new service that applies the given options to
@@ -31,6 +33,8 @@ type BGPRouteService struct {
 func NewBGPRouteService(opts ...option.RequestOption) (r *BGPRouteService) {
 	r = &BGPRouteService{}
 	r.Options = opts
+	r.Upstreams = NewBGPRouteUpstreamService(opts...)
+	r.Paths = NewBGPRoutePathService(opts...)
 	return
 }
 

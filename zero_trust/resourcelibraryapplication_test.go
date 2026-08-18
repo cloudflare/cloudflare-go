@@ -61,7 +61,7 @@ func TestResourceLibraryApplicationGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.ResourceLibrary.Applications.Get(
 		context.TODO(),
-		"0b63249c-95bf-4cc0-a7cc-d7faaaf1dac0",
+		int64(498),
 		zero_trust.ResourceLibraryApplicationGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

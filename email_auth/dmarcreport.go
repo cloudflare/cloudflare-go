@@ -96,7 +96,11 @@ type DMARCReportEditResponse struct {
 	RuaPrefix string `json:"rua_prefix"`
 	// Whether to skip the setup wizard
 	SkipWizard bool `json:"skip_wizard"`
-	// DMARC configuration status
+	// DMARC configuration status. The API omits this field when DMARC is correctly
+	// configured. If the zone lacks a DMARC TXT record of its own, the API resolves
+	// \_dmarc.{zone} recursively and evaluates whatever that lookup returns. A CNAME
+	// at \_dmarc.{zone} that points to a valid DMARC record is therefore healthy; the
+	// cname-on-dmarc-record value means the CNAME resolves to no DMARC record at all.
 	Status DMARCReportEditResponseStatus `json:"status"`
 	// Use `zone_id` instead
 	//
@@ -191,7 +195,8 @@ type DMARCReportEditResponseRecords struct {
 	BimiRecords []DMARCReportEditResponseRecordsBimiRecord `json:"bimi_records"`
 	// CNAME records for DKIM
 	CNAMEDKIMRecords []DMARCReportEditResponseRecordsCnamedkimRecord `json:"cname_dkim_records"`
-	// CNAME records at \_dmarc (problematic)
+	// CNAME records at \_dmarc. When such a CNAME resolves to a DMARC TXT record, the
+	// API returns that record in resolved_dmarc_records.
 	CNAMEDMARCRecords []DMARCReportEditResponseRecordsCnamedmarcRecord `json:"cname_dmarc_records"`
 	// CNAME records for SPF
 	CNAMESPFRecords []DMARCReportEditResponseRecordsCnamespfRecord `json:"cname_spf_records"`
@@ -199,6 +204,10 @@ type DMARCReportEditResponseRecords struct {
 	DKIMRecords []DMARCReportEditResponseRecordsDKIMRecord `json:"dkim_records"`
 	// DMARC TXT records
 	DMARCRecords []DMARCReportEditResponseRecordsDMARCRecord `json:"dmarc_records"`
+	// DMARC records that a recursive lookup of \_dmarc.{zone} returned. The API
+	// populates this only when the zone lacks a DMARC TXT record of its own, which
+	// usually means a CNAME delegates DMARC to another zone.
+	ResolvedDMARCRecords []DMARCReportEditResponseRecordsResolvedDMARCRecord `json:"resolved_dmarc_records"`
 	// SPF TXT records
 	SPFRecords []DMARCReportEditResponseRecordsSPFRecord `json:"spf_records"`
 	JSON       dmarcReportEditResponseRecordsJSON        `json:"-"`
@@ -207,15 +216,16 @@ type DMARCReportEditResponseRecords struct {
 // dmarcReportEditResponseRecordsJSON contains the JSON metadata for the struct
 // [DMARCReportEditResponseRecords]
 type dmarcReportEditResponseRecordsJSON struct {
-	BimiRecords       apijson.Field
-	CNAMEDKIMRecords  apijson.Field
-	CNAMEDMARCRecords apijson.Field
-	CNAMESPFRecords   apijson.Field
-	DKIMRecords       apijson.Field
-	DMARCRecords      apijson.Field
-	SPFRecords        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	BimiRecords          apijson.Field
+	CNAMEDKIMRecords     apijson.Field
+	CNAMEDMARCRecords    apijson.Field
+	CNAMESPFRecords      apijson.Field
+	DKIMRecords          apijson.Field
+	DMARCRecords         apijson.Field
+	ResolvedDMARCRecords apijson.Field
+	SPFRecords           apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *DMARCReportEditResponseRecords) UnmarshalJSON(data []byte) (err error) {
@@ -436,6 +446,35 @@ func (r dmarcReportEditResponseRecordsDMARCRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+// A DMARC TXT record that a recursive lookup of \_dmarc.{zone} returned. Such a
+// record usually lives in another zone outside this account's control, so this
+// schema omits the DNS record ID. The API therefore treats such a record as
+// read-only.
+type DMARCReportEditResponseRecordsResolvedDMARCRecord struct {
+	// The TXT record value. The API joins all character-strings into a single string.
+	Content string `json:"content"`
+	// The name the API queried.
+	Name string                                                `json:"name"`
+	JSON dmarcReportEditResponseRecordsResolvedDMARCRecordJSON `json:"-"`
+}
+
+// dmarcReportEditResponseRecordsResolvedDMARCRecordJSON contains the JSON metadata
+// for the struct [DMARCReportEditResponseRecordsResolvedDMARCRecord]
+type dmarcReportEditResponseRecordsResolvedDMARCRecordJSON struct {
+	Content     apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DMARCReportEditResponseRecordsResolvedDMARCRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dmarcReportEditResponseRecordsResolvedDMARCRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 // Summary of a single DNS record
 type DMARCReportEditResponseRecordsSPFRecord struct {
 	// DNS record ID
@@ -471,7 +510,11 @@ func (r dmarcReportEditResponseRecordsSPFRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-// DMARC configuration status
+// DMARC configuration status. The API omits this field when DMARC is correctly
+// configured. If the zone lacks a DMARC TXT record of its own, the API resolves
+// \_dmarc.{zone} recursively and evaluates whatever that lookup returns. A CNAME
+// at \_dmarc.{zone} that points to a valid DMARC record is therefore healthy; the
+// cname-on-dmarc-record value means the CNAME resolves to no DMARC record at all.
 type DMARCReportEditResponseStatus string
 
 const (
@@ -513,7 +556,11 @@ type DMARCReportGetResponse struct {
 	RuaPrefix string `json:"rua_prefix"`
 	// Whether to skip the setup wizard
 	SkipWizard bool `json:"skip_wizard"`
-	// DMARC configuration status
+	// DMARC configuration status. The API omits this field when DMARC is correctly
+	// configured. If the zone lacks a DMARC TXT record of its own, the API resolves
+	// \_dmarc.{zone} recursively and evaluates whatever that lookup returns. A CNAME
+	// at \_dmarc.{zone} that points to a valid DMARC record is therefore healthy; the
+	// cname-on-dmarc-record value means the CNAME resolves to no DMARC record at all.
 	Status DMARCReportGetResponseStatus `json:"status"`
 	// Use `zone_id` instead
 	//
@@ -608,7 +655,8 @@ type DMARCReportGetResponseRecords struct {
 	BimiRecords []DMARCReportGetResponseRecordsBimiRecord `json:"bimi_records"`
 	// CNAME records for DKIM
 	CNAMEDKIMRecords []DMARCReportGetResponseRecordsCnamedkimRecord `json:"cname_dkim_records"`
-	// CNAME records at \_dmarc (problematic)
+	// CNAME records at \_dmarc. When such a CNAME resolves to a DMARC TXT record, the
+	// API returns that record in resolved_dmarc_records.
 	CNAMEDMARCRecords []DMARCReportGetResponseRecordsCnamedmarcRecord `json:"cname_dmarc_records"`
 	// CNAME records for SPF
 	CNAMESPFRecords []DMARCReportGetResponseRecordsCnamespfRecord `json:"cname_spf_records"`
@@ -616,6 +664,10 @@ type DMARCReportGetResponseRecords struct {
 	DKIMRecords []DMARCReportGetResponseRecordsDKIMRecord `json:"dkim_records"`
 	// DMARC TXT records
 	DMARCRecords []DMARCReportGetResponseRecordsDMARCRecord `json:"dmarc_records"`
+	// DMARC records that a recursive lookup of \_dmarc.{zone} returned. The API
+	// populates this only when the zone lacks a DMARC TXT record of its own, which
+	// usually means a CNAME delegates DMARC to another zone.
+	ResolvedDMARCRecords []DMARCReportGetResponseRecordsResolvedDMARCRecord `json:"resolved_dmarc_records"`
 	// SPF TXT records
 	SPFRecords []DMARCReportGetResponseRecordsSPFRecord `json:"spf_records"`
 	JSON       dmarcReportGetResponseRecordsJSON        `json:"-"`
@@ -624,15 +676,16 @@ type DMARCReportGetResponseRecords struct {
 // dmarcReportGetResponseRecordsJSON contains the JSON metadata for the struct
 // [DMARCReportGetResponseRecords]
 type dmarcReportGetResponseRecordsJSON struct {
-	BimiRecords       apijson.Field
-	CNAMEDKIMRecords  apijson.Field
-	CNAMEDMARCRecords apijson.Field
-	CNAMESPFRecords   apijson.Field
-	DKIMRecords       apijson.Field
-	DMARCRecords      apijson.Field
-	SPFRecords        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	BimiRecords          apijson.Field
+	CNAMEDKIMRecords     apijson.Field
+	CNAMEDMARCRecords    apijson.Field
+	CNAMESPFRecords      apijson.Field
+	DKIMRecords          apijson.Field
+	DMARCRecords         apijson.Field
+	ResolvedDMARCRecords apijson.Field
+	SPFRecords           apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *DMARCReportGetResponseRecords) UnmarshalJSON(data []byte) (err error) {
@@ -853,6 +906,35 @@ func (r dmarcReportGetResponseRecordsDMARCRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+// A DMARC TXT record that a recursive lookup of \_dmarc.{zone} returned. Such a
+// record usually lives in another zone outside this account's control, so this
+// schema omits the DNS record ID. The API therefore treats such a record as
+// read-only.
+type DMARCReportGetResponseRecordsResolvedDMARCRecord struct {
+	// The TXT record value. The API joins all character-strings into a single string.
+	Content string `json:"content"`
+	// The name the API queried.
+	Name string                                               `json:"name"`
+	JSON dmarcReportGetResponseRecordsResolvedDMARCRecordJSON `json:"-"`
+}
+
+// dmarcReportGetResponseRecordsResolvedDMARCRecordJSON contains the JSON metadata
+// for the struct [DMARCReportGetResponseRecordsResolvedDMARCRecord]
+type dmarcReportGetResponseRecordsResolvedDMARCRecordJSON struct {
+	Content     apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DMARCReportGetResponseRecordsResolvedDMARCRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dmarcReportGetResponseRecordsResolvedDMARCRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 // Summary of a single DNS record
 type DMARCReportGetResponseRecordsSPFRecord struct {
 	// DNS record ID
@@ -888,7 +970,11 @@ func (r dmarcReportGetResponseRecordsSPFRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-// DMARC configuration status
+// DMARC configuration status. The API omits this field when DMARC is correctly
+// configured. If the zone lacks a DMARC TXT record of its own, the API resolves
+// \_dmarc.{zone} recursively and evaluates whatever that lookup returns. A CNAME
+// at \_dmarc.{zone} that points to a valid DMARC record is therefore healthy; the
+// cname-on-dmarc-record value means the CNAME resolves to no DMARC record at all.
 type DMARCReportGetResponseStatus string
 
 const (

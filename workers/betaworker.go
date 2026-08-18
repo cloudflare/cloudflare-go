@@ -536,19 +536,35 @@ func (r workerReferencesWorkerJSON) RawJSON() string {
 type WorkerSubdomain struct {
 	// Whether the \*.workers.dev subdomain is enabled for the Worker.
 	Enabled bool `json:"enabled"`
+	// Prepend a version or preview prefix to this host suffix to form the
+	// \*.workers.dev
+	// [preview URL](https://developers.cloudflare.com/workers/configuration/previews/)
+	// the Worker would serve on once previews are enabled, e.g.
+	// `https://<prefix>-my-worker.my-subdomain.workers.dev`. Present whenever the
+	// account owns a workers.dev subdomain, regardless of whether `previews_enabled`
+	// is true, so presence does not imply preview URLs are currently live. Absent only
+	// when the account owns no workers.dev subdomain.
+	PreviewURLSuffix string `json:"preview_url_suffix"`
 	// Whether
 	// [preview URLs](https://developers.cloudflare.com/workers/configuration/previews/)
 	// are enabled for the Worker.
-	PreviewsEnabled bool                `json:"previews_enabled"`
-	JSON            workerSubdomainJSON `json:"-"`
+	PreviewsEnabled bool `json:"previews_enabled"`
+	// The address the Worker would serve on once its \*.workers.dev subdomain is
+	// enabled. Present whenever the account owns a workers.dev subdomain, regardless
+	// of whether `enabled` is true, so presence does not imply the Worker is currently
+	// live at this URL. Absent only when the account owns no workers.dev subdomain.
+	URL  string              `json:"url" format:"uri"`
+	JSON workerSubdomainJSON `json:"-"`
 }
 
 // workerSubdomainJSON contains the JSON metadata for the struct [WorkerSubdomain]
 type workerSubdomainJSON struct {
-	Enabled         apijson.Field
-	PreviewsEnabled apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Enabled          apijson.Field
+	PreviewURLSuffix apijson.Field
+	PreviewsEnabled  apijson.Field
+	URL              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *WorkerSubdomain) UnmarshalJSON(data []byte) (err error) {

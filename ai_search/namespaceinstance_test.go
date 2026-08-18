@@ -102,6 +102,14 @@ func TestNamespaceInstanceNewWithOptionalParams(t *testing.T) {
 				Prefix:         cloudflare.F("prefix"),
 				R2Jurisdiction: cloudflare.F("r2_jurisdiction"),
 				WebCrawler: cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawler{
+					DiscoverOptions: cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptions{
+						Depth:                cloudflare.F(5.000000),
+						IncludeExternalLinks: cloudflare.F(false),
+						IncludeSubdomains:    cloudflare.F(false),
+						Limit:                cloudflare.F(10000.000000),
+						MaxAge:               cloudflare.F(86400.000000),
+						Source:               cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceAll),
+					}),
 					ParseOptions: cloudflare.F(ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptions{
 						ContentSelector: cloudflare.F([]ai_search.NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector{{
 							Path:     cloudflare.F("**/blog/**"),
@@ -221,6 +229,14 @@ func TestNamespaceInstanceUpdateWithOptionalParams(t *testing.T) {
 				Prefix:         cloudflare.F("prefix"),
 				R2Jurisdiction: cloudflare.F("r2_jurisdiction"),
 				WebCrawler: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawler{
+					DiscoverOptions: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptions{
+						Depth:                cloudflare.F(5.000000),
+						IncludeExternalLinks: cloudflare.F(false),
+						IncludeSubdomains:    cloudflare.F(false),
+						Limit:                cloudflare.F(10000.000000),
+						MaxAge:               cloudflare.F(86400.000000),
+						Source:               cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceAll),
+					}),
 					ParseOptions: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptions{
 						ContentSelector: cloudflare.F([]ai_search.NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector{{
 							Path:     cloudflare.F("**/blog/**"),

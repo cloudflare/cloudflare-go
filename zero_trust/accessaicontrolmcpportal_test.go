@@ -31,9 +31,10 @@ func TestAccessAIControlMcpPortalNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.AIControls.Mcp.Portals.New(context.TODO(), zero_trust.AccessAIControlMcpPortalNewParams{
 		AccountID:        cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		ID:               cloudflare.F("my-mcp-portal"),
-		Hostname:         cloudflare.F("exmaple.com"),
+		Hostname:         cloudflare.F("example.com"),
 		Name:             cloudflare.F("My MCP Portal"),
 		AllowCodeMode:    cloudflare.F(true),
+		CodeMode:         cloudflare.F(zero_trust.AccessAIControlMcpPortalNewParamsCodeModeOptIn),
 		Description:      cloudflare.F("This is my custom MCP Portal"),
 		SecureWebGateway: cloudflare.F(false),
 		Servers: cloudflare.F([]zero_trust.AccessAIControlMcpPortalNewParamsServer{{
@@ -83,8 +84,9 @@ func TestAccessAIControlMcpPortalUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.AccessAIControlMcpPortalUpdateParams{
 			AccountID:        cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 			AllowCodeMode:    cloudflare.F(true),
+			CodeMode:         cloudflare.F(zero_trust.AccessAIControlMcpPortalUpdateParamsCodeModeOptIn),
 			Description:      cloudflare.F("This is my custom MCP Portal"),
-			Hostname:         cloudflare.F("exmaple.com"),
+			Hostname:         cloudflare.F("example.com"),
 			Name:             cloudflare.F("My MCP Portal"),
 			SecureWebGateway: cloudflare.F(false),
 			Servers: cloudflare.F([]zero_trust.AccessAIControlMcpPortalUpdateParamsServer{{

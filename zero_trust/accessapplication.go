@@ -2183,6 +2183,7 @@ type AccessApplicationNewResponse struct {
 	// [AccessApplicationNewResponseSelfHostedApplicationMfaConfig],
 	// [AccessApplicationNewResponseBrowserSSHApplicationMfaConfig],
 	// [AccessApplicationNewResponseBrowserVNCApplicationMfaConfig],
+	// [AccessApplicationNewResponseInfrastructureApplicationMfaConfig],
 	// [AccessApplicationNewResponseBrowserRDPApplicationMfaConfig].
 	MfaConfig interface{} `json:"mfa_config"`
 	// The name of the application.
@@ -3246,6 +3247,8 @@ func (r accessApplicationNewResponseSelfHostedApplicationOAuthConfigurationGrant
 type AccessApplicationNewResponseSelfHostedApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -3285,7 +3288,7 @@ type AccessApplicationNewResponseSelfHostedApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                      `json:"session_duration"`
+	SessionDuration string                                                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseSelfHostedApplicationPolicyJSON `json:"-"`
 }
@@ -3295,6 +3298,7 @@ type AccessApplicationNewResponseSelfHostedApplicationPolicy struct {
 // [AccessApplicationNewResponseSelfHostedApplicationPolicy]
 type accessApplicationNewResponseSelfHostedApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -3831,6 +3835,8 @@ func (r AccessApplicationNewResponseSaaSApplication) implementsAccessApplication
 type AccessApplicationNewResponseSaaSApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -3870,7 +3876,7 @@ type AccessApplicationNewResponseSaaSApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                `json:"session_duration"`
+	SessionDuration string                                                `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                             `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseSaaSApplicationPolicyJSON `json:"-"`
 }
@@ -3879,6 +3885,7 @@ type AccessApplicationNewResponseSaaSApplicationPolicy struct {
 // for the struct [AccessApplicationNewResponseSaaSApplicationPolicy]
 type accessApplicationNewResponseSaaSApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -5347,6 +5354,8 @@ func (r accessApplicationNewResponseBrowserSSHApplicationOAuthConfigurationGrant
 type AccessApplicationNewResponseBrowserSSHApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -5386,7 +5395,7 @@ type AccessApplicationNewResponseBrowserSSHApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                      `json:"session_duration"`
+	SessionDuration string                                                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseBrowserSSHApplicationPolicyJSON `json:"-"`
 }
@@ -5396,6 +5405,7 @@ type AccessApplicationNewResponseBrowserSSHApplicationPolicy struct {
 // [AccessApplicationNewResponseBrowserSSHApplicationPolicy]
 type accessApplicationNewResponseBrowserSSHApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -6714,6 +6724,8 @@ func (r accessApplicationNewResponseBrowserVNCApplicationOAuthConfigurationGrant
 type AccessApplicationNewResponseBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -6753,7 +6765,7 @@ type AccessApplicationNewResponseBrowserVNCApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                      `json:"session_duration"`
+	SessionDuration string                                                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseBrowserVNCApplicationPolicyJSON `json:"-"`
 }
@@ -6763,6 +6775,7 @@ type AccessApplicationNewResponseBrowserVNCApplicationPolicy struct {
 // [AccessApplicationNewResponseBrowserVNCApplicationPolicy]
 type accessApplicationNewResponseBrowserVNCApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -7409,6 +7422,8 @@ func (r accessApplicationNewResponseAppLauncherApplicationLandingPageDesignJSON)
 type AccessApplicationNewResponseAppLauncherApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -7448,7 +7463,7 @@ type AccessApplicationNewResponseAppLauncherApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                       `json:"session_duration"`
+	SessionDuration string                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseAppLauncherApplicationPolicyJSON `json:"-"`
 }
@@ -7458,6 +7473,7 @@ type AccessApplicationNewResponseAppLauncherApplicationPolicy struct {
 // [AccessApplicationNewResponseAppLauncherApplicationPolicy]
 type accessApplicationNewResponseAppLauncherApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -7686,6 +7702,8 @@ func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication) impl
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -7725,7 +7743,7 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy st
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                       `json:"session_duration"`
+	SessionDuration string                                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
 }
@@ -7735,6 +7753,7 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy st
 // [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy]
 type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -7963,6 +7982,8 @@ func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplication) impl
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -8002,7 +8023,7 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy st
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                       `json:"session_duration"`
+	SessionDuration string                                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
 }
@@ -8012,6 +8033,7 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy st
 // [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy]
 type accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -8240,6 +8262,8 @@ func (r AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication) imp
 type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -8279,7 +8303,7 @@ type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy s
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                        `json:"session_duration"`
+	SessionDuration string                                                                        `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                     `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
 }
@@ -8289,6 +8313,7 @@ type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy s
 // [AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy]
 type accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -8500,6 +8525,8 @@ func (r AccessApplicationNewResponseBookmarkApplication) implementsAccessApplica
 type AccessApplicationNewResponseBookmarkApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -8539,7 +8566,7 @@ type AccessApplicationNewResponseBookmarkApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                    `json:"session_duration"`
+	SessionDuration string                                                    `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                 `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseBookmarkApplicationPolicyJSON `json:"-"`
 }
@@ -8548,6 +8575,7 @@ type AccessApplicationNewResponseBookmarkApplicationPolicy struct {
 // metadata for the struct [AccessApplicationNewResponseBookmarkApplicationPolicy]
 type accessApplicationNewResponseBookmarkApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -8716,6 +8744,9 @@ type AccessApplicationNewResponseInfrastructureApplication struct {
 	ID string `json:"id"`
 	// Audience tag.
 	AUD string `json:"aud"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationNewResponseInfrastructureApplicationMfaConfig `json:"mfa_config"`
 	// The name of the application.
 	Name     string                                                        `json:"name"`
 	Policies []AccessApplicationNewResponseInfrastructureApplicationPolicy `json:"policies"`
@@ -8729,6 +8760,7 @@ type accessApplicationNewResponseInfrastructureApplicationJSON struct {
 	Type           apijson.Field
 	ID             apijson.Field
 	AUD            apijson.Field
+	MfaConfig      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
 	raw            string
@@ -8786,6 +8818,55 @@ const (
 func (r AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationNewResponseInfrastructureApplicationMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
+	AllowedAuthenticators []AccessApplicationNewResponseInfrastructureApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                             `json:"session_duration"`
+	JSON            accessApplicationNewResponseInfrastructureApplicationMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationMfaConfigJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationMfaConfig]
+type accessApplicationNewResponseInfrastructureApplicationMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseInfrastructureApplicationMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationNewResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey      AccessApplicationNewResponseInfrastructureApplicationMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationNewResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationNewResponseInfrastructureApplicationMfaConfigAllowedAuthenticator = "ssh_fido2_key"
+)
+
+func (r AccessApplicationNewResponseInfrastructureApplicationMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey, AccessApplicationNewResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -8903,7 +8984,7 @@ func (r accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionR
 // applications.
 type AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `piv_key` is supported.
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
 	AllowedAuthenticators []AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -8936,12 +9017,13 @@ func (r accessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigJS
 type AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey      AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
+	case AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey, AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -9813,6 +9895,8 @@ func (r accessApplicationNewResponseBrowserRDPApplicationOAuthConfigurationGrant
 type AccessApplicationNewResponseBrowserRDPApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -9852,7 +9936,7 @@ type AccessApplicationNewResponseBrowserRDPApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                      `json:"session_duration"`
+	SessionDuration string                                                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseBrowserRDPApplicationPolicyJSON `json:"-"`
 }
@@ -9862,6 +9946,7 @@ type AccessApplicationNewResponseBrowserRDPApplicationPolicy struct {
 // [AccessApplicationNewResponseBrowserRDPApplicationPolicy]
 type accessApplicationNewResponseBrowserRDPApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -11047,6 +11132,8 @@ func (r accessApplicationNewResponseMcpServerApplicationOAuthConfigurationGrantJ
 type AccessApplicationNewResponseMcpServerApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -11086,7 +11173,7 @@ type AccessApplicationNewResponseMcpServerApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                     `json:"session_duration"`
+	SessionDuration string                                                     `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                  `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseMcpServerApplicationPolicyJSON `json:"-"`
 }
@@ -11095,6 +11182,7 @@ type AccessApplicationNewResponseMcpServerApplicationPolicy struct {
 // metadata for the struct [AccessApplicationNewResponseMcpServerApplicationPolicy]
 type accessApplicationNewResponseMcpServerApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -12285,6 +12373,8 @@ func (r accessApplicationNewResponseMcpServerPortalApplicationOAuthConfiguration
 type AccessApplicationNewResponseMcpServerPortalApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -12324,7 +12414,7 @@ type AccessApplicationNewResponseMcpServerPortalApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                           `json:"session_duration"`
+	SessionDuration string                                                           `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                        `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationNewResponseMcpServerPortalApplicationPolicyJSON `json:"-"`
 }
@@ -12334,6 +12424,7 @@ type AccessApplicationNewResponseMcpServerPortalApplicationPolicy struct {
 // [AccessApplicationNewResponseMcpServerPortalApplicationPolicy]
 type accessApplicationNewResponseMcpServerPortalApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -12876,6 +12967,7 @@ type AccessApplicationUpdateResponse struct {
 	// [AccessApplicationUpdateResponseSelfHostedApplicationMfaConfig],
 	// [AccessApplicationUpdateResponseBrowserSSHApplicationMfaConfig],
 	// [AccessApplicationUpdateResponseBrowserVNCApplicationMfaConfig],
+	// [AccessApplicationUpdateResponseInfrastructureApplicationMfaConfig],
 	// [AccessApplicationUpdateResponseBrowserRDPApplicationMfaConfig].
 	MfaConfig interface{} `json:"mfa_config"`
 	// The name of the application.
@@ -13940,6 +14032,8 @@ func (r accessApplicationUpdateResponseSelfHostedApplicationOAuthConfigurationGr
 type AccessApplicationUpdateResponseSelfHostedApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -13979,7 +14073,7 @@ type AccessApplicationUpdateResponseSelfHostedApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                         `json:"session_duration"`
+	SessionDuration string                                                         `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                      `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON `json:"-"`
 }
@@ -13989,6 +14083,7 @@ type AccessApplicationUpdateResponseSelfHostedApplicationPolicy struct {
 // [AccessApplicationUpdateResponseSelfHostedApplicationPolicy]
 type accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -14525,6 +14620,8 @@ func (r AccessApplicationUpdateResponseSaaSApplication) implementsAccessApplicat
 type AccessApplicationUpdateResponseSaaSApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -14564,7 +14661,7 @@ type AccessApplicationUpdateResponseSaaSApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                   `json:"session_duration"`
+	SessionDuration string                                                   `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseSaaSApplicationPolicyJSON `json:"-"`
 }
@@ -14573,6 +14670,7 @@ type AccessApplicationUpdateResponseSaaSApplicationPolicy struct {
 // metadata for the struct [AccessApplicationUpdateResponseSaaSApplicationPolicy]
 type accessApplicationUpdateResponseSaaSApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -16043,6 +16141,8 @@ func (r accessApplicationUpdateResponseBrowserSSHApplicationOAuthConfigurationGr
 type AccessApplicationUpdateResponseBrowserSSHApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -16082,7 +16182,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                         `json:"session_duration"`
+	SessionDuration string                                                         `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                      `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON `json:"-"`
 }
@@ -16092,6 +16192,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationPolicy struct {
 // [AccessApplicationUpdateResponseBrowserSSHApplicationPolicy]
 type accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -17411,6 +17512,8 @@ func (r accessApplicationUpdateResponseBrowserVNCApplicationOAuthConfigurationGr
 type AccessApplicationUpdateResponseBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -17450,7 +17553,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                         `json:"session_duration"`
+	SessionDuration string                                                         `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                      `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON `json:"-"`
 }
@@ -17460,6 +17563,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationPolicy struct {
 // [AccessApplicationUpdateResponseBrowserVNCApplicationPolicy]
 type accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -18106,6 +18210,8 @@ func (r accessApplicationUpdateResponseAppLauncherApplicationLandingPageDesignJS
 type AccessApplicationUpdateResponseAppLauncherApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -18145,7 +18251,7 @@ type AccessApplicationUpdateResponseAppLauncherApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                          `json:"session_duration"`
+	SessionDuration string                                                          `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                       `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON `json:"-"`
 }
@@ -18155,6 +18261,7 @@ type AccessApplicationUpdateResponseAppLauncherApplicationPolicy struct {
 // [AccessApplicationUpdateResponseAppLauncherApplicationPolicy]
 type accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -18383,6 +18490,8 @@ func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication) i
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -18422,7 +18531,7 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                          `json:"session_duration"`
+	SessionDuration string                                                                          `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                       `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
 }
@@ -18432,6 +18541,7 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy
 // [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy]
 type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -18660,6 +18770,8 @@ func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication) i
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -18699,7 +18811,7 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                          `json:"session_duration"`
+	SessionDuration string                                                                          `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                       `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
 }
@@ -18709,6 +18821,7 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy
 // [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy]
 type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -18937,6 +19050,8 @@ func (r AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication) 
 type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -18976,7 +19091,7 @@ type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolic
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                           `json:"session_duration"`
+	SessionDuration string                                                                           `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                        `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
 }
@@ -18986,6 +19101,7 @@ type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolic
 // [AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy]
 type accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -19198,6 +19314,8 @@ func (r AccessApplicationUpdateResponseBookmarkApplication) implementsAccessAppl
 type AccessApplicationUpdateResponseBookmarkApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -19237,7 +19355,7 @@ type AccessApplicationUpdateResponseBookmarkApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                       `json:"session_duration"`
+	SessionDuration string                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseBookmarkApplicationPolicyJSON `json:"-"`
 }
@@ -19247,6 +19365,7 @@ type AccessApplicationUpdateResponseBookmarkApplicationPolicy struct {
 // [AccessApplicationUpdateResponseBookmarkApplicationPolicy]
 type accessApplicationUpdateResponseBookmarkApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -19415,6 +19534,9 @@ type AccessApplicationUpdateResponseInfrastructureApplication struct {
 	ID string `json:"id"`
 	// Audience tag.
 	AUD string `json:"aud"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationUpdateResponseInfrastructureApplicationMfaConfig `json:"mfa_config"`
 	// The name of the application.
 	Name     string                                                           `json:"name"`
 	Policies []AccessApplicationUpdateResponseInfrastructureApplicationPolicy `json:"policies"`
@@ -19429,6 +19551,7 @@ type accessApplicationUpdateResponseInfrastructureApplicationJSON struct {
 	Type           apijson.Field
 	ID             apijson.Field
 	AUD            apijson.Field
+	MfaConfig      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
 	raw            string
@@ -19486,6 +19609,55 @@ const (
 func (r AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationUpdateResponseInfrastructureApplicationMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
+	AllowedAuthenticators []AccessApplicationUpdateResponseInfrastructureApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                                `json:"session_duration"`
+	JSON            accessApplicationUpdateResponseInfrastructureApplicationMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationMfaConfigJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationMfaConfig]
+type accessApplicationUpdateResponseInfrastructureApplicationMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseInfrastructureApplicationMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationUpdateResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey      AccessApplicationUpdateResponseInfrastructureApplicationMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationUpdateResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationUpdateResponseInfrastructureApplicationMfaConfigAllowedAuthenticator = "ssh_fido2_key"
+)
+
+func (r AccessApplicationUpdateResponseInfrastructureApplicationMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey, AccessApplicationUpdateResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -19603,7 +19775,7 @@ func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnecti
 // applications.
 type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `piv_key` is supported.
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
 	AllowedAuthenticators []AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -19636,12 +19808,13 @@ func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfi
 type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey      AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
+	case AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey, AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -20514,6 +20687,8 @@ func (r accessApplicationUpdateResponseBrowserRDPApplicationOAuthConfigurationGr
 type AccessApplicationUpdateResponseBrowserRDPApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -20553,7 +20728,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                         `json:"session_duration"`
+	SessionDuration string                                                         `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                      `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseBrowserRDPApplicationPolicyJSON `json:"-"`
 }
@@ -20563,6 +20738,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationPolicy struct {
 // [AccessApplicationUpdateResponseBrowserRDPApplicationPolicy]
 type accessApplicationUpdateResponseBrowserRDPApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -21749,6 +21925,8 @@ func (r accessApplicationUpdateResponseMcpServerApplicationOAuthConfigurationGra
 type AccessApplicationUpdateResponseMcpServerApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -21788,7 +21966,7 @@ type AccessApplicationUpdateResponseMcpServerApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                        `json:"session_duration"`
+	SessionDuration string                                                        `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                     `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseMcpServerApplicationPolicyJSON `json:"-"`
 }
@@ -21798,6 +21976,7 @@ type AccessApplicationUpdateResponseMcpServerApplicationPolicy struct {
 // [AccessApplicationUpdateResponseMcpServerApplicationPolicy]
 type accessApplicationUpdateResponseMcpServerApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -22989,6 +23168,8 @@ func (r accessApplicationUpdateResponseMcpServerPortalApplicationOAuthConfigurat
 type AccessApplicationUpdateResponseMcpServerPortalApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -23028,7 +23209,7 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                              `json:"session_duration"`
+	SessionDuration string                                                              `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                           `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationUpdateResponseMcpServerPortalApplicationPolicyJSON `json:"-"`
 }
@@ -23038,6 +23219,7 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationPolicy struct {
 // [AccessApplicationUpdateResponseMcpServerPortalApplicationPolicy]
 type accessApplicationUpdateResponseMcpServerPortalApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -23580,6 +23762,7 @@ type AccessApplicationListResponse struct {
 	// [AccessApplicationListResponseSelfHostedApplicationMfaConfig],
 	// [AccessApplicationListResponseBrowserSSHApplicationMfaConfig],
 	// [AccessApplicationListResponseBrowserVNCApplicationMfaConfig],
+	// [AccessApplicationListResponseInfrastructureApplicationMfaConfig],
 	// [AccessApplicationListResponseBrowserRDPApplicationMfaConfig].
 	MfaConfig interface{} `json:"mfa_config"`
 	// The name of the application.
@@ -24644,6 +24827,8 @@ func (r accessApplicationListResponseSelfHostedApplicationOAuthConfigurationGran
 type AccessApplicationListResponseSelfHostedApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -24683,7 +24868,7 @@ type AccessApplicationListResponseSelfHostedApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                       `json:"session_duration"`
+	SessionDuration string                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseSelfHostedApplicationPolicyJSON `json:"-"`
 }
@@ -24693,6 +24878,7 @@ type AccessApplicationListResponseSelfHostedApplicationPolicy struct {
 // [AccessApplicationListResponseSelfHostedApplicationPolicy]
 type accessApplicationListResponseSelfHostedApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -25229,6 +25415,8 @@ func (r AccessApplicationListResponseSaaSApplication) implementsAccessApplicatio
 type AccessApplicationListResponseSaaSApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -25268,7 +25456,7 @@ type AccessApplicationListResponseSaaSApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                 `json:"session_duration"`
+	SessionDuration string                                                 `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                              `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseSaaSApplicationPolicyJSON `json:"-"`
 }
@@ -25277,6 +25465,7 @@ type AccessApplicationListResponseSaaSApplicationPolicy struct {
 // metadata for the struct [AccessApplicationListResponseSaaSApplicationPolicy]
 type accessApplicationListResponseSaaSApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -26746,6 +26935,8 @@ func (r accessApplicationListResponseBrowserSSHApplicationOAuthConfigurationGran
 type AccessApplicationListResponseBrowserSSHApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -26785,7 +26976,7 @@ type AccessApplicationListResponseBrowserSSHApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                       `json:"session_duration"`
+	SessionDuration string                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseBrowserSSHApplicationPolicyJSON `json:"-"`
 }
@@ -26795,6 +26986,7 @@ type AccessApplicationListResponseBrowserSSHApplicationPolicy struct {
 // [AccessApplicationListResponseBrowserSSHApplicationPolicy]
 type accessApplicationListResponseBrowserSSHApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -28114,6 +28306,8 @@ func (r accessApplicationListResponseBrowserVNCApplicationOAuthConfigurationGran
 type AccessApplicationListResponseBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -28153,7 +28347,7 @@ type AccessApplicationListResponseBrowserVNCApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                       `json:"session_duration"`
+	SessionDuration string                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseBrowserVNCApplicationPolicyJSON `json:"-"`
 }
@@ -28163,6 +28357,7 @@ type AccessApplicationListResponseBrowserVNCApplicationPolicy struct {
 // [AccessApplicationListResponseBrowserVNCApplicationPolicy]
 type accessApplicationListResponseBrowserVNCApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -28809,6 +29004,8 @@ func (r accessApplicationListResponseAppLauncherApplicationLandingPageDesignJSON
 type AccessApplicationListResponseAppLauncherApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -28848,7 +29045,7 @@ type AccessApplicationListResponseAppLauncherApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                        `json:"session_duration"`
+	SessionDuration string                                                        `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                     `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseAppLauncherApplicationPolicyJSON `json:"-"`
 }
@@ -28858,6 +29055,7 @@ type AccessApplicationListResponseAppLauncherApplicationPolicy struct {
 // [AccessApplicationListResponseAppLauncherApplicationPolicy]
 type accessApplicationListResponseAppLauncherApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -29086,6 +29284,8 @@ func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplication) imp
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -29125,7 +29325,7 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy s
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                        `json:"session_duration"`
+	SessionDuration string                                                                        `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                     `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
 }
@@ -29135,6 +29335,7 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy s
 // [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy]
 type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -29363,6 +29564,8 @@ func (r AccessApplicationListResponseBrowserIsolationPermissionsApplication) imp
 type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -29402,7 +29605,7 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy s
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                        `json:"session_duration"`
+	SessionDuration string                                                                        `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                     `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
 }
@@ -29412,6 +29615,7 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy s
 // [AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy]
 type accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -29640,6 +29844,8 @@ func (r AccessApplicationListResponseGatewayIdentityProxyEndpointApplication) im
 type AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -29679,7 +29885,7 @@ type AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy 
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                         `json:"session_duration"`
+	SessionDuration string                                                                         `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                      `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
 }
@@ -29689,6 +29895,7 @@ type AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy 
 // [AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy]
 type accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -29900,6 +30107,8 @@ func (r AccessApplicationListResponseBookmarkApplication) implementsAccessApplic
 type AccessApplicationListResponseBookmarkApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -29939,7 +30148,7 @@ type AccessApplicationListResponseBookmarkApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                     `json:"session_duration"`
+	SessionDuration string                                                     `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                  `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseBookmarkApplicationPolicyJSON `json:"-"`
 }
@@ -29948,6 +30157,7 @@ type AccessApplicationListResponseBookmarkApplicationPolicy struct {
 // metadata for the struct [AccessApplicationListResponseBookmarkApplicationPolicy]
 type accessApplicationListResponseBookmarkApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -30116,6 +30326,9 @@ type AccessApplicationListResponseInfrastructureApplication struct {
 	ID string `json:"id"`
 	// Audience tag.
 	AUD string `json:"aud"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationListResponseInfrastructureApplicationMfaConfig `json:"mfa_config"`
 	// The name of the application.
 	Name     string                                                         `json:"name"`
 	Policies []AccessApplicationListResponseInfrastructureApplicationPolicy `json:"policies"`
@@ -30129,6 +30342,7 @@ type accessApplicationListResponseInfrastructureApplicationJSON struct {
 	Type           apijson.Field
 	ID             apijson.Field
 	AUD            apijson.Field
+	MfaConfig      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
 	raw            string
@@ -30186,6 +30400,55 @@ const (
 func (r AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
 	case AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationListResponseInfrastructureApplicationMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
+	AllowedAuthenticators []AccessApplicationListResponseInfrastructureApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                              `json:"session_duration"`
+	JSON            accessApplicationListResponseInfrastructureApplicationMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationMfaConfigJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationMfaConfig]
+type accessApplicationListResponseInfrastructureApplicationMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseInfrastructureApplicationMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationListResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey      AccessApplicationListResponseInfrastructureApplicationMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationListResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationListResponseInfrastructureApplicationMfaConfigAllowedAuthenticator = "ssh_fido2_key"
+)
+
+func (r AccessApplicationListResponseInfrastructureApplicationMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey, AccessApplicationListResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -30303,7 +30566,7 @@ func (r accessApplicationListResponseInfrastructureApplicationPoliciesConnection
 // applications.
 type AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `piv_key` is supported.
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
 	AllowedAuthenticators []AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -30336,12 +30599,13 @@ func (r accessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigJ
 type AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey      AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
+	case AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey, AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -31214,6 +31478,8 @@ func (r accessApplicationListResponseBrowserRDPApplicationOAuthConfigurationGran
 type AccessApplicationListResponseBrowserRDPApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -31253,7 +31519,7 @@ type AccessApplicationListResponseBrowserRDPApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                       `json:"session_duration"`
+	SessionDuration string                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseBrowserRDPApplicationPolicyJSON `json:"-"`
 }
@@ -31263,6 +31529,7 @@ type AccessApplicationListResponseBrowserRDPApplicationPolicy struct {
 // [AccessApplicationListResponseBrowserRDPApplicationPolicy]
 type accessApplicationListResponseBrowserRDPApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -32449,6 +32716,8 @@ func (r accessApplicationListResponseMcpServerApplicationOAuthConfigurationGrant
 type AccessApplicationListResponseMcpServerApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -32488,7 +32757,7 @@ type AccessApplicationListResponseMcpServerApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                      `json:"session_duration"`
+	SessionDuration string                                                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseMcpServerApplicationPolicyJSON `json:"-"`
 }
@@ -32498,6 +32767,7 @@ type AccessApplicationListResponseMcpServerApplicationPolicy struct {
 // [AccessApplicationListResponseMcpServerApplicationPolicy]
 type accessApplicationListResponseMcpServerApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -33689,6 +33959,8 @@ func (r accessApplicationListResponseMcpServerPortalApplicationOAuthConfiguratio
 type AccessApplicationListResponseMcpServerPortalApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -33728,7 +34000,7 @@ type AccessApplicationListResponseMcpServerPortalApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                            `json:"session_duration"`
+	SessionDuration string                                                            `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                         `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationListResponseMcpServerPortalApplicationPolicyJSON `json:"-"`
 }
@@ -33738,6 +34010,7 @@ type AccessApplicationListResponseMcpServerPortalApplicationPolicy struct {
 // [AccessApplicationListResponseMcpServerPortalApplicationPolicy]
 type accessApplicationListResponseMcpServerPortalApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -34302,6 +34575,7 @@ type AccessApplicationGetResponse struct {
 	// [AccessApplicationGetResponseSelfHostedApplicationMfaConfig],
 	// [AccessApplicationGetResponseBrowserSSHApplicationMfaConfig],
 	// [AccessApplicationGetResponseBrowserVNCApplicationMfaConfig],
+	// [AccessApplicationGetResponseInfrastructureApplicationMfaConfig],
 	// [AccessApplicationGetResponseBrowserRDPApplicationMfaConfig].
 	MfaConfig interface{} `json:"mfa_config"`
 	// The name of the application.
@@ -35365,6 +35639,8 @@ func (r accessApplicationGetResponseSelfHostedApplicationOAuthConfigurationGrant
 type AccessApplicationGetResponseSelfHostedApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -35404,7 +35680,7 @@ type AccessApplicationGetResponseSelfHostedApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                      `json:"session_duration"`
+	SessionDuration string                                                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseSelfHostedApplicationPolicyJSON `json:"-"`
 }
@@ -35414,6 +35690,7 @@ type AccessApplicationGetResponseSelfHostedApplicationPolicy struct {
 // [AccessApplicationGetResponseSelfHostedApplicationPolicy]
 type accessApplicationGetResponseSelfHostedApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -35950,6 +36227,8 @@ func (r AccessApplicationGetResponseSaaSApplication) implementsAccessApplication
 type AccessApplicationGetResponseSaaSApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -35989,7 +36268,7 @@ type AccessApplicationGetResponseSaaSApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                `json:"session_duration"`
+	SessionDuration string                                                `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                             `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseSaaSApplicationPolicyJSON `json:"-"`
 }
@@ -35998,6 +36277,7 @@ type AccessApplicationGetResponseSaaSApplicationPolicy struct {
 // for the struct [AccessApplicationGetResponseSaaSApplicationPolicy]
 type accessApplicationGetResponseSaaSApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -37466,6 +37746,8 @@ func (r accessApplicationGetResponseBrowserSSHApplicationOAuthConfigurationGrant
 type AccessApplicationGetResponseBrowserSSHApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -37505,7 +37787,7 @@ type AccessApplicationGetResponseBrowserSSHApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                      `json:"session_duration"`
+	SessionDuration string                                                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseBrowserSSHApplicationPolicyJSON `json:"-"`
 }
@@ -37515,6 +37797,7 @@ type AccessApplicationGetResponseBrowserSSHApplicationPolicy struct {
 // [AccessApplicationGetResponseBrowserSSHApplicationPolicy]
 type accessApplicationGetResponseBrowserSSHApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -38833,6 +39116,8 @@ func (r accessApplicationGetResponseBrowserVNCApplicationOAuthConfigurationGrant
 type AccessApplicationGetResponseBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -38872,7 +39157,7 @@ type AccessApplicationGetResponseBrowserVNCApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                      `json:"session_duration"`
+	SessionDuration string                                                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseBrowserVNCApplicationPolicyJSON `json:"-"`
 }
@@ -38882,6 +39167,7 @@ type AccessApplicationGetResponseBrowserVNCApplicationPolicy struct {
 // [AccessApplicationGetResponseBrowserVNCApplicationPolicy]
 type accessApplicationGetResponseBrowserVNCApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -39528,6 +39814,8 @@ func (r accessApplicationGetResponseAppLauncherApplicationLandingPageDesignJSON)
 type AccessApplicationGetResponseAppLauncherApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -39567,7 +39855,7 @@ type AccessApplicationGetResponseAppLauncherApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                       `json:"session_duration"`
+	SessionDuration string                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseAppLauncherApplicationPolicyJSON `json:"-"`
 }
@@ -39577,6 +39865,7 @@ type AccessApplicationGetResponseAppLauncherApplicationPolicy struct {
 // [AccessApplicationGetResponseAppLauncherApplicationPolicy]
 type accessApplicationGetResponseAppLauncherApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -39805,6 +40094,8 @@ func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication) impl
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -39844,7 +40135,7 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy st
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                       `json:"session_duration"`
+	SessionDuration string                                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
 }
@@ -39854,6 +40145,7 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy st
 // [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy]
 type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -40082,6 +40374,8 @@ func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplication) impl
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -40121,7 +40415,7 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy st
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                       `json:"session_duration"`
+	SessionDuration string                                                                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                    `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
 }
@@ -40131,6 +40425,7 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy st
 // [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy]
 type accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -40359,6 +40654,8 @@ func (r AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication) imp
 type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -40398,7 +40695,7 @@ type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy s
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                                        `json:"session_duration"`
+	SessionDuration string                                                                        `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                                     `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJSON `json:"-"`
 }
@@ -40408,6 +40705,7 @@ type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy s
 // [AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy]
 type accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -40619,6 +40917,8 @@ func (r AccessApplicationGetResponseBookmarkApplication) implementsAccessApplica
 type AccessApplicationGetResponseBookmarkApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -40658,7 +40958,7 @@ type AccessApplicationGetResponseBookmarkApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                    `json:"session_duration"`
+	SessionDuration string                                                    `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                 `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseBookmarkApplicationPolicyJSON `json:"-"`
 }
@@ -40667,6 +40967,7 @@ type AccessApplicationGetResponseBookmarkApplicationPolicy struct {
 // metadata for the struct [AccessApplicationGetResponseBookmarkApplicationPolicy]
 type accessApplicationGetResponseBookmarkApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -40835,6 +41136,9 @@ type AccessApplicationGetResponseInfrastructureApplication struct {
 	ID string `json:"id"`
 	// Audience tag.
 	AUD string `json:"aud"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig AccessApplicationGetResponseInfrastructureApplicationMfaConfig `json:"mfa_config"`
 	// The name of the application.
 	Name     string                                                        `json:"name"`
 	Policies []AccessApplicationGetResponseInfrastructureApplicationPolicy `json:"policies"`
@@ -40848,6 +41152,7 @@ type accessApplicationGetResponseInfrastructureApplicationJSON struct {
 	Type           apijson.Field
 	ID             apijson.Field
 	AUD            apijson.Field
+	MfaConfig      apijson.Field
 	Name           apijson.Field
 	Policies       apijson.Field
 	raw            string
@@ -40905,6 +41210,55 @@ const (
 func (r AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
 	case AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationGetResponseInfrastructureApplicationMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
+	AllowedAuthenticators []AccessApplicationGetResponseInfrastructureApplicationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled bool `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration string                                                             `json:"session_duration"`
+	JSON            accessApplicationGetResponseInfrastructureApplicationMfaConfigJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationMfaConfigJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationMfaConfig]
+type accessApplicationGetResponseInfrastructureApplicationMfaConfigJSON struct {
+	AllowedAuthenticators apijson.Field
+	MfaDisabled           apijson.Field
+	SessionDuration       apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseInfrastructureApplicationMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationGetResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey      AccessApplicationGetResponseInfrastructureApplicationMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationGetResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationGetResponseInfrastructureApplicationMfaConfigAllowedAuthenticator = "ssh_fido2_key"
+)
+
+func (r AccessApplicationGetResponseInfrastructureApplicationMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey, AccessApplicationGetResponseInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -41022,7 +41376,7 @@ func (r accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionR
 // applications.
 type AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `piv_key` is supported.
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
 	AllowedAuthenticators []AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -41055,12 +41409,13 @@ func (r accessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigJS
 type AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey      AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
+	case AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey, AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -41932,6 +42287,8 @@ func (r accessApplicationGetResponseBrowserRDPApplicationOAuthConfigurationGrant
 type AccessApplicationGetResponseBrowserRDPApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -41971,7 +42328,7 @@ type AccessApplicationGetResponseBrowserRDPApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                      `json:"session_duration"`
+	SessionDuration string                                                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseBrowserRDPApplicationPolicyJSON `json:"-"`
 }
@@ -41981,6 +42338,7 @@ type AccessApplicationGetResponseBrowserRDPApplicationPolicy struct {
 // [AccessApplicationGetResponseBrowserRDPApplicationPolicy]
 type accessApplicationGetResponseBrowserRDPApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -43166,6 +43524,8 @@ func (r accessApplicationGetResponseMcpServerApplicationOAuthConfigurationGrantJ
 type AccessApplicationGetResponseMcpServerApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -43205,7 +43565,7 @@ type AccessApplicationGetResponseMcpServerApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                     `json:"session_duration"`
+	SessionDuration string                                                     `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                  `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseMcpServerApplicationPolicyJSON `json:"-"`
 }
@@ -43214,6 +43574,7 @@ type AccessApplicationGetResponseMcpServerApplicationPolicy struct {
 // metadata for the struct [AccessApplicationGetResponseMcpServerApplicationPolicy]
 type accessApplicationGetResponseMcpServerApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -44404,6 +44765,8 @@ func (r accessApplicationGetResponseMcpServerPortalApplicationOAuthConfiguration
 type AccessApplicationGetResponseMcpServerPortalApplicationPolicy struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -44443,7 +44806,7 @@ type AccessApplicationGetResponseMcpServerPortalApplicationPolicy struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                                           `json:"session_duration"`
+	SessionDuration string                                                           `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                                                        `json:"updated_at" format:"date-time"`
 	JSON            accessApplicationGetResponseMcpServerPortalApplicationPolicyJSON `json:"-"`
 }
@@ -44453,6 +44816,7 @@ type AccessApplicationGetResponseMcpServerPortalApplicationPolicy struct {
 // [AccessApplicationGetResponseMcpServerPortalApplicationPolicy]
 type accessApplicationGetResponseMcpServerPortalApplicationPolicyJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -45589,7 +45953,9 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationOAuthConfigurationGra
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -45635,6 +46001,8 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion interface {
 type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -46038,7 +46406,9 @@ func (r AccessApplicationNewParamsBodySaaSApplication) implementsAccessApplicati
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -46084,6 +46454,8 @@ type AccessApplicationNewParamsBodySaaSApplicationPolicyUnion interface {
 type AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -47085,7 +47457,9 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationOAuthConfigurationGra
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -47131,6 +47505,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion interface {
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -48048,7 +48424,9 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationOAuthConfigurationGra
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -48094,6 +48472,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion interface {
 type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -48563,7 +48943,9 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign) M
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -48609,6 +48991,8 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion interface {
 type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -48783,7 +49167,9 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication) im
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -48829,6 +49215,8 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyU
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -49003,7 +49391,9 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication) im
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -49049,6 +49439,8 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyU
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -49228,7 +49620,9 @@ func (r AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication) i
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -49274,6 +49668,8 @@ type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicy
 type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -49441,7 +49837,9 @@ func (r AccessApplicationNewParamsBodyBookmarkApplication) implementsAccessAppli
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBookmarkApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -49487,6 +49885,8 @@ type AccessApplicationNewParamsBodyBookmarkApplicationPolicyUnion interface {
 type AccessApplicationNewParamsBodyBookmarkApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -49627,6 +50027,9 @@ type AccessApplicationNewParamsBodyInfrastructureApplication struct {
 	TargetCriteria param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria" api:"required"`
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type" api:"required"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfig] `json:"mfa_config"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application.
@@ -49664,6 +50067,39 @@ const (
 func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
+	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey      AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticator = "ssh_fido2_key"
+)
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey, AccessApplicationNewParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -49725,7 +50161,7 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectio
 // applications.
 type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `piv_key` is supported.
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
 	AllowedAuthenticators param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -49742,12 +50178,13 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig
 type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey      AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
+	case AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey, AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -50311,7 +50748,9 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationOAuthConfigurationGra
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserRDPApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -50357,6 +50796,8 @@ type AccessApplicationNewParamsBodyBrowserRDPApplicationPolicyUnion interface {
 type AccessApplicationNewParamsBodyBrowserRDPApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -51170,7 +51611,9 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationOAuthConfigurationGran
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyMcpServerApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -51216,6 +51659,8 @@ type AccessApplicationNewParamsBodyMcpServerApplicationPolicyUnion interface {
 type AccessApplicationNewParamsBodyMcpServerApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -52032,7 +52477,9 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationOAuthConfigurati
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -52078,6 +52525,8 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplicationPolicyUnion interfa
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -53243,7 +53692,9 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationOAuthConfiguration
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -53289,6 +53740,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion interface
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -53692,7 +54145,9 @@ func (r AccessApplicationUpdateParamsBodySaaSApplication) implementsAccessApplic
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -53738,6 +54193,8 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion interface {
 type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -54739,7 +55196,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationOAuthConfiguration
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -54785,6 +55244,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion interface
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -55702,7 +56163,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationOAuthConfiguration
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -55748,6 +56211,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion interface
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -56217,7 +56682,9 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -56263,6 +56730,8 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion interfac
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -56437,7 +56906,9 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication)
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -56483,6 +56954,8 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -56657,7 +57130,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication)
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -56703,6 +57178,8 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -56882,7 +57359,9 @@ func (r AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -56928,6 +57407,8 @@ type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPol
 type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -57095,7 +57576,9 @@ func (r AccessApplicationUpdateParamsBodyBookmarkApplication) implementsAccessAp
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBookmarkApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -57141,6 +57624,8 @@ type AccessApplicationUpdateParamsBodyBookmarkApplicationPolicyUnion interface {
 type AccessApplicationUpdateParamsBodyBookmarkApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -57281,6 +57766,9 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplication struct {
 	TargetCriteria param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria" api:"required"`
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type" api:"required"`
+	// Configures multi-factor authentication (MFA) settings for infrastructure
+	// applications.
+	MfaConfig param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfig] `json:"mfa_config"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application.
@@ -57318,6 +57806,39 @@ const (
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+// Configures multi-factor authentication (MFA) settings for infrastructure
+// applications.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. For infrastructure
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
+	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	// Indicates whether to disable MFA for this resource. This option is available at
+	// the application and policy level.
+	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticator string
+
+const (
+	AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey      AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticator = "ssh_fido2_key"
+)
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticatorPivKey, AccessApplicationUpdateParamsBodyInfrastructureApplicationMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -57379,7 +57900,7 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnec
 // applications.
 type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, only `piv_key` is supported.
+	// applications, supported values are `piv_key` and `ssh_fido2_key`.
 	AllowedAuthenticators param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
@@ -57396,12 +57917,13 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaCon
 type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey      AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "piv_key"
+	AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey:
+	case AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorPivKey, AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -57965,7 +58487,9 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationOAuthConfiguration
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -58011,6 +58535,8 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplicationPolicyUnion interface
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -58824,7 +59350,9 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationOAuthConfigurationG
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyMcpServerApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -58870,6 +59398,8 @@ type AccessApplicationUpdateParamsBodyMcpServerApplicationPolicyUnion interface 
 type AccessApplicationUpdateParamsBodyMcpServerApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -59686,7 +60216,9 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationOAuthConfigur
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationPolicy struct {
 	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
+	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID      param.Field[string]      `json:"account_id"`
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
@@ -59732,6 +60264,8 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationPolicyUnion inte
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Identifier.
+	AccountID param.Field[string] `json:"account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`

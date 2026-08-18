@@ -69,9 +69,10 @@ type MarkdownNewParams struct {
 	// `<style type="text/css">` tag with the content.
 	AddStyleTag param.Field[[]MarkdownNewParamsAddStyleTag] `json:"addStyleTag"`
 	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	// Reject rules are applied first.
 	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
 	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'.
+	// 'script'. Reject rules are applied first.
 	AllowResourceTypes param.Field[[]MarkdownNewParamsAllowResourceType] `json:"allowResourceTypes"`
 	// Provide credentials for HTTP authentication.
 	Authenticate param.Field[MarkdownNewParamsAuthenticate] `json:"authenticate"`
@@ -395,10 +396,12 @@ func (r MarkdownNewParamsWaitForSelectorVisible) IsKnown() bool {
 }
 
 type MarkdownNewResponseEnvelope struct {
+	Meta MarkdownNewResponseEnvelopeMeta `json:"meta" api:"required"`
 	// Response status.
 	Success bool                                `json:"success" api:"required"`
 	Errors  []MarkdownNewResponseEnvelopeErrors `json:"errors"`
-	// Markdown content.
+	// Markdown content. Prefixed with YAML frontmatter (e.g. `title`) when the page
+	// provides that metadata.
 	Result string                          `json:"result"`
 	JSON   markdownNewResponseEnvelopeJSON `json:"-"`
 }
@@ -406,6 +409,7 @@ type MarkdownNewResponseEnvelope struct {
 // markdownNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [MarkdownNewResponseEnvelope]
 type markdownNewResponseEnvelopeJSON struct {
+	Meta        apijson.Field
 	Success     apijson.Field
 	Errors      apijson.Field
 	Result      apijson.Field
@@ -418,6 +422,71 @@ func (r *MarkdownNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r markdownNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type MarkdownNewResponseEnvelopeMeta struct {
+	// URL that served the response, after any redirects the browser followed.
+	FinalURL string `json:"finalUrl"`
+	// Origin response headers, lowercased. Repeated headers are joined with a newline.
+	// Credential and transport-only headers that do not survive rendering are omitted.
+	Headers map[string]string `json:"headers"`
+	// HTTP redirects followed to reach `finalUrl`, oldest first. Omitted for direct
+	// navigation and for client-side redirects such as meta refresh. An empty array
+	// means redirects occurred but their intermediate responses could not be read.
+	RedirectChain []MarkdownNewResponseEnvelopeMetaRedirectChain `json:"redirectChain"`
+	// HTTP status returned by the origin.
+	Status float64 `json:"status"`
+	// Page title.
+	Title string                              `json:"title"`
+	JSON  markdownNewResponseEnvelopeMetaJSON `json:"-"`
+}
+
+// markdownNewResponseEnvelopeMetaJSON contains the JSON metadata for the struct
+// [MarkdownNewResponseEnvelopeMeta]
+type markdownNewResponseEnvelopeMetaJSON struct {
+	FinalURL      apijson.Field
+	Headers       apijson.Field
+	RedirectChain apijson.Field
+	Status        apijson.Field
+	Title         apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *MarkdownNewResponseEnvelopeMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r markdownNewResponseEnvelopeMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type MarkdownNewResponseEnvelopeMetaRedirectChain struct {
+	// Redirect response headers, including `location`.
+	Headers map[string]string `json:"headers" api:"required"`
+	// HTTP status of the redirect.
+	Status float64 `json:"status" api:"required"`
+	// URL that returned the redirect.
+	URL  string                                           `json:"url" api:"required"`
+	JSON markdownNewResponseEnvelopeMetaRedirectChainJSON `json:"-"`
+}
+
+// markdownNewResponseEnvelopeMetaRedirectChainJSON contains the JSON metadata for
+// the struct [MarkdownNewResponseEnvelopeMetaRedirectChain]
+type markdownNewResponseEnvelopeMetaRedirectChainJSON struct {
+	Headers     apijson.Field
+	Status      apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MarkdownNewResponseEnvelopeMetaRedirectChain) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r markdownNewResponseEnvelopeMetaRedirectChainJSON) RawJSON() string {
 	return r.raw
 }
 

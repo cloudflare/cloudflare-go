@@ -34,7 +34,7 @@ func NewThreatEventTargetIndustryCatalogService(opts ...option.RequestOption) (r
 	return
 }
 
-// List all predefined target industries from the industry map catalog.
+// Lists all target industries from industry map catalog
 func (r *ThreatEventTargetIndustryCatalogService) List(ctx context.Context, query ThreatEventTargetIndustryCatalogListParams, opts ...option.RequestOption) (res *ThreatEventTargetIndustryCatalogListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

@@ -59,29 +59,8 @@ func (r *SettingTLSService) Update(ctx context.Context, settingID SettingTLSUpda
 	return res, nil
 }
 
-// Delete the tls setting value for the hostname.
-func (r *SettingTLSService) Delete(ctx context.Context, settingID SettingTLSDeleteParamsSettingID, hostname string, body SettingTLSDeleteParams, opts ...option.RequestOption) (res *SettingTLSDeleteResponse, err error) {
-	var env SettingTLSDeleteResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if body.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return nil, err
-	}
-	if hostname == "" {
-		err = errors.New("missing required hostname parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", body.ZoneID, settingID, hostname)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
-}
-
 // List the requested TLS setting for the hostnames under this zone.
-func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetParamsSettingID, query SettingTLSGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingTLSGetResponse], err error) {
+func (r *SettingTLSService) List(ctx context.Context, settingID SettingTLSListParamsSettingID, query SettingTLSListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingTLSListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -103,8 +82,50 @@ func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetPara
 }
 
 // List the requested TLS setting for the hostnames under this zone.
-func (r *SettingTLSService) GetAutoPaging(ctx context.Context, settingID SettingTLSGetParamsSettingID, query SettingTLSGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingTLSGetResponse] {
-	return pagination.NewSinglePageAutoPager(r.Get(ctx, settingID, query, opts...))
+func (r *SettingTLSService) ListAutoPaging(ctx context.Context, settingID SettingTLSListParamsSettingID, query SettingTLSListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingTLSListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, settingID, query, opts...))
+}
+
+// Delete the tls setting value for the hostname.
+func (r *SettingTLSService) Delete(ctx context.Context, settingID SettingTLSDeleteParamsSettingID, hostname string, body SettingTLSDeleteParams, opts ...option.RequestOption) (res *SettingTLSDeleteResponse, err error) {
+	var env SettingTLSDeleteResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return nil, err
+	}
+	if hostname == "" {
+		err = errors.New("missing required hostname parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", body.ZoneID, settingID, hostname)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// Get the requested TLS setting for the hostname.
+func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetParamsSettingID, hostname string, query SettingTLSGetParams, opts ...option.RequestOption) (res *Setting, err error) {
+	var env SettingTLSGetResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return nil, err
+	}
+	if hostname == "" {
+		err = errors.New("missing required hostname parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", query.ZoneID, settingID, hostname)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 type Setting struct {
@@ -224,6 +245,48 @@ type SettingValueArrayParam []string
 
 func (r SettingValueArrayParam) implementsSettingValueUnionParam() {}
 
+type SettingTLSListResponse struct {
+	// This is the time the tls setting was originally created for this hostname.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The hostname for which the tls settings are set.
+	Hostname string `json:"hostname"`
+	// Deployment status for the given tls setting.
+	Status string `json:"status"`
+	// This is the time the tls setting was updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// The TLS setting value. The type depends on the `setting_id` used in the request
+	// path:
+	//
+	//   - `ciphers`: an array of allowed cipher suite strings in BoringSSL format (e.g.,
+	//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`).
+	//   - `min_tls_version`: a string indicating the minimum TLS version — one of
+	//     `"1.0"`, `"1.1"`, `"1.2"`, or `"1.3"` (e.g., `"1.2"`).
+	//   - `http2`: a string indicating whether HTTP/2 is enabled — `"on"` or `"off"`
+	//     (e.g., `"on"`).
+	Value SettingValueUnion          `json:"value"`
+	JSON  settingTLSListResponseJSON `json:"-"`
+}
+
+// settingTLSListResponseJSON contains the JSON metadata for the struct
+// [SettingTLSListResponse]
+type settingTLSListResponseJSON struct {
+	CreatedAt   apijson.Field
+	Hostname    apijson.Field
+	Status      apijson.Field
+	UpdatedAt   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTLSListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTLSListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SettingTLSDeleteResponse struct {
 	// This is the time the tls setting was originally created for this hostname.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -263,48 +326,6 @@ func (r *SettingTLSDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r settingTLSDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTLSGetResponse struct {
-	// This is the time the tls setting was originally created for this hostname.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The hostname for which the tls settings are set.
-	Hostname string `json:"hostname"`
-	// Deployment status for the given tls setting.
-	Status string `json:"status"`
-	// This is the time the tls setting was updated.
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
-	// The TLS setting value. The type depends on the `setting_id` used in the request
-	// path:
-	//
-	//   - `ciphers`: an array of allowed cipher suite strings in BoringSSL format (e.g.,
-	//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`).
-	//   - `min_tls_version`: a string indicating the minimum TLS version — one of
-	//     `"1.0"`, `"1.1"`, `"1.2"`, or `"1.3"` (e.g., `"1.2"`).
-	//   - `http2`: a string indicating whether HTTP/2 is enabled — `"on"` or `"off"`
-	//     (e.g., `"on"`).
-	Value SettingValueUnion         `json:"value"`
-	JSON  settingTLSGetResponseJSON `json:"-"`
-}
-
-// settingTLSGetResponseJSON contains the JSON metadata for the struct
-// [SettingTLSGetResponse]
-type settingTLSGetResponseJSON struct {
-	CreatedAt   apijson.Field
-	Hostname    apijson.Field
-	Status      apijson.Field
-	UpdatedAt   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -484,6 +505,34 @@ const (
 func (r SettingTLSUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SettingTLSUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SettingTLSListParams struct {
+	// Identifier.
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+}
+
+// The TLS Setting name. The value type depends on the setting:
+//
+//   - `ciphers`: value is an array of cipher suite strings (e.g.,
+//     `["ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"]`).
+//   - `min_tls_version`: value is a TLS version string (`"1.0"`, `"1.1"`, `"1.2"`,
+//     or `"1.3"`).
+//   - `http2`: value is `"on"` or `"off"`.
+type SettingTLSListParamsSettingID string
+
+const (
+	SettingTLSListParamsSettingIDCiphers       SettingTLSListParamsSettingID = "ciphers"
+	SettingTLSListParamsSettingIDMinTLSVersion SettingTLSListParamsSettingID = "min_tls_version"
+	SettingTLSListParamsSettingIDHTTP2         SettingTLSListParamsSettingID = "http2"
+)
+
+func (r SettingTLSListParamsSettingID) IsKnown() bool {
+	switch r {
+	case SettingTLSListParamsSettingIDCiphers, SettingTLSListParamsSettingIDMinTLSVersion, SettingTLSListParamsSettingIDHTTP2:
 		return true
 	}
 	return false
@@ -679,6 +728,145 @@ const (
 func (r SettingTLSGetParamsSettingID) IsKnown() bool {
 	switch r {
 	case SettingTLSGetParamsSettingIDCiphers, SettingTLSGetParamsSettingIDMinTLSVersion, SettingTLSGetParamsSettingIDHTTP2:
+		return true
+	}
+	return false
+}
+
+type SettingTLSGetResponseEnvelope struct {
+	Errors   []SettingTLSGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingTLSGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success SettingTLSGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  Setting                              `json:"result"`
+	JSON    settingTLSGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// settingTLSGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingTLSGetResponseEnvelope]
+type settingTLSGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTLSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTLSGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingTLSGetResponseEnvelopeErrors struct {
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           SettingTLSGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingTLSGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingTLSGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingTLSGetResponseEnvelopeErrors]
+type settingTLSGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingTLSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTLSGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingTLSGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    settingTLSGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingTLSGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [SettingTLSGetResponseEnvelopeErrorsSource]
+type settingTLSGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTLSGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTLSGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingTLSGetResponseEnvelopeMessages struct {
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           SettingTLSGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingTLSGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingTLSGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingTLSGetResponseEnvelopeMessages]
+type settingTLSGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingTLSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTLSGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingTLSGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    settingTLSGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingTLSGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [SettingTLSGetResponseEnvelopeMessagesSource]
+type settingTLSGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTLSGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTLSGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type SettingTLSGetResponseEnvelopeSuccess bool
+
+const (
+	SettingTLSGetResponseEnvelopeSuccessTrue SettingTLSGetResponseEnvelopeSuccess = true
+)
+
+func (r SettingTLSGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingTLSGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

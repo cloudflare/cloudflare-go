@@ -35,7 +35,7 @@ func NewThreatEventTargetIndustryByDatasetService(opts ...option.RequestOption) 
 	return
 }
 
-// List all target industries referenced in events for a specific dataset.
+// Lists all target industries for a specific dataset
 func (r *ThreatEventTargetIndustryByDatasetService) List(ctx context.Context, datasetID string, query ThreatEventTargetIndustryByDatasetListParams, opts ...option.RequestOption) (res *ThreatEventTargetIndustryByDatasetListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
