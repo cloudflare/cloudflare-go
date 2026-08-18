@@ -1,0 +1,21 @@
+magic_transit/connectoreventlatest.go
+  s_106fbb49e78746::t_e6163eb0ccbe63 1273
+magic_transit/connectorevent.go
+  s_106fbb49e78746::t_50ab79fe7cb032 1300
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "f24e14619ea5cf8a593d3df36c4310566843f83e",
+  "prompts": {},
+  "sessions": {
+    "s_106fbb49e78746": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fea0e51e7ffewNj3oZFMs3BSzv",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
