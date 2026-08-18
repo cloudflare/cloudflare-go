@@ -9,17 +9,25 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
+<!-- x-release-please-start-version -->
+
 ```go
 import (
 	"github.com/cloudflare/cloudflare-go/v7" // imported as cloudflare
 )
 ```
 
+<!-- x-release-please-end -->
+
 Or to pin the version:
+
+<!-- x-release-please-start-version -->
 
 ```sh
 go get -u 'github.com/cloudflare/cloudflare-go/v7@v7.7.0'
 ```
+
+<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -416,9 +424,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 ## Maintenance
 
-This SDK is actively maintained, however, many issues are tracked outside of GitHub on internal Cloudflare systems. Members of the community are welcome to join and discuss your issues during our twice monthly triage meetings. For urgent issues, please contact [Cloudflare support](https://www.support.cloudflare.com/s/?language=en_US). 
-
-* [Community triage meeting](https://calendar.google.com/calendar/embed?src=c_dbf6ce250643f2e60f806d28f3fc09a9de24cbe0ab3ffb699838303d2adfc9e4%40group.calendar.google.com&ctz=America%2FLos_Angeles)
+We are keen for your feedback; please open an [issue](https://www.github.com/cloudflare/cloudflare-go/issues) with questions, bugs, or suggestions.
 
 ## Contributing
 

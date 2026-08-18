@@ -393,7 +393,7 @@ func (r NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpir
 type NamespaceTableMaintenanceConfigUpdateParams struct {
 	// Use this to identify the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Updates compaction configuration (all fields optional).
+	// Updates table compaction configuration; all fields are optional.
 	Compaction param.Field[NamespaceTableMaintenanceConfigUpdateParamsCompaction] `json:"compaction"`
 	// Updates snapshot expiration configuration (all fields optional).
 	SnapshotExpiration param.Field[NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpiration] `json:"snapshot_expiration"`
@@ -403,11 +403,11 @@ func (r NamespaceTableMaintenanceConfigUpdateParams) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-// Updates compaction configuration (all fields optional).
+// Updates table compaction configuration; all fields are optional.
 type NamespaceTableMaintenanceConfigUpdateParamsCompaction struct {
-	// Updates the state optionally.
+	// Specifies the state of maintenance operations.
 	State param.Field[NamespaceTableMaintenanceConfigUpdateParamsCompactionState] `json:"state"`
-	// Updates the target file size optionally.
+	// Sets the target file size for compaction in megabytes. Defaults to "128".
 	TargetSizeMB param.Field[NamespaceTableMaintenanceConfigUpdateParamsCompactionTargetSizeMB] `json:"target_size_mb"`
 }
 
@@ -415,7 +415,7 @@ func (r NamespaceTableMaintenanceConfigUpdateParamsCompaction) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// Updates the state optionally.
+// Specifies the state of maintenance operations.
 type NamespaceTableMaintenanceConfigUpdateParamsCompactionState string
 
 const (
@@ -431,7 +431,7 @@ func (r NamespaceTableMaintenanceConfigUpdateParamsCompactionState) IsKnown() bo
 	return false
 }
 
-// Updates the target file size optionally.
+// Sets the target file size for compaction in megabytes. Defaults to "128".
 type NamespaceTableMaintenanceConfigUpdateParamsCompactionTargetSizeMB string
 
 const (

@@ -631,6 +631,10 @@ type CustomCsrListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// The direction to sort by.
+	Direction param.Field[CustomCsrListParamsDirection] `query:"direction"`
+	// The field to sort the returned custom CSRs by.
+	Order param.Field[CustomCsrListParamsOrder] `query:"order"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of custom CSRs per page.
@@ -643,6 +647,39 @@ func (r CustomCsrListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// The direction to sort by.
+type CustomCsrListParamsDirection string
+
+const (
+	CustomCsrListParamsDirectionAsc  CustomCsrListParamsDirection = "asc"
+	CustomCsrListParamsDirectionDesc CustomCsrListParamsDirection = "desc"
+)
+
+func (r CustomCsrListParamsDirection) IsKnown() bool {
+	switch r {
+	case CustomCsrListParamsDirectionAsc, CustomCsrListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
+// The field to sort the returned custom CSRs by.
+type CustomCsrListParamsOrder string
+
+const (
+	CustomCsrListParamsOrderName       CustomCsrListParamsOrder = "name"
+	CustomCsrListParamsOrderAccountTag CustomCsrListParamsOrder = "account_tag"
+	CustomCsrListParamsOrderCreatedAt  CustomCsrListParamsOrder = "created_at"
+)
+
+func (r CustomCsrListParamsOrder) IsKnown() bool {
+	switch r {
+	case CustomCsrListParamsOrderName, CustomCsrListParamsOrderAccountTag, CustomCsrListParamsOrderCreatedAt:
+		return true
+	}
+	return false
 }
 
 type CustomCsrDeleteParams struct {

@@ -90,6 +90,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/page_shield"
 	"github.com/cloudflare/cloudflare-go/v7/pages"
 	"github.com/cloudflare/cloudflare-go/v7/pipelines"
+	"github.com/cloudflare/cloudflare-go/v7/precursor"
 	"github.com/cloudflare/cloudflare-go/v7/queues"
 	"github.com/cloudflare/cloudflare-go/v7/r2"
 	"github.com/cloudflare/cloudflare-go/v7/r2_data_catalog"
@@ -432,6 +433,7 @@ type Client struct {
 	Radar                       *radar.RadarService
 	BotManagement               *bot_management.BotManagementService
 	Fraud                       *fraud.FraudService
+	Precursor                   *precursor.PrecursorService
 	OriginPostQuantumEncryption *origin_post_quantum_encryption.OriginPostQuantumEncryptionService
 	OriginTLSComplianceModes    *origin_tls_compliance_modes.OriginTLSComplianceModeService
 	GoogleTagGateway            *google_tag_gateway.GoogleTagGatewayService
@@ -595,6 +597,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Radar = radar.NewRadarService(opts...)
 	r.BotManagement = bot_management.NewBotManagementService(opts...)
 	r.Fraud = fraud.NewFraudService(opts...)
+	r.Precursor = precursor.NewPrecursorService(opts...)
 	r.OriginPostQuantumEncryption = origin_post_quantum_encryption.NewOriginPostQuantumEncryptionService(opts...)
 	r.OriginTLSComplianceModes = origin_tls_compliance_modes.NewOriginTLSComplianceModeService(opts...)
 	r.GoogleTagGateway = google_tag_gateway.NewGoogleTagGatewayService(opts...)

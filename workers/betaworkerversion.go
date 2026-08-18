@@ -599,6 +599,7 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [VersionBindingsWorkersBindingKindAI],
 // [VersionBindingsWorkersBindingKindAISearch],
 // [VersionBindingsWorkersBindingKindAISearchNamespace],
+// [VersionBindingsWorkersBindingKindMessaging],
 // [VersionBindingsWorkersBindingKindAnalyticsEngine],
 // [VersionBindingsWorkersBindingKindAssets],
 // [VersionBindingsWorkersBindingKindBrowser],
@@ -640,6 +641,7 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // Union satisfied by [VersionBindingsWorkersBindingKindAI],
 // [VersionBindingsWorkersBindingKindAISearch],
 // [VersionBindingsWorkersBindingKindAISearchNamespace],
+// [VersionBindingsWorkersBindingKindMessaging],
 // [VersionBindingsWorkersBindingKindAnalyticsEngine],
 // [VersionBindingsWorkersBindingKindAssets],
 // [VersionBindingsWorkersBindingKindBrowser],
@@ -694,6 +696,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindAISearchNamespace{}),
 			DiscriminatorValue: "ai_search_namespace",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindMessaging{}),
+			DiscriminatorValue: "messaging",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -993,6 +1000,51 @@ const (
 func (r VersionBindingsWorkersBindingKindAISearchNamespaceType) IsKnown() bool {
 	switch r {
 	case VersionBindingsWorkersBindingKindAISearchNamespaceTypeAISearchNamespace:
+		return true
+	}
+	return false
+}
+
+type VersionBindingsWorkersBindingKindMessaging struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// The Messaging namespace to bind to.
+	Namespace string `json:"namespace" api:"required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindMessagingType `json:"type" api:"required"`
+	JSON versionBindingsWorkersBindingKindMessagingJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindMessagingJSON contains the JSON metadata for
+// the struct [VersionBindingsWorkersBindingKindMessaging]
+type versionBindingsWorkersBindingKindMessagingJSON struct {
+	Name        apijson.Field
+	Namespace   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindMessaging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindMessagingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindMessaging) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindMessagingType string
+
+const (
+	VersionBindingsWorkersBindingKindMessagingTypeMessaging VersionBindingsWorkersBindingKindMessagingType = "messaging"
+)
+
+func (r VersionBindingsWorkersBindingKindMessagingType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindMessagingTypeMessaging:
 		return true
 	}
 	return false
@@ -2680,6 +2732,7 @@ const (
 	VersionBindingsTypeAI                     VersionBindingsType = "ai"
 	VersionBindingsTypeAISearch               VersionBindingsType = "ai_search"
 	VersionBindingsTypeAISearchNamespace      VersionBindingsType = "ai_search_namespace"
+	VersionBindingsTypeMessaging              VersionBindingsType = "messaging"
 	VersionBindingsTypeAnalyticsEngine        VersionBindingsType = "analytics_engine"
 	VersionBindingsTypeAssets                 VersionBindingsType = "assets"
 	VersionBindingsTypeBrowser                VersionBindingsType = "browser"
@@ -2716,7 +2769,7 @@ const (
 
 func (r VersionBindingsType) IsKnown() bool {
 	switch r {
-	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeFlagship, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService, VersionBindingsTypeVPCNetwork:
+	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeMessaging, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeFlagship, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService, VersionBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -4481,6 +4534,7 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // Satisfied by [workers.VersionBindingsWorkersBindingKindAIParam],
 // [workers.VersionBindingsWorkersBindingKindAISearchParam],
 // [workers.VersionBindingsWorkersBindingKindAISearchNamespaceParam],
+// [workers.VersionBindingsWorkersBindingKindMessagingParam],
 // [workers.VersionBindingsWorkersBindingKindAnalyticsEngineParam],
 // [workers.VersionBindingsWorkersBindingKindAssetsParam],
 // [workers.VersionBindingsWorkersBindingKindBrowserParam],
@@ -4568,6 +4622,21 @@ func (r VersionBindingsWorkersBindingKindAISearchNamespaceParam) MarshalJSON() (
 
 func (r VersionBindingsWorkersBindingKindAISearchNamespaceParam) implementsVersionBindingsUnionParam() {
 }
+
+type VersionBindingsWorkersBindingKindMessagingParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// The Messaging namespace to bind to.
+	Namespace param.Field[string] `json:"namespace" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindMessagingType] `json:"type" api:"required"`
+}
+
+func (r VersionBindingsWorkersBindingKindMessagingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindMessagingParam) implementsVersionBindingsUnionParam() {}
 
 type VersionBindingsWorkersBindingKindAnalyticsEngineParam struct {
 	// The name of the dataset to bind to.

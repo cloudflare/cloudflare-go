@@ -240,9 +240,9 @@ func (r casbPostureWebhookJobNewResponseFailedJSON) RawJSON() string {
 
 type CasbPostureWebhookJobNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Array of finding instance IDs to send to the webhooks
+	// Array of finding instance IDs to send to the webhooks.
 	FindingInstanceIDs param.Field[[]string] `json:"finding_instance_ids" api:"required" format:"uuid"`
-	// Array of webhook IDs to trigger jobs for
+	// Array of webhook IDs to trigger jobs for.
 	WebhookIDs param.Field[[]string] `json:"webhook_ids" api:"required" format:"uuid"`
 }
 

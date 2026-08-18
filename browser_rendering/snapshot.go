@@ -63,7 +63,8 @@ type SnapshotNewResponse struct {
 	AccessibilityTree SnapshotNewResponseAccessibilityTree `json:"accessibilityTree"`
 	// HTML content.
 	Content string `json:"content"`
-	// Markdown content.
+	// Markdown content. Prefixed with YAML frontmatter (e.g. `title`) when the page
+	// provides that metadata.
 	Markdown string `json:"markdown"`
 	// Base64 encoded image.
 	Screenshot string                  `json:"screenshot"`
@@ -280,9 +281,10 @@ type SnapshotNewParams struct {
 	// `<style type="text/css">` tag with the content.
 	AddStyleTag param.Field[[]SnapshotNewParamsAddStyleTag] `json:"addStyleTag"`
 	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	// Reject rules are applied first.
 	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
 	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'.
+	// 'script'. Reject rules are applied first.
 	AllowResourceTypes param.Field[[]SnapshotNewParamsAllowResourceType] `json:"allowResourceTypes"`
 	// Provide credentials for HTTP authentication.
 	Authenticate param.Field[SnapshotNewParamsAuthenticate] `json:"authenticate"`
@@ -696,18 +698,32 @@ func (r snapshotNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SnapshotNewResponseEnvelopeMeta struct {
-	Status float64                             `json:"status"`
-	Title  string                              `json:"title"`
-	JSON   snapshotNewResponseEnvelopeMetaJSON `json:"-"`
+	// URL that served the response, after any redirects the browser followed.
+	FinalURL string `json:"finalUrl"`
+	// Origin response headers, lowercased. Repeated headers are joined with a newline.
+	// Credential and transport-only headers that do not survive rendering are omitted.
+	Headers map[string]string `json:"headers"`
+	// HTTP redirects followed to reach `finalUrl`, oldest first. Omitted for direct
+	// navigation and for client-side redirects such as meta refresh. An empty array
+	// means redirects occurred but their intermediate responses could not be read.
+	RedirectChain []SnapshotNewResponseEnvelopeMetaRedirectChain `json:"redirectChain"`
+	// HTTP status returned by the origin.
+	Status float64 `json:"status"`
+	// Page title.
+	Title string                              `json:"title"`
+	JSON  snapshotNewResponseEnvelopeMetaJSON `json:"-"`
 }
 
 // snapshotNewResponseEnvelopeMetaJSON contains the JSON metadata for the struct
 // [SnapshotNewResponseEnvelopeMeta]
 type snapshotNewResponseEnvelopeMetaJSON struct {
-	Status      apijson.Field
-	Title       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	FinalURL      apijson.Field
+	Headers       apijson.Field
+	RedirectChain apijson.Field
+	Status        apijson.Field
+	Title         apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *SnapshotNewResponseEnvelopeMeta) UnmarshalJSON(data []byte) (err error) {
@@ -715,6 +731,34 @@ func (r *SnapshotNewResponseEnvelopeMeta) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r snapshotNewResponseEnvelopeMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type SnapshotNewResponseEnvelopeMetaRedirectChain struct {
+	// Redirect response headers, including `location`.
+	Headers map[string]string `json:"headers" api:"required"`
+	// HTTP status of the redirect.
+	Status float64 `json:"status" api:"required"`
+	// URL that returned the redirect.
+	URL  string                                           `json:"url" api:"required"`
+	JSON snapshotNewResponseEnvelopeMetaRedirectChainJSON `json:"-"`
+}
+
+// snapshotNewResponseEnvelopeMetaRedirectChainJSON contains the JSON metadata for
+// the struct [SnapshotNewResponseEnvelopeMetaRedirectChain]
+type snapshotNewResponseEnvelopeMetaRedirectChainJSON struct {
+	Headers     apijson.Field
+	Status      apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SnapshotNewResponseEnvelopeMetaRedirectChain) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r snapshotNewResponseEnvelopeMetaRedirectChainJSON) RawJSON() string {
 	return r.raw
 }
 

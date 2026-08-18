@@ -36,13 +36,15 @@ func NewCTAlertingService(opts ...option.RequestOption) (r *CTAlertingService) {
 
 // Create or update the Certificate Transparency alerting subscription for a zone.
 // Enables or disables email notifications when certificates are issued for the
-// zone's domains. For Free and Pro zones, the subscription is toggled on or off
-// using the enabled field. Notification emails are sent to all users with SSL
-// permissions on the zone. For Business and Enterprise zones, the emails field is
-// required and controls which addresses receive alerts. Setting emails to an empty
-// list disables the subscription regardless of the enabled field. A maximum of 10
-// email addresses may be configured.
-func (r *CTAlertingService) Edit(ctx context.Context, params CTAlertingEditParams, opts ...option.RequestOption) (res *CTAlertingEditResponse, err error) {
+// zone's domains. The `enabled` field is required on every request and controls
+// whether the subscription is active. The `emails` field is optional and, when
+// provided, replaces the stored recipient list for the zone. When `emails` is
+// omitted, the stored recipient list is preserved and only the enabled state is
+// toggled. A maximum of 100 email addresses may be configured per zone. Requests
+// that omit `enabled` are rejected with error code 1008. Subscribe and unsubscribe
+// notification emails are only sent for recipients whose effective subscription
+// state changes. Idempotent requests (no state change) send no notification email.
+func (r *CTAlertingService) Edit(ctx context.Context, params CTAlertingEditParams, opts ...option.RequestOption) (res *CTAlertingSubscription, err error) {
 	var env CTAlertingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -59,9 +61,9 @@ func (r *CTAlertingService) Edit(ctx context.Context, params CTAlertingEditParam
 }
 
 // Retrieve the Certificate Transparency alerting subscription settings for a zone.
-// Returns whether CT monitoring is enabled and, for Business and Enterprise zones,
-// the list of email addresses that receive alerts.
-func (r *CTAlertingService) Get(ctx context.Context, query CTAlertingGetParams, opts ...option.RequestOption) (res *CTAlertingGetResponse, err error) {
+// Returns whether CT monitoring is enabled and the list of email addresses that
+// receive alerts, if any have been configured.
+func (r *CTAlertingService) Get(ctx context.Context, query CTAlertingGetParams, opts ...option.RequestOption) (res *CTAlertingSubscription, err error) {
 	var env CTAlertingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
@@ -78,60 +80,30 @@ func (r *CTAlertingService) Get(ctx context.Context, query CTAlertingGetParams, 
 }
 
 // Certificate Transparency alerting subscription settings for a zone.
-type CTAlertingEditResponse struct {
+type CTAlertingSubscription struct {
 	// Whether CT alerting is enabled for the zone.
 	Enabled bool `json:"enabled" api:"required"`
-	// Email addresses that receive CT alert notifications. Only present and
-	// configurable for Business and Enterprise zones. Maximum of 10 addresses. For
-	// Free and Pro zones, notifications are sent to all users with SSL permissions on
-	// the zone.
+	// Email addresses that receive CT alert notifications for the zone. A maximum of
+	// 100 addresses may be configured. Each address must be a valid RFC 5322 email
+	// address and must not contain a comma.
 	Emails []string                   `json:"emails" format:"email"`
-	JSON   ctAlertingEditResponseJSON `json:"-"`
+	JSON   ctAlertingSubscriptionJSON `json:"-"`
 }
 
-// ctAlertingEditResponseJSON contains the JSON metadata for the struct
-// [CTAlertingEditResponse]
-type ctAlertingEditResponseJSON struct {
+// ctAlertingSubscriptionJSON contains the JSON metadata for the struct
+// [CTAlertingSubscription]
+type ctAlertingSubscriptionJSON struct {
 	Enabled     apijson.Field
 	Emails      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CTAlertingEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CTAlertingSubscription) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ctAlertingEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Certificate Transparency alerting subscription settings for a zone.
-type CTAlertingGetResponse struct {
-	// Whether CT alerting is enabled for the zone.
-	Enabled bool `json:"enabled" api:"required"`
-	// Email addresses that receive CT alert notifications. Only present and
-	// configurable for Business and Enterprise zones. Maximum of 10 addresses. For
-	// Free and Pro zones, notifications are sent to all users with SSL permissions on
-	// the zone.
-	Emails []string                  `json:"emails" format:"email"`
-	JSON   ctAlertingGetResponseJSON `json:"-"`
-}
-
-// ctAlertingGetResponseJSON contains the JSON metadata for the struct
-// [CTAlertingGetResponse]
-type ctAlertingGetResponseJSON struct {
-	Enabled     apijson.Field
-	Emails      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CTAlertingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ctAlertingGetResponseJSON) RawJSON() string {
+func (r ctAlertingSubscriptionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -140,10 +112,9 @@ type CTAlertingEditParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Whether CT alerting is enabled for the zone.
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
-	// Email addresses that receive CT alert notifications. Only present and
-	// configurable for Business and Enterprise zones. Maximum of 10 addresses. For
-	// Free and Pro zones, notifications are sent to all users with SSL permissions on
-	// the zone.
+	// Email addresses that receive CT alert notifications for the zone. A maximum of
+	// 100 addresses may be configured. Each address must be a valid RFC 5322 email
+	// address and must not contain a comma.
 	Emails param.Field[[]string] `json:"emails" format:"email"`
 }
 
@@ -157,7 +128,7 @@ type CTAlertingEditResponseEnvelope struct {
 	// Whether the API call was successful.
 	Success CTAlertingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Certificate Transparency alerting subscription settings for a zone.
-	Result CTAlertingEditResponse             `json:"result"`
+	Result CTAlertingSubscription             `json:"result"`
 	JSON   ctAlertingEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -302,7 +273,7 @@ type CTAlertingGetResponseEnvelope struct {
 	// Whether the API call was successful.
 	Success CTAlertingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// Certificate Transparency alerting subscription settings for a zone.
-	Result CTAlertingGetResponse             `json:"result"`
+	Result CTAlertingSubscription            `json:"result"`
 	JSON   ctAlertingGetResponseEnvelopeJSON `json:"-"`
 }
 

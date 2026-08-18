@@ -167,7 +167,6 @@ func (r crawlGetResponseJSON) RawJSON() string {
 }
 
 type CrawlGetResponseRecord struct {
-	Metadata CrawlGetResponseRecordsMetadata `json:"metadata" api:"required"`
 	// Current status of the crawled URL.
 	Status CrawlGetResponseRecordsStatus `json:"status" api:"required"`
 	// Crawled URL.
@@ -177,19 +176,21 @@ type CrawlGetResponseRecord struct {
 	// JSON of the content of the crawled URL.
 	Json map[string]interface{} `json:"json"`
 	// Markdown of the content of the crawled URL.
-	Markdown string                     `json:"markdown"`
-	JSON     crawlGetResponseRecordJSON `json:"-"`
+	Markdown string `json:"markdown"`
+	// Absent for urls that never reached a fetch.
+	Metadata CrawlGetResponseRecordsMetadata `json:"metadata"`
+	JSON     crawlGetResponseRecordJSON      `json:"-"`
 }
 
 // crawlGetResponseRecordJSON contains the JSON metadata for the struct
 // [CrawlGetResponseRecord]
 type crawlGetResponseRecordJSON struct {
-	Metadata    apijson.Field
 	Status      apijson.Field
 	URL         apijson.Field
 	HTML        apijson.Field
 	Json        apijson.Field
 	Markdown    apijson.Field
+	Metadata    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -202,6 +203,27 @@ func (r crawlGetResponseRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+// Current status of the crawled URL.
+type CrawlGetResponseRecordsStatus string
+
+const (
+	CrawlGetResponseRecordsStatusQueued     CrawlGetResponseRecordsStatus = "queued"
+	CrawlGetResponseRecordsStatusErrored    CrawlGetResponseRecordsStatus = "errored"
+	CrawlGetResponseRecordsStatusCompleted  CrawlGetResponseRecordsStatus = "completed"
+	CrawlGetResponseRecordsStatusDisallowed CrawlGetResponseRecordsStatus = "disallowed"
+	CrawlGetResponseRecordsStatusSkipped    CrawlGetResponseRecordsStatus = "skipped"
+	CrawlGetResponseRecordsStatusCancelled  CrawlGetResponseRecordsStatus = "cancelled"
+)
+
+func (r CrawlGetResponseRecordsStatus) IsKnown() bool {
+	switch r {
+	case CrawlGetResponseRecordsStatusQueued, CrawlGetResponseRecordsStatusErrored, CrawlGetResponseRecordsStatusCompleted, CrawlGetResponseRecordsStatusDisallowed, CrawlGetResponseRecordsStatusSkipped, CrawlGetResponseRecordsStatusCancelled:
+		return true
+	}
+	return false
+}
+
+// Absent for urls that never reached a fetch.
 type CrawlGetResponseRecordsMetadata struct {
 	// HTTP status code of the crawled page.
 	Status float64 `json:"status" api:"required"`
@@ -228,26 +250,6 @@ func (r *CrawlGetResponseRecordsMetadata) UnmarshalJSON(data []byte) (err error)
 
 func (r crawlGetResponseRecordsMetadataJSON) RawJSON() string {
 	return r.raw
-}
-
-// Current status of the crawled URL.
-type CrawlGetResponseRecordsStatus string
-
-const (
-	CrawlGetResponseRecordsStatusQueued     CrawlGetResponseRecordsStatus = "queued"
-	CrawlGetResponseRecordsStatusErrored    CrawlGetResponseRecordsStatus = "errored"
-	CrawlGetResponseRecordsStatusCompleted  CrawlGetResponseRecordsStatus = "completed"
-	CrawlGetResponseRecordsStatusDisallowed CrawlGetResponseRecordsStatus = "disallowed"
-	CrawlGetResponseRecordsStatusSkipped    CrawlGetResponseRecordsStatus = "skipped"
-	CrawlGetResponseRecordsStatusCancelled  CrawlGetResponseRecordsStatus = "cancelled"
-)
-
-func (r CrawlGetResponseRecordsStatus) IsKnown() bool {
-	switch r {
-	case CrawlGetResponseRecordsStatusQueued, CrawlGetResponseRecordsStatusErrored, CrawlGetResponseRecordsStatusCompleted, CrawlGetResponseRecordsStatusDisallowed, CrawlGetResponseRecordsStatusSkipped, CrawlGetResponseRecordsStatusCancelled:
-		return true
-	}
-	return false
 }
 
 type CrawlNewParams struct {
@@ -347,9 +349,10 @@ type CrawlNewParamsBodyObject struct {
 	// `<style type="text/css">` tag with the content.
 	AddStyleTag param.Field[[]CrawlNewParamsBodyObjectAddStyleTag] `json:"addStyleTag"`
 	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	// Reject rules are applied first.
 	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
 	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'.
+	// 'script'. Reject rules are applied first.
 	AllowResourceTypes param.Field[[]CrawlNewParamsBodyObjectAllowResourceType] `json:"allowResourceTypes"`
 	// Provide credentials for HTTP authentication.
 	Authenticate param.Field[CrawlNewParamsBodyObjectAuthenticate] `json:"authenticate"`
@@ -669,24 +672,11 @@ type CrawlNewParamsBodyObjectJsonOptionsResponseFormat struct {
 	Type param.Field[string] `json:"type" api:"required"`
 	// Schema for the response format. More information here:
 	// https://developers.cloudflare.com/workers-ai/json-mode/
-	JsonSchema param.Field[map[string]CrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion] `json:"json_schema"`
+	JsonSchema param.Field[map[string]interface{}] `json:"json_schema"`
 }
 
 func (r CrawlNewParamsBodyObjectJsonOptionsResponseFormat) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool],
-// [browser_rendering.CrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaArray].
-//
-// Use [Raw()] to specify an arbitrary value for this param
-type CrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion interface {
-	ImplementsCrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion()
-}
-
-type CrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaArray []string
-
-func (r CrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaArray) ImplementsCrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion() {
 }
 
 // Additional options for the crawler.

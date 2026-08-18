@@ -140,6 +140,39 @@ func (r connectorEventListResponseItemJSON) RawJSON() string {
 
 // Recorded Event
 type ConnectorEventGetResponse struct {
+	// Event kind plus event-specific payload fields.
+	//
+	// Event kinds:
+	//
+	// - `Init`: Initialized process
+	// - `Leave`: Stopped process
+	// - `StartAttestation`: Started attestation
+	// - `FinishAttestationSuccess`: Finished attestation
+	// - `FinishAttestationFailure`: Failed attestation
+	// - `StartRotateCryptKey`: Started crypt key rotation
+	// - `FinishRotateCryptKeySuccess`: Finished crypt key rotation
+	// - `FinishRotateCryptKeyFailure`: Failed crypt key rotation
+	// - `StartRotatePki`: Started PKI rotation
+	// - `FinishRotatePkiSuccess`: Finished PKI rotation
+	// - `FinishRotatePkiFailure`: Failed PKI rotation
+	// - `StartUpgrade`: Started upgrade
+	// - `FinishUpgradeSuccess`: Finished upgrade
+	// - `FinishUpgradeFailure`: Failed upgrade
+	// - `BlessSlotSuccess`: Blessed boot entry slot
+	// - `BlessSlotPending`: Boot entry slot is not yet blessed
+	// - `BlessSlotFailure`: Failed to bless boot entry slot
+	// - `Reconcile`: Reconciled
+	// - `ConfigureCloudflaredTunnel`: Configured Cloudflared tunnel
+	// - `RekeyInstallBoth`: Installed initial inbound and outbound keys
+	// - `RekeyStart`: Installed new inbound key, kept old outbound
+	// - `RekeyRestart`: Restarted in-progress rekey with newer key material
+	// - `RekeyAdvance`: Confirmed traffic on new inbound key, swapped outbound to new
+	// - `RekeyComplete`: Deleted old keys
+	// - `RekeyReset`: Deleted all keys after receiving an unexpected key
+	// - `HaTransition`: Completed HA state transition
+	// - `HaError`: Received unexpected HA error
+	// - `HaInit`: Initialized HA subsystem
+	// - `HaLeave`: Stopped HA subsystem
 	E ConnectorEventGetResponseE `json:"e" api:"required"`
 	// Sequence number, used to order events with the same timestamp
 	N float64 `json:"n" api:"required"`
@@ -169,6 +202,39 @@ func (r connectorEventGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Event kind plus event-specific payload fields.
+//
+// Event kinds:
+//
+// - `Init`: Initialized process
+// - `Leave`: Stopped process
+// - `StartAttestation`: Started attestation
+// - `FinishAttestationSuccess`: Finished attestation
+// - `FinishAttestationFailure`: Failed attestation
+// - `StartRotateCryptKey`: Started crypt key rotation
+// - `FinishRotateCryptKeySuccess`: Finished crypt key rotation
+// - `FinishRotateCryptKeyFailure`: Failed crypt key rotation
+// - `StartRotatePki`: Started PKI rotation
+// - `FinishRotatePkiSuccess`: Finished PKI rotation
+// - `FinishRotatePkiFailure`: Failed PKI rotation
+// - `StartUpgrade`: Started upgrade
+// - `FinishUpgradeSuccess`: Finished upgrade
+// - `FinishUpgradeFailure`: Failed upgrade
+// - `BlessSlotSuccess`: Blessed boot entry slot
+// - `BlessSlotPending`: Boot entry slot is not yet blessed
+// - `BlessSlotFailure`: Failed to bless boot entry slot
+// - `Reconcile`: Reconciled
+// - `ConfigureCloudflaredTunnel`: Configured Cloudflared tunnel
+// - `RekeyInstallBoth`: Installed initial inbound and outbound keys
+// - `RekeyStart`: Installed new inbound key, kept old outbound
+// - `RekeyRestart`: Restarted in-progress rekey with newer key material
+// - `RekeyAdvance`: Confirmed traffic on new inbound key, swapped outbound to new
+// - `RekeyComplete`: Deleted old keys
+// - `RekeyReset`: Deleted all keys after receiving an unexpected key
+// - `HaTransition`: Completed HA state transition
+// - `HaError`: Received unexpected HA error
+// - `HaInit`: Initialized HA subsystem
+// - `HaLeave`: Stopped HA subsystem
 type ConnectorEventGetResponseE struct {
 	// Initialized process
 	K ConnectorEventGetResponseEK `json:"k" api:"required"`
@@ -1224,6 +1290,9 @@ const (
 	ConnectorEventGetResponseEKStartUpgrade                ConnectorEventGetResponseEK = "StartUpgrade"
 	ConnectorEventGetResponseEKFinishUpgradeSuccess        ConnectorEventGetResponseEK = "FinishUpgradeSuccess"
 	ConnectorEventGetResponseEKFinishUpgradeFailure        ConnectorEventGetResponseEK = "FinishUpgradeFailure"
+	ConnectorEventGetResponseEKBlessSlotSuccess            ConnectorEventGetResponseEK = "BlessSlotSuccess"
+	ConnectorEventGetResponseEKBlessSlotPending            ConnectorEventGetResponseEK = "BlessSlotPending"
+	ConnectorEventGetResponseEKBlessSlotFailure            ConnectorEventGetResponseEK = "BlessSlotFailure"
 	ConnectorEventGetResponseEKReconcile                   ConnectorEventGetResponseEK = "Reconcile"
 	ConnectorEventGetResponseEKConfigureCloudflaredTunnel  ConnectorEventGetResponseEK = "ConfigureCloudflaredTunnel"
 	ConnectorEventGetResponseEKRekeyInstallBoth            ConnectorEventGetResponseEK = "RekeyInstallBoth"
@@ -1231,11 +1300,15 @@ const (
 	ConnectorEventGetResponseEKRekeyAdvance                ConnectorEventGetResponseEK = "RekeyAdvance"
 	ConnectorEventGetResponseEKRekeyComplete               ConnectorEventGetResponseEK = "RekeyComplete"
 	ConnectorEventGetResponseEKRekeyReset                  ConnectorEventGetResponseEK = "RekeyReset"
+	ConnectorEventGetResponseEKHaTransition                ConnectorEventGetResponseEK = "HaTransition"
+	ConnectorEventGetResponseEKHaError                     ConnectorEventGetResponseEK = "HaError"
+	ConnectorEventGetResponseEKHaInit                      ConnectorEventGetResponseEK = "HaInit"
+	ConnectorEventGetResponseEKHaLeave                     ConnectorEventGetResponseEK = "HaLeave"
 )
 
 func (r ConnectorEventGetResponseEK) IsKnown() bool {
 	switch r {
-	case ConnectorEventGetResponseEKInit, ConnectorEventGetResponseEKLeave, ConnectorEventGetResponseEKStartAttestation, ConnectorEventGetResponseEKFinishAttestationSuccess, ConnectorEventGetResponseEKFinishAttestationFailure, ConnectorEventGetResponseEKStartRotateCryptKey, ConnectorEventGetResponseEKFinishRotateCryptKeySuccess, ConnectorEventGetResponseEKFinishRotateCryptKeyFailure, ConnectorEventGetResponseEKStartRotatePki, ConnectorEventGetResponseEKFinishRotatePkiSuccess, ConnectorEventGetResponseEKFinishRotatePkiFailure, ConnectorEventGetResponseEKStartUpgrade, ConnectorEventGetResponseEKFinishUpgradeSuccess, ConnectorEventGetResponseEKFinishUpgradeFailure, ConnectorEventGetResponseEKReconcile, ConnectorEventGetResponseEKConfigureCloudflaredTunnel, ConnectorEventGetResponseEKRekeyInstallBoth, ConnectorEventGetResponseEKRekeyStart, ConnectorEventGetResponseEKRekeyAdvance, ConnectorEventGetResponseEKRekeyComplete, ConnectorEventGetResponseEKRekeyReset:
+	case ConnectorEventGetResponseEKInit, ConnectorEventGetResponseEKLeave, ConnectorEventGetResponseEKStartAttestation, ConnectorEventGetResponseEKFinishAttestationSuccess, ConnectorEventGetResponseEKFinishAttestationFailure, ConnectorEventGetResponseEKStartRotateCryptKey, ConnectorEventGetResponseEKFinishRotateCryptKeySuccess, ConnectorEventGetResponseEKFinishRotateCryptKeyFailure, ConnectorEventGetResponseEKStartRotatePki, ConnectorEventGetResponseEKFinishRotatePkiSuccess, ConnectorEventGetResponseEKFinishRotatePkiFailure, ConnectorEventGetResponseEKStartUpgrade, ConnectorEventGetResponseEKFinishUpgradeSuccess, ConnectorEventGetResponseEKFinishUpgradeFailure, ConnectorEventGetResponseEKBlessSlotSuccess, ConnectorEventGetResponseEKBlessSlotPending, ConnectorEventGetResponseEKBlessSlotFailure, ConnectorEventGetResponseEKReconcile, ConnectorEventGetResponseEKConfigureCloudflaredTunnel, ConnectorEventGetResponseEKRekeyInstallBoth, ConnectorEventGetResponseEKRekeyStart, ConnectorEventGetResponseEKRekeyRestart, ConnectorEventGetResponseEKRekeyAdvance, ConnectorEventGetResponseEKRekeyComplete, ConnectorEventGetResponseEKRekeyReset, ConnectorEventGetResponseEKHaTransition, ConnectorEventGetResponseEKHaError, ConnectorEventGetResponseEKHaInit, ConnectorEventGetResponseEKHaLeave:
 		return true
 	}
 	return false

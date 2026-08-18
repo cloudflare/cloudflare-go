@@ -199,10 +199,13 @@ type DLPEntryUpdateResponse struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPEntryUpdateResponsePredefinedEntryConfidence].
-	Confidence  interface{} `json:"confidence"`
-	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description" api:"nullable"`
-	Pattern     Pattern     `json:"pattern"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated  bool    `json:"deprecated"`
+	Description string  `json:"description" api:"nullable"`
+	Pattern     Pattern `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
@@ -226,6 +229,7 @@ type dlpEntryUpdateResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
+	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -422,6 +426,9 @@ type DLPEntryUpdateResponsePredefinedEntry struct {
 	Enabled    bool                                            `json:"enabled" api:"required"`
 	Name       string                                          `json:"name" api:"required"`
 	Type       DLPEntryUpdateResponsePredefinedEntryType       `json:"type" api:"required"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated bool `json:"deprecated"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// A Predefined AI prompt classification topic entry.
@@ -437,6 +444,7 @@ type dlpEntryUpdateResponsePredefinedEntryJSON struct {
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	Deprecated  apijson.Field
 	ProfileID   apijson.Field
 	Variant     apijson.Field
 	raw         string
@@ -886,10 +894,13 @@ type DLPEntryListResponse struct {
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of [DLPEntryListResponseObjectConfidence].
-	Confidence  interface{} `json:"confidence"`
-	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description" api:"nullable"`
-	Pattern     Pattern     `json:"pattern"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated  bool    `json:"deprecated"`
+	Description string  `json:"description" api:"nullable"`
+	Pattern     Pattern `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID    string                           `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret       bool                             `json:"secret"`
@@ -913,6 +924,7 @@ type dlpEntryListResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
+	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -1119,10 +1131,13 @@ type DLPEntryGetResponse struct {
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of [DLPEntryGetResponseObjectConfidence].
-	Confidence  interface{} `json:"confidence"`
-	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description" api:"nullable"`
-	Pattern     Pattern     `json:"pattern"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated  bool    `json:"deprecated"`
+	Description string  `json:"description" api:"nullable"`
+	Pattern     Pattern `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// This field can have the runtime type of [[]DLPEntryGetResponseObjectProfile].
@@ -1148,6 +1163,7 @@ type dlpEntryGetResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
+	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field

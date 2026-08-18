@@ -34,11 +34,11 @@ func TestObservabilityQueryNewWithOptionalParams(t *testing.T) {
 		Description: cloudflare.F("Query description"),
 		Name:        cloudflare.F("x"),
 		Parameters: cloudflare.F(workers.ObservabilityQueryNewParamsParameters{
-			Calculations: cloudflare.F([]workers.ObservabilityQueryNewParamsParametersCalculation{{
-				Operator: cloudflare.F(workers.ObservabilityQueryNewParamsParametersCalculationsOperatorUniq),
+			Calculations: cloudflare.F([]workers.ObservabilityQueryNewParamsParametersCalculationUnion{workers.ObservabilityQueryNewParamsParametersCalculationsObject{
+				Operator: cloudflare.F(workers.ObservabilityQueryNewParamsParametersCalculationsObjectOperatorCount),
 				Alias:    cloudflare.F("alias"),
 				Key:      cloudflare.F("key"),
-				KeyType:  cloudflare.F(workers.ObservabilityQueryNewParamsParametersCalculationsKeyTypeString),
+				KeyType:  cloudflare.F(workers.ObservabilityQueryNewParamsParametersCalculationsObjectKeyTypeString),
 			}}),
 			Datasets:          cloudflare.F([]string{"string"}),
 			FilterCombination: cloudflare.F(workers.ObservabilityQueryNewParamsParametersFilterCombinationAnd),

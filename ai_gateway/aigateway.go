@@ -179,6 +179,7 @@ type AIGatewayNewResponse struct {
 	DLP                     AIGatewayNewResponseDLP                   `json:"dlp"`
 	Guardrails              AIGatewayNewResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault               bool                                      `json:"is_default"`
+	LogClassification       bool                                      `json:"log_classification"`
 	LogManagement           int64                                     `json:"log_management" api:"nullable"`
 	LogManagementStrategy   AIGatewayNewResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
 	Logpush                 bool                                      `json:"logpush"`
@@ -195,7 +196,9 @@ type AIGatewayNewResponse struct {
 	StoreID          string                          `json:"store_id" api:"nullable"`
 	Stripe           AIGatewayNewResponseStripe      `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
-	// Only 'postpaid' is currently supported.
+	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+	// Gateway.
 	WorkersAIBillingMode AIGatewayNewResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
 	Zdr                  bool                                     `json:"zdr"`
 	JSON                 aiGatewayNewResponseJSON                 `json:"-"`
@@ -216,6 +219,7 @@ type aiGatewayNewResponseJSON struct {
 	DLP                     apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
+	LogClassification       apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -1337,16 +1341,19 @@ func (r aiGatewayNewResponseStripeUsageEventJSON) RawJSON() string {
 }
 
 // Controls how Workers AI inference calls routed through this gateway are billed.
-// Only 'postpaid' is currently supported.
+// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+// Gateway.
 type AIGatewayNewResponseWorkersAIBillingMode string
 
 const (
 	AIGatewayNewResponseWorkersAIBillingModePostpaid AIGatewayNewResponseWorkersAIBillingMode = "postpaid"
+	AIGatewayNewResponseWorkersAIBillingModeUnified  AIGatewayNewResponseWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayNewResponseWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayNewResponseWorkersAIBillingModePostpaid:
+	case AIGatewayNewResponseWorkersAIBillingModePostpaid, AIGatewayNewResponseWorkersAIBillingModeUnified:
 		return true
 	}
 	return false
@@ -1366,6 +1373,7 @@ type AIGatewayUpdateResponse struct {
 	DLP                     AIGatewayUpdateResponseDLP                   `json:"dlp"`
 	Guardrails              AIGatewayUpdateResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault               bool                                         `json:"is_default"`
+	LogClassification       bool                                         `json:"log_classification"`
 	LogManagement           int64                                        `json:"log_management" api:"nullable"`
 	LogManagementStrategy   AIGatewayUpdateResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
 	Logpush                 bool                                         `json:"logpush"`
@@ -1382,7 +1390,9 @@ type AIGatewayUpdateResponse struct {
 	StoreID          string                             `json:"store_id" api:"nullable"`
 	Stripe           AIGatewayUpdateResponseStripe      `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
-	// Only 'postpaid' is currently supported.
+	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+	// Gateway.
 	WorkersAIBillingMode AIGatewayUpdateResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
 	Zdr                  bool                                        `json:"zdr"`
 	JSON                 aiGatewayUpdateResponseJSON                 `json:"-"`
@@ -1403,6 +1413,7 @@ type aiGatewayUpdateResponseJSON struct {
 	DLP                     apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
+	LogClassification       apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -2525,16 +2536,19 @@ func (r aiGatewayUpdateResponseStripeUsageEventJSON) RawJSON() string {
 }
 
 // Controls how Workers AI inference calls routed through this gateway are billed.
-// Only 'postpaid' is currently supported.
+// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+// Gateway.
 type AIGatewayUpdateResponseWorkersAIBillingMode string
 
 const (
 	AIGatewayUpdateResponseWorkersAIBillingModePostpaid AIGatewayUpdateResponseWorkersAIBillingMode = "postpaid"
+	AIGatewayUpdateResponseWorkersAIBillingModeUnified  AIGatewayUpdateResponseWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayUpdateResponseWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayUpdateResponseWorkersAIBillingModePostpaid:
+	case AIGatewayUpdateResponseWorkersAIBillingModePostpaid, AIGatewayUpdateResponseWorkersAIBillingModeUnified:
 		return true
 	}
 	return false
@@ -2554,6 +2568,7 @@ type AIGatewayListResponse struct {
 	DLP                     AIGatewayListResponseDLP                   `json:"dlp"`
 	Guardrails              AIGatewayListResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault               bool                                       `json:"is_default"`
+	LogClassification       bool                                       `json:"log_classification"`
 	LogManagement           int64                                      `json:"log_management" api:"nullable"`
 	LogManagementStrategy   AIGatewayListResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
 	Logpush                 bool                                       `json:"logpush"`
@@ -2570,7 +2585,9 @@ type AIGatewayListResponse struct {
 	StoreID          string                           `json:"store_id" api:"nullable"`
 	Stripe           AIGatewayListResponseStripe      `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
-	// Only 'postpaid' is currently supported.
+	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+	// Gateway.
 	WorkersAIBillingMode AIGatewayListResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
 	Zdr                  bool                                      `json:"zdr"`
 	JSON                 aiGatewayListResponseJSON                 `json:"-"`
@@ -2591,6 +2608,7 @@ type aiGatewayListResponseJSON struct {
 	DLP                     apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
+	LogClassification       apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -3713,16 +3731,19 @@ func (r aiGatewayListResponseStripeUsageEventJSON) RawJSON() string {
 }
 
 // Controls how Workers AI inference calls routed through this gateway are billed.
-// Only 'postpaid' is currently supported.
+// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+// Gateway.
 type AIGatewayListResponseWorkersAIBillingMode string
 
 const (
 	AIGatewayListResponseWorkersAIBillingModePostpaid AIGatewayListResponseWorkersAIBillingMode = "postpaid"
+	AIGatewayListResponseWorkersAIBillingModeUnified  AIGatewayListResponseWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayListResponseWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayListResponseWorkersAIBillingModePostpaid:
+	case AIGatewayListResponseWorkersAIBillingModePostpaid, AIGatewayListResponseWorkersAIBillingModeUnified:
 		return true
 	}
 	return false
@@ -3742,6 +3763,7 @@ type AIGatewayDeleteResponse struct {
 	DLP                     AIGatewayDeleteResponseDLP                   `json:"dlp"`
 	Guardrails              AIGatewayDeleteResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault               bool                                         `json:"is_default"`
+	LogClassification       bool                                         `json:"log_classification"`
 	LogManagement           int64                                        `json:"log_management" api:"nullable"`
 	LogManagementStrategy   AIGatewayDeleteResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
 	Logpush                 bool                                         `json:"logpush"`
@@ -3758,7 +3780,9 @@ type AIGatewayDeleteResponse struct {
 	StoreID          string                             `json:"store_id" api:"nullable"`
 	Stripe           AIGatewayDeleteResponseStripe      `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
-	// Only 'postpaid' is currently supported.
+	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+	// Gateway.
 	WorkersAIBillingMode AIGatewayDeleteResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
 	Zdr                  bool                                        `json:"zdr"`
 	JSON                 aiGatewayDeleteResponseJSON                 `json:"-"`
@@ -3779,6 +3803,7 @@ type aiGatewayDeleteResponseJSON struct {
 	DLP                     apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
+	LogClassification       apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -4901,16 +4926,19 @@ func (r aiGatewayDeleteResponseStripeUsageEventJSON) RawJSON() string {
 }
 
 // Controls how Workers AI inference calls routed through this gateway are billed.
-// Only 'postpaid' is currently supported.
+// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+// Gateway.
 type AIGatewayDeleteResponseWorkersAIBillingMode string
 
 const (
 	AIGatewayDeleteResponseWorkersAIBillingModePostpaid AIGatewayDeleteResponseWorkersAIBillingMode = "postpaid"
+	AIGatewayDeleteResponseWorkersAIBillingModeUnified  AIGatewayDeleteResponseWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayDeleteResponseWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayDeleteResponseWorkersAIBillingModePostpaid:
+	case AIGatewayDeleteResponseWorkersAIBillingModePostpaid, AIGatewayDeleteResponseWorkersAIBillingModeUnified:
 		return true
 	}
 	return false
@@ -4930,6 +4958,7 @@ type AIGatewayGetResponse struct {
 	DLP                     AIGatewayGetResponseDLP                   `json:"dlp"`
 	Guardrails              AIGatewayGetResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault               bool                                      `json:"is_default"`
+	LogClassification       bool                                      `json:"log_classification"`
 	LogManagement           int64                                     `json:"log_management" api:"nullable"`
 	LogManagementStrategy   AIGatewayGetResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
 	Logpush                 bool                                      `json:"logpush"`
@@ -4946,7 +4975,9 @@ type AIGatewayGetResponse struct {
 	StoreID          string                          `json:"store_id" api:"nullable"`
 	Stripe           AIGatewayGetResponseStripe      `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
-	// Only 'postpaid' is currently supported.
+	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+	// Gateway.
 	WorkersAIBillingMode AIGatewayGetResponseWorkersAIBillingMode `json:"workers_ai_billing_mode"`
 	Zdr                  bool                                     `json:"zdr"`
 	JSON                 aiGatewayGetResponseJSON                 `json:"-"`
@@ -4967,6 +4998,7 @@ type aiGatewayGetResponseJSON struct {
 	DLP                     apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
+	LogClassification       apijson.Field
 	LogManagement           apijson.Field
 	LogManagementStrategy   apijson.Field
 	Logpush                 apijson.Field
@@ -6088,16 +6120,19 @@ func (r aiGatewayGetResponseStripeUsageEventJSON) RawJSON() string {
 }
 
 // Controls how Workers AI inference calls routed through this gateway are billed.
-// Only 'postpaid' is currently supported.
+// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+// Gateway.
 type AIGatewayGetResponseWorkersAIBillingMode string
 
 const (
 	AIGatewayGetResponseWorkersAIBillingModePostpaid AIGatewayGetResponseWorkersAIBillingMode = "postpaid"
+	AIGatewayGetResponseWorkersAIBillingModeUnified  AIGatewayGetResponseWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayGetResponseWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayGetResponseWorkersAIBillingModePostpaid:
+	case AIGatewayGetResponseWorkersAIBillingModePostpaid, AIGatewayGetResponseWorkersAIBillingModeUnified:
 		return true
 	}
 	return false
@@ -6123,9 +6158,12 @@ type AIGatewayNewParams struct {
 	// Delay between retry attempts in milliseconds (0-5000)
 	RetryDelay param.Field[int64] `json:"retry_delay"`
 	// Maximum number of retry attempts for failed requests (1-5)
-	RetryMaxAttempts param.Field[int64] `json:"retry_max_attempts"`
+	RetryMaxAttempts param.Field[int64]  `json:"retry_max_attempts"`
+	StoreID          param.Field[string] `json:"store_id"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
-	// Only 'postpaid' is currently supported.
+	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+	// Gateway.
 	WorkersAIBillingMode param.Field[AIGatewayNewParamsWorkersAIBillingMode] `json:"workers_ai_billing_mode"`
 	Zdr                  param.Field[bool]                                   `json:"zdr"`
 }
@@ -6182,16 +6220,19 @@ func (r AIGatewayNewParamsRetryBackoff) IsKnown() bool {
 }
 
 // Controls how Workers AI inference calls routed through this gateway are billed.
-// Only 'postpaid' is currently supported.
+// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+// Gateway.
 type AIGatewayNewParamsWorkersAIBillingMode string
 
 const (
 	AIGatewayNewParamsWorkersAIBillingModePostpaid AIGatewayNewParamsWorkersAIBillingMode = "postpaid"
+	AIGatewayNewParamsWorkersAIBillingModeUnified  AIGatewayNewParamsWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayNewParamsWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayNewParamsWorkersAIBillingModePostpaid:
+	case AIGatewayNewParamsWorkersAIBillingModePostpaid, AIGatewayNewParamsWorkersAIBillingModeUnified:
 		return true
 	}
 	return false
@@ -6230,6 +6271,7 @@ type AIGatewayUpdateParams struct {
 	Authentication          param.Field[bool]                                       `json:"authentication"`
 	DLP                     param.Field[AIGatewayUpdateParamsDLPUnion]              `json:"dlp"`
 	Guardrails              param.Field[AIGatewayUpdateParamsGuardrails]            `json:"guardrails"`
+	LogClassification       param.Field[bool]                                       `json:"log_classification"`
 	LogManagement           param.Field[int64]                                      `json:"log_management"`
 	LogManagementStrategy   param.Field[AIGatewayUpdateParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush                 param.Field[bool]                                       `json:"logpush"`
@@ -6246,7 +6288,9 @@ type AIGatewayUpdateParams struct {
 	StoreID          param.Field[string]                           `json:"store_id"`
 	Stripe           param.Field[AIGatewayUpdateParamsStripe]      `json:"stripe"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
-	// Only 'postpaid' is currently supported.
+	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+	// Gateway.
 	WorkersAIBillingMode param.Field[AIGatewayUpdateParamsWorkersAIBillingMode] `json:"workers_ai_billing_mode"`
 	Zdr                  param.Field[bool]                                      `json:"zdr"`
 }
@@ -7048,16 +7092,19 @@ func (r AIGatewayUpdateParamsStripeUsageEvent) MarshalJSON() (data []byte, err e
 }
 
 // Controls how Workers AI inference calls routed through this gateway are billed.
-// Only 'postpaid' is currently supported.
+// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
+// credits via AI Gateway using neuron-based pricing and delegates billing to AI
+// Gateway.
 type AIGatewayUpdateParamsWorkersAIBillingMode string
 
 const (
 	AIGatewayUpdateParamsWorkersAIBillingModePostpaid AIGatewayUpdateParamsWorkersAIBillingMode = "postpaid"
+	AIGatewayUpdateParamsWorkersAIBillingModeUnified  AIGatewayUpdateParamsWorkersAIBillingMode = "unified"
 )
 
 func (r AIGatewayUpdateParamsWorkersAIBillingMode) IsKnown() bool {
 	switch r {
-	case AIGatewayUpdateParamsWorkersAIBillingModePostpaid:
+	case AIGatewayUpdateParamsWorkersAIBillingModePostpaid, AIGatewayUpdateParamsWorkersAIBillingModeUnified:
 		return true
 	}
 	return false

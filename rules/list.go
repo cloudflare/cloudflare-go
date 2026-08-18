@@ -147,13 +147,13 @@ func (r *ListService) Get(ctx context.Context, listID string, query ListGetParam
 	return res, nil
 }
 
-// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-// 0 to 9, wildcards (\*), and the hyphen (-).
+// Hostnames support ASCII(7) letters from a to z, the digits from 0 to 9,
+// wildcards (\*), and the hyphen (-).
 type Hostname struct {
 	URLHostname string `json:"url_hostname" api:"required"`
 	// Only applies to wildcard hostnames (e.g., \*.example.com). When true (default),
-	// only subdomains are blocked. When false, both the root domain and subdomains are
-	// blocked.
+	// the rule blocks only subdomains. When false, the rule blocks both the root
+	// domain and subdomains.
 	ExcludeExactHostname bool         `json:"exclude_exact_hostname"`
 	JSON                 hostnameJSON `json:"-"`
 }
@@ -174,13 +174,13 @@ func (r hostnameJSON) RawJSON() string {
 	return r.raw
 }
 
-// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-// 0 to 9, wildcards (\*), and the hyphen (-).
+// Hostnames support ASCII(7) letters from a to z, the digits from 0 to 9,
+// wildcards (\*), and the hyphen (-).
 type HostnameParam struct {
 	URLHostname param.Field[string] `json:"url_hostname" api:"required"`
 	// Only applies to wildcard hostnames (e.g., \*.example.com). When true (default),
-	// only subdomains are blocked. When false, both the root domain and subdomains are
-	// blocked.
+	// the rule blocks only subdomains. When false, the rule blocks both the root
+	// domain and subdomains.
 	ExcludeExactHostname param.Field[bool] `json:"exclude_exact_hostname"`
 }
 

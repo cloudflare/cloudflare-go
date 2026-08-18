@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/browser_rendering"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 func TestCrawlNewWithOptionalParams(t *testing.T) {
@@ -85,8 +84,8 @@ func TestCrawlNewWithOptionalParams(t *testing.T) {
 				Prompt: cloudflare.F("prompt"),
 				ResponseFormat: cloudflare.F(browser_rendering.CrawlNewParamsBodyObjectJsonOptionsResponseFormat{
 					Type: cloudflare.F("type"),
-					JsonSchema: cloudflare.F(map[string]browser_rendering.CrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion{
-						"foo": shared.UnionString("string"),
+					JsonSchema: cloudflare.F(map[string]interface{}{
+						"foo": "bar",
 					}),
 				}),
 			}),

@@ -47,11 +47,11 @@ func TestObservabilitySharedQueryNewWithOptionalParams(t *testing.T) {
 		OffsetBy:        cloudflare.F(0.000000),
 		OffsetDirection: cloudflare.F("offsetDirection"),
 		Parameters: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParameters{
-			Calculations: cloudflare.F([]workers.ObservabilitySharedQueryNewParamsParametersCalculation{{
-				Operator: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersCalculationsOperatorUniq),
+			Calculations: cloudflare.F([]workers.ObservabilitySharedQueryNewParamsParametersCalculationUnion{workers.ObservabilitySharedQueryNewParamsParametersCalculationsObject{
+				Operator: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperatorCount),
 				Alias:    cloudflare.F("alias"),
 				Key:      cloudflare.F("key"),
-				KeyType:  cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersCalculationsKeyTypeString),
+				KeyType:  cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyTypeString),
 			}}),
 			Datasets:          cloudflare.F([]string{"string"}),
 			FilterCombination: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersFilterCombinationAnd),

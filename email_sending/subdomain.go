@@ -40,7 +40,10 @@ func NewSubdomainService(opts ...option.RequestOption) (r *SubdomainService) {
 
 // Creates a new sending subdomain or re-enables sending on an existing subdomain
 // that had it disabled. If zone-level Email Sending has not been enabled yet, the
-// zone flag is automatically set when the entitlement is present.
+// zone flag is automatically set when the entitlement is present. A leftmost
+// wildcard such as `*.example.com` is accepted only for accounts with wildcard
+// Email Sending enabled. Wildcard senders share the base domain's DKIM signing
+// identity and `cf-bounce.<base>` return path.
 func (r *SubdomainService) New(ctx context.Context, params SubdomainNewParams, opts ...option.RequestOption) (res *SubdomainNewResponse, err error) {
 	var env SubdomainNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,19 +128,21 @@ func (r *SubdomainService) Get(ctx context.Context, subdomainID string, query Su
 type SubdomainNewResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
 	Enabled bool `json:"enabled" api:"required"`
-	// The subdomain domain name.
+	// The exact domain name or a leftmost wildcard such as `*.example.com`.
 	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
 	Tag string `json:"tag" api:"required"`
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
-	// The DKIM selector used for email signing.
+	// The DKIM selector used for email signing. Wildcard rows publish the selector and
+	// sign with `d=<base>`.
 	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Whether sent messages from this subdomain can be previewed in the activity log.
 	PreviewEnabled bool `json:"preview_enabled"`
-	// The return-path domain used for bounce handling.
+	// The return-path domain used for bounce handling. Wildcard rows use
+	// `cf-bounce.<base>`.
 	ReturnPathDomain string                   `json:"return_path_domain"`
 	JSON             subdomainNewResponseJSON `json:"-"`
 }
@@ -168,19 +173,21 @@ func (r subdomainNewResponseJSON) RawJSON() string {
 type SubdomainListResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
 	Enabled bool `json:"enabled" api:"required"`
-	// The subdomain domain name.
+	// The exact domain name or a leftmost wildcard such as `*.example.com`.
 	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
 	Tag string `json:"tag" api:"required"`
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
-	// The DKIM selector used for email signing.
+	// The DKIM selector used for email signing. Wildcard rows publish the selector and
+	// sign with `d=<base>`.
 	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Whether sent messages from this subdomain can be previewed in the activity log.
 	PreviewEnabled bool `json:"preview_enabled"`
-	// The return-path domain used for bounce handling.
+	// The return-path domain used for bounce handling. Wildcard rows use
+	// `cf-bounce.<base>`.
 	ReturnPathDomain string                    `json:"return_path_domain"`
 	JSON             subdomainListResponseJSON `json:"-"`
 }
@@ -348,19 +355,21 @@ func (r SubdomainDeleteResponseSuccess) IsKnown() bool {
 type SubdomainGetResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
 	Enabled bool `json:"enabled" api:"required"`
-	// The subdomain domain name.
+	// The exact domain name or a leftmost wildcard such as `*.example.com`.
 	Name string `json:"name" api:"required"`
 	// Sending subdomain identifier.
 	Tag string `json:"tag" api:"required"`
 	// The date and time the destination address has been created.
 	Created time.Time `json:"created" format:"date-time"`
-	// The DKIM selector used for email signing.
+	// The DKIM selector used for email signing. Wildcard rows publish the selector and
+	// sign with `d=<base>`.
 	DKIMSelector string `json:"dkim_selector"`
 	// The date and time the destination address was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Whether sent messages from this subdomain can be previewed in the activity log.
 	PreviewEnabled bool `json:"preview_enabled"`
-	// The return-path domain used for bounce handling.
+	// The return-path domain used for bounce handling. Wildcard rows use
+	// `cf-bounce.<base>`.
 	ReturnPathDomain string                   `json:"return_path_domain"`
 	JSON             subdomainGetResponseJSON `json:"-"`
 }
@@ -391,7 +400,9 @@ func (r subdomainGetResponseJSON) RawJSON() string {
 type SubdomainNewParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	// The subdomain name. Must be within the zone.
+	// The domain name within the zone. A wildcard is allowed only as the complete
+	// leftmost label (`*.example.com`) and requires the account wildcard Email Sending
+	// entitlement.
 	Name param.Field[string] `json:"name" api:"required"`
 }
 

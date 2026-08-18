@@ -146,19 +146,34 @@ func (r *AccessAIControlMcpPortalService) Read(ctx context.Context, id string, q
 }
 
 type AccessAIControlMcpPortalNewResponse struct {
-	// portal id
-	ID       string                                      `json:"id" api:"required"`
-	Hostname string                                      `json:"hostname" api:"required"`
-	Name     string                                      `json:"name" api:"required"`
-	Servers  []AccessAIControlMcpPortalNewResponseServer `json:"servers" api:"required"`
-	// Allow remote code execution in Dynamic Workers (beta)
-	AllowCodeMode bool      `json:"allow_code_mode"`
-	CreatedAt     time.Time `json:"created_at" format:"date-time"`
-	CreatedBy     string    `json:"created_by"`
-	Description   string    `json:"description"`
-	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
-	ModifiedBy    string    `json:"modified_by"`
-	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
+	// Unique identifier for the MCP portal.
+	ID string `json:"id" api:"required"`
+	// Hostname where the MCP portal is available.
+	Hostname string `json:"hostname" api:"required"`
+	// Display name for the MCP portal.
+	Name    string                                      `json:"name" api:"required"`
+	Servers []AccessAIControlMcpPortalNewResponseServer `json:"servers" api:"required"`
+	// Deprecated: use `code_mode` for new integrations. `true` maps to any non-off
+	// Code Mode policy; `false` maps to `code_mode: off`. If both fields are sent,
+	// they must be consistent or the request returns a 400.
+	//
+	// Deprecated: deprecated
+	AllowCodeMode bool `json:"allow_code_mode"`
+	// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+	// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+	// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+	// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+	// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+	// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+	// consistent or the request returns a 400.
+	CodeMode  AccessAIControlMcpPortalNewResponseCodeMode `json:"code_mode"`
+	CreatedAt time.Time                                   `json:"created_at" format:"date-time"`
+	CreatedBy string                                      `json:"created_by"`
+	// Optional description of the MCP portal.
+	Description string    `json:"description"`
+	ModifiedAt  time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy  string    `json:"modified_by"`
+	// Route outbound MCP traffic through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool                                    `json:"secure_web_gateway"`
 	JSON             accessAIControlMcpPortalNewResponseJSON `json:"-"`
 }
@@ -171,6 +186,7 @@ type accessAIControlMcpPortalNewResponseJSON struct {
 	Name             apijson.Field
 	Servers          apijson.Field
 	AllowCodeMode    apijson.Field
+	CodeMode         apijson.Field
 	CreatedAt        apijson.Field
 	CreatedBy        apijson.Field
 	Description      apijson.Field
@@ -190,37 +206,44 @@ func (r accessAIControlMcpPortalNewResponseJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpPortalNewResponseServer struct {
-	// server id
-	ID       string                                             `json:"id" api:"required"`
+	// Unique identifier for the MCP server.
+	ID string `json:"id" api:"required"`
+	// Authentication method used to connect to the upstream MCP server.
 	AuthType AccessAIControlMcpPortalNewResponseServersAuthType `json:"auth_type" api:"required"`
-	Hostname string                                             `json:"hostname" api:"required" format:"uri"`
-	Name     string                                             `json:"name" api:"required"`
-	Prompts  []map[string]interface{}                           `json:"prompts" api:"required"`
-	// server id
+	// URL of the upstream MCP endpoint.
+	Hostname string `json:"hostname" api:"required" format:"uri"`
+	// Display name for the MCP server.
+	Name    string                   `json:"name" api:"required"`
+	Prompts []map[string]interface{} `json:"prompts" api:"required"`
+	// Unique identifier for the MCP server.
 	ServerID string                   `json:"server_id" api:"required"`
 	Tools    []map[string]interface{} `json:"tools" api:"required"`
 	// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
 	// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
 	// endpoints + client_id for manual servers. Never includes the secret value.
 	AuthConfigSummary AccessAIControlMcpPortalNewResponseServersAuthConfigSummary `json:"auth_config_summary"`
-	CreatedAt         time.Time                                                   `json:"created_at" format:"date-time"`
-	CreatedBy         string                                                      `json:"created_by"`
-	DefaultDisabled   bool                                                        `json:"default_disabled"`
-	Description       string                                                      `json:"description" api:"nullable"`
-	Error             string                                                      `json:"error"`
-	ErrorDetails      AccessAIControlMcpPortalNewResponseServersErrorDetails      `json:"error_details"`
+	// Whether administrative authentication is required before capabilities can be
+	// synced. Manual OAuth is user-managed and has no administrative authentication
+	// flow.
+	AuthenticationStatus AccessAIControlMcpPortalNewResponseServersAuthenticationStatus `json:"authentication_status"`
+	CreatedAt            time.Time                                                      `json:"created_at" format:"date-time"`
+	CreatedBy            string                                                         `json:"created_by"`
+	DefaultDisabled      bool                                                           `json:"default_disabled"`
+	// Optional description of the MCP server.
+	Description  string                                                 `json:"description" api:"nullable"`
+	Error        string                                                 `json:"error"`
+	ErrorDetails AccessAIControlMcpPortalNewResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
 	// customer portal hostname. Defaults to false (off); opt in per server by setting
-	// true. Effective behavior is gated by the gateway worker's per-env rollout mode
-	// KV key.
+	// true.
 	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
-	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
+	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool `json:"secure_web_gateway"`
 	// Current sync state of the server
 	Status         AccessAIControlMcpPortalNewResponseServersStatus          `json:"status"`
@@ -240,6 +263,7 @@ type accessAIControlMcpPortalNewResponseServerJSON struct {
 	ServerID                     apijson.Field
 	Tools                        apijson.Field
 	AuthConfigSummary            apijson.Field
+	AuthenticationStatus         apijson.Field
 	CreatedAt                    apijson.Field
 	CreatedBy                    apijson.Field
 	DefaultDisabled              apijson.Field
@@ -268,6 +292,7 @@ func (r accessAIControlMcpPortalNewResponseServerJSON) RawJSON() string {
 	return r.raw
 }
 
+// Authentication method used to connect to the upstream MCP server.
 type AccessAIControlMcpPortalNewResponseServersAuthType string
 
 const (
@@ -390,6 +415,27 @@ func (r accessAIControlMcpPortalNewResponseServersAuthConfigSummaryRegistrationI
 	return r.raw
 }
 
+// Whether administrative authentication is required before capabilities can be
+// synced. Manual OAuth is user-managed and has no administrative authentication
+// flow.
+type AccessAIControlMcpPortalNewResponseServersAuthenticationStatus string
+
+const (
+	AccessAIControlMcpPortalNewResponseServersAuthenticationStatusNotRequired AccessAIControlMcpPortalNewResponseServersAuthenticationStatus = "not_required"
+	AccessAIControlMcpPortalNewResponseServersAuthenticationStatusRequired    AccessAIControlMcpPortalNewResponseServersAuthenticationStatus = "required"
+	AccessAIControlMcpPortalNewResponseServersAuthenticationStatusConnected   AccessAIControlMcpPortalNewResponseServersAuthenticationStatus = "connected"
+	AccessAIControlMcpPortalNewResponseServersAuthenticationStatusStale       AccessAIControlMcpPortalNewResponseServersAuthenticationStatus = "stale"
+	AccessAIControlMcpPortalNewResponseServersAuthenticationStatusManual      AccessAIControlMcpPortalNewResponseServersAuthenticationStatus = "manual"
+)
+
+func (r AccessAIControlMcpPortalNewResponseServersAuthenticationStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalNewResponseServersAuthenticationStatusNotRequired, AccessAIControlMcpPortalNewResponseServersAuthenticationStatusRequired, AccessAIControlMcpPortalNewResponseServersAuthenticationStatusConnected, AccessAIControlMcpPortalNewResponseServersAuthenticationStatusStale, AccessAIControlMcpPortalNewResponseServersAuthenticationStatusManual:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalNewResponseServersErrorDetails struct {
 	// Underlying error message
 	Cause string `json:"cause"`
@@ -505,20 +551,59 @@ func (r accessAIControlMcpPortalNewResponseServersUpdatedToolJSON) RawJSON() str
 	return r.raw
 }
 
+// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+// consistent or the request returns a 400.
+type AccessAIControlMcpPortalNewResponseCodeMode string
+
+const (
+	AccessAIControlMcpPortalNewResponseCodeModeOff       AccessAIControlMcpPortalNewResponseCodeMode = "off"
+	AccessAIControlMcpPortalNewResponseCodeModeOptIn     AccessAIControlMcpPortalNewResponseCodeMode = "opt_in"
+	AccessAIControlMcpPortalNewResponseCodeModeDefaultOn AccessAIControlMcpPortalNewResponseCodeMode = "default_on"
+	AccessAIControlMcpPortalNewResponseCodeModeEnforced  AccessAIControlMcpPortalNewResponseCodeMode = "enforced"
+)
+
+func (r AccessAIControlMcpPortalNewResponseCodeMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalNewResponseCodeModeOff, AccessAIControlMcpPortalNewResponseCodeModeOptIn, AccessAIControlMcpPortalNewResponseCodeModeDefaultOn, AccessAIControlMcpPortalNewResponseCodeModeEnforced:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalUpdateResponse struct {
-	// portal id
-	ID       string                                         `json:"id" api:"required"`
-	Hostname string                                         `json:"hostname" api:"required"`
-	Name     string                                         `json:"name" api:"required"`
-	Servers  []AccessAIControlMcpPortalUpdateResponseServer `json:"servers" api:"required"`
-	// Allow remote code execution in Dynamic Workers (beta)
-	AllowCodeMode bool      `json:"allow_code_mode"`
-	CreatedAt     time.Time `json:"created_at" format:"date-time"`
-	CreatedBy     string    `json:"created_by"`
-	Description   string    `json:"description"`
-	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
-	ModifiedBy    string    `json:"modified_by"`
-	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
+	// Unique identifier for the MCP portal.
+	ID string `json:"id" api:"required"`
+	// Hostname where the MCP portal is available.
+	Hostname string `json:"hostname" api:"required"`
+	// Display name for the MCP portal.
+	Name    string                                         `json:"name" api:"required"`
+	Servers []AccessAIControlMcpPortalUpdateResponseServer `json:"servers" api:"required"`
+	// Deprecated: use `code_mode` for new integrations. `true` maps to any non-off
+	// Code Mode policy; `false` maps to `code_mode: off`. If both fields are sent,
+	// they must be consistent or the request returns a 400.
+	//
+	// Deprecated: deprecated
+	AllowCodeMode bool `json:"allow_code_mode"`
+	// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+	// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+	// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+	// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+	// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+	// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+	// consistent or the request returns a 400.
+	CodeMode  AccessAIControlMcpPortalUpdateResponseCodeMode `json:"code_mode"`
+	CreatedAt time.Time                                      `json:"created_at" format:"date-time"`
+	CreatedBy string                                         `json:"created_by"`
+	// Optional description of the MCP portal.
+	Description string    `json:"description"`
+	ModifiedAt  time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy  string    `json:"modified_by"`
+	// Route outbound MCP traffic through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool                                       `json:"secure_web_gateway"`
 	JSON             accessAIControlMcpPortalUpdateResponseJSON `json:"-"`
 }
@@ -531,6 +616,7 @@ type accessAIControlMcpPortalUpdateResponseJSON struct {
 	Name             apijson.Field
 	Servers          apijson.Field
 	AllowCodeMode    apijson.Field
+	CodeMode         apijson.Field
 	CreatedAt        apijson.Field
 	CreatedBy        apijson.Field
 	Description      apijson.Field
@@ -550,37 +636,44 @@ func (r accessAIControlMcpPortalUpdateResponseJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpPortalUpdateResponseServer struct {
-	// server id
-	ID       string                                                `json:"id" api:"required"`
+	// Unique identifier for the MCP server.
+	ID string `json:"id" api:"required"`
+	// Authentication method used to connect to the upstream MCP server.
 	AuthType AccessAIControlMcpPortalUpdateResponseServersAuthType `json:"auth_type" api:"required"`
-	Hostname string                                                `json:"hostname" api:"required" format:"uri"`
-	Name     string                                                `json:"name" api:"required"`
-	Prompts  []map[string]interface{}                              `json:"prompts" api:"required"`
-	// server id
+	// URL of the upstream MCP endpoint.
+	Hostname string `json:"hostname" api:"required" format:"uri"`
+	// Display name for the MCP server.
+	Name    string                   `json:"name" api:"required"`
+	Prompts []map[string]interface{} `json:"prompts" api:"required"`
+	// Unique identifier for the MCP server.
 	ServerID string                   `json:"server_id" api:"required"`
 	Tools    []map[string]interface{} `json:"tools" api:"required"`
 	// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
 	// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
 	// endpoints + client_id for manual servers. Never includes the secret value.
 	AuthConfigSummary AccessAIControlMcpPortalUpdateResponseServersAuthConfigSummary `json:"auth_config_summary"`
-	CreatedAt         time.Time                                                      `json:"created_at" format:"date-time"`
-	CreatedBy         string                                                         `json:"created_by"`
-	DefaultDisabled   bool                                                           `json:"default_disabled"`
-	Description       string                                                         `json:"description" api:"nullable"`
-	Error             string                                                         `json:"error"`
-	ErrorDetails      AccessAIControlMcpPortalUpdateResponseServersErrorDetails      `json:"error_details"`
+	// Whether administrative authentication is required before capabilities can be
+	// synced. Manual OAuth is user-managed and has no administrative authentication
+	// flow.
+	AuthenticationStatus AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatus `json:"authentication_status"`
+	CreatedAt            time.Time                                                         `json:"created_at" format:"date-time"`
+	CreatedBy            string                                                            `json:"created_by"`
+	DefaultDisabled      bool                                                              `json:"default_disabled"`
+	// Optional description of the MCP server.
+	Description  string                                                    `json:"description" api:"nullable"`
+	Error        string                                                    `json:"error"`
+	ErrorDetails AccessAIControlMcpPortalUpdateResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
 	// customer portal hostname. Defaults to false (off); opt in per server by setting
-	// true. Effective behavior is gated by the gateway worker's per-env rollout mode
-	// KV key.
+	// true.
 	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
-	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
+	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool `json:"secure_web_gateway"`
 	// Current sync state of the server
 	Status         AccessAIControlMcpPortalUpdateResponseServersStatus          `json:"status"`
@@ -600,6 +693,7 @@ type accessAIControlMcpPortalUpdateResponseServerJSON struct {
 	ServerID                     apijson.Field
 	Tools                        apijson.Field
 	AuthConfigSummary            apijson.Field
+	AuthenticationStatus         apijson.Field
 	CreatedAt                    apijson.Field
 	CreatedBy                    apijson.Field
 	DefaultDisabled              apijson.Field
@@ -628,6 +722,7 @@ func (r accessAIControlMcpPortalUpdateResponseServerJSON) RawJSON() string {
 	return r.raw
 }
 
+// Authentication method used to connect to the upstream MCP server.
 type AccessAIControlMcpPortalUpdateResponseServersAuthType string
 
 const (
@@ -750,6 +845,27 @@ func (r accessAIControlMcpPortalUpdateResponseServersAuthConfigSummaryRegistrati
 	return r.raw
 }
 
+// Whether administrative authentication is required before capabilities can be
+// synced. Manual OAuth is user-managed and has no administrative authentication
+// flow.
+type AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatus string
+
+const (
+	AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatusNotRequired AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatus = "not_required"
+	AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatusRequired    AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatus = "required"
+	AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatusConnected   AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatus = "connected"
+	AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatusStale       AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatus = "stale"
+	AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatusManual      AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatus = "manual"
+)
+
+func (r AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatusNotRequired, AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatusRequired, AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatusConnected, AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatusStale, AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatusManual:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalUpdateResponseServersErrorDetails struct {
 	// Underlying error message
 	Cause string `json:"cause"`
@@ -867,20 +983,59 @@ func (r accessAIControlMcpPortalUpdateResponseServersUpdatedToolJSON) RawJSON() 
 	return r.raw
 }
 
+// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+// consistent or the request returns a 400.
+type AccessAIControlMcpPortalUpdateResponseCodeMode string
+
+const (
+	AccessAIControlMcpPortalUpdateResponseCodeModeOff       AccessAIControlMcpPortalUpdateResponseCodeMode = "off"
+	AccessAIControlMcpPortalUpdateResponseCodeModeOptIn     AccessAIControlMcpPortalUpdateResponseCodeMode = "opt_in"
+	AccessAIControlMcpPortalUpdateResponseCodeModeDefaultOn AccessAIControlMcpPortalUpdateResponseCodeMode = "default_on"
+	AccessAIControlMcpPortalUpdateResponseCodeModeEnforced  AccessAIControlMcpPortalUpdateResponseCodeMode = "enforced"
+)
+
+func (r AccessAIControlMcpPortalUpdateResponseCodeMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalUpdateResponseCodeModeOff, AccessAIControlMcpPortalUpdateResponseCodeModeOptIn, AccessAIControlMcpPortalUpdateResponseCodeModeDefaultOn, AccessAIControlMcpPortalUpdateResponseCodeModeEnforced:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalListResponse struct {
-	// portal id
-	ID       string                                       `json:"id" api:"required"`
-	Hostname string                                       `json:"hostname" api:"required"`
-	Name     string                                       `json:"name" api:"required"`
-	Servers  []AccessAIControlMcpPortalListResponseServer `json:"servers" api:"required"`
-	// Allow remote code execution in Dynamic Workers (beta)
-	AllowCodeMode bool      `json:"allow_code_mode"`
-	CreatedAt     time.Time `json:"created_at" format:"date-time"`
-	CreatedBy     string    `json:"created_by"`
-	Description   string    `json:"description"`
-	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
-	ModifiedBy    string    `json:"modified_by"`
-	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
+	// Unique identifier for the MCP portal.
+	ID string `json:"id" api:"required"`
+	// Hostname where the MCP portal is available.
+	Hostname string `json:"hostname" api:"required"`
+	// Display name for the MCP portal.
+	Name    string                                       `json:"name" api:"required"`
+	Servers []AccessAIControlMcpPortalListResponseServer `json:"servers" api:"required"`
+	// Deprecated: use `code_mode` for new integrations. `true` maps to any non-off
+	// Code Mode policy; `false` maps to `code_mode: off`. If both fields are sent,
+	// they must be consistent or the request returns a 400.
+	//
+	// Deprecated: deprecated
+	AllowCodeMode bool `json:"allow_code_mode"`
+	// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+	// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+	// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+	// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+	// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+	// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+	// consistent or the request returns a 400.
+	CodeMode  AccessAIControlMcpPortalListResponseCodeMode `json:"code_mode"`
+	CreatedAt time.Time                                    `json:"created_at" format:"date-time"`
+	CreatedBy string                                       `json:"created_by"`
+	// Optional description of the MCP portal.
+	Description string    `json:"description"`
+	ModifiedAt  time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy  string    `json:"modified_by"`
+	// Route outbound MCP traffic through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool                                     `json:"secure_web_gateway"`
 	JSON             accessAIControlMcpPortalListResponseJSON `json:"-"`
 }
@@ -893,6 +1048,7 @@ type accessAIControlMcpPortalListResponseJSON struct {
 	Name             apijson.Field
 	Servers          apijson.Field
 	AllowCodeMode    apijson.Field
+	CodeMode         apijson.Field
 	CreatedAt        apijson.Field
 	CreatedBy        apijson.Field
 	Description      apijson.Field
@@ -912,37 +1068,44 @@ func (r accessAIControlMcpPortalListResponseJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpPortalListResponseServer struct {
-	// server id
-	ID       string                                              `json:"id" api:"required"`
+	// Unique identifier for the MCP server.
+	ID string `json:"id" api:"required"`
+	// Authentication method used to connect to the upstream MCP server.
 	AuthType AccessAIControlMcpPortalListResponseServersAuthType `json:"auth_type" api:"required"`
-	Hostname string                                              `json:"hostname" api:"required" format:"uri"`
-	Name     string                                              `json:"name" api:"required"`
-	Prompts  []map[string]interface{}                            `json:"prompts" api:"required"`
-	// server id
+	// URL of the upstream MCP endpoint.
+	Hostname string `json:"hostname" api:"required" format:"uri"`
+	// Display name for the MCP server.
+	Name    string                   `json:"name" api:"required"`
+	Prompts []map[string]interface{} `json:"prompts" api:"required"`
+	// Unique identifier for the MCP server.
 	ServerID string                   `json:"server_id" api:"required"`
 	Tools    []map[string]interface{} `json:"tools" api:"required"`
 	// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
 	// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
 	// endpoints + client_id for manual servers. Never includes the secret value.
 	AuthConfigSummary AccessAIControlMcpPortalListResponseServersAuthConfigSummary `json:"auth_config_summary"`
-	CreatedAt         time.Time                                                    `json:"created_at" format:"date-time"`
-	CreatedBy         string                                                       `json:"created_by"`
-	DefaultDisabled   bool                                                         `json:"default_disabled"`
-	Description       string                                                       `json:"description" api:"nullable"`
-	Error             string                                                       `json:"error"`
-	ErrorDetails      AccessAIControlMcpPortalListResponseServersErrorDetails      `json:"error_details"`
+	// Whether administrative authentication is required before capabilities can be
+	// synced. Manual OAuth is user-managed and has no administrative authentication
+	// flow.
+	AuthenticationStatus AccessAIControlMcpPortalListResponseServersAuthenticationStatus `json:"authentication_status"`
+	CreatedAt            time.Time                                                       `json:"created_at" format:"date-time"`
+	CreatedBy            string                                                          `json:"created_by"`
+	DefaultDisabled      bool                                                            `json:"default_disabled"`
+	// Optional description of the MCP server.
+	Description  string                                                  `json:"description" api:"nullable"`
+	Error        string                                                  `json:"error"`
+	ErrorDetails AccessAIControlMcpPortalListResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
 	// customer portal hostname. Defaults to false (off); opt in per server by setting
-	// true. Effective behavior is gated by the gateway worker's per-env rollout mode
-	// KV key.
+	// true.
 	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
-	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
+	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool `json:"secure_web_gateway"`
 	// Current sync state of the server
 	Status         AccessAIControlMcpPortalListResponseServersStatus          `json:"status"`
@@ -962,6 +1125,7 @@ type accessAIControlMcpPortalListResponseServerJSON struct {
 	ServerID                     apijson.Field
 	Tools                        apijson.Field
 	AuthConfigSummary            apijson.Field
+	AuthenticationStatus         apijson.Field
 	CreatedAt                    apijson.Field
 	CreatedBy                    apijson.Field
 	DefaultDisabled              apijson.Field
@@ -990,6 +1154,7 @@ func (r accessAIControlMcpPortalListResponseServerJSON) RawJSON() string {
 	return r.raw
 }
 
+// Authentication method used to connect to the upstream MCP server.
 type AccessAIControlMcpPortalListResponseServersAuthType string
 
 const (
@@ -1112,6 +1277,27 @@ func (r accessAIControlMcpPortalListResponseServersAuthConfigSummaryRegistration
 	return r.raw
 }
 
+// Whether administrative authentication is required before capabilities can be
+// synced. Manual OAuth is user-managed and has no administrative authentication
+// flow.
+type AccessAIControlMcpPortalListResponseServersAuthenticationStatus string
+
+const (
+	AccessAIControlMcpPortalListResponseServersAuthenticationStatusNotRequired AccessAIControlMcpPortalListResponseServersAuthenticationStatus = "not_required"
+	AccessAIControlMcpPortalListResponseServersAuthenticationStatusRequired    AccessAIControlMcpPortalListResponseServersAuthenticationStatus = "required"
+	AccessAIControlMcpPortalListResponseServersAuthenticationStatusConnected   AccessAIControlMcpPortalListResponseServersAuthenticationStatus = "connected"
+	AccessAIControlMcpPortalListResponseServersAuthenticationStatusStale       AccessAIControlMcpPortalListResponseServersAuthenticationStatus = "stale"
+	AccessAIControlMcpPortalListResponseServersAuthenticationStatusManual      AccessAIControlMcpPortalListResponseServersAuthenticationStatus = "manual"
+)
+
+func (r AccessAIControlMcpPortalListResponseServersAuthenticationStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalListResponseServersAuthenticationStatusNotRequired, AccessAIControlMcpPortalListResponseServersAuthenticationStatusRequired, AccessAIControlMcpPortalListResponseServersAuthenticationStatusConnected, AccessAIControlMcpPortalListResponseServersAuthenticationStatusStale, AccessAIControlMcpPortalListResponseServersAuthenticationStatusManual:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalListResponseServersErrorDetails struct {
 	// Underlying error message
 	Cause string `json:"cause"`
@@ -1228,19 +1414,58 @@ func (r accessAIControlMcpPortalListResponseServersUpdatedToolJSON) RawJSON() st
 	return r.raw
 }
 
+// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+// consistent or the request returns a 400.
+type AccessAIControlMcpPortalListResponseCodeMode string
+
+const (
+	AccessAIControlMcpPortalListResponseCodeModeOff       AccessAIControlMcpPortalListResponseCodeMode = "off"
+	AccessAIControlMcpPortalListResponseCodeModeOptIn     AccessAIControlMcpPortalListResponseCodeMode = "opt_in"
+	AccessAIControlMcpPortalListResponseCodeModeDefaultOn AccessAIControlMcpPortalListResponseCodeMode = "default_on"
+	AccessAIControlMcpPortalListResponseCodeModeEnforced  AccessAIControlMcpPortalListResponseCodeMode = "enforced"
+)
+
+func (r AccessAIControlMcpPortalListResponseCodeMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalListResponseCodeModeOff, AccessAIControlMcpPortalListResponseCodeModeOptIn, AccessAIControlMcpPortalListResponseCodeModeDefaultOn, AccessAIControlMcpPortalListResponseCodeModeEnforced:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalDeleteResponse struct {
-	// portal id
-	ID       string `json:"id" api:"required"`
+	// Unique identifier for the MCP portal.
+	ID string `json:"id" api:"required"`
+	// Hostname where the MCP portal is available.
 	Hostname string `json:"hostname" api:"required"`
-	Name     string `json:"name" api:"required"`
-	// Allow remote code execution in Dynamic Workers (beta)
-	AllowCodeMode bool      `json:"allow_code_mode"`
-	CreatedAt     time.Time `json:"created_at" format:"date-time"`
-	CreatedBy     string    `json:"created_by"`
-	Description   string    `json:"description"`
-	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
-	ModifiedBy    string    `json:"modified_by"`
-	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
+	// Display name for the MCP portal.
+	Name string `json:"name" api:"required"`
+	// Deprecated: use `code_mode` for new integrations. `true` maps to any non-off
+	// Code Mode policy; `false` maps to `code_mode: off`. If both fields are sent,
+	// they must be consistent or the request returns a 400.
+	//
+	// Deprecated: deprecated
+	AllowCodeMode bool `json:"allow_code_mode"`
+	// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+	// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+	// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+	// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+	// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+	// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+	// consistent or the request returns a 400.
+	CodeMode  AccessAIControlMcpPortalDeleteResponseCodeMode `json:"code_mode"`
+	CreatedAt time.Time                                      `json:"created_at" format:"date-time"`
+	CreatedBy string                                         `json:"created_by"`
+	// Optional description of the MCP portal.
+	Description string    `json:"description"`
+	ModifiedAt  time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy  string    `json:"modified_by"`
+	// Route outbound MCP traffic through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool                                       `json:"secure_web_gateway"`
 	JSON             accessAIControlMcpPortalDeleteResponseJSON `json:"-"`
 }
@@ -1252,6 +1477,7 @@ type accessAIControlMcpPortalDeleteResponseJSON struct {
 	Hostname         apijson.Field
 	Name             apijson.Field
 	AllowCodeMode    apijson.Field
+	CodeMode         apijson.Field
 	CreatedAt        apijson.Field
 	CreatedBy        apijson.Field
 	Description      apijson.Field
@@ -1270,20 +1496,59 @@ func (r accessAIControlMcpPortalDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+// consistent or the request returns a 400.
+type AccessAIControlMcpPortalDeleteResponseCodeMode string
+
+const (
+	AccessAIControlMcpPortalDeleteResponseCodeModeOff       AccessAIControlMcpPortalDeleteResponseCodeMode = "off"
+	AccessAIControlMcpPortalDeleteResponseCodeModeOptIn     AccessAIControlMcpPortalDeleteResponseCodeMode = "opt_in"
+	AccessAIControlMcpPortalDeleteResponseCodeModeDefaultOn AccessAIControlMcpPortalDeleteResponseCodeMode = "default_on"
+	AccessAIControlMcpPortalDeleteResponseCodeModeEnforced  AccessAIControlMcpPortalDeleteResponseCodeMode = "enforced"
+)
+
+func (r AccessAIControlMcpPortalDeleteResponseCodeMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalDeleteResponseCodeModeOff, AccessAIControlMcpPortalDeleteResponseCodeModeOptIn, AccessAIControlMcpPortalDeleteResponseCodeModeDefaultOn, AccessAIControlMcpPortalDeleteResponseCodeModeEnforced:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalReadResponse struct {
-	// portal id
-	ID       string                                       `json:"id" api:"required"`
-	Hostname string                                       `json:"hostname" api:"required"`
-	Name     string                                       `json:"name" api:"required"`
-	Servers  []AccessAIControlMcpPortalReadResponseServer `json:"servers" api:"required"`
-	// Allow remote code execution in Dynamic Workers (beta)
-	AllowCodeMode bool      `json:"allow_code_mode"`
-	CreatedAt     time.Time `json:"created_at" format:"date-time"`
-	CreatedBy     string    `json:"created_by"`
-	Description   string    `json:"description"`
-	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
-	ModifiedBy    string    `json:"modified_by"`
-	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
+	// Unique identifier for the MCP portal.
+	ID string `json:"id" api:"required"`
+	// Hostname where the MCP portal is available.
+	Hostname string `json:"hostname" api:"required"`
+	// Display name for the MCP portal.
+	Name    string                                       `json:"name" api:"required"`
+	Servers []AccessAIControlMcpPortalReadResponseServer `json:"servers" api:"required"`
+	// Deprecated: use `code_mode` for new integrations. `true` maps to any non-off
+	// Code Mode policy; `false` maps to `code_mode: off`. If both fields are sent,
+	// they must be consistent or the request returns a 400.
+	//
+	// Deprecated: deprecated
+	AllowCodeMode bool `json:"allow_code_mode"`
+	// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+	// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+	// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+	// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+	// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+	// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+	// consistent or the request returns a 400.
+	CodeMode  AccessAIControlMcpPortalReadResponseCodeMode `json:"code_mode"`
+	CreatedAt time.Time                                    `json:"created_at" format:"date-time"`
+	CreatedBy string                                       `json:"created_by"`
+	// Optional description of the MCP portal.
+	Description string    `json:"description"`
+	ModifiedAt  time.Time `json:"modified_at" format:"date-time"`
+	ModifiedBy  string    `json:"modified_by"`
+	// Route outbound MCP traffic through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool                                     `json:"secure_web_gateway"`
 	JSON             accessAIControlMcpPortalReadResponseJSON `json:"-"`
 }
@@ -1296,6 +1561,7 @@ type accessAIControlMcpPortalReadResponseJSON struct {
 	Name             apijson.Field
 	Servers          apijson.Field
 	AllowCodeMode    apijson.Field
+	CodeMode         apijson.Field
 	CreatedAt        apijson.Field
 	CreatedBy        apijson.Field
 	Description      apijson.Field
@@ -1315,37 +1581,44 @@ func (r accessAIControlMcpPortalReadResponseJSON) RawJSON() string {
 }
 
 type AccessAIControlMcpPortalReadResponseServer struct {
-	// server id
-	ID       string                                              `json:"id" api:"required"`
+	// Unique identifier for the MCP server.
+	ID string `json:"id" api:"required"`
+	// Authentication method used to connect to the upstream MCP server.
 	AuthType AccessAIControlMcpPortalReadResponseServersAuthType `json:"auth_type" api:"required"`
-	Hostname string                                              `json:"hostname" api:"required" format:"uri"`
-	Name     string                                              `json:"name" api:"required"`
-	Prompts  []map[string]interface{}                            `json:"prompts" api:"required"`
-	// server id
+	// URL of the upstream MCP endpoint.
+	Hostname string `json:"hostname" api:"required" format:"uri"`
+	// Display name for the MCP server.
+	Name    string                   `json:"name" api:"required"`
+	Prompts []map[string]interface{} `json:"prompts" api:"required"`
+	// Unique identifier for the MCP server.
 	ServerID string                   `json:"server_id" api:"required"`
 	Tools    []map[string]interface{} `json:"tools" api:"required"`
 	// Safe subset of auth_credentials surfaced to the dashboard. Includes auth_mode
 	// (dcr|manual), has_client_secret, client_secret_version, and the OAuth
 	// endpoints + client_id for manual servers. Never includes the secret value.
 	AuthConfigSummary AccessAIControlMcpPortalReadResponseServersAuthConfigSummary `json:"auth_config_summary"`
-	CreatedAt         time.Time                                                    `json:"created_at" format:"date-time"`
-	CreatedBy         string                                                       `json:"created_by"`
-	DefaultDisabled   bool                                                         `json:"default_disabled"`
-	Description       string                                                       `json:"description" api:"nullable"`
-	Error             string                                                       `json:"error"`
-	ErrorDetails      AccessAIControlMcpPortalReadResponseServersErrorDetails      `json:"error_details"`
+	// Whether administrative authentication is required before capabilities can be
+	// synced. Manual OAuth is user-managed and has no administrative authentication
+	// flow.
+	AuthenticationStatus AccessAIControlMcpPortalReadResponseServersAuthenticationStatus `json:"authentication_status"`
+	CreatedAt            time.Time                                                       `json:"created_at" format:"date-time"`
+	CreatedBy            string                                                          `json:"created_by"`
+	DefaultDisabled      bool                                                            `json:"default_disabled"`
+	// Optional description of the MCP server.
+	Description  string                                                  `json:"description" api:"nullable"`
+	Error        string                                                  `json:"error"`
+	ErrorDetails AccessAIControlMcpPortalReadResponseServersErrorDetails `json:"error_details"`
 	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
 	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
 	// customer portal hostname. Defaults to false (off); opt in per server by setting
-	// true. Effective behavior is gated by the gateway worker's per-env rollout mode
-	// KV key.
+	// true.
 	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
-	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway
+	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool `json:"secure_web_gateway"`
 	// Current sync state of the server
 	Status         AccessAIControlMcpPortalReadResponseServersStatus          `json:"status"`
@@ -1365,6 +1638,7 @@ type accessAIControlMcpPortalReadResponseServerJSON struct {
 	ServerID                     apijson.Field
 	Tools                        apijson.Field
 	AuthConfigSummary            apijson.Field
+	AuthenticationStatus         apijson.Field
 	CreatedAt                    apijson.Field
 	CreatedBy                    apijson.Field
 	DefaultDisabled              apijson.Field
@@ -1393,6 +1667,7 @@ func (r accessAIControlMcpPortalReadResponseServerJSON) RawJSON() string {
 	return r.raw
 }
 
+// Authentication method used to connect to the upstream MCP server.
 type AccessAIControlMcpPortalReadResponseServersAuthType string
 
 const (
@@ -1515,6 +1790,27 @@ func (r accessAIControlMcpPortalReadResponseServersAuthConfigSummaryRegistration
 	return r.raw
 }
 
+// Whether administrative authentication is required before capabilities can be
+// synced. Manual OAuth is user-managed and has no administrative authentication
+// flow.
+type AccessAIControlMcpPortalReadResponseServersAuthenticationStatus string
+
+const (
+	AccessAIControlMcpPortalReadResponseServersAuthenticationStatusNotRequired AccessAIControlMcpPortalReadResponseServersAuthenticationStatus = "not_required"
+	AccessAIControlMcpPortalReadResponseServersAuthenticationStatusRequired    AccessAIControlMcpPortalReadResponseServersAuthenticationStatus = "required"
+	AccessAIControlMcpPortalReadResponseServersAuthenticationStatusConnected   AccessAIControlMcpPortalReadResponseServersAuthenticationStatus = "connected"
+	AccessAIControlMcpPortalReadResponseServersAuthenticationStatusStale       AccessAIControlMcpPortalReadResponseServersAuthenticationStatus = "stale"
+	AccessAIControlMcpPortalReadResponseServersAuthenticationStatusManual      AccessAIControlMcpPortalReadResponseServersAuthenticationStatus = "manual"
+)
+
+func (r AccessAIControlMcpPortalReadResponseServersAuthenticationStatus) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalReadResponseServersAuthenticationStatusNotRequired, AccessAIControlMcpPortalReadResponseServersAuthenticationStatusRequired, AccessAIControlMcpPortalReadResponseServersAuthenticationStatusConnected, AccessAIControlMcpPortalReadResponseServersAuthenticationStatusStale, AccessAIControlMcpPortalReadResponseServersAuthenticationStatusManual:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalReadResponseServersErrorDetails struct {
 	// Underlying error message
 	Cause string `json:"cause"`
@@ -1631,31 +1927,97 @@ func (r accessAIControlMcpPortalReadResponseServersUpdatedToolJSON) RawJSON() st
 	return r.raw
 }
 
+// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+// consistent or the request returns a 400.
+type AccessAIControlMcpPortalReadResponseCodeMode string
+
+const (
+	AccessAIControlMcpPortalReadResponseCodeModeOff       AccessAIControlMcpPortalReadResponseCodeMode = "off"
+	AccessAIControlMcpPortalReadResponseCodeModeOptIn     AccessAIControlMcpPortalReadResponseCodeMode = "opt_in"
+	AccessAIControlMcpPortalReadResponseCodeModeDefaultOn AccessAIControlMcpPortalReadResponseCodeMode = "default_on"
+	AccessAIControlMcpPortalReadResponseCodeModeEnforced  AccessAIControlMcpPortalReadResponseCodeMode = "enforced"
+)
+
+func (r AccessAIControlMcpPortalReadResponseCodeMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalReadResponseCodeModeOff, AccessAIControlMcpPortalReadResponseCodeModeOptIn, AccessAIControlMcpPortalReadResponseCodeModeDefaultOn, AccessAIControlMcpPortalReadResponseCodeModeEnforced:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// portal id
-	ID       param.Field[string] `json:"id" api:"required"`
+	// Unique identifier for the MCP portal.
+	ID param.Field[string] `json:"id" api:"required"`
+	// Hostname where the MCP portal is available.
 	Hostname param.Field[string] `json:"hostname" api:"required"`
-	Name     param.Field[string] `json:"name" api:"required"`
-	// Allow remote code execution in Dynamic Workers (beta)
-	AllowCodeMode param.Field[bool]   `json:"allow_code_mode"`
-	Description   param.Field[string] `json:"description"`
-	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
-	SecureWebGateway param.Field[bool]                                      `json:"secure_web_gateway"`
-	Servers          param.Field[[]AccessAIControlMcpPortalNewParamsServer] `json:"servers"`
+	// Display name for the MCP portal.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Deprecated: use `code_mode` for new integrations. `true` maps to any non-off
+	// Code Mode policy; `false` maps to `code_mode: off`. If both fields are sent,
+	// they must be consistent or the request returns a 400.
+	AllowCodeMode param.Field[bool] `json:"allow_code_mode"`
+	// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+	// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+	// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+	// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+	// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+	// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+	// consistent or the request returns a 400.
+	CodeMode param.Field[AccessAIControlMcpPortalNewParamsCodeMode] `json:"code_mode"`
+	// Optional description of the MCP portal.
+	Description param.Field[string] `json:"description"`
+	// Route outbound MCP traffic through Zero Trust Secure Web Gateway.
+	SecureWebGateway param.Field[bool] `json:"secure_web_gateway"`
+	// MCP servers attached to the portal and their portal-specific settings.
+	Servers param.Field[[]AccessAIControlMcpPortalNewParamsServer] `json:"servers"`
 }
 
 func (r AccessAIControlMcpPortalNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+// consistent or the request returns a 400.
+type AccessAIControlMcpPortalNewParamsCodeMode string
+
+const (
+	AccessAIControlMcpPortalNewParamsCodeModeOff       AccessAIControlMcpPortalNewParamsCodeMode = "off"
+	AccessAIControlMcpPortalNewParamsCodeModeOptIn     AccessAIControlMcpPortalNewParamsCodeMode = "opt_in"
+	AccessAIControlMcpPortalNewParamsCodeModeDefaultOn AccessAIControlMcpPortalNewParamsCodeMode = "default_on"
+	AccessAIControlMcpPortalNewParamsCodeModeEnforced  AccessAIControlMcpPortalNewParamsCodeMode = "enforced"
+)
+
+func (r AccessAIControlMcpPortalNewParamsCodeMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalNewParamsCodeModeOff, AccessAIControlMcpPortalNewParamsCodeModeOptIn, AccessAIControlMcpPortalNewParamsCodeModeDefaultOn, AccessAIControlMcpPortalNewParamsCodeModeEnforced:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalNewParamsServer struct {
-	// server id
-	ServerID        param.Field[string]                                                  `json:"server_id" api:"required"`
-	DefaultDisabled param.Field[bool]                                                    `json:"default_disabled"`
-	OnBehalf        param.Field[bool]                                                    `json:"on_behalf"`
-	UpdatedPrompts  param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedPrompt] `json:"updated_prompts"`
-	UpdatedTools    param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedTool]   `json:"updated_tools"`
+	// Unique identifier for the MCP server.
+	ServerID param.Field[string] `json:"server_id" api:"required"`
+	// Disable this server by default for clients connecting through the portal.
+	DefaultDisabled param.Field[bool] `json:"default_disabled"`
+	// Use end-user OAuth credentials when connecting this server to the portal.
+	OnBehalf param.Field[bool] `json:"on_behalf"`
+	// Portal-specific prompt overrides.
+	UpdatedPrompts param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedPrompt] `json:"updated_prompts"`
+	// Portal-specific tool overrides.
+	UpdatedTools param.Field[[]AccessAIControlMcpPortalNewParamsServersUpdatedTool] `json:"updated_tools"`
 }
 
 func (r AccessAIControlMcpPortalNewParamsServer) MarshalJSON() (data []byte, err error) {
@@ -1663,10 +2025,14 @@ func (r AccessAIControlMcpPortalNewParamsServer) MarshalJSON() (data []byte, err
 }
 
 type AccessAIControlMcpPortalNewParamsServersUpdatedPrompt struct {
-	Name        param.Field[string] `json:"name" api:"required"`
-	Alias       param.Field[string] `json:"alias"`
+	// Name of the tool or prompt capability to override.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Custom name exposed for the capability.
+	Alias param.Field[string] `json:"alias"`
+	// Custom description exposed for the capability.
 	Description param.Field[string] `json:"description"`
-	Enabled     param.Field[bool]   `json:"enabled"`
+	// Whether the capability is available through the MCP server.
+	Enabled param.Field[bool] `json:"enabled"`
 }
 
 func (r AccessAIControlMcpPortalNewParamsServersUpdatedPrompt) MarshalJSON() (data []byte, err error) {
@@ -1674,10 +2040,14 @@ func (r AccessAIControlMcpPortalNewParamsServersUpdatedPrompt) MarshalJSON() (da
 }
 
 type AccessAIControlMcpPortalNewParamsServersUpdatedTool struct {
-	Name        param.Field[string] `json:"name" api:"required"`
-	Alias       param.Field[string] `json:"alias"`
+	// Name of the tool or prompt capability to override.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Custom name exposed for the capability.
+	Alias param.Field[string] `json:"alias"`
+	// Custom description exposed for the capability.
 	Description param.Field[string] `json:"description"`
-	Enabled     param.Field[bool]   `json:"enabled"`
+	// Whether the capability is available through the MCP server.
+	Enabled param.Field[bool] `json:"enabled"`
 }
 
 func (r AccessAIControlMcpPortalNewParamsServersUpdatedTool) MarshalJSON() (data []byte, err error) {
@@ -1709,27 +2079,69 @@ func (r accessAIControlMcpPortalNewResponseEnvelopeJSON) RawJSON() string {
 
 type AccessAIControlMcpPortalUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Allow remote code execution in Dynamic Workers (beta)
-	AllowCodeMode param.Field[bool]   `json:"allow_code_mode"`
-	Description   param.Field[string] `json:"description"`
-	Hostname      param.Field[string] `json:"hostname"`
-	Name          param.Field[string] `json:"name"`
-	// Route outbound MCP traffic through Zero Trust Secure Web Gateway
-	SecureWebGateway param.Field[bool]                                         `json:"secure_web_gateway"`
-	Servers          param.Field[[]AccessAIControlMcpPortalUpdateParamsServer] `json:"servers"`
+	// Deprecated: use `code_mode` for new integrations. `true` maps to any non-off
+	// Code Mode policy; `false` maps to `code_mode: off`. If both fields are sent,
+	// they must be consistent or the request returns a 400.
+	AllowCodeMode param.Field[bool] `json:"allow_code_mode"`
+	// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+	// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+	// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+	// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+	// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+	// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+	// consistent or the request returns a 400.
+	CodeMode param.Field[AccessAIControlMcpPortalUpdateParamsCodeMode] `json:"code_mode"`
+	// Optional description of the MCP portal.
+	Description param.Field[string] `json:"description"`
+	// Hostname where the MCP portal is available.
+	Hostname param.Field[string] `json:"hostname"`
+	// Display name for the MCP portal.
+	Name param.Field[string] `json:"name"`
+	// Route outbound MCP traffic through Zero Trust Secure Web Gateway.
+	SecureWebGateway param.Field[bool] `json:"secure_web_gateway"`
+	// MCP servers attached to the portal and their portal-specific settings.
+	Servers param.Field[[]AccessAIControlMcpPortalUpdateParamsServer] `json:"servers"`
 }
 
 func (r AccessAIControlMcpPortalUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Code Mode policy for this portal. `off`: Code Mode is unavailable; query
+// parameters are ignored. `opt_in`: Code Mode is off by default; clients turn it
+// on with `?codemode=search_and_execute`. `default_on`: Code Mode is on by
+// default; clients can opt out with `?codemode=off`. `enforced`: Code Mode is
+// always on; query parameters are ignored. Defaults to `opt_in` when omitted on
+// create. If both `code_mode` and `allow_code_mode` are sent, they must be
+// consistent or the request returns a 400.
+type AccessAIControlMcpPortalUpdateParamsCodeMode string
+
+const (
+	AccessAIControlMcpPortalUpdateParamsCodeModeOff       AccessAIControlMcpPortalUpdateParamsCodeMode = "off"
+	AccessAIControlMcpPortalUpdateParamsCodeModeOptIn     AccessAIControlMcpPortalUpdateParamsCodeMode = "opt_in"
+	AccessAIControlMcpPortalUpdateParamsCodeModeDefaultOn AccessAIControlMcpPortalUpdateParamsCodeMode = "default_on"
+	AccessAIControlMcpPortalUpdateParamsCodeModeEnforced  AccessAIControlMcpPortalUpdateParamsCodeMode = "enforced"
+)
+
+func (r AccessAIControlMcpPortalUpdateParamsCodeMode) IsKnown() bool {
+	switch r {
+	case AccessAIControlMcpPortalUpdateParamsCodeModeOff, AccessAIControlMcpPortalUpdateParamsCodeModeOptIn, AccessAIControlMcpPortalUpdateParamsCodeModeDefaultOn, AccessAIControlMcpPortalUpdateParamsCodeModeEnforced:
+		return true
+	}
+	return false
+}
+
 type AccessAIControlMcpPortalUpdateParamsServer struct {
-	// server id
-	ServerID        param.Field[string]                                                     `json:"server_id" api:"required"`
-	DefaultDisabled param.Field[bool]                                                       `json:"default_disabled"`
-	OnBehalf        param.Field[bool]                                                       `json:"on_behalf"`
-	UpdatedPrompts  param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt] `json:"updated_prompts"`
-	UpdatedTools    param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedTool]   `json:"updated_tools"`
+	// Unique identifier for the MCP server.
+	ServerID param.Field[string] `json:"server_id" api:"required"`
+	// Disable this server by default for clients connecting through the portal.
+	DefaultDisabled param.Field[bool] `json:"default_disabled"`
+	// Use end-user OAuth credentials when connecting this server to the portal.
+	OnBehalf param.Field[bool] `json:"on_behalf"`
+	// Portal-specific prompt overrides.
+	UpdatedPrompts param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt] `json:"updated_prompts"`
+	// Portal-specific tool overrides.
+	UpdatedTools param.Field[[]AccessAIControlMcpPortalUpdateParamsServersUpdatedTool] `json:"updated_tools"`
 }
 
 func (r AccessAIControlMcpPortalUpdateParamsServer) MarshalJSON() (data []byte, err error) {
@@ -1737,10 +2149,14 @@ func (r AccessAIControlMcpPortalUpdateParamsServer) MarshalJSON() (data []byte, 
 }
 
 type AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt struct {
-	Name        param.Field[string] `json:"name" api:"required"`
-	Alias       param.Field[string] `json:"alias"`
+	// Name of the tool or prompt capability to override.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Custom name exposed for the capability.
+	Alias param.Field[string] `json:"alias"`
+	// Custom description exposed for the capability.
 	Description param.Field[string] `json:"description"`
-	Enabled     param.Field[bool]   `json:"enabled"`
+	// Whether the capability is available through the MCP server.
+	Enabled param.Field[bool] `json:"enabled"`
 }
 
 func (r AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt) MarshalJSON() (data []byte, err error) {
@@ -1748,10 +2164,14 @@ func (r AccessAIControlMcpPortalUpdateParamsServersUpdatedPrompt) MarshalJSON() 
 }
 
 type AccessAIControlMcpPortalUpdateParamsServersUpdatedTool struct {
-	Name        param.Field[string] `json:"name" api:"required"`
-	Alias       param.Field[string] `json:"alias"`
+	// Name of the tool or prompt capability to override.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Custom name exposed for the capability.
+	Alias param.Field[string] `json:"alias"`
+	// Custom description exposed for the capability.
 	Description param.Field[string] `json:"description"`
-	Enabled     param.Field[bool]   `json:"enabled"`
+	// Whether the capability is available through the MCP server.
+	Enabled param.Field[bool] `json:"enabled"`
 }
 
 func (r AccessAIControlMcpPortalUpdateParamsServersUpdatedTool) MarshalJSON() (data []byte, err error) {

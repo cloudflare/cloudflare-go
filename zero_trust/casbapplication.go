@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 )
 
 // CasbApplicationService contains methods and other services that help with
@@ -39,28 +40,48 @@ func NewCasbApplicationService(opts ...option.RequestOption) (r *CasbApplication
 }
 
 // Returns a list of available applications with use cases and permissions.
-func (r *CasbApplicationService) List(ctx context.Context, params CasbApplicationListParams, opts ...option.RequestOption) (res *[]CasbApplicationListResponse, err error) {
+func (r *CasbApplicationService) List(ctx context.Context, params CasbApplicationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CasbApplicationListResponse], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/one/applications", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return res, err
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns a list of available applications with use cases and permissions.
+func (r *CasbApplicationService) ListAutoPaging(ctx context.Context, params CasbApplicationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CasbApplicationListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Returns full application details including auth methods, use cases, and
 // permissions.
 func (r *CasbApplicationService) Get(ctx context.Context, applicationID CasbApplicationGetParamsApplicationID, query CasbApplicationGetParams, opts ...option.RequestOption) (res *CasbApplicationGetResponse, err error) {
+	var env CasbApplicationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/one/applications/%v", query.AccountID, applicationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // Application item in list response.
@@ -68,6 +89,7 @@ type CasbApplicationListResponse struct {
 	// Vendor identifier (e.g. microsoft_internal, google_workspace).
 	//
 	// - `ANTHROPIC` - ANTHROPIC
+	// - `AWS` - AWS
 	// - `BITBUCKET` - BITBUCKET
 	// - `BOX` - BOX
 	// - `CONFLUENCE` - CONFLUENCE
@@ -79,6 +101,7 @@ type CasbApplicationListResponse struct {
 	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
 	// - `OPENAI` - OPENAI
 	// - `SALESFORCE` - SALESFORCE
+	// - `SERVICENOW` - SERVICENOW
 	// - `SLACK` - SLACK
 	ID CasbApplicationListResponseID `json:"id" api:"required"`
 	// Available auth methods.
@@ -130,6 +153,7 @@ func (r casbApplicationListResponseJSON) RawJSON() string {
 // Vendor identifier (e.g. microsoft_internal, google_workspace).
 //
 // - `ANTHROPIC` - ANTHROPIC
+// - `AWS` - AWS
 // - `BITBUCKET` - BITBUCKET
 // - `BOX` - BOX
 // - `CONFLUENCE` - CONFLUENCE
@@ -141,11 +165,13 @@ func (r casbApplicationListResponseJSON) RawJSON() string {
 // - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
 // - `OPENAI` - OPENAI
 // - `SALESFORCE` - SALESFORCE
+// - `SERVICENOW` - SERVICENOW
 // - `SLACK` - SLACK
 type CasbApplicationListResponseID string
 
 const (
 	CasbApplicationListResponseIDAnthropic           CasbApplicationListResponseID = "ANTHROPIC"
+	CasbApplicationListResponseIDAws                 CasbApplicationListResponseID = "AWS"
 	CasbApplicationListResponseIDBitbucket           CasbApplicationListResponseID = "BITBUCKET"
 	CasbApplicationListResponseIDBox                 CasbApplicationListResponseID = "BOX"
 	CasbApplicationListResponseIDConfluence          CasbApplicationListResponseID = "CONFLUENCE"
@@ -157,12 +183,13 @@ const (
 	CasbApplicationListResponseIDMicrosoftInternal   CasbApplicationListResponseID = "MICROSOFT_INTERNAL"
 	CasbApplicationListResponseIDOpenAI              CasbApplicationListResponseID = "OPENAI"
 	CasbApplicationListResponseIDSalesforce          CasbApplicationListResponseID = "SALESFORCE"
+	CasbApplicationListResponseIDServicenow          CasbApplicationListResponseID = "SERVICENOW"
 	CasbApplicationListResponseIDSlack               CasbApplicationListResponseID = "SLACK"
 )
 
 func (r CasbApplicationListResponseID) IsKnown() bool {
 	switch r {
-	case CasbApplicationListResponseIDAnthropic, CasbApplicationListResponseIDBitbucket, CasbApplicationListResponseIDBox, CasbApplicationListResponseIDConfluence, CasbApplicationListResponseIDDropbox, CasbApplicationListResponseIDGitHub, CasbApplicationListResponseIDGoogleCloudPlatform, CasbApplicationListResponseIDGoogleWorkspace, CasbApplicationListResponseIDJira, CasbApplicationListResponseIDMicrosoftInternal, CasbApplicationListResponseIDOpenAI, CasbApplicationListResponseIDSalesforce, CasbApplicationListResponseIDSlack:
+	case CasbApplicationListResponseIDAnthropic, CasbApplicationListResponseIDAws, CasbApplicationListResponseIDBitbucket, CasbApplicationListResponseIDBox, CasbApplicationListResponseIDConfluence, CasbApplicationListResponseIDDropbox, CasbApplicationListResponseIDGitHub, CasbApplicationListResponseIDGoogleCloudPlatform, CasbApplicationListResponseIDGoogleWorkspace, CasbApplicationListResponseIDJira, CasbApplicationListResponseIDMicrosoftInternal, CasbApplicationListResponseIDOpenAI, CasbApplicationListResponseIDSalesforce, CasbApplicationListResponseIDServicenow, CasbApplicationListResponseIDSlack:
 		return true
 	}
 	return false
@@ -277,11 +304,12 @@ func (r casbApplicationListResponseUseCaseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Full application detail for onboarding UI.
+// The requested item.
 type CasbApplicationGetResponse struct {
 	// Vendor identifier.
 	//
 	// - `ANTHROPIC` - ANTHROPIC
+	// - `AWS` - AWS
 	// - `BITBUCKET` - BITBUCKET
 	// - `BOX` - BOX
 	// - `CONFLUENCE` - CONFLUENCE
@@ -293,6 +321,7 @@ type CasbApplicationGetResponse struct {
 	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
 	// - `OPENAI` - OPENAI
 	// - `SALESFORCE` - SALESFORCE
+	// - `SERVICENOW` - SERVICENOW
 	// - `SLACK` - SLACK
 	ID CasbApplicationGetResponseID `json:"id" api:"required"`
 	// Available authentication methods.
@@ -341,6 +370,7 @@ func (r casbApplicationGetResponseJSON) RawJSON() string {
 // Vendor identifier.
 //
 // - `ANTHROPIC` - ANTHROPIC
+// - `AWS` - AWS
 // - `BITBUCKET` - BITBUCKET
 // - `BOX` - BOX
 // - `CONFLUENCE` - CONFLUENCE
@@ -352,11 +382,13 @@ func (r casbApplicationGetResponseJSON) RawJSON() string {
 // - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
 // - `OPENAI` - OPENAI
 // - `SALESFORCE` - SALESFORCE
+// - `SERVICENOW` - SERVICENOW
 // - `SLACK` - SLACK
 type CasbApplicationGetResponseID string
 
 const (
 	CasbApplicationGetResponseIDAnthropic           CasbApplicationGetResponseID = "ANTHROPIC"
+	CasbApplicationGetResponseIDAws                 CasbApplicationGetResponseID = "AWS"
 	CasbApplicationGetResponseIDBitbucket           CasbApplicationGetResponseID = "BITBUCKET"
 	CasbApplicationGetResponseIDBox                 CasbApplicationGetResponseID = "BOX"
 	CasbApplicationGetResponseIDConfluence          CasbApplicationGetResponseID = "CONFLUENCE"
@@ -368,12 +400,13 @@ const (
 	CasbApplicationGetResponseIDMicrosoftInternal   CasbApplicationGetResponseID = "MICROSOFT_INTERNAL"
 	CasbApplicationGetResponseIDOpenAI              CasbApplicationGetResponseID = "OPENAI"
 	CasbApplicationGetResponseIDSalesforce          CasbApplicationGetResponseID = "SALESFORCE"
+	CasbApplicationGetResponseIDServicenow          CasbApplicationGetResponseID = "SERVICENOW"
 	CasbApplicationGetResponseIDSlack               CasbApplicationGetResponseID = "SLACK"
 )
 
 func (r CasbApplicationGetResponseID) IsKnown() bool {
 	switch r {
-	case CasbApplicationGetResponseIDAnthropic, CasbApplicationGetResponseIDBitbucket, CasbApplicationGetResponseIDBox, CasbApplicationGetResponseIDConfluence, CasbApplicationGetResponseIDDropbox, CasbApplicationGetResponseIDGitHub, CasbApplicationGetResponseIDGoogleCloudPlatform, CasbApplicationGetResponseIDGoogleWorkspace, CasbApplicationGetResponseIDJira, CasbApplicationGetResponseIDMicrosoftInternal, CasbApplicationGetResponseIDOpenAI, CasbApplicationGetResponseIDSalesforce, CasbApplicationGetResponseIDSlack:
+	case CasbApplicationGetResponseIDAnthropic, CasbApplicationGetResponseIDAws, CasbApplicationGetResponseIDBitbucket, CasbApplicationGetResponseIDBox, CasbApplicationGetResponseIDConfluence, CasbApplicationGetResponseIDDropbox, CasbApplicationGetResponseIDGitHub, CasbApplicationGetResponseIDGoogleCloudPlatform, CasbApplicationGetResponseIDGoogleWorkspace, CasbApplicationGetResponseIDJira, CasbApplicationGetResponseIDMicrosoftInternal, CasbApplicationGetResponseIDOpenAI, CasbApplicationGetResponseIDSalesforce, CasbApplicationGetResponseIDServicenow, CasbApplicationGetResponseIDSlack:
 		return true
 	}
 	return false
@@ -596,6 +629,10 @@ type CasbApplicationListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter by supported environment (standard, fedramp).
 	Environment param.Field[string] `query:"environment"`
+	// A page number within the paginated result set.
+	Page param.Field[int64] `query:"page"`
+	// Number of results to return per page.
+	PageSize param.Field[int64] `query:"page_size"`
 }
 
 // URLQuery serializes [CasbApplicationListParams]'s query parameters as
@@ -615,6 +652,7 @@ type CasbApplicationGetParamsApplicationID string
 
 const (
 	CasbApplicationGetParamsApplicationIDAnthropic           CasbApplicationGetParamsApplicationID = "ANTHROPIC"
+	CasbApplicationGetParamsApplicationIDAws                 CasbApplicationGetParamsApplicationID = "AWS"
 	CasbApplicationGetParamsApplicationIDBitbucket           CasbApplicationGetParamsApplicationID = "BITBUCKET"
 	CasbApplicationGetParamsApplicationIDBox                 CasbApplicationGetParamsApplicationID = "BOX"
 	CasbApplicationGetParamsApplicationIDConfluence          CasbApplicationGetParamsApplicationID = "CONFLUENCE"
@@ -626,13 +664,45 @@ const (
 	CasbApplicationGetParamsApplicationIDMicrosoftInternal   CasbApplicationGetParamsApplicationID = "MICROSOFT_INTERNAL"
 	CasbApplicationGetParamsApplicationIDOpenAI              CasbApplicationGetParamsApplicationID = "OPENAI"
 	CasbApplicationGetParamsApplicationIDSalesforce          CasbApplicationGetParamsApplicationID = "SALESFORCE"
+	CasbApplicationGetParamsApplicationIDServicenow          CasbApplicationGetParamsApplicationID = "SERVICENOW"
 	CasbApplicationGetParamsApplicationIDSlack               CasbApplicationGetParamsApplicationID = "SLACK"
 )
 
 func (r CasbApplicationGetParamsApplicationID) IsKnown() bool {
 	switch r {
-	case CasbApplicationGetParamsApplicationIDAnthropic, CasbApplicationGetParamsApplicationIDBitbucket, CasbApplicationGetParamsApplicationIDBox, CasbApplicationGetParamsApplicationIDConfluence, CasbApplicationGetParamsApplicationIDDropbox, CasbApplicationGetParamsApplicationIDGitHub, CasbApplicationGetParamsApplicationIDGoogleCloudPlatform, CasbApplicationGetParamsApplicationIDGoogleWorkspace, CasbApplicationGetParamsApplicationIDJira, CasbApplicationGetParamsApplicationIDMicrosoftInternal, CasbApplicationGetParamsApplicationIDOpenAI, CasbApplicationGetParamsApplicationIDSalesforce, CasbApplicationGetParamsApplicationIDSlack:
+	case CasbApplicationGetParamsApplicationIDAnthropic, CasbApplicationGetParamsApplicationIDAws, CasbApplicationGetParamsApplicationIDBitbucket, CasbApplicationGetParamsApplicationIDBox, CasbApplicationGetParamsApplicationIDConfluence, CasbApplicationGetParamsApplicationIDDropbox, CasbApplicationGetParamsApplicationIDGitHub, CasbApplicationGetParamsApplicationIDGoogleCloudPlatform, CasbApplicationGetParamsApplicationIDGoogleWorkspace, CasbApplicationGetParamsApplicationIDJira, CasbApplicationGetParamsApplicationIDMicrosoftInternal, CasbApplicationGetParamsApplicationIDOpenAI, CasbApplicationGetParamsApplicationIDSalesforce, CasbApplicationGetParamsApplicationIDServicenow, CasbApplicationGetParamsApplicationIDSlack:
 		return true
 	}
 	return false
+}
+
+type CasbApplicationGetResponseEnvelope struct {
+	// The requested item.
+	Result CasbApplicationGetResponse `json:"result" api:"required"`
+	// Whether the request succeeded.
+	Success bool `json:"success" api:"required"`
+	// List of errors.
+	Errors []map[string]interface{} `json:"errors"`
+	// List of messages.
+	Messages []string                               `json:"messages"`
+	JSON     casbApplicationGetResponseEnvelopeJSON `json:"-"`
+}
+
+// casbApplicationGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CasbApplicationGetResponseEnvelope]
+type casbApplicationGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CasbApplicationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r casbApplicationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

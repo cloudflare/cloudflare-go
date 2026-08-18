@@ -146,6 +146,28 @@ func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGe
 	return res, nil
 }
 
+// Triggers a new prefix validation. The checks are run asynchronously and include
+// IRR, RPKI, and prefix ownership.
+func (r *PrefixService) Validate(ctx context.Context, prefixID string, body PrefixValidateParams, opts ...option.RequestOption) (res *Prefix, err error) {
+	var env PrefixValidateResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/validate", body.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 type Prefix struct {
 	// Identifier of an IP Prefix.
 	ID string `json:"id"`
@@ -836,6 +858,150 @@ const (
 func (r PrefixGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case PrefixGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type PrefixValidateParams struct {
+	// Identifier of a Cloudflare account.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type PrefixValidateResponseEnvelope struct {
+	Errors   []PrefixValidateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PrefixValidateResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success PrefixValidateResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  Prefix                                `json:"result"`
+	JSON    prefixValidateResponseEnvelopeJSON    `json:"-"`
+}
+
+// prefixValidateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PrefixValidateResponseEnvelope]
+type prefixValidateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixValidateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixValidateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixValidateResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           PrefixValidateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             prefixValidateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// prefixValidateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [PrefixValidateResponseEnvelopeErrors]
+type prefixValidateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixValidateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixValidateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixValidateResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    prefixValidateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// prefixValidateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [PrefixValidateResponseEnvelopeErrorsSource]
+type prefixValidateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixValidateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixValidateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixValidateResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           PrefixValidateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             prefixValidateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// prefixValidateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PrefixValidateResponseEnvelopeMessages]
+type prefixValidateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixValidateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixValidateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixValidateResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    prefixValidateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// prefixValidateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [PrefixValidateResponseEnvelopeMessagesSource]
+type prefixValidateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixValidateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixValidateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type PrefixValidateResponseEnvelopeSuccess bool
+
+const (
+	PrefixValidateResponseEnvelopeSuccessTrue PrefixValidateResponseEnvelopeSuccess = true
+)
+
+func (r PrefixValidateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixValidateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -22,6 +22,7 @@ type IntelService struct {
 	IPLists             *IPListService
 	Miscategorizations  *MiscategorizationService
 	Whois               *WhoisService
+	URLs                *URLService
 	IndicatorFeeds      *IndicatorFeedService
 	Sinkholes           *SinkholeService
 	AttackSurfaceReport *AttackSurfaceReportService
@@ -41,6 +42,7 @@ func NewIntelService(opts ...option.RequestOption) (r *IntelService) {
 	r.IPLists = NewIPListService(opts...)
 	r.Miscategorizations = NewMiscategorizationService(opts...)
 	r.Whois = NewWhoisService(opts...)
+	r.URLs = NewURLService(opts...)
 	r.IndicatorFeeds = NewIndicatorFeedService(opts...)
 	r.Sinkholes = NewSinkholeService(opts...)
 	r.AttackSurfaceReport = NewAttackSurfaceReportService(opts...)

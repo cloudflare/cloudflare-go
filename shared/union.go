@@ -8,11 +8,14 @@ import (
 
 type UnionTime time.Time
 
-func (UnionTime) ImplementsAuditLogListParamsBeforeUnion() {}
-func (UnionTime) ImplementsAuditLogListParamsSinceUnion()  {}
+func (UnionTime) ImplementsAuditLogListParamsBeforeUnion()                             {}
+func (UnionTime) ImplementsAuditLogListParamsSinceUnion()                              {}
+func (UnionTime) ImplementsThreatEventIndicatorAggregateListParamsCreatedAfterUnion()  {}
+func (UnionTime) ImplementsThreatEventIndicatorAggregateListParamsCreatedBeforeUnion() {}
 
 type UnionString string
 
+func (UnionString) ImplementsSettingEditParamsBodyValueValueUnion()                                {}
 func (UnionString) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
 func (UnionString) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                     {}
 func (UnionString) ImplementsAnalyticsQueryTopNParamsFiltersValueUnion()                           {}
@@ -176,6 +179,8 @@ func (UnionString) ImplementsThreatEventRelationshipListParamsRelationshipTypesU
 func (UnionString) ImplementsThreatEventIndicatorListParamsSearchValueUnion()                 {}
 func (UnionString) ImplementsThreatEventIndicatorListParamsTagSearchValueUnion()              {}
 func (UnionString) ImplementsThreatEventIndicatorListParamsTagSearchValueArrayItemUnion()     {}
+func (UnionString) ImplementsThreatEventIndicatorAggregateListParamsCreatedAfterUnion()       {}
+func (UnionString) ImplementsThreatEventIndicatorAggregateListParamsCreatedBeforeUnion()      {}
 func (UnionString) ImplementsThreatEventTagListParamsFiltersValueUnion()                      {}
 func (UnionString) ImplementsThreatEventTagListParamsFiltersValueArrayItemUnion()             {}
 func (UnionString) ImplementsThreatEventTagIndicatorListParamsSearchValueUnion()              {}
@@ -329,9 +334,7 @@ func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()           
 func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                                {}
 func (UnionString) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                    {}
 func (UnionString) ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()                      {}
-func (UnionString) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                          {}
 func (UnionString) ImplementsAccessibilityTreeNewResponseAccessibilityTreeValueUnion()             {}
-func (UnionString) ImplementsCrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion()    {}
 
 type UnionBool bool
 
@@ -520,21 +523,19 @@ func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesCondition
 }
 func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
 }
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterVariationsUnion()           {}
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectDiffFromUnion()                  {}
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectDiffToUnion()                    {}
-func (UnionBool) ImplementsAppEvaluateGetResponseValueUnion()                                 {}
-func (UnionBool) ImplementsNamespaceInstanceItemListResponseMetadataUnion()                   {}
-func (UnionBool) ImplementsNamespaceInstanceItemNewOrUpdateResponseMetadataUnion()            {}
-func (UnionBool) ImplementsNamespaceInstanceItemGetResponseMetadataUnion()                    {}
-func (UnionBool) ImplementsNamespaceInstanceItemSyncResponseMetadataUnion()                   {}
-func (UnionBool) ImplementsNamespaceInstanceItemUploadResponseMetadataUnion()                 {}
-func (UnionBool) ImplementsSnapshotNewResponseAccessibilityTreeCheckedUnion()                 {}
-func (UnionBool) ImplementsSnapshotNewResponseAccessibilityTreePressedUnion()                 {}
-func (UnionBool) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                       {}
-func (UnionBool) ImplementsAccessibilityTreeNewResponseAccessibilityTreeCheckedUnion()        {}
-func (UnionBool) ImplementsAccessibilityTreeNewResponseAccessibilityTreePressedUnion()        {}
-func (UnionBool) ImplementsCrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion() {}
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterVariationsUnion()    {}
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectDiffFromUnion()           {}
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectDiffToUnion()             {}
+func (UnionBool) ImplementsAppEvaluateGetResponseValueUnion()                          {}
+func (UnionBool) ImplementsNamespaceInstanceItemListResponseMetadataUnion()            {}
+func (UnionBool) ImplementsNamespaceInstanceItemNewOrUpdateResponseMetadataUnion()     {}
+func (UnionBool) ImplementsNamespaceInstanceItemGetResponseMetadataUnion()             {}
+func (UnionBool) ImplementsNamespaceInstanceItemSyncResponseMetadataUnion()            {}
+func (UnionBool) ImplementsNamespaceInstanceItemUploadResponseMetadataUnion()          {}
+func (UnionBool) ImplementsSnapshotNewResponseAccessibilityTreeCheckedUnion()          {}
+func (UnionBool) ImplementsSnapshotNewResponseAccessibilityTreePressedUnion()          {}
+func (UnionBool) ImplementsAccessibilityTreeNewResponseAccessibilityTreeCheckedUnion() {}
+func (UnionBool) ImplementsAccessibilityTreeNewResponseAccessibilityTreePressedUnion() {}
 
 type UnionInt int64
 
@@ -765,6 +766,4 @@ func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()            
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                                {}
 func (UnionFloat) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                    {}
 func (UnionFloat) ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()                      {}
-func (UnionFloat) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()                          {}
 func (UnionFloat) ImplementsAccessibilityTreeNewResponseAccessibilityTreeValueUnion()             {}
-func (UnionFloat) ImplementsCrawlNewParamsBodyObjectJsonOptionsResponseFormatJsonSchemaUnion()    {}

@@ -29,7 +29,10 @@ func TestScrapeNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.BrowserRendering.Scrape.New(context.TODO(), browser_rendering.ScrapeNewParams{
-		AccountID:     cloudflare.F("account_id"),
+		AccountID: cloudflare.F("account_id"),
+		Elements: cloudflare.F([]browser_rendering.ScrapeNewParamsElement{{
+			Selector: cloudflare.F("h1"),
+		}}),
 		CacheTTL:      cloudflare.F(0.000000),
 		ActionTimeout: cloudflare.F(120000.000000),
 		AddScriptTag: cloudflare.F([]browser_rendering.ScrapeNewParamsAddScriptTag{{
@@ -64,9 +67,6 @@ func TestScrapeNewWithOptionalParams(t *testing.T) {
 			SourcePort:   cloudflare.F(0.000000),
 			SourceScheme: cloudflare.F(browser_rendering.ScrapeNewParamsCookiesSourceSchemeUnset),
 			URL:          cloudflare.F("url"),
-		}}),
-		Elements: cloudflare.F([]browser_rendering.ScrapeNewParamsElement{{
-			Selector: cloudflare.F("h1"),
 		}}),
 		EmulateMediaType: cloudflare.F("emulateMediaType"),
 		GotoOptions: cloudflare.F(browser_rendering.ScrapeNewParamsGotoOptions{
