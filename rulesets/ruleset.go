@@ -6693,7 +6693,7 @@ type RulesetNewResponseEnvelopeResultRules struct {
 	// The reference of the rule (the rule's ID by default).
 	Ref   string                                    `json:"ref"`
 	JSON  rulesetNewResponseEnvelopeResultRulesJSON `json:"-"`
-	union RulesetNewResponseEnvelopeResultRules
+	union RulesetNewResponseEnvelopeResultRulesUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesJSON contains the JSON metadata for the
@@ -6729,7 +6729,7 @@ func (r *RulesetNewResponseEnvelopeResultRules) UnmarshalJSON(data []byte) (err 
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [RulesetNewResponseEnvelopeResultRules] interface which you
+// AsUnion returns a [RulesetNewResponseEnvelopeResultRulesUnion] interface which you
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [BlockRule],
@@ -6744,7 +6744,7 @@ func (r *RulesetNewResponseEnvelopeResultRules) UnmarshalJSON(data []byte) (err 
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRule],
 // [SetConfigRule], [SkipRule],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsTransformResponseHTMLRule].
-func (r RulesetNewResponseEnvelopeResultRules) AsUnion() RulesetNewResponseEnvelopeResultRules {
+func (r RulesetNewResponseEnvelopeResultRules) AsUnion() RulesetNewResponseEnvelopeResultRulesUnion {
 	return r.union
 }
 
@@ -6760,13 +6760,13 @@ func (r RulesetNewResponseEnvelopeResultRules) AsUnion() RulesetNewResponseEnvel
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRule],
 // [SetConfigRule], [SkipRule] or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsTransformResponseHTMLRule].
-type RulesetNewResponseEnvelopeResultRules interface {
+type RulesetNewResponseEnvelopeResultRulesUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRules()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRules)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesUnion)(nil)).Elem(),
 		"action",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -7336,7 +7336,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
 	JSON           rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON `json:"-"`
-	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable
+	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON
@@ -7369,7 +7369,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion {
 	return r.union
 }
 
@@ -7379,13 +7379,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -7516,7 +7516,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// The duration value in seconds for the directive.
 	Value int64                                                                                      `json:"value"`
 	JSON  rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON `json:"-"`
-	union RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge
+	union RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON
@@ -7550,7 +7550,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion {
 	return r.union
 }
 
@@ -7561,13 +7561,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -7698,7 +7698,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                               `json:"cloudflare_only"`
 	JSON           rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON `json:"-"`
-	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate
+	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON
@@ -7731,7 +7731,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion {
 	return r.union
 }
 
@@ -7741,13 +7741,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -7875,7 +7875,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                               `json:"cloudflare_only"`
 	JSON           rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON `json:"-"`
-	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand
+	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON
@@ -7908,7 +7908,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion {
 	return r.union
 }
 
@@ -7918,13 +7918,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -8055,7 +8055,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// This field can have the runtime type of [[]string].
 	Qualifiers interface{}                                                                                 `json:"qualifiers"`
 	JSON       rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON `json:"-"`
-	union      RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache
+	union      RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON
@@ -8089,7 +8089,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion {
 	return r.union
 }
 
@@ -8100,13 +8100,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -8238,7 +8238,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
 	JSON           rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON `json:"-"`
-	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore
+	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON
@@ -8271,7 +8271,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion {
 	return r.union
 }
 
@@ -8281,13 +8281,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -8415,7 +8415,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                            `json:"cloudflare_only"`
 	JSON           rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON `json:"-"`
-	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform
+	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON
@@ -8448,7 +8448,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion {
 	return r.union
 }
 
@@ -8458,13 +8458,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -8595,7 +8595,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// This field can have the runtime type of [[]string].
 	Qualifiers interface{}                                                                                 `json:"qualifiers"`
 	JSON       rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON `json:"-"`
-	union      RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate
+	union      RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON
@@ -8629,7 +8629,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion {
 	return r.union
 }
 
@@ -8640,13 +8640,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -8778,7 +8778,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                `json:"cloudflare_only"`
 	JSON           rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON `json:"-"`
-	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate
+	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON
@@ -8811,7 +8811,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion {
 	return r.union
 }
 
@@ -8821,13 +8821,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -8955,7 +8955,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
 	JSON           rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicJSON `json:"-"`
-	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic
+	union          RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicJSON
@@ -8988,7 +8988,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicUnion {
 	return r.union
 }
 
@@ -8998,13 +8998,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -9135,7 +9135,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// The duration value in seconds for the directive.
 	Value int64                                                                                       `json:"value"`
 	JSON  rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON `json:"-"`
-	union RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage
+	union RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON
@@ -9169,7 +9169,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion {
 	return r.union
 }
 
@@ -9180,13 +9180,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -9320,7 +9320,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// The duration value in seconds for the directive.
 	Value int64                                                                                            `json:"value"`
 	JSON  rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON `json:"-"`
-	union RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError
+	union RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON
@@ -9354,7 +9354,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion {
 	return r.union
 }
 
@@ -9365,13 +9365,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -9505,7 +9505,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParam
 	// The duration value in seconds for the directive.
 	Value int64                                                                                                    `json:"value"`
 	JSON  rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON `json:"-"`
-	union RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate
+	union RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON
@@ -9539,7 +9539,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionP
 // Possible runtime types of the union are
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion {
 	return r.union
 }
 
@@ -9550,13 +9550,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -9844,7 +9844,7 @@ type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParamete
 	// This field can have the runtime type of [[]string].
 	Values interface{}                                                                       `json:"values"`
 	JSON   rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersJSON `json:"-"`
-	union  RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters
+	union  RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersUnion
 }
 
 // rulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersJSON
@@ -9882,7 +9882,7 @@ func (r *RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionPara
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues],
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression].
-func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters {
+func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters) AsUnion() RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersUnion {
 	return r.union
 }
 
@@ -9896,13 +9896,13 @@ func (r RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParam
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues]
 // or
 // [RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression].
-type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters interface {
+type RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersUnion interface {
 	implementsRulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters)(nil)).Elem(),
+		reflect.TypeOf((*RulesetNewResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -12993,7 +12993,7 @@ type RulesetUpdateResponseEnvelopeResultRules struct {
 	// The reference of the rule (the rule's ID by default).
 	Ref   string                                       `json:"ref"`
 	JSON  rulesetUpdateResponseEnvelopeResultRulesJSON `json:"-"`
-	union RulesetUpdateResponseEnvelopeResultRules
+	union RulesetUpdateResponseEnvelopeResultRulesUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesJSON contains the JSON metadata for the
@@ -13029,7 +13029,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRules) UnmarshalJSON(data []byte) (e
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [RulesetUpdateResponseEnvelopeResultRules] interface which you
+// AsUnion returns a [RulesetUpdateResponseEnvelopeResultRulesUnion] interface which you
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [BlockRule],
@@ -13044,7 +13044,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRules) UnmarshalJSON(data []byte) (e
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRule],
 // [SetConfigRule], [SkipRule],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsTransformResponseHTMLRule].
-func (r RulesetUpdateResponseEnvelopeResultRules) AsUnion() RulesetUpdateResponseEnvelopeResultRules {
+func (r RulesetUpdateResponseEnvelopeResultRules) AsUnion() RulesetUpdateResponseEnvelopeResultRulesUnion {
 	return r.union
 }
 
@@ -13060,13 +13060,13 @@ func (r RulesetUpdateResponseEnvelopeResultRules) AsUnion() RulesetUpdateRespons
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRule],
 // [SetConfigRule], [SkipRule] or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsTransformResponseHTMLRule].
-type RulesetUpdateResponseEnvelopeResultRules interface {
+type RulesetUpdateResponseEnvelopeResultRulesUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRules()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRules)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesUnion)(nil)).Elem(),
 		"action",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -13636,7 +13636,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                             `json:"cloudflare_only"`
 	JSON           rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON `json:"-"`
-	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable
+	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableJSON
@@ -13669,7 +13669,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion {
 	return r.union
 }
 
@@ -13679,13 +13679,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutable)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersImmutableUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -13816,7 +13816,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// The duration value in seconds for the directive.
 	Value int64                                                                                         `json:"value"`
 	JSON  rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON `json:"-"`
-	union RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge
+	union RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeJSON
@@ -13850,7 +13850,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion {
 	return r.union
 }
 
@@ -13861,13 +13861,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAge)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMaxAgeUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -13998,7 +13998,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                  `json:"cloudflare_only"`
 	JSON           rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON `json:"-"`
-	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate
+	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateJSON
@@ -14031,7 +14031,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion {
 	return r.union
 }
 
@@ -14041,13 +14041,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidate)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustRevalidateUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -14175,7 +14175,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                  `json:"cloudflare_only"`
 	JSON           rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON `json:"-"`
-	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand
+	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandJSON
@@ -14208,7 +14208,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion {
 	return r.union
 }
 
@@ -14218,13 +14218,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstand)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersMustUnderstandUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -14355,7 +14355,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// This field can have the runtime type of [[]string].
 	Qualifiers interface{}                                                                                    `json:"qualifiers"`
 	JSON       rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON `json:"-"`
-	union      RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache
+	union      RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheJSON
@@ -14389,7 +14389,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion {
 	return r.union
 }
 
@@ -14400,13 +14400,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCache)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoCacheUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -14538,7 +14538,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
 	JSON           rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON `json:"-"`
-	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore
+	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreJSON
@@ -14571,7 +14571,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion {
 	return r.union
 }
 
@@ -14581,13 +14581,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStore)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoStoreUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -14715,7 +14715,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                               `json:"cloudflare_only"`
 	JSON           rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON `json:"-"`
-	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform
+	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformJSON
@@ -14748,7 +14748,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion {
 	return r.union
 }
 
@@ -14758,13 +14758,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransform)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersNoTransformUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -14895,7 +14895,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// This field can have the runtime type of [[]string].
 	Qualifiers interface{}                                                                                    `json:"qualifiers"`
 	JSON       rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON `json:"-"`
-	union      RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate
+	union      RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateJSON
@@ -14929,7 +14929,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion {
 	return r.union
 }
 
@@ -14940,13 +14940,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivate)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPrivateUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -15078,7 +15078,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                                   `json:"cloudflare_only"`
 	JSON           rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON `json:"-"`
-	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate
+	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateJSON
@@ -15111,7 +15111,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion {
 	return r.union
 }
 
@@ -15121,13 +15121,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidate)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersProxyRevalidateUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -15255,7 +15255,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// Whether the directive should only be applied to the Cloudflare CDN cache.
 	CloudflareOnly bool                                                                                          `json:"cloudflare_only"`
 	JSON           rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicJSON `json:"-"`
-	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic
+	union          RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicJSON
@@ -15288,7 +15288,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicUnion {
 	return r.union
 }
 
@@ -15298,13 +15298,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublic)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersPublicUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -15435,7 +15435,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// The duration value in seconds for the directive.
 	Value int64                                                                                          `json:"value"`
 	JSON  rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON `json:"-"`
-	union RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage
+	union RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageJSON
@@ -15469,7 +15469,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion {
 	return r.union
 }
 
@@ -15480,13 +15480,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxage)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersSMaxageUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -15620,7 +15620,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// The duration value in seconds for the directive.
 	Value int64                                                                                               `json:"value"`
 	JSON  rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON `json:"-"`
-	union RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError
+	union RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorJSON
@@ -15654,7 +15654,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion {
 	return r.union
 }
 
@@ -15665,13 +15665,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfError)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleIfErrorUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -15805,7 +15805,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionPa
 	// The duration value in seconds for the directive.
 	Value int64                                                                                                       `json:"value"`
 	JSON  rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON `json:"-"`
-	union RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate
+	union RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateJSON
@@ -15839,7 +15839,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActi
 // Possible runtime types of the union are
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion {
 	return r.union
 }
 
@@ -15850,13 +15850,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActio
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidate)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheControlRuleActionParametersStaleWhileRevalidateUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -16144,7 +16144,7 @@ type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParam
 	// This field can have the runtime type of [[]string].
 	Values interface{}                                                                          `json:"values"`
 	JSON   rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersJSON `json:"-"`
-	union  RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters
+	union  RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersUnion
 }
 
 // rulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersJSON
@@ -16182,7 +16182,7 @@ func (r *RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionP
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues],
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression].
-func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters {
+func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters) AsUnion() RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersUnion {
 	return r.union
 }
 
@@ -16196,13 +16196,13 @@ func (r RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionPa
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsValues]
 // or
 // [RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersSetCacheTagsExpression].
-type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters interface {
+type RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersUnion interface {
 	implementsRulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParameters)(nil)).Elem(),
+		reflect.TypeOf((*RulesetUpdateResponseEnvelopeResultRulesRulesetsSetCacheTagsRuleActionParametersUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
