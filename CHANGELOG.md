@@ -1,5 +1,52 @@
 # Changelog
 
+## 7.9.0 (2026-08-19)
+
+Full Changelog: [v7.8.0...v7.9.0](https://github.com/cloudflare/cloudflare-go/compare/v7.8.0...v7.9.0)
+
+### Breaking Changes
+
+See the [v7.9.0 Migration Guide](./docs/migration-guides/v7.9.0-migration-guide.md) for before/after code examples and actions needed for each change.
+
+* **billing:** `Usage.Paygo()` and `Usage.PaygoInfo()` endpoints changed from `/accounts/{account_id}/paygo-usage` and `/accounts/{account_id}/paygo-usage-info` to `/accounts/{account_id}/billable-usage` and `/accounts/{account_id}/billable-usage/info` respectively. The method signatures and return types are unchanged.
+* **hostnames:** `Settings.TLS.Get()` method signature changed -- now requires a `hostname` path parameter and returns `*Setting` instead of `*pagination.SinglePage[SettingTLSGetResponse]`. The `SettingTLSGetResponse` type and `GetAutoPaging()` method are removed. A new `List()` method replaces the old paginated listing behavior.
+* **intel:** `AttackSurfaceReport.Issues.Dismiss()` method removed along with `AttackSurfaceReportIssueDismissResponse` and `AttackSurfaceReportIssueDismissParams` types.
+* **rulesets:** return types changed for several mutating methods. `Rulesets.New()` now returns `*RulesetNewResponseEnvelopeResult` instead of `*RulesetNewResponse`. `Rulesets.Update()` now returns `*RulesetUpdateResponseEnvelopeResult` instead of `*RulesetUpdateResponse`. `Rulesets.Phases.Update()` now returns `*PhaseUpdateResponseEnvelopeResult` instead of `*PhaseUpdateResponse`. `Rulesets.Rules.New()` now returns `*RuleNewResponseEnvelopeResult` instead of `*RuleNewResponse`. `Rulesets.Rules.Delete()` now returns `*RuleDeleteResponseEnvelopeResult` instead of `*RuleDeleteResponse`. `Rulesets.Rules.Edit()` now returns `*RuleEditResponseEnvelopeResult` instead of `*RuleEditResponse`. The old response types (`RulesetNewResponse`, `RulesetUpdateResponse`, `PhaseUpdateResponse`, `RuleNewResponse`, `RuleDeleteResponse`, `RuleEditResponse`) are removed.
+* **zero_trust:** `ResourceLibrary.Applications.Get()` and `ResourceLibrary.Categories.Get()` `id` parameter type changed from `string` to `int64`. The `ID` field on `ResourceLibraryApplicationGetResponse` and `ResourceLibraryCategoryGetResponse` also changed from `string` to `int64`.
+* **zero_trust:** `Casb.Applications.List()` return type changed from `*[]CasbApplicationListResponse` to `*pagination.SinglePage[CasbApplicationListResponse]`. `Casb.Applications.AuthMethods.List()` return type changed from `*[]CasbApplicationAuthMethodListResponse` to `*pagination.SinglePage[CasbApplicationAuthMethodListResponse]`. `Casb.Integrations.List()` return type changed from `*CasbIntegrationListResponse` to `*pagination.SinglePage[CasbIntegrationListResponse]`. These methods now support auto-paging via `ListAutoPaging()`.
+* **zones:** `CT.Alerting.Edit()` and `CT.Alerting.Get()` return types changed from `*CTAlertingEditResponse` / `*CTAlertingGetResponse` to the shared `*CTAlertingSubscription` type. The old per-method response types are removed.
+
+### Features
+
+* **NEW SERVICE: `precursor`** -- Precursor configuration management
+    * `Update()` - PUT `/zones/{zone_id}/precursor`
+    * `Get()` - GET `/zones/{zone_id}/precursor`
+* **accounts:** add `SpeedSettings.Transformations.Get()` method (`GET /accounts/{account_id}/settings/transformations`)
+* **addressing:** add `Prefixes.Validate()` method (`POST /accounts/{account_id}/addressing/prefixes/{prefix_id}/validate`)
+* **billing:** add `Usage.GetAccountUsageInfoV1()`, `Usage.GetAccountUsageV1()`, and `Usage.GetAccountUsageV2()` methods for billable usage data
+* **custom_hostnames:** add `Quota.Get()` method (`GET /zones/{zone_id}/custom_hostnames/quota`)
+* **dns:** add `DNSSEC.Zsk.List()` method (`GET /zones/{zone_id}/dnssec/zsk`)
+* **hostnames:** add `Settings.TLS.List()` method (`GET /zones/{zone_id}/hostnames/settings/{setting_id}`) returning paginated `SettingTLSListResponse`
+* **intel:** add `URLs.Get()` method (`GET /accounts/{account_id}/intel/url`)
+* **intel:** add `Sinkholes.New()`, `Update()`, `Delete()`, `Get()` methods (list already existed). Add `Sinkholes.Ingresses` sub-resource with `New()`, `Update()`, `Delete()`, `Get()` methods.
+* **logs:** add `LogExplorer.Datasets.Delete()` method (`DELETE /{accounts_or_zones}/{account_or_zone_id}/logs/explorer/datasets/{dataset_id}`)
+* **pages:** add `Projects.GetUploadToken()` method (`GET /accounts/{account_id}/pages/projects/{project_name}/upload-token`)
+* **pages:** add `Projects.Deployments.Tails` sub-resource with `New()` and `Delete()` methods
+* **pages:** add `Assets` sub-resource with `CheckMissing()`, `Upload()`, and `UpsertHashes()` methods
+* **queues:** add `Messages.Peek()` and `Messages.Purge()` methods
+* **r2_data_catalog:** add `Delete()` method (`POST /accounts/{account_id}/r2-catalog/{bucket_name}/delete`)
+* **radar:** add `BGP.Routes.Upstreams.Timeseries()` method (`GET /radar/bgp/routes/upstreams/{asn}/timeseries`)
+* **radar:** add `BGP.Routes.Paths.List()` method (`GET /radar/bgp/routes/paths/{asn}`)
+* **resource_tagging:** add `Summary.Get()` method (`GET /accounts/{account_id}/tags/summary`)
+* **zero_trust:** add `Networks.Subnets.InitialResolvedIP` sub-resource with `Update()` and `Get()` methods
+* **zones:** add `TransformationsAllowedOrigins` sub-resource with `Edit()` and `Get()` methods
+* **zones:** add `TransformationsC2pa` sub-resource with `Edit()` and `Get()` methods
+* **magic_transit:** add `ConnectorEventGetResponseEKRekeyRestart` enum constant for connector events
+
+### Bug Fixes
+
+- **apijson:** replace O(n^2) array encoding with O(n) `bytes.Buffer` implementation, significantly improving performance for large arrays
+
 ## 7.8.0 (2026-07-24)
 
 Full Changelog: [v7.7.0...v7.8.0](https://github.com/cloudflare/cloudflare-go/compare/v7.7.0...v7.8.0)
