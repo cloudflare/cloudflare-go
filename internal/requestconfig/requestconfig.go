@@ -179,11 +179,6 @@ func NewRequestConfig(ctx context.Context, method string, u string, body interfa
 		return nil, err
 	}
 
-	// Direct map assignment preserves "API-Version" casing (Header.Set would canonicalize it).
-	if cfg.APIVersion != "" {
-		req.Header["API-Version"] = []string{cfg.APIVersion}
-	}
-
 	// This must run after `cfg.Apply(...)` above in case the request timeout gets modified. We also only
 	// apply our own logic for it if it's still "0" from above. If it's not, then it was deleted or modified
 	// by the user and we should respect that.
@@ -231,7 +226,6 @@ type RequestConfig struct {
 	APIKey         string
 	APIEmail       string
 	UserServiceKey string
-	APIVersion     string
 	// If ResponseBodyInto not nil, then we will attempt to deserialize into
 	// ResponseBodyInto. If Destination is a []byte, then it will return the body as
 	// is.
@@ -609,7 +603,6 @@ func (cfg *RequestConfig) Clone(ctx context.Context) *RequestConfig {
 		APIKey:         cfg.APIKey,
 		APIEmail:       cfg.APIEmail,
 		UserServiceKey: cfg.UserServiceKey,
-		APIVersion:     cfg.APIVersion,
 	}
 
 	return new
