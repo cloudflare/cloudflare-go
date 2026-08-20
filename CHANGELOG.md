@@ -1,5 +1,79 @@
 # Changelog
 
+## 7.6.0 (2026-08-20)
+
+Full Changelog: [v7.5.0...v7.6.0](https://github.com/cloudflare/cloudflare-go/compare/v7.5.0...v7.6.0)
+
+### Features
+
+* **email_routing:** add AccountRules.List and restore Rules.List ([ccd5db9](https://github.com/cloudflare/cloudflare-go/commit/ccd5db991d0306e0c9ab12ca09e4f33f34129b82))
+* **email_routing:** add AccountRules.List and restore Rules.List ([f6ccd62](https://github.com/cloudflare/cloudflare-go/commit/f6ccd62c7594c7fdca5c0a5cd69b39c67ada6bd5))
+* feat: add MoQ relays to prod (RT-603) ([b92374d](https://github.com/cloudflare/cloudflare-go/commit/b92374d78a0bfd1ee194c15a64b85855581993ca))
+* feat: ES-13122 Add email-auth API endpoints ([de6a694](https://github.com/cloudflare/cloudflare-go/commit/de6a694655cd49c1239dbafd1e51714773071cb0))
+* feat(casb): publish CASB APIs to public SDK ([e023472](https://github.com/cloudflare/cloudflare-go/commit/e023472b86a9990fb2a5a8b18c2c72435680e4f2))
+* feat(email_security): Add API to do bulk message movements and quarantine releases ([43cca81](https://github.com/cloudflare/cloudflare-go/commit/43cca814cbbdbbc64253fb973e3ac29d6f9a7f17))
+* feat(lex): add Log Explorer to SDK config ([b008758](https://github.com/cloudflare/cloudflare-go/commit/b00875875ce954af023c7773b97c1b54839b2337))
+* fix(moq): render MoQ via explicit custom casing (RT-603) ([b684bae](https://github.com/cloudflare/cloudflare-go/commit/b684bae40e86fdbd3e2e4400cce8a9c8476b122a))
+
+
+### Bug Fixes
+
+* **apijson:** replace O(n^2) array encoding with O(n) bytes.Buffer ([ffbaacb](https://github.com/cloudflare/cloudflare-go/commit/ffbaacbe264b03d612bf5e50d6cdea104ff60b83))
+* **browser_rendering:** swap HTML for URL on AccessibilityTreeNewParamsBodyObject to match generated test ([0f44441](https://github.com/cloudflare/cloudflare-go/commit/0f44441905b8e0a5f2fa3b0a0b5f0fd51c9b86f7))
+* **dns:** restore Shadow* query params on RecordListParams and IncludeShadowMetadata on Record{New,Update,List,Batch,Edit,Get}Params ([f9b3f27](https://github.com/cloudflare/cloudflare-go/commit/f9b3f274a09f4dc214546b431d8a067c5bffc720))
+* resolve duplicate type declarations in rulesets package ([be58c93](https://github.com/cloudflare/cloudflare-go/commit/be58c93577f05d83437afcb2c2eec5261958521e))
+* restore RekeyRestart enum constants in magic_transit connector events ([ff96be7](https://github.com/cloudflare/cloudflare-go/commit/ff96be78320fca09ffe30cf534c943de897095ad))
+
+
+### Chores
+
+* add v7.9.0 changelog and migration guide ([7f8843b](https://github.com/cloudflare/cloudflare-go/commit/7f8843bf13971cf289cba8fb3461ef4fa95675e2))
+* adjust casbapplication to generated code ([74aeeea](https://github.com/cloudflare/cloudflare-go/commit/74aeeeae7fca8e56310b6f3fd52d7c091b87eb2a))
+* **api:** update composite API spec ([dbca6aa](https://github.com/cloudflare/cloudflare-go/commit/dbca6aaedd0646ea6759873854f78e1d883d9efc))
+* **api:** update composite API spec ([20d6ecd](https://github.com/cloudflare/cloudflare-go/commit/20d6ecd693d257fee5c8161083a400aa2db34b04))
+* **api:** update composite API spec ([d323ad4](https://github.com/cloudflare/cloudflare-go/commit/d323ad4059fdd7cb79dd56d09e9b873ecf35d352))
+* **api:** update composite API spec ([add9c23](https://github.com/cloudflare/cloudflare-go/commit/add9c23370d3a5dd8868413780f5a2383fc0b7ed))
+* **api:** update composite API spec ([dcacfed](https://github.com/cloudflare/cloudflare-go/commit/dcacfed9e02c1bb1b1c380005c2bd88796662b81))
+* **api:** update composite API spec ([23b53b6](https://github.com/cloudflare/cloudflare-go/commit/23b53b6be0673b94326efef6160874a8f88b4069))
+* **api:** update composite API spec ([43d78b5](https://github.com/cloudflare/cloudflare-go/commit/43d78b5849e9fac6b76e12de178e61c4465d5b33))
+* **api:** update composite API spec ([88a4d5d](https://github.com/cloudflare/cloudflare-go/commit/88a4d5dbc7b8bb70910ad3346b4df48f68ff4b98))
+* **api:** update composite API spec ([be52bf1](https://github.com/cloudflare/cloudflare-go/commit/be52bf1de9b64434733946faf594323be1b9c3c1))
+* **api:** update composite API spec ([c9aa9fe](https://github.com/cloudflare/cloudflare-go/commit/c9aa9fe64037c0f005951445984fc58aecc64d73))
+* **api:** update composite API spec ([c77d457](https://github.com/cloudflare/cloudflare-go/commit/c77d4571fd5bc2cf4299d2c2cbf3b9f864f5277d))
+* **api:** update composite API spec ([639b8af](https://github.com/cloudflare/cloudflare-go/commit/639b8af33557f5d13e60bd61a1fa4a70772e172a))
+* **api:** update composite API spec ([b01a29a](https://github.com/cloudflare/cloudflare-go/commit/b01a29ac7599fc269caba55a3d3d897f1dac1d32))
+* **api:** update composite API spec ([573d9fb](https://github.com/cloudflare/cloudflare-go/commit/573d9fb311cb5d3abc4dd893413924f7785daebb))
+* **api:** update composite API spec ([6787268](https://github.com/cloudflare/cloudflare-go/commit/67872682e8ab8cb0d83f4e138cebb8f6bd1ec927))
+* **api:** update composite API spec ([8235bcf](https://github.com/cloudflare/cloudflare-go/commit/8235bcf1a2c79405b673aff986163bff0724b940))
+* **api:** update composite API spec ([6622331](https://github.com/cloudflare/cloudflare-go/commit/66223311646c8db527c0944a6f5b0e3e029101e5))
+* **api:** update composite API spec ([a1af84e](https://github.com/cloudflare/cloudflare-go/commit/a1af84e62276cdccb9cabfd6b6897db9f880befc))
+* **api:** update composite API spec ([58229bb](https://github.com/cloudflare/cloudflare-go/commit/58229bb4b18f85a0e3e56d1a5c35d962de00c10b))
+* **api:** update composite API spec ([f4f7261](https://github.com/cloudflare/cloudflare-go/commit/f4f7261c447255b1026594f6fd73a362fc905eb8))
+* apply accumulated custom code (ci jobs, gitlab config) ([eb2bf2b](https://github.com/cloudflare/cloudflare-go/commit/eb2bf2b10e8aa737ae0e15b125bd017900ca52a7))
+* bump version to 7.8.0 ([05e00a7](https://github.com/cloudflare/cloudflare-go/commit/05e00a707da7f480eee12cc3c18e920df8ef077b))
+* bump version to 7.9.0 ([b422b7a](https://github.com/cloudflare/cloudflare-go/commit/b422b7a39fb01744ec6f06a5770f332e8653d186))
+* drop .gitlab-ci.yml from GitHub branch ([fa6abc7](https://github.com/cloudflare/cloudflare-go/commit/fa6abc72d07d0a4a21570ce0141bd9cbe7652c71))
+* drop .gitlab-ci.yml from GitHub branch ([702a799](https://github.com/cloudflare/cloudflare-go/commit/702a79959bbfac1c2ae861a2d7d00f51dc66c550))
+* **internal:** codegen related update ([14b5631](https://github.com/cloudflare/cloudflare-go/commit/14b56316aff0c77a9ab1adc82c4eaa703ab21262))
+* **main:** release 7.7.0 ([2fa539e](https://github.com/cloudflare/cloudflare-go/commit/2fa539edbd02e1e913208b5e59f892910159f76c))
+* merge origin/main, resolve load_balancers conflicts ([06ec84b](https://github.com/cloudflare/cloudflare-go/commit/06ec84baaec3e8f5f6a3bd3132ca7065ba3cdfda))
+* resolve load_balancers merge conflicts, take HEAD ([7bab325](https://github.com/cloudflare/cloudflare-go/commit/7bab3256f15942fbd71859732a65aeec3e19c5d2))
+* resolve merge conflicts and apply custom code fixes ([ebd62ba](https://github.com/cloudflare/cloudflare-go/commit/ebd62ba49fde4a17ee8c2058b78f35882cf5917a))
+* revert docs/migration-guides changes ([39f8d1e](https://github.com/cloudflare/cloudflare-go/commit/39f8d1eb7f3ab5b9a2c365759a9747db0cd9a51b))
+* revert SECURITY.md and client_test.go changes ([980835a](https://github.com/cloudflare/cloudflare-go/commit/980835a9e017c48f33ca1bf54383a13edabbfba7))
+* sync repo ([bf062a8](https://github.com/cloudflare/cloudflare-go/commit/bf062a8ae53afaeadf824583e2b91295f56acbd3))
+* unblock CI test job and fix union field merge panics ([3de4191](https://github.com/cloudflare/cloudflare-go/commit/3de4191de27911384542b9c40f362003456c0147))
+* update go codegen refs ([a3e8cad](https://github.com/cloudflare/cloudflare-go/commit/a3e8cad3180f37ffe4f95cc7d047d21a966decc9))
+* update go custom code ([5eee140](https://github.com/cloudflare/cloudflare-go/commit/5eee140a96adc5ea9c0e9793c57999f7bccd62bd))
+* update README install command to v7.9.0 ([71a557a](https://github.com/cloudflare/cloudflare-go/commit/71a557a1b64e3fe3ab77e895fcc765589477fd0c))
+
+
+### Documentation
+
+* **changelog:** add v7.8.0 changelog and migration guide ([28fa46c](https://github.com/cloudflare/cloudflare-go/commit/28fa46c25c45de21a76d8f6a386add5b806af62f))
+* **changelog:** document additional breaking changes for DEXTests and IPProfiles ([24980ca](https://github.com/cloudflare/cloudflare-go/commit/24980caa8e6893fb08870f260d51282bf07381e4))
+* **changelog:** document additional breaking changes for DEXTests and IPProfiles ([98f79b6](https://github.com/cloudflare/cloudflare-go/commit/98f79b682c2e6947e6dfc086daeda2268ecc79e6))
+
 ## 7.5.0 (2026-06-10)
 
 Full Changelog: [v7.4.0...v7.5.0](https://github.com/cloudflare/cloudflare-go/compare/v7.4.0...v7.5.0)
