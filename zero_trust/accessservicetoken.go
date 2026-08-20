@@ -269,7 +269,12 @@ type ServiceToken struct {
 	// `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens.
 	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
 	// hours (8760h).
-	Duration  string    `json:"duration"`
+	Duration string `json:"duration"`
+	// Whether the service token is enabled. A disabled service token cannot be used to
+	// authenticate; both its current and previous `client_secret` stop being accepted,
+	// but the token itself is preserved and can be re-enabled at any time. Defaults to
+	// enabled when omitted on create.
+	Enabled   bool      `json:"enabled"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
 	// The name of the service token.
 	Name string           `json:"name"`
@@ -281,6 +286,7 @@ type serviceTokenJSON struct {
 	ID          apijson.Field
 	ClientID    apijson.Field
 	Duration    apijson.Field
+	Enabled     apijson.Field
 	ExpiresAt   apijson.Field
 	Name        apijson.Field
 	raw         string
@@ -309,6 +315,11 @@ type AccessServiceTokenNewResponse struct {
 	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
 	// hours (8760h).
 	Duration string `json:"duration"`
+	// Whether the service token is enabled. A disabled service token cannot be used to
+	// authenticate; both its current and previous `client_secret` stop being accepted,
+	// but the token itself is preserved and can be re-enabled at any time. Defaults to
+	// enabled when omitted on create.
+	Enabled bool `json:"enabled"`
 	// The name of the service token.
 	Name string                            `json:"name"`
 	JSON accessServiceTokenNewResponseJSON `json:"-"`
@@ -321,6 +332,7 @@ type accessServiceTokenNewResponseJSON struct {
 	ClientID     apijson.Field
 	ClientSecret apijson.Field
 	Duration     apijson.Field
+	Enabled      apijson.Field
 	Name         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -348,6 +360,11 @@ type AccessServiceTokenRotateResponse struct {
 	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
 	// hours (8760h).
 	Duration string `json:"duration"`
+	// Whether the service token is enabled. A disabled service token cannot be used to
+	// authenticate; both its current and previous `client_secret` stop being accepted,
+	// but the token itself is preserved and can be re-enabled at any time. Defaults to
+	// enabled when omitted on create.
+	Enabled bool `json:"enabled"`
 	// The name of the service token.
 	Name string                               `json:"name"`
 	JSON accessServiceTokenRotateResponseJSON `json:"-"`
@@ -360,6 +377,7 @@ type accessServiceTokenRotateResponseJSON struct {
 	ClientID     apijson.Field
 	ClientSecret apijson.Field
 	Duration     apijson.Field
+	Enabled      apijson.Field
 	Name         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -390,6 +408,11 @@ type AccessServiceTokenNewParams struct {
 	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
 	// hours (8760h).
 	Duration param.Field[string] `json:"duration"`
+	// Whether the service token is enabled. A disabled service token cannot be used to
+	// authenticate; both its current and previous `client_secret` stop being accepted,
+	// but the token itself is preserved and can be re-enabled at any time. Defaults to
+	// enabled when omitted on create.
+	Enabled param.Field[bool] `json:"enabled"`
 	// The expiration of the previous `client_secret`. This can be modified at any
 	// point after a rotation. For example, you may extend it further into the future
 	// if you need more time to update services with the new secret; or move it into
@@ -555,6 +578,11 @@ type AccessServiceTokenUpdateParams struct {
 	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
 	// hours (8760h).
 	Duration param.Field[string] `json:"duration"`
+	// Whether the service token is enabled. A disabled service token cannot be used to
+	// authenticate; both its current and previous `client_secret` stop being accepted,
+	// but the token itself is preserved and can be re-enabled at any time. Defaults to
+	// enabled when omitted on create.
+	Enabled param.Field[bool] `json:"enabled"`
 	// The name of the service token.
 	Name param.Field[string] `json:"name"`
 	// The expiration of the previous `client_secret`. This can be modified at any

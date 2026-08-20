@@ -40,7 +40,8 @@ func NewThreatEventDatasetService(opts ...option.RequestOption) (r *ThreatEventD
 	return
 }
 
-// Create a new dataset in the account.
+// Creates a new threat event dataset in Cloudforce One for organizing related
+// threat events.
 func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventDatasetNewParams, opts ...option.RequestOption) (res *ThreatEventDatasetNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -52,7 +53,7 @@ func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventD
 	return res, err
 }
 
-// List all datasets accessible to the account.
+// Lists all threat event datasets configured in Cloudforce One.
 func (r *ThreatEventDatasetService) List(ctx context.Context, params ThreatEventDatasetListParams, opts ...option.RequestOption) (res *[]ThreatEventDatasetListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -80,7 +81,8 @@ func (r *ThreatEventDatasetService) Delete(ctx context.Context, datasetID string
 	return res, err
 }
 
-// Update an existing dataset by its identifier.
+// Partially updates a threat event dataset in Cloudforce One, modifying specific
+// fields without replacing the entire dataset configuration.
 func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, params ThreatEventDatasetEditParams, opts ...option.RequestOption) (res *ThreatEventDatasetEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -96,7 +98,7 @@ func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, 
 	return res, err
 }
 
-// Retrieve metadata for a specific dataset.
+// Retrieves details for a specific threat event dataset.
 func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, query ThreatEventDatasetGetParams, opts ...option.RequestOption) (res *ThreatEventDatasetGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -134,20 +136,20 @@ func (r *ThreatEventDatasetService) Raw(ctx context.Context, datasetID string, e
 }
 
 type ThreatEventDatasetNewResponse struct {
-	IsPublic  bool                              `json:"isPublic" api:"required"`
-	Name      string                            `json:"name" api:"required"`
-	UUID      string                            `json:"uuid" api:"required"`
-	DeletedAt string                            `json:"deletedAt"`
-	JSON      threatEventDatasetNewResponseJSON `json:"-"`
+	IsAnalytics bool                              `json:"isAnalytics" api:"required"`
+	IsPublic    bool                              `json:"isPublic" api:"required"`
+	Name        string                            `json:"name" api:"required"`
+	UUID        string                            `json:"uuid" api:"required"`
+	JSON        threatEventDatasetNewResponseJSON `json:"-"`
 }
 
 // threatEventDatasetNewResponseJSON contains the JSON metadata for the struct
 // [ThreatEventDatasetNewResponse]
 type threatEventDatasetNewResponseJSON struct {
+	IsAnalytics apijson.Field
 	IsPublic    apijson.Field
 	Name        apijson.Field
 	UUID        apijson.Field
-	DeletedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -161,22 +163,29 @@ func (r threatEventDatasetNewResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetListResponse struct {
-	IsPublic  bool                               `json:"isPublic" api:"required"`
-	Name      string                             `json:"name" api:"required"`
-	UUID      string                             `json:"uuid" api:"required"`
-	DeletedAt string                             `json:"deletedAt"`
-	JSON      threatEventDatasetListResponseJSON `json:"-"`
+	// Effective indicator mutation capability after account/dataset authorization and
+	// dataset storage capability are applied. API Gateway method permissions are
+	// separate and must also allow the requested operation.
+	IndicatorWriteMode ThreatEventDatasetListResponseIndicatorWriteMode `json:"indicatorWriteMode" api:"required"`
+	IsAnalytics        bool                                             `json:"isAnalytics" api:"required"`
+	IsPublic           bool                                             `json:"isPublic" api:"required"`
+	Name               string                                           `json:"name" api:"required"`
+	UUID               string                                           `json:"uuid" api:"required"`
+	DeletedAt          string                                           `json:"deletedAt"`
+	JSON               threatEventDatasetListResponseJSON               `json:"-"`
 }
 
 // threatEventDatasetListResponseJSON contains the JSON metadata for the struct
 // [ThreatEventDatasetListResponse]
 type threatEventDatasetListResponseJSON struct {
-	IsPublic    apijson.Field
-	Name        apijson.Field
-	UUID        apijson.Field
-	DeletedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	IndicatorWriteMode apijson.Field
+	IsAnalytics        apijson.Field
+	IsPublic           apijson.Field
+	Name               apijson.Field
+	UUID               apijson.Field
+	DeletedAt          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *ThreatEventDatasetListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -185,6 +194,25 @@ func (r *ThreatEventDatasetListResponse) UnmarshalJSON(data []byte) (err error) 
 
 func (r threatEventDatasetListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Effective indicator mutation capability after account/dataset authorization and
+// dataset storage capability are applied. API Gateway method permissions are
+// separate and must also allow the requested operation.
+type ThreatEventDatasetListResponseIndicatorWriteMode string
+
+const (
+	ThreatEventDatasetListResponseIndicatorWriteModeReadOnly   ThreatEventDatasetListResponseIndicatorWriteMode = "read_only"
+	ThreatEventDatasetListResponseIndicatorWriteModeCreateOnly ThreatEventDatasetListResponseIndicatorWriteMode = "create_only"
+	ThreatEventDatasetListResponseIndicatorWriteModeFull       ThreatEventDatasetListResponseIndicatorWriteMode = "full"
+)
+
+func (r ThreatEventDatasetListResponseIndicatorWriteMode) IsKnown() bool {
+	switch r {
+	case ThreatEventDatasetListResponseIndicatorWriteModeReadOnly, ThreatEventDatasetListResponseIndicatorWriteModeCreateOnly, ThreatEventDatasetListResponseIndicatorWriteModeFull:
+		return true
+	}
+	return false
 }
 
 type ThreatEventDatasetDeleteResponse struct {
@@ -211,20 +239,20 @@ func (r threatEventDatasetDeleteResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetEditResponse struct {
-	IsPublic  bool                               `json:"isPublic" api:"required"`
-	Name      string                             `json:"name" api:"required"`
-	UUID      string                             `json:"uuid" api:"required"`
-	DeletedAt string                             `json:"deletedAt"`
-	JSON      threatEventDatasetEditResponseJSON `json:"-"`
+	IsAnalytics bool                               `json:"isAnalytics" api:"required"`
+	IsPublic    bool                               `json:"isPublic" api:"required"`
+	Name        string                             `json:"name" api:"required"`
+	UUID        string                             `json:"uuid" api:"required"`
+	JSON        threatEventDatasetEditResponseJSON `json:"-"`
 }
 
 // threatEventDatasetEditResponseJSON contains the JSON metadata for the struct
 // [ThreatEventDatasetEditResponse]
 type threatEventDatasetEditResponseJSON struct {
+	IsAnalytics apijson.Field
 	IsPublic    apijson.Field
 	Name        apijson.Field
 	UUID        apijson.Field
-	DeletedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -238,20 +266,20 @@ func (r threatEventDatasetEditResponseJSON) RawJSON() string {
 }
 
 type ThreatEventDatasetGetResponse struct {
-	IsPublic  bool                              `json:"isPublic" api:"required"`
-	Name      string                            `json:"name" api:"required"`
-	UUID      string                            `json:"uuid" api:"required"`
-	DeletedAt string                            `json:"deletedAt"`
-	JSON      threatEventDatasetGetResponseJSON `json:"-"`
+	IsAnalytics bool                              `json:"isAnalytics" api:"required"`
+	IsPublic    bool                              `json:"isPublic" api:"required"`
+	Name        string                            `json:"name" api:"required"`
+	UUID        string                            `json:"uuid" api:"required"`
+	JSON        threatEventDatasetGetResponseJSON `json:"-"`
 }
 
 // threatEventDatasetGetResponseJSON contains the JSON metadata for the struct
 // [ThreatEventDatasetGetResponse]
 type threatEventDatasetGetResponseJSON struct {
+	IsAnalytics apijson.Field
 	IsPublic    apijson.Field
 	Name        apijson.Field
 	UUID        apijson.Field
-	DeletedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

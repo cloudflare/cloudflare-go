@@ -36,7 +36,8 @@ func NewBillingTopupService(opts ...option.RequestOption) (r *BillingTopupServic
 	return
 }
 
-// Create a credit top-up via Stripe PaymentIntent for the given account.
+// Create a credit top-up for the given account, charged to the account's default
+// payment method.
 func (r *BillingTopupService) New(ctx context.Context, params BillingTopupNewParams, opts ...option.RequestOption) (res *BillingTopupNewResponse, err error) {
 	var env BillingTopupNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

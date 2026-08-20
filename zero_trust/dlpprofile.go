@@ -358,10 +358,13 @@ type ProfileCustomProfileEntry struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [ProfileCustomProfileEntriesPredefinedEntryConfidence].
-	Confidence  interface{} `json:"confidence"`
-	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description" api:"nullable"`
-	Pattern     Pattern     `json:"pattern"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated  bool    `json:"deprecated"`
+	Description string  `json:"description" api:"nullable"`
+	Pattern     Pattern `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
@@ -385,6 +388,7 @@ type profileCustomProfileEntryJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
+	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -582,6 +586,9 @@ type ProfileCustomProfileEntriesPredefinedEntry struct {
 	Enabled    bool                                                 `json:"enabled" api:"required"`
 	Name       string                                               `json:"name" api:"required"`
 	Type       ProfileCustomProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated bool `json:"deprecated"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// A Predefined AI prompt classification topic entry.
@@ -597,6 +604,7 @@ type profileCustomProfileEntriesPredefinedEntryJSON struct {
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	Deprecated  apijson.Field
 	ProfileID   apijson.Field
 	Variant     apijson.Field
 	raw         string
@@ -1072,10 +1080,13 @@ type ProfileCustomProfileSharedEntry struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [ProfileCustomProfileSharedEntriesPredefinedEntryConfidence].
-	Confidence  interface{} `json:"confidence"`
-	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description" api:"nullable"`
-	Pattern     Pattern     `json:"pattern"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated  bool    `json:"deprecated"`
+	Description string  `json:"description" api:"nullable"`
+	Pattern     Pattern `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
@@ -1099,6 +1110,7 @@ type profileCustomProfileSharedEntryJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
+	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -1298,6 +1310,9 @@ type ProfileCustomProfileSharedEntriesPredefinedEntry struct {
 	Enabled    bool                                                       `json:"enabled" api:"required"`
 	Name       string                                                     `json:"name" api:"required"`
 	Type       ProfileCustomProfileSharedEntriesPredefinedEntryType       `json:"type" api:"required"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated bool `json:"deprecated"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// A Predefined AI prompt classification topic entry.
@@ -1313,6 +1328,7 @@ type profileCustomProfileSharedEntriesPredefinedEntryJSON struct {
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	Deprecated  apijson.Field
 	ProfileID   apijson.Field
 	Variant     apijson.Field
 	raw         string
@@ -1821,10 +1837,13 @@ type ProfilePredefinedProfileEntry struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [ProfilePredefinedProfileEntriesPredefinedEntryConfidence].
-	Confidence  interface{} `json:"confidence"`
-	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description" api:"nullable"`
-	Pattern     Pattern     `json:"pattern"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated  bool    `json:"deprecated"`
+	Description string  `json:"description" api:"nullable"`
+	Pattern     Pattern `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
@@ -1848,6 +1867,7 @@ type profilePredefinedProfileEntryJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
+	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -2046,6 +2066,9 @@ type ProfilePredefinedProfileEntriesPredefinedEntry struct {
 	Enabled    bool                                                     `json:"enabled" api:"required"`
 	Name       string                                                   `json:"name" api:"required"`
 	Type       ProfilePredefinedProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated bool `json:"deprecated"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// A Predefined AI prompt classification topic entry.
@@ -2061,6 +2084,7 @@ type profilePredefinedProfileEntriesPredefinedEntryJSON struct {
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	Deprecated  apijson.Field
 	ProfileID   apijson.Field
 	Variant     apijson.Field
 	raw         string
@@ -2585,10 +2609,13 @@ type ProfileIntegrationProfileEntry struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [ProfileIntegrationProfileEntriesPredefinedEntryConfidence].
-	Confidence  interface{} `json:"confidence"`
-	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description" api:"nullable"`
-	Pattern     Pattern     `json:"pattern"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated  bool    `json:"deprecated"`
+	Description string  `json:"description" api:"nullable"`
+	Pattern     Pattern `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
@@ -2612,6 +2639,7 @@ type profileIntegrationProfileEntryJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
+	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -2810,6 +2838,9 @@ type ProfileIntegrationProfileEntriesPredefinedEntry struct {
 	Enabled    bool                                                      `json:"enabled" api:"required"`
 	Name       string                                                    `json:"name" api:"required"`
 	Type       ProfileIntegrationProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated bool `json:"deprecated"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// A Predefined AI prompt classification topic entry.
@@ -2825,6 +2856,7 @@ type profileIntegrationProfileEntriesPredefinedEntryJSON struct {
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	Deprecated  apijson.Field
 	ProfileID   apijson.Field
 	Variant     apijson.Field
 	raw         string
@@ -3281,10 +3313,13 @@ type ProfileIntegrationProfileSharedEntry struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [ProfileIntegrationProfileSharedEntriesPredefinedEntryConfidence].
-	Confidence  interface{} `json:"confidence"`
-	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
-	Description string      `json:"description" api:"nullable"`
-	Pattern     Pattern     `json:"pattern"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated  bool    `json:"deprecated"`
+	Description string  `json:"description" api:"nullable"`
+	Pattern     Pattern `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
@@ -3308,6 +3343,7 @@ type profileIntegrationProfileSharedEntryJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
+	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -3508,6 +3544,9 @@ type ProfileIntegrationProfileSharedEntriesPredefinedEntry struct {
 	Enabled    bool                                                            `json:"enabled" api:"required"`
 	Name       string                                                          `json:"name" api:"required"`
 	Type       ProfileIntegrationProfileSharedEntriesPredefinedEntryType       `json:"type" api:"required"`
+	// Whether this entry is deprecated for new use. This is computed from the static
+	// catalog and emitted only when true.
+	Deprecated bool `json:"deprecated"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// A Predefined AI prompt classification topic entry.
@@ -3523,6 +3562,7 @@ type profileIntegrationProfileSharedEntriesPredefinedEntryJSON struct {
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
+	Deprecated  apijson.Field
 	ProfileID   apijson.Field
 	Variant     apijson.Field
 	raw         string

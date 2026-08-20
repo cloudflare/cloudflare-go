@@ -144,11 +144,11 @@ type EmailSendingSendParams struct {
 	Subject param.Field[string] `json:"subject" api:"required"`
 	// File attachments and inline images.
 	Attachments param.Field[[]EmailSendingSendParamsAttachmentUnion] `json:"attachments"`
-	// BCC recipient(s). A single email string, a named address object, or an array of
-	// either.
+	// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
+	// address object, or an array of either.
 	Bcc param.Field[EmailSendingSendParamsBccUnion] `json:"bcc"`
-	// CC recipient(s). A single email string, a named address object, or an array of
-	// either.
+	// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
+	// address object, or an array of either.
 	Cc param.Field[EmailSendingSendParamsCcUnion] `json:"cc"`
 	// Custom email headers as key-value pairs.
 	Headers param.Field[map[string]string] `json:"headers"`
@@ -193,7 +193,7 @@ func (r EmailSendingSendParamsFromEmailSendingEmailAddressObject) ImplementsEmai
 type EmailSendingSendParamsAttachment struct {
 	// Base64-encoded content of the attachment.
 	Content param.Field[string] `json:"content" api:"required"`
-	// Must be 'inline'. Embeds the attachment in the email body.
+	// Use 'inline' to embed the attachment in the email body.
 	Disposition param.Field[EmailSendingSendParamsAttachmentsDisposition] `json:"disposition" api:"required"`
 	// Filename for the attachment.
 	Filename param.Field[string] `json:"filename" api:"required"`
@@ -224,7 +224,7 @@ type EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachment struct {
 	// Content ID used to reference this attachment in HTML via cid: URI (e.g.,
 	// <img src="cid:logo">).
 	ContentID param.Field[string] `json:"content_id" api:"required"`
-	// Must be 'inline'. Embeds the attachment in the email body.
+	// Use 'inline' to embed the attachment in the email body.
 	Disposition param.Field[EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachmentDisposition] `json:"disposition" api:"required"`
 	// Filename for the attachment.
 	Filename param.Field[string] `json:"filename" api:"required"`
@@ -239,7 +239,7 @@ func (r EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachment) Mars
 func (r EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachment) implementsEmailSendingSendParamsAttachmentUnion() {
 }
 
-// Must be 'inline'. Embeds the attachment in the email body.
+// Use 'inline' to embed the attachment in the email body.
 type EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachmentDisposition string
 
 const (
@@ -257,7 +257,7 @@ func (r EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachmentDispos
 type EmailSendingSendParamsAttachmentsEmailSendingEmailAttachment struct {
 	// Base64-encoded content of the attachment.
 	Content param.Field[string] `json:"content" api:"required"`
-	// Must be 'attachment'. Adds a standard file attachment.
+	// Use 'attachment' for a standard file attachment.
 	Disposition param.Field[EmailSendingSendParamsAttachmentsEmailSendingEmailAttachmentDisposition] `json:"disposition" api:"required"`
 	// Filename for the attachment.
 	Filename param.Field[string] `json:"filename" api:"required"`
@@ -272,7 +272,7 @@ func (r EmailSendingSendParamsAttachmentsEmailSendingEmailAttachment) MarshalJSO
 func (r EmailSendingSendParamsAttachmentsEmailSendingEmailAttachment) implementsEmailSendingSendParamsAttachmentUnion() {
 }
 
-// Must be 'attachment'. Adds a standard file attachment.
+// Use 'attachment' for a standard file attachment.
 type EmailSendingSendParamsAttachmentsEmailSendingEmailAttachmentDisposition string
 
 const (
@@ -287,7 +287,7 @@ func (r EmailSendingSendParamsAttachmentsEmailSendingEmailAttachmentDisposition)
 	return false
 }
 
-// Must be 'inline'. Embeds the attachment in the email body.
+// Use 'inline' to embed the attachment in the email body.
 type EmailSendingSendParamsAttachmentsDisposition string
 
 const (
@@ -303,8 +303,8 @@ func (r EmailSendingSendParamsAttachmentsDisposition) IsKnown() bool {
 	return false
 }
 
-// BCC recipient(s). A single email string, a named address object, or an array of
-// either.
+// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
+// address object, or an array of either.
 //
 // Satisfied by [shared.UnionString],
 // [email_sending.EmailSendingSendParamsBccEmailSendingEmailAddressObject],
@@ -355,8 +355,8 @@ func (r EmailSendingSendParamsBccArrayEmailSendingEmailAddressObject) MarshalJSO
 func (r EmailSendingSendParamsBccArrayEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsBccArrayItemUnion() {
 }
 
-// CC recipient(s). A single email string, a named address object, or an array of
-// either.
+// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
+// address object, or an array of either.
 //
 // Satisfied by [shared.UnionString],
 // [email_sending.EmailSendingSendParamsCcEmailSendingEmailAddressObject],

@@ -136,7 +136,7 @@ func TestInterconnectGet(t *testing.T) {
 	}
 }
 
-func TestInterconnectLOA(t *testing.T) {
+func TestInterconnectLOAWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -155,6 +155,7 @@ func TestInterconnectLOA(t *testing.T) {
 		"icon",
 		network_interconnects.InterconnectLOAParams{
 			AccountID: cloudflare.F("account_id"),
+			Name:      cloudflare.F("name"),
 		},
 	)
 	if err != nil {

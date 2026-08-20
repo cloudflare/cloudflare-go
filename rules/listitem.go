@@ -264,8 +264,8 @@ type ListItemListResponse struct {
 	ASN int64 `json:"asn"`
 	// Defines an informative summary of the list item.
 	Comment string `json:"comment"`
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
+	// Hostnames support ASCII(7) letters from a to z, the digits from 0 to 9,
+	// wildcards (\*), and the hyphen (-).
 	Hostname Hostname `json:"hostname"`
 	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
 	IP string `json:"ip"`
@@ -387,8 +387,8 @@ type ListItemListResponseListsListItemHostnameFull struct {
 	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
 	CreatedOn string `json:"created_on" api:"required"`
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
+	// Hostnames support ASCII(7) letters from a to z, the digits from 0 to 9,
+	// wildcards (\*), and the hyphen (-).
 	Hostname Hostname `json:"hostname" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
 	ModifiedOn string `json:"modified_on" api:"required"`
@@ -524,8 +524,8 @@ type ListItemGetResponse struct {
 	ASN int64 `json:"asn"`
 	// Defines an informative summary of the list item.
 	Comment string `json:"comment"`
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
+	// Hostnames support ASCII(7) letters from a to z, the digits from 0 to 9,
+	// wildcards (\*), and the hyphen (-).
 	Hostname Hostname `json:"hostname"`
 	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
 	IP string `json:"ip"`
@@ -647,8 +647,8 @@ type ListItemGetResponseListsListItemHostnameFull struct {
 	ID string `json:"id" api:"required"`
 	// The RFC 3339 timestamp of when the list was created.
 	CreatedOn string `json:"created_on" api:"required"`
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
+	// Hostnames support ASCII(7) letters from a to z, the digits from 0 to 9,
+	// wildcards (\*), and the hyphen (-).
 	Hostname Hostname `json:"hostname" api:"required"`
 	// The RFC 3339 timestamp of when the list was last modified.
 	ModifiedOn string `json:"modified_on" api:"required"`
@@ -766,8 +766,8 @@ type ListItemNewParamsBody struct {
 	ASN param.Field[int64] `json:"asn"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
+	// Hostnames support ASCII(7) letters from a to z, the digits from 0 to 9,
+	// wildcards (\*), and the hyphen (-).
 	Hostname param.Field[HostnameParam] `json:"hostname"`
 	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
 	IP param.Field[string] `json:"ip"`
@@ -816,8 +816,8 @@ func (r ListItemNewParamsBodyListsListItemRedirectComment) MarshalJSON() (data [
 func (r ListItemNewParamsBodyListsListItemRedirectComment) implementsListItemNewParamsBodyUnion() {}
 
 type ListItemNewParamsBodyListsListItemHostnameComment struct {
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
+	// Hostnames support ASCII(7) letters from a to z, the digits from 0 to 9,
+	// wildcards (\*), and the hyphen (-).
 	Hostname param.Field[HostnameParam] `json:"hostname" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
@@ -900,8 +900,8 @@ type ListItemUpdateParamsBody struct {
 	ASN param.Field[int64] `json:"asn"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
+	// Hostnames support ASCII(7) letters from a to z, the digits from 0 to 9,
+	// wildcards (\*), and the hyphen (-).
 	Hostname param.Field[HostnameParam] `json:"hostname"`
 	// An IPv4 address, an IPv4 CIDR, an IPv6 address, or an IPv6 CIDR.
 	IP param.Field[string] `json:"ip"`
@@ -952,8 +952,8 @@ func (r ListItemUpdateParamsBodyListsListItemRedirectComment) implementsListItem
 }
 
 type ListItemUpdateParamsBodyListsListItemHostnameComment struct {
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
+	// Hostnames support ASCII(7) letters from a to z, the digits from 0 to 9,
+	// wildcards (\*), and the hyphen (-).
 	Hostname param.Field[HostnameParam] `json:"hostname" api:"required"`
 	// Defines an informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
@@ -1025,10 +1025,10 @@ func (r ListItemUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type ListItemListParams struct {
 	// The Account ID for this resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The pagination cursor. An opaque string token indicating the position from which
-	// to continue when requesting the next/previous set of records. Cursor values are
-	// provided under `result_info.cursors` in the response. You should make no
-	// assumptions about a cursor's content or length.
+	// The pagination cursor. An opaque string token that indicates where to continue
+	// when requesting the next/previous set of records. The response provides cursor
+	// values under `result_info.cursors`. You should make no assumptions about a
+	// cursor's content or length.
 	Cursor param.Field[string] `query:"cursor"`
 	// Amount of results to include in each paginated response. A non-negative 32 bit
 	// integer.

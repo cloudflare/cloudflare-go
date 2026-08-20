@@ -312,6 +312,7 @@ type ObservabilitySharedQueryGetResponseRunQueryParametersCalculation struct {
 	Key      string                                                                    `json:"key"`
 	KeyType  ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsKeyType  `json:"keyType"`
 	JSON     observabilitySharedQueryGetResponseRunQueryParametersCalculationJSON      `json:"-"`
+	union    ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsUnion
 }
 
 // observabilitySharedQueryGetResponseRunQueryParametersCalculationJSON contains
@@ -326,19 +327,302 @@ type observabilitySharedQueryGetResponseRunQueryParametersCalculationJSON struct
 	ExtraFields map[string]apijson.Field
 }
 
+func (r observabilitySharedQueryGetResponseRunQueryParametersCalculationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *ObservabilitySharedQueryGetResponseRunQueryParametersCalculation) UnmarshalJSON(data []byte) (err error) {
+	*r = ObservabilitySharedQueryGetResponseRunQueryParametersCalculation{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject],
+// [ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject].
+func (r ObservabilitySharedQueryGetResponseRunQueryParametersCalculation) AsUnion() ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsUnion {
+	return r.union
+}
+
+// Union satisfied by
+// [ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject] or
+// [ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject].
+type ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsUnion interface {
+	implementsObservabilitySharedQueryGetResponseRunQueryParametersCalculation()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsUnion)(nil)).Elem(),
+		"operator",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "count",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "COUNT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "uniq",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "max",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "min",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "sum",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "avg",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "median",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p001",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p01",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p05",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p10",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p25",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p75",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p90",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p95",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p99",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "p999",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "stddev",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "variance",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "COUNT_DISTINCT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "MAX",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "MIN",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "SUM",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "AVG",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "MEDIAN",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P001",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P01",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P05",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P10",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P25",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P75",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P90",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P95",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P99",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "P999",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "STDDEV",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject{}),
+			DiscriminatorValue: "VARIANCE",
+		},
+	)
+}
+
+type ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject struct {
+	Operator ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectOperator `json:"operator" api:"required"`
+	Alias    string                                                                          `json:"alias"`
+	Key      string                                                                          `json:"key"`
+	KeyType  ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyType  `json:"keyType"`
+	JSON     observabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectJSON     `json:"-"`
+}
+
+// observabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectJSON
+// contains the JSON metadata for the struct
+// [ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject]
+type observabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectJSON struct {
+	Operator    apijson.Field
+	Alias       apijson.Field
+	Key         apijson.Field
+	KeyType     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observabilitySharedQueryGetResponseRunQueryParametersCalculationJSON) RawJSON() string {
+func (r observabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObject) implementsObservabilitySharedQueryGetResponseRunQueryParametersCalculation() {
+}
+
+type ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectOperator string
+
+const (
+	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectOperatorCount          ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectOperator = "count"
+	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectOperatorCountUppercase ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectOperator = "COUNT"
+)
+
+func (r ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectOperator) IsKnown() bool {
+	switch r {
+	case ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectOperatorCount, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectOperatorCountUppercase:
+		return true
+	}
+	return false
+}
+
+type ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyType string
+
+const (
+	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyTypeString  ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyType = "string"
+	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyTypeNumber  ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyType = "number"
+	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyTypeBoolean ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyType = "boolean"
+)
+
+func (r ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyType) IsKnown() bool {
+	switch r {
+	case ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyTypeString, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyTypeNumber, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsObjectKeyTypeBoolean:
+		return true
+	}
+	return false
 }
 
 type ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator string
 
 const (
-	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorUniq              ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "uniq"
 	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorCount             ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "count"
+	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorCountUppercase    ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "COUNT"
+	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorUniq              ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "uniq"
 	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMax               ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "max"
 	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMin               ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "min"
 	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorSum               ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "sum"
@@ -357,7 +641,6 @@ const (
 	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorStddev            ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "stddev"
 	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorVariance          ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "variance"
 	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorCountDistinct     ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "COUNT_DISTINCT"
-	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorCountUppercase    ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "COUNT"
 	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMaxUppercase      ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "MAX"
 	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMinUppercase      ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "MIN"
 	ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorSumUppercase      ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator = "SUM"
@@ -379,7 +662,7 @@ const (
 
 func (r ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperator) IsKnown() bool {
 	switch r {
-	case ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorUniq, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorCount, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMax, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMin, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorSum, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorAvg, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMedian, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP001, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP01, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP05, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP10, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP25, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP75, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP90, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP95, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP99, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP999, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorStddev, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorVariance, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorCountDistinct, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorCountUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMaxUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMinUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorSumUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorAvgUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMedianUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP001Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP01Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP05Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP10Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP25Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP75Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP90Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP95Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP99Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP999Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorStddevUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorVarianceUppercase:
+	case ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorCount, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorCountUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorUniq, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMax, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMin, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorSum, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorAvg, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMedian, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP001, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP01, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP05, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP10, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP25, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP75, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP90, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP95, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP99, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP999, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorStddev, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorVariance, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorCountDistinct, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMaxUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMinUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorSumUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorAvgUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorMedianUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP001Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP01Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP05Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP10Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP25Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP75Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP90Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP95Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP99Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorP999Uppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorStddevUppercase, ObservabilitySharedQueryGetResponseRunQueryParametersCalculationsOperatorVarianceUppercase:
 		return true
 	}
 	return false
@@ -2962,7 +3245,7 @@ func (r ObservabilitySharedQueryNewParamsChartType) IsKnown() bool {
 type ObservabilitySharedQueryNewParamsParameters struct {
 	// Aggregation calculations to compute (e.g. count, avg, p99). Each calculation
 	// produces aggregate values and optional time-series data.
-	Calculations param.Field[[]ObservabilitySharedQueryNewParamsParametersCalculation] `json:"calculations"`
+	Calculations param.Field[[]ObservabilitySharedQueryNewParamsParametersCalculationUnion] `json:"calculations"`
 	// Datasets to query. Leave empty to query all available datasets.
 	Datasets param.Field[[]string] `json:"datasets"`
 	// Logical operator for combining top-level filters: 'and' (all must match) or 'or'
@@ -3001,7 +3284,8 @@ type ObservabilitySharedQueryNewParamsParametersCalculation struct {
 	// multiple calculations.
 	Alias param.Field[string] `json:"alias"`
 	// Field name to calculate over. Must exist in the data — verify with the keys
-	// endpoint. Omit for operators that don't require a key (e.g. count).
+	// endpoint. Required for every operator except `count`, which aggregates whole
+	// rows and may omit it.
 	Key param.Field[string] `json:"key"`
 	// Data type of the key. Required when key is provided to ensure correct
 	// aggregation.
@@ -3012,13 +3296,83 @@ func (r ObservabilitySharedQueryNewParamsParametersCalculation) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
+func (r ObservabilitySharedQueryNewParamsParametersCalculation) implementsObservabilitySharedQueryNewParamsParametersCalculationUnion() {
+}
+
+// Satisfied by
+// [workers.ObservabilitySharedQueryNewParamsParametersCalculationsObject],
+// [workers.ObservabilitySharedQueryNewParamsParametersCalculationsObject],
+// [ObservabilitySharedQueryNewParamsParametersCalculation].
+type ObservabilitySharedQueryNewParamsParametersCalculationUnion interface {
+	implementsObservabilitySharedQueryNewParamsParametersCalculationUnion()
+}
+
+type ObservabilitySharedQueryNewParamsParametersCalculationsObject struct {
+	// Aggregation operator to apply. Examples: count, avg, sum, min, max, median, p90,
+	// p95, p99, uniq, stddev, variance.
+	Operator param.Field[ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperator] `json:"operator" api:"required"`
+	// Custom label for this calculation in the results. Useful for distinguishing
+	// multiple calculations.
+	Alias param.Field[string] `json:"alias"`
+	// Field name to calculate over. Must exist in the data — verify with the keys
+	// endpoint. Required for every operator except `count`, which aggregates whole
+	// rows and may omit it.
+	Key param.Field[string] `json:"key"`
+	// Data type of the key. Required when key is provided to ensure correct
+	// aggregation.
+	KeyType param.Field[ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyType] `json:"keyType"`
+}
+
+func (r ObservabilitySharedQueryNewParamsParametersCalculationsObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ObservabilitySharedQueryNewParamsParametersCalculationsObject) implementsObservabilitySharedQueryNewParamsParametersCalculationUnion() {
+}
+
+// Aggregation operator to apply. Examples: count, avg, sum, min, max, median, p90,
+// p95, p99, uniq, stddev, variance.
+type ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperator string
+
+const (
+	ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperatorCount          ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperator = "count"
+	ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperatorCountUppercase ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperator = "COUNT"
+)
+
+func (r ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperator) IsKnown() bool {
+	switch r {
+	case ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperatorCount, ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperatorCountUppercase:
+		return true
+	}
+	return false
+}
+
+// Data type of the key. Required when key is provided to ensure correct
+// aggregation.
+type ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyType string
+
+const (
+	ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyTypeString  ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyType = "string"
+	ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyTypeNumber  ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyType = "number"
+	ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyTypeBoolean ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyType = "boolean"
+)
+
+func (r ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyType) IsKnown() bool {
+	switch r {
+	case ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyTypeString, ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyTypeNumber, ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyTypeBoolean:
+		return true
+	}
+	return false
+}
+
 // Aggregation operator to apply. Examples: count, avg, sum, min, max, median, p90,
 // p95, p99, uniq, stddev, variance.
 type ObservabilitySharedQueryNewParamsParametersCalculationsOperator string
 
 const (
-	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorUniq              ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "uniq"
 	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorCount             ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "count"
+	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorCountUppercase    ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "COUNT"
+	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorUniq              ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "uniq"
 	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMax               ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "max"
 	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMin               ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "min"
 	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorSum               ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "sum"
@@ -3037,7 +3391,6 @@ const (
 	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorStddev            ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "stddev"
 	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorVariance          ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "variance"
 	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorCountDistinct     ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "COUNT_DISTINCT"
-	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorCountUppercase    ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "COUNT"
 	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMaxUppercase      ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "MAX"
 	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMinUppercase      ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "MIN"
 	ObservabilitySharedQueryNewParamsParametersCalculationsOperatorSumUppercase      ObservabilitySharedQueryNewParamsParametersCalculationsOperator = "SUM"
@@ -3059,7 +3412,7 @@ const (
 
 func (r ObservabilitySharedQueryNewParamsParametersCalculationsOperator) IsKnown() bool {
 	switch r {
-	case ObservabilitySharedQueryNewParamsParametersCalculationsOperatorUniq, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorCount, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMax, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMin, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorSum, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorAvg, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMedian, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP001, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP01, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP05, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP10, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP25, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP75, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP90, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP95, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP99, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP999, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorStddev, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorVariance, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorCountDistinct, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorCountUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMaxUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMinUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorSumUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorAvgUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMedianUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP001Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP01Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP05Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP10Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP25Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP75Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP90Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP95Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP99Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP999Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorStddevUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorVarianceUppercase:
+	case ObservabilitySharedQueryNewParamsParametersCalculationsOperatorCount, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorCountUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorUniq, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMax, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMin, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorSum, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorAvg, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMedian, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP001, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP01, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP05, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP10, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP25, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP75, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP90, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP95, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP99, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP999, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorStddev, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorVariance, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorCountDistinct, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMaxUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMinUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorSumUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorAvgUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorMedianUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP001Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP01Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP05Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP10Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP25Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP75Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP90Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP95Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP99Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorP999Uppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorStddevUppercase, ObservabilitySharedQueryNewParamsParametersCalculationsOperatorVarianceUppercase:
 		return true
 	}
 	return false

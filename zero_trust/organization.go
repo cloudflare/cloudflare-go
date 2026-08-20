@@ -243,9 +243,9 @@ type Organization struct {
 	MfaPivKeyRequirements OrganizationMfaPivKeyRequirements `json:"mfa_piv_key_requirements"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
-	// session duration configured. Note: 'allowed_authenticators' cannot only contain
-	// 'piv_key' if the organization has any non-infrastructure applications because
-	// PIV keys are only compatible with infrastructure apps.
+	// session duration configured. Note: 'allowed_authenticators' cannot contain only
+	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
+	// organization has any non-infrastructure applications.
 	MfaRequiredForAllApps bool `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
@@ -261,6 +261,9 @@ type Organization struct {
 	// month (730h). Must be in the format `300ms` or `2h45m`. Valid time units are:
 	// `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
+	// When enabled, unsuccessful WARP authentication requests with a non-HTML Accept
+	// header return a 401 response instead of redirecting to the login page.
+	WARPAuthNonBrowser401 bool `json:"warp_auth_non_browser_401"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
 	WARPAuthSessionDuration string           `json:"warp_auth_session_duration"`
@@ -284,6 +287,7 @@ type organizationJSON struct {
 	SessionDuration                        apijson.Field
 	UIReadOnlyToggleReason                 apijson.Field
 	UserSeatExpirationInactiveTime         apijson.Field
+	WARPAuthNonBrowser401                  apijson.Field
 	WARPAuthSessionDuration                apijson.Field
 	raw                                    string
 	ExtraFields                            map[string]apijson.Field
@@ -325,7 +329,8 @@ func (r organizationCustomPagesJSON) RawJSON() string {
 
 // Configures multi-factor authentication (MFA) settings for an organization.
 type OrganizationMfaConfig struct {
-	// Lists the MFA methods that users can authenticate with.
+	// Lists the MFA methods that users can authenticate with. The `piv_key` and
+	// `ssh_fido2_key` values are supported only for infrastructure applications.
 	AllowedAuthenticators []OrganizationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Allows a user to skip MFA via Authentication Method Reference (AMR) matching
 	// when the AMR claim provided by the IdP the user used to authenticate contains
@@ -366,11 +371,12 @@ const (
 	OrganizationMfaConfigAllowedAuthenticatorBiometrics  OrganizationMfaConfigAllowedAuthenticator = "biometrics"
 	OrganizationMfaConfigAllowedAuthenticatorSecurityKey OrganizationMfaConfigAllowedAuthenticator = "security_key"
 	OrganizationMfaConfigAllowedAuthenticatorPivKey      OrganizationMfaConfigAllowedAuthenticator = "piv_key"
+	OrganizationMfaConfigAllowedAuthenticatorSSHFido2Key OrganizationMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r OrganizationMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case OrganizationMfaConfigAllowedAuthenticatorTotp, OrganizationMfaConfigAllowedAuthenticatorBiometrics, OrganizationMfaConfigAllowedAuthenticatorSecurityKey, OrganizationMfaConfigAllowedAuthenticatorPivKey:
+	case OrganizationMfaConfigAllowedAuthenticatorTotp, OrganizationMfaConfigAllowedAuthenticatorBiometrics, OrganizationMfaConfigAllowedAuthenticatorSecurityKey, OrganizationMfaConfigAllowedAuthenticatorPivKey, OrganizationMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -542,9 +548,9 @@ type OrganizationNewParams struct {
 	MfaPivKeyRequirements param.Field[OrganizationNewParamsMfaPivKeyRequirements] `json:"mfa_piv_key_requirements"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
-	// session duration configured. Note: 'allowed_authenticators' cannot only contain
-	// 'piv_key' if the organization has any non-infrastructure applications because
-	// PIV keys are only compatible with infrastructure apps.
+	// session duration configured. Note: 'allowed_authenticators' cannot contain only
+	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
+	// organization has any non-infrastructure applications.
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
@@ -558,6 +564,9 @@ type OrganizationNewParams struct {
 	// month (730h). Must be in the format `300ms` or `2h45m`. Valid time units are:
 	// `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 	UserSeatExpirationInactiveTime param.Field[string] `json:"user_seat_expiration_inactive_time"`
+	// When enabled, unsuccessful WARP authentication requests with a non-HTML Accept
+	// header return a 401 response instead of redirecting to the login page.
+	WARPAuthNonBrowser401 param.Field[bool] `json:"warp_auth_non_browser_401"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
 	WARPAuthSessionDuration param.Field[string] `json:"warp_auth_session_duration"`
@@ -569,7 +578,8 @@ func (r OrganizationNewParams) MarshalJSON() (data []byte, err error) {
 
 // Configures multi-factor authentication (MFA) settings for an organization.
 type OrganizationNewParamsMfaConfig struct {
-	// Lists the MFA methods that users can authenticate with.
+	// Lists the MFA methods that users can authenticate with. The `piv_key` and
+	// `ssh_fido2_key` values are supported only for infrastructure applications.
 	AllowedAuthenticators param.Field[[]OrganizationNewParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
 	// Allows a user to skip MFA via Authentication Method Reference (AMR) matching
 	// when the AMR claim provided by the IdP the user used to authenticate contains
@@ -594,11 +604,12 @@ const (
 	OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics  OrganizationNewParamsMfaConfigAllowedAuthenticator = "biometrics"
 	OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey OrganizationNewParamsMfaConfigAllowedAuthenticator = "security_key"
 	OrganizationNewParamsMfaConfigAllowedAuthenticatorPivKey      OrganizationNewParamsMfaConfigAllowedAuthenticator = "piv_key"
+	OrganizationNewParamsMfaConfigAllowedAuthenticatorSSHFido2Key OrganizationNewParamsMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r OrganizationNewParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case OrganizationNewParamsMfaConfigAllowedAuthenticatorTotp, OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationNewParamsMfaConfigAllowedAuthenticatorPivKey:
+	case OrganizationNewParamsMfaConfigAllowedAuthenticatorTotp, OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationNewParamsMfaConfigAllowedAuthenticatorPivKey, OrganizationNewParamsMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false
@@ -876,9 +887,9 @@ type OrganizationUpdateParams struct {
 	MfaPivKeyRequirements param.Field[OrganizationUpdateParamsMfaPivKeyRequirements] `json:"mfa_piv_key_requirements"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
-	// session duration configured. Note: 'allowed_authenticators' cannot only contain
-	// 'piv_key' if the organization has any non-infrastructure applications because
-	// PIV keys are only compatible with infrastructure apps.
+	// session duration configured. Note: 'allowed_authenticators' cannot contain only
+	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
+	// organization has any non-infrastructure applications.
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name param.Field[string] `json:"name"`
@@ -894,6 +905,9 @@ type OrganizationUpdateParams struct {
 	// month (730h). Must be in the format `300ms` or `2h45m`. Valid time units are:
 	// `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 	UserSeatExpirationInactiveTime param.Field[string] `json:"user_seat_expiration_inactive_time"`
+	// When enabled, unsuccessful WARP authentication requests with a non-HTML Accept
+	// header return a 401 response instead of redirecting to the login page.
+	WARPAuthNonBrowser401 param.Field[bool] `json:"warp_auth_non_browser_401"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
 	WARPAuthSessionDuration param.Field[string] `json:"warp_auth_session_duration"`
@@ -917,7 +931,8 @@ func (r OrganizationUpdateParamsCustomPages) MarshalJSON() (data []byte, err err
 
 // Configures multi-factor authentication (MFA) settings for an organization.
 type OrganizationUpdateParamsMfaConfig struct {
-	// Lists the MFA methods that users can authenticate with.
+	// Lists the MFA methods that users can authenticate with. The `piv_key` and
+	// `ssh_fido2_key` values are supported only for infrastructure applications.
 	AllowedAuthenticators param.Field[[]OrganizationUpdateParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
 	// Allows a user to skip MFA via Authentication Method Reference (AMR) matching
 	// when the AMR claim provided by the IdP the user used to authenticate contains
@@ -942,11 +957,12 @@ const (
 	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics  OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "biometrics"
 	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "security_key"
 	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorPivKey      OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "piv_key"
+	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSSHFido2Key OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r OrganizationUpdateParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case OrganizationUpdateParamsMfaConfigAllowedAuthenticatorTotp, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorPivKey:
+	case OrganizationUpdateParamsMfaConfigAllowedAuthenticatorTotp, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorPivKey, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSSHFido2Key:
 		return true
 	}
 	return false

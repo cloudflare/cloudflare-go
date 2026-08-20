@@ -36,7 +36,7 @@ func NewThreatEventIndicatorTypeService(opts ...option.RequestOption) (r *Threat
 	return
 }
 
-// List indicator types across one or more datasets for the account.
+// Lists indicator types across multiple datasets
 func (r *ThreatEventIndicatorTypeService) List(ctx context.Context, params ThreatEventIndicatorTypeListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorTypeListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

@@ -35,6 +35,10 @@ func TestDevtoolBrowserNewWithOptionalParams(t *testing.T) {
 		LiveViewURLExpiresInMs: cloudflare.F(60000.000000),
 		Recording:              cloudflare.F(true),
 		Targets:                cloudflare.F(true),
+		Guardrails: cloudflare.F(browser_rendering.DevtoolBrowserNewParamsGuardrails{
+			AllowedDomains:    cloudflare.F([]string{"string"}),
+			AllowedDomainSets: cloudflare.F([]string{"string"}),
+		}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -125,10 +129,11 @@ func TestDevtoolBrowserLaunchWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.BrowserRendering.Devtools.Browser.Launch(context.TODO(), browser_rendering.DevtoolBrowserLaunchParams{
-		AccountID: cloudflare.F("account_id"),
-		KeepAlive: cloudflare.F(10000.000000),
-		Lab:       cloudflare.F(true),
-		Recording: cloudflare.F(true),
+		AccountID:         cloudflare.F("account_id"),
+		KeepAlive:         cloudflare.F(10000.000000),
+		Lab:               cloudflare.F(true),
+		Recording:         cloudflare.F(true),
+		CfBrapiGuardrails: cloudflare.F("eyJhbGxvd2VkRG9tYWlucyI6WyIqLmV4YW1wbGUuY29tIl19"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -229,7 +229,7 @@ type AccessPolicyNewResponse struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                      `json:"session_duration"`
+	SessionDuration string                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                   `json:"updated_at" format:"date-time"`
 	JSON            accessPolicyNewResponseJSON `json:"-"`
 }
@@ -452,7 +452,7 @@ type AccessPolicyUpdateResponse struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                         `json:"session_duration"`
+	SessionDuration string                         `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                      `json:"updated_at" format:"date-time"`
 	JSON            accessPolicyUpdateResponseJSON `json:"-"`
 }
@@ -675,7 +675,7 @@ type AccessPolicyListResponse struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                       `json:"session_duration"`
+	SessionDuration string                       `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                    `json:"updated_at" format:"date-time"`
 	JSON            accessPolicyListResponseJSON `json:"-"`
 }
@@ -920,7 +920,7 @@ type AccessPolicyGetResponse struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                      `json:"session_duration"`
+	SessionDuration string                      `json:"session_duration" api:"nullable"`
 	UpdatedAt       time.Time                   `json:"updated_at" format:"date-time"`
 	JSON            accessPolicyGetResponseJSON `json:"-"`
 }

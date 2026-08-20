@@ -31,6 +31,8 @@ func TestCasbApplicationListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Casb.Applications.List(context.TODO(), zero_trust.CasbApplicationListParams{
 		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Environment: cloudflare.F("environment"),
+		Page:        cloudflare.F(int64(0)),
+		PageSize:    cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

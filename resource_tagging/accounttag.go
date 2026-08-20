@@ -152,6 +152,7 @@ func (r *AccountTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicy],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroup],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccount],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhook],
@@ -164,17 +165,26 @@ func (r *AccountTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayList],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRule],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheck],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImage],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTarget],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespace],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancer],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueue],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShare],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInput],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideo],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndex],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorker],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRoute],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersion],
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZone].
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZone],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRuleset].
 func (r AccountTagUpdateResponse) AsUnion() AccountTagUpdateResponseUnion {
 	return r.union
 }
@@ -186,6 +196,7 @@ func (r AccountTagUpdateResponse) AsUnion() AccountTagUpdateResponseUnion {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicy],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroup],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccount],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhook],
@@ -198,17 +209,26 @@ func (r AccountTagUpdateResponse) AsUnion() AccountTagUpdateResponseUnion {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayList],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRule],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheck],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImage],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTarget],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespace],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancer],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueue],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShare],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInput],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideo],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndex],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorker],
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersion] or
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZone].
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRoute],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersion],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZone] or
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRuleset].
 type AccountTagUpdateResponseUnion interface {
 	implementsAccountTagUpdateResponse()
 }
@@ -236,6 +256,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccount{}),
 			DiscriminatorValue: "account",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset{}),
+			DiscriminatorValue: "account_ruleset",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -299,8 +324,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheck{}),
+			DiscriminatorValue: "healthcheck",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImage{}),
 			DiscriminatorValue: "image",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTarget{}),
+			DiscriminatorValue: "infrastructure_target",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -309,8 +344,28 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancer{}),
+			DiscriminatorValue: "load_balancer",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor{}),
+			DiscriminatorValue: "load_balancer_monitor",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool{}),
+			DiscriminatorValue: "load_balancer_pool",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate{}),
 			DiscriminatorValue: "managed_client_certificate",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject{}),
+			DiscriminatorValue: "pages_project",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -339,8 +394,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndex{}),
+			DiscriminatorValue: "vectorize_index",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorker{}),
 			DiscriminatorValue: "worker",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRoute{}),
+			DiscriminatorValue: "worker_route",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -351,6 +416,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZone{}),
 			DiscriminatorValue: "zone",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRuleset{}),
+			DiscriminatorValue: "zone_ruleset",
 		},
 	)
 }
@@ -367,7 +437,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicatio
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON `json:"-"`
@@ -425,7 +496,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicatio
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                      `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -485,7 +557,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroup stru
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupJSON `json:"-"`
@@ -541,7 +614,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccount struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                      `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountJSON `json:"-"`
@@ -585,6 +659,63 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountType) 
 	return false
 }
 
+// Response for account_ruleset resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                             `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetType `json:"type" api:"required"`
+	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetTypeAccountRuleset AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetType = "account_ruleset"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetTypeAccountRuleset:
+		return true
+	}
+	return false
+}
+
 // Response for ai_gateway resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway struct {
 	// Identifies the unique resource.
@@ -597,7 +728,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway struct
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                        `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayJSON `json:"-"`
@@ -653,7 +785,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy s
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                             `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicyType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON `json:"-"`
@@ -709,7 +842,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhook 
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                              `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhookType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON `json:"-"`
@@ -765,7 +899,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperat
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                  `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -824,7 +959,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunne
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON `json:"-"`
@@ -880,7 +1016,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificat
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -939,7 +1076,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname s
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                             `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -998,7 +1136,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database struc
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                         `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON `json:"-"`
@@ -1054,7 +1193,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord struct
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                        `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecordType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -1113,7 +1253,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNam
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                     `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON `json:"-"`
@@ -1169,7 +1310,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayList stru
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListJSON `json:"-"`
@@ -1225,7 +1367,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRule stru
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON `json:"-"`
@@ -1269,6 +1412,66 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleTy
 	return false
 }
 
+// Response for healthcheck resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheck struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckType `json:"type" api:"required"`
+	// Zone ID is required only for zone-level resources
+	ZoneID string                                                                     `json:"zone_id" api:"required"`
+	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheck]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	ZoneID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheck) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckTypeHealthcheck AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckType = "healthcheck"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckTypeHealthcheck:
+		return true
+	}
+	return false
+}
+
 // Response for image resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImage struct {
 	// Identifies the unique resource.
@@ -1281,7 +1484,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImage struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImageType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectImageJSON `json:"-"`
@@ -1325,6 +1529,63 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectImageType) Is
 	return false
 }
 
+// Response for infrastructure_target resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTarget struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                                   `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetType `json:"type" api:"required"`
+	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTarget]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTarget) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTarget) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetTypeInfrastructureTarget AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetType = "infrastructure_target"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetTypeInfrastructureTarget:
+		return true
+	}
+	return false
+}
+
 // Response for kv_namespace resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespace struct {
 	// Identifies the unique resource.
@@ -1337,7 +1598,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespace stru
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON `json:"-"`
@@ -1381,6 +1643,180 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceTy
 	return false
 }
 
+// Response for load_balancer resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancer struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                           `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerType `json:"type" api:"required"`
+	// Zone ID is required only for zone-level resources
+	ZoneID string                                                                      `json:"zone_id" api:"required"`
+	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancer]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	ZoneID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancer) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerTypeLoadBalancer AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerType = "load_balancer"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerTypeLoadBalancer:
+		return true
+	}
+	return false
+}
+
+// Response for load_balancer_monitor resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                                  `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorType `json:"type" api:"required"`
+	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorTypeLoadBalancerMonitor AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorType = "load_balancer_monitor"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorTypeLoadBalancerMonitor:
+		return true
+	}
+	return false
+}
+
+// Response for load_balancer_pool resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                               `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolType `json:"type" api:"required"`
+	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolTypeLoadBalancerPool AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolType = "load_balancer_pool"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolTypeLoadBalancerPool:
+		return true
+	}
+	return false
+}
+
 // Response for managed_client_certificate resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate struct {
 	// Identifies the unique resource.
@@ -1393,7 +1829,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCer
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                       `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -1440,6 +1877,63 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClient
 	return false
 }
 
+// Response for pages_project resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                           `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectType `json:"type" api:"required"`
+	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectTypePagesProject AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectType = "pages_project"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectTypePagesProject:
+		return true
+	}
+	return false
+}
+
 // Response for queue resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueue struct {
 	// Identifies the unique resource.
@@ -1452,7 +1946,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueue struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueueType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectQueueJSON `json:"-"`
@@ -1508,7 +2003,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket struct 
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketJSON `json:"-"`
@@ -1564,7 +2060,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShare st
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                            `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShareType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShareJSON `json:"-"`
@@ -1620,7 +2117,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInput 
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                              `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInputType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON `json:"-"`
@@ -1676,7 +2174,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideo stru
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoJSON `json:"-"`
@@ -1720,6 +2219,63 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoTy
 	return false
 }
 
+// Response for vectorize_index resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndex struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                             `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexType `json:"type" api:"required"`
+	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndex]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndex) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndex) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexTypeVectorizeIndex AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexType = "vectorize_index"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexTypeVectorizeIndex:
+		return true
+	}
+	return false
+}
+
 // Response for worker resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorker struct {
 	// Identifies the unique resource.
@@ -1732,7 +2288,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorker struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                     `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerType `json:"type" api:"required"`
 	JSON accountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerJSON `json:"-"`
@@ -1776,6 +2333,66 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerType) I
 	return false
 }
 
+// Response for worker_route resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRoute struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteType `json:"type" api:"required"`
+	// Zone ID is required only for zone-level resources
+	ZoneID string                                                                     `json:"zone_id" api:"required"`
+	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRoute]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	ZoneID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRoute) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRoute) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteTypeWorkerRoute AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteType = "worker_route"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteTypeWorkerRoute:
+		return true
+	}
+	return false
+}
+
 // Response for worker_version resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersion struct {
 	// Identifies the unique resource.
@@ -1788,7 +2405,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersion st
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                            `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersionType `json:"type" api:"required"`
 	// Worker ID is required only for worker_version resources
@@ -1847,7 +2465,8 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZone struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                   `json:"tags" api:"required"`
 	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -1894,6 +2513,66 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneType) IsK
 	return false
 }
 
+// Response for zone_ruleset resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRuleset struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetType `json:"type" api:"required"`
+	// Zone ID is required only for zone-level resources
+	ZoneID string                                                                     `json:"zone_id" api:"required"`
+	JSON   accountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRuleset]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	ZoneID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRuleset) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRuleset) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetTypeZoneRuleset AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetType = "zone_ruleset"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetTypeZoneRuleset:
+		return true
+	}
+	return false
+}
+
 type AccountTagUpdateResponseType string
 
 const (
@@ -1901,6 +2580,7 @@ const (
 	AccountTagUpdateResponseTypeAccessApplicationPolicy  AccountTagUpdateResponseType = "access_application_policy"
 	AccountTagUpdateResponseTypeAccessGroup              AccountTagUpdateResponseType = "access_group"
 	AccountTagUpdateResponseTypeAccount                  AccountTagUpdateResponseType = "account"
+	AccountTagUpdateResponseTypeAccountRuleset           AccountTagUpdateResponseType = "account_ruleset"
 	AccountTagUpdateResponseTypeAIGateway                AccountTagUpdateResponseType = "ai_gateway"
 	AccountTagUpdateResponseTypeAlertingPolicy           AccountTagUpdateResponseType = "alerting_policy"
 	AccountTagUpdateResponseTypeAlertingWebhook          AccountTagUpdateResponseType = "alerting_webhook"
@@ -1913,22 +2593,31 @@ const (
 	AccountTagUpdateResponseTypeDurableObjectNamespace   AccountTagUpdateResponseType = "durable_object_namespace"
 	AccountTagUpdateResponseTypeGatewayList              AccountTagUpdateResponseType = "gateway_list"
 	AccountTagUpdateResponseTypeGatewayRule              AccountTagUpdateResponseType = "gateway_rule"
+	AccountTagUpdateResponseTypeHealthcheck              AccountTagUpdateResponseType = "healthcheck"
 	AccountTagUpdateResponseTypeImage                    AccountTagUpdateResponseType = "image"
+	AccountTagUpdateResponseTypeInfrastructureTarget     AccountTagUpdateResponseType = "infrastructure_target"
 	AccountTagUpdateResponseTypeKVNamespace              AccountTagUpdateResponseType = "kv_namespace"
+	AccountTagUpdateResponseTypeLoadBalancer             AccountTagUpdateResponseType = "load_balancer"
+	AccountTagUpdateResponseTypeLoadBalancerMonitor      AccountTagUpdateResponseType = "load_balancer_monitor"
+	AccountTagUpdateResponseTypeLoadBalancerPool         AccountTagUpdateResponseType = "load_balancer_pool"
 	AccountTagUpdateResponseTypeManagedClientCertificate AccountTagUpdateResponseType = "managed_client_certificate"
+	AccountTagUpdateResponseTypePagesProject             AccountTagUpdateResponseType = "pages_project"
 	AccountTagUpdateResponseTypeQueue                    AccountTagUpdateResponseType = "queue"
 	AccountTagUpdateResponseTypeR2Bucket                 AccountTagUpdateResponseType = "r2_bucket"
 	AccountTagUpdateResponseTypeResourceShare            AccountTagUpdateResponseType = "resource_share"
 	AccountTagUpdateResponseTypeStreamLiveInput          AccountTagUpdateResponseType = "stream_live_input"
 	AccountTagUpdateResponseTypeStreamVideo              AccountTagUpdateResponseType = "stream_video"
+	AccountTagUpdateResponseTypeVectorizeIndex           AccountTagUpdateResponseType = "vectorize_index"
 	AccountTagUpdateResponseTypeWorker                   AccountTagUpdateResponseType = "worker"
+	AccountTagUpdateResponseTypeWorkerRoute              AccountTagUpdateResponseType = "worker_route"
 	AccountTagUpdateResponseTypeWorkerVersion            AccountTagUpdateResponseType = "worker_version"
 	AccountTagUpdateResponseTypeZone                     AccountTagUpdateResponseType = "zone"
+	AccountTagUpdateResponseTypeZoneRuleset              AccountTagUpdateResponseType = "zone_ruleset"
 )
 
 func (r AccountTagUpdateResponseType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateResponseTypeAccessApplication, AccountTagUpdateResponseTypeAccessApplicationPolicy, AccountTagUpdateResponseTypeAccessGroup, AccountTagUpdateResponseTypeAccount, AccountTagUpdateResponseTypeAIGateway, AccountTagUpdateResponseTypeAlertingPolicy, AccountTagUpdateResponseTypeAlertingWebhook, AccountTagUpdateResponseTypeAPIGatewayOperation, AccountTagUpdateResponseTypeCloudflaredTunnel, AccountTagUpdateResponseTypeCustomCertificate, AccountTagUpdateResponseTypeCustomHostname, AccountTagUpdateResponseTypeD1Database, AccountTagUpdateResponseTypeDNSRecord, AccountTagUpdateResponseTypeDurableObjectNamespace, AccountTagUpdateResponseTypeGatewayList, AccountTagUpdateResponseTypeGatewayRule, AccountTagUpdateResponseTypeImage, AccountTagUpdateResponseTypeKVNamespace, AccountTagUpdateResponseTypeManagedClientCertificate, AccountTagUpdateResponseTypeQueue, AccountTagUpdateResponseTypeR2Bucket, AccountTagUpdateResponseTypeResourceShare, AccountTagUpdateResponseTypeStreamLiveInput, AccountTagUpdateResponseTypeStreamVideo, AccountTagUpdateResponseTypeWorker, AccountTagUpdateResponseTypeWorkerVersion, AccountTagUpdateResponseTypeZone:
+	case AccountTagUpdateResponseTypeAccessApplication, AccountTagUpdateResponseTypeAccessApplicationPolicy, AccountTagUpdateResponseTypeAccessGroup, AccountTagUpdateResponseTypeAccount, AccountTagUpdateResponseTypeAccountRuleset, AccountTagUpdateResponseTypeAIGateway, AccountTagUpdateResponseTypeAlertingPolicy, AccountTagUpdateResponseTypeAlertingWebhook, AccountTagUpdateResponseTypeAPIGatewayOperation, AccountTagUpdateResponseTypeCloudflaredTunnel, AccountTagUpdateResponseTypeCustomCertificate, AccountTagUpdateResponseTypeCustomHostname, AccountTagUpdateResponseTypeD1Database, AccountTagUpdateResponseTypeDNSRecord, AccountTagUpdateResponseTypeDurableObjectNamespace, AccountTagUpdateResponseTypeGatewayList, AccountTagUpdateResponseTypeGatewayRule, AccountTagUpdateResponseTypeHealthcheck, AccountTagUpdateResponseTypeImage, AccountTagUpdateResponseTypeInfrastructureTarget, AccountTagUpdateResponseTypeKVNamespace, AccountTagUpdateResponseTypeLoadBalancer, AccountTagUpdateResponseTypeLoadBalancerMonitor, AccountTagUpdateResponseTypeLoadBalancerPool, AccountTagUpdateResponseTypeManagedClientCertificate, AccountTagUpdateResponseTypePagesProject, AccountTagUpdateResponseTypeQueue, AccountTagUpdateResponseTypeR2Bucket, AccountTagUpdateResponseTypeResourceShare, AccountTagUpdateResponseTypeStreamLiveInput, AccountTagUpdateResponseTypeStreamVideo, AccountTagUpdateResponseTypeVectorizeIndex, AccountTagUpdateResponseTypeWorker, AccountTagUpdateResponseTypeWorkerRoute, AccountTagUpdateResponseTypeWorkerVersion, AccountTagUpdateResponseTypeZone, AccountTagUpdateResponseTypeZoneRuleset:
 		return true
 	}
 	return false
@@ -1995,6 +2684,7 @@ func (r *AccountTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicy],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroup],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccount],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGateway],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhook],
@@ -2007,17 +2697,26 @@ func (r *AccountTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayList],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRule],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheck],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectImage],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTarget],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespace],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancer],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectQueue],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectResourceShare],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInput],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideo],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndex],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectWorker],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRoute],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersion],
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectZone].
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectZone],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRuleset].
 func (r AccountTagGetResponse) AsUnion() AccountTagGetResponseUnion {
 	return r.union
 }
@@ -2029,6 +2728,7 @@ func (r AccountTagGetResponse) AsUnion() AccountTagGetResponseUnion {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicy],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroup],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccount],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGateway],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhook],
@@ -2041,17 +2741,26 @@ func (r AccountTagGetResponse) AsUnion() AccountTagGetResponseUnion {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayList],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRule],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheck],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectImage],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTarget],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespace],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancer],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectQueue],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectResourceShare],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInput],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideo],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndex],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectWorker],
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersion] or
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectZone].
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRoute],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersion],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectZone] or
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRuleset].
 type AccountTagGetResponseUnion interface {
 	implementsAccountTagGetResponse()
 }
@@ -2079,6 +2788,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectAccount{}),
 			DiscriminatorValue: "account",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset{}),
+			DiscriminatorValue: "account_ruleset",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -2142,8 +2856,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheck{}),
+			DiscriminatorValue: "healthcheck",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectImage{}),
 			DiscriminatorValue: "image",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTarget{}),
+			DiscriminatorValue: "infrastructure_target",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -2152,8 +2876,28 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancer{}),
+			DiscriminatorValue: "load_balancer",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor{}),
+			DiscriminatorValue: "load_balancer_monitor",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool{}),
+			DiscriminatorValue: "load_balancer_pool",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate{}),
 			DiscriminatorValue: "managed_client_certificate",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProject{}),
+			DiscriminatorValue: "pages_project",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -2182,8 +2926,18 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndex{}),
+			DiscriminatorValue: "vectorize_index",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectWorker{}),
 			DiscriminatorValue: "worker",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRoute{}),
+			DiscriminatorValue: "worker_route",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -2194,6 +2948,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectZone{}),
 			DiscriminatorValue: "zone",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRuleset{}),
+			DiscriminatorValue: "zone_ruleset",
 		},
 	)
 }
@@ -2210,7 +2969,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplication s
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                             `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON `json:"-"`
@@ -2268,7 +3028,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPo
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                   `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -2328,7 +3089,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroup struct 
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupJSON `json:"-"`
@@ -2384,7 +3146,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccount struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                   `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAccountJSON `json:"-"`
@@ -2428,6 +3191,63 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountType) IsK
 	return false
 }
 
+// Response for account_ruleset resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetType `json:"type" api:"required"`
+	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetTypeAccountRuleset AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetType = "account_ruleset"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetTypeAccountRuleset:
+		return true
+	}
+	return false
+}
+
 // Response for ai_gateway resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGateway struct {
 	// Identifies the unique resource.
@@ -2440,7 +3260,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGateway struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                     `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayJSON `json:"-"`
@@ -2496,7 +3317,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy stru
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON `json:"-"`
@@ -2552,7 +3374,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhook str
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                           `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON `json:"-"`
@@ -2608,7 +3431,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                               `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -2667,7 +3491,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel s
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                             `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON `json:"-"`
@@ -2723,7 +3548,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate s
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                             `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -2782,7 +3608,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname stru
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -2841,7 +3668,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectD1Database struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                      `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON `json:"-"`
@@ -2897,7 +3725,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                     `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecordType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -2956,7 +3785,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamesp
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                  `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON `json:"-"`
@@ -3012,7 +3842,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayList struct 
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayListType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectGatewayListJSON `json:"-"`
@@ -3068,7 +3899,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRule struct 
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON `json:"-"`
@@ -3112,6 +3944,66 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleType)
 	return false
 }
 
+// Response for healthcheck resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheck struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                       `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckType `json:"type" api:"required"`
+	// Zone ID is required only for zone-level resources
+	ZoneID string                                                                  `json:"zone_id" api:"required"`
+	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckJSON contains
+// the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheck]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	ZoneID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheck) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckTypeHealthcheck AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckType = "healthcheck"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckTypeHealthcheck:
+		return true
+	}
+	return false
+}
+
 // Response for image resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectImage struct {
 	// Identifies the unique resource.
@@ -3124,7 +4016,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectImage struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                 `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectImageType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectImageJSON `json:"-"`
@@ -3168,6 +4061,63 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectImageType) IsKno
 	return false
 }
 
+// Response for infrastructure_target resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTarget struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                                `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetType `json:"type" api:"required"`
+	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTarget]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTarget) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTarget) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetTypeInfrastructureTarget AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetType = "infrastructure_target"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetTypeInfrastructureTarget:
+		return true
+	}
+	return false
+}
+
 // Response for kv_namespace resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespace struct {
 	// Identifies the unique resource.
@@ -3180,7 +4130,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespace struct 
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON `json:"-"`
@@ -3224,6 +4175,180 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceType)
 	return false
 }
 
+// Response for load_balancer resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancer struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                        `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerType `json:"type" api:"required"`
+	// Zone ID is required only for zone-level resources
+	ZoneID string                                                                   `json:"zone_id" api:"required"`
+	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancer]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	ZoneID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancer) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerTypeLoadBalancer AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerType = "load_balancer"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerTypeLoadBalancer:
+		return true
+	}
+	return false
+}
+
+// Response for load_balancer_monitor resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                               `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorType `json:"type" api:"required"`
+	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorTypeLoadBalancerMonitor AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorType = "load_balancer_monitor"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorTypeLoadBalancerMonitor:
+		return true
+	}
+	return false
+}
+
+// Response for load_balancer_pool resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                            `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolType `json:"type" api:"required"`
+	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolTypeLoadBalancerPool AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolType = "load_balancer_pool"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolTypeLoadBalancerPool:
+		return true
+	}
+	return false
+}
+
 // Response for managed_client_certificate resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate struct {
 	// Identifies the unique resource.
@@ -3236,7 +4361,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertif
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                    `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -3283,6 +4409,63 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCer
 	return false
 }
 
+// Response for pages_project resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProject struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                        `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectType `json:"type" api:"required"`
+	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProject]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProject) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectTypePagesProject AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectType = "pages_project"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectTypePagesProject:
+		return true
+	}
+	return false
+}
+
 // Response for queue resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectQueue struct {
 	// Identifies the unique resource.
@@ -3295,7 +4478,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectQueue struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                 `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectQueueType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectQueueJSON `json:"-"`
@@ -3351,7 +4535,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectR2BucketType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectR2BucketJSON `json:"-"`
@@ -3407,7 +4592,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectResourceShare struc
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                         `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectResourceShareType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectResourceShareJSON `json:"-"`
@@ -3463,7 +4649,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInput str
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                           `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON `json:"-"`
@@ -3519,7 +4706,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideo struct 
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoJSON `json:"-"`
@@ -3563,6 +4751,63 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoType)
 	return false
 }
 
+// Response for vectorize_index resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndex struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                          `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexType `json:"type" api:"required"`
+	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndex]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndex) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndex) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexTypeVectorizeIndex AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexType = "vectorize_index"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexTypeVectorizeIndex:
+		return true
+	}
+	return false
+}
+
 // Response for worker resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorker struct {
 	// Identifies the unique resource.
@@ -3575,7 +4820,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorker struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                  `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerType `json:"type" api:"required"`
 	JSON accountTagGetResponseResourceTaggingTaggedResourceObjectWorkerJSON `json:"-"`
@@ -3619,6 +4865,66 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerType) IsKn
 	return false
 }
 
+// Response for worker_route resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRoute struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                       `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteType `json:"type" api:"required"`
+	// Zone ID is required only for zone-level resources
+	ZoneID string                                                                  `json:"zone_id" api:"required"`
+	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON contains
+// the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRoute]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	ZoneID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRoute) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRoute) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteTypeWorkerRoute AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteType = "worker_route"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteTypeWorkerRoute:
+		return true
+	}
+	return false
+}
+
 // Response for worker_version resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersion struct {
 	// Identifies the unique resource.
@@ -3631,7 +4937,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersion struc
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                         `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersionType `json:"type" api:"required"`
 	// Worker ID is required only for worker_version resources
@@ -3690,7 +4997,8 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectZone struct {
 	Etag string `json:"etag" api:"required"`
 	// Human-readable name of the resource.
 	Name string `json:"name" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                `json:"tags" api:"required"`
 	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
@@ -3737,6 +5045,66 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneType) IsKnow
 	return false
 }
 
+// Response for zone_ruleset resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRuleset struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                       `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetType `json:"type" api:"required"`
+	// Zone ID is required only for zone-level resources
+	ZoneID string                                                                  `json:"zone_id" api:"required"`
+	JSON   accountTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON contains
+// the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRuleset]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON struct {
+	ID          apijson.Field
+	Etag        apijson.Field
+	Name        apijson.Field
+	Tags        apijson.Field
+	Type        apijson.Field
+	ZoneID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRuleset) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRuleset) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetTypeZoneRuleset AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetType = "zone_ruleset"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetTypeZoneRuleset:
+		return true
+	}
+	return false
+}
+
 type AccountTagGetResponseType string
 
 const (
@@ -3744,6 +5112,7 @@ const (
 	AccountTagGetResponseTypeAccessApplicationPolicy  AccountTagGetResponseType = "access_application_policy"
 	AccountTagGetResponseTypeAccessGroup              AccountTagGetResponseType = "access_group"
 	AccountTagGetResponseTypeAccount                  AccountTagGetResponseType = "account"
+	AccountTagGetResponseTypeAccountRuleset           AccountTagGetResponseType = "account_ruleset"
 	AccountTagGetResponseTypeAIGateway                AccountTagGetResponseType = "ai_gateway"
 	AccountTagGetResponseTypeAlertingPolicy           AccountTagGetResponseType = "alerting_policy"
 	AccountTagGetResponseTypeAlertingWebhook          AccountTagGetResponseType = "alerting_webhook"
@@ -3756,22 +5125,31 @@ const (
 	AccountTagGetResponseTypeDurableObjectNamespace   AccountTagGetResponseType = "durable_object_namespace"
 	AccountTagGetResponseTypeGatewayList              AccountTagGetResponseType = "gateway_list"
 	AccountTagGetResponseTypeGatewayRule              AccountTagGetResponseType = "gateway_rule"
+	AccountTagGetResponseTypeHealthcheck              AccountTagGetResponseType = "healthcheck"
 	AccountTagGetResponseTypeImage                    AccountTagGetResponseType = "image"
+	AccountTagGetResponseTypeInfrastructureTarget     AccountTagGetResponseType = "infrastructure_target"
 	AccountTagGetResponseTypeKVNamespace              AccountTagGetResponseType = "kv_namespace"
+	AccountTagGetResponseTypeLoadBalancer             AccountTagGetResponseType = "load_balancer"
+	AccountTagGetResponseTypeLoadBalancerMonitor      AccountTagGetResponseType = "load_balancer_monitor"
+	AccountTagGetResponseTypeLoadBalancerPool         AccountTagGetResponseType = "load_balancer_pool"
 	AccountTagGetResponseTypeManagedClientCertificate AccountTagGetResponseType = "managed_client_certificate"
+	AccountTagGetResponseTypePagesProject             AccountTagGetResponseType = "pages_project"
 	AccountTagGetResponseTypeQueue                    AccountTagGetResponseType = "queue"
 	AccountTagGetResponseTypeR2Bucket                 AccountTagGetResponseType = "r2_bucket"
 	AccountTagGetResponseTypeResourceShare            AccountTagGetResponseType = "resource_share"
 	AccountTagGetResponseTypeStreamLiveInput          AccountTagGetResponseType = "stream_live_input"
 	AccountTagGetResponseTypeStreamVideo              AccountTagGetResponseType = "stream_video"
+	AccountTagGetResponseTypeVectorizeIndex           AccountTagGetResponseType = "vectorize_index"
 	AccountTagGetResponseTypeWorker                   AccountTagGetResponseType = "worker"
+	AccountTagGetResponseTypeWorkerRoute              AccountTagGetResponseType = "worker_route"
 	AccountTagGetResponseTypeWorkerVersion            AccountTagGetResponseType = "worker_version"
 	AccountTagGetResponseTypeZone                     AccountTagGetResponseType = "zone"
+	AccountTagGetResponseTypeZoneRuleset              AccountTagGetResponseType = "zone_ruleset"
 )
 
 func (r AccountTagGetResponseType) IsKnown() bool {
 	switch r {
-	case AccountTagGetResponseTypeAccessApplication, AccountTagGetResponseTypeAccessApplicationPolicy, AccountTagGetResponseTypeAccessGroup, AccountTagGetResponseTypeAccount, AccountTagGetResponseTypeAIGateway, AccountTagGetResponseTypeAlertingPolicy, AccountTagGetResponseTypeAlertingWebhook, AccountTagGetResponseTypeAPIGatewayOperation, AccountTagGetResponseTypeCloudflaredTunnel, AccountTagGetResponseTypeCustomCertificate, AccountTagGetResponseTypeCustomHostname, AccountTagGetResponseTypeD1Database, AccountTagGetResponseTypeDNSRecord, AccountTagGetResponseTypeDurableObjectNamespace, AccountTagGetResponseTypeGatewayList, AccountTagGetResponseTypeGatewayRule, AccountTagGetResponseTypeImage, AccountTagGetResponseTypeKVNamespace, AccountTagGetResponseTypeManagedClientCertificate, AccountTagGetResponseTypeQueue, AccountTagGetResponseTypeR2Bucket, AccountTagGetResponseTypeResourceShare, AccountTagGetResponseTypeStreamLiveInput, AccountTagGetResponseTypeStreamVideo, AccountTagGetResponseTypeWorker, AccountTagGetResponseTypeWorkerVersion, AccountTagGetResponseTypeZone:
+	case AccountTagGetResponseTypeAccessApplication, AccountTagGetResponseTypeAccessApplicationPolicy, AccountTagGetResponseTypeAccessGroup, AccountTagGetResponseTypeAccount, AccountTagGetResponseTypeAccountRuleset, AccountTagGetResponseTypeAIGateway, AccountTagGetResponseTypeAlertingPolicy, AccountTagGetResponseTypeAlertingWebhook, AccountTagGetResponseTypeAPIGatewayOperation, AccountTagGetResponseTypeCloudflaredTunnel, AccountTagGetResponseTypeCustomCertificate, AccountTagGetResponseTypeCustomHostname, AccountTagGetResponseTypeD1Database, AccountTagGetResponseTypeDNSRecord, AccountTagGetResponseTypeDurableObjectNamespace, AccountTagGetResponseTypeGatewayList, AccountTagGetResponseTypeGatewayRule, AccountTagGetResponseTypeHealthcheck, AccountTagGetResponseTypeImage, AccountTagGetResponseTypeInfrastructureTarget, AccountTagGetResponseTypeKVNamespace, AccountTagGetResponseTypeLoadBalancer, AccountTagGetResponseTypeLoadBalancerMonitor, AccountTagGetResponseTypeLoadBalancerPool, AccountTagGetResponseTypeManagedClientCertificate, AccountTagGetResponseTypePagesProject, AccountTagGetResponseTypeQueue, AccountTagGetResponseTypeR2Bucket, AccountTagGetResponseTypeResourceShare, AccountTagGetResponseTypeStreamLiveInput, AccountTagGetResponseTypeStreamVideo, AccountTagGetResponseTypeVectorizeIndex, AccountTagGetResponseTypeWorker, AccountTagGetResponseTypeWorkerRoute, AccountTagGetResponseTypeWorkerVersion, AccountTagGetResponseTypeZone, AccountTagGetResponseTypeZoneRuleset:
 		return true
 	}
 	return false
@@ -3826,7 +5204,8 @@ type AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVe
 	ResourceType param.Field[AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType] `json:"resource_type" api:"required"`
 	// Worker ID is required only for worker_version resources
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags param.Field[map[string]string] `json:"tags"`
 }
 
@@ -3845,6 +5224,7 @@ const (
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccessApplication      AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "access_application"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccessGroup            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "access_group"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccount                AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "account"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccountRuleset         AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "account_ruleset"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAIGateway              AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "ai_gateway"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAlertingPolicy         AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "alerting_policy"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAlertingWebhook        AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "alerting_webhook"
@@ -3854,19 +5234,24 @@ const (
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeGatewayList            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "gateway_list"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeGatewayRule            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "gateway_rule"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeImage                  AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "image"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeInfrastructureTarget   AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "infrastructure_target"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeKVNamespace            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "kv_namespace"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeLoadBalancerMonitor    AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "load_balancer_monitor"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeLoadBalancerPool       AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "load_balancer_pool"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypePagesProject           AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "pages_project"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeQueue                  AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "queue"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeR2Bucket               AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "r2_bucket"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeResourceShare          AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "resource_share"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeStreamLiveInput        AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "stream_live_input"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeStreamVideo            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "stream_video"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeVectorizeIndex         AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "vectorize_index"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeWorker                 AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "worker"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeWorkerVersion          AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType = "worker_version"
 )
 
 func (r AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccount, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeImage, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeQueue, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeWorker, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeWorkerVersion:
+	case AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccount, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeImage, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeQueue, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeWorker, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeWorkerVersion:
 		return true
 	}
 	return false
@@ -3879,7 +5264,8 @@ type AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBase str
 	// Enum for base account-level resource types (those with no extra required
 	// fields).
 	ResourceType param.Field[AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType] `json:"resource_type" api:"required"`
-	// Contains key-value pairs of tags.
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags param.Field[map[string]string] `json:"tags"`
 }
 
@@ -3898,6 +5284,7 @@ const (
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessApplication      AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "access_application"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessGroup            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "access_group"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccount                AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "account"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccountRuleset         AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "account_ruleset"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAIGateway              AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "ai_gateway"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingPolicy         AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "alerting_policy"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingWebhook        AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "alerting_webhook"
@@ -3907,18 +5294,23 @@ const (
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayList            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "gateway_list"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayRule            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "gateway_rule"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeImage                  AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "image"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeInfrastructureTarget   AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "infrastructure_target"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeKVNamespace            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "kv_namespace"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerMonitor    AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "load_balancer_monitor"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerPool       AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "load_balancer_pool"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypePagesProject           AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "pages_project"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeQueue                  AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "queue"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeR2Bucket               AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "r2_bucket"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeResourceShare          AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "resource_share"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamLiveInput        AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "stream_live_input"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamVideo            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "stream_video"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeVectorizeIndex         AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "vectorize_index"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeWorker                 AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "worker"
 )
 
 func (r AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccount, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeImage, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeQueue, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeWorker:
+	case AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccount, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeImage, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeQueue, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeWorker:
 		return true
 	}
 	return false
@@ -3932,6 +5324,7 @@ const (
 	AccountTagUpdateParamsBodyResourceTypeAccessApplication      AccountTagUpdateParamsBodyResourceType = "access_application"
 	AccountTagUpdateParamsBodyResourceTypeAccessGroup            AccountTagUpdateParamsBodyResourceType = "access_group"
 	AccountTagUpdateParamsBodyResourceTypeAccount                AccountTagUpdateParamsBodyResourceType = "account"
+	AccountTagUpdateParamsBodyResourceTypeAccountRuleset         AccountTagUpdateParamsBodyResourceType = "account_ruleset"
 	AccountTagUpdateParamsBodyResourceTypeAIGateway              AccountTagUpdateParamsBodyResourceType = "ai_gateway"
 	AccountTagUpdateParamsBodyResourceTypeAlertingPolicy         AccountTagUpdateParamsBodyResourceType = "alerting_policy"
 	AccountTagUpdateParamsBodyResourceTypeAlertingWebhook        AccountTagUpdateParamsBodyResourceType = "alerting_webhook"
@@ -3941,19 +5334,24 @@ const (
 	AccountTagUpdateParamsBodyResourceTypeGatewayList            AccountTagUpdateParamsBodyResourceType = "gateway_list"
 	AccountTagUpdateParamsBodyResourceTypeGatewayRule            AccountTagUpdateParamsBodyResourceType = "gateway_rule"
 	AccountTagUpdateParamsBodyResourceTypeImage                  AccountTagUpdateParamsBodyResourceType = "image"
+	AccountTagUpdateParamsBodyResourceTypeInfrastructureTarget   AccountTagUpdateParamsBodyResourceType = "infrastructure_target"
 	AccountTagUpdateParamsBodyResourceTypeKVNamespace            AccountTagUpdateParamsBodyResourceType = "kv_namespace"
+	AccountTagUpdateParamsBodyResourceTypeLoadBalancerMonitor    AccountTagUpdateParamsBodyResourceType = "load_balancer_monitor"
+	AccountTagUpdateParamsBodyResourceTypeLoadBalancerPool       AccountTagUpdateParamsBodyResourceType = "load_balancer_pool"
+	AccountTagUpdateParamsBodyResourceTypePagesProject           AccountTagUpdateParamsBodyResourceType = "pages_project"
 	AccountTagUpdateParamsBodyResourceTypeQueue                  AccountTagUpdateParamsBodyResourceType = "queue"
 	AccountTagUpdateParamsBodyResourceTypeR2Bucket               AccountTagUpdateParamsBodyResourceType = "r2_bucket"
 	AccountTagUpdateParamsBodyResourceTypeResourceShare          AccountTagUpdateParamsBodyResourceType = "resource_share"
 	AccountTagUpdateParamsBodyResourceTypeStreamLiveInput        AccountTagUpdateParamsBodyResourceType = "stream_live_input"
 	AccountTagUpdateParamsBodyResourceTypeStreamVideo            AccountTagUpdateParamsBodyResourceType = "stream_video"
+	AccountTagUpdateParamsBodyResourceTypeVectorizeIndex         AccountTagUpdateParamsBodyResourceType = "vectorize_index"
 	AccountTagUpdateParamsBodyResourceTypeWorker                 AccountTagUpdateParamsBodyResourceType = "worker"
 	AccountTagUpdateParamsBodyResourceTypeWorkerVersion          AccountTagUpdateParamsBodyResourceType = "worker_version"
 )
 
 func (r AccountTagUpdateParamsBodyResourceType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateParamsBodyResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTypeAccount, AccountTagUpdateParamsBodyResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTypeImage, AccountTagUpdateParamsBodyResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTypeQueue, AccountTagUpdateParamsBodyResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTypeWorker, AccountTagUpdateParamsBodyResourceTypeWorkerVersion:
+	case AccountTagUpdateParamsBodyResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTypeAccount, AccountTagUpdateParamsBodyResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTypeImage, AccountTagUpdateParamsBodyResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTypeQueue, AccountTagUpdateParamsBodyResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTypeWorker, AccountTagUpdateParamsBodyResourceTypeWorkerVersion:
 		return true
 	}
 	return false
@@ -4131,6 +5529,7 @@ const (
 	AccountTagGetParamsResourceTypeAccessApplication      AccountTagGetParamsResourceType = "access_application"
 	AccountTagGetParamsResourceTypeAccessGroup            AccountTagGetParamsResourceType = "access_group"
 	AccountTagGetParamsResourceTypeAccount                AccountTagGetParamsResourceType = "account"
+	AccountTagGetParamsResourceTypeAccountRuleset         AccountTagGetParamsResourceType = "account_ruleset"
 	AccountTagGetParamsResourceTypeAIGateway              AccountTagGetParamsResourceType = "ai_gateway"
 	AccountTagGetParamsResourceTypeAlertingPolicy         AccountTagGetParamsResourceType = "alerting_policy"
 	AccountTagGetParamsResourceTypeAlertingWebhook        AccountTagGetParamsResourceType = "alerting_webhook"
@@ -4140,19 +5539,24 @@ const (
 	AccountTagGetParamsResourceTypeGatewayList            AccountTagGetParamsResourceType = "gateway_list"
 	AccountTagGetParamsResourceTypeGatewayRule            AccountTagGetParamsResourceType = "gateway_rule"
 	AccountTagGetParamsResourceTypeImage                  AccountTagGetParamsResourceType = "image"
+	AccountTagGetParamsResourceTypeInfrastructureTarget   AccountTagGetParamsResourceType = "infrastructure_target"
 	AccountTagGetParamsResourceTypeKVNamespace            AccountTagGetParamsResourceType = "kv_namespace"
+	AccountTagGetParamsResourceTypeLoadBalancerMonitor    AccountTagGetParamsResourceType = "load_balancer_monitor"
+	AccountTagGetParamsResourceTypeLoadBalancerPool       AccountTagGetParamsResourceType = "load_balancer_pool"
+	AccountTagGetParamsResourceTypePagesProject           AccountTagGetParamsResourceType = "pages_project"
 	AccountTagGetParamsResourceTypeQueue                  AccountTagGetParamsResourceType = "queue"
 	AccountTagGetParamsResourceTypeR2Bucket               AccountTagGetParamsResourceType = "r2_bucket"
 	AccountTagGetParamsResourceTypeResourceShare          AccountTagGetParamsResourceType = "resource_share"
 	AccountTagGetParamsResourceTypeStreamLiveInput        AccountTagGetParamsResourceType = "stream_live_input"
 	AccountTagGetParamsResourceTypeStreamVideo            AccountTagGetParamsResourceType = "stream_video"
+	AccountTagGetParamsResourceTypeVectorizeIndex         AccountTagGetParamsResourceType = "vectorize_index"
 	AccountTagGetParamsResourceTypeWorker                 AccountTagGetParamsResourceType = "worker"
 	AccountTagGetParamsResourceTypeWorkerVersion          AccountTagGetParamsResourceType = "worker_version"
 )
 
 func (r AccountTagGetParamsResourceType) IsKnown() bool {
 	switch r {
-	case AccountTagGetParamsResourceTypeAccessApplication, AccountTagGetParamsResourceTypeAccessGroup, AccountTagGetParamsResourceTypeAccount, AccountTagGetParamsResourceTypeAIGateway, AccountTagGetParamsResourceTypeAlertingPolicy, AccountTagGetParamsResourceTypeAlertingWebhook, AccountTagGetParamsResourceTypeCloudflaredTunnel, AccountTagGetParamsResourceTypeD1Database, AccountTagGetParamsResourceTypeDurableObjectNamespace, AccountTagGetParamsResourceTypeGatewayList, AccountTagGetParamsResourceTypeGatewayRule, AccountTagGetParamsResourceTypeImage, AccountTagGetParamsResourceTypeKVNamespace, AccountTagGetParamsResourceTypeQueue, AccountTagGetParamsResourceTypeR2Bucket, AccountTagGetParamsResourceTypeResourceShare, AccountTagGetParamsResourceTypeStreamLiveInput, AccountTagGetParamsResourceTypeStreamVideo, AccountTagGetParamsResourceTypeWorker, AccountTagGetParamsResourceTypeWorkerVersion:
+	case AccountTagGetParamsResourceTypeAccessApplication, AccountTagGetParamsResourceTypeAccessGroup, AccountTagGetParamsResourceTypeAccount, AccountTagGetParamsResourceTypeAccountRuleset, AccountTagGetParamsResourceTypeAIGateway, AccountTagGetParamsResourceTypeAlertingPolicy, AccountTagGetParamsResourceTypeAlertingWebhook, AccountTagGetParamsResourceTypeCloudflaredTunnel, AccountTagGetParamsResourceTypeD1Database, AccountTagGetParamsResourceTypeDurableObjectNamespace, AccountTagGetParamsResourceTypeGatewayList, AccountTagGetParamsResourceTypeGatewayRule, AccountTagGetParamsResourceTypeImage, AccountTagGetParamsResourceTypeInfrastructureTarget, AccountTagGetParamsResourceTypeKVNamespace, AccountTagGetParamsResourceTypeLoadBalancerMonitor, AccountTagGetParamsResourceTypeLoadBalancerPool, AccountTagGetParamsResourceTypePagesProject, AccountTagGetParamsResourceTypeQueue, AccountTagGetParamsResourceTypeR2Bucket, AccountTagGetParamsResourceTypeResourceShare, AccountTagGetParamsResourceTypeStreamLiveInput, AccountTagGetParamsResourceTypeStreamVideo, AccountTagGetParamsResourceTypeVectorizeIndex, AccountTagGetParamsResourceTypeWorker, AccountTagGetParamsResourceTypeWorkerVersion:
 		return true
 	}
 	return false

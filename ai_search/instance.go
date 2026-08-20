@@ -895,11 +895,13 @@ func (r InstanceNewResponseRewriteModel) IsKnown() bool {
 type InstanceNewResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   []string                                  `json:"include_items"`
 	Prefix         string                                    `json:"prefix"`
 	R2Jurisdiction string                                    `json:"r2_jurisdiction"`
@@ -928,18 +930,24 @@ func (r instanceNewResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceNewResponseSourceParamsWebCrawler struct {
-	ParseOptions InstanceNewResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
-	ParseType    InstanceNewResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	JSON         instanceNewResponseSourceParamsWebCrawlerJSON         `json:"-"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions InstanceNewResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
+	ParseOptions    InstanceNewResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType InstanceNewResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
+	JSON      instanceNewResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
 
 // instanceNewResponseSourceParamsWebCrawlerJSON contains the JSON metadata for the
 // struct [InstanceNewResponseSourceParamsWebCrawler]
 type instanceNewResponseSourceParamsWebCrawlerJSON struct {
-	ParseOptions apijson.Field
-	ParseType    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	DiscoverOptions apijson.Field
+	ParseOptions    apijson.Field
+	ParseType       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *InstanceNewResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (err error) {
@@ -948,6 +956,66 @@ func (r *InstanceNewResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (
 
 func (r instanceNewResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type InstanceNewResponseSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth float64 `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks bool `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains bool `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit float64 `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge float64 `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource `json:"source"`
+	JSON   instanceNewResponseSourceParamsWebCrawlerDiscoverOptionsJSON   `json:"-"`
+}
+
+// instanceNewResponseSourceParamsWebCrawlerDiscoverOptionsJSON contains the JSON
+// metadata for the struct
+// [InstanceNewResponseSourceParamsWebCrawlerDiscoverOptions]
+type instanceNewResponseSourceParamsWebCrawlerDiscoverOptionsJSON struct {
+	Depth                apijson.Field
+	IncludeExternalLinks apijson.Field
+	IncludeSubdomains    apijson.Field
+	Limit                apijson.Field
+	MaxAge               apijson.Field
+	Source               apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *InstanceNewResponseSourceParamsWebCrawlerDiscoverOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponseSourceParamsWebCrawlerDiscoverOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll      InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks    InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll, InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type InstanceNewResponseSourceParamsWebCrawlerParseOptions struct {
@@ -1017,16 +1085,18 @@ func (r instanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON
 	return r.raw
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type InstanceNewResponseSourceParamsWebCrawlerParseType string
 
 const (
-	InstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap InstanceNewResponseSourceParamsWebCrawlerParseType = "sitemap"
-	InstanceNewResponseSourceParamsWebCrawlerParseTypeCrawl   InstanceNewResponseSourceParamsWebCrawlerParseType = "crawl"
+	InstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap  InstanceNewResponseSourceParamsWebCrawlerParseType = "sitemap"
+	InstanceNewResponseSourceParamsWebCrawlerParseTypeDiscover InstanceNewResponseSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r InstanceNewResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case InstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap, InstanceNewResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case InstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap, InstanceNewResponseSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -1756,11 +1826,13 @@ func (r InstanceUpdateResponseRewriteModel) IsKnown() bool {
 type InstanceUpdateResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   []string                                     `json:"include_items"`
 	Prefix         string                                       `json:"prefix"`
 	R2Jurisdiction string                                       `json:"r2_jurisdiction"`
@@ -1789,18 +1861,24 @@ func (r instanceUpdateResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceUpdateResponseSourceParamsWebCrawler struct {
-	ParseOptions InstanceUpdateResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
-	ParseType    InstanceUpdateResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	JSON         instanceUpdateResponseSourceParamsWebCrawlerJSON         `json:"-"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
+	ParseOptions    InstanceUpdateResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType InstanceUpdateResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
+	JSON      instanceUpdateResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
 
 // instanceUpdateResponseSourceParamsWebCrawlerJSON contains the JSON metadata for
 // the struct [InstanceUpdateResponseSourceParamsWebCrawler]
 type instanceUpdateResponseSourceParamsWebCrawlerJSON struct {
-	ParseOptions apijson.Field
-	ParseType    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	DiscoverOptions apijson.Field
+	ParseOptions    apijson.Field
+	ParseType       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *InstanceUpdateResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (err error) {
@@ -1809,6 +1887,66 @@ func (r *InstanceUpdateResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte
 
 func (r instanceUpdateResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth float64 `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks bool `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains bool `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit float64 `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge float64 `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource `json:"source"`
+	JSON   instanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsJSON   `json:"-"`
+}
+
+// instanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsJSON contains the
+// JSON metadata for the struct
+// [InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptions]
+type instanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsJSON struct {
+	Depth                apijson.Field
+	IncludeExternalLinks apijson.Field
+	IncludeSubdomains    apijson.Field
+	Limit                apijson.Field
+	MaxAge               apijson.Field
+	Source               apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll      InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks    InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll, InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type InstanceUpdateResponseSourceParamsWebCrawlerParseOptions struct {
@@ -1879,16 +2017,18 @@ func (r instanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelectorJ
 	return r.raw
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type InstanceUpdateResponseSourceParamsWebCrawlerParseType string
 
 const (
-	InstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap InstanceUpdateResponseSourceParamsWebCrawlerParseType = "sitemap"
-	InstanceUpdateResponseSourceParamsWebCrawlerParseTypeCrawl   InstanceUpdateResponseSourceParamsWebCrawlerParseType = "crawl"
+	InstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap  InstanceUpdateResponseSourceParamsWebCrawlerParseType = "sitemap"
+	InstanceUpdateResponseSourceParamsWebCrawlerParseTypeDiscover InstanceUpdateResponseSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r InstanceUpdateResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case InstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap, InstanceUpdateResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case InstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap, InstanceUpdateResponseSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -2497,19 +2637,21 @@ func (r instanceListResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceListResponseSourceParamsWebCrawler struct {
-	ParseOptions InstanceListResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
-	ParseType    InstanceListResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	ExtraFields  map[string]interface{}                                 `json:"-" api:"extrafields"`
-	JSON         instanceListResponseSourceParamsWebCrawlerJSON         `json:"-"`
+	DiscoverOptions InstanceListResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
+	ParseOptions    InstanceListResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
+	ParseType       InstanceListResponseSourceParamsWebCrawlerParseType       `json:"parse_type"`
+	ExtraFields     map[string]interface{}                                    `json:"-" api:"extrafields"`
+	JSON            instanceListResponseSourceParamsWebCrawlerJSON            `json:"-"`
 }
 
 // instanceListResponseSourceParamsWebCrawlerJSON contains the JSON metadata for
 // the struct [InstanceListResponseSourceParamsWebCrawler]
 type instanceListResponseSourceParamsWebCrawlerJSON struct {
-	ParseOptions apijson.Field
-	ParseType    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	DiscoverOptions apijson.Field
+	ParseOptions    apijson.Field
+	ParseType       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *InstanceListResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (err error) {
@@ -2518,6 +2660,58 @@ func (r *InstanceListResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) 
 
 func (r instanceListResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceListResponseSourceParamsWebCrawlerDiscoverOptions struct {
+	Depth                float64 `json:"depth"`
+	IncludeExternalLinks bool    `json:"include_external_links"`
+	IncludeSubdomains    bool    `json:"include_subdomains"`
+	// Maximum number of pages to crawl. New values are capped at 100000; instances
+	// configured before that cap may report a higher stored value, which the crawler
+	// clamps at run time.
+	Limit       float64                                                         `json:"limit"`
+	MaxAge      float64                                                         `json:"max_age"`
+	Source      InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource `json:"source"`
+	ExtraFields map[string]interface{}                                          `json:"-" api:"extrafields"`
+	JSON        instanceListResponseSourceParamsWebCrawlerDiscoverOptionsJSON   `json:"-"`
+}
+
+// instanceListResponseSourceParamsWebCrawlerDiscoverOptionsJSON contains the JSON
+// metadata for the struct
+// [InstanceListResponseSourceParamsWebCrawlerDiscoverOptions]
+type instanceListResponseSourceParamsWebCrawlerDiscoverOptionsJSON struct {
+	Depth                apijson.Field
+	IncludeExternalLinks apijson.Field
+	IncludeSubdomains    apijson.Field
+	Limit                apijson.Field
+	MaxAge               apijson.Field
+	Source               apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *InstanceListResponseSourceParamsWebCrawlerDiscoverOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponseSourceParamsWebCrawlerDiscoverOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll      InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks    InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll, InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, InstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type InstanceListResponseSourceParamsWebCrawlerParseOptions struct {
@@ -2578,13 +2772,13 @@ func (r instanceListResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSO
 type InstanceListResponseSourceParamsWebCrawlerParseType string
 
 const (
-	InstanceListResponseSourceParamsWebCrawlerParseTypeSitemap InstanceListResponseSourceParamsWebCrawlerParseType = "sitemap"
-	InstanceListResponseSourceParamsWebCrawlerParseTypeCrawl   InstanceListResponseSourceParamsWebCrawlerParseType = "crawl"
+	InstanceListResponseSourceParamsWebCrawlerParseTypeSitemap  InstanceListResponseSourceParamsWebCrawlerParseType = "sitemap"
+	InstanceListResponseSourceParamsWebCrawlerParseTypeDiscover InstanceListResponseSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r InstanceListResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case InstanceListResponseSourceParamsWebCrawlerParseTypeSitemap, InstanceListResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case InstanceListResponseSourceParamsWebCrawlerParseTypeSitemap, InstanceListResponseSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -3312,11 +3506,13 @@ func (r InstanceDeleteResponseRewriteModel) IsKnown() bool {
 type InstanceDeleteResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   []string                                     `json:"include_items"`
 	Prefix         string                                       `json:"prefix"`
 	R2Jurisdiction string                                       `json:"r2_jurisdiction"`
@@ -3345,18 +3541,24 @@ func (r instanceDeleteResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceDeleteResponseSourceParamsWebCrawler struct {
-	ParseOptions InstanceDeleteResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
-	ParseType    InstanceDeleteResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	JSON         instanceDeleteResponseSourceParamsWebCrawlerJSON         `json:"-"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
+	ParseOptions    InstanceDeleteResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType InstanceDeleteResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
+	JSON      instanceDeleteResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
 
 // instanceDeleteResponseSourceParamsWebCrawlerJSON contains the JSON metadata for
 // the struct [InstanceDeleteResponseSourceParamsWebCrawler]
 type instanceDeleteResponseSourceParamsWebCrawlerJSON struct {
-	ParseOptions apijson.Field
-	ParseType    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	DiscoverOptions apijson.Field
+	ParseOptions    apijson.Field
+	ParseType       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *InstanceDeleteResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (err error) {
@@ -3365,6 +3567,66 @@ func (r *InstanceDeleteResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte
 
 func (r instanceDeleteResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth float64 `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks bool `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains bool `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit float64 `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge float64 `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource `json:"source"`
+	JSON   instanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsJSON   `json:"-"`
+}
+
+// instanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsJSON contains the
+// JSON metadata for the struct
+// [InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptions]
+type instanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsJSON struct {
+	Depth                apijson.Field
+	IncludeExternalLinks apijson.Field
+	IncludeSubdomains    apijson.Field
+	Limit                apijson.Field
+	MaxAge               apijson.Field
+	Source               apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll      InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks    InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll, InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type InstanceDeleteResponseSourceParamsWebCrawlerParseOptions struct {
@@ -3435,16 +3697,18 @@ func (r instanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelectorJ
 	return r.raw
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type InstanceDeleteResponseSourceParamsWebCrawlerParseType string
 
 const (
-	InstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap InstanceDeleteResponseSourceParamsWebCrawlerParseType = "sitemap"
-	InstanceDeleteResponseSourceParamsWebCrawlerParseTypeCrawl   InstanceDeleteResponseSourceParamsWebCrawlerParseType = "crawl"
+	InstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap  InstanceDeleteResponseSourceParamsWebCrawlerParseType = "sitemap"
+	InstanceDeleteResponseSourceParamsWebCrawlerParseTypeDiscover InstanceDeleteResponseSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r InstanceDeleteResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case InstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap, InstanceDeleteResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case InstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap, InstanceDeleteResponseSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -4530,11 +4794,13 @@ func (r InstanceReadResponseRewriteModel) IsKnown() bool {
 type InstanceReadResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   []string                                   `json:"include_items"`
 	Prefix         string                                     `json:"prefix"`
 	R2Jurisdiction string                                     `json:"r2_jurisdiction"`
@@ -4563,18 +4829,24 @@ func (r instanceReadResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceReadResponseSourceParamsWebCrawler struct {
-	ParseOptions InstanceReadResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
-	ParseType    InstanceReadResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	JSON         instanceReadResponseSourceParamsWebCrawlerJSON         `json:"-"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions InstanceReadResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
+	ParseOptions    InstanceReadResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType InstanceReadResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
+	JSON      instanceReadResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
 
 // instanceReadResponseSourceParamsWebCrawlerJSON contains the JSON metadata for
 // the struct [InstanceReadResponseSourceParamsWebCrawler]
 type instanceReadResponseSourceParamsWebCrawlerJSON struct {
-	ParseOptions apijson.Field
-	ParseType    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	DiscoverOptions apijson.Field
+	ParseOptions    apijson.Field
+	ParseType       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *InstanceReadResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (err error) {
@@ -4583,6 +4855,66 @@ func (r *InstanceReadResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) 
 
 func (r instanceReadResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type InstanceReadResponseSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth float64 `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks bool `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains bool `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit float64 `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge float64 `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource `json:"source"`
+	JSON   instanceReadResponseSourceParamsWebCrawlerDiscoverOptionsJSON   `json:"-"`
+}
+
+// instanceReadResponseSourceParamsWebCrawlerDiscoverOptionsJSON contains the JSON
+// metadata for the struct
+// [InstanceReadResponseSourceParamsWebCrawlerDiscoverOptions]
+type instanceReadResponseSourceParamsWebCrawlerDiscoverOptionsJSON struct {
+	Depth                apijson.Field
+	IncludeExternalLinks apijson.Field
+	IncludeSubdomains    apijson.Field
+	Limit                apijson.Field
+	MaxAge               apijson.Field
+	Source               apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *InstanceReadResponseSourceParamsWebCrawlerDiscoverOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponseSourceParamsWebCrawlerDiscoverOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll      InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks    InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll, InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type InstanceReadResponseSourceParamsWebCrawlerParseOptions struct {
@@ -4652,16 +4984,18 @@ func (r instanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSO
 	return r.raw
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type InstanceReadResponseSourceParamsWebCrawlerParseType string
 
 const (
-	InstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap InstanceReadResponseSourceParamsWebCrawlerParseType = "sitemap"
-	InstanceReadResponseSourceParamsWebCrawlerParseTypeCrawl   InstanceReadResponseSourceParamsWebCrawlerParseType = "crawl"
+	InstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap  InstanceReadResponseSourceParamsWebCrawlerParseType = "sitemap"
+	InstanceReadResponseSourceParamsWebCrawlerParseTypeDiscover InstanceReadResponseSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r InstanceReadResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case InstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap, InstanceReadResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case InstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap, InstanceReadResponseSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -5432,11 +5766,13 @@ func (r InstanceNewParamsRewriteModel) IsKnown() bool {
 type InstanceNewParamsSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems param.Field[[]string] `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   param.Field[[]string]                                `json:"include_items"`
 	Prefix         param.Field[string]                                  `json:"prefix"`
 	R2Jurisdiction param.Field[string]                                  `json:"r2_jurisdiction"`
@@ -5448,12 +5784,58 @@ func (r InstanceNewParamsSourceParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceNewParamsSourceParamsWebCrawler struct {
-	ParseOptions param.Field[InstanceNewParamsSourceParamsWebCrawlerParseOptions] `json:"parse_options"`
-	ParseType    param.Field[InstanceNewParamsSourceParamsWebCrawlerParseType]    `json:"parse_type"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions param.Field[InstanceNewParamsSourceParamsWebCrawlerDiscoverOptions] `json:"discover_options"`
+	ParseOptions    param.Field[InstanceNewParamsSourceParamsWebCrawlerParseOptions]    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType param.Field[InstanceNewParamsSourceParamsWebCrawlerParseType] `json:"parse_type"`
 }
 
 func (r InstanceNewParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type InstanceNewParamsSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth param.Field[float64] `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks param.Field[bool] `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains param.Field[bool] `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit param.Field[float64] `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge param.Field[float64] `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source param.Field[InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource] `json:"source"`
+}
+
+func (r InstanceNewParamsSourceParamsWebCrawlerDiscoverOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceAll      InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceLinks    InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceAll, InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type InstanceNewParamsSourceParamsWebCrawlerParseOptions struct {
@@ -5491,16 +5873,18 @@ func (r InstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector) Mars
 	return apijson.MarshalRoot(r)
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type InstanceNewParamsSourceParamsWebCrawlerParseType string
 
 const (
-	InstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap InstanceNewParamsSourceParamsWebCrawlerParseType = "sitemap"
-	InstanceNewParamsSourceParamsWebCrawlerParseTypeCrawl   InstanceNewParamsSourceParamsWebCrawlerParseType = "crawl"
+	InstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap  InstanceNewParamsSourceParamsWebCrawlerParseType = "sitemap"
+	InstanceNewParamsSourceParamsWebCrawlerParseTypeDiscover InstanceNewParamsSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r InstanceNewParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap, InstanceNewParamsSourceParamsWebCrawlerParseTypeCrawl:
+	case InstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap, InstanceNewParamsSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -6032,11 +6416,13 @@ func (r InstanceUpdateParamsRewriteModel) IsKnown() bool {
 type InstanceUpdateParamsSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems param.Field[[]string] `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   param.Field[[]string]                                   `json:"include_items"`
 	Prefix         param.Field[string]                                     `json:"prefix"`
 	R2Jurisdiction param.Field[string]                                     `json:"r2_jurisdiction"`
@@ -6048,12 +6434,58 @@ func (r InstanceUpdateParamsSourceParams) MarshalJSON() (data []byte, err error)
 }
 
 type InstanceUpdateParamsSourceParamsWebCrawler struct {
-	ParseOptions param.Field[InstanceUpdateParamsSourceParamsWebCrawlerParseOptions] `json:"parse_options"`
-	ParseType    param.Field[InstanceUpdateParamsSourceParamsWebCrawlerParseType]    `json:"parse_type"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions param.Field[InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptions] `json:"discover_options"`
+	ParseOptions    param.Field[InstanceUpdateParamsSourceParamsWebCrawlerParseOptions]    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType param.Field[InstanceUpdateParamsSourceParamsWebCrawlerParseType] `json:"parse_type"`
 }
 
 func (r InstanceUpdateParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth param.Field[float64] `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks param.Field[bool] `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains param.Field[bool] `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit param.Field[float64] `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge param.Field[float64] `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source param.Field[InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource] `json:"source"`
+}
+
+func (r InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceAll      InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceLinks    InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceAll, InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type InstanceUpdateParamsSourceParamsWebCrawlerParseOptions struct {
@@ -6091,16 +6523,18 @@ func (r InstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector) M
 	return apijson.MarshalRoot(r)
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type InstanceUpdateParamsSourceParamsWebCrawlerParseType string
 
 const (
-	InstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap InstanceUpdateParamsSourceParamsWebCrawlerParseType = "sitemap"
-	InstanceUpdateParamsSourceParamsWebCrawlerParseTypeCrawl   InstanceUpdateParamsSourceParamsWebCrawlerParseType = "crawl"
+	InstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap  InstanceUpdateParamsSourceParamsWebCrawlerParseType = "sitemap"
+	InstanceUpdateParamsSourceParamsWebCrawlerParseTypeDiscover InstanceUpdateParamsSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r InstanceUpdateParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case InstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap, InstanceUpdateParamsSourceParamsWebCrawlerParseTypeCrawl:
+	case InstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap, InstanceUpdateParamsSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false

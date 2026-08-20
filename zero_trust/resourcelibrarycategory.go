@@ -65,18 +65,14 @@ func (r *ResourceLibraryCategoryService) ListAutoPaging(ctx context.Context, par
 }
 
 // Get application category by ID.
-func (r *ResourceLibraryCategoryService) Get(ctx context.Context, id string, query ResourceLibraryCategoryGetParams, opts ...option.RequestOption) (res *ResourceLibraryCategoryGetResponse, err error) {
+func (r *ResourceLibraryCategoryService) Get(ctx context.Context, id int64, query ResourceLibraryCategoryGetParams, opts ...option.RequestOption) (res *ResourceLibraryCategoryGetResponse, err error) {
 	var env ResourceLibraryCategoryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/resource-library/categories/%s", query.AccountID, id)
+	path := fmt.Sprintf("accounts/%s/resource-library/categories/%v", query.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -87,7 +83,7 @@ func (r *ResourceLibraryCategoryService) Get(ctx context.Context, id string, que
 
 type ResourceLibraryCategoryListResponse struct {
 	// Returns the category ID.
-	ID string `json:"id" api:"required"`
+	ID int64 `json:"id" api:"required"`
 	// Returns the category creation time.
 	CreatedAt string `json:"created_at" api:"required"`
 	// Returns the category description.
@@ -118,7 +114,7 @@ func (r resourceLibraryCategoryListResponseJSON) RawJSON() string {
 
 type ResourceLibraryCategoryGetResponse struct {
 	// Returns the category ID.
-	ID string `json:"id" api:"required"`
+	ID int64 `json:"id" api:"required"`
 	// Returns the category creation time.
 	CreatedAt string `json:"created_at" api:"required"`
 	// Returns the category description.

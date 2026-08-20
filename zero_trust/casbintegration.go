@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 )
 
 // CasbIntegrationService contains methods and other services that help with
@@ -42,19 +43,25 @@ func NewCasbIntegrationService(opts ...option.RequestOption) (r *CasbIntegration
 // `GET /v2/applications/{application_id}/credential-guide` to see the required
 // credential structure and example payloads for each vendor.
 func (r *CasbIntegrationService) New(ctx context.Context, params CasbIntegrationNewParams, opts ...option.RequestOption) (res *CasbIntegrationNewResponse, err error) {
+	var env CasbIntegrationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/one/integrations", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return res, err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // Updates an integration's name, permissions, DLP profiles, use cases, or
 // credentials.
 func (r *CasbIntegrationService) Update(ctx context.Context, id string, params CasbIntegrationUpdateParams, opts ...option.RequestOption) (res *CasbIntegrationUpdateResponse, err error) {
+	var env CasbIntegrationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -65,20 +72,39 @@ func (r *CasbIntegrationService) Update(ctx context.Context, id string, params C
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/one/integrations/%s", params.AccountID, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return res, err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // Returns a paginated list of integrations for the account.
-func (r *CasbIntegrationService) List(ctx context.Context, params CasbIntegrationListParams, opts ...option.RequestOption) (res *CasbIntegrationListResponse, err error) {
+func (r *CasbIntegrationService) List(ctx context.Context, params CasbIntegrationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CasbIntegrationListResponse], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/one/integrations", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return res, err
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns a paginated list of integrations for the account.
+func (r *CasbIntegrationService) ListAutoPaging(ctx context.Context, params CasbIntegrationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CasbIntegrationListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete an integration by soft-deleting it.
@@ -100,6 +126,7 @@ func (r *CasbIntegrationService) Delete(ctx context.Context, id string, body Cas
 
 // Returns full integration details including use cases and permissions.
 func (r *CasbIntegrationService) Get(ctx context.Context, id string, query CasbIntegrationGetParams, opts ...option.RequestOption) (res *CasbIntegrationGetResponse, err error) {
+	var env CasbIntegrationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -110,12 +137,17 @@ func (r *CasbIntegrationService) Get(ctx context.Context, id string, query CasbI
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/one/integrations/%s", query.AccountID, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // Pauses an integration, stopping all crawlers.
 func (r *CasbIntegrationService) Pause(ctx context.Context, id string, body CasbIntegrationPauseParams, opts ...option.RequestOption) (res *CasbIntegrationPauseResponse, err error) {
+	var env CasbIntegrationPauseResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -126,12 +158,17 @@ func (r *CasbIntegrationService) Pause(ctx context.Context, id string, body Casb
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/one/integrations/%s/pause", body.AccountID, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return res, err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // Resumes a paused integration, restarting crawlers.
 func (r *CasbIntegrationService) Resume(ctx context.Context, id string, body CasbIntegrationResumeParams, opts ...option.RequestOption) (res *CasbIntegrationResumeResponse, err error) {
+	var env CasbIntegrationResumeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -142,11 +179,15 @@ func (r *CasbIntegrationService) Resume(ctx context.Context, id string, body Cas
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/one/integrations/%s/resume", body.AccountID, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return res, err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
-// Serializer for v2 integration detail response with use cases.
+// The requested item.
 type CasbIntegrationNewResponse struct {
 	// Integration ID.
 	ID          string            `json:"id" api:"required" format:"uuid"`
@@ -169,8 +210,6 @@ type CasbIntegrationNewResponse struct {
 	LastHydrated time.Time `json:"last_hydrated" api:"required" format:"date-time"`
 	// Name of the integration.
 	Name string `json:"name" api:"required"`
-	// Organization ID.
-	OrganizationID int64 `json:"organization_id" api:"required"`
 	// Integration status.
 	Status string `json:"status" api:"required"`
 	// When the integration was last updated.
@@ -194,7 +233,6 @@ type casbIntegrationNewResponseJSON struct {
 	IsPaused          apijson.Field
 	LastHydrated      apijson.Field
 	Name              apijson.Field
-	OrganizationID    apijson.Field
 	Status            apijson.Field
 	Updated           apijson.Field
 	UseCases          apijson.Field
@@ -234,7 +272,7 @@ func (r casbIntegrationNewResponseAuthorizationLinkJSON) RawJSON() string {
 	return r.raw
 }
 
-// Serializer for v2 integration detail response with use cases.
+// The requested item.
 type CasbIntegrationUpdateResponse struct {
 	// Integration ID.
 	ID          string            `json:"id" api:"required" format:"uuid"`
@@ -257,8 +295,6 @@ type CasbIntegrationUpdateResponse struct {
 	LastHydrated time.Time `json:"last_hydrated" api:"required" format:"date-time"`
 	// Name of the integration.
 	Name string `json:"name" api:"required"`
-	// Organization ID.
-	OrganizationID int64 `json:"organization_id" api:"required"`
 	// Integration status.
 	Status string `json:"status" api:"required"`
 	// When the integration was last updated.
@@ -282,7 +318,6 @@ type casbIntegrationUpdateResponseJSON struct {
 	IsPaused          apijson.Field
 	LastHydrated      apijson.Field
 	Name              apijson.Field
-	OrganizationID    apijson.Field
 	Status            apijson.Field
 	Updated           apijson.Field
 	UseCases          apijson.Field
@@ -322,9 +357,47 @@ func (r casbIntegrationUpdateResponseAuthorizationLinkJSON) RawJSON() string {
 	return r.raw
 }
 
-type CasbIntegrationListResponse = interface{}
+// Serializer for v2 integration list responses.
+type CasbIntegrationListResponse struct {
+	// Integration ID.
+	ID          string            `json:"id" api:"required" format:"uuid"`
+	Application map[string]string `json:"application" api:"required"`
+	// When the integration was created.
+	Created time.Time `json:"created" api:"required" format:"date-time"`
+	// Whether the user paused the integration.
+	IsPaused bool `json:"is_paused" api:"required"`
+	// Name of the integration.
+	Name string `json:"name" api:"required"`
+	// Integration status.
+	Status string `json:"status" api:"required"`
+	// When the integration was last updated.
+	Updated time.Time                       `json:"updated" api:"required" format:"date-time"`
+	JSON    casbIntegrationListResponseJSON `json:"-"`
+}
 
-// Serializer for v2 integration detail response with use cases.
+// casbIntegrationListResponseJSON contains the JSON metadata for the struct
+// [CasbIntegrationListResponse]
+type casbIntegrationListResponseJSON struct {
+	ID          apijson.Field
+	Application apijson.Field
+	Created     apijson.Field
+	IsPaused    apijson.Field
+	Name        apijson.Field
+	Status      apijson.Field
+	Updated     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CasbIntegrationListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r casbIntegrationListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The requested item.
 type CasbIntegrationGetResponse struct {
 	// Integration ID.
 	ID          string            `json:"id" api:"required" format:"uuid"`
@@ -347,8 +420,6 @@ type CasbIntegrationGetResponse struct {
 	LastHydrated time.Time `json:"last_hydrated" api:"required" format:"date-time"`
 	// Name of the integration.
 	Name string `json:"name" api:"required"`
-	// Organization ID.
-	OrganizationID int64 `json:"organization_id" api:"required"`
 	// Integration status.
 	Status string `json:"status" api:"required"`
 	// When the integration was last updated.
@@ -372,7 +443,6 @@ type casbIntegrationGetResponseJSON struct {
 	IsPaused          apijson.Field
 	LastHydrated      apijson.Field
 	Name              apijson.Field
-	OrganizationID    apijson.Field
 	Status            apijson.Field
 	Updated           apijson.Field
 	UseCases          apijson.Field
@@ -412,7 +482,7 @@ func (r casbIntegrationGetResponseAuthorizationLinkJSON) RawJSON() string {
 	return r.raw
 }
 
-// Serializer for v2 integration detail response with use cases.
+// The requested item.
 type CasbIntegrationPauseResponse struct {
 	// Integration ID.
 	ID          string            `json:"id" api:"required" format:"uuid"`
@@ -435,8 +505,6 @@ type CasbIntegrationPauseResponse struct {
 	LastHydrated time.Time `json:"last_hydrated" api:"required" format:"date-time"`
 	// Name of the integration.
 	Name string `json:"name" api:"required"`
-	// Organization ID.
-	OrganizationID int64 `json:"organization_id" api:"required"`
 	// Integration status.
 	Status string `json:"status" api:"required"`
 	// When the integration was last updated.
@@ -460,7 +528,6 @@ type casbIntegrationPauseResponseJSON struct {
 	IsPaused          apijson.Field
 	LastHydrated      apijson.Field
 	Name              apijson.Field
-	OrganizationID    apijson.Field
 	Status            apijson.Field
 	Updated           apijson.Field
 	UseCases          apijson.Field
@@ -500,7 +567,7 @@ func (r casbIntegrationPauseResponseAuthorizationLinkJSON) RawJSON() string {
 	return r.raw
 }
 
-// Serializer for v2 integration detail response with use cases.
+// The requested item.
 type CasbIntegrationResumeResponse struct {
 	// Integration ID.
 	ID          string            `json:"id" api:"required" format:"uuid"`
@@ -523,8 +590,6 @@ type CasbIntegrationResumeResponse struct {
 	LastHydrated time.Time `json:"last_hydrated" api:"required" format:"date-time"`
 	// Name of the integration.
 	Name string `json:"name" api:"required"`
-	// Organization ID.
-	OrganizationID int64 `json:"organization_id" api:"required"`
 	// Integration status.
 	Status string `json:"status" api:"required"`
 	// When the integration was last updated.
@@ -548,7 +613,6 @@ type casbIntegrationResumeResponseJSON struct {
 	IsPaused          apijson.Field
 	LastHydrated      apijson.Field
 	Name              apijson.Field
-	OrganizationID    apijson.Field
 	Status            apijson.Field
 	Updated           apijson.Field
 	UseCases          apijson.Field
@@ -593,6 +657,7 @@ type CasbIntegrationNewParams struct {
 	// Vendor/application slug (e.g., GOOGLE_WORKSPACE).
 	//
 	// - `ANTHROPIC` - ANTHROPIC
+	// - `AWS` - AWS
 	// - `BITBUCKET` - BITBUCKET
 	// - `BOX` - BOX
 	// - `CONFLUENCE` - CONFLUENCE
@@ -604,6 +669,7 @@ type CasbIntegrationNewParams struct {
 	// - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
 	// - `OPENAI` - OPENAI
 	// - `SALESFORCE` - SALESFORCE
+	// - `SERVICENOW` - SERVICENOW
 	// - `SLACK` - SLACK
 	Application param.Field[CasbIntegrationNewParamsApplication] `json:"application" api:"required"`
 	// Credentials for the integration.
@@ -628,6 +694,7 @@ func (r CasbIntegrationNewParams) MarshalJSON() (data []byte, err error) {
 // Vendor/application slug (e.g., GOOGLE_WORKSPACE).
 //
 // - `ANTHROPIC` - ANTHROPIC
+// - `AWS` - AWS
 // - `BITBUCKET` - BITBUCKET
 // - `BOX` - BOX
 // - `CONFLUENCE` - CONFLUENCE
@@ -639,11 +706,13 @@ func (r CasbIntegrationNewParams) MarshalJSON() (data []byte, err error) {
 // - `MICROSOFT_INTERNAL` - MICROSOFT_INTERNAL
 // - `OPENAI` - OPENAI
 // - `SALESFORCE` - SALESFORCE
+// - `SERVICENOW` - SERVICENOW
 // - `SLACK` - SLACK
 type CasbIntegrationNewParamsApplication string
 
 const (
 	CasbIntegrationNewParamsApplicationAnthropic           CasbIntegrationNewParamsApplication = "ANTHROPIC"
+	CasbIntegrationNewParamsApplicationAws                 CasbIntegrationNewParamsApplication = "AWS"
 	CasbIntegrationNewParamsApplicationBitbucket           CasbIntegrationNewParamsApplication = "BITBUCKET"
 	CasbIntegrationNewParamsApplicationBox                 CasbIntegrationNewParamsApplication = "BOX"
 	CasbIntegrationNewParamsApplicationConfluence          CasbIntegrationNewParamsApplication = "CONFLUENCE"
@@ -655,12 +724,13 @@ const (
 	CasbIntegrationNewParamsApplicationMicrosoftInternal   CasbIntegrationNewParamsApplication = "MICROSOFT_INTERNAL"
 	CasbIntegrationNewParamsApplicationOpenAI              CasbIntegrationNewParamsApplication = "OPENAI"
 	CasbIntegrationNewParamsApplicationSalesforce          CasbIntegrationNewParamsApplication = "SALESFORCE"
+	CasbIntegrationNewParamsApplicationServicenow          CasbIntegrationNewParamsApplication = "SERVICENOW"
 	CasbIntegrationNewParamsApplicationSlack               CasbIntegrationNewParamsApplication = "SLACK"
 )
 
 func (r CasbIntegrationNewParamsApplication) IsKnown() bool {
 	switch r {
-	case CasbIntegrationNewParamsApplicationAnthropic, CasbIntegrationNewParamsApplicationBitbucket, CasbIntegrationNewParamsApplicationBox, CasbIntegrationNewParamsApplicationConfluence, CasbIntegrationNewParamsApplicationDropbox, CasbIntegrationNewParamsApplicationGitHub, CasbIntegrationNewParamsApplicationGoogleCloudPlatform, CasbIntegrationNewParamsApplicationGoogleWorkspace, CasbIntegrationNewParamsApplicationJira, CasbIntegrationNewParamsApplicationMicrosoftInternal, CasbIntegrationNewParamsApplicationOpenAI, CasbIntegrationNewParamsApplicationSalesforce, CasbIntegrationNewParamsApplicationSlack:
+	case CasbIntegrationNewParamsApplicationAnthropic, CasbIntegrationNewParamsApplicationAws, CasbIntegrationNewParamsApplicationBitbucket, CasbIntegrationNewParamsApplicationBox, CasbIntegrationNewParamsApplicationConfluence, CasbIntegrationNewParamsApplicationDropbox, CasbIntegrationNewParamsApplicationGitHub, CasbIntegrationNewParamsApplicationGoogleCloudPlatform, CasbIntegrationNewParamsApplicationGoogleWorkspace, CasbIntegrationNewParamsApplicationJira, CasbIntegrationNewParamsApplicationMicrosoftInternal, CasbIntegrationNewParamsApplicationOpenAI, CasbIntegrationNewParamsApplicationSalesforce, CasbIntegrationNewParamsApplicationServicenow, CasbIntegrationNewParamsApplicationSlack:
 		return true
 	}
 	return false
@@ -683,6 +753,37 @@ func (r CasbIntegrationNewParamsUseCase) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type CasbIntegrationNewResponseEnvelope struct {
+	// The requested item.
+	Result CasbIntegrationNewResponse `json:"result" api:"required"`
+	// Whether the request succeeded.
+	Success bool `json:"success" api:"required"`
+	// List of errors.
+	Errors []map[string]interface{} `json:"errors"`
+	// List of messages.
+	Messages []string                               `json:"messages"`
+	JSON     casbIntegrationNewResponseEnvelopeJSON `json:"-"`
+}
+
+// casbIntegrationNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CasbIntegrationNewResponseEnvelope]
+type casbIntegrationNewResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CasbIntegrationNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r casbIntegrationNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type CasbIntegrationUpdateParams struct {
@@ -721,6 +822,37 @@ func (r CasbIntegrationUpdateParamsUseCase) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type CasbIntegrationUpdateResponseEnvelope struct {
+	// The requested item.
+	Result CasbIntegrationUpdateResponse `json:"result" api:"required"`
+	// Whether the request succeeded.
+	Success bool `json:"success" api:"required"`
+	// List of errors.
+	Errors []map[string]interface{} `json:"errors"`
+	// List of messages.
+	Messages []string                                  `json:"messages"`
+	JSON     casbIntegrationUpdateResponseEnvelopeJSON `json:"-"`
+}
+
+// casbIntegrationUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [CasbIntegrationUpdateResponseEnvelope]
+type casbIntegrationUpdateResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CasbIntegrationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r casbIntegrationUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type CasbIntegrationListParams struct {
@@ -815,10 +947,103 @@ type CasbIntegrationGetParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
+type CasbIntegrationGetResponseEnvelope struct {
+	// The requested item.
+	Result CasbIntegrationGetResponse `json:"result" api:"required"`
+	// Whether the request succeeded.
+	Success bool `json:"success" api:"required"`
+	// List of errors.
+	Errors []map[string]interface{} `json:"errors"`
+	// List of messages.
+	Messages []string                               `json:"messages"`
+	JSON     casbIntegrationGetResponseEnvelopeJSON `json:"-"`
+}
+
+// casbIntegrationGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CasbIntegrationGetResponseEnvelope]
+type casbIntegrationGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CasbIntegrationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r casbIntegrationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CasbIntegrationPauseParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
+type CasbIntegrationPauseResponseEnvelope struct {
+	// The requested item.
+	Result CasbIntegrationPauseResponse `json:"result" api:"required"`
+	// Whether the request succeeded.
+	Success bool `json:"success" api:"required"`
+	// List of errors.
+	Errors []map[string]interface{} `json:"errors"`
+	// List of messages.
+	Messages []string                                 `json:"messages"`
+	JSON     casbIntegrationPauseResponseEnvelopeJSON `json:"-"`
+}
+
+// casbIntegrationPauseResponseEnvelopeJSON contains the JSON metadata for the
+// struct [CasbIntegrationPauseResponseEnvelope]
+type casbIntegrationPauseResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CasbIntegrationPauseResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r casbIntegrationPauseResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CasbIntegrationResumeParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type CasbIntegrationResumeResponseEnvelope struct {
+	// The requested item.
+	Result CasbIntegrationResumeResponse `json:"result" api:"required"`
+	// Whether the request succeeded.
+	Success bool `json:"success" api:"required"`
+	// List of errors.
+	Errors []map[string]interface{} `json:"errors"`
+	// List of messages.
+	Messages []string                                  `json:"messages"`
+	JSON     casbIntegrationResumeResponseEnvelopeJSON `json:"-"`
+}
+
+// casbIntegrationResumeResponseEnvelopeJSON contains the JSON metadata for the
+// struct [CasbIntegrationResumeResponseEnvelope]
+type casbIntegrationResumeResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CasbIntegrationResumeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r casbIntegrationResumeResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

@@ -34,9 +34,9 @@ func TestAccessAIControlMcpServerNewWithOptionalParams(t *testing.T) {
 		AuthType:                     cloudflare.F(zero_trust.AccessAIControlMcpServerNewParamsAuthTypeUnauthenticated),
 		Hostname:                     cloudflare.F("https://example.com/mcp"),
 		Name:                         cloudflare.F("My MCP Server"),
-		AuthCredentials:              cloudflare.F("auth_credentials"),
+		AuthCredentials:              cloudflare.F("sk-my-bearer-token"),
 		ClientSecret:                 cloudflare.F("client_secret"),
-		Description:                  cloudflare.F("This is one remote mcp server"),
+		Description:                  cloudflare.F("This is one remote MCP server"),
 		IsSharedOAuthCallbackEnabled: cloudflare.F(true),
 		SecureWebGateway:             cloudflare.F(false),
 		UpdatedPrompts: cloudflare.F([]zero_trust.AccessAIControlMcpServerNewParamsUpdatedPrompt{{
@@ -80,9 +80,9 @@ func TestAccessAIControlMcpServerUpdateWithOptionalParams(t *testing.T) {
 		"my-mcp-server",
 		zero_trust.AccessAIControlMcpServerUpdateParams{
 			AccountID:                    cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
-			AuthCredentials:              cloudflare.F("auth_credentials"),
+			AuthCredentials:              cloudflare.F("sk-my-bearer-token"),
 			ClientSecret:                 cloudflare.F("client_secret"),
-			Description:                  cloudflare.F("This is one remote mcp server"),
+			Description:                  cloudflare.F("This is one remote MCP server"),
 			IsSharedOAuthCallbackEnabled: cloudflare.F(true),
 			Name:                         cloudflare.F("My MCP Server"),
 			SecureWebGateway:             cloudflare.F(false),
@@ -214,7 +214,7 @@ func TestAccessAIControlMcpServerSync(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.AIControls.Mcp.Servers.Sync(
 		context.TODO(),
-		"my-mcp-portal",
+		"my-mcp-server",
 		zero_trust.AccessAIControlMcpServerSyncParams{
 			AccountID: cloudflare.F("a86a8f5c339544d7bdc89926de14fb8c"),
 		},

@@ -34,6 +34,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 		rulesets.PhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseUpdateParams{
 			AccountID:   cloudflare.F("account_id"),
+			DryRun:      cloudflare.F(true),
 			Description: cloudflare.F("A description for my ruleset."),
 			Name:        cloudflare.F("My ruleset"),
 			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRuleUnion{rulesets.BlockRuleParam{

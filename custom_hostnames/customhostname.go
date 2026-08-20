@@ -30,6 +30,7 @@ type CustomHostnameService struct {
 	Options         []option.RequestOption
 	FallbackOrigin  *FallbackOriginService
 	CertificatePack *CertificatePackService
+	Quota           *QuotaService
 }
 
 // NewCustomHostnameService generates a new service that applies the given options
@@ -40,6 +41,7 @@ func NewCustomHostnameService(opts ...option.RequestOption) (r *CustomHostnameSe
 	r.Options = opts
 	r.FallbackOrigin = NewFallbackOriginService(opts...)
 	r.CertificatePack = NewCertificatePackService(opts...)
+	r.Quota = NewQuotaService(opts...)
 	return
 }
 

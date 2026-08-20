@@ -43,9 +43,10 @@ func NewThreatEventIndicatorService(opts ...option.RequestOption) (r *ThreatEven
 	return
 }
 
-// Retrieves a paginated list of indicators across specified datasets. Use
-// datasetIds=all or datasetIds=\* to query all datasets for the account. If no
-// datasetIds provided, uses the default dataset.
+// Retrieves indicators across specified datasets, ordered by createdAt descending
+// then UUID, dataset ID, and shard ID ascending. Use datasetIds=all or
+// datasetIds=\* to query all datasets for the account. If no datasetIds provided,
+// uses the default dataset.
 func (r *ThreatEventIndicatorService) List(ctx context.Context, params ThreatEventIndicatorListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -81,18 +82,20 @@ func (r threatEventIndicatorListResponseJSON) RawJSON() string {
 }
 
 type ThreatEventIndicatorListResponseProperties struct {
-	Indicators ThreatEventIndicatorListResponsePropertiesIndicators `json:"indicators" api:"required"`
-	Pagination ThreatEventIndicatorListResponsePropertiesPagination `json:"pagination" api:"required"`
-	JSON       threatEventIndicatorListResponsePropertiesJSON       `json:"-"`
+	Completeness ThreatEventIndicatorListResponsePropertiesCompleteness `json:"completeness" api:"required"`
+	Indicators   ThreatEventIndicatorListResponsePropertiesIndicators   `json:"indicators" api:"required"`
+	Pagination   ThreatEventIndicatorListResponsePropertiesPagination   `json:"pagination" api:"required"`
+	JSON         threatEventIndicatorListResponsePropertiesJSON         `json:"-"`
 }
 
 // threatEventIndicatorListResponsePropertiesJSON contains the JSON metadata for
 // the struct [ThreatEventIndicatorListResponseProperties]
 type threatEventIndicatorListResponsePropertiesJSON struct {
-	Indicators  apijson.Field
-	Pagination  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Completeness apijson.Field
+	Indicators   apijson.Field
+	Pagination   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ThreatEventIndicatorListResponseProperties) UnmarshalJSON(data []byte) (err error) {
@@ -100,6 +103,287 @@ func (r *ThreatEventIndicatorListResponseProperties) UnmarshalJSON(data []byte) 
 }
 
 func (r threatEventIndicatorListResponsePropertiesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompleteness struct {
+	Properties ThreatEventIndicatorListResponsePropertiesCompletenessProperties `json:"properties" api:"required"`
+	Type       string                                                           `json:"type" api:"required"`
+	JSON       threatEventIndicatorListResponsePropertiesCompletenessJSON       `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessJSON contains the JSON
+// metadata for the struct [ThreatEventIndicatorListResponsePropertiesCompleteness]
+type threatEventIndicatorListResponsePropertiesCompletenessJSON struct {
+	Properties  apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompleteness) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessProperties struct {
+	Complete       ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesComplete       `json:"complete" api:"required"`
+	FailedDatasets ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasets `json:"failedDatasets" api:"required"`
+	FailedShards   ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShards   `json:"failedShards" api:"required"`
+	Warnings       ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesWarnings       `json:"warnings" api:"required"`
+	JSON           threatEventIndicatorListResponsePropertiesCompletenessPropertiesJSON           `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesJSON contains
+// the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessProperties]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesJSON struct {
+	Complete       apijson.Field
+	FailedDatasets apijson.Field
+	FailedShards   apijson.Field
+	Warnings       apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessProperties) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesComplete struct {
+	Type string                                                                       `json:"type" api:"required"`
+	JSON threatEventIndicatorListResponsePropertiesCompletenessPropertiesCompleteJSON `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesCompleteJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesComplete]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesCompleteJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesComplete) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesCompleteJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasets struct {
+	Items ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsItems `json:"items" api:"required"`
+	Type  string                                                                              `json:"type" api:"required"`
+	JSON  threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsJSON  `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasets]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsJSON struct {
+	Items       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasets) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsItems struct {
+	Type string                                                                                  `json:"type" api:"required"`
+	JSON threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsItemsJSON `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsItemsJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsItems]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsItemsJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsItems) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedDatasetsItemsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShards struct {
+	Items ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItems `json:"items" api:"required"`
+	Type  string                                                                            `json:"type" api:"required"`
+	JSON  threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsJSON  `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShards]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsJSON struct {
+	Items       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShards) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItems struct {
+	Properties ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsProperties `json:"properties" api:"required"`
+	Type       string                                                                                      `json:"type" api:"required"`
+	JSON       threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsJSON       `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItems]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsJSON struct {
+	Properties  apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItems) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsProperties struct {
+	DatasetID ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesDatasetID `json:"datasetId" api:"required"`
+	ShardID   ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesShardID   `json:"shardId" api:"required"`
+	JSON      threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesJSON      `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsProperties]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesJSON struct {
+	DatasetID   apijson.Field
+	ShardID     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsProperties) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesDatasetID struct {
+	Type string                                                                                                   `json:"type" api:"required"`
+	JSON threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesDatasetIDJSON `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesDatasetIDJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesDatasetID]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesDatasetIDJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesDatasetID) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesDatasetIDJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesShardID struct {
+	Type string                                                                                                 `json:"type" api:"required"`
+	JSON threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesShardIDJSON `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesShardIDJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesShardID]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesShardIDJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesShardID) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesFailedShardsItemsPropertiesShardIDJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesWarnings struct {
+	Items ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsItems `json:"items" api:"required"`
+	Type  string                                                                        `json:"type" api:"required"`
+	JSON  threatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsJSON  `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesWarnings]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsJSON struct {
+	Items       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesWarnings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsItems struct {
+	Type string                                                                            `json:"type" api:"required"`
+	JSON threatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsItemsJSON `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsItemsJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsItems]
+type threatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsItemsJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsItems) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesCompletenessPropertiesWarningsItemsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -164,8 +448,11 @@ func (r threatEventIndicatorListResponsePropertiesIndicatorsItemsJSON) RawJSON()
 }
 
 type ThreatEventIndicatorListResponsePropertiesIndicatorsItemsRelatedEvent struct {
-	DatasetID string                                                                    `json:"datasetId" api:"required"`
-	EventID   string                                                                    `json:"eventId" api:"required"`
+	DatasetID string `json:"datasetId" api:"required"`
+	EventID   string `json:"eventId" api:"required"`
+	// ISO 8601 date of the related event. Null for legacy relationships created before
+	// event-date tracking was added.
+	EventDate string                                                                    `json:"eventDate" api:"nullable"`
 	JSON      threatEventIndicatorListResponsePropertiesIndicatorsItemsRelatedEventJSON `json:"-"`
 }
 
@@ -175,6 +462,7 @@ type ThreatEventIndicatorListResponsePropertiesIndicatorsItemsRelatedEvent struc
 type threatEventIndicatorListResponsePropertiesIndicatorsItemsRelatedEventJSON struct {
 	DatasetID   apijson.Field
 	EventID     apijson.Field
+	EventDate   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -237,23 +525,29 @@ func (r threatEventIndicatorListResponsePropertiesPaginationJSON) RawJSON() stri
 }
 
 type ThreatEventIndicatorListResponsePropertiesPaginationProperties struct {
-	Count      ThreatEventIndicatorListResponsePropertiesPaginationPropertiesCount      `json:"count" api:"required"`
-	Page       ThreatEventIndicatorListResponsePropertiesPaginationPropertiesPage       `json:"page" api:"required"`
-	PerPage    ThreatEventIndicatorListResponsePropertiesPaginationPropertiesPerPage    `json:"per_page" api:"required"`
-	TotalCount ThreatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCount `json:"total_count" api:"required"`
-	JSON       threatEventIndicatorListResponsePropertiesPaginationPropertiesJSON       `json:"-"`
+	Count             ThreatEventIndicatorListResponsePropertiesPaginationPropertiesCount             `json:"count" api:"required"`
+	Cursor            ThreatEventIndicatorListResponsePropertiesPaginationPropertiesCursor            `json:"cursor" api:"required"`
+	HasMore           ThreatEventIndicatorListResponsePropertiesPaginationPropertiesHasMore           `json:"has_more" api:"required"`
+	Page              ThreatEventIndicatorListResponsePropertiesPaginationPropertiesPage              `json:"page" api:"required"`
+	PerPage           ThreatEventIndicatorListResponsePropertiesPaginationPropertiesPerPage           `json:"per_page" api:"required"`
+	TotalCount        ThreatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCount        `json:"total_count" api:"required"`
+	TotalCountIsExact ThreatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountIsExact `json:"total_count_is_exact" api:"required"`
+	JSON              threatEventIndicatorListResponsePropertiesPaginationPropertiesJSON              `json:"-"`
 }
 
 // threatEventIndicatorListResponsePropertiesPaginationPropertiesJSON contains the
 // JSON metadata for the struct
 // [ThreatEventIndicatorListResponsePropertiesPaginationProperties]
 type threatEventIndicatorListResponsePropertiesPaginationPropertiesJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Count             apijson.Field
+	Cursor            apijson.Field
+	HasMore           apijson.Field
+	Page              apijson.Field
+	PerPage           apijson.Field
+	TotalCount        apijson.Field
+	TotalCountIsExact apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ThreatEventIndicatorListResponsePropertiesPaginationProperties) UnmarshalJSON(data []byte) (err error) {
@@ -283,6 +577,56 @@ func (r *ThreatEventIndicatorListResponsePropertiesPaginationPropertiesCount) Un
 }
 
 func (r threatEventIndicatorListResponsePropertiesPaginationPropertiesCountJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesPaginationPropertiesCursor struct {
+	Description string                                                                   `json:"description" api:"required"`
+	Nullable    bool                                                                     `json:"nullable" api:"required"`
+	Type        string                                                                   `json:"type" api:"required"`
+	JSON        threatEventIndicatorListResponsePropertiesPaginationPropertiesCursorJSON `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesPaginationPropertiesCursorJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesPaginationPropertiesCursor]
+type threatEventIndicatorListResponsePropertiesPaginationPropertiesCursorJSON struct {
+	Description apijson.Field
+	Nullable    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesPaginationPropertiesCursor) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesPaginationPropertiesCursorJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesPaginationPropertiesHasMore struct {
+	Description string                                                                    `json:"description" api:"required"`
+	Type        string                                                                    `json:"type" api:"required"`
+	JSON        threatEventIndicatorListResponsePropertiesPaginationPropertiesHasMoreJSON `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesPaginationPropertiesHasMoreJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesPaginationPropertiesHasMore]
+type threatEventIndicatorListResponsePropertiesPaginationPropertiesHasMoreJSON struct {
+	Description apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesPaginationPropertiesHasMore) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesPaginationPropertiesHasMoreJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -331,14 +675,18 @@ func (r threatEventIndicatorListResponsePropertiesPaginationPropertiesPerPageJSO
 }
 
 type ThreatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCount struct {
-	Type string                                                                       `json:"type" api:"required"`
-	JSON threatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountJSON `json:"-"`
+	Description string                                                                       `json:"description" api:"required"`
+	Nullable    bool                                                                         `json:"nullable" api:"required"`
+	Type        string                                                                       `json:"type" api:"required"`
+	JSON        threatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountJSON `json:"-"`
 }
 
 // threatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountJSON
 // contains the JSON metadata for the struct
 // [ThreatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCount]
 type threatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountJSON struct {
+	Description apijson.Field
+	Nullable    apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -352,11 +700,36 @@ func (r threatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCount
 	return r.raw
 }
 
+type ThreatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountIsExact struct {
+	Description string                                                                              `json:"description" api:"required"`
+	Type        string                                                                              `json:"type" api:"required"`
+	JSON        threatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountIsExactJSON `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountIsExactJSON
+// contains the JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountIsExact]
+type threatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountIsExactJSON struct {
+	Description apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountIsExact) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesPaginationPropertiesTotalCountIsExactJSON) RawJSON() string {
+	return r.raw
+}
+
 type ThreatEventIndicatorListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Cache strategy. 'from-graph' serves results from the graph-node KV cache when
 	// all requested UUIDs are cached; falls back to normal path on partial/zero hit.
+	// Cannot be combined with `cursor`.
 	Cache param.Field[ThreatEventIndicatorListParamsCache] `query:"cache"`
 	// Filter indicators created on or after this date. Must use ISO 8601 format (e.g.,
 	// '2024-01-15T00:00:00Z').
@@ -364,6 +737,15 @@ type ThreatEventIndicatorListParams struct {
 	// Filter indicators created on or before this date. Must use ISO 8601 format
 	// (e.g., '2024-12-31T23:59:59Z').
 	CreatedBefore param.Field[time.Time] `query:"createdBefore" format:"date-time"`
+	// Opaque cursor from a previous response's `pagination.cursor`. When provided, all
+	// filters, datasetIds, page, `pageSize`, `includeTags` and `relatedEventsLimit`
+	// come from the cursor — do not resend them. Sending any filter, `page`,
+	// `pageSize`, `includeTags`, `relatedEventsLimit`, `includeTotalCount=true`, or
+	// `cache=from-graph` alongside a cursor yields a 400 `CursorFilterConflictError`.
+	// A cursor issued for a different entity, an unsupported version, or a dataset
+	// that has since been reconfigured as analytics-only yields a 400
+	// `InvalidCursorError`.
+	Cursor param.Field[string] `query:"cursor"`
 	// Dataset IDs to query indicators from (array of UUIDs), or special value 'all' or
 	// '\*' to query all datasets. If not provided, uses the default dataset.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
@@ -373,8 +755,8 @@ type ThreatEventIndicatorListParams struct {
 	Format param.Field[ThreatEventIndicatorListParamsFormat] `query:"format"`
 	// Whether to include full tag details for each indicator. Defaults to true.
 	IncludeTags param.Field[bool] `query:"includeTags"`
-	// Whether to compute accurate total count via COUNT(\*). Defaults to false for
-	// performance. When false, total_count is an approximation.
+	// Whether to compute total count via COUNT(\*). Defaults to false for performance.
+	// total_count is null unless this is true and the complete fan-out succeeds.
 	IncludeTotalCount param.Field[bool]   `query:"includeTotalCount"`
 	IndicatorType     param.Field[string] `query:"indicatorType"`
 	// Filter indicators by value using substring match (LIKE). Legacy alternative to
@@ -394,9 +776,6 @@ type ThreatEventIndicatorListParams struct {
 	// search=[{"field":"value","op":"in","value":["evil.com","bad.org"]}]. Multiple
 	// conditions are AND'd together. Max 10 conditions per request.
 	Search param.Field[[]ThreatEventIndicatorListParamsSearch] `query:"search"`
-	// Read backend. 'do' (default) reads Durable Object storage. 'r2catalog' reads R2
-	// Data Catalog (admin-only, experimental; supports a subset of search fields).
-	Source param.Field[ThreatEventIndicatorListParamsSource] `query:"source"`
 	// Filter by tag values or UUIDs. Indicators must have at least one of the
 	// specified tags (OR logic). Supports both tag UUID and tag value.
 	Tags param.Field[[]string] `query:"tags"`
@@ -432,6 +811,7 @@ func (r ThreatEventIndicatorListParams) URLQuery() (v url.Values) {
 
 // Cache strategy. 'from-graph' serves results from the graph-node KV cache when
 // all requested UUIDs are cached; falls back to normal path on partial/zero hit.
+// Cannot be combined with `cursor`.
 type ThreatEventIndicatorListParamsCache string
 
 const (
@@ -541,23 +921,6 @@ type ThreatEventIndicatorListParamsSearchValueUnion interface {
 type ThreatEventIndicatorListParamsSearchValueArray []string
 
 func (r ThreatEventIndicatorListParamsSearchValueArray) ImplementsThreatEventIndicatorListParamsSearchValueUnion() {
-}
-
-// Read backend. 'do' (default) reads Durable Object storage. 'r2catalog' reads R2
-// Data Catalog (admin-only, experimental; supports a subset of search fields).
-type ThreatEventIndicatorListParamsSource string
-
-const (
-	ThreatEventIndicatorListParamsSourceDo        ThreatEventIndicatorListParamsSource = "do"
-	ThreatEventIndicatorListParamsSourceR2catalog ThreatEventIndicatorListParamsSource = "r2catalog"
-)
-
-func (r ThreatEventIndicatorListParamsSource) IsKnown() bool {
-	switch r {
-	case ThreatEventIndicatorListParamsSourceDo, ThreatEventIndicatorListParamsSourceR2catalog:
-		return true
-	}
-	return false
 }
 
 type ThreatEventIndicatorListParamsTagSearch struct {

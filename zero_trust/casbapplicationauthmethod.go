@@ -7,12 +7,15 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 )
 
 // CasbApplicationAuthMethodService contains methods and other services that help
@@ -37,15 +40,32 @@ func NewCasbApplicationAuthMethodService(opts ...option.RequestOption) (r *CasbA
 // Returns available auth methods for the specified vendor, including credential
 // schema, instructions, and example payloads. Use this to understand what
 // credentials are required before calling POST /v2/integrations.
-func (r *CasbApplicationAuthMethodService) List(ctx context.Context, applicationID CasbApplicationAuthMethodListParamsApplicationID, query CasbApplicationAuthMethodListParams, opts ...option.RequestOption) (res *[]CasbApplicationAuthMethodListResponse, err error) {
+func (r *CasbApplicationAuthMethodService) List(ctx context.Context, applicationID CasbApplicationAuthMethodListParamsApplicationID, params CasbApplicationAuthMethodListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CasbApplicationAuthMethodListResponse], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/one/applications/%v/auth-methods", query.AccountID, applicationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
+	path := fmt.Sprintf("accounts/%s/one/applications/%v/auth-methods", params.AccountID, applicationID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns available auth methods for the specified vendor, including credential
+// schema, instructions, and example payloads. Use this to understand what
+// credentials are required before calling POST /v2/integrations.
+func (r *CasbApplicationAuthMethodService) ListAutoPaging(ctx context.Context, applicationID CasbApplicationAuthMethodListParamsApplicationID, params CasbApplicationAuthMethodListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CasbApplicationAuthMethodListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, applicationID, params, opts...))
 }
 
 // Detailed auth method info including credentials schema and instructions.
@@ -115,12 +135,26 @@ func (r casbApplicationAuthMethodListResponseInstructionsJSON) RawJSON() string 
 
 type CasbApplicationAuthMethodListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// A page number within the paginated result set.
+	Page param.Field[int64] `query:"page"`
+	// Number of results to return per page.
+	PageSize param.Field[int64] `query:"page_size"`
+}
+
+// URLQuery serializes [CasbApplicationAuthMethodListParams]'s query parameters as
+// `url.Values`.
+func (r CasbApplicationAuthMethodListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type CasbApplicationAuthMethodListParamsApplicationID string
 
 const (
 	CasbApplicationAuthMethodListParamsApplicationIDAnthropic           CasbApplicationAuthMethodListParamsApplicationID = "ANTHROPIC"
+	CasbApplicationAuthMethodListParamsApplicationIDAws                 CasbApplicationAuthMethodListParamsApplicationID = "AWS"
 	CasbApplicationAuthMethodListParamsApplicationIDBitbucket           CasbApplicationAuthMethodListParamsApplicationID = "BITBUCKET"
 	CasbApplicationAuthMethodListParamsApplicationIDBox                 CasbApplicationAuthMethodListParamsApplicationID = "BOX"
 	CasbApplicationAuthMethodListParamsApplicationIDConfluence          CasbApplicationAuthMethodListParamsApplicationID = "CONFLUENCE"
@@ -132,12 +166,13 @@ const (
 	CasbApplicationAuthMethodListParamsApplicationIDMicrosoftInternal   CasbApplicationAuthMethodListParamsApplicationID = "MICROSOFT_INTERNAL"
 	CasbApplicationAuthMethodListParamsApplicationIDOpenAI              CasbApplicationAuthMethodListParamsApplicationID = "OPENAI"
 	CasbApplicationAuthMethodListParamsApplicationIDSalesforce          CasbApplicationAuthMethodListParamsApplicationID = "SALESFORCE"
+	CasbApplicationAuthMethodListParamsApplicationIDServicenow          CasbApplicationAuthMethodListParamsApplicationID = "SERVICENOW"
 	CasbApplicationAuthMethodListParamsApplicationIDSlack               CasbApplicationAuthMethodListParamsApplicationID = "SLACK"
 )
 
 func (r CasbApplicationAuthMethodListParamsApplicationID) IsKnown() bool {
 	switch r {
-	case CasbApplicationAuthMethodListParamsApplicationIDAnthropic, CasbApplicationAuthMethodListParamsApplicationIDBitbucket, CasbApplicationAuthMethodListParamsApplicationIDBox, CasbApplicationAuthMethodListParamsApplicationIDConfluence, CasbApplicationAuthMethodListParamsApplicationIDDropbox, CasbApplicationAuthMethodListParamsApplicationIDGitHub, CasbApplicationAuthMethodListParamsApplicationIDGoogleCloudPlatform, CasbApplicationAuthMethodListParamsApplicationIDGoogleWorkspace, CasbApplicationAuthMethodListParamsApplicationIDJira, CasbApplicationAuthMethodListParamsApplicationIDMicrosoftInternal, CasbApplicationAuthMethodListParamsApplicationIDOpenAI, CasbApplicationAuthMethodListParamsApplicationIDSalesforce, CasbApplicationAuthMethodListParamsApplicationIDSlack:
+	case CasbApplicationAuthMethodListParamsApplicationIDAnthropic, CasbApplicationAuthMethodListParamsApplicationIDAws, CasbApplicationAuthMethodListParamsApplicationIDBitbucket, CasbApplicationAuthMethodListParamsApplicationIDBox, CasbApplicationAuthMethodListParamsApplicationIDConfluence, CasbApplicationAuthMethodListParamsApplicationIDDropbox, CasbApplicationAuthMethodListParamsApplicationIDGitHub, CasbApplicationAuthMethodListParamsApplicationIDGoogleCloudPlatform, CasbApplicationAuthMethodListParamsApplicationIDGoogleWorkspace, CasbApplicationAuthMethodListParamsApplicationIDJira, CasbApplicationAuthMethodListParamsApplicationIDMicrosoftInternal, CasbApplicationAuthMethodListParamsApplicationIDOpenAI, CasbApplicationAuthMethodListParamsApplicationIDSalesforce, CasbApplicationAuthMethodListParamsApplicationIDServicenow, CasbApplicationAuthMethodListParamsApplicationIDSlack:
 		return true
 	}
 	return false

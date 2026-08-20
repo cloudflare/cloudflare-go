@@ -237,6 +237,8 @@ Methods:
 
 # [Fraud](fraud/api.md)
 
+# [Precursor](precursor/api.md)
+
 # [OriginPostQuantumEncryption](origin_post_quantum_encryption/api.md)
 
 # [OriginTLSComplianceModes](origin_tls_compliance_modes/api.md)

@@ -65,9 +65,10 @@ type PDFNewParams struct {
 	// `<style type="text/css">` tag with the content.
 	AddStyleTag param.Field[[]PDFNewParamsAddStyleTag] `json:"addStyleTag"`
 	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	// Reject rules are applied first.
 	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
 	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'.
+	// 'script'. Reject rules are applied first.
 	AllowResourceTypes param.Field[[]PDFNewParamsAllowResourceType] `json:"allowResourceTypes"`
 	// Provide credentials for HTTP authentication.
 	Authenticate param.Field[PDFNewParamsAuthenticate] `json:"authenticate"`

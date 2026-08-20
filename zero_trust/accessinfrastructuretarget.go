@@ -38,7 +38,7 @@ func NewAccessInfrastructureTargetService(opts ...option.RequestOption) (r *Acce
 	return
 }
 
-// Create new target
+// Creates a new infrastructure access target in the account.
 func (r *AccessInfrastructureTargetService) New(ctx context.Context, params AccessInfrastructureTargetNewParams, opts ...option.RequestOption) (res *AccessInfrastructureTargetNewResponse, err error) {
 	var env AccessInfrastructureTargetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +55,7 @@ func (r *AccessInfrastructureTargetService) New(ctx context.Context, params Acce
 	return res, nil
 }
 
-// Update target
+// Updates an existing infrastructure access target by its ID.
 func (r *AccessInfrastructureTargetService) Update(ctx context.Context, targetID string, params AccessInfrastructureTargetUpdateParams, opts ...option.RequestOption) (res *AccessInfrastructureTargetUpdateResponse, err error) {
 	var env AccessInfrastructureTargetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -76,7 +76,7 @@ func (r *AccessInfrastructureTargetService) Update(ctx context.Context, targetID
 	return res, nil
 }
 
-// Lists and sorts an account’s targets. Filters are optional and are ANDed
+// Lists and sorts an account's targets. Filters are optional and are ANDed
 // together.
 func (r *AccessInfrastructureTargetService) List(ctx context.Context, params AccessInfrastructureTargetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessInfrastructureTargetListResponse], err error) {
 	var raw *http.Response
@@ -99,13 +99,13 @@ func (r *AccessInfrastructureTargetService) List(ctx context.Context, params Acc
 	return res, nil
 }
 
-// Lists and sorts an account’s targets. Filters are optional and are ANDed
+// Lists and sorts an account's targets. Filters are optional and are ANDed
 // together.
 func (r *AccessInfrastructureTargetService) ListAutoPaging(ctx context.Context, params AccessInfrastructureTargetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessInfrastructureTargetListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete target
+// Removes a single infrastructure access target by its ID.
 func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID string, body AccessInfrastructureTargetDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -177,7 +177,7 @@ func (r *AccessInfrastructureTargetService) BulkUpdateAutoPaging(ctx context.Con
 	return pagination.NewSinglePageAutoPager(r.BulkUpdate(ctx, params, opts...))
 }
 
-// Get target
+// Fetches a single infrastructure access target by its ID.
 func (r *AccessInfrastructureTargetService) Get(ctx context.Context, targetID string, query AccessInfrastructureTargetGetParams, opts ...option.RequestOption) (res *AccessInfrastructureTargetGetResponse, err error) {
 	var env AccessInfrastructureTargetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

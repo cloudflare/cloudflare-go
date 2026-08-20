@@ -12,6 +12,16 @@ Methods:
 - <code title="patch /zones/{zone_id}/dnssec">client.DNS.DNSSEC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#DNSSECService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#DNSSECEditParams">DNSSECEditParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#DNSSEC">DNSSEC</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/dnssec">client.DNS.DNSSEC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#DNSSECService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#DNSSECGetParams">DNSSECGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#DNSSEC">DNSSEC</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+### Zsk
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#DNSSECZskListResponse">DNSSECZskListResponse</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/dnssec/zsk">client.DNS.DNSSEC.Zsk.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#DNSSECZskService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#DNSSECZskListParams">DNSSECZskListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/dns#DNSSECZskListResponse">DNSSECZskListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Records
 
 Params Types:

@@ -34,7 +34,7 @@ func NewThreatEventCategoryCatalogService(opts ...option.RequestOption) (r *Thre
 	return
 }
 
-// List all categories stored in the account catalog.
+// Lists categories
 func (r *ThreatEventCategoryCatalogService) List(ctx context.Context, query ThreatEventCategoryCatalogListParams, opts ...option.RequestOption) (res *[]ThreatEventCategoryCatalogListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

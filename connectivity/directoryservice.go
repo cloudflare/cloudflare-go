@@ -40,7 +40,7 @@ func NewDirectoryServiceService(opts ...option.RequestOption) (r *DirectoryServi
 	return
 }
 
-// Create Workers VPC connectivity service
+// Creates a new Workers VPC connectivity service in the account.
 func (r *DirectoryServiceService) New(ctx context.Context, params DirectoryServiceNewParams, opts ...option.RequestOption) (res *DirectoryServiceNewResponse, err error) {
 	var env DirectoryServiceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +57,7 @@ func (r *DirectoryServiceService) New(ctx context.Context, params DirectoryServi
 	return res, nil
 }
 
-// Update Workers VPC connectivity service
+// Updates an existing Workers VPC connectivity service by its ID.
 func (r *DirectoryServiceService) Update(ctx context.Context, serviceID string, params DirectoryServiceUpdateParams, opts ...option.RequestOption) (res *DirectoryServiceUpdateResponse, err error) {
 	var env DirectoryServiceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -78,7 +78,7 @@ func (r *DirectoryServiceService) Update(ctx context.Context, serviceID string, 
 	return res, nil
 }
 
-// List Workers VPC connectivity services
+// Lists the Workers VPC connectivity services in the account.
 func (r *DirectoryServiceService) List(ctx context.Context, params DirectoryServiceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DirectoryServiceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -100,12 +100,12 @@ func (r *DirectoryServiceService) List(ctx context.Context, params DirectoryServ
 	return res, nil
 }
 
-// List Workers VPC connectivity services
+// Lists the Workers VPC connectivity services in the account.
 func (r *DirectoryServiceService) ListAutoPaging(ctx context.Context, params DirectoryServiceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DirectoryServiceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete Workers VPC connectivity service
+// Removes a single Workers VPC connectivity service by its ID.
 func (r *DirectoryServiceService) Delete(ctx context.Context, serviceID string, body DirectoryServiceDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -122,7 +122,7 @@ func (r *DirectoryServiceService) Delete(ctx context.Context, serviceID string, 
 	return err
 }
 
-// Get Workers VPC connectivity service
+// Fetches a single Workers VPC connectivity service by its ID.
 func (r *DirectoryServiceService) Get(ctx context.Context, serviceID string, query DirectoryServiceGetParams, opts ...option.RequestOption) (res *DirectoryServiceGetResponse, err error) {
 	var env DirectoryServiceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

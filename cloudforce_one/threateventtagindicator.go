@@ -117,8 +117,11 @@ func (r threatEventTagIndicatorListResponseIndicatorJSON) RawJSON() string {
 }
 
 type ThreatEventTagIndicatorListResponseIndicatorsRelatedEvent struct {
-	DatasetID string                                                        `json:"datasetId" api:"required"`
-	EventID   string                                                        `json:"eventId" api:"required"`
+	DatasetID string `json:"datasetId" api:"required"`
+	EventID   string `json:"eventId" api:"required"`
+	// ISO 8601 date of the related event. Null for legacy relationships created before
+	// event-date tracking was added.
+	EventDate string                                                        `json:"eventDate" api:"nullable"`
 	JSON      threatEventTagIndicatorListResponseIndicatorsRelatedEventJSON `json:"-"`
 }
 
@@ -128,6 +131,7 @@ type ThreatEventTagIndicatorListResponseIndicatorsRelatedEvent struct {
 type threatEventTagIndicatorListResponseIndicatorsRelatedEventJSON struct {
 	DatasetID   apijson.Field
 	EventID     apijson.Field
+	EventDate   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

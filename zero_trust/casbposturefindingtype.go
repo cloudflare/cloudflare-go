@@ -355,6 +355,8 @@ type CasbPostureFindingTypeListParams struct {
 	Page param.Field[int64] `query:"page"`
 	// Number of results to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
+	// Filter finding types by vendor. Supports multiple comma-separated values.
+	Vendors param.Field[[]CasbPostureFindingTypeListParamsVendor] `query:"vendors"`
 }
 
 // URLQuery serializes [CasbPostureFindingTypeListParams]'s query parameters as
@@ -364,6 +366,36 @@ func (r CasbPostureFindingTypeListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Supported vendor types for integrations.
+type CasbPostureFindingTypeListParamsVendor string
+
+const (
+	CasbPostureFindingTypeListParamsVendorAnthropic           CasbPostureFindingTypeListParamsVendor = "ANTHROPIC"
+	CasbPostureFindingTypeListParamsVendorAws                 CasbPostureFindingTypeListParamsVendor = "AWS"
+	CasbPostureFindingTypeListParamsVendorBitbucket           CasbPostureFindingTypeListParamsVendor = "BITBUCKET"
+	CasbPostureFindingTypeListParamsVendorBox                 CasbPostureFindingTypeListParamsVendor = "BOX"
+	CasbPostureFindingTypeListParamsVendorConfluence          CasbPostureFindingTypeListParamsVendor = "CONFLUENCE"
+	CasbPostureFindingTypeListParamsVendorDropbox             CasbPostureFindingTypeListParamsVendor = "DROPBOX"
+	CasbPostureFindingTypeListParamsVendorGitHub              CasbPostureFindingTypeListParamsVendor = "GITHUB"
+	CasbPostureFindingTypeListParamsVendorGoogleCloudPlatform CasbPostureFindingTypeListParamsVendor = "GOOGLE_CLOUD_PLATFORM"
+	CasbPostureFindingTypeListParamsVendorGoogleWorkspace     CasbPostureFindingTypeListParamsVendor = "GOOGLE_WORKSPACE"
+	CasbPostureFindingTypeListParamsVendorJira                CasbPostureFindingTypeListParamsVendor = "JIRA"
+	CasbPostureFindingTypeListParamsVendorMicrosoft           CasbPostureFindingTypeListParamsVendor = "MICROSOFT"
+	CasbPostureFindingTypeListParamsVendorMicrosoftInternal   CasbPostureFindingTypeListParamsVendor = "MICROSOFT_INTERNAL"
+	CasbPostureFindingTypeListParamsVendorOpenAI              CasbPostureFindingTypeListParamsVendor = "OPENAI"
+	CasbPostureFindingTypeListParamsVendorSalesforce          CasbPostureFindingTypeListParamsVendor = "SALESFORCE"
+	CasbPostureFindingTypeListParamsVendorServicenow          CasbPostureFindingTypeListParamsVendor = "SERVICENOW"
+	CasbPostureFindingTypeListParamsVendorSlack               CasbPostureFindingTypeListParamsVendor = "SLACK"
+)
+
+func (r CasbPostureFindingTypeListParamsVendor) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingTypeListParamsVendorAnthropic, CasbPostureFindingTypeListParamsVendorAws, CasbPostureFindingTypeListParamsVendorBitbucket, CasbPostureFindingTypeListParamsVendorBox, CasbPostureFindingTypeListParamsVendorConfluence, CasbPostureFindingTypeListParamsVendorDropbox, CasbPostureFindingTypeListParamsVendorGitHub, CasbPostureFindingTypeListParamsVendorGoogleCloudPlatform, CasbPostureFindingTypeListParamsVendorGoogleWorkspace, CasbPostureFindingTypeListParamsVendorJira, CasbPostureFindingTypeListParamsVendorMicrosoft, CasbPostureFindingTypeListParamsVendorMicrosoftInternal, CasbPostureFindingTypeListParamsVendorOpenAI, CasbPostureFindingTypeListParamsVendorSalesforce, CasbPostureFindingTypeListParamsVendorServicenow, CasbPostureFindingTypeListParamsVendorSlack:
+		return true
+	}
+	return false
 }
 
 type CasbPostureFindingTypeGetParams struct {

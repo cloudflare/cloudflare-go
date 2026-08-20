@@ -97,6 +97,9 @@ type BillingUsageGetResponse struct {
 	InvoiceIssuerName string `json:"InvoiceIssuerName" api:"required"`
 	// Name of the entity that made the services available for purchase.
 	ServiceProviderName string `json:"ServiceProviderName" api:"required"`
+	// The unique identifier for the billable metric in the Cloudflare catalog.
+	// Cloudflare extension; replaces FOCUS SkuId.
+	XBillableMetricID string `json:"x_BillableMetricId" api:"required"`
 	// The display name of the billable metric. Cloudflare extension; replaces FOCUS
 	// SkuMeter.
 	XBillableMetricName string `json:"x_BillableMetricName" api:"required"`
@@ -147,12 +150,12 @@ type BillingUsageGetResponse struct {
 	// Name assigned to a grouping of services. For Cloudflare, this is the
 	// subscription or contract display name.
 	SubAccountName string `json:"SubAccountName"`
-	// The unique identifier for the billable metric in the Cloudflare catalog.
-	// Cloudflare extension; replaces FOCUS SkuId.
-	XBillableMetricID string `json:"x_BillableMetricId"`
 	// The product category the charge belongs to (e.g., "Developer", "Cloudflare
 	// One"). Cloudflare extension; replaces FOCUS ServiceCategory.
 	XProductCategoryName string `json:"x_ProductCategoryName"`
+	// The unique identifier for the product family in the Cloudflare catalog.
+	// Cloudflare extension; replaces FOCUS ServiceId.
+	XProductFamilyID string `json:"x_ProductFamilyId"`
 	// The product family the charge belongs to (e.g., "R2", "Workers"). Cloudflare
 	// extension; replaces FOCUS ServiceName.
 	XProductFamilyName string `json:"x_ProductFamilyName"`
@@ -178,6 +181,7 @@ type billingUsageGetResponseJSON struct {
 	HostProviderName     apijson.Field
 	InvoiceIssuerName    apijson.Field
 	ServiceProviderName  apijson.Field
+	XBillableMetricID    apijson.Field
 	XBillableMetricName  apijson.Field
 	BilledCost           apijson.Field
 	BillingCurrency      apijson.Field
@@ -195,8 +199,8 @@ type billingUsageGetResponseJSON struct {
 	RegionName           apijson.Field
 	SubAccountID         apijson.Field
 	SubAccountName       apijson.Field
-	XBillableMetricID    apijson.Field
 	XProductCategoryName apijson.Field
+	XProductFamilyID     apijson.Field
 	XProductFamilyName   apijson.Field
 	XZoneID              apijson.Field
 	XZoneName            apijson.Field

@@ -931,11 +931,13 @@ func (r NamespaceInstanceNewResponseRewriteModel) IsKnown() bool {
 type NamespaceInstanceNewResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   []string                                           `json:"include_items"`
 	Prefix         string                                             `json:"prefix"`
 	R2Jurisdiction string                                             `json:"r2_jurisdiction"`
@@ -964,18 +966,24 @@ func (r namespaceInstanceNewResponseSourceParamsJSON) RawJSON() string {
 }
 
 type NamespaceInstanceNewResponseSourceParamsWebCrawler struct {
-	ParseOptions NamespaceInstanceNewResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
-	ParseType    NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	JSON         namespaceInstanceNewResponseSourceParamsWebCrawlerJSON         `json:"-"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
+	ParseOptions    NamespaceInstanceNewResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
+	JSON      namespaceInstanceNewResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
 
 // namespaceInstanceNewResponseSourceParamsWebCrawlerJSON contains the JSON
 // metadata for the struct [NamespaceInstanceNewResponseSourceParamsWebCrawler]
 type namespaceInstanceNewResponseSourceParamsWebCrawlerJSON struct {
-	ParseOptions apijson.Field
-	ParseType    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	DiscoverOptions apijson.Field
+	ParseOptions    apijson.Field
+	ParseType       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NamespaceInstanceNewResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (err error) {
@@ -984,6 +992,66 @@ func (r *NamespaceInstanceNewResponseSourceParamsWebCrawler) UnmarshalJSON(data 
 
 func (r namespaceInstanceNewResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth float64 `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks bool `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains bool `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit float64 `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge float64 `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource `json:"source"`
+	JSON   namespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsJSON   `json:"-"`
+}
+
+// namespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsJSON contains
+// the JSON metadata for the struct
+// [NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptions]
+type namespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsJSON struct {
+	Depth                apijson.Field
+	IncludeExternalLinks apijson.Field
+	IncludeSubdomains    apijson.Field
+	Limit                apijson.Field
+	MaxAge               apijson.Field
+	Source               apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll      NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks    NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll, NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, NamespaceInstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceNewResponseSourceParamsWebCrawlerParseOptions struct {
@@ -1054,16 +1122,18 @@ func (r namespaceInstanceNewResponseSourceParamsWebCrawlerParseOptionsContentSel
 	return r.raw
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType string
 
 const (
-	NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType = "crawl"
+	NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap  NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType = "sitemap"
+	NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeDiscover NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceNewResponseSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -1794,11 +1864,13 @@ func (r NamespaceInstanceUpdateResponseRewriteModel) IsKnown() bool {
 type NamespaceInstanceUpdateResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   []string                                              `json:"include_items"`
 	Prefix         string                                                `json:"prefix"`
 	R2Jurisdiction string                                                `json:"r2_jurisdiction"`
@@ -1827,18 +1899,24 @@ func (r namespaceInstanceUpdateResponseSourceParamsJSON) RawJSON() string {
 }
 
 type NamespaceInstanceUpdateResponseSourceParamsWebCrawler struct {
-	ParseOptions NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
-	ParseType    NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	JSON         namespaceInstanceUpdateResponseSourceParamsWebCrawlerJSON         `json:"-"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
+	ParseOptions    NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
+	JSON      namespaceInstanceUpdateResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
 
 // namespaceInstanceUpdateResponseSourceParamsWebCrawlerJSON contains the JSON
 // metadata for the struct [NamespaceInstanceUpdateResponseSourceParamsWebCrawler]
 type namespaceInstanceUpdateResponseSourceParamsWebCrawlerJSON struct {
-	ParseOptions apijson.Field
-	ParseType    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	DiscoverOptions apijson.Field
+	ParseOptions    apijson.Field
+	ParseType       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NamespaceInstanceUpdateResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (err error) {
@@ -1847,6 +1925,66 @@ func (r *NamespaceInstanceUpdateResponseSourceParamsWebCrawler) UnmarshalJSON(da
 
 func (r namespaceInstanceUpdateResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth float64 `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks bool `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains bool `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit float64 `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge float64 `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource `json:"source"`
+	JSON   namespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsJSON   `json:"-"`
+}
+
+// namespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsJSON
+// contains the JSON metadata for the struct
+// [NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptions]
+type namespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsJSON struct {
+	Depth                apijson.Field
+	IncludeExternalLinks apijson.Field
+	IncludeSubdomains    apijson.Field
+	Limit                apijson.Field
+	MaxAge               apijson.Field
+	Source               apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll      NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks    NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll, NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, NamespaceInstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseOptions struct {
@@ -1917,16 +2055,18 @@ func (r namespaceInstanceUpdateResponseSourceParamsWebCrawlerParseOptionsContent
 	return r.raw
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType string
 
 const (
-	NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType = "crawl"
+	NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap  NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType = "sitemap"
+	NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeDiscover NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -2537,19 +2677,21 @@ func (r namespaceInstanceListResponseSourceParamsJSON) RawJSON() string {
 }
 
 type NamespaceInstanceListResponseSourceParamsWebCrawler struct {
-	ParseOptions NamespaceInstanceListResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
-	ParseType    NamespaceInstanceListResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	ExtraFields  map[string]interface{}                                          `json:"-" api:"extrafields"`
-	JSON         namespaceInstanceListResponseSourceParamsWebCrawlerJSON         `json:"-"`
+	DiscoverOptions NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
+	ParseOptions    NamespaceInstanceListResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
+	ParseType       NamespaceInstanceListResponseSourceParamsWebCrawlerParseType       `json:"parse_type"`
+	ExtraFields     map[string]interface{}                                             `json:"-" api:"extrafields"`
+	JSON            namespaceInstanceListResponseSourceParamsWebCrawlerJSON            `json:"-"`
 }
 
 // namespaceInstanceListResponseSourceParamsWebCrawlerJSON contains the JSON
 // metadata for the struct [NamespaceInstanceListResponseSourceParamsWebCrawler]
 type namespaceInstanceListResponseSourceParamsWebCrawlerJSON struct {
-	ParseOptions apijson.Field
-	ParseType    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	DiscoverOptions apijson.Field
+	ParseOptions    apijson.Field
+	ParseType       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NamespaceInstanceListResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (err error) {
@@ -2558,6 +2700,58 @@ func (r *NamespaceInstanceListResponseSourceParamsWebCrawler) UnmarshalJSON(data
 
 func (r namespaceInstanceListResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
+}
+
+type NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptions struct {
+	Depth                float64 `json:"depth"`
+	IncludeExternalLinks bool    `json:"include_external_links"`
+	IncludeSubdomains    bool    `json:"include_subdomains"`
+	// Maximum number of pages to crawl. New values are capped at 100000; instances
+	// configured before that cap may report a higher stored value, which the crawler
+	// clamps at run time.
+	Limit       float64                                                                  `json:"limit"`
+	MaxAge      float64                                                                  `json:"max_age"`
+	Source      NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource `json:"source"`
+	ExtraFields map[string]interface{}                                                   `json:"-" api:"extrafields"`
+	JSON        namespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsJSON   `json:"-"`
+}
+
+// namespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsJSON contains
+// the JSON metadata for the struct
+// [NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptions]
+type namespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsJSON struct {
+	Depth                apijson.Field
+	IncludeExternalLinks apijson.Field
+	IncludeSubdomains    apijson.Field
+	Limit                apijson.Field
+	MaxAge               apijson.Field
+	Source               apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll      NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks    NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll, NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, NamespaceInstanceListResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceListResponseSourceParamsWebCrawlerParseOptions struct {
@@ -2619,13 +2813,13 @@ func (r namespaceInstanceListResponseSourceParamsWebCrawlerParseOptionsContentSe
 type NamespaceInstanceListResponseSourceParamsWebCrawlerParseType string
 
 const (
-	NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceListResponseSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceListResponseSourceParamsWebCrawlerParseType = "crawl"
+	NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeSitemap  NamespaceInstanceListResponseSourceParamsWebCrawlerParseType = "sitemap"
+	NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeDiscover NamespaceInstanceListResponseSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r NamespaceInstanceListResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceListResponseSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -3354,11 +3548,13 @@ func (r NamespaceInstanceDeleteResponseRewriteModel) IsKnown() bool {
 type NamespaceInstanceDeleteResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   []string                                              `json:"include_items"`
 	Prefix         string                                                `json:"prefix"`
 	R2Jurisdiction string                                                `json:"r2_jurisdiction"`
@@ -3387,18 +3583,24 @@ func (r namespaceInstanceDeleteResponseSourceParamsJSON) RawJSON() string {
 }
 
 type NamespaceInstanceDeleteResponseSourceParamsWebCrawler struct {
-	ParseOptions NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
-	ParseType    NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	JSON         namespaceInstanceDeleteResponseSourceParamsWebCrawlerJSON         `json:"-"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
+	ParseOptions    NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
+	JSON      namespaceInstanceDeleteResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
 
 // namespaceInstanceDeleteResponseSourceParamsWebCrawlerJSON contains the JSON
 // metadata for the struct [NamespaceInstanceDeleteResponseSourceParamsWebCrawler]
 type namespaceInstanceDeleteResponseSourceParamsWebCrawlerJSON struct {
-	ParseOptions apijson.Field
-	ParseType    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	DiscoverOptions apijson.Field
+	ParseOptions    apijson.Field
+	ParseType       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NamespaceInstanceDeleteResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (err error) {
@@ -3407,6 +3609,66 @@ func (r *NamespaceInstanceDeleteResponseSourceParamsWebCrawler) UnmarshalJSON(da
 
 func (r namespaceInstanceDeleteResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth float64 `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks bool `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains bool `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit float64 `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge float64 `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource `json:"source"`
+	JSON   namespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsJSON   `json:"-"`
+}
+
+// namespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsJSON
+// contains the JSON metadata for the struct
+// [NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptions]
+type namespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsJSON struct {
+	Depth                apijson.Field
+	IncludeExternalLinks apijson.Field
+	IncludeSubdomains    apijson.Field
+	Limit                apijson.Field
+	MaxAge               apijson.Field
+	Source               apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll      NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks    NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll, NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, NamespaceInstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseOptions struct {
@@ -3477,16 +3739,18 @@ func (r namespaceInstanceDeleteResponseSourceParamsWebCrawlerParseOptionsContent
 	return r.raw
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType string
 
 const (
-	NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType = "crawl"
+	NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap  NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType = "sitemap"
+	NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeDiscover NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -4575,11 +4839,13 @@ func (r NamespaceInstanceReadResponseRewriteModel) IsKnown() bool {
 type NamespaceInstanceReadResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   []string                                            `json:"include_items"`
 	Prefix         string                                              `json:"prefix"`
 	R2Jurisdiction string                                              `json:"r2_jurisdiction"`
@@ -4608,18 +4874,24 @@ func (r namespaceInstanceReadResponseSourceParamsJSON) RawJSON() string {
 }
 
 type NamespaceInstanceReadResponseSourceParamsWebCrawler struct {
-	ParseOptions NamespaceInstanceReadResponseSourceParamsWebCrawlerParseOptions `json:"parse_options"`
-	ParseType    NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType    `json:"parse_type"`
-	JSON         namespaceInstanceReadResponseSourceParamsWebCrawlerJSON         `json:"-"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
+	ParseOptions    NamespaceInstanceReadResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
+	JSON      namespaceInstanceReadResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
 
 // namespaceInstanceReadResponseSourceParamsWebCrawlerJSON contains the JSON
 // metadata for the struct [NamespaceInstanceReadResponseSourceParamsWebCrawler]
 type namespaceInstanceReadResponseSourceParamsWebCrawlerJSON struct {
-	ParseOptions apijson.Field
-	ParseType    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	DiscoverOptions apijson.Field
+	ParseOptions    apijson.Field
+	ParseType       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NamespaceInstanceReadResponseSourceParamsWebCrawler) UnmarshalJSON(data []byte) (err error) {
@@ -4628,6 +4900,66 @@ func (r *NamespaceInstanceReadResponseSourceParamsWebCrawler) UnmarshalJSON(data
 
 func (r namespaceInstanceReadResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth float64 `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks bool `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains bool `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit float64 `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge float64 `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource `json:"source"`
+	JSON   namespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsJSON   `json:"-"`
+}
+
+// namespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsJSON contains
+// the JSON metadata for the struct
+// [NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptions]
+type namespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsJSON struct {
+	Depth                apijson.Field
+	IncludeExternalLinks apijson.Field
+	IncludeSubdomains    apijson.Field
+	Limit                apijson.Field
+	MaxAge               apijson.Field
+	Source               apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll      NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks    NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceAll, NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, NamespaceInstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceReadResponseSourceParamsWebCrawlerParseOptions struct {
@@ -4698,16 +5030,18 @@ func (r namespaceInstanceReadResponseSourceParamsWebCrawlerParseOptionsContentSe
 	return r.raw
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType string
 
 const (
-	NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType = "crawl"
+	NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap  NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType = "sitemap"
+	NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeDiscover NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceReadResponseSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -5478,11 +5812,13 @@ func (r NamespaceInstanceNewParamsRewriteModel) IsKnown() bool {
 type NamespaceInstanceNewParamsSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems param.Field[[]string] `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   param.Field[[]string]                                         `json:"include_items"`
 	Prefix         param.Field[string]                                           `json:"prefix"`
 	R2Jurisdiction param.Field[string]                                           `json:"r2_jurisdiction"`
@@ -5494,12 +5830,58 @@ func (r NamespaceInstanceNewParamsSourceParams) MarshalJSON() (data []byte, err 
 }
 
 type NamespaceInstanceNewParamsSourceParamsWebCrawler struct {
-	ParseOptions param.Field[NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptions] `json:"parse_options"`
-	ParseType    param.Field[NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType]    `json:"parse_type"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions param.Field[NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptions] `json:"discover_options"`
+	ParseOptions    param.Field[NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptions]    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType param.Field[NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType] `json:"parse_type"`
 }
 
 func (r NamespaceInstanceNewParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth param.Field[float64] `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks param.Field[bool] `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains param.Field[bool] `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit param.Field[float64] `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge param.Field[float64] `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source param.Field[NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource] `json:"source"`
+}
+
+func (r NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceAll      NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceLinks    NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceAll, NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, NamespaceInstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptions struct {
@@ -5537,16 +5919,18 @@ func (r NamespaceInstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelec
 	return apijson.MarshalRoot(r)
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType string
 
 const (
-	NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType = "crawl"
+	NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap  NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType = "sitemap"
+	NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeDiscover NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceNewParamsSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false
@@ -6078,11 +6462,13 @@ func (r NamespaceInstanceUpdateParamsRewriteModel) IsKnown() bool {
 type NamespaceInstanceUpdateParamsSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced)
+	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// rules; contact support to raise it.
 	ExcludeItems param.Field[[]string] `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post)
+	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// support to raise it.
 	IncludeItems   param.Field[[]string]                                            `json:"include_items"`
 	Prefix         param.Field[string]                                              `json:"prefix"`
 	R2Jurisdiction param.Field[string]                                              `json:"r2_jurisdiction"`
@@ -6094,12 +6480,58 @@ func (r NamespaceInstanceUpdateParamsSourceParams) MarshalJSON() (data []byte, e
 }
 
 type NamespaceInstanceUpdateParamsSourceParamsWebCrawler struct {
-	ParseOptions param.Field[NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptions] `json:"parse_options"`
-	ParseType    param.Field[NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType]    `json:"parse_type"`
+	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// following and sitemaps. Ignored for 'sitemap'.
+	DiscoverOptions param.Field[NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptions] `json:"discover_options"`
+	ParseOptions    param.Field[NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptions]    `json:"parse_options"`
+	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+	// recursively and requires the source to be a Verified zone on this account.
+	ParseType param.Field[NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType] `json:"parse_type"`
 }
 
 func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// following and sitemaps. Ignored for 'sitemap'.
+type NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptions struct {
+	// Maximum link-follow depth from the seed URL.
+	Depth param.Field[float64] `json:"depth"`
+	// Follow links that point outside the source domain. Must stay `false` — discover
+	// crawls are restricted to the zone you own.
+	IncludeExternalLinks param.Field[bool] `json:"include_external_links"`
+	// Follow links to subdomains of the source host.
+	IncludeSubdomains param.Field[bool] `json:"include_subdomains"`
+	// Maximum number of pages to crawl (1-100000).
+	Limit param.Field[float64] `json:"limit"`
+	// Maximum content age in seconds to accept (0–604800).
+	MaxAge param.Field[float64] `json:"max_age"`
+	// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+	// follows page links only, 'all' does both.
+	Source param.Field[NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource] `json:"source"`
+}
+
+func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Where the crawler looks for URLs: 'sitemaps' reads sitemap XML only, 'links'
+// follows page links only, 'all' does both.
+type NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource string
+
+const (
+	NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceAll      NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource = "all"
+	NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource = "sitemaps"
+	NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceLinks    NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource = "links"
+)
+
+func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceAll, NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceSitemaps, NamespaceInstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSourceLinks:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptions struct {
@@ -6137,16 +6569,18 @@ func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSe
 	return apijson.MarshalRoot(r)
 }
 
+// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
+// recursively and requires the source to be a Verified zone on this account.
 type NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType string
 
 const (
-	NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType = "sitemap"
-	NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeCrawl   NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType = "crawl"
+	NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap  NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType = "sitemap"
+	NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeDiscover NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType = "discover"
 )
 
 func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
-	case NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeCrawl:
+	case NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeDiscover:
 		return true
 	}
 	return false

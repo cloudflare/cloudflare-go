@@ -35,6 +35,7 @@ func TestThreatEventIndicatorListWithOptionalParams(t *testing.T) {
 		Cache:              cloudflare.F(cloudforce_one.ThreatEventIndicatorListParamsCacheFromGraph),
 		CreatedAfter:       cloudflare.F(time.Now()),
 		CreatedBefore:      cloudflare.F(time.Now()),
+		Cursor:             cloudflare.F("cursor"),
 		DatasetIDs:         cloudflare.F([]string{"string"}),
 		Format:             cloudflare.F(cloudforce_one.ThreatEventIndicatorListParamsFormatJson),
 		IncludeTags:        cloudflare.F(true),
@@ -50,8 +51,7 @@ func TestThreatEventIndicatorListWithOptionalParams(t *testing.T) {
 			Op:    cloudflare.F(cloudforce_one.ThreatEventIndicatorListParamsSearchOpContains),
 			Value: cloudflare.F[cloudforce_one.ThreatEventIndicatorListParamsSearchValueUnion](shared.UnionString("malicious")),
 		}}),
-		Source: cloudflare.F(cloudforce_one.ThreatEventIndicatorListParamsSourceDo),
-		Tags:   cloudflare.F([]string{"string"}),
+		Tags: cloudflare.F([]string{"string"}),
 		TagSearch: cloudflare.F([]cloudforce_one.ThreatEventIndicatorListParamsTagSearch{{
 			Field: cloudflare.F(cloudforce_one.ThreatEventIndicatorListParamsTagSearchFieldOriginCountryISO),
 			Op:    cloudflare.F(cloudforce_one.ThreatEventIndicatorListParamsTagSearchOpIn),

@@ -32,8 +32,9 @@ func TestIndicatorFeedSnapshotUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		int64(12),
 		intel.IndicatorFeedSnapshotUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Source:    cloudflare.F("@/Users/me/test.stix2.gz"),
+			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Source:        cloudflare.F("@/Users/me/test.stix2.gz"),
+			CfAsyncUpload: cloudflare.F(intel.IndicatorFeedSnapshotUpdateParamsCfAsyncUpload1),
 		},
 	)
 	if err != nil {

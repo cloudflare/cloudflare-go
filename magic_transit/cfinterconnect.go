@@ -157,7 +157,8 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise. Requires the `coupler_integration` account flag to be enabled;
 	// requests setting this to `true` without that flag will be rejected.
-	AutomaticReturnRouting bool `json:"automatic_return_routing"`
+	AutomaticReturnRouting bool                                                `json:"automatic_return_routing"`
+	BGP                    CfInterconnectUpdateResponseModifiedInterconnectBGP `json:"bgp"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
 	// The date and time the tunnel was created.
@@ -202,6 +203,7 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 type cfInterconnectUpdateResponseModifiedInterconnectJSON struct {
 	ID                       apijson.Field
 	AutomaticReturnRouting   apijson.Field
+	BGP                      apijson.Field
 	ColoName                 apijson.Field
 	CreatedOn                apijson.Field
 	Description              apijson.Field
@@ -223,6 +225,73 @@ func (r *CfInterconnectUpdateResponseModifiedInterconnect) UnmarshalJSON(data []
 }
 
 func (r cfInterconnectUpdateResponseModifiedInterconnectJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectUpdateResponseModifiedInterconnectBGP struct {
+	// Deprecated. Use customer_asn.
+	//
+	// Deprecated: deprecated
+	AsNo int64 `json:"as_no"`
+	// Read-only for v1.5; derived from interface_address.
+	//
+	// Deprecated: deprecated
+	CloudflareEndpoint string `json:"cloudflare_endpoint" format:"ipv4"`
+	// ASN used on the customer end of the BGP session.
+	CustomerASN int64 `json:"customer_asn"`
+	// Read-only for v1.5; derived from interface_address.
+	//
+	// Deprecated: deprecated
+	CustomerEndpoint string `json:"customer_endpoint" format:"ipv4"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                                  `json:"md5_key"`
+	JSON   cfInterconnectUpdateResponseModifiedInterconnectBGPJSON `json:"-"`
+}
+
+// cfInterconnectUpdateResponseModifiedInterconnectBGPJSON contains the JSON
+// metadata for the struct [CfInterconnectUpdateResponseModifiedInterconnectBGP]
+type cfInterconnectUpdateResponseModifiedInterconnectBGPJSON struct {
+	AsNo               apijson.Field
+	CloudflareEndpoint apijson.Field
+	CustomerASN        apijson.Field
+	CustomerEndpoint   apijson.Field
+	ExportFilterID     apijson.Field
+	ExtraPrefixes      apijson.Field
+	ImportFilterID     apijson.Field
+	Md5Key             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *CfInterconnectUpdateResponseModifiedInterconnectBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectUpdateResponseModifiedInterconnectBGPJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -277,7 +346,8 @@ type CfInterconnectListResponseInterconnect struct {
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise. Requires the `coupler_integration` account flag to be enabled;
 	// requests setting this to `true` without that flag will be rejected.
-	AutomaticReturnRouting bool `json:"automatic_return_routing"`
+	AutomaticReturnRouting bool                                       `json:"automatic_return_routing"`
+	BGP                    CfInterconnectListResponseInterconnectsBGP `json:"bgp"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
 	// The date and time the tunnel was created.
@@ -322,6 +392,7 @@ type CfInterconnectListResponseInterconnect struct {
 type cfInterconnectListResponseInterconnectJSON struct {
 	ID                       apijson.Field
 	AutomaticReturnRouting   apijson.Field
+	BGP                      apijson.Field
 	ColoName                 apijson.Field
 	CreatedOn                apijson.Field
 	Description              apijson.Field
@@ -343,6 +414,73 @@ func (r *CfInterconnectListResponseInterconnect) UnmarshalJSON(data []byte) (err
 }
 
 func (r cfInterconnectListResponseInterconnectJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectListResponseInterconnectsBGP struct {
+	// Deprecated. Use customer_asn.
+	//
+	// Deprecated: deprecated
+	AsNo int64 `json:"as_no"`
+	// Read-only for v1.5; derived from interface_address.
+	//
+	// Deprecated: deprecated
+	CloudflareEndpoint string `json:"cloudflare_endpoint" format:"ipv4"`
+	// ASN used on the customer end of the BGP session.
+	CustomerASN int64 `json:"customer_asn"`
+	// Read-only for v1.5; derived from interface_address.
+	//
+	// Deprecated: deprecated
+	CustomerEndpoint string `json:"customer_endpoint" format:"ipv4"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                         `json:"md5_key"`
+	JSON   cfInterconnectListResponseInterconnectsBGPJSON `json:"-"`
+}
+
+// cfInterconnectListResponseInterconnectsBGPJSON contains the JSON metadata for
+// the struct [CfInterconnectListResponseInterconnectsBGP]
+type cfInterconnectListResponseInterconnectsBGPJSON struct {
+	AsNo               apijson.Field
+	CloudflareEndpoint apijson.Field
+	CustomerASN        apijson.Field
+	CustomerEndpoint   apijson.Field
+	ExportFilterID     apijson.Field
+	ExtraPrefixes      apijson.Field
+	ImportFilterID     apijson.Field
+	Md5Key             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *CfInterconnectListResponseInterconnectsBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectListResponseInterconnectsBGPJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -399,7 +537,8 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise. Requires the `coupler_integration` account flag to be enabled;
 	// requests setting this to `true` without that flag will be rejected.
-	AutomaticReturnRouting bool `json:"automatic_return_routing"`
+	AutomaticReturnRouting bool                                                     `json:"automatic_return_routing"`
+	BGP                    CfInterconnectBulkUpdateResponseModifiedInterconnectsBGP `json:"bgp"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
 	// The date and time the tunnel was created.
@@ -444,6 +583,7 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 type cfInterconnectBulkUpdateResponseModifiedInterconnectJSON struct {
 	ID                       apijson.Field
 	AutomaticReturnRouting   apijson.Field
+	BGP                      apijson.Field
 	ColoName                 apijson.Field
 	CreatedOn                apijson.Field
 	Description              apijson.Field
@@ -465,6 +605,74 @@ func (r *CfInterconnectBulkUpdateResponseModifiedInterconnect) UnmarshalJSON(dat
 }
 
 func (r cfInterconnectBulkUpdateResponseModifiedInterconnectJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectBulkUpdateResponseModifiedInterconnectsBGP struct {
+	// Deprecated. Use customer_asn.
+	//
+	// Deprecated: deprecated
+	AsNo int64 `json:"as_no"`
+	// Read-only for v1.5; derived from interface_address.
+	//
+	// Deprecated: deprecated
+	CloudflareEndpoint string `json:"cloudflare_endpoint" format:"ipv4"`
+	// ASN used on the customer end of the BGP session.
+	CustomerASN int64 `json:"customer_asn"`
+	// Read-only for v1.5; derived from interface_address.
+	//
+	// Deprecated: deprecated
+	CustomerEndpoint string `json:"customer_endpoint" format:"ipv4"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                                       `json:"md5_key"`
+	JSON   cfInterconnectBulkUpdateResponseModifiedInterconnectsBGPJSON `json:"-"`
+}
+
+// cfInterconnectBulkUpdateResponseModifiedInterconnectsBGPJSON contains the JSON
+// metadata for the struct
+// [CfInterconnectBulkUpdateResponseModifiedInterconnectsBGP]
+type cfInterconnectBulkUpdateResponseModifiedInterconnectsBGPJSON struct {
+	AsNo               apijson.Field
+	CloudflareEndpoint apijson.Field
+	CustomerASN        apijson.Field
+	CustomerEndpoint   apijson.Field
+	ExportFilterID     apijson.Field
+	ExtraPrefixes      apijson.Field
+	ImportFilterID     apijson.Field
+	Md5Key             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *CfInterconnectBulkUpdateResponseModifiedInterconnectsBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectBulkUpdateResponseModifiedInterconnectsBGPJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -520,7 +728,8 @@ type CfInterconnectGetResponseInterconnect struct {
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise. Requires the `coupler_integration` account flag to be enabled;
 	// requests setting this to `true` without that flag will be rejected.
-	AutomaticReturnRouting bool `json:"automatic_return_routing"`
+	AutomaticReturnRouting bool                                     `json:"automatic_return_routing"`
+	BGP                    CfInterconnectGetResponseInterconnectBGP `json:"bgp"`
 	// The name of the interconnect. The name cannot share a name with other tunnels.
 	ColoName string `json:"colo_name"`
 	// The date and time the tunnel was created.
@@ -565,6 +774,7 @@ type CfInterconnectGetResponseInterconnect struct {
 type cfInterconnectGetResponseInterconnectJSON struct {
 	ID                       apijson.Field
 	AutomaticReturnRouting   apijson.Field
+	BGP                      apijson.Field
 	ColoName                 apijson.Field
 	CreatedOn                apijson.Field
 	Description              apijson.Field
@@ -586,6 +796,73 @@ func (r *CfInterconnectGetResponseInterconnect) UnmarshalJSON(data []byte) (err 
 }
 
 func (r cfInterconnectGetResponseInterconnectJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectGetResponseInterconnectBGP struct {
+	// Deprecated. Use customer_asn.
+	//
+	// Deprecated: deprecated
+	AsNo int64 `json:"as_no"`
+	// Read-only for v1.5; derived from interface_address.
+	//
+	// Deprecated: deprecated
+	CloudflareEndpoint string `json:"cloudflare_endpoint" format:"ipv4"`
+	// ASN used on the customer end of the BGP session.
+	CustomerASN int64 `json:"customer_asn"`
+	// Read-only for v1.5; derived from interface_address.
+	//
+	// Deprecated: deprecated
+	CustomerEndpoint string `json:"customer_endpoint" format:"ipv4"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID string `json:"export_filter_id"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID string `json:"import_filter_id"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key string                                       `json:"md5_key"`
+	JSON   cfInterconnectGetResponseInterconnectBGPJSON `json:"-"`
+}
+
+// cfInterconnectGetResponseInterconnectBGPJSON contains the JSON metadata for the
+// struct [CfInterconnectGetResponseInterconnectBGP]
+type cfInterconnectGetResponseInterconnectBGPJSON struct {
+	AsNo               apijson.Field
+	CloudflareEndpoint apijson.Field
+	CustomerASN        apijson.Field
+	CustomerEndpoint   apijson.Field
+	ExportFilterID     apijson.Field
+	ExtraPrefixes      apijson.Field
+	ImportFilterID     apijson.Field
+	Md5Key             apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *CfInterconnectGetResponseInterconnectBGP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectGetResponseInterconnectBGPJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -619,7 +896,8 @@ type CfInterconnectUpdateParams struct {
 	// True if automatic stateful return routing should be enabled for a tunnel, false
 	// otherwise. Requires the `coupler_integration` account flag to be enabled;
 	// requests setting this to `true` without that flag will be rejected.
-	AutomaticReturnRouting param.Field[bool] `json:"automatic_return_routing"`
+	AutomaticReturnRouting param.Field[bool]                          `json:"automatic_return_routing"`
+	BGP                    param.Field[CfInterconnectUpdateParamsBGP] `json:"bgp"`
 	// An optional description of the interconnect.
 	Description param.Field[string] `json:"description"`
 	// The configuration specific to GRE interconnects.
@@ -645,6 +923,53 @@ type CfInterconnectUpdateParams struct {
 }
 
 func (r CfInterconnectUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type CfInterconnectUpdateParamsBGP struct {
+	// Deprecated. Use customer_asn.
+	//
+	// Deprecated: deprecated
+	AsNo param.Field[int64] `json:"as_no"`
+	// Read-only for v1.5; derived from interface_address.
+	//
+	// Deprecated: deprecated
+	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint" format:"ipv4"`
+	// ASN used on the customer end of the BGP session.
+	CustomerASN param.Field[int64] `json:"customer_asn"`
+	// Read-only for v1.5; derived from interface_address.
+	//
+	// Deprecated: deprecated
+	CustomerEndpoint param.Field[string] `json:"customer_endpoint" format:"ipv4"`
+	// ID of the BGP filter profile applied to routes advertised to the customer.
+	ExportFilterID param.Field[string] `json:"export_filter_id"`
+	// Prefixes in this list will be advertised to the customer device, in addition to
+	// the routes in the Magic routing table.
+	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
+	// ID of the BGP filter profile applied to routes received from the customer.
+	ImportFilterID param.Field[string] `json:"import_filter_id"`
+	// MD5 key to use for session authentication.
+	//
+	// Note that _this is not a security measure_. MD5 is not a valid security
+	// mechanism, and the key is not treated as a secret value. This is _only_
+	// supported for preventing misconfiguration, not for defending against malicious
+	// attacks.
+	//
+	// The MD5 key, if set, must be of non-zero length and consist only of the
+	// following types of character:
+	//
+	// - ASCII alphanumerics: `[a-zA-Z0-9]`
+	// - Special characters in the set `'!@#$%^&*()+[]{}<>/.,;:_-~`= \|`
+	//
+	// In other words, MD5 keys may contain any printable ASCII character aside from
+	// newline (0x0A), quotation mark (`"`), vertical tab (0x0B), carriage return
+	// (0x0D), tab (0x09), form feed (0x0C), and the question mark (`?`). Requests
+	// specifying an MD5 key with one or more of these disallowed characters will be
+	// rejected.
+	Md5Key param.Field[string] `json:"md5_key"`
+}
+
+func (r CfInterconnectUpdateParamsBGP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

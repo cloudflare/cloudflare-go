@@ -71,9 +71,10 @@ type JsonNewParams struct {
 	// `<style type="text/css">` tag with the content.
 	AddStyleTag param.Field[[]JsonNewParamsAddStyleTag] `json:"addStyleTag"`
 	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	// Reject rules are applied first.
 	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
 	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'.
+	// 'script'. Reject rules are applied first.
 	AllowResourceTypes param.Field[[]JsonNewParamsAllowResourceType] `json:"allowResourceTypes"`
 	// Provide credentials for HTTP authentication.
 	Authenticate param.Field[JsonNewParamsAuthenticate] `json:"authenticate"`
@@ -362,24 +363,11 @@ type JsonNewParamsResponseFormat struct {
 	Type param.Field[string] `json:"type" api:"required"`
 	// Schema for the response format. More information here:
 	// https://developers.cloudflare.com/workers-ai/json-mode/
-	JsonSchema param.Field[map[string]JsonNewParamsResponseFormatJsonSchemaUnion] `json:"json_schema"`
+	JsonSchema param.Field[map[string]interface{}] `json:"json_schema"`
 }
 
 func (r JsonNewParamsResponseFormat) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool],
-// [browser_rendering.JsonNewParamsResponseFormatJsonSchemaArray].
-//
-// Use [Raw()] to specify an arbitrary value for this param
-type JsonNewParamsResponseFormatJsonSchemaUnion interface {
-	ImplementsJsonNewParamsResponseFormatJsonSchemaUnion()
-}
-
-type JsonNewParamsResponseFormatJsonSchemaArray []string
-
-func (r JsonNewParamsResponseFormatJsonSchemaArray) ImplementsJsonNewParamsResponseFormatJsonSchemaUnion() {
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
@@ -438,7 +426,8 @@ func (r JsonNewParamsWaitForSelectorVisible) IsKnown() bool {
 }
 
 type JsonNewResponseEnvelope struct {
-	Result JsonNewResponse `json:"result" api:"required"`
+	Meta   JsonNewResponseEnvelopeMeta `json:"meta" api:"required"`
+	Result JsonNewResponse             `json:"result" api:"required"`
 	// Response status.
 	Success bool                            `json:"success" api:"required"`
 	Errors  []JsonNewResponseEnvelopeErrors `json:"errors"`
@@ -448,6 +437,7 @@ type JsonNewResponseEnvelope struct {
 // jsonNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [JsonNewResponseEnvelope]
 type jsonNewResponseEnvelopeJSON struct {
+	Meta        apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	Errors      apijson.Field
@@ -460,6 +450,71 @@ func (r *JsonNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r jsonNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type JsonNewResponseEnvelopeMeta struct {
+	// URL that served the response, after any redirects the browser followed.
+	FinalURL string `json:"finalUrl"`
+	// Origin response headers, lowercased. Repeated headers are joined with a newline.
+	// Credential and transport-only headers that do not survive rendering are omitted.
+	Headers map[string]string `json:"headers"`
+	// HTTP redirects followed to reach `finalUrl`, oldest first. Omitted for direct
+	// navigation and for client-side redirects such as meta refresh. An empty array
+	// means redirects occurred but their intermediate responses could not be read.
+	RedirectChain []JsonNewResponseEnvelopeMetaRedirectChain `json:"redirectChain"`
+	// HTTP status returned by the origin.
+	Status float64 `json:"status"`
+	// Page title.
+	Title string                          `json:"title"`
+	JSON  jsonNewResponseEnvelopeMetaJSON `json:"-"`
+}
+
+// jsonNewResponseEnvelopeMetaJSON contains the JSON metadata for the struct
+// [JsonNewResponseEnvelopeMeta]
+type jsonNewResponseEnvelopeMetaJSON struct {
+	FinalURL      apijson.Field
+	Headers       apijson.Field
+	RedirectChain apijson.Field
+	Status        apijson.Field
+	Title         apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *JsonNewResponseEnvelopeMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jsonNewResponseEnvelopeMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type JsonNewResponseEnvelopeMetaRedirectChain struct {
+	// Redirect response headers, including `location`.
+	Headers map[string]string `json:"headers" api:"required"`
+	// HTTP status of the redirect.
+	Status float64 `json:"status" api:"required"`
+	// URL that returned the redirect.
+	URL  string                                       `json:"url" api:"required"`
+	JSON jsonNewResponseEnvelopeMetaRedirectChainJSON `json:"-"`
+}
+
+// jsonNewResponseEnvelopeMetaRedirectChainJSON contains the JSON metadata for the
+// struct [JsonNewResponseEnvelopeMetaRedirectChain]
+type jsonNewResponseEnvelopeMetaRedirectChainJSON struct {
+	Headers     apijson.Field
+	Status      apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *JsonNewResponseEnvelopeMetaRedirectChain) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jsonNewResponseEnvelopeMetaRedirectChainJSON) RawJSON() string {
 	return r.raw
 }
 

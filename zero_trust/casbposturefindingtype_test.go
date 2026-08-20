@@ -32,6 +32,7 @@ func TestCasbPostureFindingTypeListWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
 		Page:      cloudflare.F(int64(0)),
 		PerPage:   cloudflare.F(int64(0)),
+		Vendors:   cloudflare.F([]zero_trust.CasbPostureFindingTypeListParamsVendor{zero_trust.CasbPostureFindingTypeListParamsVendorGoogleWorkspace}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

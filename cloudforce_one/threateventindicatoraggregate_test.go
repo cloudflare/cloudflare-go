@@ -7,11 +7,13 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 func TestThreatEventIndicatorAggregateListWithOptionalParams(t *testing.T) {
@@ -31,8 +33,8 @@ func TestThreatEventIndicatorAggregateListWithOptionalParams(t *testing.T) {
 	_, err := client.CloudforceOne.ThreatEvents.Indicators.Aggregate.List(context.TODO(), cloudforce_one.ThreatEventIndicatorAggregateListParams{
 		AccountID:       cloudflare.F("account_id"),
 		AggregateBy:     cloudflare.F("aggregateBy"),
-		CreatedAfter:    cloudflare.F("createdAfter"),
-		CreatedBefore:   cloudflare.F("createdBefore"),
+		CreatedAfter:    cloudflare.F[cloudforce_one.ThreatEventIndicatorAggregateListParamsCreatedAfterUnion](shared.UnionTime(time.Now())),
+		CreatedBefore:   cloudflare.F[cloudforce_one.ThreatEventIndicatorAggregateListParamsCreatedBeforeUnion](shared.UnionTime(time.Now())),
 		DatasetIDs:      cloudflare.F([]string{"string"}),
 		EventDateAfter:  cloudflare.F("eventDateAfter"),
 		EventDateBefore: cloudflare.F("eventDateBefore"),
