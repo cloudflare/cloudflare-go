@@ -70,8 +70,12 @@ func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAss
 	return res, nil
 }
 
+type HostnameAssociation = string
+
+type HostnameAssociationParam = string
+
 type TLSHostnameAssociationParam struct {
-	Hostnames param.Field[[]string] `json:"hostnames"`
+	Hostnames param.Field[[]HostnameAssociationParam] `json:"hostnames"`
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
 	// to your active Cloudflare Managed CA.
@@ -83,7 +87,7 @@ func (r TLSHostnameAssociationParam) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameAssociationUpdateResponse struct {
-	Hostnames []string                              `json:"hostnames"`
+	Hostnames []HostnameAssociation                 `json:"hostnames"`
 	JSON      hostnameAssociationUpdateResponseJSON `json:"-"`
 }
 
@@ -104,7 +108,7 @@ func (r hostnameAssociationUpdateResponseJSON) RawJSON() string {
 }
 
 type HostnameAssociationGetResponse struct {
-	Hostnames []string                           `json:"hostnames"`
+	Hostnames []HostnameAssociation              `json:"hostnames"`
 	JSON      hostnameAssociationGetResponseJSON `json:"-"`
 }
 

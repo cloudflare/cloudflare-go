@@ -48,9 +48,6 @@ func NewIndicatorFeedSnapshotService(opts ...option.RequestOption) (r *Indicator
 // decompressed STIX.
 func (r *IndicatorFeedSnapshotService) Update(ctx context.Context, feedID int64, params IndicatorFeedSnapshotUpdateParams, opts ...option.RequestOption) (res *IndicatorFeedSnapshotUpdateResponse, err error) {
 	var env IndicatorFeedSnapshotUpdateResponseEnvelope
-	if params.CfAsyncUpload.Present {
-		opts = append(opts, option.WithHeader("Cf-Async-Upload", fmt.Sprintf("%v", params.CfAsyncUpload)))
-	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -70,20 +67,9 @@ type IndicatorFeedSnapshotUpdateResponse struct {
 	FileID int64 `json:"file_id"`
 	// Name of the file unified in our system
 	Filename string `json:"filename"`
-	// Account-relative polling path. Prepend `/accounts/{account_id}` using the same
-	// account identifier and API host as the upload request. The path omits the
-	// account segment because the service does not have your account identifier in
-	// this context.
-	PollURL string `json:"poll_url"`
-	// Current status of the upload at the moment the request returned. This is NOT a
-	// terminal state: the file is unified inline, but the durable loader has only
-	// accepted it, so the upload is still `Unifying`. Poll `poll_url` until the status
-	// reaches a terminal value (`Unified` or `Error`).
-	Status string `json:"status"`
-	// Identifier of the upload row, for polling this upload to a terminal state via
-	// `poll_url`.
-	UploadID int64                                   `json:"upload_id"`
-	JSON     indicatorFeedSnapshotUpdateResponseJSON `json:"-"`
+	// Current status of upload, should be unified
+	Status string                                  `json:"status"`
+	JSON   indicatorFeedSnapshotUpdateResponseJSON `json:"-"`
 }
 
 // indicatorFeedSnapshotUpdateResponseJSON contains the JSON metadata for the
@@ -91,9 +77,7 @@ type IndicatorFeedSnapshotUpdateResponse struct {
 type indicatorFeedSnapshotUpdateResponseJSON struct {
 	FileID      apijson.Field
 	Filename    apijson.Field
-	PollURL     apijson.Field
 	Status      apijson.Field
-	UploadID    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -111,8 +95,7 @@ type IndicatorFeedSnapshotUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The file to upload. Either a plain STIX2/CRDF body or a gzipped one (recognised
 	// by `0x1f 0x8b` magic bytes or a `.gz` filename suffix).
-	Source        param.Field[string]                                         `json:"source"`
-	CfAsyncUpload param.Field[IndicatorFeedSnapshotUpdateParamsCfAsyncUpload] `header:"Cf-Async-Upload"`
+	Source param.Field[string] `json:"source"`
 }
 
 func (r IndicatorFeedSnapshotUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -128,20 +111,6 @@ func (r IndicatorFeedSnapshotUpdateParams) MarshalMultipart() (data []byte, cont
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
-}
-
-type IndicatorFeedSnapshotUpdateParamsCfAsyncUpload string
-
-const (
-	IndicatorFeedSnapshotUpdateParamsCfAsyncUpload1 IndicatorFeedSnapshotUpdateParamsCfAsyncUpload = "1"
-)
-
-func (r IndicatorFeedSnapshotUpdateParamsCfAsyncUpload) IsKnown() bool {
-	switch r {
-	case IndicatorFeedSnapshotUpdateParamsCfAsyncUpload1:
-		return true
-	}
-	return false
 }
 
 type IndicatorFeedSnapshotUpdateResponseEnvelope struct {

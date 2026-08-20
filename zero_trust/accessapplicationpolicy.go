@@ -245,7 +245,7 @@ func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, 
 	return res, nil
 }
 
-// Enforces a device posture rule has run successfully
+// AccessDevicePostureRule enforces a device posture rule has run successfully.
 type AccessDevicePostureRule struct {
 	DevicePosture AccessDevicePostureRuleDevicePosture `json:"device_posture" api:"required"`
 	JSON          accessDevicePostureRuleJSON          `json:"-"`
@@ -291,7 +291,7 @@ func (r accessDevicePostureRuleDevicePostureJSON) RawJSON() string {
 	return r.raw
 }
 
-// Enforces a device posture rule has run successfully
+// AccessDevicePostureRuleParam enforces a device posture rule has run successfully.
 type AccessDevicePostureRuleParam struct {
 	DevicePosture param.Field[AccessDevicePostureRuleDevicePostureParam] `json:"device_posture" api:"required"`
 }
@@ -311,7 +311,7 @@ func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an Access group.
+// AccessRule matches an Access group.
 type AccessRule struct {
 	// This field can have the runtime type of
 	// [AnyValidServiceTokenRuleAnyValidServiceToken].
@@ -440,7 +440,7 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
 }
 
-// Matches an Access group.
+// AccessRuleUnion matches an Access group.
 //
 // Union satisfied by [GroupRule], [AnyValidServiceTokenRule],
 // [AccessRuleAccessAuthContextRule], [AuthenticationMethodRule], [AzureGroupRule],
@@ -567,7 +567,7 @@ func init() {
 	)
 }
 
-// Matches an Azure Authentication Context. Requires an Azure identity provider.
+// AccessRuleAccessAuthContextRule matches an Azure Authentication Context. Requires an Azure identity provider.
 type AccessRuleAccessAuthContextRule struct {
 	AuthContext AccessRuleAccessAuthContextRuleAuthContext `json:"auth_context" api:"required"`
 	JSON        accessRuleAccessAuthContextRuleJSON        `json:"-"`
@@ -619,7 +619,7 @@ func (r accessRuleAccessAuthContextRuleAuthContextJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a specific common name.
+// AccessRuleAccessCommonNameRule matches a specific common name.
 type AccessRuleAccessCommonNameRule struct {
 	CommonName AccessRuleAccessCommonNameRuleCommonName `json:"common_name" api:"required"`
 	JSON       accessRuleAccessCommonNameRuleJSON       `json:"-"`
@@ -665,7 +665,7 @@ func (r accessRuleAccessCommonNameRuleCommonNameJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a specific identity provider id.
+// AccessRuleAccessLoginMethodRule matches a specific identity provider id.
 type AccessRuleAccessLoginMethodRule struct {
 	LoginMethod AccessRuleAccessLoginMethodRuleLoginMethod `json:"login_method" api:"required"`
 	JSON        accessRuleAccessLoginMethodRuleJSON        `json:"-"`
@@ -711,7 +711,7 @@ func (r accessRuleAccessLoginMethodRuleLoginMethodJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an OIDC claim. Requires an OIDC identity provider.
+// AccessRuleAccessOIDCClaimRule matches an OIDC claim. Requires an OIDC identity provider.
 type AccessRuleAccessOIDCClaimRule struct {
 	OIDC AccessRuleAccessOIDCClaimRuleOIDC `json:"oidc" api:"required"`
 	JSON accessRuleAccessOIDCClaimRuleJSON `json:"-"`
@@ -763,7 +763,7 @@ func (r accessRuleAccessOIDCClaimRuleOIDCJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
+// AccessRuleAccessLinkedAppTokenRule matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
 // application. Only compatible with non_identity and bypass decisions.
 type AccessRuleAccessLinkedAppTokenRule struct {
 	LinkedAppToken AccessRuleAccessLinkedAppTokenRuleLinkedAppToken `json:"linked_app_token" api:"required"`
@@ -810,7 +810,7 @@ func (r accessRuleAccessLinkedAppTokenRuleLinkedAppTokenJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a user's risk score.
+// AccessRuleAccessUserRiskScoreRule matches a user's risk score.
 type AccessRuleAccessUserRiskScoreRule struct {
 	UserRiskScore AccessRuleAccessUserRiskScoreRuleUserRiskScore `json:"user_risk_score" api:"required"`
 	JSON          accessRuleAccessUserRiskScoreRuleJSON          `json:"-"`
@@ -874,7 +874,7 @@ func (r AccessRuleAccessUserRiskScoreRuleUserRiskScoreUserRiskScore) IsKnown() b
 	return false
 }
 
-// Matches users who are members of a specific Cloudflare account. Requires a
+// AccessRuleAccessCloudflareAccountMemberRule matches users who are members of a specific Cloudflare account. Requires a
 // Cloudflare identity provider.
 type AccessRuleAccessCloudflareAccountMemberRule struct {
 	CloudflareAccountMember AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMember `json:"cloudflare_account_member" api:"required"`
@@ -922,7 +922,7 @@ func (r accessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberJSON) 
 	return r.raw
 }
 
-// Matches an Access group.
+// AccessRuleParam matches an Access group.
 type AccessRuleParam struct {
 	AnyValidServiceToken    param.Field[interface{}] `json:"any_valid_service_token"`
 	AuthContext             param.Field[interface{}] `json:"auth_context"`
@@ -958,7 +958,7 @@ func (r AccessRuleParam) MarshalJSON() (data []byte, err error) {
 
 func (r AccessRuleParam) implementsAccessRuleUnionParam() {}
 
-// Matches an Access group.
+// AccessRuleUnionParam matches an Access group.
 //
 // Satisfied by [zero_trust.GroupRuleParam],
 // [zero_trust.AnyValidServiceTokenRuleParam],
@@ -983,7 +983,7 @@ type AccessRuleUnionParam interface {
 	implementsAccessRuleUnionParam()
 }
 
-// Matches an Azure Authentication Context. Requires an Azure identity provider.
+// AccessRuleAccessAuthContextRuleParam matches an Azure Authentication Context. Requires an Azure identity provider.
 type AccessRuleAccessAuthContextRuleParam struct {
 	AuthContext param.Field[AccessRuleAccessAuthContextRuleAuthContextParam] `json:"auth_context" api:"required"`
 }
@@ -1007,7 +1007,7 @@ func (r AccessRuleAccessAuthContextRuleAuthContextParam) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific common name.
+// AccessRuleAccessCommonNameRuleParam matches a specific common name.
 type AccessRuleAccessCommonNameRuleParam struct {
 	CommonName param.Field[AccessRuleAccessCommonNameRuleCommonNameParam] `json:"common_name" api:"required"`
 }
@@ -1027,7 +1027,7 @@ func (r AccessRuleAccessCommonNameRuleCommonNameParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific identity provider id.
+// AccessRuleAccessLoginMethodRuleParam matches a specific identity provider id.
 type AccessRuleAccessLoginMethodRuleParam struct {
 	LoginMethod param.Field[AccessRuleAccessLoginMethodRuleLoginMethodParam] `json:"login_method" api:"required"`
 }
@@ -1047,7 +1047,7 @@ func (r AccessRuleAccessLoginMethodRuleLoginMethodParam) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an OIDC claim. Requires an OIDC identity provider.
+// AccessRuleAccessOIDCClaimRuleParam matches an OIDC claim. Requires an OIDC identity provider.
 type AccessRuleAccessOIDCClaimRuleParam struct {
 	OIDC param.Field[AccessRuleAccessOIDCClaimRuleOIDCParam] `json:"oidc" api:"required"`
 }
@@ -1071,7 +1071,7 @@ func (r AccessRuleAccessOIDCClaimRuleOIDCParam) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-// Matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
+// AccessRuleAccessLinkedAppTokenRuleParam matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
 // application. Only compatible with non_identity and bypass decisions.
 type AccessRuleAccessLinkedAppTokenRuleParam struct {
 	LinkedAppToken param.Field[AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam] `json:"linked_app_token" api:"required"`
@@ -1092,7 +1092,7 @@ func (r AccessRuleAccessLinkedAppTokenRuleLinkedAppTokenParam) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a user's risk score.
+// AccessRuleAccessUserRiskScoreRuleParam matches a user's risk score.
 type AccessRuleAccessUserRiskScoreRuleParam struct {
 	UserRiskScore param.Field[AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam] `json:"user_risk_score" api:"required"`
 }
@@ -1113,7 +1113,7 @@ func (r AccessRuleAccessUserRiskScoreRuleUserRiskScoreParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-// Matches users who are members of a specific Cloudflare account. Requires a
+// AccessRuleAccessCloudflareAccountMemberRuleParam matches users who are members of a specific Cloudflare account. Requires a
 // Cloudflare identity provider.
 type AccessRuleAccessCloudflareAccountMemberRuleParam struct {
 	CloudflareAccountMember param.Field[AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberParam] `json:"cloudflare_account_member" api:"required"`
@@ -1134,7 +1134,7 @@ func (r AccessRuleAccessCloudflareAccountMemberRuleCloudflareAccountMemberParam)
 	return apijson.MarshalRoot(r)
 }
 
-// Matches any valid Access Service Token
+// AnyValidServiceTokenRule matches any valid Access Service Token
 type AnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
 	AnyValidServiceToken AnyValidServiceTokenRuleAnyValidServiceToken `json:"any_valid_service_token" api:"required"`
@@ -1159,7 +1159,7 @@ func (r anyValidServiceTokenRuleJSON) RawJSON() string {
 
 func (r AnyValidServiceTokenRule) implementsAccessRule() {}
 
-// An empty object which matches on all service tokens.
+// AnyValidServiceTokenRuleAnyValidServiceToken is an empty object which matches on all service tokens.
 type AnyValidServiceTokenRuleAnyValidServiceToken struct {
 	JSON anyValidServiceTokenRuleAnyValidServiceTokenJSON `json:"-"`
 }
@@ -1179,7 +1179,7 @@ func (r anyValidServiceTokenRuleAnyValidServiceTokenJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches any valid Access Service Token
+// AnyValidServiceTokenRuleParam matches any valid Access Service Token
 type AnyValidServiceTokenRuleParam struct {
 	// An empty object which matches on all service tokens.
 	AnyValidServiceToken param.Field[AnyValidServiceTokenRuleAnyValidServiceTokenParam] `json:"any_valid_service_token" api:"required"`
@@ -1191,7 +1191,7 @@ func (r AnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
 
 func (r AnyValidServiceTokenRuleParam) implementsAccessRuleUnionParam() {}
 
-// An empty object which matches on all service tokens.
+// AnyValidServiceTokenRuleAnyValidServiceTokenParam is an empty object which matches on all service tokens.
 type AnyValidServiceTokenRuleAnyValidServiceTokenParam struct {
 }
 
@@ -1199,7 +1199,7 @@ func (r AnyValidServiceTokenRuleAnyValidServiceTokenParam) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-// Enforce different MFA options
+// AuthenticationMethodRule enforce different MFA options
 type AuthenticationMethodRule struct {
 	AuthMethod AuthenticationMethodRuleAuthMethod `json:"auth_method" api:"required"`
 	JSON       authenticationMethodRuleJSON       `json:"-"`
@@ -1246,7 +1246,7 @@ func (r authenticationMethodRuleAuthMethodJSON) RawJSON() string {
 	return r.raw
 }
 
-// Enforce different MFA options
+// AuthenticationMethodRuleParam enforce different MFA options
 type AuthenticationMethodRuleParam struct {
 	AuthMethod param.Field[AuthenticationMethodRuleAuthMethodParam] `json:"auth_method" api:"required"`
 }
@@ -1267,7 +1267,7 @@ func (r AuthenticationMethodRuleAuthMethodParam) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an Azure group. Requires an Azure identity provider.
+// AzureGroupRule matches an Azure group. Requires an Azure identity provider.
 type AzureGroupRule struct {
 	AzureAD AzureGroupRuleAzureAD `json:"azureAD" api:"required"`
 	JSON    azureGroupRuleJSON    `json:"-"`
@@ -1315,7 +1315,7 @@ func (r azureGroupRuleAzureADJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an Azure group. Requires an Azure identity provider.
+// AzureGroupRuleParam matches an Azure group. Requires an Azure identity provider.
 type AzureGroupRuleParam struct {
 	AzureAD param.Field[AzureGroupRuleAzureADParam] `json:"azureAD" api:"required"`
 }
@@ -1337,7 +1337,7 @@ func (r AzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches any valid client certificate.
+// CertificateRule matches any valid client certificate.
 type CertificateRule struct {
 	Certificate CertificateRuleCertificate `json:"certificate" api:"required"`
 	JSON        certificateRuleJSON        `json:"-"`
@@ -1379,7 +1379,7 @@ func (r certificateRuleCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches any valid client certificate.
+// CertificateRuleParam matches any valid client certificate.
 type CertificateRuleParam struct {
 	Certificate param.Field[CertificateRuleCertificateParam] `json:"certificate" api:"required"`
 }
@@ -1397,7 +1397,7 @@ func (r CertificateRuleCertificateParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific country
+// CountryRule matches a specific country
 type CountryRule struct {
 	Geo  CountryRuleGeo  `json:"geo" api:"required"`
 	JSON countryRuleJSON `json:"-"`
@@ -1441,7 +1441,7 @@ func (r countryRuleGeoJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a specific country
+// CountryRuleParam matches a specific country
 type CountryRuleParam struct {
 	Geo param.Field[CountryRuleGeoParam] `json:"geo" api:"required"`
 }
@@ -1461,7 +1461,7 @@ func (r CountryRuleGeoParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Match an entire email domain.
+// DomainRule match an entire email domain.
 type DomainRule struct {
 	EmailDomain DomainRuleEmailDomain `json:"email_domain" api:"required"`
 	JSON        domainRuleJSON        `json:"-"`
@@ -1506,7 +1506,7 @@ func (r domainRuleEmailDomainJSON) RawJSON() string {
 	return r.raw
 }
 
-// Match an entire email domain.
+// DomainRuleParam match an entire email domain.
 type DomainRuleParam struct {
 	EmailDomain param.Field[DomainRuleEmailDomainParam] `json:"email_domain" api:"required"`
 }
@@ -1526,7 +1526,7 @@ func (r DomainRuleEmailDomainParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an email address from a list.
+// EmailListRule matches an email address from a list.
 type EmailListRule struct {
 	EmailList EmailListRuleEmailList `json:"email_list" api:"required"`
 	JSON      emailListRuleJSON      `json:"-"`
@@ -1571,7 +1571,7 @@ func (r emailListRuleEmailListJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an email address from a list.
+// EmailListRuleParam matches an email address from a list.
 type EmailListRuleParam struct {
 	EmailList param.Field[EmailListRuleEmailListParam] `json:"email_list" api:"required"`
 }
@@ -1591,7 +1591,7 @@ func (r EmailListRuleEmailListParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific email.
+// EmailRule matches a specific email.
 type EmailRule struct {
 	Email EmailRuleEmail `json:"email" api:"required"`
 	JSON  emailRuleJSON  `json:"-"`
@@ -1635,7 +1635,7 @@ func (r emailRuleEmailJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a specific email.
+// EmailRuleParam matches a specific email.
 type EmailRuleParam struct {
 	Email param.Field[EmailRuleEmailParam] `json:"email" api:"required"`
 }
@@ -1655,7 +1655,7 @@ func (r EmailRuleEmailParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches everyone.
+// EveryoneRule matches everyone.
 type EveryoneRule struct {
 	// An empty object which matches on all users.
 	Everyone EveryoneRuleEveryone `json:"everyone" api:"required"`
@@ -1679,7 +1679,7 @@ func (r everyoneRuleJSON) RawJSON() string {
 
 func (r EveryoneRule) implementsAccessRule() {}
 
-// An empty object which matches on all users.
+// EveryoneRuleEveryone is an empty object which matches on all users.
 type EveryoneRuleEveryone struct {
 	JSON everyoneRuleEveryoneJSON `json:"-"`
 }
@@ -1699,7 +1699,7 @@ func (r everyoneRuleEveryoneJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches everyone.
+// EveryoneRuleParam matches everyone.
 type EveryoneRuleParam struct {
 	// An empty object which matches on all users.
 	Everyone param.Field[EveryoneRuleEveryoneParam] `json:"everyone" api:"required"`
@@ -1711,7 +1711,7 @@ func (r EveryoneRuleParam) MarshalJSON() (data []byte, err error) {
 
 func (r EveryoneRuleParam) implementsAccessRuleUnionParam() {}
 
-// An empty object which matches on all users.
+// EveryoneRuleEveryoneParam is an empty object which matches on all users.
 type EveryoneRuleEveryoneParam struct {
 }
 
@@ -1719,7 +1719,7 @@ func (r EveryoneRuleEveryoneParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Create Allow or Block policies which evaluate the user based on custom criteria.
+// ExternalEvaluationRule create Allow or Block policies which evaluate the user based on custom criteria.
 type ExternalEvaluationRule struct {
 	ExternalEvaluation ExternalEvaluationRuleExternalEvaluation `json:"external_evaluation" api:"required"`
 	JSON               externalEvaluationRuleJSON               `json:"-"`
@@ -1769,7 +1769,7 @@ func (r externalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Create Allow or Block policies which evaluate the user based on custom criteria.
+// ExternalEvaluationRuleParam create Allow or Block policies which evaluate the user based on custom criteria.
 type ExternalEvaluationRuleParam struct {
 	ExternalEvaluation param.Field[ExternalEvaluationRuleExternalEvaluationParam] `json:"external_evaluation" api:"required"`
 }
@@ -1792,7 +1792,7 @@ func (r ExternalEvaluationRuleExternalEvaluationParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a Github organization. Requires a Github identity provider.
+// GitHubOrganizationRule matches a Github organization. Requires a Github identity provider.
 type GitHubOrganizationRule struct {
 	GitHubOrganization GitHubOrganizationRuleGitHubOrganization `json:"github-organization" api:"required"`
 	JSON               githubOrganizationRuleJSON               `json:"-"`
@@ -1844,7 +1844,7 @@ func (r githubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a Github organization. Requires a Github identity provider.
+// GitHubOrganizationRuleParam matches a Github organization. Requires a Github identity provider.
 type GitHubOrganizationRuleParam struct {
 	GitHubOrganization param.Field[GitHubOrganizationRuleGitHubOrganizationParam] `json:"github-organization" api:"required"`
 }
@@ -1868,7 +1868,7 @@ func (r GitHubOrganizationRuleGitHubOrganizationParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an Access group.
+// GroupRule matches an Access group.
 type GroupRule struct {
 	Group GroupRuleGroup `json:"group" api:"required"`
 	JSON  groupRuleJSON  `json:"-"`
@@ -1912,7 +1912,7 @@ func (r groupRuleGroupJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an Access group.
+// GroupRuleParam matches an Access group.
 type GroupRuleParam struct {
 	Group param.Field[GroupRuleGroupParam] `json:"group" api:"required"`
 }
@@ -1932,7 +1932,7 @@ func (r GroupRuleGroupParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a group in Google Workspace. Requires a Google Workspace identity
+// GSuiteGroupRule matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type GSuiteGroupRule struct {
 	GSuite GSuiteGroupRuleGSuite `json:"gsuite" api:"required"`
@@ -1981,7 +1981,7 @@ func (r GSuiteGroupRuleGSuiteJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a group in Google Workspace. Requires a Google Workspace identity
+// GSuiteGroupRuleParam matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type GSuiteGroupRuleParam struct {
 	GSuite param.Field[GSuiteGroupRuleGSuiteParam] `json:"gsuite" api:"required"`
@@ -2004,7 +2004,7 @@ func (r GSuiteGroupRuleGSuiteParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an IP address from a list.
+// IPListRule matches an IP address from a list.
 type IPListRule struct {
 	IPList IPListRuleIPList `json:"ip_list" api:"required"`
 	JSON   ipListRuleJSON   `json:"-"`
@@ -2049,7 +2049,7 @@ func (r ipListRuleIPListJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an IP address from a list.
+// IPListRuleParam matches an IP address from a list.
 type IPListRuleParam struct {
 	IPList param.Field[IPListRuleIPListParam] `json:"ip_list" api:"required"`
 }
@@ -2069,7 +2069,7 @@ func (r IPListRuleIPListParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an IP address block.
+// IPRule matches an IP address block.
 type IPRule struct {
 	IP   IPRuleIP   `json:"ip" api:"required"`
 	JSON ipRuleJSON `json:"-"`
@@ -2113,7 +2113,7 @@ func (r ipRuleIPJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an IP address block.
+// IPRuleParam matches an IP address block.
 type IPRuleParam struct {
 	IP param.Field[IPRuleIPParam] `json:"ip" api:"required"`
 }
@@ -2133,7 +2133,7 @@ func (r IPRuleIPParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches an Okta group. Requires an Okta identity provider.
+// OktaGroupRule matches an Okta group. Requires an Okta identity provider.
 type OktaGroupRule struct {
 	Okta OktaGroupRuleOkta `json:"okta" api:"required"`
 	JSON oktaGroupRuleJSON `json:"-"`
@@ -2181,7 +2181,7 @@ func (r oktaGroupRuleOktaJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches an Okta group. Requires an Okta identity provider.
+// OktaGroupRuleParam matches an Okta group. Requires an Okta identity provider.
 type OktaGroupRuleParam struct {
 	Okta param.Field[OktaGroupRuleOktaParam] `json:"okta" api:"required"`
 }
@@ -2203,7 +2203,7 @@ func (r OktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a SAML group. Requires a SAML identity provider.
+// SAMLGroupRule matches a SAML group. Requires a SAML identity provider.
 type SAMLGroupRule struct {
 	SAML SAMLGroupRuleSAML `json:"saml" api:"required"`
 	JSON samlGroupRuleJSON `json:"-"`
@@ -2254,7 +2254,7 @@ func (r samlGroupRuleSAMLJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a SAML group. Requires a SAML identity provider.
+// SAMLGroupRuleParam matches a SAML group. Requires a SAML identity provider.
 type SAMLGroupRuleParam struct {
 	SAML param.Field[SAMLGroupRuleSAMLParam] `json:"saml" api:"required"`
 }
@@ -2278,7 +2278,7 @@ func (r SAMLGroupRuleSAMLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific Access Service Token
+// ServiceTokenRule matches a specific Access Service Token
 type ServiceTokenRule struct {
 	ServiceToken ServiceTokenRuleServiceToken `json:"service_token" api:"required"`
 	JSON         serviceTokenRuleJSON         `json:"-"`
@@ -2324,7 +2324,7 @@ func (r serviceTokenRuleServiceTokenJSON) RawJSON() string {
 	return r.raw
 }
 
-// Matches a specific Access Service Token
+// ServiceTokenRuleParam matches a specific Access Service Token
 type ServiceTokenRuleParam struct {
 	ServiceToken param.Field[ServiceTokenRuleServiceTokenParam] `json:"service_token" api:"required"`
 }
@@ -2347,125 +2347,6 @@ func (r ServiceTokenRuleServiceTokenParam) MarshalJSON() (data []byte, err error
 type AccessApplicationPolicyNewResponse struct {
 	// The UUID of the policy
 	ID string `json:"id"`
-	// Identifier.
-	AccountID string `json:"account_id"`
-	// This field can have the runtime type of [[]ApprovalGroup].
-	ApprovalGroups interface{} `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired bool `json:"approval_required"`
-	// This field can have the runtime type of
-	// [AccessApplicationPolicyNewResponseObjectConnectionRules].
-	ConnectionRules interface{} `json:"connection_rules"`
-	CreatedAt       time.Time   `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy. Infrastructure
-	// application policies can only use the Allow action.
-	Decision Decision `json:"decision"`
-	// This field can have the runtime type of [[]AccessRule].
-	Exclude interface{} `json:"exclude"`
-	// This field can have the runtime type of [[]AccessRule].
-	Include interface{} `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired bool `json:"isolation_required"`
-	// This field can have the runtime type of
-	// [AccessApplicationPolicyNewResponseObjectMfaConfig].
-	MfaConfig interface{} `json:"mfa_config"`
-	// The name of the Access policy.
-	Name string `json:"name"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence int64 `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired bool `json:"purpose_justification_required"`
-	// This field can have the runtime type of [[]AccessRule].
-	Require interface{} `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration string                                 `json:"session_duration" api:"nullable"`
-	UpdatedAt       time.Time                              `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationPolicyNewResponseJSON `json:"-"`
-	union           AccessApplicationPolicyNewResponseUnion
-}
-
-// accessApplicationPolicyNewResponseJSON contains the JSON metadata for the struct
-// [AccessApplicationPolicyNewResponse]
-type accessApplicationPolicyNewResponseJSON struct {
-	ID                           apijson.Field
-	AccountID                    apijson.Field
-	ApprovalGroups               apijson.Field
-	ApprovalRequired             apijson.Field
-	ConnectionRules              apijson.Field
-	CreatedAt                    apijson.Field
-	Decision                     apijson.Field
-	Exclude                      apijson.Field
-	Include                      apijson.Field
-	IsolationRequired            apijson.Field
-	MfaConfig                    apijson.Field
-	Name                         apijson.Field
-	Precedence                   apijson.Field
-	PurposeJustificationPrompt   apijson.Field
-	PurposeJustificationRequired apijson.Field
-	Require                      apijson.Field
-	SessionDuration              apijson.Field
-	UpdatedAt                    apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
-}
-
-func (r accessApplicationPolicyNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationPolicyNewResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationPolicyNewResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [AccessApplicationPolicyNewResponseUnion] interface which you
-// can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [AccessApplicationPolicyNewResponseObject],
-// [AccessApplicationPolicyNewResponseObject].
-func (r AccessApplicationPolicyNewResponse) AsUnion() AccessApplicationPolicyNewResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [AccessApplicationPolicyNewResponseObject] or
-// [AccessApplicationPolicyNewResponseObject].
-type AccessApplicationPolicyNewResponseUnion interface {
-	implementsAccessApplicationPolicyNewResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationPolicyNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationPolicyNewResponseObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationPolicyNewResponseObject{}),
-		},
-	)
-}
-
-type AccessApplicationPolicyNewResponseObject struct {
-	// The UUID of the policy
-	ID string `json:"id"`
-	// Identifier.
-	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -2473,8 +2354,8 @@ type AccessApplicationPolicyNewResponseObject struct {
 	ApprovalRequired bool `json:"approval_required"`
 	// The rules that define how users may connect to targets secured by your
 	// application.
-	ConnectionRules AccessApplicationPolicyNewResponseObjectConnectionRules `json:"connection_rules"`
-	CreatedAt       time.Time                                               `json:"created_at" format:"date-time"`
+	ConnectionRules AccessApplicationPolicyNewResponseConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                                         `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -2489,7 +2370,7 @@ type AccessApplicationPolicyNewResponseObject struct {
 	// this feature.
 	IsolationRequired bool `json:"isolation_required"`
 	// Configures multi-factor authentication (MFA) settings.
-	MfaConfig AccessApplicationPolicyNewResponseObjectMfaConfig `json:"mfa_config"`
+	MfaConfig AccessApplicationPolicyNewResponseMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -2505,16 +2386,15 @@ type AccessApplicationPolicyNewResponseObject struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                       `json:"session_duration" api:"nullable"`
-	UpdatedAt       time.Time                                    `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationPolicyNewResponseObjectJSON `json:"-"`
+	SessionDuration string                                 `json:"session_duration"`
+	UpdatedAt       time.Time                              `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationPolicyNewResponseJSON `json:"-"`
 }
 
-// accessApplicationPolicyNewResponseObjectJSON contains the JSON metadata for the
-// struct [AccessApplicationPolicyNewResponseObject]
-type accessApplicationPolicyNewResponseObjectJSON struct {
+// accessApplicationPolicyNewResponseJSON contains the JSON metadata for the struct
+// [AccessApplicationPolicyNewResponse]
+type accessApplicationPolicyNewResponseJSON struct {
 	ID                           apijson.Field
-	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -2535,116 +2415,110 @@ type accessApplicationPolicyNewResponseObjectJSON struct {
 	ExtraFields                  map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyNewResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyNewResponseObjectJSON) RawJSON() string {
+func (r accessApplicationPolicyNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessApplicationPolicyNewResponseObject) implementsAccessApplicationPolicyNewResponse() {}
-
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyNewResponseConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
-type AccessApplicationPolicyNewResponseObjectConnectionRules struct {
+type AccessApplicationPolicyNewResponseConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
-	RDP  AccessApplicationPolicyNewResponseObjectConnectionRulesRDP  `json:"rdp"`
-	JSON accessApplicationPolicyNewResponseObjectConnectionRulesJSON `json:"-"`
+	RDP  AccessApplicationPolicyNewResponseConnectionRulesRDP  `json:"rdp"`
+	JSON accessApplicationPolicyNewResponseConnectionRulesJSON `json:"-"`
 }
 
-// accessApplicationPolicyNewResponseObjectConnectionRulesJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationPolicyNewResponseObjectConnectionRules]
-type accessApplicationPolicyNewResponseObjectConnectionRulesJSON struct {
+// accessApplicationPolicyNewResponseConnectionRulesJSON contains the JSON metadata
+// for the struct [AccessApplicationPolicyNewResponseConnectionRules]
+type accessApplicationPolicyNewResponseConnectionRulesJSON struct {
 	RDP         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyNewResponseObjectConnectionRules) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyNewResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyNewResponseObjectConnectionRulesJSON) RawJSON() string {
+func (r accessApplicationPolicyNewResponseConnectionRulesJSON) RawJSON() string {
 	return r.raw
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
-type AccessApplicationPolicyNewResponseObjectConnectionRulesRDP struct {
+// AccessApplicationPolicyNewResponseConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessApplicationPolicyNewResponseConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
-	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
+	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
 	// Clipboard formats allowed when copying from remote RDP session to local machine.
-	AllowedClipboardRemoteToLocalFormats []AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
-	JSON                                 accessApplicationPolicyNewResponseObjectConnectionRulesRDPJSON                                  `json:"-"`
+	AllowedClipboardRemoteToLocalFormats []AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
+	JSON                                 accessApplicationPolicyNewResponseConnectionRulesRDPJSON                                  `json:"-"`
 }
 
-// accessApplicationPolicyNewResponseObjectConnectionRulesRDPJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationPolicyNewResponseObjectConnectionRulesRDP]
-type accessApplicationPolicyNewResponseObjectConnectionRulesRDPJSON struct {
+// accessApplicationPolicyNewResponseConnectionRulesRDPJSON contains the JSON
+// metadata for the struct [AccessApplicationPolicyNewResponseConnectionRulesRDP]
+type accessApplicationPolicyNewResponseConnectionRulesRDPJSON struct {
 	AllowedClipboardLocalToRemoteFormats apijson.Field
 	AllowedClipboardRemoteToLocalFormats apijson.Field
 	raw                                  string
 	ExtraFields                          map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyNewResponseObjectConnectionRulesRDP) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyNewResponseConnectionRulesRDP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyNewResponseObjectConnectionRulesRDPJSON) RawJSON() string {
+func (r accessApplicationPolicyNewResponseConnectionRulesRDPJSON) RawJSON() string {
 	return r.raw
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
+// AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
+type AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
-	AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
+	AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
 )
 
-func (r AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+func (r AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
+// AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
+type AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
-	AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
+	AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
 )
 
-func (r AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+func (r AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyNewResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyNewResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
-type AccessApplicationPolicyNewResponseObjectMfaConfig struct {
+// AccessApplicationPolicyNewResponseMfaConfig configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyNewResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
-	AllowedAuthenticators []AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	AllowedAuthenticators []AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
 	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
-	SessionDuration string                                                `json:"session_duration"`
-	JSON            accessApplicationPolicyNewResponseObjectMfaConfigJSON `json:"-"`
+	SessionDuration string                                          `json:"session_duration"`
+	JSON            accessApplicationPolicyNewResponseMfaConfigJSON `json:"-"`
 }
 
-// accessApplicationPolicyNewResponseObjectMfaConfigJSON contains the JSON metadata
-// for the struct [AccessApplicationPolicyNewResponseObjectMfaConfig]
-type accessApplicationPolicyNewResponseObjectMfaConfigJSON struct {
+// accessApplicationPolicyNewResponseMfaConfigJSON contains the JSON metadata for
+// the struct [AccessApplicationPolicyNewResponseMfaConfig]
+type accessApplicationPolicyNewResponseMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
 	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
@@ -2652,25 +2526,25 @@ type accessApplicationPolicyNewResponseObjectMfaConfigJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyNewResponseObjectMfaConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyNewResponseMfaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyNewResponseObjectMfaConfigJSON) RawJSON() string {
+func (r accessApplicationPolicyNewResponseMfaConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticator string
+type AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticator = "totp"
-	AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticator = "biometrics"
-	AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticator = "security_key"
+	AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator = "security_key"
 )
 
-func (r AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticator) IsKnown() bool {
+func (r AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticatorSecurityKey:
+	case AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyNewResponseMfaConfigAllowedAuthenticatorSecurityKey:
 		return true
 	}
 	return false
@@ -2679,125 +2553,6 @@ func (r AccessApplicationPolicyNewResponseObjectMfaConfigAllowedAuthenticator) I
 type AccessApplicationPolicyUpdateResponse struct {
 	// The UUID of the policy
 	ID string `json:"id"`
-	// Identifier.
-	AccountID string `json:"account_id"`
-	// This field can have the runtime type of [[]ApprovalGroup].
-	ApprovalGroups interface{} `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired bool `json:"approval_required"`
-	// This field can have the runtime type of
-	// [AccessApplicationPolicyUpdateResponseObjectConnectionRules].
-	ConnectionRules interface{} `json:"connection_rules"`
-	CreatedAt       time.Time   `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy. Infrastructure
-	// application policies can only use the Allow action.
-	Decision Decision `json:"decision"`
-	// This field can have the runtime type of [[]AccessRule].
-	Exclude interface{} `json:"exclude"`
-	// This field can have the runtime type of [[]AccessRule].
-	Include interface{} `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired bool `json:"isolation_required"`
-	// This field can have the runtime type of
-	// [AccessApplicationPolicyUpdateResponseObjectMfaConfig].
-	MfaConfig interface{} `json:"mfa_config"`
-	// The name of the Access policy.
-	Name string `json:"name"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence int64 `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired bool `json:"purpose_justification_required"`
-	// This field can have the runtime type of [[]AccessRule].
-	Require interface{} `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration string                                    `json:"session_duration" api:"nullable"`
-	UpdatedAt       time.Time                                 `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationPolicyUpdateResponseJSON `json:"-"`
-	union           AccessApplicationPolicyUpdateResponseUnion
-}
-
-// accessApplicationPolicyUpdateResponseJSON contains the JSON metadata for the
-// struct [AccessApplicationPolicyUpdateResponse]
-type accessApplicationPolicyUpdateResponseJSON struct {
-	ID                           apijson.Field
-	AccountID                    apijson.Field
-	ApprovalGroups               apijson.Field
-	ApprovalRequired             apijson.Field
-	ConnectionRules              apijson.Field
-	CreatedAt                    apijson.Field
-	Decision                     apijson.Field
-	Exclude                      apijson.Field
-	Include                      apijson.Field
-	IsolationRequired            apijson.Field
-	MfaConfig                    apijson.Field
-	Name                         apijson.Field
-	Precedence                   apijson.Field
-	PurposeJustificationPrompt   apijson.Field
-	PurposeJustificationRequired apijson.Field
-	Require                      apijson.Field
-	SessionDuration              apijson.Field
-	UpdatedAt                    apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
-}
-
-func (r accessApplicationPolicyUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationPolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationPolicyUpdateResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [AccessApplicationPolicyUpdateResponseUnion] interface which
-// you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [AccessApplicationPolicyUpdateResponseObject],
-// [AccessApplicationPolicyUpdateResponseObject].
-func (r AccessApplicationPolicyUpdateResponse) AsUnion() AccessApplicationPolicyUpdateResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [AccessApplicationPolicyUpdateResponseObject] or
-// [AccessApplicationPolicyUpdateResponseObject].
-type AccessApplicationPolicyUpdateResponseUnion interface {
-	implementsAccessApplicationPolicyUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationPolicyUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationPolicyUpdateResponseObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationPolicyUpdateResponseObject{}),
-		},
-	)
-}
-
-type AccessApplicationPolicyUpdateResponseObject struct {
-	// The UUID of the policy
-	ID string `json:"id"`
-	// Identifier.
-	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -2805,8 +2560,8 @@ type AccessApplicationPolicyUpdateResponseObject struct {
 	ApprovalRequired bool `json:"approval_required"`
 	// The rules that define how users may connect to targets secured by your
 	// application.
-	ConnectionRules AccessApplicationPolicyUpdateResponseObjectConnectionRules `json:"connection_rules"`
-	CreatedAt       time.Time                                                  `json:"created_at" format:"date-time"`
+	ConnectionRules AccessApplicationPolicyUpdateResponseConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                                            `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -2821,7 +2576,7 @@ type AccessApplicationPolicyUpdateResponseObject struct {
 	// this feature.
 	IsolationRequired bool `json:"isolation_required"`
 	// Configures multi-factor authentication (MFA) settings.
-	MfaConfig AccessApplicationPolicyUpdateResponseObjectMfaConfig `json:"mfa_config"`
+	MfaConfig AccessApplicationPolicyUpdateResponseMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -2837,16 +2592,15 @@ type AccessApplicationPolicyUpdateResponseObject struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                          `json:"session_duration" api:"nullable"`
-	UpdatedAt       time.Time                                       `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationPolicyUpdateResponseObjectJSON `json:"-"`
+	SessionDuration string                                    `json:"session_duration"`
+	UpdatedAt       time.Time                                 `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationPolicyUpdateResponseJSON `json:"-"`
 }
 
-// accessApplicationPolicyUpdateResponseObjectJSON contains the JSON metadata for
-// the struct [AccessApplicationPolicyUpdateResponseObject]
-type accessApplicationPolicyUpdateResponseObjectJSON struct {
+// accessApplicationPolicyUpdateResponseJSON contains the JSON metadata for the
+// struct [AccessApplicationPolicyUpdateResponse]
+type accessApplicationPolicyUpdateResponseJSON struct {
 	ID                           apijson.Field
-	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -2867,117 +2621,111 @@ type accessApplicationPolicyUpdateResponseObjectJSON struct {
 	ExtraFields                  map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyUpdateResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyUpdateResponseObjectJSON) RawJSON() string {
+func (r accessApplicationPolicyUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessApplicationPolicyUpdateResponseObject) implementsAccessApplicationPolicyUpdateResponse() {
-}
-
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyUpdateResponseConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
-type AccessApplicationPolicyUpdateResponseObjectConnectionRules struct {
+type AccessApplicationPolicyUpdateResponseConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
-	RDP  AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDP  `json:"rdp"`
-	JSON accessApplicationPolicyUpdateResponseObjectConnectionRulesJSON `json:"-"`
+	RDP  AccessApplicationPolicyUpdateResponseConnectionRulesRDP  `json:"rdp"`
+	JSON accessApplicationPolicyUpdateResponseConnectionRulesJSON `json:"-"`
 }
 
-// accessApplicationPolicyUpdateResponseObjectConnectionRulesJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationPolicyUpdateResponseObjectConnectionRules]
-type accessApplicationPolicyUpdateResponseObjectConnectionRulesJSON struct {
+// accessApplicationPolicyUpdateResponseConnectionRulesJSON contains the JSON
+// metadata for the struct [AccessApplicationPolicyUpdateResponseConnectionRules]
+type accessApplicationPolicyUpdateResponseConnectionRulesJSON struct {
 	RDP         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyUpdateResponseObjectConnectionRules) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyUpdateResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyUpdateResponseObjectConnectionRulesJSON) RawJSON() string {
+func (r accessApplicationPolicyUpdateResponseConnectionRulesJSON) RawJSON() string {
 	return r.raw
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
-type AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDP struct {
+// AccessApplicationPolicyUpdateResponseConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessApplicationPolicyUpdateResponseConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
-	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
+	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
 	// Clipboard formats allowed when copying from remote RDP session to local machine.
-	AllowedClipboardRemoteToLocalFormats []AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
-	JSON                                 accessApplicationPolicyUpdateResponseObjectConnectionRulesRDPJSON                                  `json:"-"`
+	AllowedClipboardRemoteToLocalFormats []AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
+	JSON                                 accessApplicationPolicyUpdateResponseConnectionRulesRDPJSON                                  `json:"-"`
 }
 
-// accessApplicationPolicyUpdateResponseObjectConnectionRulesRDPJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDP]
-type accessApplicationPolicyUpdateResponseObjectConnectionRulesRDPJSON struct {
+// accessApplicationPolicyUpdateResponseConnectionRulesRDPJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationPolicyUpdateResponseConnectionRulesRDP]
+type accessApplicationPolicyUpdateResponseConnectionRulesRDPJSON struct {
 	AllowedClipboardLocalToRemoteFormats apijson.Field
 	AllowedClipboardRemoteToLocalFormats apijson.Field
 	raw                                  string
 	ExtraFields                          map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDP) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyUpdateResponseConnectionRulesRDP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyUpdateResponseObjectConnectionRulesRDPJSON) RawJSON() string {
+func (r accessApplicationPolicyUpdateResponseConnectionRulesRDPJSON) RawJSON() string {
 	return r.raw
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
+// AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
+type AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
-	AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
+	AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
 )
 
-func (r AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+func (r AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
+// AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
+type AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
-	AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
+	AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
 )
 
-func (r AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+func (r AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyUpdateResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyUpdateResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
-type AccessApplicationPolicyUpdateResponseObjectMfaConfig struct {
+// AccessApplicationPolicyUpdateResponseMfaConfig configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyUpdateResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
-	AllowedAuthenticators []AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	AllowedAuthenticators []AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
 	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
-	SessionDuration string                                                   `json:"session_duration"`
-	JSON            accessApplicationPolicyUpdateResponseObjectMfaConfigJSON `json:"-"`
+	SessionDuration string                                             `json:"session_duration"`
+	JSON            accessApplicationPolicyUpdateResponseMfaConfigJSON `json:"-"`
 }
 
-// accessApplicationPolicyUpdateResponseObjectMfaConfigJSON contains the JSON
-// metadata for the struct [AccessApplicationPolicyUpdateResponseObjectMfaConfig]
-type accessApplicationPolicyUpdateResponseObjectMfaConfigJSON struct {
+// accessApplicationPolicyUpdateResponseMfaConfigJSON contains the JSON metadata
+// for the struct [AccessApplicationPolicyUpdateResponseMfaConfig]
+type accessApplicationPolicyUpdateResponseMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
 	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
@@ -2985,25 +2733,25 @@ type accessApplicationPolicyUpdateResponseObjectMfaConfigJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyUpdateResponseObjectMfaConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyUpdateResponseMfaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyUpdateResponseObjectMfaConfigJSON) RawJSON() string {
+func (r accessApplicationPolicyUpdateResponseMfaConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticator string
+type AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticator = "totp"
-	AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticator = "biometrics"
-	AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticator = "security_key"
+	AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator = "security_key"
 )
 
-func (r AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticator) IsKnown() bool {
+func (r AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticatorSecurityKey:
+	case AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyUpdateResponseMfaConfigAllowedAuthenticatorSecurityKey:
 		return true
 	}
 	return false
@@ -3012,125 +2760,6 @@ func (r AccessApplicationPolicyUpdateResponseObjectMfaConfigAllowedAuthenticator
 type AccessApplicationPolicyListResponse struct {
 	// The UUID of the policy
 	ID string `json:"id"`
-	// Identifier.
-	AccountID string `json:"account_id"`
-	// This field can have the runtime type of [[]ApprovalGroup].
-	ApprovalGroups interface{} `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired bool `json:"approval_required"`
-	// This field can have the runtime type of
-	// [AccessApplicationPolicyListResponseObjectConnectionRules].
-	ConnectionRules interface{} `json:"connection_rules"`
-	CreatedAt       time.Time   `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy. Infrastructure
-	// application policies can only use the Allow action.
-	Decision Decision `json:"decision"`
-	// This field can have the runtime type of [[]AccessRule].
-	Exclude interface{} `json:"exclude"`
-	// This field can have the runtime type of [[]AccessRule].
-	Include interface{} `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired bool `json:"isolation_required"`
-	// This field can have the runtime type of
-	// [AccessApplicationPolicyListResponseObjectMfaConfig].
-	MfaConfig interface{} `json:"mfa_config"`
-	// The name of the Access policy.
-	Name string `json:"name"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence int64 `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired bool `json:"purpose_justification_required"`
-	// This field can have the runtime type of [[]AccessRule].
-	Require interface{} `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration string                                  `json:"session_duration" api:"nullable"`
-	UpdatedAt       time.Time                               `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationPolicyListResponseJSON `json:"-"`
-	union           AccessApplicationPolicyListResponseUnion
-}
-
-// accessApplicationPolicyListResponseJSON contains the JSON metadata for the
-// struct [AccessApplicationPolicyListResponse]
-type accessApplicationPolicyListResponseJSON struct {
-	ID                           apijson.Field
-	AccountID                    apijson.Field
-	ApprovalGroups               apijson.Field
-	ApprovalRequired             apijson.Field
-	ConnectionRules              apijson.Field
-	CreatedAt                    apijson.Field
-	Decision                     apijson.Field
-	Exclude                      apijson.Field
-	Include                      apijson.Field
-	IsolationRequired            apijson.Field
-	MfaConfig                    apijson.Field
-	Name                         apijson.Field
-	Precedence                   apijson.Field
-	PurposeJustificationPrompt   apijson.Field
-	PurposeJustificationRequired apijson.Field
-	Require                      apijson.Field
-	SessionDuration              apijson.Field
-	UpdatedAt                    apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
-}
-
-func (r accessApplicationPolicyListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationPolicyListResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationPolicyListResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [AccessApplicationPolicyListResponseUnion] interface which you
-// can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [AccessApplicationPolicyListResponseObject],
-// [AccessApplicationPolicyListResponseObject].
-func (r AccessApplicationPolicyListResponse) AsUnion() AccessApplicationPolicyListResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [AccessApplicationPolicyListResponseObject] or
-// [AccessApplicationPolicyListResponseObject].
-type AccessApplicationPolicyListResponseUnion interface {
-	implementsAccessApplicationPolicyListResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationPolicyListResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationPolicyListResponseObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationPolicyListResponseObject{}),
-		},
-	)
-}
-
-type AccessApplicationPolicyListResponseObject struct {
-	// The UUID of the policy
-	ID string `json:"id"`
-	// Identifier.
-	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -3138,8 +2767,8 @@ type AccessApplicationPolicyListResponseObject struct {
 	ApprovalRequired bool `json:"approval_required"`
 	// The rules that define how users may connect to targets secured by your
 	// application.
-	ConnectionRules AccessApplicationPolicyListResponseObjectConnectionRules `json:"connection_rules"`
-	CreatedAt       time.Time                                                `json:"created_at" format:"date-time"`
+	ConnectionRules AccessApplicationPolicyListResponseConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                                          `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -3154,7 +2783,7 @@ type AccessApplicationPolicyListResponseObject struct {
 	// this feature.
 	IsolationRequired bool `json:"isolation_required"`
 	// Configures multi-factor authentication (MFA) settings.
-	MfaConfig AccessApplicationPolicyListResponseObjectMfaConfig `json:"mfa_config"`
+	MfaConfig AccessApplicationPolicyListResponseMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -3170,16 +2799,15 @@ type AccessApplicationPolicyListResponseObject struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                        `json:"session_duration" api:"nullable"`
-	UpdatedAt       time.Time                                     `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationPolicyListResponseObjectJSON `json:"-"`
+	SessionDuration string                                  `json:"session_duration"`
+	UpdatedAt       time.Time                               `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationPolicyListResponseJSON `json:"-"`
 }
 
-// accessApplicationPolicyListResponseObjectJSON contains the JSON metadata for the
-// struct [AccessApplicationPolicyListResponseObject]
-type accessApplicationPolicyListResponseObjectJSON struct {
+// accessApplicationPolicyListResponseJSON contains the JSON metadata for the
+// struct [AccessApplicationPolicyListResponse]
+type accessApplicationPolicyListResponseJSON struct {
 	ID                           apijson.Field
-	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -3200,116 +2828,110 @@ type accessApplicationPolicyListResponseObjectJSON struct {
 	ExtraFields                  map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyListResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyListResponseObjectJSON) RawJSON() string {
+func (r accessApplicationPolicyListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessApplicationPolicyListResponseObject) implementsAccessApplicationPolicyListResponse() {}
-
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyListResponseConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
-type AccessApplicationPolicyListResponseObjectConnectionRules struct {
+type AccessApplicationPolicyListResponseConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
-	RDP  AccessApplicationPolicyListResponseObjectConnectionRulesRDP  `json:"rdp"`
-	JSON accessApplicationPolicyListResponseObjectConnectionRulesJSON `json:"-"`
+	RDP  AccessApplicationPolicyListResponseConnectionRulesRDP  `json:"rdp"`
+	JSON accessApplicationPolicyListResponseConnectionRulesJSON `json:"-"`
 }
 
-// accessApplicationPolicyListResponseObjectConnectionRulesJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationPolicyListResponseObjectConnectionRules]
-type accessApplicationPolicyListResponseObjectConnectionRulesJSON struct {
+// accessApplicationPolicyListResponseConnectionRulesJSON contains the JSON
+// metadata for the struct [AccessApplicationPolicyListResponseConnectionRules]
+type accessApplicationPolicyListResponseConnectionRulesJSON struct {
 	RDP         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyListResponseObjectConnectionRules) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyListResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyListResponseObjectConnectionRulesJSON) RawJSON() string {
+func (r accessApplicationPolicyListResponseConnectionRulesJSON) RawJSON() string {
 	return r.raw
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
-type AccessApplicationPolicyListResponseObjectConnectionRulesRDP struct {
+// AccessApplicationPolicyListResponseConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessApplicationPolicyListResponseConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
-	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
+	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
 	// Clipboard formats allowed when copying from remote RDP session to local machine.
-	AllowedClipboardRemoteToLocalFormats []AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
-	JSON                                 accessApplicationPolicyListResponseObjectConnectionRulesRDPJSON                                  `json:"-"`
+	AllowedClipboardRemoteToLocalFormats []AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
+	JSON                                 accessApplicationPolicyListResponseConnectionRulesRDPJSON                                  `json:"-"`
 }
 
-// accessApplicationPolicyListResponseObjectConnectionRulesRDPJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationPolicyListResponseObjectConnectionRulesRDP]
-type accessApplicationPolicyListResponseObjectConnectionRulesRDPJSON struct {
+// accessApplicationPolicyListResponseConnectionRulesRDPJSON contains the JSON
+// metadata for the struct [AccessApplicationPolicyListResponseConnectionRulesRDP]
+type accessApplicationPolicyListResponseConnectionRulesRDPJSON struct {
 	AllowedClipboardLocalToRemoteFormats apijson.Field
 	AllowedClipboardRemoteToLocalFormats apijson.Field
 	raw                                  string
 	ExtraFields                          map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyListResponseObjectConnectionRulesRDP) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyListResponseConnectionRulesRDP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyListResponseObjectConnectionRulesRDPJSON) RawJSON() string {
+func (r accessApplicationPolicyListResponseConnectionRulesRDPJSON) RawJSON() string {
 	return r.raw
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
+// AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
+type AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
-	AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
+	AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
 )
 
-func (r AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+func (r AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
+// AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
+type AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
-	AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
+	AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
 )
 
-func (r AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+func (r AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyListResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyListResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
-type AccessApplicationPolicyListResponseObjectMfaConfig struct {
+// AccessApplicationPolicyListResponseMfaConfig configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyListResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
-	AllowedAuthenticators []AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	AllowedAuthenticators []AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
 	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
-	SessionDuration string                                                 `json:"session_duration"`
-	JSON            accessApplicationPolicyListResponseObjectMfaConfigJSON `json:"-"`
+	SessionDuration string                                           `json:"session_duration"`
+	JSON            accessApplicationPolicyListResponseMfaConfigJSON `json:"-"`
 }
 
-// accessApplicationPolicyListResponseObjectMfaConfigJSON contains the JSON
-// metadata for the struct [AccessApplicationPolicyListResponseObjectMfaConfig]
-type accessApplicationPolicyListResponseObjectMfaConfigJSON struct {
+// accessApplicationPolicyListResponseMfaConfigJSON contains the JSON metadata for
+// the struct [AccessApplicationPolicyListResponseMfaConfig]
+type accessApplicationPolicyListResponseMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
 	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
@@ -3317,25 +2939,25 @@ type accessApplicationPolicyListResponseObjectMfaConfigJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyListResponseObjectMfaConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyListResponseMfaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyListResponseObjectMfaConfigJSON) RawJSON() string {
+func (r accessApplicationPolicyListResponseMfaConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticator string
+type AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticator = "totp"
-	AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticator = "biometrics"
-	AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticator = "security_key"
+	AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator = "security_key"
 )
 
-func (r AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticator) IsKnown() bool {
+func (r AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyListResponseObjectMfaConfigAllowedAuthenticatorSecurityKey:
+	case AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyListResponseMfaConfigAllowedAuthenticatorSecurityKey:
 		return true
 	}
 	return false
@@ -3366,125 +2988,6 @@ func (r accessApplicationPolicyDeleteResponseJSON) RawJSON() string {
 type AccessApplicationPolicyGetResponse struct {
 	// The UUID of the policy
 	ID string `json:"id"`
-	// Identifier.
-	AccountID string `json:"account_id"`
-	// This field can have the runtime type of [[]ApprovalGroup].
-	ApprovalGroups interface{} `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired bool `json:"approval_required"`
-	// This field can have the runtime type of
-	// [AccessApplicationPolicyGetResponseObjectConnectionRules].
-	ConnectionRules interface{} `json:"connection_rules"`
-	CreatedAt       time.Time   `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy. Infrastructure
-	// application policies can only use the Allow action.
-	Decision Decision `json:"decision"`
-	// This field can have the runtime type of [[]AccessRule].
-	Exclude interface{} `json:"exclude"`
-	// This field can have the runtime type of [[]AccessRule].
-	Include interface{} `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired bool `json:"isolation_required"`
-	// This field can have the runtime type of
-	// [AccessApplicationPolicyGetResponseObjectMfaConfig].
-	MfaConfig interface{} `json:"mfa_config"`
-	// The name of the Access policy.
-	Name string `json:"name"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence int64 `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired bool `json:"purpose_justification_required"`
-	// This field can have the runtime type of [[]AccessRule].
-	Require interface{} `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration string                                 `json:"session_duration" api:"nullable"`
-	UpdatedAt       time.Time                              `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationPolicyGetResponseJSON `json:"-"`
-	union           AccessApplicationPolicyGetResponseUnion
-}
-
-// accessApplicationPolicyGetResponseJSON contains the JSON metadata for the struct
-// [AccessApplicationPolicyGetResponse]
-type accessApplicationPolicyGetResponseJSON struct {
-	ID                           apijson.Field
-	AccountID                    apijson.Field
-	ApprovalGroups               apijson.Field
-	ApprovalRequired             apijson.Field
-	ConnectionRules              apijson.Field
-	CreatedAt                    apijson.Field
-	Decision                     apijson.Field
-	Exclude                      apijson.Field
-	Include                      apijson.Field
-	IsolationRequired            apijson.Field
-	MfaConfig                    apijson.Field
-	Name                         apijson.Field
-	Precedence                   apijson.Field
-	PurposeJustificationPrompt   apijson.Field
-	PurposeJustificationRequired apijson.Field
-	Require                      apijson.Field
-	SessionDuration              apijson.Field
-	UpdatedAt                    apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
-}
-
-func (r accessApplicationPolicyGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationPolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationPolicyGetResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [AccessApplicationPolicyGetResponseUnion] interface which you
-// can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [AccessApplicationPolicyGetResponseObject],
-// [AccessApplicationPolicyGetResponseObject].
-func (r AccessApplicationPolicyGetResponse) AsUnion() AccessApplicationPolicyGetResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [AccessApplicationPolicyGetResponseObject] or
-// [AccessApplicationPolicyGetResponseObject].
-type AccessApplicationPolicyGetResponseUnion interface {
-	implementsAccessApplicationPolicyGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationPolicyGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationPolicyGetResponseObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationPolicyGetResponseObject{}),
-		},
-	)
-}
-
-type AccessApplicationPolicyGetResponseObject struct {
-	// The UUID of the policy
-	ID string `json:"id"`
-	// Identifier.
-	AccountID string `json:"account_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -3492,8 +2995,8 @@ type AccessApplicationPolicyGetResponseObject struct {
 	ApprovalRequired bool `json:"approval_required"`
 	// The rules that define how users may connect to targets secured by your
 	// application.
-	ConnectionRules AccessApplicationPolicyGetResponseObjectConnectionRules `json:"connection_rules"`
-	CreatedAt       time.Time                                               `json:"created_at" format:"date-time"`
+	ConnectionRules AccessApplicationPolicyGetResponseConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                                         `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -3508,7 +3011,7 @@ type AccessApplicationPolicyGetResponseObject struct {
 	// this feature.
 	IsolationRequired bool `json:"isolation_required"`
 	// Configures multi-factor authentication (MFA) settings.
-	MfaConfig AccessApplicationPolicyGetResponseObjectMfaConfig `json:"mfa_config"`
+	MfaConfig AccessApplicationPolicyGetResponseMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -3524,16 +3027,15 @@ type AccessApplicationPolicyGetResponseObject struct {
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string                                       `json:"session_duration" api:"nullable"`
-	UpdatedAt       time.Time                                    `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationPolicyGetResponseObjectJSON `json:"-"`
+	SessionDuration string                                 `json:"session_duration"`
+	UpdatedAt       time.Time                              `json:"updated_at" format:"date-time"`
+	JSON            accessApplicationPolicyGetResponseJSON `json:"-"`
 }
 
-// accessApplicationPolicyGetResponseObjectJSON contains the JSON metadata for the
-// struct [AccessApplicationPolicyGetResponseObject]
-type accessApplicationPolicyGetResponseObjectJSON struct {
+// accessApplicationPolicyGetResponseJSON contains the JSON metadata for the struct
+// [AccessApplicationPolicyGetResponse]
+type accessApplicationPolicyGetResponseJSON struct {
 	ID                           apijson.Field
-	AccountID                    apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
 	ConnectionRules              apijson.Field
@@ -3554,116 +3056,110 @@ type accessApplicationPolicyGetResponseObjectJSON struct {
 	ExtraFields                  map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyGetResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyGetResponseObjectJSON) RawJSON() string {
+func (r accessApplicationPolicyGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessApplicationPolicyGetResponseObject) implementsAccessApplicationPolicyGetResponse() {}
-
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyGetResponseConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
-type AccessApplicationPolicyGetResponseObjectConnectionRules struct {
+type AccessApplicationPolicyGetResponseConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
-	RDP  AccessApplicationPolicyGetResponseObjectConnectionRulesRDP  `json:"rdp"`
-	JSON accessApplicationPolicyGetResponseObjectConnectionRulesJSON `json:"-"`
+	RDP  AccessApplicationPolicyGetResponseConnectionRulesRDP  `json:"rdp"`
+	JSON accessApplicationPolicyGetResponseConnectionRulesJSON `json:"-"`
 }
 
-// accessApplicationPolicyGetResponseObjectConnectionRulesJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationPolicyGetResponseObjectConnectionRules]
-type accessApplicationPolicyGetResponseObjectConnectionRulesJSON struct {
+// accessApplicationPolicyGetResponseConnectionRulesJSON contains the JSON metadata
+// for the struct [AccessApplicationPolicyGetResponseConnectionRules]
+type accessApplicationPolicyGetResponseConnectionRulesJSON struct {
 	RDP         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyGetResponseObjectConnectionRules) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyGetResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyGetResponseObjectConnectionRulesJSON) RawJSON() string {
+func (r accessApplicationPolicyGetResponseConnectionRulesJSON) RawJSON() string {
 	return r.raw
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
-type AccessApplicationPolicyGetResponseObjectConnectionRulesRDP struct {
+// AccessApplicationPolicyGetResponseConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessApplicationPolicyGetResponseConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
-	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
+	AllowedClipboardLocalToRemoteFormats []AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat `json:"allowed_clipboard_local_to_remote_formats"`
 	// Clipboard formats allowed when copying from remote RDP session to local machine.
-	AllowedClipboardRemoteToLocalFormats []AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
-	JSON                                 accessApplicationPolicyGetResponseObjectConnectionRulesRDPJSON                                  `json:"-"`
+	AllowedClipboardRemoteToLocalFormats []AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat `json:"allowed_clipboard_remote_to_local_formats"`
+	JSON                                 accessApplicationPolicyGetResponseConnectionRulesRDPJSON                                  `json:"-"`
 }
 
-// accessApplicationPolicyGetResponseObjectConnectionRulesRDPJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationPolicyGetResponseObjectConnectionRulesRDP]
-type accessApplicationPolicyGetResponseObjectConnectionRulesRDPJSON struct {
+// accessApplicationPolicyGetResponseConnectionRulesRDPJSON contains the JSON
+// metadata for the struct [AccessApplicationPolicyGetResponseConnectionRulesRDP]
+type accessApplicationPolicyGetResponseConnectionRulesRDPJSON struct {
 	AllowedClipboardLocalToRemoteFormats apijson.Field
 	AllowedClipboardRemoteToLocalFormats apijson.Field
 	raw                                  string
 	ExtraFields                          map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyGetResponseObjectConnectionRulesRDP) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyGetResponseConnectionRulesRDP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyGetResponseObjectConnectionRulesRDPJSON) RawJSON() string {
+func (r accessApplicationPolicyGetResponseConnectionRulesRDPJSON) RawJSON() string {
 	return r.raw
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
+// AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
+type AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
-	AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
+	AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
 )
 
-func (r AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+func (r AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
+// AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
+type AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
-	AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
+	AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
 )
 
-func (r AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+func (r AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyGetResponseObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyGetResponseConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
-type AccessApplicationPolicyGetResponseObjectMfaConfig struct {
+// AccessApplicationPolicyGetResponseMfaConfig configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyGetResponseMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
-	AllowedAuthenticators []AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	AllowedAuthenticators []AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
 	MfaDisabled bool `json:"mfa_disabled"`
 	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
 	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
-	SessionDuration string                                                `json:"session_duration"`
-	JSON            accessApplicationPolicyGetResponseObjectMfaConfigJSON `json:"-"`
+	SessionDuration string                                          `json:"session_duration"`
+	JSON            accessApplicationPolicyGetResponseMfaConfigJSON `json:"-"`
 }
 
-// accessApplicationPolicyGetResponseObjectMfaConfigJSON contains the JSON metadata
-// for the struct [AccessApplicationPolicyGetResponseObjectMfaConfig]
-type accessApplicationPolicyGetResponseObjectMfaConfigJSON struct {
+// accessApplicationPolicyGetResponseMfaConfigJSON contains the JSON metadata for
+// the struct [AccessApplicationPolicyGetResponseMfaConfig]
+type accessApplicationPolicyGetResponseMfaConfigJSON struct {
 	AllowedAuthenticators apijson.Field
 	MfaDisabled           apijson.Field
 	SessionDuration       apijson.Field
@@ -3671,89 +3167,35 @@ type accessApplicationPolicyGetResponseObjectMfaConfigJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *AccessApplicationPolicyGetResponseObjectMfaConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationPolicyGetResponseMfaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationPolicyGetResponseObjectMfaConfigJSON) RawJSON() string {
+func (r accessApplicationPolicyGetResponseMfaConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticator string
+type AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticator = "totp"
-	AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticator = "biometrics"
-	AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticator = "security_key"
+	AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator = "security_key"
 )
 
-func (r AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticator) IsKnown() bool {
+func (r AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyGetResponseObjectMfaConfigAllowedAuthenticatorSecurityKey:
+	case AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyGetResponseMfaConfigAllowedAuthenticatorSecurityKey:
 		return true
 	}
 	return false
 }
 
 type AccessApplicationPolicyNewParams struct {
-	Body AccessApplicationPolicyNewParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-func (r AccessApplicationPolicyNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type AccessApplicationPolicyNewParamsBody struct {
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules"`
-	// The action Access will take if a user matches this policy. Infrastructure
-	// application policies can only use the Allow action.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude"`
-	Include  param.Field[interface{}] `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool]        `json:"isolation_required"`
-	MfaConfig         param.Field[interface{}] `json:"mfa_config"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationPolicyNewParamsBody) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationPolicyNewParamsBody) implementsAccessApplicationPolicyNewParamsBodyUnion() {}
-
-// Satisfied by
-// [zero_trust.AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequest],
-// [zero_trust.AccessApplicationPolicyNewParamsBodyObject],
-// [AccessApplicationPolicyNewParamsBody].
-type AccessApplicationPolicyNewParamsBodyUnion interface {
-	implementsAccessApplicationPolicyNewParamsBodyUnion()
-}
-
-type AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequest struct {
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -3761,13 +3203,13 @@ type AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequest struct {
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The rules that define how users may connect to targets secured by your
 	// application.
-	ConnectionRules param.Field[AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRules] `json:"connection_rules"`
+	ConnectionRules param.Field[AccessApplicationPolicyNewParamsConnectionRules] `json:"connection_rules"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// Configures multi-factor authentication (MFA) settings.
-	MfaConfig param.Field[AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfig] `json:"mfa_config"`
+	MfaConfig param.Field[AccessApplicationPolicyNewParamsMfaConfig] `json:"mfa_config"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -3781,72 +3223,67 @@ type AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequest struct {
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
-func (r AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequest) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequest) implementsAccessApplicationPolicyNewParamsBodyUnion() {
-}
-
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyNewParamsConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
-type AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRules struct {
+type AccessApplicationPolicyNewParamsConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
-	RDP param.Field[AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDP] `json:"rdp"`
+	RDP param.Field[AccessApplicationPolicyNewParamsConnectionRulesRDP] `json:"rdp"`
 }
 
-func (r AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRules) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyNewParamsConnectionRules) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
-type AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDP struct {
+// AccessApplicationPolicyNewParamsConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessApplicationPolicyNewParamsConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
-	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
+	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
 	// Clipboard formats allowed when copying from remote RDP session to local machine.
-	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
+	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
 }
 
-func (r AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDP) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyNewParamsConnectionRulesRDP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
+// AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
+type AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
-	AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
+	AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
 )
 
-func (r AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+func (r AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
+// AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
+type AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
-	AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
+	AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
 )
 
-func (r AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+func (r AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyNewParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
-type AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfig struct {
+// AccessApplicationPolicyNewParamsMfaConfig configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyNewParamsMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
-	AllowedAuthenticators param.Field[[]AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	AllowedAuthenticators param.Field[[]AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
 	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
@@ -3855,109 +3292,21 @@ type AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfig struct 
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
-func (r AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfig) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyNewParamsMfaConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator string
+type AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator = "totp"
-	AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator = "biometrics"
-	AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator = "security_key"
+	AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator = "security_key"
 )
 
-func (r AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator) IsKnown() bool {
+func (r AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyNewParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorSecurityKey:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationPolicyNewParamsBodyObject struct {
-	// The action Access will take if a user matches this policy. Infrastructure
-	// application policies can only use the Allow action.
-	Decision param.Field[Decision] `json:"decision" api:"required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include" api:"required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name" api:"required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationPolicyNewParamsBodyObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
-	// Configures multi-factor authentication (MFA) settings for infrastructure
-	// applications.
-	MfaConfig param.Field[AccessApplicationPolicyNewParamsBodyObjectMfaConfig] `json:"mfa_config"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
-}
-
-func (r AccessApplicationPolicyNewParamsBodyObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationPolicyNewParamsBodyObject) implementsAccessApplicationPolicyNewParamsBodyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationPolicyNewParamsBodyObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationPolicyNewParamsBodyObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationPolicyNewParamsBodyObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationPolicyNewParamsBodyObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames" api:"required"`
-	// Enables using Identity Provider email alias as SSH username.
-	AllowEmailAlias param.Field[bool] `json:"allow_email_alias"`
-}
-
-func (r AccessApplicationPolicyNewParamsBodyObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures multi-factor authentication (MFA) settings for infrastructure
-// applications.
-type AccessApplicationPolicyNewParamsBodyObjectMfaConfig struct {
-	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, supported values are `piv_key` and `ssh_fido2_key`.
-	AllowedAuthenticators param.Field[[]AccessApplicationPolicyNewParamsBodyObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to disable MFA for this resource. This option is available at
-	// the application and policy level.
-	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
-	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
-	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationPolicyNewParamsBodyObjectMfaConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessApplicationPolicyNewParamsBodyObjectMfaConfigAllowedAuthenticator string
-
-const (
-	AccessApplicationPolicyNewParamsBodyObjectMfaConfigAllowedAuthenticatorPivKey      AccessApplicationPolicyNewParamsBodyObjectMfaConfigAllowedAuthenticator = "piv_key"
-	AccessApplicationPolicyNewParamsBodyObjectMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationPolicyNewParamsBodyObjectMfaConfigAllowedAuthenticator = "ssh_fido2_key"
-)
-
-func (r AccessApplicationPolicyNewParamsBodyObjectMfaConfigAllowedAuthenticator) IsKnown() bool {
-	switch r {
-	case AccessApplicationPolicyNewParamsBodyObjectMfaConfigAllowedAuthenticatorPivKey, AccessApplicationPolicyNewParamsBodyObjectMfaConfigAllowedAuthenticatorSSHFido2Key:
+	case AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyNewParamsMfaConfigAllowedAuthenticatorSecurityKey:
 		return true
 	}
 	return false
@@ -4088,7 +3437,7 @@ func (r accessApplicationPolicyNewResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationPolicyNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationPolicyNewResponseEnvelopeSuccess bool
 
 const (
@@ -4104,65 +3453,10 @@ func (r AccessApplicationPolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessApplicationPolicyUpdateParams struct {
-	Body AccessApplicationPolicyUpdateParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-func (r AccessApplicationPolicyUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type AccessApplicationPolicyUpdateParamsBody struct {
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules"`
-	// The action Access will take if a user matches this policy. Infrastructure
-	// application policies can only use the Allow action.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude"`
-	Include  param.Field[interface{}] `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool]        `json:"isolation_required"`
-	MfaConfig         param.Field[interface{}] `json:"mfa_config"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationPolicyUpdateParamsBody) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationPolicyUpdateParamsBody) implementsAccessApplicationPolicyUpdateParamsBodyUnion() {
-}
-
-// Satisfied by
-// [zero_trust.AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequest],
-// [zero_trust.AccessApplicationPolicyUpdateParamsBodyObject],
-// [AccessApplicationPolicyUpdateParamsBody].
-type AccessApplicationPolicyUpdateParamsBodyUnion interface {
-	implementsAccessApplicationPolicyUpdateParamsBodyUnion()
-}
-
-type AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequest struct {
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -4170,13 +3464,13 @@ type AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequest struct {
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The rules that define how users may connect to targets secured by your
 	// application.
-	ConnectionRules param.Field[AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRules] `json:"connection_rules"`
+	ConnectionRules param.Field[AccessApplicationPolicyUpdateParamsConnectionRules] `json:"connection_rules"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// Configures multi-factor authentication (MFA) settings.
-	MfaConfig param.Field[AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfig] `json:"mfa_config"`
+	MfaConfig param.Field[AccessApplicationPolicyUpdateParamsMfaConfig] `json:"mfa_config"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -4190,72 +3484,67 @@ type AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequest struct {
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
-func (r AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequest) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequest) implementsAccessApplicationPolicyUpdateParamsBodyUnion() {
-}
-
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyUpdateParamsConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
-type AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRules struct {
+type AccessApplicationPolicyUpdateParamsConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
-	RDP param.Field[AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDP] `json:"rdp"`
+	RDP param.Field[AccessApplicationPolicyUpdateParamsConnectionRulesRDP] `json:"rdp"`
 }
 
-func (r AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRules) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyUpdateParamsConnectionRules) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
-type AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDP struct {
+// AccessApplicationPolicyUpdateParamsConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
+type AccessApplicationPolicyUpdateParamsConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
-	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
+	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
 	// Clipboard formats allowed when copying from remote RDP session to local machine.
-	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
+	AllowedClipboardRemoteToLocalFormats param.Field[[]AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat] `json:"allowed_clipboard_remote_to_local_formats"`
 }
 
-func (r AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDP) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyUpdateParamsConnectionRulesRDP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
+// AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
+type AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
-	AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
+	AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
 )
 
-func (r AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
+func (r AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
-type AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
+// AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
+type AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
-	AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
+	AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
 )
 
-func (r AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
+func (r AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyUpdateParamsConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
-type AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfig struct {
+// AccessApplicationPolicyUpdateParamsMfaConfig configures multi-factor authentication (MFA) settings.
+type AccessApplicationPolicyUpdateParamsMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
-	AllowedAuthenticators param.Field[[]AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
+	AllowedAuthenticators param.Field[[]AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
 	// Indicates whether to disable MFA for this resource. This option is available at
 	// the application and policy level.
 	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
@@ -4264,109 +3553,21 @@ type AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfig stru
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
-func (r AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfig) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationPolicyUpdateParamsMfaConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator string
+type AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator string
 
 const (
-	AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator = "totp"
-	AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator = "biometrics"
-	AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator = "security_key"
+	AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorTotp        AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator = "totp"
+	AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorBiometrics  AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator = "biometrics"
+	AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator = "security_key"
 )
 
-func (r AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticator) IsKnown() bool {
+func (r AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyUpdateParamsBodyAccessAppPolicyRequestMfaConfigAllowedAuthenticatorSecurityKey:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationPolicyUpdateParamsBodyObject struct {
-	// The action Access will take if a user matches this policy. Infrastructure
-	// application policies can only use the Allow action.
-	Decision param.Field[Decision] `json:"decision" api:"required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include" api:"required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name" api:"required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationPolicyUpdateParamsBodyObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
-	// Configures multi-factor authentication (MFA) settings for infrastructure
-	// applications.
-	MfaConfig param.Field[AccessApplicationPolicyUpdateParamsBodyObjectMfaConfig] `json:"mfa_config"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
-}
-
-func (r AccessApplicationPolicyUpdateParamsBodyObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationPolicyUpdateParamsBodyObject) implementsAccessApplicationPolicyUpdateParamsBodyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationPolicyUpdateParamsBodyObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationPolicyUpdateParamsBodyObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationPolicyUpdateParamsBodyObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationPolicyUpdateParamsBodyObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames" api:"required"`
-	// Enables using Identity Provider email alias as SSH username.
-	AllowEmailAlias param.Field[bool] `json:"allow_email_alias"`
-}
-
-func (r AccessApplicationPolicyUpdateParamsBodyObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures multi-factor authentication (MFA) settings for infrastructure
-// applications.
-type AccessApplicationPolicyUpdateParamsBodyObjectMfaConfig struct {
-	// Lists the MFA methods that users can authenticate with. For infrastructure
-	// applications, supported values are `piv_key` and `ssh_fido2_key`.
-	AllowedAuthenticators param.Field[[]AccessApplicationPolicyUpdateParamsBodyObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
-	// Indicates whether to disable MFA for this resource. This option is available at
-	// the application and policy level.
-	MfaDisabled param.Field[bool] `json:"mfa_disabled"`
-	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
-	// Minimum: 0m. Maximum: 720h (30 days). Examples: `5m` or `24h`.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationPolicyUpdateParamsBodyObjectMfaConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessApplicationPolicyUpdateParamsBodyObjectMfaConfigAllowedAuthenticator string
-
-const (
-	AccessApplicationPolicyUpdateParamsBodyObjectMfaConfigAllowedAuthenticatorPivKey      AccessApplicationPolicyUpdateParamsBodyObjectMfaConfigAllowedAuthenticator = "piv_key"
-	AccessApplicationPolicyUpdateParamsBodyObjectMfaConfigAllowedAuthenticatorSSHFido2Key AccessApplicationPolicyUpdateParamsBodyObjectMfaConfigAllowedAuthenticator = "ssh_fido2_key"
-)
-
-func (r AccessApplicationPolicyUpdateParamsBodyObjectMfaConfigAllowedAuthenticator) IsKnown() bool {
-	switch r {
-	case AccessApplicationPolicyUpdateParamsBodyObjectMfaConfigAllowedAuthenticatorPivKey, AccessApplicationPolicyUpdateParamsBodyObjectMfaConfigAllowedAuthenticatorSSHFido2Key:
+	case AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorTotp, AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, AccessApplicationPolicyUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey:
 		return true
 	}
 	return false
@@ -4498,7 +3699,7 @@ func (r accessApplicationPolicyUpdateResponseEnvelopeMessagesSourceJSON) RawJSON
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationPolicyUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationPolicyUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -4666,7 +3867,7 @@ func (r accessApplicationPolicyDeleteResponseEnvelopeMessagesSourceJSON) RawJSON
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationPolicyDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationPolicyDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -4813,7 +4014,7 @@ func (r accessApplicationPolicyGetResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationPolicyGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationPolicyGetResponseEnvelopeSuccess bool
 
 const (

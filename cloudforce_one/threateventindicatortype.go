@@ -7,11 +7,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -36,15 +34,18 @@ func NewThreatEventIndicatorTypeService(opts ...option.RequestOption) (r *Threat
 	return
 }
 
-// Lists indicator types across multiple datasets
-func (r *ThreatEventIndicatorTypeService) List(ctx context.Context, params ThreatEventIndicatorTypeListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorTypeListResponse, err error) {
+// This Method is deprecated. Please use /events/dataset/:dataset_id/indicatorTypes
+// instead.
+//
+// Deprecated: deprecated
+func (r *ThreatEventIndicatorTypeService) List(ctx context.Context, query ThreatEventIndicatorTypeListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorTypeListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/indicator-types", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/cloudforce-one/events/indicatorTypes", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
 }
 
@@ -95,16 +96,4 @@ func (r threatEventIndicatorTypeListResponseItemsJSON) RawJSON() string {
 type ThreatEventIndicatorTypeListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Array of dataset IDs to query indicator types from. If not provided, queries all
-	// datasets for the account.
-	DatasetIDs param.Field[[]string] `query:"datasetIds"`
-}
-
-// URLQuery serializes [ThreatEventIndicatorTypeListParams]'s query parameters as
-// `url.Values`.
-func (r ThreatEventIndicatorTypeListParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }

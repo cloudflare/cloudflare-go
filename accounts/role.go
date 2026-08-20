@@ -25,9 +25,6 @@ import (
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewRoleService] method instead.
-//
-// Deprecated: Use the
-// [github.com/cloudflare/cloudflare-go/v7/iam.PermissionGroupService] instead
 type RoleService struct {
 	Options []option.RequestOption
 }
@@ -42,8 +39,6 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-//
-// Deprecated: Use /accounts/{account_id}/iam/permission_groups instead.
 func (r *RoleService) List(ctx context.Context, params RoleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.Role], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -66,16 +61,11 @@ func (r *RoleService) List(ctx context.Context, params RoleListParams, opts ...o
 }
 
 // Get all available roles for an account.
-//
-// Deprecated: Use /accounts/{account_id}/iam/permission_groups instead.
 func (r *RoleService) ListAutoPaging(ctx context.Context, params RoleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.Role] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Get information about a specific role for an account.
-//
-// Deprecated: Use
-// /accounts/{account_id}/iam/permission_groups/{permission_group_id} instead.
 func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParams, opts ...option.RequestOption) (res *shared.Role, err error) {
 	var env RoleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

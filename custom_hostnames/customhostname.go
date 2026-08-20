@@ -30,7 +30,6 @@ type CustomHostnameService struct {
 	Options         []option.RequestOption
 	FallbackOrigin  *FallbackOriginService
 	CertificatePack *CertificatePackService
-	Quota           *QuotaService
 }
 
 // NewCustomHostnameService generates a new service that applies the given options
@@ -41,7 +40,6 @@ func NewCustomHostnameService(opts ...option.RequestOption) (r *CustomHostnameSe
 	r.Options = opts
 	r.FallbackOrigin = NewFallbackOriginService(opts...)
 	r.CertificatePack = NewCertificatePackService(opts...)
-	r.Quota = NewQuotaService(opts...)
 	return
 }
 
@@ -2223,15 +2221,6 @@ type CustomHostnameNewParams struct {
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
 	// settings.
 	CustomMetadata param.Field[map[string]string] `json:"custom_metadata"`
-	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
-	// record.
-	CustomOriginServer param.Field[string] `json:"custom_origin_server"`
-	// A hostname that will be sent to your custom origin server as SNI for TLS
-	// handshake. This can be a valid subdomain of the zone or custom origin server
-	// name or the string ':request_host_header:' which will cause the host header in
-	// the request to be used as SNI. Not configurable with default/fallback origin
-	// server.
-	CustomOriginSNI param.Field[string] `json:"custom_origin_sni"`
 	// SSL properties used when creating the custom hostname.
 	SSL param.Field[CustomHostnameNewParamsSSL] `json:"ssl"`
 }

@@ -35,9 +35,9 @@ func NewInvestigateReleaseService(opts ...option.RequestOption) (r *InvestigateR
 	return
 }
 
-// Delivers one or more quarantined messages to their intended recipients, for
-// cases where a message was incorrectly quarantined. The response includes
-// delivery status for each recipient.
+// Releases one or more quarantined messages, delivering them to the intended
+// recipients. Use when a message was incorrectly quarantined. Returns delivery
+// status for each recipient.
 func (r *InvestigateReleaseService) Bulk(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateReleaseBulkResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -59,21 +59,21 @@ func (r *InvestigateReleaseService) Bulk(ctx context.Context, params Investigate
 	return res, nil
 }
 
-// Delivers one or more quarantined messages to their intended recipients, for
-// cases where a message was incorrectly quarantined. The response includes
-// delivery status for each recipient.
+// Releases one or more quarantined messages, delivering them to the intended
+// recipients. Use when a message was incorrectly quarantined. Returns delivery
+// status for each recipient.
 func (r *InvestigateReleaseService) BulkAutoPaging(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateReleaseBulkResponse] {
 	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, params, opts...))
 }
 
 type InvestigateReleaseBulkResponse struct {
-	// Unique identifier for a message retrieved from investigation.
+	// Unique identifier for a message retrieved from investigation
 	ID        string   `json:"id" api:"required"`
 	Delivered []string `json:"delivered" api:"nullable"`
 	Failed    []string `json:"failed" api:"nullable"`
 	// Deprecated, use `id` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `id` instead.
+	// Deprecated: deprecated
 	PostfixID   string                             `json:"postfix_id"`
 	Undelivered []string                           `json:"undelivered" api:"nullable"`
 	JSON        investigateReleaseBulkResponseJSON `json:"-"`

@@ -150,19 +150,19 @@ func (r *SettingURLIgnorePatternService) Get(ctx context.Context, patternID stri
 	return res, nil
 }
 
-// A URL ignore pattern that exempts matching URLs from Email Security's URL
-// rewriting.
+// A URL ignore pattern that exempts matching URLs from being rewritten by Email
+// Security.
 type SettingURLIgnorePatternNewResponse struct {
-	// URL ignore pattern identifier.
+	// URL ignore pattern identifier
 	ID        string    `json:"id" api:"required" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// Regular expression identifying URLs to exempt from rewriting.
+	// Regular expression matching URLs that should not be rewritten.
 	Pattern string `json:"pattern" api:"required"`
 	// Optional note describing the reason for the ignore pattern.
 	Comments string `json:"comments" api:"nullable"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified time.Time                              `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                              `json:"modified_at" format:"date-time"`
 	JSON         settingURLIgnorePatternNewResponseJSON `json:"-"`
@@ -189,19 +189,19 @@ func (r settingURLIgnorePatternNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A URL ignore pattern that exempts matching URLs from Email Security's URL
-// rewriting.
+// A URL ignore pattern that exempts matching URLs from being rewritten by Email
+// Security.
 type SettingURLIgnorePatternListResponse struct {
-	// URL ignore pattern identifier.
+	// URL ignore pattern identifier
 	ID        string    `json:"id" api:"required" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// Regular expression identifying URLs to exempt from rewriting.
+	// Regular expression matching URLs that should not be rewritten.
 	Pattern string `json:"pattern" api:"required"`
 	// Optional note describing the reason for the ignore pattern.
 	Comments string `json:"comments" api:"nullable"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified time.Time                               `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                               `json:"modified_at" format:"date-time"`
 	JSON         settingURLIgnorePatternListResponseJSON `json:"-"`
@@ -229,7 +229,7 @@ func (r settingURLIgnorePatternListResponseJSON) RawJSON() string {
 }
 
 type SettingURLIgnorePatternDeleteResponse struct {
-	// URL ignore pattern identifier.
+	// URL ignore pattern identifier
 	ID   string                                    `json:"id" api:"required" format:"uuid"`
 	JSON settingURLIgnorePatternDeleteResponseJSON `json:"-"`
 }
@@ -250,19 +250,19 @@ func (r settingURLIgnorePatternDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A URL ignore pattern that exempts matching URLs from Email Security's URL
-// rewriting.
+// A URL ignore pattern that exempts matching URLs from being rewritten by Email
+// Security.
 type SettingURLIgnorePatternEditResponse struct {
-	// URL ignore pattern identifier.
+	// URL ignore pattern identifier
 	ID        string    `json:"id" api:"required" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// Regular expression identifying URLs to exempt from rewriting.
+	// Regular expression matching URLs that should not be rewritten.
 	Pattern string `json:"pattern" api:"required"`
 	// Optional note describing the reason for the ignore pattern.
 	Comments string `json:"comments" api:"nullable"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified time.Time                               `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                               `json:"modified_at" format:"date-time"`
 	JSON         settingURLIgnorePatternEditResponseJSON `json:"-"`
@@ -289,19 +289,19 @@ func (r settingURLIgnorePatternEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A URL ignore pattern that exempts matching URLs from Email Security's URL
-// rewriting.
+// A URL ignore pattern that exempts matching URLs from being rewritten by Email
+// Security.
 type SettingURLIgnorePatternGetResponse struct {
-	// URL ignore pattern identifier.
+	// URL ignore pattern identifier
 	ID        string    `json:"id" api:"required" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// Regular expression identifying URLs to exempt from rewriting.
+	// Regular expression matching URLs that should not be rewritten.
 	Pattern string `json:"pattern" api:"required"`
 	// Optional note describing the reason for the ignore pattern.
 	Comments string `json:"comments" api:"nullable"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified time.Time                              `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                              `json:"modified_at" format:"date-time"`
 	JSON         settingURLIgnorePatternGetResponseJSON `json:"-"`
@@ -331,7 +331,7 @@ func (r settingURLIgnorePatternGetResponseJSON) RawJSON() string {
 type SettingURLIgnorePatternNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Regular expression identifying URLs to exempt from rewriting.
+	// Regular expression matching URLs that should not be rewritten.
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Optional note describing the reason for the ignore pattern.
 	Comments param.Field[string] `json:"comments"`
@@ -346,8 +346,8 @@ type SettingURLIgnorePatternNewResponseEnvelope struct {
 	Messages []SettingURLIgnorePatternNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingURLIgnorePatternNewResponseEnvelopeSuccess `json:"success" api:"required"`
-	// A URL ignore pattern that exempts matching URLs from Email Security's URL
-	// rewriting.
+	// A URL ignore pattern that exempts matching URLs from being rewritten by Email
+	// Security.
 	Result SettingURLIgnorePatternNewResponse             `json:"result"`
 	JSON   settingURLIgnorePatternNewResponseEnvelopeJSON `json:"-"`
 }
@@ -652,7 +652,7 @@ type SettingURLIgnorePatternEditParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Optional note describing the reason for the ignore pattern.
 	Comments param.Field[string] `json:"comments"`
-	// Regular expression identifying URLs to exempt from rewriting.
+	// Regular expression matching URLs that should not be rewritten.
 	Pattern param.Field[string] `json:"pattern"`
 }
 
@@ -665,8 +665,8 @@ type SettingURLIgnorePatternEditResponseEnvelope struct {
 	Messages []SettingURLIgnorePatternEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingURLIgnorePatternEditResponseEnvelopeSuccess `json:"success" api:"required"`
-	// A URL ignore pattern that exempts matching URLs from Email Security's URL
-	// rewriting.
+	// A URL ignore pattern that exempts matching URLs from being rewritten by Email
+	// Security.
 	Result SettingURLIgnorePatternEditResponse             `json:"result"`
 	JSON   settingURLIgnorePatternEditResponseEnvelopeJSON `json:"-"`
 }
@@ -813,8 +813,8 @@ type SettingURLIgnorePatternGetResponseEnvelope struct {
 	Messages []SettingURLIgnorePatternGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingURLIgnorePatternGetResponseEnvelopeSuccess `json:"success" api:"required"`
-	// A URL ignore pattern that exempts matching URLs from Email Security's URL
-	// rewriting.
+	// A URL ignore pattern that exempts matching URLs from being rewritten by Email
+	// Security.
 	Result SettingURLIgnorePatternGetResponse             `json:"result"`
 	JSON   settingURLIgnorePatternGetResponseEnvelopeJSON `json:"-"`
 }

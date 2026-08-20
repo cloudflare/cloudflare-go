@@ -29,23 +29,21 @@ func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.DEXTests.New(context.TODO(), zero_trust.DeviceDEXTestNewParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		SchemaHTTP: zero_trust.SchemaHTTPParam{
-			Data: cloudflare.F(zero_trust.SchemaDataParam{
-				Host:   cloudflare.F("https://dash.cloudflare.com"),
-				Kind:   cloudflare.F(zero_trust.SchemaDataKindHTTP),
-				Method: cloudflare.F(zero_trust.SchemaDataMethodGet),
-			}),
-			Enabled:     cloudflare.F(true),
-			Interval:    cloudflare.F("30m"),
-			Name:        cloudflare.F("HTTP dash health check"),
-			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
-			TargetPolicies: cloudflare.F([]zero_trust.SchemaHTTPTargetPolicyParam{{
-				ID:      cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				Default: cloudflare.F(true),
-				Name:    cloudflare.F("name"),
-			}}),
-			Targeted: cloudflare.F(true),
-		},
+		Data: cloudflare.F(zero_trust.DeviceDEXTestNewParamsData{
+			Host:   cloudflare.F("https://dash.cloudflare.com"),
+			Kind:   cloudflare.F(zero_trust.DeviceDEXTestNewParamsDataKindHTTP),
+			Method: cloudflare.F(zero_trust.DeviceDEXTestNewParamsDataMethodGet),
+		}),
+		Enabled:     cloudflare.F(true),
+		Interval:    cloudflare.F("30m"),
+		Name:        cloudflare.F("HTTP dash health check"),
+		Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
+		TargetPolicies: cloudflare.F([]zero_trust.DeviceDEXTestNewParamsTargetPolicy{{
+			ID:      cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+			Default: cloudflare.F(true),
+			Name:    cloudflare.F("name"),
+		}}),
+		Targeted: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -74,23 +72,21 @@ func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DeviceDEXTestUpdateParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			SchemaHTTP: zero_trust.SchemaHTTPParam{
-				Data: cloudflare.F(zero_trust.SchemaDataParam{
-					Host:   cloudflare.F("https://dash.cloudflare.com"),
-					Kind:   cloudflare.F(zero_trust.SchemaDataKindHTTP),
-					Method: cloudflare.F(zero_trust.SchemaDataMethodGet),
-				}),
-				Enabled:     cloudflare.F(true),
-				Interval:    cloudflare.F("30m"),
-				Name:        cloudflare.F("HTTP dash health check"),
-				Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
-				TargetPolicies: cloudflare.F([]zero_trust.SchemaHTTPTargetPolicyParam{{
-					ID:      cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					Default: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-				}}),
-				Targeted: cloudflare.F(true),
-			},
+			Data: cloudflare.F(zero_trust.DeviceDEXTestUpdateParamsData{
+				Host:   cloudflare.F("https://dash.cloudflare.com"),
+				Kind:   cloudflare.F(zero_trust.DeviceDEXTestUpdateParamsDataKindHTTP),
+				Method: cloudflare.F(zero_trust.DeviceDEXTestUpdateParamsDataMethodGet),
+			}),
+			Enabled:     cloudflare.F(true),
+			Interval:    cloudflare.F("30m"),
+			Name:        cloudflare.F("HTTP dash health check"),
+			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
+			TargetPolicies: cloudflare.F([]zero_trust.DeviceDEXTestUpdateParamsTargetPolicy{{
+				ID:      cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+				Default: cloudflare.F(true),
+				Name:    cloudflare.F("name"),
+			}}),
+			Targeted: cloudflare.F(true),
 		},
 	)
 	if err != nil {

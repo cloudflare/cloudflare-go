@@ -57,13 +57,13 @@ func (r *AnalyticsAggregateCurrentService) Get(ctx context.Context, params Analy
 type AnalyticsAggregateCurrentGetResponse struct {
 	// Application identifier.
 	AppID string `json:"appID" api:"required"`
-	// Number of bytes sent.
+	// Number of bytes sent
 	BytesEgress float64 `json:"bytesEgress" api:"required"`
-	// Number of bytes received.
+	// Number of bytes received
 	BytesIngress float64 `json:"bytesIngress" api:"required"`
-	// Number of connections.
+	// Number of connections
 	Connections float64 `json:"connections" api:"required"`
-	// Average duration of connections.
+	// Average duration of connections
 	DurationAvg float64                                  `json:"durationAvg" api:"required"`
 	JSON        analyticsAggregateCurrentGetResponseJSON `json:"-"`
 }

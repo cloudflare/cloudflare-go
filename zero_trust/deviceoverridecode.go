@@ -163,7 +163,7 @@ func (r deviceOverrideCodeGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// A message which can be returned in either the 'errors' or 'messages' fields in a
+// DeviceOverrideCodeGetResponseEnvelopeErrors is a message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceOverrideCodeGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code" api:"required"`
@@ -188,7 +188,7 @@ func (r deviceOverrideCodeGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-// A message which can be returned in either the 'errors' or 'messages' fields in a
+// DeviceOverrideCodeGetResponseEnvelopeMessages is a message which can be returned in either the 'errors' or 'messages' fields in a
 // v4 API response.
 type DeviceOverrideCodeGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code" api:"required"`

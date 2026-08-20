@@ -36,29 +36,15 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 	return
 }
 
-// Creates an account or zone subscription.
+// Creates an account subscription.
 func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *shared.Subscription, err error) {
 	var env SubscriptionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
-		err = errors.New("account ID and zone ID are mutually exclusive")
-		return
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
 	}
-	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
-		err = errors.New("either account ID or zone ID must be provided")
-		return
-	}
-	if params.AccountID.Value != "" {
-		accountOrZone = "accounts"
-		accountOrZoneID = params.AccountID
-	}
-	if params.ZoneID.Value != "" {
-		accountOrZone = "zones"
-		accountOrZoneID = params.ZoneID
-	}
-	path := fmt.Sprintf("%s/%s/subscriptions", accountOrZone, accountOrZoneID)
+	path := fmt.Sprintf("accounts/%s/subscriptions", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -109,30 +95,16 @@ func (r *SubscriptionService) Delete(ctx context.Context, subscriptionIdentifier
 	return res, nil
 }
 
-// Lists all of an account or zone's subscriptions.
+// Lists all of an account's subscriptions.
 func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[shared.Subscription], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
-		err = errors.New("account ID and zone ID are mutually exclusive")
-		return
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
 	}
-	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
-		err = errors.New("either account ID or zone ID must be provided")
-		return
-	}
-	if query.AccountID.Value != "" {
-		accountOrZone = "accounts"
-		accountOrZoneID = query.AccountID
-	}
-	if query.ZoneID.Value != "" {
-		accountOrZone = "zones"
-		accountOrZoneID = query.ZoneID
-	}
-	path := fmt.Sprintf("%s/%s/subscriptions", accountOrZone, accountOrZoneID)
+	path := fmt.Sprintf("accounts/%s/subscriptions", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -145,7 +117,7 @@ func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetPara
 	return res, nil
 }
 
-// Lists all of an account or zone's subscriptions.
+// Lists all of an account's subscriptions.
 func (r *SubscriptionService) GetAutoPaging(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[shared.Subscription] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, query, opts...))
 }
@@ -173,11 +145,9 @@ func (r subscriptionDeleteResponseJSON) RawJSON() string {
 }
 
 type SubscriptionNewParams struct {
+	// Identifier
+	AccountID    param.Field[string]      `path:"account_id" api:"required"`
 	Subscription shared.SubscriptionParam `json:"subscription" api:"required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
@@ -329,8 +299,6 @@ func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionGetParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
+	// Identifier
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

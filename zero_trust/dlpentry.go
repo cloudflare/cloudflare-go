@@ -199,13 +199,10 @@ type DLPEntryUpdateResponse struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPEntryUpdateResponsePredefinedEntryConfidence].
-	Confidence interface{} `json:"confidence"`
-	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated  bool    `json:"deprecated"`
-	Description string  `json:"description" api:"nullable"`
-	Pattern     Pattern `json:"pattern"`
+	Confidence  interface{} `json:"confidence"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
+	Description string      `json:"description" api:"nullable"`
+	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
@@ -229,7 +226,6 @@ type dlpEntryUpdateResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
-	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -268,7 +264,7 @@ func (r DLPEntryUpdateResponse) AsUnion() DLPEntryUpdateResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [DLPEntryUpdateResponseCustomEntry],
+// DLPEntryUpdateResponseUnion is satisfied by [DLPEntryUpdateResponseCustomEntry],
 // [DLPEntryUpdateResponseCustomPromptTopicEntry],
 // [DLPEntryUpdateResponsePredefinedEntry],
 // [DLPEntryUpdateResponseIntegrationEntry],
@@ -426,9 +422,6 @@ type DLPEntryUpdateResponsePredefinedEntry struct {
 	Enabled    bool                                            `json:"enabled" api:"required"`
 	Name       string                                          `json:"name" api:"required"`
 	Type       DLPEntryUpdateResponsePredefinedEntryType       `json:"type" api:"required"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated bool `json:"deprecated"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// A Predefined AI prompt classification topic entry.
@@ -444,7 +437,6 @@ type dlpEntryUpdateResponsePredefinedEntryJSON struct {
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
-	Deprecated  apijson.Field
 	ProfileID   apijson.Field
 	Variant     apijson.Field
 	raw         string
@@ -501,7 +493,7 @@ func (r DLPEntryUpdateResponsePredefinedEntryType) IsKnown() bool {
 	return false
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryUpdateResponsePredefinedEntryVariant is a Predefined AI prompt classification topic entry.
 type DLPEntryUpdateResponsePredefinedEntryVariant struct {
 	Type DLPEntryUpdateResponsePredefinedEntryVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -545,7 +537,7 @@ func (r DLPEntryUpdateResponsePredefinedEntryVariant) AsUnion() DLPEntryUpdateRe
 	return r.union
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryUpdateResponsePredefinedEntryVariantUnion is a Predefined AI prompt classification topic entry.
 //
 // Union satisfied by [DLPEntryUpdateResponsePredefinedEntryVariantObject] or
 // [DLPEntryUpdateResponsePredefinedEntryVariantObject].
@@ -568,7 +560,7 @@ func init() {
 	)
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryUpdateResponsePredefinedEntryVariantObject is a Predefined AI prompt classification topic entry.
 type DLPEntryUpdateResponsePredefinedEntryVariantObject struct {
 	TopicType DLPEntryUpdateResponsePredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      DLPEntryUpdateResponsePredefinedEntryVariantObjectType      `json:"type" api:"required"`
@@ -894,13 +886,10 @@ type DLPEntryListResponse struct {
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of [DLPEntryListResponseObjectConfidence].
-	Confidence interface{} `json:"confidence"`
-	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated  bool    `json:"deprecated"`
-	Description string  `json:"description" api:"nullable"`
-	Pattern     Pattern `json:"pattern"`
+	Confidence  interface{} `json:"confidence"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
+	Description string      `json:"description" api:"nullable"`
+	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID    string                           `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret       bool                             `json:"secret"`
@@ -924,7 +913,6 @@ type dlpEntryListResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
-	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -961,7 +949,7 @@ func (r DLPEntryListResponse) AsUnion() DLPEntryListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [DLPEntryListResponseObject], [DLPEntryListResponseObject],
+// DLPEntryListResponseUnion is satisfied by [DLPEntryListResponseObject], [DLPEntryListResponseObject],
 // [DLPEntryListResponseObject], [DLPEntryListResponseObject],
 // [DLPEntryListResponseObject], [DLPEntryListResponseObject] or
 // [DLPEntryListResponseObject].
@@ -1131,13 +1119,10 @@ type DLPEntryGetResponse struct {
 	// a case-sensitive manner Cannot be set to false if secret is true
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of [DLPEntryGetResponseObjectConfidence].
-	Confidence interface{} `json:"confidence"`
-	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated  bool    `json:"deprecated"`
-	Description string  `json:"description" api:"nullable"`
-	Pattern     Pattern `json:"pattern"`
+	Confidence  interface{} `json:"confidence"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
+	Description string      `json:"description" api:"nullable"`
+	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// This field can have the runtime type of [[]DLPEntryGetResponseObjectProfile].
@@ -1163,7 +1148,6 @@ type dlpEntryGetResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
-	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -1201,7 +1185,7 @@ func (r DLPEntryGetResponse) AsUnion() DLPEntryGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [DLPEntryGetResponseObject], [DLPEntryGetResponseObject],
+// DLPEntryGetResponseUnion is satisfied by [DLPEntryGetResponseObject], [DLPEntryGetResponseObject],
 // [DLPEntryGetResponseObject], [DLPEntryGetResponseObject],
 // [DLPEntryGetResponseObject], [DLPEntryGetResponseObject] or
 // [DLPEntryGetResponseObject].
@@ -1303,7 +1287,7 @@ func (r DLPEntryGetResponseObjectType) IsKnown() bool {
 	return false
 }
 
-// Computed entry field for a profile that an entry is shared into.
+// DLPEntryGetResponseObjectProfile computed entry field for a profile that an entry is shared into.
 type DLPEntryGetResponseObjectProfile struct {
 	ID   string                               `json:"id" api:"required" format:"uuid"`
 	Name string                               `json:"name" api:"required"`
@@ -1522,7 +1506,7 @@ func (r dlpEntryNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryNewResponseEnvelopeSuccess bool
 
 const (
@@ -1560,7 +1544,7 @@ func (r DLPEntryUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r DLPEntryUpdateParamsBody) implementsDLPEntryUpdateParamsBodyUnion() {}
 
-// Satisfied by [zero_trust.DLPEntryUpdateParamsBodyCustom],
+// DLPEntryUpdateParamsBodyUnion satisfied by [zero_trust.DLPEntryUpdateParamsBodyCustom],
 // [zero_trust.DLPEntryUpdateParamsBodyPredefined],
 // [zero_trust.DLPEntryUpdateParamsBodyIntegration], [DLPEntryUpdateParamsBody].
 type DLPEntryUpdateParamsBodyUnion interface {
@@ -1785,7 +1769,7 @@ func (r dlpEntryUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1932,7 +1916,7 @@ func (r dlpEntryDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -2075,7 +2059,7 @@ func (r dlpEntryGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryGetResponseEnvelopeSuccess bool
 
 const (

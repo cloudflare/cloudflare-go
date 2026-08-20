@@ -40,8 +40,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 				ErrorRetention:   cloudflare.F[workflows.InstanceNewParamsInstanceRetentionErrorRetentionUnion](shared.UnionString("5 minutes")),
 				SuccessRetention: cloudflare.F[workflows.InstanceNewParamsInstanceRetentionSuccessRetentionUnion](shared.UnionString("5 minutes")),
 			}),
-			LocationHint: cloudflare.F(workflows.InstanceNewParamsLocationHintWnam),
-			Params:       cloudflare.F("params"),
+			Params: cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
@@ -115,8 +114,7 @@ func TestInstanceBulkWithOptionalParams(t *testing.T) {
 					ErrorRetention:   cloudflare.F[workflows.InstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion](shared.UnionString("5 minutes")),
 					SuccessRetention: cloudflare.F[workflows.InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion](shared.UnionString("5 minutes")),
 				}),
-				LocationHint: cloudflare.F(workflows.InstanceBulkParamsBodyLocationHintWnam),
-				Params:       cloudflare.F("params"),
+				Params: cloudflare.F[any](map[string]interface{}{}),
 			}},
 		},
 	)

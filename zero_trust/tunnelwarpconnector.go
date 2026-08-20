@@ -156,7 +156,7 @@ func (r *TunnelWARPConnectorService) Get(ctx context.Context, tunnelID string, q
 	return res, nil
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelWARPConnectorNewResponse is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorNewResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -228,6 +228,11 @@ type TunnelWARPConnectorNewResponseConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -240,15 +245,16 @@ type TunnelWARPConnectorNewResponseConnection struct {
 // tunnelWARPConnectorNewResponseConnectionJSON contains the JSON metadata for the
 // struct [TunnelWARPConnectorNewResponseConnection]
 type tunnelWARPConnectorNewResponseConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *TunnelWARPConnectorNewResponseConnection) UnmarshalJSON(data []byte) (err error) {
@@ -259,7 +265,7 @@ func (r tunnelWARPConnectorNewResponseConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorNewResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -280,7 +286,7 @@ func (r TunnelWARPConnectorNewResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelWARPConnectorNewResponseTunType is the type of tunnel.
 type TunnelWARPConnectorNewResponseTunType string
 
 const (
@@ -301,7 +307,7 @@ func (r TunnelWARPConnectorNewResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelWARPConnectorListResponse is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorListResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -373,6 +379,11 @@ type TunnelWARPConnectorListResponseConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -385,15 +396,16 @@ type TunnelWARPConnectorListResponseConnection struct {
 // tunnelWARPConnectorListResponseConnectionJSON contains the JSON metadata for the
 // struct [TunnelWARPConnectorListResponseConnection]
 type tunnelWARPConnectorListResponseConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *TunnelWARPConnectorListResponseConnection) UnmarshalJSON(data []byte) (err error) {
@@ -404,7 +416,7 @@ func (r tunnelWARPConnectorListResponseConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorListResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -425,7 +437,7 @@ func (r TunnelWARPConnectorListResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelWARPConnectorListResponseTunType is the type of tunnel.
 type TunnelWARPConnectorListResponseTunType string
 
 const (
@@ -446,7 +458,7 @@ func (r TunnelWARPConnectorListResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelWARPConnectorDeleteResponse is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorDeleteResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -518,6 +530,11 @@ type TunnelWARPConnectorDeleteResponseConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -530,15 +547,16 @@ type TunnelWARPConnectorDeleteResponseConnection struct {
 // tunnelWARPConnectorDeleteResponseConnectionJSON contains the JSON metadata for
 // the struct [TunnelWARPConnectorDeleteResponseConnection]
 type tunnelWARPConnectorDeleteResponseConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *TunnelWARPConnectorDeleteResponseConnection) UnmarshalJSON(data []byte) (err error) {
@@ -549,7 +567,7 @@ func (r tunnelWARPConnectorDeleteResponseConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorDeleteResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -570,7 +588,7 @@ func (r TunnelWARPConnectorDeleteResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelWARPConnectorDeleteResponseTunType is the type of tunnel.
 type TunnelWARPConnectorDeleteResponseTunType string
 
 const (
@@ -591,7 +609,7 @@ func (r TunnelWARPConnectorDeleteResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelWARPConnectorEditResponse is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorEditResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -663,6 +681,11 @@ type TunnelWARPConnectorEditResponseConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -675,15 +698,16 @@ type TunnelWARPConnectorEditResponseConnection struct {
 // tunnelWARPConnectorEditResponseConnectionJSON contains the JSON metadata for the
 // struct [TunnelWARPConnectorEditResponseConnection]
 type tunnelWARPConnectorEditResponseConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *TunnelWARPConnectorEditResponseConnection) UnmarshalJSON(data []byte) (err error) {
@@ -694,7 +718,7 @@ func (r tunnelWARPConnectorEditResponseConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorEditResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -715,7 +739,7 @@ func (r TunnelWARPConnectorEditResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelWARPConnectorEditResponseTunType is the type of tunnel.
 type TunnelWARPConnectorEditResponseTunType string
 
 const (
@@ -736,7 +760,7 @@ func (r TunnelWARPConnectorEditResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// TunnelWARPConnectorGetResponse is a Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorGetResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -808,6 +832,11 @@ type TunnelWARPConnectorGetResponseConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -820,15 +849,16 @@ type TunnelWARPConnectorGetResponseConnection struct {
 // tunnelWARPConnectorGetResponseConnectionJSON contains the JSON metadata for the
 // struct [TunnelWARPConnectorGetResponseConnection]
 type tunnelWARPConnectorGetResponseConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *TunnelWARPConnectorGetResponseConnection) UnmarshalJSON(data []byte) (err error) {
@@ -839,7 +869,7 @@ func (r tunnelWARPConnectorGetResponseConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorGetResponseStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -860,7 +890,7 @@ func (r TunnelWARPConnectorGetResponseStatus) IsKnown() bool {
 	return false
 }
 
-// The type of tunnel.
+// TunnelWARPConnectorGetResponseTunType is the type of tunnel.
 type TunnelWARPConnectorGetResponseTunType string
 
 const (
@@ -924,7 +954,7 @@ func (r tunnelWARPConnectorNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelWARPConnectorNewResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelWARPConnectorNewResponseEnvelopeSuccess bool
 
 const (
@@ -976,7 +1006,7 @@ func (r TunnelWARPConnectorListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelWARPConnectorListParamsStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -1031,7 +1061,7 @@ func (r tunnelWARPConnectorDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelWARPConnectorDeleteResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelWARPConnectorDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1089,7 +1119,7 @@ func (r tunnelWARPConnectorEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelWARPConnectorEditResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelWARPConnectorEditResponseEnvelopeSuccess bool
 
 const (
@@ -1138,7 +1168,7 @@ func (r tunnelWARPConnectorGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelWARPConnectorGetResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelWARPConnectorGetResponseEnvelopeSuccess bool
 
 const (

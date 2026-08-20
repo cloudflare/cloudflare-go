@@ -2285,13 +2285,11 @@ const (
 	RecordingGetRecordingsParamsStatusRecording RecordingGetRecordingsParamsStatus = "RECORDING"
 	RecordingGetRecordingsParamsStatusUploading RecordingGetRecordingsParamsStatus = "UPLOADING"
 	RecordingGetRecordingsParamsStatusUploaded  RecordingGetRecordingsParamsStatus = "UPLOADED"
-	RecordingGetRecordingsParamsStatusErrored   RecordingGetRecordingsParamsStatus = "ERRORED"
-	RecordingGetRecordingsParamsStatusPaused    RecordingGetRecordingsParamsStatus = "PAUSED"
 )
 
 func (r RecordingGetRecordingsParamsStatus) IsKnown() bool {
 	switch r {
-	case RecordingGetRecordingsParamsStatusInvoked, RecordingGetRecordingsParamsStatusRecording, RecordingGetRecordingsParamsStatusUploading, RecordingGetRecordingsParamsStatusUploaded, RecordingGetRecordingsParamsStatusErrored, RecordingGetRecordingsParamsStatusPaused:
+	case RecordingGetRecordingsParamsStatusInvoked, RecordingGetRecordingsParamsStatusRecording, RecordingGetRecordingsParamsStatusUploading, RecordingGetRecordingsParamsStatusUploaded:
 		return true
 	}
 	return false
@@ -2326,8 +2324,6 @@ func (r RecordingPauseResumeStopRecordingParamsAction) IsKnown() bool {
 type RecordingStartRecordingsParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// ID of the meeting to record.
-	MeetingID param.Field[string] `json:"meeting_id" api:"required" format:"uuid"`
 	// By default, a meeting allows only one recording to run at a time. Enabling the
 	// `allow_multiple_recordings` parameter to true allows you to initiate multiple
 	// recordings concurrently in the same meeting. This allows you to record separate
@@ -2346,7 +2342,9 @@ type RecordingStartRecordingsParams struct {
 	InteractiveConfig param.Field[RecordingStartRecordingsParamsInteractiveConfig] `json:"interactive_config"`
 	// Specifies the maximum duration for recording in seconds, ranging from a minimum
 	// of 60 seconds to a maximum of 24 hours.
-	MaxSeconds              param.Field[int64]                                                 `json:"max_seconds"`
+	MaxSeconds param.Field[int64] `json:"max_seconds"`
+	// ID of the meeting to record.
+	MeetingID               param.Field[string]                                                `json:"meeting_id" format:"uuid"`
 	RealtimekitBucketConfig param.Field[RecordingStartRecordingsParamsRealtimekitBucketConfig] `json:"realtimekit_bucket_config"`
 	RtmpOutConfig           param.Field[RecordingStartRecordingsParamsRtmpOutConfig]           `json:"rtmp_out_config"`
 	StorageConfig           param.Field[RecordingStartRecordingsParamsStorageConfig]           `json:"storage_config"`

@@ -33,28 +33,6 @@ func TestNamespaceNewWithOptionalParams(t *testing.T) {
 		AccountID:   cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 		Name:        cloudflare.F("name"),
 		Description: cloudflare.F("Production environment"),
-		PublicEndpointParams: cloudflare.F(ai_search.NamespaceNewParamsPublicEndpointParams{
-			AuthorizedHosts: cloudflare.F([]string{"string"}),
-			ChatCompletionsEndpoint: cloudflare.F(ai_search.NamespaceNewParamsPublicEndpointParamsChatCompletionsEndpoint{
-				Disabled: cloudflare.F(true),
-			}),
-			CustomDomains:        cloudflare.F([]string{"search.example.com"}),
-			DefaultDomainEnabled: cloudflare.F(true),
-			Enabled:              cloudflare.F(true),
-			InstancesAllowed:     cloudflare.F([]string{"docs", "blog"}),
-			Mcp: cloudflare.F(ai_search.NamespaceNewParamsPublicEndpointParamsMcp{
-				Description: cloudflare.F("description"),
-				Disabled:    cloudflare.F(true),
-			}),
-			RateLimit: cloudflare.F(ai_search.NamespaceNewParamsPublicEndpointParamsRateLimit{
-				PeriodMs:  cloudflare.F(int64(60000)),
-				Requests:  cloudflare.F(int64(1)),
-				Technique: cloudflare.F(ai_search.NamespaceNewParamsPublicEndpointParamsRateLimitTechniqueFixed),
-			}),
-			SearchEndpoint: cloudflare.F(ai_search.NamespaceNewParamsPublicEndpointParamsSearchEndpoint{
-				Disabled: cloudflare.F(true),
-			}),
-		}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -85,28 +63,6 @@ func TestNamespaceUpdateWithOptionalParams(t *testing.T) {
 		ai_search.NamespaceUpdateParams{
 			AccountID:   cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 			Description: cloudflare.F("Production environment"),
-			PublicEndpointParams: cloudflare.F(ai_search.NamespaceUpdateParamsPublicEndpointParams{
-				AuthorizedHosts: cloudflare.F([]string{"string"}),
-				ChatCompletionsEndpoint: cloudflare.F(ai_search.NamespaceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint{
-					Disabled: cloudflare.F(true),
-				}),
-				CustomDomains:        cloudflare.F([]string{"search.example.com"}),
-				DefaultDomainEnabled: cloudflare.F(true),
-				Enabled:              cloudflare.F(true),
-				InstancesAllowed:     cloudflare.F([]string{"docs", "blog"}),
-				Mcp: cloudflare.F(ai_search.NamespaceUpdateParamsPublicEndpointParamsMcp{
-					Description: cloudflare.F("description"),
-					Disabled:    cloudflare.F(true),
-				}),
-				RateLimit: cloudflare.F(ai_search.NamespaceUpdateParamsPublicEndpointParamsRateLimit{
-					PeriodMs:  cloudflare.F(int64(60000)),
-					Requests:  cloudflare.F(int64(1)),
-					Technique: cloudflare.F(ai_search.NamespaceUpdateParamsPublicEndpointParamsRateLimitTechniqueFixed),
-				}),
-				SearchEndpoint: cloudflare.F(ai_search.NamespaceUpdateParamsPublicEndpointParamsSearchEndpoint{
-					Disabled: cloudflare.F(true),
-				}),
-			}),
 		},
 	)
 	if err != nil {

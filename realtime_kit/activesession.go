@@ -298,8 +298,10 @@ type ActiveSessionGetActiveSessionResponseData struct {
 	UpdatedAt     string        `json:"updated_at" api:"required"`
 	BreakoutRooms []interface{} `json:"breakout_rooms"`
 	// timestamp when session ended
-	EndedAt string                                        `json:"ended_at"`
-	JSON    activeSessionGetActiveSessionResponseDataJSON `json:"-"`
+	EndedAt string `json:"ended_at"`
+	// Any meta data about session.
+	Meta interface{}                                   `json:"meta"`
+	JSON activeSessionGetActiveSessionResponseDataJSON `json:"-"`
 }
 
 // activeSessionGetActiveSessionResponseDataJSON contains the JSON metadata for the
@@ -319,6 +321,7 @@ type activeSessionGetActiveSessionResponseDataJSON struct {
 	UpdatedAt                 apijson.Field
 	BreakoutRooms             apijson.Field
 	EndedAt                   apijson.Field
+	Meta                      apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
 }

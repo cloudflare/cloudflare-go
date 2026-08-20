@@ -103,39 +103,3 @@ func TestLogAuditListWithOptionalParams(t *testing.T) {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
 }
-
-func TestLogAuditHistoryWithOptionalParams(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Organizations.Logs.Audit.History(
-		context.TODO(),
-		"a67e14daa5f8dceeb91fe5449ba496ef",
-		"f174be97-19b1-40d6-954d-70cd5fbd52db",
-		organizations.LogAuditHistoryParams{
-			ActionTime: cloudflare.F(time.Now()),
-			Before:     cloudflare.F(time.Now()),
-			Since:      cloudflare.F(time.Now()),
-			Cursor:     cloudflare.F("Q1buH-__DQqqig7SVYXT-SsMOTGY2Z3Y80W-fGgva7yaDdmPKveucH5ddOcHsJRhNb-xUK8agZQqkJSMAENGO8NU6g=="),
-			Direction:  cloudflare.F(organizations.LogAuditHistoryParamsDirectionDesc),
-			Limit:      cloudflare.F(25.000000),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}

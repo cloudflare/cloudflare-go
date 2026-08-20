@@ -1,199 +1,78 @@
 # Changelog
 
-## 7.9.0 (2026-08-19)
-
-Full Changelog: [v7.8.0...v7.9.0](https://github.com/cloudflare/cloudflare-go/compare/v7.8.0...v7.9.0)
-
-### Breaking Changes
-
-See the [v7.9.0 Migration Guide](./docs/migration-guides/v7.9.0-migration-guide.md) for before/after code examples and actions needed for each change.
-
-* **billing:** `Usage.Paygo()` and `Usage.PaygoInfo()` endpoints changed from `/accounts/{account_id}/paygo-usage` and `/accounts/{account_id}/paygo-usage-info` to `/accounts/{account_id}/billable-usage` and `/accounts/{account_id}/billable-usage/info` respectively. The method signatures and return types are unchanged.
-* **hostnames:** `Settings.TLS.Get()` method signature changed -- now requires a `hostname` path parameter and returns `*Setting` instead of `*pagination.SinglePage[SettingTLSGetResponse]`. The `SettingTLSGetResponse` type and `GetAutoPaging()` method are removed. A new `List()` method replaces the old paginated listing behavior.
-* **intel:** `AttackSurfaceReport.Issues.Dismiss()` method removed along with `AttackSurfaceReportIssueDismissResponse` and `AttackSurfaceReportIssueDismissParams` types.
-* **rulesets:** return types changed for several mutating methods. `Rulesets.New()` now returns `*RulesetNewResponseEnvelopeResult` instead of `*RulesetNewResponse`. `Rulesets.Update()` now returns `*RulesetUpdateResponseEnvelopeResult` instead of `*RulesetUpdateResponse`. `Rulesets.Phases.Update()` now returns `*PhaseUpdateResponseEnvelopeResult` instead of `*PhaseUpdateResponse`. `Rulesets.Rules.New()` now returns `*RuleNewResponseEnvelopeResult` instead of `*RuleNewResponse`. `Rulesets.Rules.Delete()` now returns `*RuleDeleteResponseEnvelopeResult` instead of `*RuleDeleteResponse`. `Rulesets.Rules.Edit()` now returns `*RuleEditResponseEnvelopeResult` instead of `*RuleEditResponse`. The old response types (`RulesetNewResponse`, `RulesetUpdateResponse`, `PhaseUpdateResponse`, `RuleNewResponse`, `RuleDeleteResponse`, `RuleEditResponse`) are removed.
-* **zero_trust:** `ResourceLibrary.Applications.Get()` and `ResourceLibrary.Categories.Get()` `id` parameter type changed from `string` to `int64`. The `ID` field on `ResourceLibraryApplicationGetResponse` and `ResourceLibraryCategoryGetResponse` also changed from `string` to `int64`.
-* **zero_trust:** `Casb.Applications.List()` return type changed from `*[]CasbApplicationListResponse` to `*pagination.SinglePage[CasbApplicationListResponse]`. `Casb.Applications.AuthMethods.List()` return type changed from `*[]CasbApplicationAuthMethodListResponse` to `*pagination.SinglePage[CasbApplicationAuthMethodListResponse]`. `Casb.Integrations.List()` return type changed from `*CasbIntegrationListResponse` to `*pagination.SinglePage[CasbIntegrationListResponse]`. These methods now support auto-paging via `ListAutoPaging()`.
-* **zones:** `CT.Alerting.Edit()` and `CT.Alerting.Get()` return types changed from `*CTAlertingEditResponse` / `*CTAlertingGetResponse` to the shared `*CTAlertingSubscription` type. The old per-method response types are removed.
-
-### Features
-
-* **NEW SERVICE: `precursor`** -- Precursor configuration management
-    * `Update()` - PUT `/zones/{zone_id}/precursor`
-    * `Get()` - GET `/zones/{zone_id}/precursor`
-* **accounts:** add `SpeedSettings.Transformations.Get()` method (`GET /accounts/{account_id}/settings/transformations`)
-* **addressing:** add `Prefixes.Validate()` method (`POST /accounts/{account_id}/addressing/prefixes/{prefix_id}/validate`)
-* **billing:** add `Usage.GetAccountUsageInfoV1()`, `Usage.GetAccountUsageV1()`, and `Usage.GetAccountUsageV2()` methods for billable usage data
-* **custom_hostnames:** add `Quota.Get()` method (`GET /zones/{zone_id}/custom_hostnames/quota`)
-* **dns:** add `DNSSEC.Zsk.List()` method (`GET /zones/{zone_id}/dnssec/zsk`)
-* **hostnames:** add `Settings.TLS.List()` method (`GET /zones/{zone_id}/hostnames/settings/{setting_id}`) returning paginated `SettingTLSListResponse`
-* **intel:** add `URLs.Get()` method (`GET /accounts/{account_id}/intel/url`)
-* **intel:** add `Sinkholes.New()`, `Update()`, `Delete()`, `Get()` methods (list already existed). Add `Sinkholes.Ingresses` sub-resource with `New()`, `Update()`, `Delete()`, `Get()` methods.
-* **logs:** add `LogExplorer.Datasets.Delete()` method (`DELETE /{accounts_or_zones}/{account_or_zone_id}/logs/explorer/datasets/{dataset_id}`)
-* **pages:** add `Projects.GetUploadToken()` method (`GET /accounts/{account_id}/pages/projects/{project_name}/upload-token`)
-* **pages:** add `Projects.Deployments.Tails` sub-resource with `New()` and `Delete()` methods
-* **pages:** add `Assets` sub-resource with `CheckMissing()`, `Upload()`, and `UpsertHashes()` methods
-* **queues:** add `Messages.Peek()` and `Messages.Purge()` methods
-* **r2_data_catalog:** add `Delete()` method (`POST /accounts/{account_id}/r2-catalog/{bucket_name}/delete`)
-* **radar:** add `BGP.Routes.Upstreams.Timeseries()` method (`GET /radar/bgp/routes/upstreams/{asn}/timeseries`)
-* **radar:** add `BGP.Routes.Paths.List()` method (`GET /radar/bgp/routes/paths/{asn}`)
-* **resource_tagging:** add `Summary.Get()` method (`GET /accounts/{account_id}/tags/summary`)
-* **zero_trust:** add `Networks.Subnets.InitialResolvedIP` sub-resource with `Update()` and `Get()` methods
-* **zones:** add `TransformationsAllowedOrigins` sub-resource with `Edit()` and `Get()` methods
-* **zones:** add `TransformationsC2pa` sub-resource with `Edit()` and `Get()` methods
-* **magic_transit:** add `ConnectorEventGetResponseEKRekeyRestart` enum constant for connector events
-
-### Bug Fixes
-
-- **apijson:** replace O(n^2) array encoding with O(n) `bytes.Buffer` implementation, significantly improving performance for large arrays
-
-## 7.8.0 (2026-07-24)
-
-Full Changelog: [v7.7.0...v7.8.0](https://github.com/cloudflare/cloudflare-go/compare/v7.7.0...v7.8.0)
-
-### Breaking Changes
-
-See the [v7.8.0 Migration Guide](./docs/migration-guides/v7.8.0-migration-guide.md) for before/after code examples and actions needed for each change.
-
-* **acm:** `CertificateAuthority` param and response type removed from the `acm` package. Callers referencing this type directly must update.
-* **brand_protection:** `V2.Queries.Get()` return type changed from `*[]V2QueryGetResponse` to `*V2QueryGetResponseUnion`. The `V2QueryGetResponse` type is removed; use the new union type and handle variants via `.AsUnion()`.
-* **certificate_authorities:** `HostnameAssociationParam` and `HostnameAssociation` types removed. Use `TLSHostnameAssociationParam` and the per-method response types instead.
-* **cloudforce_one:** `ThreatEvents.IndicatorTypes` sub-resource relocated to `ThreatEvents.Indicators.Types`. The endpoint path changed from `/events/indicatorTypes` to `/events/indicator-types`. The type name `ThreatEventIndicatorTypeListResponse` is unchanged.
-* **custom_certificates:** `Status` response type removed from the `custom_certificates` package.
-* **hyperdrive:** `Configs.List()` pagination type changed from `SinglePage[Hyperdrive]` to `V4PagePaginationArray[Hyperdrive]`. The second parameter name changed from `query` to `params`.
-* **moq:** `Relays.Tokens.Rotate()` method removed along with `RelayTokenRotateResponse` and `RelayTokenRotateParams`. Replaced by full CRUD: `Tokens.New()`, `Tokens.List()`, `Tokens.Delete()`.
-* **mtls_certificates:** shared `MTLSCertificate` response type removed. `List()`, `Delete()`, and `Get()` now return `MTLSCertificateListResponse`, `MTLSCertificateDeleteResponse`, and `MTLSCertificateGetResponse` respectively.
-* **ssl:** `HostParam`, `Host`, `Status`, and `ValidationMethod` types removed from the `ssl` package.
-* **zero_trust:** `Casb.Applications.SetupFlows` sub-resource renamed to `Casb.Applications.AuthMethods`. The `CasbApplicationSetupFlowListResponse` type is replaced by `CasbApplicationAuthMethodListResponse`. The path parameter on `Applications.Get()` changed from `slug` (`CasbApplicationGetParamsSlug`) to `applicationID` (`CasbApplicationGetParamsApplicationID`).
-
-### Features
-
-* **NEW SERVICE: `registrar_sandbox`** -- test domain registration flows without buying real domains
-  * `client.RegistrarSandbox.Check`, `client.RegistrarSandbox.Search`
-  * `Registrations.{New,List,Edit,Get}`
-  * `RegistrationStatus.Get`, `UpdateStatus.Get`
-  * `Extensions.{List,Get}`
-* **NEW SERVICE: `AnalyticsQuery`** -- analytics query API at the top-level client
-  * `client.AnalyticsQuery.Summary`, `client.AnalyticsQuery.Timeseries`, `client.AnalyticsQuery.TopN`
-  * `DataSecurity.ContentFindings.TopN`
-  * `DataSecurity.Findings.{Summary,Timeseries}`
-* **ai_audit:** add `Robots.BulkGet` and `Robots.Get` methods
-* **billing:** add `Usage.PaygoInfo` method (`GET /accounts/{account_id}/paygo-usage-info`)
-* **cloudforce_one:** major expansion of `ThreatEvents` sub-resources:
-  * `Aggregate.List`, `Graphql.New`, `Graph.List`
-  * `Queries.{New,List,Delete,Edit,Get}`
-  * `Relationships.List`
-  * `Indicators.{List,Aggregate,ByDataset,ByDataset.Tags}`
-  * `Categories.Catalog.List`
-  * `Datasets.{Delete,Events.Get}`
-  * `Tags.{List,Delete,Edit}` + `Tags.Categories.{New,Update,List,Delete,Get}` + `Tags.Indicators`, `Tags.Indicators.ByDataset`
-  * `TargetIndustries.{ByDataset.List,Catalog.List}`
-* **email_routing:** add `Update`, `Edit` methods on the root service; add `Rules.List` and `AccountRules.List` methods
-* **email_security:** add `Settings.Domains.BulkDelete` method
-* **magic_transit:** add `Connectors.Interrupts` sub-resource (`New`, `List`)
-* **moq:** add `Relays.Tokens.{New,List,Delete}` methods (replacing `Rotate`)
-* **registrar:** add `Extensions` sub-resource (`List`, `Get`)
-* **zero_trust:** add `Casb.Posture` sub-resource tree (~40 new methods):
-  * `Findings.{List,Export,Get,Ignore,ResetSeverity,TuneSeverity,Unignore}`
-  * `Findings.Instances.{List,Archive,Export,Get,Unarchive}`
-  * `Exports.{List,Get}`
-  * `FindingTypes.{List,Get}` + `FindingTypes.RemediationTypes.List`
-  * `Content.{List,Export}`
-  * `Remediations.Jobs.{New,List,Export}`
-  * `Webhooks.{New,Update,List,Delete,Evaluate,EvaluateExisting,Get}` + `Webhooks.Jobs.New`
-* **accounts:** `Subscriptions.New` and `Subscriptions.Get` now support both account-level and zone-level paths (`/{accounts_or_zones}/{account_or_zone_id}/subscriptions`). Params accept both `AccountID` and `ZoneID` (mutually exclusive); existing `AccountID`-only callers are unaffected.
-* **load_balancers:** endpoints now support both account-level and zone-level paths (`/{accounts_or_zones}/{account_or_zone_id}/load_balancers`). Params accept both `AccountID` and `ZoneID`; existing `ZoneID`-only callers are unaffected.
-
-## 7.7.0 (2026-07-08)
-
-Full Changelog: [v7.6.0...v7.7.0](https://github.com/cloudflare/cloudflare-go/compare/v7.6.0...v7.7.0)
-
-### Breaking Changes
-
-See the [v7.7.0 Migration Guide](./docs/migration-guides/v7.7.0-migration-guide.md) for before/after code examples and actions needed for each change.
-
-* **ssl:** `Recommendations.Get` method and `RecommendationGetResponse` / `RecommendationGetParams` types removed.
-* **ai_gateway, workflows, zero_trust/dlpemailaccountmapping:** merged-union parent fields with same-name-different-type collisions changed from a variant-struct type to `interface{}`. Affected fields:
-  * `ai_gateway.AIGateway{New,Update,List,Delete,Get}ResponseSpendLimitsRulesMetadata.Mode` (5 structs)
-  * `workflows.VersionGraphResponseGraphWorkflowPayload.Type`
-  * `zero_trust.DLPEmailAccountMapping{New,Get}ResponseAuthRequirements.Type` (2 structs)
-
-  These fields were unreadable in the previous type (marshaling panicked with `reflect: call of reflect.Value.SetString on struct Value`). The new `interface{}` type matches the codegen pattern used by sibling merged fields on the same structs (e.g. `Values`, `Fields`, `AllowedMicrosoftOrganizations`); callers should switch on the parent union via `AsUnion()` for a strongly-typed variant.
-
-* **zero_trust:** `Devices.DEXTests.{New,Update,List,Get}` response type renamed from `DeviceDEXTest{New,Update,List,Get}Response` to the shared `SchemaHTTP`; field structure unchanged. Nested types renamed accordingly (e.g. `DeviceDEXTestNewResponseData` → `SchemaData`, `DeviceDEXTestNewResponseTargetPolicy` → `SchemaHTTPTargetPolicy`). Callers using `:=` inference and field access continue to compile; callers referencing the removed type names must update to `SchemaHTTP`.
-* **zero_trust:** `Devices.IPProfiles.List` pagination changed from `pagination.SinglePage[IPProfile]` to `pagination.V4PagePaginationArray[IPProfile]`. `.Result` field access and `ListAutoPaging()` iteration continue to work; callers referencing the pagination type by name must update.
-
-### Features
-
-* **NEW SERVICE: `email_auth`** &mdash; DMARC reports edit/get and SPF inspect
-  * `client.EmailAuth.DMARCReports.Edit`
-  * `client.EmailAuth.DMARCReports.Get`
-  * `client.EmailAuth.SPF.Inspect.Get`
-* **NEW SERVICE: `moq`** &mdash; Media over QUIC relay management
-  * `client.MoQ.Relays.{New,Update,List,Delete,Get}`
-  * `client.MoQ.Relays.Tokens.Rotate`
-* **zero_trust:** publish CASB APIs (`client.ZeroTrust.Casb.*`)
-  * `Applications.{List,Get}` + `Applications.SetupFlows.List`
-  * `Integrations.{New,Update,List,Delete,Get,Pause,Resume}`
-* **logs:** add `LogExplorer` sub-resource
-  * `LogExplorer.Query.Sql`
-  * `LogExplorer.Datasets.{New,Update,List,Get}`
-  * `LogExplorer.Datasets.Available.List`
-* **browser_rendering:** add `AccessibilityTree.New` method
-* **email_routing:** add `EmailRouting.Unlock` and `EmailRouting.Addresses.Edit` methods
-* **email_routing:** add `AccountRules.List` method (`GET /accounts/{account_id}/email/routing/rules`) returning `AccountRule` with new `Zone` field; `Rules.List` gains optional `AccountID` param (mutually exclusive with `ZoneID`) so callers can list rules by account or zone
-* **email_security:** add bulk investigation APIs
-  * `Investigate.Bulk.{New,List,Delete,Get}`
-  * `Investigate.Bulk.Cancel.New`
-  * `Investigate.Bulk.Messages.List`
-* **accounts:** add `Logs.Audit.History` and `Logs.Audit.ProductCategories` methods
-* **organizations:** add `Logs.Audit.History` method
-
-### Bug Fixes
-
-* **ai_gateway, workflows, zero_trust/dlpemailaccountmapping:** fix panics on union-merged parent field decoding by switching same-name-different-type merged fields from a variant-struct type to `interface{}` ([3de4191](https://github.com/cloudflare/cloudflare-go/commit/3de4191de))
-* **browser_rendering:** `AccessibilityTreeNewParamsBodyObject` now uses `URL` (matching the generated test fixture) instead of `HTML` ([0f44441](https://github.com/cloudflare/cloudflare-go/commit/0f4444190))
-* **dns:** restore `Shadow*` query params on `RecordListParams` and `IncludeShadowMetadata` on `Record{New,Update,List,Batch,Edit,Get}Params` after a codegen regression dropped them ([f9b3f27](https://github.com/cloudflare/cloudflare-go/commit/f9b3f274a))
-
-### Chores
-
-* **api:** update composite API spec (20+ codegen sync commits)
-* **ci:** bump CI job timeouts to 30 minutes ([6cad6cb](https://github.com/cloudflare/cloudflare-go/commit/6cad6cb57))
-* **ci:** unblock test job by installing nodejs/npm for prism mock server ([3de4191](https://github.com/cloudflare/cloudflare-go/commit/3de4191de))
-* apply accumulated custom code (CI jobs, GitLab config) ([eb2bf2b](https://github.com/cloudflare/cloudflare-go/commit/eb2bf2b10))
-
-## 7.6.0 (2026-06-16)
+## 7.6.0 (2026-08-20)
 
 Full Changelog: [v7.5.0...v7.6.0](https://github.com/cloudflare/cloudflare-go/compare/v7.5.0...v7.6.0)
 
 ### Features
 
-* feat(ai_gateway): add custom_providers resource ([d7b56dc](https://github.com/cloudflare/cloudflare-go/commit/d7b56dc682ccb2a112e5c499bcdd7f8f5f16d1da))
-* feat(api): map ipsec_tunnels/psk, sites/app_policies and cf1_sites for magic-on-ramps ([8c090a8](https://github.com/cloudflare/cloudflare-go/commit/8c090a82ce354136733d9d01ce33e750dcc11315))
-* feat(ct_alerter): add CT alerting subscription endpoint mappings ([1fbd47d](https://github.com/cloudflare/cloudflare-go/commit/1fbd47d82e5f7ce28a00ae24189614fbf2d40bd0))
-* feat(tenants): add tenants resource SDK mapping [PT-2567] ([8e4faec](https://github.com/cloudflare/cloudflare-go/commit/8e4faeca3d1c8aed151d1f32d0d7095192205e63))
+* **email_routing:** add AccountRules.List and restore Rules.List ([ccd5db9](https://github.com/cloudflare/cloudflare-go/commit/ccd5db991d0306e0c9ab12ca09e4f33f34129b82))
+* **email_routing:** add AccountRules.List and restore Rules.List ([f6ccd62](https://github.com/cloudflare/cloudflare-go/commit/f6ccd62c7594c7fdca5c0a5cd69b39c67ada6bd5))
+* feat: add MoQ relays to prod (RT-603) ([b92374d](https://github.com/cloudflare/cloudflare-go/commit/b92374d78a0bfd1ee194c15a64b85855581993ca))
+* feat: ES-13122 Add email-auth API endpoints ([de6a694](https://github.com/cloudflare/cloudflare-go/commit/de6a694655cd49c1239dbafd1e51714773071cb0))
+* feat(casb): publish CASB APIs to public SDK ([e023472](https://github.com/cloudflare/cloudflare-go/commit/e023472b86a9990fb2a5a8b18c2c72435680e4f2))
+* feat(email_security): Add API to do bulk message movements and quarantine releases ([43cca81](https://github.com/cloudflare/cloudflare-go/commit/43cca814cbbdbbc64253fb973e3ac29d6f9a7f17))
+* feat(lex): add Log Explorer to SDK config ([b008758](https://github.com/cloudflare/cloudflare-go/commit/b00875875ce954af023c7773b97c1b54839b2337))
+* fix(moq): render MoQ via explicit custom casing (RT-603) ([b684bae](https://github.com/cloudflare/cloudflare-go/commit/b684bae40e86fdbd3e2e4400cce8a9c8476b122a))
+
+
+### Bug Fixes
+
+* **apijson:** replace O(n^2) array encoding with O(n) bytes.Buffer ([ffbaacb](https://github.com/cloudflare/cloudflare-go/commit/ffbaacbe264b03d612bf5e50d6cdea104ff60b83))
+* **browser_rendering:** swap HTML for URL on AccessibilityTreeNewParamsBodyObject to match generated test ([0f44441](https://github.com/cloudflare/cloudflare-go/commit/0f44441905b8e0a5f2fa3b0a0b5f0fd51c9b86f7))
+* **dns:** restore Shadow* query params on RecordListParams and IncludeShadowMetadata on Record{New,Update,List,Batch,Edit,Get}Params ([f9b3f27](https://github.com/cloudflare/cloudflare-go/commit/f9b3f274a09f4dc214546b431d8a067c5bffc720))
+* resolve duplicate type declarations in rulesets package ([be58c93](https://github.com/cloudflare/cloudflare-go/commit/be58c93577f05d83437afcb2c2eec5261958521e))
+* restore RekeyRestart enum constants in magic_transit connector events ([ff96be7](https://github.com/cloudflare/cloudflare-go/commit/ff96be78320fca09ffe30cf534c943de897095ad))
 
 
 ### Chores
 
-* **api:** update composite API spec ([5053a77](https://github.com/cloudflare/cloudflare-go/commit/5053a772a0ae6460954320a042ff43a983539888))
-* **api:** update composite API spec ([6acef20](https://github.com/cloudflare/cloudflare-go/commit/6acef2064bcb82d5e20028b10f5f2e9ecd277172))
-* **api:** update composite API spec ([109d3e8](https://github.com/cloudflare/cloudflare-go/commit/109d3e82e9fa2a86c6ccff4cea499b1cc37f209b))
-* **api:** update composite API spec ([d1f1bea](https://github.com/cloudflare/cloudflare-go/commit/d1f1bea01dfc61ba7535a1ece7b0b7cb6caaeae6))
-* **api:** update composite API spec ([e2e533b](https://github.com/cloudflare/cloudflare-go/commit/e2e533b3d773180e4f22a8f0f5ef783454dfb105))
-* **api:** update composite API spec ([0ac6cd6](https://github.com/cloudflare/cloudflare-go/commit/0ac6cd641ce54837a46fc4fdffb7e0cb5327c10d))
-* **api:** update composite API spec ([cef1247](https://github.com/cloudflare/cloudflare-go/commit/cef1247e79574337e82328f4d17f5e5f889ca21a))
-* **api:** update composite API spec ([295c30e](https://github.com/cloudflare/cloudflare-go/commit/295c30ee385c30d4522842b425f5a172e7e120db))
-* **api:** update composite API spec ([c362e95](https://github.com/cloudflare/cloudflare-go/commit/c362e95004dfff2cfa39ad032827c59ae4fa79de))
-* **api:** update composite API spec ([4321a13](https://github.com/cloudflare/cloudflare-go/commit/4321a137245de5df032f2bd09a1b1e82cd450635))
-* **api:** update composite API spec ([fae4f51](https://github.com/cloudflare/cloudflare-go/commit/fae4f5121412e3f0b537c7e014425581594616bb))
-* **api:** update composite API spec ([47fa180](https://github.com/cloudflare/cloudflare-go/commit/47fa1808c80096ed6177f4966d200f9a6b876951))
-* **api:** update composite API spec ([835c44d](https://github.com/cloudflare/cloudflare-go/commit/835c44dc4d403df781e1faf8b9526a804f2f4e4d))
+* add v7.9.0 changelog and migration guide ([7f8843b](https://github.com/cloudflare/cloudflare-go/commit/7f8843bf13971cf289cba8fb3461ef4fa95675e2))
+* adjust casbapplication to generated code ([74aeeea](https://github.com/cloudflare/cloudflare-go/commit/74aeeeae7fca8e56310b6f3fd52d7c091b87eb2a))
+* **api:** update composite API spec ([dbca6aa](https://github.com/cloudflare/cloudflare-go/commit/dbca6aaedd0646ea6759873854f78e1d883d9efc))
+* **api:** update composite API spec ([20d6ecd](https://github.com/cloudflare/cloudflare-go/commit/20d6ecd693d257fee5c8161083a400aa2db34b04))
+* **api:** update composite API spec ([d323ad4](https://github.com/cloudflare/cloudflare-go/commit/d323ad4059fdd7cb79dd56d09e9b873ecf35d352))
+* **api:** update composite API spec ([add9c23](https://github.com/cloudflare/cloudflare-go/commit/add9c23370d3a5dd8868413780f5a2383fc0b7ed))
+* **api:** update composite API spec ([dcacfed](https://github.com/cloudflare/cloudflare-go/commit/dcacfed9e02c1bb1b1c380005c2bd88796662b81))
+* **api:** update composite API spec ([23b53b6](https://github.com/cloudflare/cloudflare-go/commit/23b53b6be0673b94326efef6160874a8f88b4069))
+* **api:** update composite API spec ([43d78b5](https://github.com/cloudflare/cloudflare-go/commit/43d78b5849e9fac6b76e12de178e61c4465d5b33))
+* **api:** update composite API spec ([88a4d5d](https://github.com/cloudflare/cloudflare-go/commit/88a4d5dbc7b8bb70910ad3346b4df48f68ff4b98))
+* **api:** update composite API spec ([be52bf1](https://github.com/cloudflare/cloudflare-go/commit/be52bf1de9b64434733946faf594323be1b9c3c1))
+* **api:** update composite API spec ([c9aa9fe](https://github.com/cloudflare/cloudflare-go/commit/c9aa9fe64037c0f005951445984fc58aecc64d73))
+* **api:** update composite API spec ([c77d457](https://github.com/cloudflare/cloudflare-go/commit/c77d4571fd5bc2cf4299d2c2cbf3b9f864f5277d))
+* **api:** update composite API spec ([639b8af](https://github.com/cloudflare/cloudflare-go/commit/639b8af33557f5d13e60bd61a1fa4a70772e172a))
+* **api:** update composite API spec ([b01a29a](https://github.com/cloudflare/cloudflare-go/commit/b01a29ac7599fc269caba55a3d3d897f1dac1d32))
+* **api:** update composite API spec ([573d9fb](https://github.com/cloudflare/cloudflare-go/commit/573d9fb311cb5d3abc4dd893413924f7785daebb))
+* **api:** update composite API spec ([6787268](https://github.com/cloudflare/cloudflare-go/commit/67872682e8ab8cb0d83f4e138cebb8f6bd1ec927))
+* **api:** update composite API spec ([8235bcf](https://github.com/cloudflare/cloudflare-go/commit/8235bcf1a2c79405b673aff986163bff0724b940))
+* **api:** update composite API spec ([6622331](https://github.com/cloudflare/cloudflare-go/commit/66223311646c8db527c0944a6f5b0e3e029101e5))
+* **api:** update composite API spec ([a1af84e](https://github.com/cloudflare/cloudflare-go/commit/a1af84e62276cdccb9cabfd6b6897db9f880befc))
+* **api:** update composite API spec ([58229bb](https://github.com/cloudflare/cloudflare-go/commit/58229bb4b18f85a0e3e56d1a5c35d962de00c10b))
+* **api:** update composite API spec ([f4f7261](https://github.com/cloudflare/cloudflare-go/commit/f4f7261c447255b1026594f6fd73a362fc905eb8))
+* apply accumulated custom code (ci jobs, gitlab config) ([eb2bf2b](https://github.com/cloudflare/cloudflare-go/commit/eb2bf2b10e8aa737ae0e15b125bd017900ca52a7))
+* bump version to 7.8.0 ([05e00a7](https://github.com/cloudflare/cloudflare-go/commit/05e00a707da7f480eee12cc3c18e920df8ef077b))
+* bump version to 7.9.0 ([b422b7a](https://github.com/cloudflare/cloudflare-go/commit/b422b7a39fb01744ec6f06a5770f332e8653d186))
+* drop .gitlab-ci.yml from GitHub branch ([fa6abc7](https://github.com/cloudflare/cloudflare-go/commit/fa6abc72d07d0a4a21570ce0141bd9cbe7652c71))
+* drop .gitlab-ci.yml from GitHub branch ([702a799](https://github.com/cloudflare/cloudflare-go/commit/702a79959bbfac1c2ae861a2d7d00f51dc66c550))
+* **internal:** codegen related update ([14b5631](https://github.com/cloudflare/cloudflare-go/commit/14b56316aff0c77a9ab1adc82c4eaa703ab21262))
+* **main:** release 7.7.0 ([2fa539e](https://github.com/cloudflare/cloudflare-go/commit/2fa539edbd02e1e913208b5e59f892910159f76c))
+* merge origin/main, resolve load_balancers conflicts ([06ec84b](https://github.com/cloudflare/cloudflare-go/commit/06ec84baaec3e8f5f6a3bd3132ca7065ba3cdfda))
+* resolve load_balancers merge conflicts, take HEAD ([7bab325](https://github.com/cloudflare/cloudflare-go/commit/7bab3256f15942fbd71859732a65aeec3e19c5d2))
+* resolve merge conflicts and apply custom code fixes ([ebd62ba](https://github.com/cloudflare/cloudflare-go/commit/ebd62ba49fde4a17ee8c2058b78f35882cf5917a))
+* revert docs/migration-guides changes ([39f8d1e](https://github.com/cloudflare/cloudflare-go/commit/39f8d1eb7f3ab5b9a2c365759a9747db0cd9a51b))
+* revert SECURITY.md and client_test.go changes ([980835a](https://github.com/cloudflare/cloudflare-go/commit/980835a9e017c48f33ca1bf54383a13edabbfba7))
+* sync repo ([bf062a8](https://github.com/cloudflare/cloudflare-go/commit/bf062a8ae53afaeadf824583e2b91295f56acbd3))
+* unblock CI test job and fix union field merge panics ([3de4191](https://github.com/cloudflare/cloudflare-go/commit/3de4191de27911384542b9c40f362003456c0147))
+* update go codegen refs ([a3e8cad](https://github.com/cloudflare/cloudflare-go/commit/a3e8cad3180f37ffe4f95cc7d047d21a966decc9))
+* update go custom code ([5eee140](https://github.com/cloudflare/cloudflare-go/commit/5eee140a96adc5ea9c0e9793c57999f7bccd62bd))
+* update README install command to v7.9.0 ([71a557a](https://github.com/cloudflare/cloudflare-go/commit/71a557a1b64e3fe3ab77e895fcc765589477fd0c))
 
 
 ### Documentation
 
-* add v7.6.0 migration guide ([f27940b](https://github.com/cloudflare/cloudflare-go/commit/f27940b228914e7b7d924b16ad440574f356e0cc))
+* **changelog:** add v7.8.0 changelog and migration guide ([28fa46c](https://github.com/cloudflare/cloudflare-go/commit/28fa46c25c45de21a76d8f6a386add5b806af62f))
+* **changelog:** document additional breaking changes for DEXTests and IPProfiles ([24980ca](https://github.com/cloudflare/cloudflare-go/commit/24980caa8e6893fb08870f260d51282bf07381e4))
+* **changelog:** document additional breaking changes for DEXTests and IPProfiles ([98f79b6](https://github.com/cloudflare/cloudflare-go/commit/98f79b682c2e6947e6dfc086daeda2268ecc79e6))
 
 ## 7.5.0 (2026-06-10)
 

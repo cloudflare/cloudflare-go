@@ -348,7 +348,7 @@ func (r gatewayPacfileNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayPacfileNewResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayPacfileNewResponseEnvelopeSuccess bool
 
 const (
@@ -405,7 +405,7 @@ func (r gatewayPacfileUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayPacfileUpdateResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayPacfileUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -456,7 +456,7 @@ func (r gatewayPacfileDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayPacfileDeleteResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayPacfileDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -503,7 +503,7 @@ func (r gatewayPacfileGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayPacfileGetResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayPacfileGetResponseEnvelopeSuccess bool
 
 const (

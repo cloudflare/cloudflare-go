@@ -179,7 +179,7 @@ func (r gatewayNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayNewResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayNewResponseEnvelopeSuccess bool
 
 const (
@@ -226,7 +226,7 @@ func (r gatewayListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayListResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayListResponseEnvelopeSuccess bool
 
 const (

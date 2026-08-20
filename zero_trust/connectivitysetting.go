@@ -160,7 +160,7 @@ func (r connectivitySettingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// ConnectivitySettingEditResponseEnvelopeSuccess indicates whether the API call was successful
 type ConnectivitySettingEditResponseEnvelopeSuccess bool
 
 const (
@@ -208,7 +208,7 @@ func (r connectivitySettingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// ConnectivitySettingGetResponseEnvelopeSuccess indicates whether the API call was successful
 type ConnectivitySettingGetResponseEnvelopeSuccess bool
 
 const (

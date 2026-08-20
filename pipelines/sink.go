@@ -84,7 +84,7 @@ func (r *SinkService) ListAutoPaging(ctx context.Context, params SinkListParams,
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete Sink in Account.
+// Delete Pipeline in Account.
 func (r *SinkService) Delete(ctx context.Context, sinkID string, params SinkDeleteParams, opts ...option.RequestOption) (res *SinkDeleteResponse, err error) {
 	var env SinkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

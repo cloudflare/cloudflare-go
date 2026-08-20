@@ -152,27 +152,6 @@ func (r *ProjectService) Get(ctx context.Context, projectName string, query Proj
 	return res, nil
 }
 
-// Get a short-lived JWT for Pages Direct Upload asset operations.
-func (r *ProjectService) GetUploadToken(ctx context.Context, projectName string, query ProjectGetUploadTokenParams, opts ...option.RequestOption) (res *ProjectGetUploadTokenResponse, err error) {
-	var env ProjectGetUploadTokenResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	if projectName == "" {
-		err = errors.New("missing required project_name parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/upload-token", query.AccountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
-}
-
 // Purge all cached build artifacts for a Pages project
 func (r *ProjectService) PurgeBuildCache(ctx context.Context, projectName string, body ProjectPurgeBuildCacheParams, opts ...option.RequestOption) (res *ProjectPurgeBuildCacheResponse, err error) {
 	var env ProjectPurgeBuildCacheResponseEnvelope
@@ -227,8 +206,6 @@ type Deployment struct {
 	Stages []Stage `json:"stages" api:"required"`
 	// The live URL to view this deployment.
 	URL string `json:"url" api:"required"`
-	// Why the deployment was skipped.
-	SkipReason DeploymentSkipReason `json:"skip_reason" api:"nullable"`
 	// Whether the deployment uses functions.
 	UsesFunctions bool           `json:"uses_functions" api:"nullable"`
 	JSON          deploymentJSON `json:"-"`
@@ -252,7 +229,6 @@ type deploymentJSON struct {
 	Source            apijson.Field
 	Stages            apijson.Field
 	URL               apijson.Field
-	SkipReason        apijson.Field
 	UsesFunctions     apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -679,26 +655,6 @@ const (
 func (r DeploymentSourceType) IsKnown() bool {
 	switch r {
 	case DeploymentSourceTypeGitHub, DeploymentSourceTypeGitlab:
-		return true
-	}
-	return false
-}
-
-// Why the deployment was skipped.
-type DeploymentSkipReason string
-
-const (
-	DeploymentSkipReasonCommitMessage                 DeploymentSkipReason = "commit_message"
-	DeploymentSkipReasonPreviewDeploymentsDisabled    DeploymentSkipReason = "preview_deployments_disabled"
-	DeploymentSkipReasonProductionDeploymentsDisabled DeploymentSkipReason = "production_deployments_disabled"
-	DeploymentSkipReasonPathConfig                    DeploymentSkipReason = "path_config"
-	DeploymentSkipReasonBranchConfig                  DeploymentSkipReason = "branch_config"
-	DeploymentSkipReasonPagesToWorkersConversion      DeploymentSkipReason = "pages_to_workers_conversion"
-)
-
-func (r DeploymentSkipReason) IsKnown() bool {
-	switch r {
-	case DeploymentSkipReasonCommitMessage, DeploymentSkipReasonPreviewDeploymentsDisabled, DeploymentSkipReasonProductionDeploymentsDisabled, DeploymentSkipReasonPathConfig, DeploymentSkipReasonBranchConfig, DeploymentSkipReasonPagesToWorkersConversion:
 		return true
 	}
 	return false
@@ -2225,28 +2181,6 @@ func (r StageStatus) IsKnown() bool {
 }
 
 type ProjectDeleteResponse = interface{}
-
-type ProjectGetUploadTokenResponse struct {
-	// Short-lived JWT used to authenticate Pages Direct Upload asset operations.
-	JWT  string                            `json:"jwt" api:"required"`
-	JSON projectGetUploadTokenResponseJSON `json:"-"`
-}
-
-// projectGetUploadTokenResponseJSON contains the JSON metadata for the struct
-// [ProjectGetUploadTokenResponse]
-type projectGetUploadTokenResponseJSON struct {
-	JWT         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectGetUploadTokenResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectGetUploadTokenResponseJSON) RawJSON() string {
-	return r.raw
-}
 
 type ProjectPurgeBuildCacheResponse = interface{}
 
@@ -4330,150 +4264,6 @@ const (
 func (r ProjectGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case ProjectGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ProjectGetUploadTokenParams struct {
-	// Identifier.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-}
-
-type ProjectGetUploadTokenResponseEnvelope struct {
-	Errors   []ProjectGetUploadTokenResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []ProjectGetUploadTokenResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   ProjectGetUploadTokenResponse                   `json:"result" api:"required"`
-	// Whether the API call was successful.
-	Success ProjectGetUploadTokenResponseEnvelopeSuccess `json:"success" api:"required"`
-	JSON    projectGetUploadTokenResponseEnvelopeJSON    `json:"-"`
-}
-
-// projectGetUploadTokenResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ProjectGetUploadTokenResponseEnvelope]
-type projectGetUploadTokenResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectGetUploadTokenResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectGetUploadTokenResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectGetUploadTokenResponseEnvelopeErrors struct {
-	Code             int64                                             `json:"code" api:"required"`
-	Message          string                                            `json:"message" api:"required"`
-	DocumentationURL string                                            `json:"documentation_url"`
-	Source           ProjectGetUploadTokenResponseEnvelopeErrorsSource `json:"source"`
-	JSON             projectGetUploadTokenResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// projectGetUploadTokenResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ProjectGetUploadTokenResponseEnvelopeErrors]
-type projectGetUploadTokenResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ProjectGetUploadTokenResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectGetUploadTokenResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectGetUploadTokenResponseEnvelopeErrorsSource struct {
-	Pointer string                                                `json:"pointer"`
-	JSON    projectGetUploadTokenResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// projectGetUploadTokenResponseEnvelopeErrorsSourceJSON contains the JSON metadata
-// for the struct [ProjectGetUploadTokenResponseEnvelopeErrorsSource]
-type projectGetUploadTokenResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectGetUploadTokenResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectGetUploadTokenResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectGetUploadTokenResponseEnvelopeMessages struct {
-	Code             int64                                               `json:"code" api:"required"`
-	Message          string                                              `json:"message" api:"required"`
-	DocumentationURL string                                              `json:"documentation_url"`
-	Source           ProjectGetUploadTokenResponseEnvelopeMessagesSource `json:"source"`
-	JSON             projectGetUploadTokenResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// projectGetUploadTokenResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ProjectGetUploadTokenResponseEnvelopeMessages]
-type projectGetUploadTokenResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ProjectGetUploadTokenResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectGetUploadTokenResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectGetUploadTokenResponseEnvelopeMessagesSource struct {
-	Pointer string                                                  `json:"pointer"`
-	JSON    projectGetUploadTokenResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// projectGetUploadTokenResponseEnvelopeMessagesSourceJSON contains the JSON
-// metadata for the struct [ProjectGetUploadTokenResponseEnvelopeMessagesSource]
-type projectGetUploadTokenResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectGetUploadTokenResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectGetUploadTokenResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type ProjectGetUploadTokenResponseEnvelopeSuccess bool
-
-const (
-	ProjectGetUploadTokenResponseEnvelopeSuccessTrue ProjectGetUploadTokenResponseEnvelopeSuccess = true
-)
-
-func (r ProjectGetUploadTokenResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ProjectGetUploadTokenResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

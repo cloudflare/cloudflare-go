@@ -249,7 +249,7 @@ func (r DevicePolicyCustomNewParamsDNSSearchSuffix) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-// Global Acceleration settings for China. When configured, WARP clients connect to
+// DevicePolicyCustomNewParamsGlobalAcceleration global Acceleration settings for China. When configured, WARP clients connect to
 // the Global Accelerator addresses instead of the default ones. Please contact
 // your account representative to enable this feature on your account. See
 // https://developers.cloudflare.com/china-network/concepts/global-acceleration/.
@@ -281,7 +281,7 @@ func (r DevicePolicyCustomNewParamsServiceModeV2) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-// Virtual network access settings for the device.
+// DevicePolicyCustomNewParamsVirtualNetworks virtual network access settings for the device.
 type DevicePolicyCustomNewParamsVirtualNetworks struct {
 	// List of virtual network IDs the device is allowed to access. When
 	// virtual_networks is set, at least one entry is required.
@@ -322,7 +322,7 @@ func (r devicePolicyCustomNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DevicePolicyCustomNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DevicePolicyCustomNewResponseEnvelopeSuccess bool
 
 const (
@@ -432,7 +432,7 @@ func (r DevicePolicyCustomEditParamsDNSSearchSuffix) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-// Global Acceleration settings for China. When configured, WARP clients connect to
+// DevicePolicyCustomEditParamsGlobalAcceleration global Acceleration settings for China. When configured, WARP clients connect to
 // the Global Accelerator addresses instead of the default ones. Please contact
 // your account representative to enable this feature on your account. See
 // https://developers.cloudflare.com/china-network/concepts/global-acceleration/.
@@ -464,7 +464,7 @@ func (r DevicePolicyCustomEditParamsServiceModeV2) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// Virtual network access settings for the device.
+// DevicePolicyCustomEditParamsVirtualNetworks virtual network access settings for the device.
 type DevicePolicyCustomEditParamsVirtualNetworks struct {
 	// List of virtual network IDs the device is allowed to access. When
 	// virtual_networks is set, at least one entry is required.
@@ -505,7 +505,7 @@ func (r devicePolicyCustomEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DevicePolicyCustomEditResponseEnvelopeSuccess indicates whether the API call was successful.
 type DevicePolicyCustomEditResponseEnvelopeSuccess bool
 
 const (
@@ -552,7 +552,7 @@ func (r devicePolicyCustomGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DevicePolicyCustomGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DevicePolicyCustomGetResponseEnvelopeSuccess bool
 
 const (

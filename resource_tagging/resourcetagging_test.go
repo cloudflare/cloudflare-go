@@ -29,9 +29,7 @@ func TestResourceTaggingListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ResourceTagging.List(context.TODO(), resource_tagging.ResourceTaggingListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ID:        cloudflare.F([]string{"023e105f4ecef8ad9ca31a8372d0c353"}),
 		Cursor:    cloudflare.F("eyJhY2NvdW50X2lkIjoxMjM0NTY3ODkwfQ"),
-		Name:      cloudflare.F("name"),
 		Tag:       cloudflare.F([]string{"production", "env=prod", "env=prod,staging", "!archived", "region!=us-west-1"}),
 		Type:      cloudflare.F([]resource_tagging.ResourceTaggingListParamsType{resource_tagging.ResourceTaggingListParamsTypeZone}),
 	})

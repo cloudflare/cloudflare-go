@@ -29,10 +29,10 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.New(context.TODO(), load_balancers.LoadBalancerNewParams{
+		ZoneID:       cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 		FallbackPool: cloudflare.F("fallback_pool"),
 		Name:         cloudflare.F("www.example.com"),
-		AccountID:    cloudflare.F("account_id"),
 		AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 			FailoverAcrossPools: cloudflare.F(true),
 		}),
@@ -41,7 +41,6 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 			"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 		}),
 		Description: cloudflare.F("Load Balancer for www.example.com"),
-		Enabled:     cloudflare.F(true),
 		LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 			Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
 			PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
@@ -88,12 +87,6 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
 					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
-				PoolDefaultWeight: cloudflare.F(0.200000),
-				PoolWeights: cloudflare.F(map[string]float64{
-					"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-					"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
-				}),
-				Pools: cloudflare.F([]string{"17b5962d775c646f3f9725cbc7a53df4"}),
 				POPPools: cloudflare.F(map[string][]string{
 					"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
@@ -166,10 +159,10 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		load_balancers.LoadBalancerUpdateParams{
+			ZoneID:       cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 			FallbackPool: cloudflare.F("fallback_pool"),
 			Name:         cloudflare.F("www.example.com"),
-			AccountID:    cloudflare.F("account_id"),
 			AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 				FailoverAcrossPools: cloudflare.F(true),
 			}),
@@ -225,12 +218,6 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PoolDefaultWeight: cloudflare.F(0.200000),
-					PoolWeights: cloudflare.F(map[string]float64{
-						"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-						"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
-					}),
-					Pools: cloudflare.F([]string{"17b5962d775c646f3f9725cbc7a53df4"}),
 					POPPools: cloudflare.F(map[string][]string{
 						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
@@ -286,7 +273,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerListWithOptionalParams(t *testing.T) {
+func TestLoadBalancerList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -301,7 +288,7 @@ func TestLoadBalancerListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.List(context.TODO(), load_balancers.LoadBalancerListParams{
-		AccountID: cloudflare.F("account_id"),
+		ZoneID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -312,7 +299,7 @@ func TestLoadBalancerListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerDeleteWithOptionalParams(t *testing.T) {
+func TestLoadBalancerDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -330,7 +317,7 @@ func TestLoadBalancerDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		load_balancers.LoadBalancerDeleteParams{
-			AccountID: cloudflare.F("account_id"),
+			ZoneID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {
@@ -360,7 +347,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		load_balancers.LoadBalancerEditParams{
-			AccountID: cloudflare.F("account_id"),
+			ZoneID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 				FailoverAcrossPools: cloudflare.F(true),
 			}),
@@ -376,8 +363,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 				Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
 				PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 			}),
-			Name:     cloudflare.F("www.example.com"),
-			Networks: cloudflare.F([]string{"string"}),
+			Name: cloudflare.F("www.example.com"),
 			POPPools: cloudflare.F(map[string][]string{
 				"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 				"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
@@ -419,12 +405,6 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PoolDefaultWeight: cloudflare.F(0.200000),
-					PoolWeights: cloudflare.F(map[string]float64{
-						"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-						"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
-					}),
-					Pools: cloudflare.F([]string{"17b5962d775c646f3f9725cbc7a53df4"}),
 					POPPools: cloudflare.F(map[string][]string{
 						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
@@ -480,7 +460,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerGetWithOptionalParams(t *testing.T) {
+func TestLoadBalancerGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -498,7 +478,7 @@ func TestLoadBalancerGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		load_balancers.LoadBalancerGetParams{
-			AccountID: cloudflare.F("account_id"),
+			ZoneID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

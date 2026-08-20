@@ -227,7 +227,7 @@ func (r DOTEndpointParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Configure the destination endpoints for this location.
+// Endpoint configure the destination endpoints for this location.
 type Endpoint struct {
 	DOH  DOHEndpoint  `json:"doh" api:"required"`
 	DOT  DOTEndpoint  `json:"dot" api:"required"`
@@ -254,7 +254,7 @@ func (r endpointJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure the destination endpoints for this location.
+// EndpointParam configure the destination endpoints for this location.
 type EndpointParam struct {
 	DOH  param.Field[DOHEndpointParam]  `json:"doh" api:"required"`
 	DOT  param.Field[DOTEndpointParam]  `json:"dot" api:"required"`
@@ -423,9 +423,9 @@ type Location struct {
 	// Show the backup destination IPv4 address from the pair identified
 	// dns_destination_ips_id. This field read-only.
 	IPV4DestinationBackup string `json:"ipv4_destination_backup"`
-	// Controls how DNS response TTLs are capped for this location relative to the
-	// account `max_ttl_secs` setting. Omitting `max_ttl` on update resets it to
-	// `inherit`.
+	// Configure DNS response TTL behavior for this Gateway location. Gateway can
+	// rewrite DNS responses to cap returned record TTLs using the account setting or a
+	// location-specific value, or leave TTLs unchanged.
 	MaxTTL LocationMaxTTL `json:"max_ttl" api:"nullable"`
 	// Specify the location name.
 	Name string `json:"name"`
@@ -466,14 +466,14 @@ func (r locationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Controls how DNS response TTLs are capped for this location relative to the
-// account `max_ttl_secs` setting. Omitting `max_ttl` on update resets it to
-// `inherit`.
+// LocationMaxTTL configure DNS response TTL behavior for this Gateway location. Gateway can
+// rewrite DNS responses to cap returned record TTLs using the account setting or a
+// location-specific value, or leave TTLs unchanged.
 type LocationMaxTTL struct {
-	// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
-	// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
+	// Specify how this location handles DNS response TTLs by using the account
+	// setting, using a location-specific value, or leaving TTLs unchanged.
 	Mode LocationMaxTTLMode `json:"mode" api:"required"`
-	// Location-specific cap on DNS response TTLs, in seconds. Required when `mode` is
+	// Set the location-specific DNS TTL cap, in seconds. Required when `mode` is
 	// `override`. Must be omitted when `mode` is `inherit` or `disabled`.
 	TTLSecs int64              `json:"ttl_secs" api:"nullable"`
 	JSON    locationMaxTTLJSON `json:"-"`
@@ -495,8 +495,8 @@ func (r locationMaxTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
-// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
+// LocationMaxTTLMode specify how this location handles DNS response TTLs by using the account
+// setting, using a location-specific value, or leaving TTLs unchanged.
 type LocationMaxTTLMode string
 
 const (
@@ -534,7 +534,7 @@ func (r locationNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
-type GatewayLocationDeleteResponse = interface{}
+type GatewayLocationDeleteResponse = any
 
 type GatewayLocationNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -552,9 +552,9 @@ type GatewayLocationNewParams struct {
 	ECSSupport param.Field[bool] `json:"ecs_support"`
 	// Configure the destination endpoints for this location.
 	Endpoints param.Field[EndpointParam] `json:"endpoints"`
-	// Controls how DNS response TTLs are capped for this location relative to the
-	// account `max_ttl_secs` setting. Omitting `max_ttl` on update resets it to
-	// `inherit`.
+	// Configure DNS response TTL behavior for this Gateway location. Gateway can
+	// rewrite DNS responses to cap returned record TTLs using the account setting or a
+	// location-specific value, or leave TTLs unchanged.
 	MaxTTL param.Field[GatewayLocationNewParamsMaxTTL] `json:"max_ttl"`
 	// Specify the list of network ranges from which requests at this location
 	// originate. The list takes effect only if it is non-empty and the IPv4 endpoint
@@ -566,14 +566,14 @@ func (r GatewayLocationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Controls how DNS response TTLs are capped for this location relative to the
-// account `max_ttl_secs` setting. Omitting `max_ttl` on update resets it to
-// `inherit`.
+// GatewayLocationNewParamsMaxTTL configure DNS response TTL behavior for this Gateway location. Gateway can
+// rewrite DNS responses to cap returned record TTLs using the account setting or a
+// location-specific value, or leave TTLs unchanged.
 type GatewayLocationNewParamsMaxTTL struct {
-	// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
-	// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
+	// Specify how this location handles DNS response TTLs by using the account
+	// setting, using a location-specific value, or leaving TTLs unchanged.
 	Mode param.Field[GatewayLocationNewParamsMaxTTLMode] `json:"mode" api:"required"`
-	// Location-specific cap on DNS response TTLs, in seconds. Required when `mode` is
+	// Set the location-specific DNS TTL cap, in seconds. Required when `mode` is
 	// `override`. Must be omitted when `mode` is `inherit` or `disabled`.
 	TTLSecs param.Field[int64] `json:"ttl_secs"`
 }
@@ -582,8 +582,8 @@ func (r GatewayLocationNewParamsMaxTTL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
-// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
+// GatewayLocationNewParamsMaxTTLMode specify how this location handles DNS response TTLs by using the account
+// setting, using a location-specific value, or leaving TTLs unchanged.
 type GatewayLocationNewParamsMaxTTLMode string
 
 const (
@@ -637,7 +637,7 @@ func (r gatewayLocationNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayLocationNewResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayLocationNewResponseEnvelopeSuccess bool
 
 const (
@@ -668,9 +668,9 @@ type GatewayLocationUpdateParams struct {
 	ECSSupport param.Field[bool] `json:"ecs_support"`
 	// Configure the destination endpoints for this location.
 	Endpoints param.Field[EndpointParam] `json:"endpoints"`
-	// Controls how DNS response TTLs are capped for this location relative to the
-	// account `max_ttl_secs` setting. Omitting `max_ttl` on update resets it to
-	// `inherit`.
+	// Configure DNS response TTL behavior for this Gateway location. Gateway can
+	// rewrite DNS responses to cap returned record TTLs using the account setting or a
+	// location-specific value, or leave TTLs unchanged.
 	MaxTTL param.Field[GatewayLocationUpdateParamsMaxTTL] `json:"max_ttl"`
 	// Specify the list of network ranges from which requests at this location
 	// originate. The list takes effect only if it is non-empty and the IPv4 endpoint
@@ -682,14 +682,14 @@ func (r GatewayLocationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Controls how DNS response TTLs are capped for this location relative to the
-// account `max_ttl_secs` setting. Omitting `max_ttl` on update resets it to
-// `inherit`.
+// GatewayLocationUpdateParamsMaxTTL configure DNS response TTL behavior for this Gateway location. Gateway can
+// rewrite DNS responses to cap returned record TTLs using the account setting or a
+// location-specific value, or leave TTLs unchanged.
 type GatewayLocationUpdateParamsMaxTTL struct {
-	// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
-	// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
+	// Specify how this location handles DNS response TTLs by using the account
+	// setting, using a location-specific value, or leaving TTLs unchanged.
 	Mode param.Field[GatewayLocationUpdateParamsMaxTTLMode] `json:"mode" api:"required"`
-	// Location-specific cap on DNS response TTLs, in seconds. Required when `mode` is
+	// Set the location-specific DNS TTL cap, in seconds. Required when `mode` is
 	// `override`. Must be omitted when `mode` is `inherit` or `disabled`.
 	TTLSecs param.Field[int64] `json:"ttl_secs"`
 }
@@ -698,8 +698,8 @@ func (r GatewayLocationUpdateParamsMaxTTL) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-// `inherit` uses the account `max_ttl_secs`. `override` uses this location's
-// `ttl_secs`. `disabled` leaves returned TTLs unchanged.
+// GatewayLocationUpdateParamsMaxTTLMode specify how this location handles DNS response TTLs by using the account
+// setting, using a location-specific value, or leaving TTLs unchanged.
 type GatewayLocationUpdateParamsMaxTTLMode string
 
 const (
@@ -753,7 +753,7 @@ func (r gatewayLocationUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayLocationUpdateResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayLocationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -804,7 +804,7 @@ func (r gatewayLocationDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayLocationDeleteResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayLocationDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -851,7 +851,7 @@ func (r gatewayLocationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayLocationGetResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayLocationGetResponseEnvelopeSuccess bool
 
 const (

@@ -36,9 +36,7 @@ func NewEmailSendingService(opts ...option.RequestOption) (r *EmailSendingServic
 	return
 }
 
-// Send an email for the specified account using the structured builder. Provide
-// the sender, recipients, subject, and at least one of text or html; attachments
-// are optional.
+// Send an email
 func (r *EmailSendingService) Send(ctx context.Context, params EmailSendingSendParams, opts ...option.RequestOption) (res *EmailSendingSendResponse, err error) {
 	var env EmailSendingSendResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,8 +53,7 @@ func (r *EmailSendingService) Send(ctx context.Context, params EmailSendingSendP
 	return res, nil
 }
 
-// Send a raw RFC 5322 (MIME) email for the specified account. Provide the full
-// MIME message plus the SMTP envelope (from and recipients).
+// Send a raw MIME email
 func (r *EmailSendingService) SendRaw(ctx context.Context, params EmailSendingSendRawParams, opts ...option.RequestOption) (res *EmailSendingSendRawResponse, err error) {
 	var env EmailSendingSendRawResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -144,22 +141,22 @@ type EmailSendingSendParams struct {
 	Subject param.Field[string] `json:"subject" api:"required"`
 	// File attachments and inline images.
 	Attachments param.Field[[]EmailSendingSendParamsAttachmentUnion] `json:"attachments"`
-	// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
-	// address object, or an array of either.
+	// BCC recipient(s). A single email string or an array of email strings.
 	Bcc param.Field[EmailSendingSendParamsBccUnion] `json:"bcc"`
-	// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
-	// address object, or an array of either.
+	// CC recipient(s). A single email string or an array of email strings.
 	Cc param.Field[EmailSendingSendParamsCcUnion] `json:"cc"`
 	// Custom email headers as key-value pairs.
 	Headers param.Field[map[string]string] `json:"headers"`
-	// HTML body of the email. Provide at least one of text or html (non-empty).
+	// HTML body of the email. At least one of text or html must be provided
+	// (non-empty).
 	HTML param.Field[string] `json:"html"`
 	// Reply-to address. Either a plain string or an object with address and name.
 	ReplyTo param.Field[EmailSendingSendParamsReplyToUnion] `json:"reply_to"`
-	// Plain text body of the email. Provide at least one of text or html (non-empty).
+	// Plain text body of the email. At least one of text or html must be provided
+	// (non-empty).
 	Text param.Field[string] `json:"text"`
-	// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
-	// address object, or an array of either.
+	// Recipient(s). Optional if cc or bcc is provided. A single email string or an
+	// array of email strings.
 	To param.Field[EmailSendingSendParamsToUnion] `json:"to"`
 }
 
@@ -178,9 +175,8 @@ type EmailSendingSendParamsFromUnion interface {
 type EmailSendingSendParamsFromEmailSendingEmailAddressObject struct {
 	// Email address (e.g., 'user@example.com').
 	Address param.Field[string] `json:"address" api:"required"`
-	// Display name for the email address (e.g., 'John Doe'). Optional; set to null or
-	// leave it unset to send the address on its own.
-	Name param.Field[string] `json:"name"`
+	// Display name for the email address (e.g., 'John Doe').
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r EmailSendingSendParamsFromEmailSendingEmailAddressObject) MarshalJSON() (data []byte, err error) {
@@ -193,7 +189,7 @@ func (r EmailSendingSendParamsFromEmailSendingEmailAddressObject) ImplementsEmai
 type EmailSendingSendParamsAttachment struct {
 	// Base64-encoded content of the attachment.
 	Content param.Field[string] `json:"content" api:"required"`
-	// Use 'inline' to embed the attachment in the email body.
+	// Must be 'inline'. Indicates the attachment is embedded in the email body.
 	Disposition param.Field[EmailSendingSendParamsAttachmentsDisposition] `json:"disposition" api:"required"`
 	// Filename for the attachment.
 	Filename param.Field[string] `json:"filename" api:"required"`
@@ -224,7 +220,7 @@ type EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachment struct {
 	// Content ID used to reference this attachment in HTML via cid: URI (e.g.,
 	// <img src="cid:logo">).
 	ContentID param.Field[string] `json:"content_id" api:"required"`
-	// Use 'inline' to embed the attachment in the email body.
+	// Must be 'inline'. Indicates the attachment is embedded in the email body.
 	Disposition param.Field[EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachmentDisposition] `json:"disposition" api:"required"`
 	// Filename for the attachment.
 	Filename param.Field[string] `json:"filename" api:"required"`
@@ -239,7 +235,7 @@ func (r EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachment) Mars
 func (r EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachment) implementsEmailSendingSendParamsAttachmentUnion() {
 }
 
-// Use 'inline' to embed the attachment in the email body.
+// Must be 'inline'. Indicates the attachment is embedded in the email body.
 type EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachmentDisposition string
 
 const (
@@ -257,7 +253,7 @@ func (r EmailSendingSendParamsAttachmentsEmailSendingEmailInlineAttachmentDispos
 type EmailSendingSendParamsAttachmentsEmailSendingEmailAttachment struct {
 	// Base64-encoded content of the attachment.
 	Content param.Field[string] `json:"content" api:"required"`
-	// Use 'attachment' for a standard file attachment.
+	// Must be 'attachment'. Indicates a standard file attachment.
 	Disposition param.Field[EmailSendingSendParamsAttachmentsEmailSendingEmailAttachmentDisposition] `json:"disposition" api:"required"`
 	// Filename for the attachment.
 	Filename param.Field[string] `json:"filename" api:"required"`
@@ -272,7 +268,7 @@ func (r EmailSendingSendParamsAttachmentsEmailSendingEmailAttachment) MarshalJSO
 func (r EmailSendingSendParamsAttachmentsEmailSendingEmailAttachment) implementsEmailSendingSendParamsAttachmentUnion() {
 }
 
-// Use 'attachment' for a standard file attachment.
+// Must be 'attachment'. Indicates a standard file attachment.
 type EmailSendingSendParamsAttachmentsEmailSendingEmailAttachmentDisposition string
 
 const (
@@ -287,7 +283,7 @@ func (r EmailSendingSendParamsAttachmentsEmailSendingEmailAttachmentDisposition)
 	return false
 }
 
-// Use 'inline' to embed the attachment in the email body.
+// Must be 'inline'. Indicates the attachment is embedded in the email body.
 type EmailSendingSendParamsAttachmentsDisposition string
 
 const (
@@ -303,108 +299,30 @@ func (r EmailSendingSendParamsAttachmentsDisposition) IsKnown() bool {
 	return false
 }
 
-// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
-// address object, or an array of either.
+// BCC recipient(s). A single email string or an array of email strings.
 //
 // Satisfied by [shared.UnionString],
-// [email_sending.EmailSendingSendParamsBccEmailSendingEmailAddressObject],
-// [email_sending.EmailSendingSendParamsBccArray].
+// [email_sending.EmailSendingSendParamsBccEmailSendingEmailAddressList].
 type EmailSendingSendParamsBccUnion interface {
 	ImplementsEmailSendingSendParamsBccUnion()
 }
 
-type EmailSendingSendParamsBccEmailSendingEmailAddressObject struct {
-	// Email address (e.g., 'user@example.com').
-	Address param.Field[string] `json:"address" api:"required"`
-	// Display name for the email address (e.g., 'John Doe'). Optional; set to null or
-	// leave it unset to send the address on its own.
-	Name param.Field[string] `json:"name"`
+type EmailSendingSendParamsBccEmailSendingEmailAddressList []string
+
+func (r EmailSendingSendParamsBccEmailSendingEmailAddressList) ImplementsEmailSendingSendParamsBccUnion() {
 }
 
-func (r EmailSendingSendParamsBccEmailSendingEmailAddressObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r EmailSendingSendParamsBccEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsBccUnion() {
-}
-
-type EmailSendingSendParamsBccArray []EmailSendingSendParamsBccArrayItemUnion
-
-func (r EmailSendingSendParamsBccArray) ImplementsEmailSendingSendParamsBccUnion() {}
-
-// An email address as a plain string.
+// CC recipient(s). A single email string or an array of email strings.
 //
 // Satisfied by [shared.UnionString],
-// [email_sending.EmailSendingSendParamsBccArrayEmailSendingEmailAddressObject].
-type EmailSendingSendParamsBccArrayItemUnion interface {
-	ImplementsEmailSendingSendParamsBccArrayItemUnion()
-}
-
-type EmailSendingSendParamsBccArrayEmailSendingEmailAddressObject struct {
-	// Email address (e.g., 'user@example.com').
-	Address param.Field[string] `json:"address" api:"required"`
-	// Display name for the email address (e.g., 'John Doe'). Optional; set to null or
-	// leave it unset to send the address on its own.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r EmailSendingSendParamsBccArrayEmailSendingEmailAddressObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r EmailSendingSendParamsBccArrayEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsBccArrayItemUnion() {
-}
-
-// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
-// address object, or an array of either.
-//
-// Satisfied by [shared.UnionString],
-// [email_sending.EmailSendingSendParamsCcEmailSendingEmailAddressObject],
-// [email_sending.EmailSendingSendParamsCcArray].
+// [email_sending.EmailSendingSendParamsCcEmailSendingEmailAddressList].
 type EmailSendingSendParamsCcUnion interface {
 	ImplementsEmailSendingSendParamsCcUnion()
 }
 
-type EmailSendingSendParamsCcEmailSendingEmailAddressObject struct {
-	// Email address (e.g., 'user@example.com').
-	Address param.Field[string] `json:"address" api:"required"`
-	// Display name for the email address (e.g., 'John Doe'). Optional; set to null or
-	// leave it unset to send the address on its own.
-	Name param.Field[string] `json:"name"`
-}
+type EmailSendingSendParamsCcEmailSendingEmailAddressList []string
 
-func (r EmailSendingSendParamsCcEmailSendingEmailAddressObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r EmailSendingSendParamsCcEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsCcUnion() {
-}
-
-type EmailSendingSendParamsCcArray []EmailSendingSendParamsCcArrayItemUnion
-
-func (r EmailSendingSendParamsCcArray) ImplementsEmailSendingSendParamsCcUnion() {}
-
-// An email address as a plain string.
-//
-// Satisfied by [shared.UnionString],
-// [email_sending.EmailSendingSendParamsCcArrayEmailSendingEmailAddressObject].
-type EmailSendingSendParamsCcArrayItemUnion interface {
-	ImplementsEmailSendingSendParamsCcArrayItemUnion()
-}
-
-type EmailSendingSendParamsCcArrayEmailSendingEmailAddressObject struct {
-	// Email address (e.g., 'user@example.com').
-	Address param.Field[string] `json:"address" api:"required"`
-	// Display name for the email address (e.g., 'John Doe'). Optional; set to null or
-	// leave it unset to send the address on its own.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r EmailSendingSendParamsCcArrayEmailSendingEmailAddressObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r EmailSendingSendParamsCcArrayEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsCcArrayItemUnion() {
+func (r EmailSendingSendParamsCcEmailSendingEmailAddressList) ImplementsEmailSendingSendParamsCcUnion() {
 }
 
 // Reply-to address. Either a plain string or an object with address and name.
@@ -418,9 +336,8 @@ type EmailSendingSendParamsReplyToUnion interface {
 type EmailSendingSendParamsReplyToEmailSendingEmailAddressObject struct {
 	// Email address (e.g., 'user@example.com').
 	Address param.Field[string] `json:"address" api:"required"`
-	// Display name for the email address (e.g., 'John Doe'). Optional; set to null or
-	// leave it unset to send the address on its own.
-	Name param.Field[string] `json:"name"`
+	// Display name for the email address (e.g., 'John Doe').
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r EmailSendingSendParamsReplyToEmailSendingEmailAddressObject) MarshalJSON() (data []byte, err error) {
@@ -430,56 +347,18 @@ func (r EmailSendingSendParamsReplyToEmailSendingEmailAddressObject) MarshalJSON
 func (r EmailSendingSendParamsReplyToEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsReplyToUnion() {
 }
 
-// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
-// address object, or an array of either.
+// Recipient(s). Optional if cc or bcc is provided. A single email string or an
+// array of email strings.
 //
 // Satisfied by [shared.UnionString],
-// [email_sending.EmailSendingSendParamsToEmailSendingEmailAddressObject],
-// [email_sending.EmailSendingSendParamsToArray].
+// [email_sending.EmailSendingSendParamsToEmailSendingEmailAddressList].
 type EmailSendingSendParamsToUnion interface {
 	ImplementsEmailSendingSendParamsToUnion()
 }
 
-type EmailSendingSendParamsToEmailSendingEmailAddressObject struct {
-	// Email address (e.g., 'user@example.com').
-	Address param.Field[string] `json:"address" api:"required"`
-	// Display name for the email address (e.g., 'John Doe'). Optional; set to null or
-	// leave it unset to send the address on its own.
-	Name param.Field[string] `json:"name"`
-}
+type EmailSendingSendParamsToEmailSendingEmailAddressList []string
 
-func (r EmailSendingSendParamsToEmailSendingEmailAddressObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r EmailSendingSendParamsToEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsToUnion() {
-}
-
-type EmailSendingSendParamsToArray []EmailSendingSendParamsToArrayItemUnion
-
-func (r EmailSendingSendParamsToArray) ImplementsEmailSendingSendParamsToUnion() {}
-
-// An email address as a plain string.
-//
-// Satisfied by [shared.UnionString],
-// [email_sending.EmailSendingSendParamsToArrayEmailSendingEmailAddressObject].
-type EmailSendingSendParamsToArrayItemUnion interface {
-	ImplementsEmailSendingSendParamsToArrayItemUnion()
-}
-
-type EmailSendingSendParamsToArrayEmailSendingEmailAddressObject struct {
-	// Email address (e.g., 'user@example.com').
-	Address param.Field[string] `json:"address" api:"required"`
-	// Display name for the email address (e.g., 'John Doe'). Optional; set to null or
-	// leave it unset to send the address on its own.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r EmailSendingSendParamsToArrayEmailSendingEmailAddressObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r EmailSendingSendParamsToArrayEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsToArrayItemUnion() {
+func (r EmailSendingSendParamsToEmailSendingEmailAddressList) ImplementsEmailSendingSendParamsToUnion() {
 }
 
 type EmailSendingSendResponseEnvelope struct {

@@ -477,7 +477,7 @@ func (r DEXTracerouteTestGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Time interval for aggregate time slots.
+// DEXTracerouteTestGetParamsInterval time interval for aggregate time slots.
 type DEXTracerouteTestGetParamsInterval string
 
 const (
@@ -617,7 +617,7 @@ func (r dexTracerouteTestGetResponseEnvelopeMessagesSourceJSON) RawJSON() string
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DEXTracerouteTestGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DEXTracerouteTestGetResponseEnvelopeSuccess bool
 
 const (
@@ -654,7 +654,7 @@ func (r DEXTracerouteTestNetworkPathParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Time interval for aggregate time slots.
+// DEXTracerouteTestNetworkPathParamsInterval time interval for aggregate time slots.
 type DEXTracerouteTestNetworkPathParamsInterval string
 
 const (
@@ -796,7 +796,7 @@ func (r dexTracerouteTestNetworkPathResponseEnvelopeMessagesSourceJSON) RawJSON(
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DEXTracerouteTestNetworkPathResponseEnvelopeSuccess indicates whether the API call was successful.
 type DEXTracerouteTestNetworkPathResponseEnvelopeSuccess bool
 
 const (
@@ -961,7 +961,7 @@ func (r dexTracerouteTestPercentilesResponseEnvelopeMessagesSourceJSON) RawJSON(
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DEXTracerouteTestPercentilesResponseEnvelopeSuccess indicates whether the API call was successful.
 type DEXTracerouteTestPercentilesResponseEnvelopeSuccess bool
 
 const (

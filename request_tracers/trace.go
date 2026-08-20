@@ -34,11 +34,7 @@ func NewTraceService(opts ...option.RequestOption) (r *TraceService) {
 	return
 }
 
-// Traces a simulated HTTP request through Cloudflare's edge to analyze how rules,
-// settings, and configurations would process the request. Useful for debugging
-// firewall rules, page rules, and other request transformations without sending
-// actual traffic. Supports custom headers, cookies, body content, and geolocation
-// context.
+// Request Trace
 func (r *TraceService) New(ctx context.Context, params TraceNewParams, opts ...option.RequestOption) (res *TraceNewResponse, err error) {
 	var env TraceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

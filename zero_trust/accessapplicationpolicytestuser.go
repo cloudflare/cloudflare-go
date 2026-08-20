@@ -99,7 +99,7 @@ func (r accessApplicationPolicyTestUserListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Policy evaluation result for an individual user.
+// AccessApplicationPolicyTestUserListResponseStatus policy evaluation result for an individual user.
 type AccessApplicationPolicyTestUserListResponseStatus string
 
 const (
@@ -135,7 +135,7 @@ func (r AccessApplicationPolicyTestUserListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Filter users by their policy evaluation status.
+// AccessApplicationPolicyTestUserListParamsStatus filter users by their policy evaluation status.
 type AccessApplicationPolicyTestUserListParamsStatus string
 
 const (

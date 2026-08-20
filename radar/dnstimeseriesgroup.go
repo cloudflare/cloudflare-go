@@ -3242,9 +3242,6 @@ type DNSTimeseriesGroupCacheHitParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[DNSTimeseriesGroupCacheHitParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -3255,29 +3252,13 @@ type DNSTimeseriesGroupCacheHitParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupCacheHitParamsFormat] `query:"format"`
@@ -3295,10 +3276,7 @@ type DNSTimeseriesGroupCacheHitParams struct {
 	QueryType param.Field[[]DNSTimeseriesGroupCacheHitParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSTimeseriesGroupCacheHitParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain. Incompatible with the `ipVersion`,
-	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
-	// filters/dimensions; this restriction does not apply to country-code TLDs
-	// (2-letter, e.g. `uk`).
+	// Filters results by top-level domain.
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -3314,9 +3292,6 @@ func (r DNSTimeseriesGroupCacheHitParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type DNSTimeseriesGroupCacheHitParamsAggInterval string
 
 const (
@@ -3527,9 +3502,6 @@ type DNSTimeseriesGroupDNSSECParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[DNSTimeseriesGroupDNSSECParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -3540,29 +3512,13 @@ type DNSTimeseriesGroupDNSSECParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupDNSSECParamsFormat] `query:"format"`
@@ -3580,10 +3536,7 @@ type DNSTimeseriesGroupDNSSECParams struct {
 	QueryType param.Field[[]DNSTimeseriesGroupDNSSECParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSTimeseriesGroupDNSSECParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain. Incompatible with the `ipVersion`,
-	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
-	// filters/dimensions; this restriction does not apply to country-code TLDs
-	// (2-letter, e.g. `uk`).
+	// Filters results by top-level domain.
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -3599,9 +3552,6 @@ func (r DNSTimeseriesGroupDNSSECParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type DNSTimeseriesGroupDNSSECParamsAggInterval string
 
 const (
@@ -3812,9 +3762,6 @@ type DNSTimeseriesGroupDNSSECAwareParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[DNSTimeseriesGroupDNSSECAwareParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -3825,29 +3772,13 @@ type DNSTimeseriesGroupDNSSECAwareParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupDNSSECAwareParamsFormat] `query:"format"`
@@ -3865,10 +3796,7 @@ type DNSTimeseriesGroupDNSSECAwareParams struct {
 	QueryType param.Field[[]DNSTimeseriesGroupDNSSECAwareParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSTimeseriesGroupDNSSECAwareParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain. Incompatible with the `ipVersion`,
-	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
-	// filters/dimensions; this restriction does not apply to country-code TLDs
-	// (2-letter, e.g. `uk`).
+	// Filters results by top-level domain.
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -3884,9 +3812,6 @@ func (r DNSTimeseriesGroupDNSSECAwareParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type DNSTimeseriesGroupDNSSECAwareParamsAggInterval string
 
 const (
@@ -4097,9 +4022,6 @@ type DNSTimeseriesGroupDNSSECE2EParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[DNSTimeseriesGroupDnssece2EParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -4110,29 +4032,13 @@ type DNSTimeseriesGroupDNSSECE2EParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupDnssece2EParamsFormat] `query:"format"`
@@ -4150,10 +4056,7 @@ type DNSTimeseriesGroupDNSSECE2EParams struct {
 	QueryType param.Field[[]DNSTimeseriesGroupDnssece2EParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSTimeseriesGroupDnssece2EParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain. Incompatible with the `ipVersion`,
-	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
-	// filters/dimensions; this restriction does not apply to country-code TLDs
-	// (2-letter, e.g. `uk`).
+	// Filters results by top-level domain.
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -4169,9 +4072,6 @@ func (r DNSTimeseriesGroupDNSSECE2EParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type DNSTimeseriesGroupDnssece2EParamsAggInterval string
 
 const (
@@ -4382,9 +4282,6 @@ type DNSTimeseriesGroupIPVersionParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[DNSTimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -4395,29 +4292,13 @@ type DNSTimeseriesGroupIPVersionParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupIPVersionParamsFormat] `query:"format"`
@@ -4435,10 +4316,7 @@ type DNSTimeseriesGroupIPVersionParams struct {
 	QueryType param.Field[[]DNSTimeseriesGroupIPVersionParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSTimeseriesGroupIPVersionParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain. Incompatible with the `ipVersion`,
-	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
-	// filters/dimensions; this restriction does not apply to country-code TLDs
-	// (2-letter, e.g. `uk`).
+	// Filters results by top-level domain.
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -4454,9 +4332,6 @@ func (r DNSTimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type DNSTimeseriesGroupIPVersionParamsAggInterval string
 
 const (
@@ -4667,9 +4542,6 @@ type DNSTimeseriesGroupMatchingAnswerParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[DNSTimeseriesGroupMatchingAnswerParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -4680,29 +4552,13 @@ type DNSTimeseriesGroupMatchingAnswerParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupMatchingAnswerParamsFormat] `query:"format"`
@@ -4720,10 +4576,7 @@ type DNSTimeseriesGroupMatchingAnswerParams struct {
 	QueryType param.Field[[]DNSTimeseriesGroupMatchingAnswerParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSTimeseriesGroupMatchingAnswerParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain. Incompatible with the `ipVersion`,
-	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
-	// filters/dimensions; this restriction does not apply to country-code TLDs
-	// (2-letter, e.g. `uk`).
+	// Filters results by top-level domain.
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -4739,9 +4592,6 @@ func (r DNSTimeseriesGroupMatchingAnswerParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type DNSTimeseriesGroupMatchingAnswerParamsAggInterval string
 
 const (
@@ -4952,9 +4802,6 @@ type DNSTimeseriesGroupProtocolParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[DNSTimeseriesGroupProtocolParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -4965,29 +4812,13 @@ type DNSTimeseriesGroupProtocolParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupProtocolParamsFormat] `query:"format"`
@@ -5003,10 +4834,7 @@ type DNSTimeseriesGroupProtocolParams struct {
 	QueryType param.Field[[]DNSTimeseriesGroupProtocolParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSTimeseriesGroupProtocolParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain. Incompatible with the `ipVersion`,
-	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
-	// filters/dimensions; this restriction does not apply to country-code TLDs
-	// (2-letter, e.g. `uk`).
+	// Filters results by top-level domain.
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -5022,9 +4850,6 @@ func (r DNSTimeseriesGroupProtocolParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type DNSTimeseriesGroupProtocolParamsAggInterval string
 
 const (
@@ -5218,9 +5043,6 @@ type DNSTimeseriesGroupQueryTypeParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[DNSTimeseriesGroupQueryTypeParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -5231,36 +5053,19 @@ type DNSTimeseriesGroupQueryTypeParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupQueryTypeParamsFormat] `query:"format"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
-	// an "other" category. Only supported on high-cardinality dimensions; otherwise
-	// the request is rejected. Minimum value is 2.
+	// an "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
@@ -5274,10 +5079,7 @@ type DNSTimeseriesGroupQueryTypeParams struct {
 	Protocol param.Field[[]DNSTimeseriesGroupQueryTypeParamsProtocol] `query:"protocol"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSTimeseriesGroupQueryTypeParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain. Incompatible with the `ipVersion`,
-	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
-	// filters/dimensions; this restriction does not apply to country-code TLDs
-	// (2-letter, e.g. `uk`).
+	// Filters results by top-level domain.
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -5293,9 +5095,6 @@ func (r DNSTimeseriesGroupQueryTypeParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type DNSTimeseriesGroupQueryTypeParamsAggInterval string
 
 const (
@@ -5405,9 +5204,6 @@ type DNSTimeseriesGroupResponseCodeParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[DNSTimeseriesGroupResponseCodeParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -5418,36 +5214,19 @@ type DNSTimeseriesGroupResponseCodeParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupResponseCodeParamsFormat] `query:"format"`
 	// Limits the number of objects per group to the top items within the specified
 	// time range. When item count exceeds the limit, extra items appear grouped under
-	// an "other" category. Only supported on high-cardinality dimensions; otherwise
-	// the request is rejected. Minimum value is 2.
+	// an "other" category.
 	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Filters results by location. Specify a comma-separated list of alpha-2 codes.
 	// Prefix with `-` to exclude locations from results. For example, `-US,PT`
@@ -5461,10 +5240,7 @@ type DNSTimeseriesGroupResponseCodeParams struct {
 	Protocol param.Field[[]DNSTimeseriesGroupResponseCodeParamsProtocol] `query:"protocol"`
 	// Filters results by DNS query type.
 	QueryType param.Field[[]DNSTimeseriesGroupResponseCodeParamsQueryType] `query:"queryType"`
-	// Filters results by top-level domain. Incompatible with the `ipVersion`,
-	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
-	// filters/dimensions; this restriction does not apply to country-code TLDs
-	// (2-letter, e.g. `uk`).
+	// Filters results by top-level domain.
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -5480,9 +5256,6 @@ func (r DNSTimeseriesGroupResponseCodeParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type DNSTimeseriesGroupResponseCodeParamsAggInterval string
 
 const (
@@ -5661,9 +5434,6 @@ type DNSTimeseriesGroupResponseTTLParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[DNSTimeseriesGroupResponseTTLParamsAggInterval] `query:"aggInterval"`
 	// Filters results by Autonomous System. Specify one or more Autonomous System
 	// Numbers (ASNs) as a comma-separated list. Prefix with `-` to exclude ASNs from
@@ -5674,29 +5444,13 @@ type DNSTimeseriesGroupResponseTTLParams struct {
 	// Prefix with `-` to exclude continents from results. For example, `-EU,NA`
 	// excludes results from EU, but includes results from NA.
 	Continent param.Field[[]string] `query:"continent"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format in which results will be returned.
 	Format param.Field[DNSTimeseriesGroupResponseTTLParamsFormat] `query:"format"`
@@ -5714,10 +5468,7 @@ type DNSTimeseriesGroupResponseTTLParams struct {
 	QueryType param.Field[[]DNSTimeseriesGroupResponseTTLParamsQueryType] `query:"queryType"`
 	// Filters results by DNS response code.
 	ResponseCode param.Field[[]DNSTimeseriesGroupResponseTTLParamsResponseCode] `query:"responseCode"`
-	// Filters results by top-level domain. Incompatible with the `ipVersion`,
-	// `protocol`, `dnssecE2e`, `dnssecAware`, `responseTtl`, and `cacheHit`
-	// filters/dimensions; this restriction does not apply to country-code TLDs
-	// (2-letter, e.g. `uk`).
+	// Filters results by top-level domain.
 	TLD param.Field[[]string] `query:"tld"`
 }
 
@@ -5733,9 +5484,6 @@ func (r DNSTimeseriesGroupResponseTTLParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type DNSTimeseriesGroupResponseTTLParamsAggInterval string
 
 const (

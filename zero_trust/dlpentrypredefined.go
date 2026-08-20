@@ -152,9 +152,6 @@ type DLPEntryPredefinedNewResponse struct {
 	Confidence DLPEntryPredefinedNewResponseConfidence `json:"confidence" api:"required"`
 	Enabled    bool                                    `json:"enabled" api:"required"`
 	Name       string                                  `json:"name" api:"required"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated bool `json:"deprecated"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// A Predefined AI prompt classification topic entry.
@@ -169,7 +166,6 @@ type dlpEntryPredefinedNewResponseJSON struct {
 	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
-	Deprecated  apijson.Field
 	ProfileID   apijson.Field
 	Variant     apijson.Field
 	raw         string
@@ -210,7 +206,7 @@ func (r dlpEntryPredefinedNewResponseConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryPredefinedNewResponseVariant is a Predefined AI prompt classification topic entry.
 type DLPEntryPredefinedNewResponseVariant struct {
 	Type DLPEntryPredefinedNewResponseVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -254,7 +250,7 @@ func (r DLPEntryPredefinedNewResponseVariant) AsUnion() DLPEntryPredefinedNewRes
 	return r.union
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryPredefinedNewResponseVariantUnion is a Predefined AI prompt classification topic entry.
 //
 // Union satisfied by [DLPEntryPredefinedNewResponseVariantObject] or
 // [DLPEntryPredefinedNewResponseVariantObject].
@@ -277,7 +273,7 @@ func init() {
 	)
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryPredefinedNewResponseVariantObject is a Predefined AI prompt classification topic entry.
 type DLPEntryPredefinedNewResponseVariantObject struct {
 	TopicType DLPEntryPredefinedNewResponseVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      DLPEntryPredefinedNewResponseVariantObjectType      `json:"type" api:"required"`
@@ -372,9 +368,6 @@ type DLPEntryPredefinedUpdateResponse struct {
 	Confidence DLPEntryPredefinedUpdateResponseConfidence `json:"confidence" api:"required"`
 	Enabled    bool                                       `json:"enabled" api:"required"`
 	Name       string                                     `json:"name" api:"required"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated bool `json:"deprecated"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// A Predefined AI prompt classification topic entry.
@@ -389,7 +382,6 @@ type dlpEntryPredefinedUpdateResponseJSON struct {
 	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
-	Deprecated  apijson.Field
 	ProfileID   apijson.Field
 	Variant     apijson.Field
 	raw         string
@@ -430,7 +422,7 @@ func (r dlpEntryPredefinedUpdateResponseConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryPredefinedUpdateResponseVariant is a Predefined AI prompt classification topic entry.
 type DLPEntryPredefinedUpdateResponseVariant struct {
 	Type DLPEntryPredefinedUpdateResponseVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -474,7 +466,7 @@ func (r DLPEntryPredefinedUpdateResponseVariant) AsUnion() DLPEntryPredefinedUpd
 	return r.union
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryPredefinedUpdateResponseVariantUnion is a Predefined AI prompt classification topic entry.
 //
 // Union satisfied by [DLPEntryPredefinedUpdateResponseVariantObject] or
 // [DLPEntryPredefinedUpdateResponseVariantObject].
@@ -497,7 +489,7 @@ func init() {
 	)
 }
 
-// A Predefined AI prompt classification topic entry.
+// DLPEntryPredefinedUpdateResponseVariantObject is a Predefined AI prompt classification topic entry.
 type DLPEntryPredefinedUpdateResponseVariantObject struct {
 	TopicType DLPEntryPredefinedUpdateResponseVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      DLPEntryPredefinedUpdateResponseVariantObjectType      `json:"type" api:"required"`
@@ -598,13 +590,10 @@ type DLPEntryPredefinedListResponse struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPEntryPredefinedListResponseObjectConfidence].
-	Confidence interface{} `json:"confidence"`
-	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated  bool    `json:"deprecated"`
-	Description string  `json:"description" api:"nullable"`
-	Pattern     Pattern `json:"pattern"`
+	Confidence  interface{} `json:"confidence"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
+	Description string      `json:"description" api:"nullable"`
+	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID    string                                     `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret       bool                                       `json:"secret"`
@@ -629,7 +618,6 @@ type dlpEntryPredefinedListResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
-	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -666,7 +654,7 @@ func (r DLPEntryPredefinedListResponse) AsUnion() DLPEntryPredefinedListResponse
 	return r.union
 }
 
-// Union satisfied by [DLPEntryPredefinedListResponseObject],
+// DLPEntryPredefinedListResponseUnion is satisfied by [DLPEntryPredefinedListResponseObject],
 // [DLPEntryPredefinedListResponseObject], [DLPEntryPredefinedListResponseObject],
 // [DLPEntryPredefinedListResponseObject], [DLPEntryPredefinedListResponseObject],
 // [DLPEntryPredefinedListResponseObject] or
@@ -838,13 +826,10 @@ type DLPEntryPredefinedGetResponse struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPEntryPredefinedGetResponseObjectConfidence].
-	Confidence interface{} `json:"confidence"`
-	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated  bool    `json:"deprecated"`
-	Description string  `json:"description" api:"nullable"`
-	Pattern     Pattern `json:"pattern"`
+	Confidence  interface{} `json:"confidence"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
+	Description string      `json:"description" api:"nullable"`
+	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// This field can have the runtime type of
@@ -872,7 +857,6 @@ type dlpEntryPredefinedGetResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
-	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -910,7 +894,7 @@ func (r DLPEntryPredefinedGetResponse) AsUnion() DLPEntryPredefinedGetResponseUn
 	return r.union
 }
 
-// Union satisfied by [DLPEntryPredefinedGetResponseObject],
+// DLPEntryPredefinedGetResponseUnion is satisfied by [DLPEntryPredefinedGetResponseObject],
 // [DLPEntryPredefinedGetResponseObject], [DLPEntryPredefinedGetResponseObject],
 // [DLPEntryPredefinedGetResponseObject], [DLPEntryPredefinedGetResponseObject],
 // [DLPEntryPredefinedGetResponseObject] or [DLPEntryPredefinedGetResponseObject].
@@ -1012,7 +996,7 @@ func (r DLPEntryPredefinedGetResponseObjectType) IsKnown() bool {
 	return false
 }
 
-// Computed entry field for a profile that an entry is shared into.
+// DLPEntryPredefinedGetResponseObjectProfile computed entry field for a profile that an entry is shared into.
 type DLPEntryPredefinedGetResponseObjectProfile struct {
 	ID   string                                         `json:"id" api:"required" format:"uuid"`
 	Name string                                         `json:"name" api:"required"`
@@ -1231,7 +1215,7 @@ func (r dlpEntryPredefinedNewResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryPredefinedNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryPredefinedNewResponseEnvelopeSuccess bool
 
 const (
@@ -1379,7 +1363,7 @@ func (r dlpEntryPredefinedUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryPredefinedUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryPredefinedUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1526,7 +1510,7 @@ func (r dlpEntryPredefinedDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryPredefinedDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryPredefinedDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1669,7 +1653,7 @@ func (r dlpEntryPredefinedGetResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryPredefinedGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryPredefinedGetResponseEnvelopeSuccess bool
 
 const (

@@ -40,8 +40,7 @@ func NewInvestigateBulkMessageService(opts ...option.RequestOption) (r *Investig
 	return
 }
 
-// Returns the individual messages associated with a bulk action job, including
-// their processing status.
+// List messages for a bulk action job
 func (r *InvestigateBulkMessageService) List(ctx context.Context, jobID string, params InvestigateBulkMessageListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InvestigateBulkMessageListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -67,8 +66,7 @@ func (r *InvestigateBulkMessageService) List(ctx context.Context, jobID string, 
 	return res, nil
 }
 
-// Returns the individual messages associated with a bulk action job, including
-// their processing status.
+// List messages for a bulk action job
 func (r *InvestigateBulkMessageService) ListAutoPaging(ctx context.Context, jobID string, params InvestigateBulkMessageListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InvestigateBulkMessageListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, jobID, params, opts...))
 }
@@ -84,7 +82,7 @@ type InvestigateBulkMessageListResponse struct {
 	AlertID        string                                         `json:"alert_id" api:"nullable"`
 	EmailMessageID string                                         `json:"email_message_id" api:"nullable"`
 	ProcessedAt    time.Time                                      `json:"processed_at" api:"nullable" format:"date-time"`
-	// When to retry the action if it failed.
+	// When to retry the action if it failed
 	RetryAfter    time.Time                              `json:"retry_after" api:"nullable" format:"date-time"`
 	StatusMessage string                                 `json:"status_message" api:"nullable"`
 	JSON          investigateBulkMessageListResponseJSON `json:"-"`

@@ -52,15 +52,10 @@ type Hyperdrive struct {
 	// the origin database.
 	//
 	// Maximum allowed: 20 for free tier accounts, 100 for paid tier accounts. If not
-	// specified, defaults to 20 for free tier and 60 for paid tier. Certain
-	// Cloudflare-managed origins may be permitted a higher limit. Contact Cloudflare
+	// specified, defaults to 20 for free tier and 60 for paid tier. Contact Cloudflare
 	// if you need a higher limit.
-	OriginConnectionLimit int64 `json:"origin_connection_limit"`
-	// Defines the last time the Hyperdrive connection pool was explicitly restarted
-	// via the restart endpoint. Omitted if the pool has never been explicitly
-	// restarted.
-	RestartedOn time.Time      `json:"restarted_on" api:"nullable" format:"date-time"`
-	JSON        hyperdriveJSON `json:"-"`
+	OriginConnectionLimit int64          `json:"origin_connection_limit"`
+	JSON                  hyperdriveJSON `json:"-"`
 }
 
 // hyperdriveJSON contains the JSON metadata for the struct [Hyperdrive]
@@ -73,7 +68,6 @@ type hyperdriveJSON struct {
 	ModifiedOn            apijson.Field
 	MTLS                  apijson.Field
 	OriginConnectionLimit apijson.Field
-	RestartedOn           apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
 }
@@ -513,8 +507,7 @@ type HyperdriveParam struct {
 	// the origin database.
 	//
 	// Maximum allowed: 20 for free tier accounts, 100 for paid tier accounts. If not
-	// specified, defaults to 20 for free tier and 60 for paid tier. Certain
-	// Cloudflare-managed origins may be permitted a higher limit. Contact Cloudflare
+	// specified, defaults to 20 for free tier and 60 for paid tier. Contact Cloudflare
 	// if you need a higher limit.
 	OriginConnectionLimit param.Field[int64] `json:"origin_connection_limit"`
 }

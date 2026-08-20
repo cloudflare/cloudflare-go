@@ -39,7 +39,6 @@ func TestNamespaceInstanceItemListWithOptionalParams(t *testing.T) {
 		ai_search.NamespaceInstanceItemListParams{
 			AccountID:      cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 			ItemID:         cloudflare.F("item_id"),
-			Key:            cloudflare.F("key"),
 			MetadataFilter: cloudflare.F("metadata_filter"),
 			Page:           cloudflare.F(int64(1)),
 			PerPage:        cloudflare.F(int64(0)),

@@ -582,13 +582,12 @@ type InstanceGetResponseStep struct {
 	Config interface{} `json:"config"`
 	End    time.Time   `json:"end" api:"nullable" format:"date-time"`
 	// This field can have the runtime type of [InstanceGetResponseStepsObjectError].
-	Error     interface{} `json:"error"`
-	EventType string      `json:"event_type"`
-	Finished  bool        `json:"finished"`
-	Name      string      `json:"name"`
-	Output    string      `json:"output" api:"nullable"`
-	Start     time.Time   `json:"start" format:"date-time"`
-	Success   bool        `json:"success" api:"nullable"`
+	Error    interface{} `json:"error"`
+	Finished bool        `json:"finished"`
+	Name     string      `json:"name"`
+	Output   string      `json:"output" api:"nullable"`
+	Start    time.Time   `json:"start" format:"date-time"`
+	Success  bool        `json:"success" api:"nullable"`
 	// This field can have the runtime type of [InstanceGetResponseStepsObjectTrigger].
 	Trigger interface{}                 `json:"trigger"`
 	JSON    instanceGetResponseStepJSON `json:"-"`
@@ -603,7 +602,6 @@ type instanceGetResponseStepJSON struct {
 	Config      apijson.Field
 	End         apijson.Field
 	Error       apijson.Field
-	EventType   apijson.Field
 	Finished    apijson.Field
 	Name        apijson.Field
 	Output      apijson.Field
@@ -985,9 +983,6 @@ type InstanceStepResponse struct {
 	// Error details when status='errored'; null otherwise.
 	Error  InstanceStepResponseError  `json:"error" api:"required,nullable"`
 	Status InstanceStepResponseStatus `json:"status" api:"required"`
-	// The event type the step is waiting on, as supplied to step.waitForEvent. Only
-	// present when type='waitForEvent'.
-	EventType string `json:"event_type"`
 	// Full step output or waitForEvent payload without truncation. Sensitive outputs
 	// are returned as '[REDACTED]'. Populated when status='complete'. May be a
 	// ReadableStream when the step returned one from step.do; stream outputs are
@@ -1001,7 +996,6 @@ type InstanceStepResponse struct {
 type instanceStepResponseJSON struct {
 	Error       apijson.Field
 	Status      apijson.Field
-	EventType   apijson.Field
 	Output      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1062,14 +1056,10 @@ func (r InstanceStepResponseStatus) IsKnown() bool {
 }
 
 type InstanceNewParams struct {
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// An id of exactly `cf_` followed by 64 lowercase hex characters is reserved for
-	// system-generated instances.
+	AccountID         param.Field[string]                             `path:"account_id" api:"required"`
 	InstanceID        param.Field[string]                             `json:"instance_id"`
 	InstanceRetention param.Field[InstanceNewParamsInstanceRetention] `json:"instance_retention"`
-	LocationHint      param.Field[InstanceNewParamsLocationHint]      `json:"location_hint"`
-	// JSON-encoded event payload passed into the new instance.
-	Params param.Field[string] `json:"params"`
+	Params            param.Field[interface{}]                        `json:"params"`
 }
 
 func (r InstanceNewParams) MarshalJSON() (data []byte, err error) {
@@ -1099,28 +1089,6 @@ type InstanceNewParamsInstanceRetentionErrorRetentionUnion interface {
 // Satisfied by [shared.UnionInt], [shared.UnionString].
 type InstanceNewParamsInstanceRetentionSuccessRetentionUnion interface {
 	ImplementsInstanceNewParamsInstanceRetentionSuccessRetentionUnion()
-}
-
-type InstanceNewParamsLocationHint string
-
-const (
-	InstanceNewParamsLocationHintWnam InstanceNewParamsLocationHint = "wnam"
-	InstanceNewParamsLocationHintWeur InstanceNewParamsLocationHint = "weur"
-	InstanceNewParamsLocationHintEnam InstanceNewParamsLocationHint = "enam"
-	InstanceNewParamsLocationHintEeur InstanceNewParamsLocationHint = "eeur"
-	InstanceNewParamsLocationHintApac InstanceNewParamsLocationHint = "apac"
-	InstanceNewParamsLocationHintOc   InstanceNewParamsLocationHint = "oc"
-	InstanceNewParamsLocationHintSam  InstanceNewParamsLocationHint = "sam"
-	InstanceNewParamsLocationHintAfr  InstanceNewParamsLocationHint = "afr"
-	InstanceNewParamsLocationHintMe   InstanceNewParamsLocationHint = "me"
-)
-
-func (r InstanceNewParamsLocationHint) IsKnown() bool {
-	switch r {
-	case InstanceNewParamsLocationHintWnam, InstanceNewParamsLocationHintWeur, InstanceNewParamsLocationHintEnam, InstanceNewParamsLocationHintEeur, InstanceNewParamsLocationHintApac, InstanceNewParamsLocationHintOc, InstanceNewParamsLocationHintSam, InstanceNewParamsLocationHintAfr, InstanceNewParamsLocationHintMe:
-		return true
-	}
-	return false
 }
 
 type InstanceNewResponseEnvelope struct {
@@ -1315,13 +1283,9 @@ func (r InstanceBulkParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceBulkParamsBody struct {
-	// An id of exactly `cf_` followed by 64 lowercase hex characters is reserved for
-	// system-generated instances.
 	InstanceID        param.Field[string]                                  `json:"instance_id"`
 	InstanceRetention param.Field[InstanceBulkParamsBodyInstanceRetention] `json:"instance_retention"`
-	LocationHint      param.Field[InstanceBulkParamsBodyLocationHint]      `json:"location_hint"`
-	// JSON-encoded event payload passed into the new instance.
-	Params param.Field[string] `json:"params"`
+	Params            param.Field[interface{}]                             `json:"params"`
 }
 
 func (r InstanceBulkParamsBody) MarshalJSON() (data []byte, err error) {
@@ -1351,28 +1315,6 @@ type InstanceBulkParamsBodyInstanceRetentionErrorRetentionUnion interface {
 // Satisfied by [shared.UnionInt], [shared.UnionString].
 type InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion interface {
 	ImplementsInstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion()
-}
-
-type InstanceBulkParamsBodyLocationHint string
-
-const (
-	InstanceBulkParamsBodyLocationHintWnam InstanceBulkParamsBodyLocationHint = "wnam"
-	InstanceBulkParamsBodyLocationHintWeur InstanceBulkParamsBodyLocationHint = "weur"
-	InstanceBulkParamsBodyLocationHintEnam InstanceBulkParamsBodyLocationHint = "enam"
-	InstanceBulkParamsBodyLocationHintEeur InstanceBulkParamsBodyLocationHint = "eeur"
-	InstanceBulkParamsBodyLocationHintApac InstanceBulkParamsBodyLocationHint = "apac"
-	InstanceBulkParamsBodyLocationHintOc   InstanceBulkParamsBodyLocationHint = "oc"
-	InstanceBulkParamsBodyLocationHintSam  InstanceBulkParamsBodyLocationHint = "sam"
-	InstanceBulkParamsBodyLocationHintAfr  InstanceBulkParamsBodyLocationHint = "afr"
-	InstanceBulkParamsBodyLocationHintMe   InstanceBulkParamsBodyLocationHint = "me"
-)
-
-func (r InstanceBulkParamsBodyLocationHint) IsKnown() bool {
-	switch r {
-	case InstanceBulkParamsBodyLocationHintWnam, InstanceBulkParamsBodyLocationHintWeur, InstanceBulkParamsBodyLocationHintEnam, InstanceBulkParamsBodyLocationHintEeur, InstanceBulkParamsBodyLocationHintApac, InstanceBulkParamsBodyLocationHintOc, InstanceBulkParamsBodyLocationHintSam, InstanceBulkParamsBodyLocationHintAfr, InstanceBulkParamsBodyLocationHintMe:
-		return true
-	}
-	return false
 }
 
 type InstanceGetParams struct {

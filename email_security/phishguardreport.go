@@ -78,9 +78,9 @@ type PhishguardReportListResponse struct {
 	Title       string                                  `json:"title" api:"required"`
 	CreatedAt   time.Time                               `json:"created_at" api:"nullable" format:"date-time"`
 	Tags        []PhishguardReportListResponseTag       `json:"tags" api:"nullable"`
-	// Deprecated, use `created_at` instead.
+	// Deprecated, use `created_at` instead
 	//
-	// Deprecated: Use `created_at` instead.
+	// Deprecated: deprecated
 	Ts        time.Time                        `json:"ts" format:"date-time"`
 	UpdatedAt time.Time                        `json:"updated_at" api:"nullable" format:"date-time"`
 	JSON      phishguardReportListResponseJSON `json:"-"`
@@ -139,9 +139,9 @@ type PhishguardReportListResponseFields struct {
 	From       string    `json:"from" api:"nullable"`
 	OccurredAt time.Time `json:"occurred_at" format:"date-time"`
 	PostfixID  string    `json:"postfix_id" api:"nullable"`
-	// Deprecated, use `occurred_at` instead.
+	// Deprecated, use `occurred_at` instead
 	//
-	// Deprecated: Use `occurred_at` instead.
+	// Deprecated: deprecated
 	Ts   time.Time                              `json:"ts" format:"date-time"`
 	JSON phishguardReportListResponseFieldsJSON `json:"-"`
 }

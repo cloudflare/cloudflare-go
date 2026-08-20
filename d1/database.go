@@ -444,12 +444,11 @@ type DatabaseListResponseJurisdiction string
 const (
 	DatabaseListResponseJurisdictionEu      DatabaseListResponseJurisdiction = "eu"
 	DatabaseListResponseJurisdictionFedramp DatabaseListResponseJurisdiction = "fedramp"
-	DatabaseListResponseJurisdictionUs      DatabaseListResponseJurisdiction = "us"
 )
 
 func (r DatabaseListResponseJurisdiction) IsKnown() bool {
 	switch r {
-	case DatabaseListResponseJurisdictionEu, DatabaseListResponseJurisdictionFedramp, DatabaseListResponseJurisdictionUs:
+	case DatabaseListResponseJurisdictionEu, DatabaseListResponseJurisdictionFedramp:
 		return true
 	}
 	return false
@@ -930,12 +929,11 @@ type DatabaseNewParamsJurisdiction string
 const (
 	DatabaseNewParamsJurisdictionEu      DatabaseNewParamsJurisdiction = "eu"
 	DatabaseNewParamsJurisdictionFedramp DatabaseNewParamsJurisdiction = "fedramp"
-	DatabaseNewParamsJurisdictionUs      DatabaseNewParamsJurisdiction = "us"
 )
 
 func (r DatabaseNewParamsJurisdiction) IsKnown() bool {
 	switch r {
-	case DatabaseNewParamsJurisdictionEu, DatabaseNewParamsJurisdictionFedramp, DatabaseNewParamsJurisdictionUs:
+	case DatabaseNewParamsJurisdictionEu, DatabaseNewParamsJurisdictionFedramp:
 		return true
 	}
 	return false

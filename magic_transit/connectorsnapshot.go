@@ -38,7 +38,7 @@ func NewConnectorSnapshotService(opts ...option.RequestOption) (r *ConnectorSnap
 	return
 }
 
-// Lists Magic WAN Connector Telemetry Snapshots
+// List Snapshots
 func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string, params ConnectorSnapshotListParams, opts ...option.RequestOption) (res *ConnectorSnapshotListResponse, err error) {
 	var env ConnectorSnapshotListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -59,7 +59,7 @@ func (r *ConnectorSnapshotService) List(ctx context.Context, connectorID string,
 	return res, nil
 }
 
-// Gets Magic WAN Connector Telemetry Snapshot
+// Get Snapshot
 func (r *ConnectorSnapshotService) Get(ctx context.Context, connectorID string, snapshotT float64, query ConnectorSnapshotGetParams, opts ...option.RequestOption) (res *ConnectorSnapshotGetResponse, err error) {
 	var env ConnectorSnapshotGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -336,8 +336,6 @@ type ConnectorSnapshotGetResponse struct {
 	Netdevs             []ConnectorSnapshotGetResponseNetdev `json:"netdevs"`
 	// Platform identifier
 	Platform string `json:"platform"`
-	// Site identifier
-	SiteID string `json:"site_id"`
 	// Number of ICMP Address Mask Reply messages received
 	SnmpIcmpInAddrMaskReps float64 `json:"snmp_icmp_in_addr_mask_reps"`
 	// Number of ICMP Address Mask Request messages received
@@ -590,7 +588,6 @@ type connectorSnapshotGetResponseJSON struct {
 	Mounts                         apijson.Field
 	Netdevs                        apijson.Field
 	Platform                       apijson.Field
-	SiteID                         apijson.Field
 	SnmpIcmpInAddrMaskReps         apijson.Field
 	SnmpIcmpInAddrMasks            apijson.Field
 	SnmpIcmpInCsumErrors           apijson.Field
@@ -1037,16 +1034,6 @@ type ConnectorSnapshotGetResponseTunnel struct {
 	InterfaceName string `json:"interface_name" api:"required"`
 	// Tunnel identifier
 	TunnelID string `json:"tunnel_id" api:"required"`
-	// Tunnel round-trip latency variation in milliseconds
-	JitterMs float64 `json:"jitter_ms"`
-	// 50th percentile tunnel round-trip latency in milliseconds
-	LatencyMs float64 `json:"latency_ms"`
-	// Public socket address returned by the NAT detector
-	NatdResult string `json:"natd_result"`
-	// Numeric NAT detector state (0 = detected, 1 = missing result, 2 = stale result)
-	NatdState float64 `json:"natd_state"`
-	// Target socket address probed by the NAT detector, using the detector source port
-	NatdTarget string `json:"natd_target"`
 	// MTU as measured between the two ends of the tunnel
 	ProbedMtu float64 `json:"probed_mtu"`
 	// Number of recent healthy pings for this tunnel
@@ -1063,11 +1050,6 @@ type connectorSnapshotGetResponseTunnelJSON struct {
 	HealthValue          apijson.Field
 	InterfaceName        apijson.Field
 	TunnelID             apijson.Field
-	JitterMs             apijson.Field
-	LatencyMs            apijson.Field
-	NatdResult           apijson.Field
-	NatdState            apijson.Field
-	NatdTarget           apijson.Field
 	ProbedMtu            apijson.Field
 	RecentHealthyPings   apijson.Field
 	RecentUnhealthyPings apijson.Field

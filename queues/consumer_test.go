@@ -36,7 +36,6 @@ func TestConsumerNewWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: queues.ConsumerNewParamsBodyMqWorkerConsumerRequest{
 				ScriptName:      cloudflare.F("my-consumer-worker"),
-				Type:            cloudflare.F(queues.ConsumerNewParamsBodyMqWorkerConsumerRequestTypeWorker),
 				DeadLetterQueue: cloudflare.F("example-queue"),
 				Settings: cloudflare.F(queues.ConsumerNewParamsBodyMqWorkerConsumerRequestSettings{
 					BatchSize:      cloudflare.F(50.000000),
@@ -80,7 +79,6 @@ func TestConsumerUpdateWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: queues.ConsumerUpdateParamsBodyMqWorkerConsumerRequest{
 				ScriptName:      cloudflare.F("my-consumer-worker"),
-				Type:            cloudflare.F(queues.ConsumerUpdateParamsBodyMqWorkerConsumerRequestTypeWorker),
 				DeadLetterQueue: cloudflare.F("example-queue"),
 				Settings: cloudflare.F(queues.ConsumerUpdateParamsBodyMqWorkerConsumerRequestSettings{
 					BatchSize:      cloudflare.F(50.000000),

@@ -7,11 +7,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -59,25 +57,6 @@ func (r *R2DataCatalogService) List(ctx context.Context, query R2DataCatalogList
 	}
 	res = &env.Result
 	return res, nil
-}
-
-// Removes the catalog from the control plane without deleting R2 bucket objects.
-// Set force=true to remove catalog namespaces, tables, views, and maintenance
-// metadata. Force deletion is limited to a configured catalog object count.
-func (r *R2DataCatalogService) Delete(ctx context.Context, bucketName string, params R2DataCatalogDeleteParams, opts ...option.RequestOption) (err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return err
-	}
-	if bucketName == "" {
-		err = errors.New("missing required bucket_name parameter")
-		return err
-	}
-	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/delete", params.AccountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
-	return err
 }
 
 // Disable an R2 bucket as a catalog. This operation deactivates the catalog but
@@ -687,22 +666,6 @@ func (r *R2DataCatalogListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (
 
 func (r r2DataCatalogListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
-}
-
-type R2DataCatalogDeleteParams struct {
-	// Use this to identify the account.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Remove child metadata before deleting the catalog.
-	Force param.Field[bool] `query:"force"`
-}
-
-// URLQuery serializes [R2DataCatalogDeleteParams]'s query parameters as
-// `url.Values`.
-func (r R2DataCatalogDeleteParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type R2DataCatalogDisableParams struct {

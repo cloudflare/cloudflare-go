@@ -36,9 +36,7 @@ func NewCNIService(opts ...option.RequestOption) (r *CNIService) {
 	return
 }
 
-// Creates a new Cloud Network Interconnect (CNI) for private network connectivity
-// between Cloudflare and your infrastructure. CNIs enable dedicated,
-// high-performance network links.
+// Create a new CNI object
 func (r *CNIService) New(ctx context.Context, params CNINewParams, opts ...option.RequestOption) (res *CNINewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -50,8 +48,7 @@ func (r *CNIService) New(ctx context.Context, params CNINewParams, opts ...optio
 	return res, err
 }
 
-// Updates the configuration of an existing Cloud Network Interconnect (CNI),
-// including connection parameters and routing settings.
+// Modify stored information about a CNI object
 func (r *CNIService) Update(ctx context.Context, cni string, params CNIUpdateParams, opts ...option.RequestOption) (res *CNIUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -67,8 +64,7 @@ func (r *CNIService) Update(ctx context.Context, cni string, params CNIUpdatePar
 	return res, err
 }
 
-// Lists all Cloud Network Interconnects (CNIs) configured for the account, showing
-// connection status and parameters.
+// List existing CNI objects
 func (r *CNIService) List(ctx context.Context, params CNIListParams, opts ...option.RequestOption) (res *CNIListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -80,8 +76,7 @@ func (r *CNIService) List(ctx context.Context, params CNIListParams, opts ...opt
 	return res, err
 }
 
-// Permanently removes a Cloud Network Interconnect (CNI) configuration. The
-// private network connection will be terminated.
+// Delete a specified CNI object
 func (r *CNIService) Delete(ctx context.Context, cni string, body CNIDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -98,8 +93,7 @@ func (r *CNIService) Delete(ctx context.Context, cni string, body CNIDeleteParam
 	return err
 }
 
-// Retrieves configuration details for a specific Cloud Network Interconnect (CNI),
-// including connection status and parameters.
+// Get information about a CNI object
 func (r *CNIService) Get(ctx context.Context, cni string, query CNIGetParams, opts ...option.RequestOption) (res *CNIGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -127,18 +121,9 @@ type CNINewResponse struct {
 	Interconnect string              `json:"interconnect" api:"required"`
 	Magic        CNINewResponseMagic `json:"magic" api:"required"`
 	// Cloudflare end of the point-to-point link
-	P2pIP string            `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
-	BGP   CNINewResponseBGP `json:"bgp"`
-	// The BGP mode for a CNI.
-	//
-	// Controls the customer-facing data path:
-	//
-	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-	//     bgp-bridge / bgp-bridge-receiver.
-	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-	//     Conduit
-	BGPMode CNINewResponseBGPMode `json:"bgp_mode"`
-	JSON    cniNewResponseJSON    `json:"-"`
+	P2pIP string             `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
+	BGP   CNINewResponseBGP  `json:"bgp"`
+	JSON  cniNewResponseJSON `json:"-"`
 }
 
 // cniNewResponseJSON contains the JSON metadata for the struct [CNINewResponse]
@@ -150,7 +135,6 @@ type cniNewResponseJSON struct {
 	Magic        apijson.Field
 	P2pIP        apijson.Field
 	BGP          apijson.Field
-	BGPMode      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -233,29 +217,6 @@ func (r cniNewResponseBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The BGP mode for a CNI.
-//
-// Controls the customer-facing data path:
-//
-//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-//     bgp-bridge / bgp-bridge-receiver.
-//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-//     Conduit
-type CNINewResponseBGPMode string
-
-const (
-	CNINewResponseBGPModeDynamicRouteExchange CNINewResponseBGPMode = "dynamic_route_exchange"
-	CNINewResponseBGPModeAdvertiseOnly        CNINewResponseBGPMode = "advertise_only"
-)
-
-func (r CNINewResponseBGPMode) IsKnown() bool {
-	switch r {
-	case CNINewResponseBGPModeDynamicRouteExchange, CNINewResponseBGPModeAdvertiseOnly:
-		return true
-	}
-	return false
-}
-
 type CNIUpdateResponse struct {
 	ID string `json:"id" api:"required" format:"uuid"`
 	// Customer account tag
@@ -268,18 +229,9 @@ type CNIUpdateResponse struct {
 	Interconnect string                 `json:"interconnect" api:"required"`
 	Magic        CNIUpdateResponseMagic `json:"magic" api:"required"`
 	// Cloudflare end of the point-to-point link
-	P2pIP string               `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
-	BGP   CNIUpdateResponseBGP `json:"bgp"`
-	// The BGP mode for a CNI.
-	//
-	// Controls the customer-facing data path:
-	//
-	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-	//     bgp-bridge / bgp-bridge-receiver.
-	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-	//     Conduit
-	BGPMode CNIUpdateResponseBGPMode `json:"bgp_mode"`
-	JSON    cniUpdateResponseJSON    `json:"-"`
+	P2pIP string                `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
+	BGP   CNIUpdateResponseBGP  `json:"bgp"`
+	JSON  cniUpdateResponseJSON `json:"-"`
 }
 
 // cniUpdateResponseJSON contains the JSON metadata for the struct
@@ -292,7 +244,6 @@ type cniUpdateResponseJSON struct {
 	Magic        apijson.Field
 	P2pIP        apijson.Field
 	BGP          apijson.Field
-	BGPMode      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -375,29 +326,6 @@ func (r cniUpdateResponseBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The BGP mode for a CNI.
-//
-// Controls the customer-facing data path:
-//
-//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-//     bgp-bridge / bgp-bridge-receiver.
-//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-//     Conduit
-type CNIUpdateResponseBGPMode string
-
-const (
-	CNIUpdateResponseBGPModeDynamicRouteExchange CNIUpdateResponseBGPMode = "dynamic_route_exchange"
-	CNIUpdateResponseBGPModeAdvertiseOnly        CNIUpdateResponseBGPMode = "advertise_only"
-)
-
-func (r CNIUpdateResponseBGPMode) IsKnown() bool {
-	switch r {
-	case CNIUpdateResponseBGPModeDynamicRouteExchange, CNIUpdateResponseBGPModeAdvertiseOnly:
-		return true
-	}
-	return false
-}
-
 type CNIListResponse struct {
 	Items []CNIListResponseItem `json:"items" api:"required"`
 	Next  int64                 `json:"next" api:"nullable"`
@@ -434,16 +362,7 @@ type CNIListResponseItem struct {
 	// Cloudflare end of the point-to-point link
 	P2pIP string                  `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   CNIListResponseItemsBGP `json:"bgp"`
-	// The BGP mode for a CNI.
-	//
-	// Controls the customer-facing data path:
-	//
-	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-	//     bgp-bridge / bgp-bridge-receiver.
-	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-	//     Conduit
-	BGPMode CNIListResponseItemsBGPMode `json:"bgp_mode"`
-	JSON    cniListResponseItemJSON     `json:"-"`
+	JSON  cniListResponseItemJSON `json:"-"`
 }
 
 // cniListResponseItemJSON contains the JSON metadata for the struct
@@ -456,7 +375,6 @@ type cniListResponseItemJSON struct {
 	Magic        apijson.Field
 	P2pIP        apijson.Field
 	BGP          apijson.Field
-	BGPMode      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -539,29 +457,6 @@ func (r cniListResponseItemsBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The BGP mode for a CNI.
-//
-// Controls the customer-facing data path:
-//
-//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-//     bgp-bridge / bgp-bridge-receiver.
-//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-//     Conduit
-type CNIListResponseItemsBGPMode string
-
-const (
-	CNIListResponseItemsBGPModeDynamicRouteExchange CNIListResponseItemsBGPMode = "dynamic_route_exchange"
-	CNIListResponseItemsBGPModeAdvertiseOnly        CNIListResponseItemsBGPMode = "advertise_only"
-)
-
-func (r CNIListResponseItemsBGPMode) IsKnown() bool {
-	switch r {
-	case CNIListResponseItemsBGPModeDynamicRouteExchange, CNIListResponseItemsBGPModeAdvertiseOnly:
-		return true
-	}
-	return false
-}
-
 type CNIGetResponse struct {
 	ID string `json:"id" api:"required" format:"uuid"`
 	// Customer account tag
@@ -574,18 +469,9 @@ type CNIGetResponse struct {
 	Interconnect string              `json:"interconnect" api:"required"`
 	Magic        CNIGetResponseMagic `json:"magic" api:"required"`
 	// Cloudflare end of the point-to-point link
-	P2pIP string            `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
-	BGP   CNIGetResponseBGP `json:"bgp"`
-	// The BGP mode for a CNI.
-	//
-	// Controls the customer-facing data path:
-	//
-	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-	//     bgp-bridge / bgp-bridge-receiver.
-	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-	//     Conduit
-	BGPMode CNIGetResponseBGPMode `json:"bgp_mode"`
-	JSON    cniGetResponseJSON    `json:"-"`
+	P2pIP string             `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
+	BGP   CNIGetResponseBGP  `json:"bgp"`
+	JSON  cniGetResponseJSON `json:"-"`
 }
 
 // cniGetResponseJSON contains the JSON metadata for the struct [CNIGetResponse]
@@ -597,7 +483,6 @@ type cniGetResponseJSON struct {
 	Magic        apijson.Field
 	P2pIP        apijson.Field
 	BGP          apijson.Field
-	BGPMode      apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -680,29 +565,6 @@ func (r cniGetResponseBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The BGP mode for a CNI.
-//
-// Controls the customer-facing data path:
-//
-//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-//     bgp-bridge / bgp-bridge-receiver.
-//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-//     Conduit
-type CNIGetResponseBGPMode string
-
-const (
-	CNIGetResponseBGPModeDynamicRouteExchange CNIGetResponseBGPMode = "dynamic_route_exchange"
-	CNIGetResponseBGPModeAdvertiseOnly        CNIGetResponseBGPMode = "advertise_only"
-)
-
-func (r CNIGetResponseBGPMode) IsKnown() bool {
-	switch r {
-	case CNIGetResponseBGPModeDynamicRouteExchange, CNIGetResponseBGPModeAdvertiseOnly:
-		return true
-	}
-	return false
-}
-
 type CNINewParams struct {
 	// Customer account tag
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -773,15 +635,6 @@ type CNIUpdateParams struct {
 	// Cloudflare end of the point-to-point link
 	P2pIP param.Field[string]             `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   param.Field[CNIUpdateParamsBGP] `json:"bgp"`
-	// The BGP mode for a CNI.
-	//
-	// Controls the customer-facing data path:
-	//
-	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-	//     bgp-bridge / bgp-bridge-receiver.
-	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-	//     Conduit
-	BGPMode param.Field[CNIUpdateParamsBGPMode] `json:"bgp_mode"`
 }
 
 func (r CNIUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -826,29 +679,6 @@ type CNIUpdateParamsBGP struct {
 
 func (r CNIUpdateParamsBGP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The BGP mode for a CNI.
-//
-// Controls the customer-facing data path:
-//
-//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-//     bgp-bridge / bgp-bridge-receiver.
-//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-//     Conduit
-type CNIUpdateParamsBGPMode string
-
-const (
-	CNIUpdateParamsBGPModeDynamicRouteExchange CNIUpdateParamsBGPMode = "dynamic_route_exchange"
-	CNIUpdateParamsBGPModeAdvertiseOnly        CNIUpdateParamsBGPMode = "advertise_only"
-)
-
-func (r CNIUpdateParamsBGPMode) IsKnown() bool {
-	switch r {
-	case CNIUpdateParamsBGPModeDynamicRouteExchange, CNIUpdateParamsBGPModeAdvertiseOnly:
-		return true
-	}
-	return false
 }
 
 type CNIListParams struct {

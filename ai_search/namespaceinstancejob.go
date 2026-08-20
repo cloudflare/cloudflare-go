@@ -62,7 +62,7 @@ func (r *NamespaceInstanceJobService) New(ctx context.Context, name string, id s
 	return res, nil
 }
 
-// Cancel an in-progress indexing job for an AI Search instance.
+// Updates the status of an AI Search indexing job.
 func (r *NamespaceInstanceJobService) Update(ctx context.Context, name string, id string, jobID string, params NamespaceInstanceJobUpdateParams, opts ...option.RequestOption) (res *NamespaceInstanceJobUpdateResponse, err error) {
 	var env NamespaceInstanceJobUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -174,7 +174,7 @@ func (r TunnelCloudflaredNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// TunnelCloudflaredNewParamsConfigSrc indicates if this is a locally or remotely configured tunnel. If `local`, manage
 // the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 // tunnel on the Zero Trust dashboard.
 type TunnelCloudflaredNewParamsConfigSrc string
@@ -221,7 +221,7 @@ func (r tunnelCloudflaredNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelCloudflaredNewResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelCloudflaredNewResponseEnvelopeSuccess bool
 
 const (
@@ -273,7 +273,7 @@ func (r TunnelCloudflaredListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+// TunnelCloudflaredListParamsStatus is the status of the tunnel. Valid values are `inactive` (tunnel has never been
 // run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
 // state), `healthy` (tunnel is active and able to serve traffic), or `down`
 // (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
@@ -328,7 +328,7 @@ func (r tunnelCloudflaredDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelCloudflaredDeleteResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelCloudflaredDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -386,7 +386,7 @@ func (r tunnelCloudflaredEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelCloudflaredEditResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelCloudflaredEditResponseEnvelopeSuccess bool
 
 const (
@@ -435,7 +435,7 @@ func (r tunnelCloudflaredGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelCloudflaredGetResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelCloudflaredGetResponseEnvelopeSuccess bool
 
 const (

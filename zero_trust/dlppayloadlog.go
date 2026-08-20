@@ -104,7 +104,7 @@ func (r dlpPayloadLogUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Masking level for payload logs.
+// DLPPayloadLogUpdateResponseMaskingLevel masking level for payload logs.
 //
 // - `full`: The entire payload is masked.
 // - `partial`: Only partial payload content is masked.
@@ -160,7 +160,7 @@ func (r dlpPayloadLogGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Masking level for payload logs.
+// DLPPayloadLogGetResponseMaskingLevel masking level for payload logs.
 //
 // - `full`: The entire payload is masked.
 // - `partial`: Only partial payload content is masked.
@@ -212,7 +212,7 @@ func (r DLPPayloadLogUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Masking level for payload logs.
+// DLPPayloadLogUpdateParamsMaskingLevel masking level for payload logs.
 //
 // - `full`: The entire payload is masked.
 // - `partial`: Only partial payload content is masked.
@@ -359,7 +359,7 @@ func (r dlpPayloadLogUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPPayloadLogUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPPayloadLogUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -502,7 +502,7 @@ func (r dlpPayloadLogGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPPayloadLogGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPPayloadLogGetResponseEnvelopeSuccess bool
 
 const (

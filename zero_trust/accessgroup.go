@@ -248,7 +248,7 @@ func (r zeroTrustGroupJSON) RawJSON() string {
 	return r.raw
 }
 
-// The metadata of the SCIM resource.
+// ZeroTrustGroupMeta is the metadata of the SCIM resource.
 type ZeroTrustGroupMeta struct {
 	// The timestamp of when the SCIM resource was created.
 	Created time.Time `json:"created" format:"date-time"`
@@ -608,7 +608,7 @@ func (r accessGroupNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessGroupNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessGroupNewResponseEnvelopeSuccess bool
 
 const (
@@ -771,7 +771,7 @@ func (r accessGroupUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessGroupUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessGroupUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -940,7 +940,7 @@ func (r accessGroupDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessGroupDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessGroupDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1086,7 +1086,7 @@ func (r accessGroupGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessGroupGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessGroupGetResponseEnvelopeSuccess bool
 
 const (

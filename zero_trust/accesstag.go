@@ -144,7 +144,7 @@ func (r *AccessTagService) Get(ctx context.Context, tagName string, query Access
 	return res, nil
 }
 
-// A tag
+// Tag is a tag
 type Tag struct {
 	// The name of the tag
 	Name string  `json:"name" api:"required"`
@@ -324,7 +324,7 @@ func (r accessTagNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessTagNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessTagNewResponseEnvelopeSuccess bool
 
 const (
@@ -475,7 +475,7 @@ func (r accessTagUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessTagUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessTagUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -636,7 +636,7 @@ func (r accessTagDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessTagDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessTagDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -781,7 +781,7 @@ func (r accessTagGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessTagGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessTagGetResponseEnvelopeSuccess bool
 
 const (

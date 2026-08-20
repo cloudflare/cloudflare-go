@@ -14,11 +14,15 @@ Methods:
 
 Params Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl#HostParam">HostParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl#RequestValidity">RequestValidity</a>
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl#Host">Host</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl#RequestValidity">RequestValidity</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl#Status">Status</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl#ValidationMethod">ValidationMethod</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl#CertificatePackNewResponse">CertificatePackNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl#CertificatePackListResponse">CertificatePackListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/ssl#CertificatePackDeleteResponse">CertificatePackDeleteResponse</a>

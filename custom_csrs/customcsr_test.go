@@ -66,8 +66,6 @@ func TestCustomCsrListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CustomCsrs.List(context.TODO(), custom_csrs.CustomCsrListParams{
 		AccountID: cloudflare.F("account_id"),
-		Direction: cloudflare.F(custom_csrs.CustomCsrListParamsDirectionAsc),
-		Order:     cloudflare.F(custom_csrs.CustomCsrListParamsOrderName),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 	})

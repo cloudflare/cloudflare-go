@@ -43,8 +43,8 @@ func NewRateLimitService(opts ...option.RequestOption) (r *RateLimitService) {
 	return
 }
 
-// **Deprecated**: This endpoint returns 410 Gone. Please use the Rulesets API
-// instead.
+// Creates a new rate limit for a zone. Refer to the object definition for a list
+// of required attributes.
 //
 // Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
 // Engine. See
@@ -66,8 +66,7 @@ func (r *RateLimitService) New(ctx context.Context, params RateLimitNewParams, o
 	return res, nil
 }
 
-// **Deprecated**: This endpoint returns 410 Gone. Please use the Rulesets API
-// instead.
+// Fetches the rate limits for a zone.
 //
 // Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
 // Engine. See
@@ -94,8 +93,7 @@ func (r *RateLimitService) List(ctx context.Context, params RateLimitListParams,
 	return res, nil
 }
 
-// **Deprecated**: This endpoint returns 410 Gone. Please use the Rulesets API
-// instead.
+// Fetches the rate limits for a zone.
 //
 // Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
 // Engine. See
@@ -105,8 +103,7 @@ func (r *RateLimitService) ListAutoPaging(ctx context.Context, params RateLimitL
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// **Deprecated**: This endpoint returns 410 Gone. Please use the Rulesets API
-// instead.
+// Deletes an existing rate limit.
 //
 // Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
 // Engine. See
@@ -132,8 +129,7 @@ func (r *RateLimitService) Delete(ctx context.Context, rateLimitID string, body 
 	return res, nil
 }
 
-// **Deprecated**: This endpoint returns 410 Gone. Please use the Rulesets API
-// instead.
+// Updates an existing rate limit.
 //
 // Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
 // Engine. See
@@ -159,8 +155,7 @@ func (r *RateLimitService) Edit(ctx context.Context, rateLimitID string, params 
 	return res, nil
 }
 
-// **Deprecated**: This endpoint returns 410 Gone. Please use the Rulesets API
-// instead.
+// Fetches the details of a rate limit.
 //
 // Deprecated: Rate limiting API is deprecated in favour of using the Ruleset
 // Engine. See

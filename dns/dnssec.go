@@ -24,7 +24,6 @@ import (
 // the [NewDNSSECService] method instead.
 type DNSSECService struct {
 	Options []option.RequestOption
-	Zsk     *DNSSECZskService
 }
 
 // NewDNSSECService generates a new service that applies the given options to each
@@ -33,7 +32,6 @@ type DNSSECService struct {
 func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 	r = &DNSSECService{}
 	r.Options = opts
-	r.Zsk = NewDNSSECZskService(opts...)
 	return
 }
 

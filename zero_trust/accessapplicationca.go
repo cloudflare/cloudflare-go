@@ -364,7 +364,7 @@ func (r accessApplicationCANewResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationCANewResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationCANewResponseEnvelopeSuccess bool
 
 const (
@@ -531,7 +531,7 @@ func (r accessApplicationCADeleteResponseEnvelopeMessagesSourceJSON) RawJSON() s
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationCADeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationCADeleteResponseEnvelopeSuccess bool
 
 const (
@@ -677,7 +677,7 @@ func (r accessApplicationCAGetResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationCAGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationCAGetResponseEnvelopeSuccess bool
 
 const (

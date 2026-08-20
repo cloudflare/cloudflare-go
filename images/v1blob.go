@@ -33,9 +33,8 @@ func NewV1BlobService(opts ...option.RequestOption) (r *V1BlobService) {
 	return
 }
 
-// Download an image from CF Images. For most images this will be the originally
-// uploaded file. For larger images it can be a near-lossless version of the
-// original.
+// Fetch base image. For most images this will be the originally uploaded file. For
+// larger images it can be a near-lossless version of the original.
 func (r *V1BlobService) Get(ctx context.Context, imageID string, query V1BlobGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/*")}, opts...)

@@ -97,9 +97,6 @@ type BillingUsageGetResponse struct {
 	InvoiceIssuerName string `json:"InvoiceIssuerName" api:"required"`
 	// Name of the entity that made the services available for purchase.
 	ServiceProviderName string `json:"ServiceProviderName" api:"required"`
-	// The unique identifier for the billable metric in the Cloudflare catalog.
-	// Cloudflare extension; replaces FOCUS SkuId.
-	XBillableMetricID string `json:"x_BillableMetricId" api:"required"`
 	// The display name of the billable metric. Cloudflare extension; replaces FOCUS
 	// SkuMeter.
 	XBillableMetricName string `json:"x_BillableMetricName" api:"required"`
@@ -150,12 +147,9 @@ type BillingUsageGetResponse struct {
 	// Name assigned to a grouping of services. For Cloudflare, this is the
 	// subscription or contract display name.
 	SubAccountName string `json:"SubAccountName"`
-	// The product category the charge belongs to (e.g., "Developer", "Cloudflare
-	// One"). Cloudflare extension; replaces FOCUS ServiceCategory.
-	XProductCategoryName string `json:"x_ProductCategoryName"`
-	// The unique identifier for the product family in the Cloudflare catalog.
-	// Cloudflare extension; replaces FOCUS ServiceId.
-	XProductFamilyID string `json:"x_ProductFamilyId"`
+	// The unique identifier for the billable metric in the Cloudflare catalog.
+	// Cloudflare extension; replaces FOCUS SkuId.
+	XBillableMetricID string `json:"x_BillableMetricId"`
 	// The product family the charge belongs to (e.g., "R2", "Workers"). Cloudflare
 	// extension; replaces FOCUS ServiceName.
 	XProductFamilyName string `json:"x_ProductFamilyName"`
@@ -169,43 +163,41 @@ type BillingUsageGetResponse struct {
 // billingUsageGetResponseJSON contains the JSON metadata for the struct
 // [BillingUsageGetResponse]
 type billingUsageGetResponseJSON struct {
-	BillingAccountID     apijson.Field
-	BillingAccountName   apijson.Field
-	ChargeCategory       apijson.Field
-	ChargeDescription    apijson.Field
-	ChargeFrequency      apijson.Field
-	ChargePeriodEnd      apijson.Field
-	ChargePeriodStart    apijson.Field
-	ConsumedQuantity     apijson.Field
-	ConsumedUnit         apijson.Field
-	HostProviderName     apijson.Field
-	InvoiceIssuerName    apijson.Field
-	ServiceProviderName  apijson.Field
-	XBillableMetricID    apijson.Field
-	XBillableMetricName  apijson.Field
-	BilledCost           apijson.Field
-	BillingCurrency      apijson.Field
-	BillingPeriodEnd     apijson.Field
-	BillingPeriodStart   apijson.Field
-	ChargeClass          apijson.Field
-	ContractedCost       apijson.Field
-	ContractedUnitPrice  apijson.Field
-	EffectiveCost        apijson.Field
-	ListCost             apijson.Field
-	ListUnitPrice        apijson.Field
-	PricingQuantity      apijson.Field
-	PricingUnit          apijson.Field
-	RegionID             apijson.Field
-	RegionName           apijson.Field
-	SubAccountID         apijson.Field
-	SubAccountName       apijson.Field
-	XProductCategoryName apijson.Field
-	XProductFamilyID     apijson.Field
-	XProductFamilyName   apijson.Field
-	XZoneID              apijson.Field
-	XZoneName            apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	BillingAccountID    apijson.Field
+	BillingAccountName  apijson.Field
+	ChargeCategory      apijson.Field
+	ChargeDescription   apijson.Field
+	ChargeFrequency     apijson.Field
+	ChargePeriodEnd     apijson.Field
+	ChargePeriodStart   apijson.Field
+	ConsumedQuantity    apijson.Field
+	ConsumedUnit        apijson.Field
+	HostProviderName    apijson.Field
+	InvoiceIssuerName   apijson.Field
+	ServiceProviderName apijson.Field
+	XBillableMetricName apijson.Field
+	BilledCost          apijson.Field
+	BillingCurrency     apijson.Field
+	BillingPeriodEnd    apijson.Field
+	BillingPeriodStart  apijson.Field
+	ChargeClass         apijson.Field
+	ContractedCost      apijson.Field
+	ContractedUnitPrice apijson.Field
+	EffectiveCost       apijson.Field
+	ListCost            apijson.Field
+	ListUnitPrice       apijson.Field
+	PricingQuantity     apijson.Field
+	PricingUnit         apijson.Field
+	RegionID            apijson.Field
+	RegionName          apijson.Field
+	SubAccountID        apijson.Field
+	SubAccountName      apijson.Field
+	XBillableMetricID   apijson.Field
+	XProductFamilyName  apijson.Field
+	XZoneID             apijson.Field
+	XZoneName           apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *BillingUsageGetResponse) UnmarshalJSON(data []byte) (err error) {

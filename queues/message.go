@@ -77,28 +77,6 @@ func (r *MessageService) BulkPush(ctx context.Context, queueID string, params Me
 	return res, nil
 }
 
-// Peek messages from a Queue without leasing them. Messages remain available for
-// subsequent peek or pull operations.
-func (r *MessageService) Peek(ctx context.Context, queueID string, params MessagePeekParams, opts ...option.RequestOption) (res *MessagePeekResponse, err error) {
-	var env MessagePeekResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	if queueID == "" {
-		err = errors.New("missing required queue_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/queues/%s/messages/peek", params.AccountID, queueID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
-}
-
 // Pull a batch of messages from a Queue
 func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *MessagePullResponse, err error) {
 	var env MessagePullResponseEnvelope
@@ -112,29 +90,6 @@ func (r *MessageService) Pull(ctx context.Context, queueID string, params Messag
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/messages/pull", params.AccountID, queueID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
-}
-
-// Delete peeked messages from a Queue by their ref. Purged messages aren't
-// considered delivered, they are instantly deleted from this queue and do not
-// affect metrics.
-func (r *MessageService) Purge(ctx context.Context, queueID string, params MessagePurgeParams, opts ...option.RequestOption) (res *MessagePurgeResponse, err error) {
-	var env MessagePurgeResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	if queueID == "" {
-		err = errors.New("missing required queue_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/queues/%s/messages/purge", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -267,60 +222,6 @@ func (r messageBulkPushResponseMetadataMetricsJSON) RawJSON() string {
 	return r.raw
 }
 
-type MessagePeekResponse struct {
-	Messages []MessagePeekResponseMessage `json:"messages"`
-	JSON     messagePeekResponseJSON      `json:"-"`
-}
-
-// messagePeekResponseJSON contains the JSON metadata for the struct
-// [MessagePeekResponse]
-type messagePeekResponseJSON struct {
-	Messages    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessagePeekResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messagePeekResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type MessagePeekResponseMessage struct {
-	ID       string      `json:"id"`
-	Attempts float64     `json:"attempts"`
-	Body     string      `json:"body"`
-	Metadata interface{} `json:"metadata"`
-	// An opaque reference to a peeked message. You must hold on to this value and use
-	// it to purge the message.
-	Ref         string                         `json:"ref"`
-	TimestampMs float64                        `json:"timestamp_ms"`
-	JSON        messagePeekResponseMessageJSON `json:"-"`
-}
-
-// messagePeekResponseMessageJSON contains the JSON metadata for the struct
-// [MessagePeekResponseMessage]
-type messagePeekResponseMessageJSON struct {
-	ID          apijson.Field
-	Attempts    apijson.Field
-	Body        apijson.Field
-	Metadata    apijson.Field
-	Ref         apijson.Field
-	TimestampMs apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessagePeekResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messagePeekResponseMessageJSON) RawJSON() string {
-	return r.raw
-}
-
 type MessagePullResponse struct {
 	// The number of unacknowledged messages in the queue.
 	MessageBacklogCount float64                      `json:"message_backlog_count"`
@@ -431,52 +332,6 @@ func (r *MessagePullResponseMetadataMetrics) UnmarshalJSON(data []byte) (err err
 }
 
 func (r messagePullResponseMetadataMetricsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MessagePurgeResponse struct {
-	// Errors encountered while purging messages.
-	Errors []MessagePurgeResponseError `json:"errors"`
-	// Map of refs to warning messages encountered during purge.
-	Warnings map[string]string        `json:"warnings"`
-	JSON     messagePurgeResponseJSON `json:"-"`
-}
-
-// messagePurgeResponseJSON contains the JSON metadata for the struct
-// [MessagePurgeResponse]
-type messagePurgeResponseJSON struct {
-	Errors      apijson.Field
-	Warnings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessagePurgeResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messagePurgeResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type MessagePurgeResponseError struct {
-	Message string                        `json:"message"`
-	JSON    messagePurgeResponseErrorJSON `json:"-"`
-}
-
-// messagePurgeResponseErrorJSON contains the JSON metadata for the struct
-// [MessagePurgeResponseError]
-type messagePurgeResponseErrorJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessagePurgeResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messagePurgeResponseErrorJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -781,60 +636,6 @@ func (r MessageBulkPushResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type MessagePeekParams struct {
-	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The maximum number of messages to include in a batch.
-	BatchSize param.Field[float64] `json:"batch_size"`
-}
-
-func (r MessagePeekParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type MessagePeekResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   MessagePeekResponse   `json:"result"`
-	// Indicates if the API call was successful or not.
-	Success MessagePeekResponseEnvelopeSuccess `json:"success"`
-	JSON    messagePeekResponseEnvelopeJSON    `json:"-"`
-}
-
-// messagePeekResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MessagePeekResponseEnvelope]
-type messagePeekResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessagePeekResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messagePeekResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Indicates if the API call was successful or not.
-type MessagePeekResponseEnvelopeSuccess bool
-
-const (
-	MessagePeekResponseEnvelopeSuccessTrue MessagePeekResponseEnvelopeSuccess = true
-)
-
-func (r MessagePeekResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case MessagePeekResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type MessagePullParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -887,69 +688,6 @@ const (
 func (r MessagePullResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case MessagePullResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type MessagePurgeParams struct {
-	// A Resource identifier.
-	AccountID param.Field[string]                  `path:"account_id" api:"required"`
-	Refs      param.Field[[]MessagePurgeParamsRef] `json:"refs" api:"required"`
-}
-
-func (r MessagePurgeParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type MessagePurgeParamsRef struct {
-	// An opaque reference to a peeked message. You must hold on to this value and use
-	// it to purge the message.
-	Ref param.Field[string] `json:"ref" api:"required"`
-}
-
-func (r MessagePurgeParamsRef) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type MessagePurgeResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors"`
-	Messages []string              `json:"messages"`
-	Result   MessagePurgeResponse  `json:"result"`
-	// Indicates if the API call was successful or not.
-	Success MessagePurgeResponseEnvelopeSuccess `json:"success"`
-	JSON    messagePurgeResponseEnvelopeJSON    `json:"-"`
-}
-
-// messagePurgeResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MessagePurgeResponseEnvelope]
-type messagePurgeResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MessagePurgeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r messagePurgeResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Indicates if the API call was successful or not.
-type MessagePurgeResponseEnvelopeSuccess bool
-
-const (
-	MessagePurgeResponseEnvelopeSuccessTrue MessagePurgeResponseEnvelopeSuccess = true
-)
-
-func (r MessagePurgeResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case MessagePurgeResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

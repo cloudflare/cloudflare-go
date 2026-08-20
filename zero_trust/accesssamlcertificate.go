@@ -174,7 +174,7 @@ func (r accessSAMLCertificateListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The current active certificate
+// AccessSAMLCertificateListResponseCurrentCertificate is the current active certificate
 type AccessSAMLCertificateListResponseCurrentCertificate struct {
 	// Indicates whether the certificate can be used for IdP configuration.
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -241,7 +241,7 @@ func (r accessSAMLCertificateGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The current active certificate
+// AccessSAMLCertificateGetResponseCurrentCertificate is the current active certificate
 type AccessSAMLCertificateGetResponseCurrentCertificate struct {
 	// Indicates whether the certificate can be used for IdP configuration.
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -308,7 +308,7 @@ func (r accessSAMLCertificateRotateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The current active certificate
+// AccessSAMLCertificateRotateResponseCurrentCertificate is the current active certificate
 type AccessSAMLCertificateRotateResponseCurrentCertificate struct {
 	// Indicates whether the certificate can be used for IdP configuration.
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -489,7 +489,7 @@ func (r accessSAMLCertificateGetResponseEnvelopeMessagesSourceJSON) RawJSON() st
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessSAMLCertificateGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessSAMLCertificateGetResponseEnvelopeSuccess bool
 
 const (
@@ -640,7 +640,7 @@ func (r accessSAMLCertificateRotateResponseEnvelopeMessagesSourceJSON) RawJSON()
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessSAMLCertificateRotateResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessSAMLCertificateRotateResponseEnvelopeSuccess bool
 
 const (

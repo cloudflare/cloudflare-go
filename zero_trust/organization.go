@@ -243,9 +243,9 @@ type Organization struct {
 	MfaPivKeyRequirements OrganizationMfaPivKeyRequirements `json:"mfa_piv_key_requirements"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
-	// session duration configured. Note: 'allowed_authenticators' cannot contain only
-	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
-	// organization has any non-infrastructure applications.
+	// session duration configured. Note: 'allowed_authenticators' cannot only contain
+	// 'piv_key' if the organization has any non-infrastructure applications because
+	// PIV keys are only compatible with infrastructure apps.
 	MfaRequiredForAllApps bool `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
@@ -261,9 +261,6 @@ type Organization struct {
 	// month (730h). Must be in the format `300ms` or `2h45m`. Valid time units are:
 	// `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
-	// When enabled, unsuccessful WARP authentication requests with a non-HTML Accept
-	// header return a 401 response instead of redirecting to the login page.
-	WARPAuthNonBrowser401 bool `json:"warp_auth_non_browser_401"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
 	WARPAuthSessionDuration string           `json:"warp_auth_session_duration"`
@@ -287,7 +284,6 @@ type organizationJSON struct {
 	SessionDuration                        apijson.Field
 	UIReadOnlyToggleReason                 apijson.Field
 	UserSeatExpirationInactiveTime         apijson.Field
-	WARPAuthNonBrowser401                  apijson.Field
 	WARPAuthSessionDuration                apijson.Field
 	raw                                    string
 	ExtraFields                            map[string]apijson.Field
@@ -327,10 +323,9 @@ func (r organizationCustomPagesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configures multi-factor authentication (MFA) settings for an organization.
+// OrganizationMfaConfig configures multi-factor authentication (MFA) settings for an organization.
 type OrganizationMfaConfig struct {
-	// Lists the MFA methods that users can authenticate with. The `piv_key` and
-	// `ssh_fido2_key` values are supported only for infrastructure applications.
+	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators []OrganizationMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
 	// Allows a user to skip MFA via Authentication Method Reference (AMR) matching
 	// when the AMR claim provided by the IdP the user used to authenticate contains
@@ -371,18 +366,17 @@ const (
 	OrganizationMfaConfigAllowedAuthenticatorBiometrics  OrganizationMfaConfigAllowedAuthenticator = "biometrics"
 	OrganizationMfaConfigAllowedAuthenticatorSecurityKey OrganizationMfaConfigAllowedAuthenticator = "security_key"
 	OrganizationMfaConfigAllowedAuthenticatorPivKey      OrganizationMfaConfigAllowedAuthenticator = "piv_key"
-	OrganizationMfaConfigAllowedAuthenticatorSSHFido2Key OrganizationMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r OrganizationMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case OrganizationMfaConfigAllowedAuthenticatorTotp, OrganizationMfaConfigAllowedAuthenticatorBiometrics, OrganizationMfaConfigAllowedAuthenticatorSecurityKey, OrganizationMfaConfigAllowedAuthenticatorPivKey, OrganizationMfaConfigAllowedAuthenticatorSSHFido2Key:
+	case OrganizationMfaConfigAllowedAuthenticatorTotp, OrganizationMfaConfigAllowedAuthenticatorBiometrics, OrganizationMfaConfigAllowedAuthenticatorSecurityKey, OrganizationMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
 }
 
-// Configures PIV key requirements for MFA using hardware security keys.
+// OrganizationMfaPivKeyRequirements configures PIV key requirements for MFA using hardware security keys.
 type OrganizationMfaPivKeyRequirements struct {
 	// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 	// required), `once` (PIN required once per session), `always` (PIN required for
@@ -424,7 +418,7 @@ func (r organizationMfaPivKeyRequirementsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
+// OrganizationMfaPivKeyRequirementsPinPolicy defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 // required), `once` (PIN required once per session), `always` (PIN required for
 // each use).
 type OrganizationMfaPivKeyRequirementsPinPolicy string
@@ -478,7 +472,7 @@ func (r OrganizationMfaPivKeyRequirementsSSHKeyType) IsKnown() bool {
 	return false
 }
 
-// Defines when physical touch is required to use the SSH key. Valid values:
+// OrganizationMfaPivKeyRequirementsTouchPolicy defines when physical touch is required to use the SSH key. Valid values:
 // `never` (no touch required), `always` (touch required for each use), `cached`
 // (touch cached for 15 seconds).
 type OrganizationMfaPivKeyRequirementsTouchPolicy string
@@ -548,9 +542,9 @@ type OrganizationNewParams struct {
 	MfaPivKeyRequirements param.Field[OrganizationNewParamsMfaPivKeyRequirements] `json:"mfa_piv_key_requirements"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
-	// session duration configured. Note: 'allowed_authenticators' cannot contain only
-	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
-	// organization has any non-infrastructure applications.
+	// session duration configured. Note: 'allowed_authenticators' cannot only contain
+	// 'piv_key' if the organization has any non-infrastructure applications because
+	// PIV keys are only compatible with infrastructure apps.
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
@@ -564,9 +558,6 @@ type OrganizationNewParams struct {
 	// month (730h). Must be in the format `300ms` or `2h45m`. Valid time units are:
 	// `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 	UserSeatExpirationInactiveTime param.Field[string] `json:"user_seat_expiration_inactive_time"`
-	// When enabled, unsuccessful WARP authentication requests with a non-HTML Accept
-	// header return a 401 response instead of redirecting to the login page.
-	WARPAuthNonBrowser401 param.Field[bool] `json:"warp_auth_non_browser_401"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
 	WARPAuthSessionDuration param.Field[string] `json:"warp_auth_session_duration"`
@@ -576,10 +567,9 @@ func (r OrganizationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Configures multi-factor authentication (MFA) settings for an organization.
+// OrganizationNewParamsMfaConfig configures multi-factor authentication (MFA) settings for an organization.
 type OrganizationNewParamsMfaConfig struct {
-	// Lists the MFA methods that users can authenticate with. The `piv_key` and
-	// `ssh_fido2_key` values are supported only for infrastructure applications.
+	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]OrganizationNewParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
 	// Allows a user to skip MFA via Authentication Method Reference (AMR) matching
 	// when the AMR claim provided by the IdP the user used to authenticate contains
@@ -604,18 +594,17 @@ const (
 	OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics  OrganizationNewParamsMfaConfigAllowedAuthenticator = "biometrics"
 	OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey OrganizationNewParamsMfaConfigAllowedAuthenticator = "security_key"
 	OrganizationNewParamsMfaConfigAllowedAuthenticatorPivKey      OrganizationNewParamsMfaConfigAllowedAuthenticator = "piv_key"
-	OrganizationNewParamsMfaConfigAllowedAuthenticatorSSHFido2Key OrganizationNewParamsMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r OrganizationNewParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case OrganizationNewParamsMfaConfigAllowedAuthenticatorTotp, OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationNewParamsMfaConfigAllowedAuthenticatorPivKey, OrganizationNewParamsMfaConfigAllowedAuthenticatorSSHFido2Key:
+	case OrganizationNewParamsMfaConfigAllowedAuthenticatorTotp, OrganizationNewParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationNewParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationNewParamsMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
 }
 
-// Configures PIV key requirements for MFA using hardware security keys.
+// OrganizationNewParamsMfaPivKeyRequirements configures PIV key requirements for MFA using hardware security keys.
 type OrganizationNewParamsMfaPivKeyRequirements struct {
 	// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 	// required), `once` (PIN required once per session), `always` (PIN required for
@@ -640,7 +629,7 @@ func (r OrganizationNewParamsMfaPivKeyRequirements) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
+// OrganizationNewParamsMfaPivKeyRequirementsPinPolicy defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 // required), `once` (PIN required once per session), `always` (PIN required for
 // each use).
 type OrganizationNewParamsMfaPivKeyRequirementsPinPolicy string
@@ -694,7 +683,7 @@ func (r OrganizationNewParamsMfaPivKeyRequirementsSSHKeyType) IsKnown() bool {
 	return false
 }
 
-// Defines when physical touch is required to use the SSH key. Valid values:
+// OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy defines when physical touch is required to use the SSH key. Valid values:
 // `never` (no touch required), `always` (touch required for each use), `cached`
 // (touch cached for 15 seconds).
 type OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy string
@@ -837,7 +826,7 @@ func (r organizationNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// OrganizationNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type OrganizationNewResponseEnvelopeSuccess bool
 
 const (
@@ -887,9 +876,9 @@ type OrganizationUpdateParams struct {
 	MfaPivKeyRequirements param.Field[OrganizationUpdateParamsMfaPivKeyRequirements] `json:"mfa_piv_key_requirements"`
 	// Determines whether global MFA settings apply to applications by default. The
 	// organization must have MFA enabled with at least one authentication method and a
-	// session duration configured. Note: 'allowed_authenticators' cannot contain only
-	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
-	// organization has any non-infrastructure applications.
+	// session duration configured. Note: 'allowed_authenticators' cannot only contain
+	// 'piv_key' if the organization has any non-infrastructure applications because
+	// PIV keys are only compatible with infrastructure apps.
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name param.Field[string] `json:"name"`
@@ -905,9 +894,6 @@ type OrganizationUpdateParams struct {
 	// month (730h). Must be in the format `300ms` or `2h45m`. Valid time units are:
 	// `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 	UserSeatExpirationInactiveTime param.Field[string] `json:"user_seat_expiration_inactive_time"`
-	// When enabled, unsuccessful WARP authentication requests with a non-HTML Accept
-	// header return a 401 response instead of redirecting to the login page.
-	WARPAuthNonBrowser401 param.Field[bool] `json:"warp_auth_non_browser_401"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
 	WARPAuthSessionDuration param.Field[string] `json:"warp_auth_session_duration"`
@@ -929,10 +915,9 @@ func (r OrganizationUpdateParamsCustomPages) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-// Configures multi-factor authentication (MFA) settings for an organization.
+// OrganizationUpdateParamsMfaConfig configures multi-factor authentication (MFA) settings for an organization.
 type OrganizationUpdateParamsMfaConfig struct {
-	// Lists the MFA methods that users can authenticate with. The `piv_key` and
-	// `ssh_fido2_key` values are supported only for infrastructure applications.
+	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]OrganizationUpdateParamsMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
 	// Allows a user to skip MFA via Authentication Method Reference (AMR) matching
 	// when the AMR claim provided by the IdP the user used to authenticate contains
@@ -957,18 +942,17 @@ const (
 	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics  OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "biometrics"
 	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "security_key"
 	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorPivKey      OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "piv_key"
-	OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSSHFido2Key OrganizationUpdateParamsMfaConfigAllowedAuthenticator = "ssh_fido2_key"
 )
 
 func (r OrganizationUpdateParamsMfaConfigAllowedAuthenticator) IsKnown() bool {
 	switch r {
-	case OrganizationUpdateParamsMfaConfigAllowedAuthenticatorTotp, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorPivKey, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSSHFido2Key:
+	case OrganizationUpdateParamsMfaConfigAllowedAuthenticatorTotp, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorBiometrics, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorSecurityKey, OrganizationUpdateParamsMfaConfigAllowedAuthenticatorPivKey:
 		return true
 	}
 	return false
 }
 
-// Configures PIV key requirements for MFA using hardware security keys.
+// OrganizationUpdateParamsMfaPivKeyRequirements configures PIV key requirements for MFA using hardware security keys.
 type OrganizationUpdateParamsMfaPivKeyRequirements struct {
 	// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 	// required), `once` (PIN required once per session), `always` (PIN required for
@@ -993,7 +977,7 @@ func (r OrganizationUpdateParamsMfaPivKeyRequirements) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
+// OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicy defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
 // required), `once` (PIN required once per session), `always` (PIN required for
 // each use).
 type OrganizationUpdateParamsMfaPivKeyRequirementsPinPolicy string
@@ -1047,7 +1031,7 @@ func (r OrganizationUpdateParamsMfaPivKeyRequirementsSSHKeyType) IsKnown() bool 
 	return false
 }
 
-// Defines when physical touch is required to use the SSH key. Valid values:
+// OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy defines when physical touch is required to use the SSH key. Valid values:
 // `never` (no touch required), `always` (touch required for each use), `cached`
 // (touch cached for 15 seconds).
 type OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy string
@@ -1190,7 +1174,7 @@ func (r organizationUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// OrganizationUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type OrganizationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1336,7 +1320,7 @@ func (r organizationListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// OrganizationListResponseEnvelopeSuccess indicates whether the API call was successful.
 type OrganizationListResponseEnvelopeSuccess bool
 
 const (

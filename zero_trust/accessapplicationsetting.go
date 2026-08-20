@@ -295,7 +295,7 @@ func (r accessApplicationSettingUpdateResponseEnvelopeMessagesSourceJSON) RawJSO
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationSettingUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationSettingUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -451,7 +451,7 @@ func (r accessApplicationSettingEditResponseEnvelopeMessagesSourceJSON) RawJSON(
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationSettingEditResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationSettingEditResponseEnvelopeSuccess bool
 
 const (

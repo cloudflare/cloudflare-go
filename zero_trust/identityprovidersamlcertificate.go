@@ -46,7 +46,7 @@ func NewIdentityProviderSAMLCertificateService(opts ...option.RequestOption) (r 
 // 2. Update the IdP configuration (PUT `/identity_providers/{id}`) with:
 //   - `config.enable_encryption: true`
 //   - `saml_certificate_set_id: <uid from step 1>`
-//  3. Configure the certificate's public key in your external SAML Identity
+//     3. Configure the certificate's public key in your external SAML Identity
 //     Provider
 func (r *IdentityProviderSAMLCertificateService) New(ctx context.Context, identityProviderID string, body IdentityProviderSAMLCertificateNewParams, opts ...option.RequestOption) (res *IdentityProviderSAMLCertificateNewResponse, err error) {
 	var env IdentityProviderSAMLCertificateNewResponseEnvelope
@@ -68,7 +68,7 @@ func (r *IdentityProviderSAMLCertificateService) New(ctx context.Context, identi
 	return res, nil
 }
 
-// A SAML encryption certificate set containing current and optionally previous
+// IdentityProviderSAMLCertificateNewResponse is a SAML encryption certificate set containing current and optionally previous
 // certificates for encryption key rotation.
 type IdentityProviderSAMLCertificateNewResponse struct {
 	// Timestamp when the certificate set was created
@@ -105,7 +105,7 @@ func (r identityProviderSAMLCertificateNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderSAMLCertificateNewResponseCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderSAMLCertificateNewResponseCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -275,7 +275,7 @@ func (r identityProviderSAMLCertificateNewResponseEnvelopeMessagesSourceJSON) Ra
 	return r.raw
 }
 
-// Whether the API call was successful.
+// IdentityProviderSAMLCertificateNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type IdentityProviderSAMLCertificateNewResponseEnvelopeSuccess bool
 
 const (

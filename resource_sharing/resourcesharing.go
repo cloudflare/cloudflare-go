@@ -61,18 +61,7 @@ func (r *ResourceSharingService) New(ctx context.Context, params ResourceSharing
 	return res, nil
 }
 
-// Updates the share's display name and tags. This endpoint does **not** modify
-// recipients or resources — those are managed via dedicated subresource endpoints:
-//
-//   - **Recipients**: Use `POST /accounts/{account_id}/shares/{share_id}/recipients`
-//     to add a single recipient,
-//     `PUT /accounts/{account_id}/shares/{share_id}/recipients` to replace the full
-//     recipient list, or
-//     `DELETE /accounts/{account_id}/shares/{share_id}/recipients/{recipient_id}` to
-//     remove a recipient.
-//   - **Resources**: Use the share's resource subresource endpoints.
-//
-// Updating is not immediate; an updated share object with a new status will be
+// Updating is not immediate, an updated share object with a new status will be
 // returned.
 func (r *ResourceSharingService) Update(ctx context.Context, shareID string, params ResourceSharingUpdateParams, opts ...option.RequestOption) (res *ResourceSharingUpdateResponse, err error) {
 	var env ResourceSharingUpdateResponseEnvelope

@@ -248,7 +248,7 @@ func (r riskScoringIntegrationReferenceGetResponseEnvelopeMessagesSourceJSON) Ra
 	return r.raw
 }
 
-// Whether the API call was successful.
+// RiskScoringIntegrationReferenceGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type RiskScoringIntegrationReferenceGetResponseEnvelopeSuccess bool
 
 const (

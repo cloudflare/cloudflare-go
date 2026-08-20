@@ -33,12 +33,13 @@ func TestConfigurationCredentialUpdate(t *testing.T) {
 		"4a7ee8d3-dd63-4ceb-9d5f-c27831854ce7",
 		token_validation.ConfigurationCredentialUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Keys: cloudflare.F([]token_validation.ConfigurationCredentialUpdateParamsKeyUnion{token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSA{
-				Alg: cloudflare.F(token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSAAlgRs256),
-				E:   cloudflare.F("e"),
-				Kid: cloudflare.F("kid"),
-				Kty: cloudflare.F(token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyRSAKtyRSA),
-				N:   cloudflare.F("n"),
+			Keys: cloudflare.F([]token_validation.ConfigurationCredentialUpdateParamsKeyUnion{token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256{
+				Alg: cloudflare.F(token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256AlgEs256),
+				Crv: cloudflare.F(token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256CrvP256),
+				Kid: cloudflare.F("38013f13-c266-4eec-a72a-92ec92779f21"),
+				Kty: cloudflare.F(token_validation.ConfigurationCredentialUpdateParamsKeysAPIShieldCredentialsJWTKeyEcEs256KtyEc),
+				X:   cloudflare.F("KN53JRwN3wCjm2o39bvZUX2VdrsHzS8pxOAGjm8m7EQ"),
+				Y:   cloudflare.F("lnkkzIxaveggz-HFhcMWW15nxvOj0Z_uQsXbpK0GFcY"),
 			}}),
 		},
 	)

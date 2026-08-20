@@ -52,42 +52,11 @@ func TestBetaWorkerVersionNewWithOptionalParams(t *testing.T) {
 					Text: cloudflare.F("my_data"),
 					Type: cloudflare.F(workers.VersionBindingsWorkersBindingKindPlainTextTypePlainText),
 				}}),
-				CacheOptions: cloudflare.F(workers.VersionCacheOptionsParam{
-					Enabled:           cloudflare.F(true),
-					CrossVersionCache: cloudflare.F(true),
-				}),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 				Containers: cloudflare.F([]workers.VersionContainerParam{{
 					ClassName: cloudflare.F("MyDurableObject"),
 				}}),
-				Exports: cloudflare.F(map[string]workers.VersionExportsUnionParam{
-					"Admin": workers.VersionExportsWorkersWorkerExportParam{
-						Type: cloudflare.F(workers.VersionExportsWorkersWorkerExportTypeWorker),
-						Cache: cloudflare.F(workers.VersionExportsWorkersWorkerExportCacheParam{
-							Enabled: cloudflare.F(true),
-						}),
-						State: cloudflare.F(workers.VersionExportsWorkersWorkerExportStateCreated),
-					},
-					"Counter": workers.VersionExportsWorkersDurableObjectExportParam{
-						Storage:   cloudflare.F(workers.VersionExportsWorkersDurableObjectExportStorageSqlite),
-						Type:      cloudflare.F(workers.VersionExportsWorkersDurableObjectExportTypeDurableObject),
-						Container: cloudflare.F("my-container"),
-						State:     cloudflare.F(workers.VersionExportsWorkersDurableObjectExportStateCreated),
-					},
-					"OldCounter": workers.VersionExportsWorkersDurableObjectRenamedExportParam{
-						RenamedTo: cloudflare.F("Counter"),
-						State:     cloudflare.F(workers.VersionExportsWorkersDurableObjectRenamedExportStateRenamed),
-						Type:      cloudflare.F(workers.VersionExportsWorkersDurableObjectRenamedExportTypeDurableObject),
-					},
-					"default": workers.VersionExportsWorkersWorkerExportParam{
-						Type: cloudflare.F(workers.VersionExportsWorkersWorkerExportTypeWorker),
-						Cache: cloudflare.F(workers.VersionExportsWorkersWorkerExportCacheParam{
-							Enabled: cloudflare.F(false),
-						}),
-						State: cloudflare.F(workers.VersionExportsWorkersWorkerExportStateCreated),
-					},
-				}),
 				Limits: cloudflare.F(workers.VersionLimitsParam{
 					CPUMs:       cloudflare.F(int64(50)),
 					Subrequests: cloudflare.F(int64(1000)),
@@ -113,11 +82,6 @@ func TestBetaWorkerVersionNewWithOptionalParams(t *testing.T) {
 					ContentBase64: cloudflare.F("ZXhwb3J0IGRlZmF1bHQgewogIGFzeW5jIGZldGNoKHJlcXVlc3QsIGVudiwgY3R4KSB7CiAgICByZXR1cm4gbmV3IFJlc3BvbnNlKCdIZWxsbyBXb3JsZCEnKQogIH0KfQ=="),
 					ContentType:   cloudflare.F("application/javascript+module"),
 					Name:          cloudflare.F("index.js"),
-				}}),
-				PackageDependencies: cloudflare.F([]workers.VersionPackageDependencyParam{{
-					InstalledVersion:   cloudflare.F("4.17.22"),
-					Name:               cloudflare.F("lodash"),
-					PackageJsonVersion: cloudflare.F("^4.17.21"),
 				}}),
 				Placement: cloudflare.F[workers.VersionPlacementUnionParam](workers.VersionPlacementModeParam{
 					Mode: cloudflare.F(workers.VersionPlacementModeModeSmart),

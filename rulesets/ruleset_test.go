@@ -34,7 +34,6 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 		Name:        cloudflare.F("My ruleset"),
 		Phase:       cloudflare.F(rulesets.PhaseHTTPRequestFirewallCustom),
 		AccountID:   cloudflare.F("account_id"),
-		DryRun:      cloudflare.F(true),
 		Description: cloudflare.F("A description for my ruleset."),
 		Rules: cloudflare.F([]rulesets.RulesetNewParamsRuleUnion{rulesets.BlockRuleParam{
 			ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
@@ -98,7 +97,6 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetUpdateParams{
 			AccountID:   cloudflare.F("account_id"),
-			DryRun:      cloudflare.F(true),
 			Description: cloudflare.F("A description for my ruleset."),
 			Kind:        cloudflare.F(rulesets.KindRoot),
 			Name:        cloudflare.F("My ruleset"),
@@ -195,7 +193,6 @@ func TestRulesetDeleteWithOptionalParams(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetDeleteParams{
 			AccountID: cloudflare.F("account_id"),
-			DryRun:    cloudflare.F(true),
 		},
 	)
 	if err != nil {

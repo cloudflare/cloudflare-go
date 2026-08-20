@@ -224,7 +224,7 @@ func (r deviceSettingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DeviceSettingUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type DeviceSettingUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -271,7 +271,7 @@ func (r deviceSettingDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DeviceSettingDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type DeviceSettingDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -323,7 +323,7 @@ func (r deviceSettingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DeviceSettingEditResponseEnvelopeSuccess indicates whether the API call was successful.
 type DeviceSettingEditResponseEnvelopeSuccess bool
 
 const (
@@ -370,7 +370,7 @@ func (r deviceSettingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DeviceSettingGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DeviceSettingGetResponseEnvelopeSuccess bool
 
 const (

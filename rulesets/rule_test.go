@@ -71,7 +71,6 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			AccountID: cloudflare.F("account_id"),
-			DryRun:    cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -104,7 +103,6 @@ func TestRuleDeleteWithOptionalParams(t *testing.T) {
 		"3a03d665bac047339bb530ecb439a90d",
 		rulesets.RuleDeleteParams{
 			AccountID: cloudflare.F("account_id"),
-			DryRun:    cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -174,7 +172,6 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			AccountID: cloudflare.F("account_id"),
-			DryRun:    cloudflare.F(true),
 		},
 	)
 	if err != nil {

@@ -40,8 +40,7 @@ func NewDevtoolBrowserService(opts ...option.RequestOption) (r *DevtoolBrowserSe
 	return
 }
 
-// Acquires a browser and returns its session ID and websocket URL. Optionally
-// accepts a JSON body with session guardrails to restrict outbound HTTP/S traffic.
+// Acquire a new browser DevTools session
 func (r *DevtoolBrowserService) New(ctx context.Context, params DevtoolBrowserNewParams, opts ...option.RequestOption) (res *DevtoolBrowserNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -86,14 +85,8 @@ func (r *DevtoolBrowserService) Connect(ctx context.Context, sessionID string, p
 	return err
 }
 
-// Acquires and establishes a WebSocket connection to a browser session. Session
-// guardrails may be supplied in the `cf-brapi-guardrails` header as
-// base64url-encoded JSON of the same `guardrails` object the POST body accepts
-// (for example `{"allowedDomains":["*.example.com"]}`).
+// Acquires and establishes a WebSocket connection to a browser session.
 func (r *DevtoolBrowserService) Launch(ctx context.Context, params DevtoolBrowserLaunchParams, opts ...option.RequestOption) (err error) {
-	if params.CfBrapiGuardrails.Present {
-		opts = append(opts, option.WithHeader("cf-brapi-guardrails", fmt.Sprintf("%v", params.CfBrapiGuardrails)))
-	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
@@ -330,18 +323,10 @@ type DevtoolBrowserNewParams struct {
 	// Keep-alive time in milliseconds.
 	KeepAlive param.Field[float64] `query:"keep_alive"`
 	// Use experimental browser.
-	Lab param.Field[bool] `query:"lab"`
-	// How long the live view URL remains valid, in milliseconds (max 60 minutes). Only
-	// used when targets is true.
-	LiveViewURLExpiresInMs param.Field[float64] `query:"liveViewUrlExpiresInMs"`
-	Recording              param.Field[bool]    `query:"recording"`
+	Lab       param.Field[bool] `query:"lab"`
+	Recording param.Field[bool] `query:"recording"`
 	// Include browser targets in response.
-	Targets    param.Field[bool]                              `query:"targets"`
-	Guardrails param.Field[DevtoolBrowserNewParamsGuardrails] `json:"guardrails"`
-}
-
-func (r DevtoolBrowserNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	Targets param.Field[bool] `query:"targets"`
 }
 
 // URLQuery serializes [DevtoolBrowserNewParams]'s query parameters as
@@ -351,20 +336,6 @@ func (r DevtoolBrowserNewParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type DevtoolBrowserNewParamsGuardrails struct {
-	// Hostname patterns, max 50. Supports exact hosts (example.com) or a single _
-	// wildcard anywhere. Prefer _.example.com (subdomain wildcard) over \*example.com
-	// (prefix wildcard) to avoid matching overbroad lookalikes like evilexample.com.
-	AllowedDomains param.Field[[]string] `json:"allowedDomains"`
-	// Max 4 entries: curated preset names (common-cdns) and/or https URLs of
-	// newline-separated hostname lists.
-	AllowedDomainSets param.Field[[]string] `json:"allowedDomainSets"`
-}
-
-func (r DevtoolBrowserNewParamsGuardrails) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type DevtoolBrowserDeleteParams struct {
@@ -399,9 +370,6 @@ type DevtoolBrowserLaunchParams struct {
 	// Use experimental browser.
 	Lab       param.Field[bool] `query:"lab"`
 	Recording param.Field[bool] `query:"recording"`
-	// Optional base64url-encoded JSON session guardrails (allowedDomains and
-	// allowedDomainSets)
-	CfBrapiGuardrails param.Field[string] `header:"cf-brapi-guardrails"`
 }
 
 // URLQuery serializes [DevtoolBrowserLaunchParams]'s query parameters as
