@@ -57,7 +57,7 @@ func (r *DLPEmailRuleService) New(ctx context.Context, params DLPEmailRuleNewPar
 	return res, nil
 }
 
-// Updates a DLP email scanning rule.
+// Update email scanner rule
 func (r *DLPEmailRuleService) Update(ctx context.Context, ruleID string, params DLPEmailRuleUpdateParams, opts ...option.RequestOption) (res *DLPEmailRuleUpdateResponse, err error) {
 	var env DLPEmailRuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -300,7 +300,7 @@ func (r DLPEmailRuleNewResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [DLPEmailRuleNewResponseConditionsValueArray] or
+// DLPEmailRuleNewResponseConditionsValueUnion is satisfied by [DLPEmailRuleNewResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleNewResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleNewResponseConditionsValueUnion()
@@ -459,7 +459,7 @@ func (r DLPEmailRuleUpdateResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [DLPEmailRuleUpdateResponseConditionsValueArray] or
+// DLPEmailRuleUpdateResponseConditionsValueUnion is satisfied by [DLPEmailRuleUpdateResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleUpdateResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleUpdateResponseConditionsValueUnion()
@@ -618,7 +618,7 @@ func (r DLPEmailRuleListResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [DLPEmailRuleListResponseConditionsValueArray] or
+// DLPEmailRuleListResponseConditionsValueUnion is satisfied by [DLPEmailRuleListResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleListResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleListResponseConditionsValueUnion()
@@ -777,7 +777,7 @@ func (r DLPEmailRuleDeleteResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [DLPEmailRuleDeleteResponseConditionsValueArray] or
+// DLPEmailRuleDeleteResponseConditionsValueUnion is satisfied by [DLPEmailRuleDeleteResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleDeleteResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleDeleteResponseConditionsValueUnion()
@@ -936,7 +936,7 @@ func (r DLPEmailRuleBulkEditResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [DLPEmailRuleBulkEditResponseConditionsValueArray] or
+// DLPEmailRuleBulkEditResponseConditionsValueUnion is satisfied by [DLPEmailRuleBulkEditResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleBulkEditResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleBulkEditResponseConditionsValueUnion()
@@ -1095,7 +1095,7 @@ func (r DLPEmailRuleGetResponseConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [DLPEmailRuleGetResponseConditionsValueArray] or
+// DLPEmailRuleGetResponseConditionsValueUnion is satisfied by [DLPEmailRuleGetResponseConditionsValueArray] or
 // [shared.UnionString].
 type DLPEmailRuleGetResponseConditionsValueUnion interface {
 	ImplementsDLPEmailRuleGetResponseConditionsValueUnion()
@@ -1201,7 +1201,7 @@ func (r DLPEmailRuleNewParamsConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Satisfied by [zero_trust.DLPEmailRuleNewParamsConditionsValueArray],
+// DLPEmailRuleNewParamsConditionsValueUnion satisfied by [zero_trust.DLPEmailRuleNewParamsConditionsValueArray],
 // [shared.UnionString].
 type DLPEmailRuleNewParamsConditionsValueUnion interface {
 	ImplementsDLPEmailRuleNewParamsConditionsValueUnion()
@@ -1336,7 +1336,7 @@ func (r dlpEmailRuleNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEmailRuleNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEmailRuleNewResponseEnvelopeSuccess bool
 
 const (
@@ -1431,7 +1431,7 @@ func (r DLPEmailRuleUpdateParamsConditionsSelector) IsKnown() bool {
 	return false
 }
 
-// Satisfied by [zero_trust.DLPEmailRuleUpdateParamsConditionsValueArray],
+// DLPEmailRuleUpdateParamsConditionsValueUnion satisfied by [zero_trust.DLPEmailRuleUpdateParamsConditionsValueArray],
 // [shared.UnionString].
 type DLPEmailRuleUpdateParamsConditionsValueUnion interface {
 	ImplementsDLPEmailRuleUpdateParamsConditionsValueUnion()
@@ -1566,7 +1566,7 @@ func (r dlpEmailRuleUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEmailRuleUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEmailRuleUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1713,7 +1713,7 @@ func (r dlpEmailRuleDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEmailRuleDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEmailRuleDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1861,7 +1861,7 @@ func (r dlpEmailRuleBulkEditResponseEnvelopeMessagesSourceJSON) RawJSON() string
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEmailRuleBulkEditResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEmailRuleBulkEditResponseEnvelopeSuccess bool
 
 const (
@@ -2004,7 +2004,7 @@ func (r dlpEmailRuleGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEmailRuleGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEmailRuleGetResponseEnvelopeSuccess bool
 
 const (

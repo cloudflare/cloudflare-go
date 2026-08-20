@@ -65,14 +65,18 @@ func (r *ResourceLibraryApplicationService) ListAutoPaging(ctx context.Context, 
 }
 
 // Get application by ID.
-func (r *ResourceLibraryApplicationService) Get(ctx context.Context, id int64, query ResourceLibraryApplicationGetParams, opts ...option.RequestOption) (res *ResourceLibraryApplicationGetResponse, err error) {
+func (r *ResourceLibraryApplicationService) Get(ctx context.Context, id string, query ResourceLibraryApplicationGetParams, opts ...option.RequestOption) (res *ResourceLibraryApplicationGetResponse, err error) {
 	var env ResourceLibraryApplicationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/resource-library/applications/%v", query.AccountID, id)
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/resource-library/applications/%s", query.AccountID, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -83,7 +87,7 @@ func (r *ResourceLibraryApplicationService) Get(ctx context.Context, id int64, q
 
 type ResourceLibraryApplicationListResponse struct {
 	// Returns the application ID.
-	ID int64 `json:"id" api:"required"`
+	ID string `json:"id" api:"required"`
 	// Confidence score for the application. Returns -1 when no score is available.
 	ApplicationConfidenceScore float64 `json:"application_confidence_score" api:"required"`
 	// Returns the application source.
@@ -92,23 +96,21 @@ type ResourceLibraryApplicationListResponse struct {
 	ApplicationType string `json:"application_type" api:"required"`
 	// Returns the application type description.
 	ApplicationTypeDescription string `json:"application_type_description" api:"required"`
-	// Returns the category ID.
-	CategoryID int64 `json:"category_id" api:"required"`
 	// Returns the application creation time.
 	CreatedAt string `json:"created_at" api:"required"`
 	// GenAI score for the application. Returns -1 when no score is available.
 	GenAIScore float64 `json:"gen_ai_score" api:"required"`
-	// Hostnames matched by the application.
+	// Returns the list of hostnames for the application.
 	Hostnames []string `json:"hostnames" api:"required"`
 	// Returns the human readable ID.
 	HumanID string `json:"human_id" api:"required"`
-	// IP subnets matched by the application.
+	// Returns the list of IP subnets for the application.
 	IPSubnets []string `json:"ip_subnets" api:"required"`
 	// Returns the application name.
 	Name string `json:"name" api:"required"`
-	// Port and protocol pairs matched by the application.
+	// Returns the list of port protocols for the application.
 	PortProtocols []string `json:"port_protocols" api:"required"`
-	// Support domains matched by the application.
+	// Returns the list of support domains for the application.
 	SupportDomains []string `json:"support_domains" api:"required"`
 	// Cloudflare products that support this application.
 	Supported []ResourceLibraryApplicationListResponseSupported `json:"supported" api:"required"`
@@ -117,8 +119,10 @@ type ResourceLibraryApplicationListResponse struct {
 	// Returns the application version.
 	Version string `json:"version" api:"required"`
 	// Returns the score composition breakdown for the application.
-	ApplicationScoreComposition interface{}                                `json:"application_score_composition" api:"nullable"`
-	JSON                        resourceLibraryApplicationListResponseJSON `json:"-"`
+	ApplicationScoreComposition interface{} `json:"application_score_composition" api:"nullable"`
+	// Returns the Intel API ID for the application.
+	IntelID int64                                      `json:"intel_id" api:"nullable"`
+	JSON    resourceLibraryApplicationListResponseJSON `json:"-"`
 }
 
 // resourceLibraryApplicationListResponseJSON contains the JSON metadata for the
@@ -129,7 +133,6 @@ type resourceLibraryApplicationListResponseJSON struct {
 	ApplicationSource           apijson.Field
 	ApplicationType             apijson.Field
 	ApplicationTypeDescription  apijson.Field
-	CategoryID                  apijson.Field
 	CreatedAt                   apijson.Field
 	GenAIScore                  apijson.Field
 	Hostnames                   apijson.Field
@@ -142,6 +145,7 @@ type resourceLibraryApplicationListResponseJSON struct {
 	UpdatedAt                   apijson.Field
 	Version                     apijson.Field
 	ApplicationScoreComposition apijson.Field
+	IntelID                     apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -172,7 +176,7 @@ func (r ResourceLibraryApplicationListResponseSupported) IsKnown() bool {
 
 type ResourceLibraryApplicationGetResponse struct {
 	// Returns the application ID.
-	ID int64 `json:"id" api:"required"`
+	ID string `json:"id" api:"required"`
 	// Confidence score for the application. Returns -1 when no score is available.
 	ApplicationConfidenceScore float64 `json:"application_confidence_score" api:"required"`
 	// Returns the application source.
@@ -181,23 +185,21 @@ type ResourceLibraryApplicationGetResponse struct {
 	ApplicationType string `json:"application_type" api:"required"`
 	// Returns the application type description.
 	ApplicationTypeDescription string `json:"application_type_description" api:"required"`
-	// Returns the category ID.
-	CategoryID int64 `json:"category_id" api:"required"`
 	// Returns the application creation time.
 	CreatedAt string `json:"created_at" api:"required"`
 	// GenAI score for the application. Returns -1 when no score is available.
 	GenAIScore float64 `json:"gen_ai_score" api:"required"`
-	// Hostnames matched by the application.
+	// Returns the list of hostnames for the application.
 	Hostnames []string `json:"hostnames" api:"required"`
 	// Returns the human readable ID.
 	HumanID string `json:"human_id" api:"required"`
-	// IP subnets matched by the application.
+	// Returns the list of IP subnets for the application.
 	IPSubnets []string `json:"ip_subnets" api:"required"`
 	// Returns the application name.
 	Name string `json:"name" api:"required"`
-	// Port and protocol pairs matched by the application.
+	// Returns the list of port protocols for the application.
 	PortProtocols []string `json:"port_protocols" api:"required"`
-	// Support domains matched by the application.
+	// Returns the list of support domains for the application.
 	SupportDomains []string `json:"support_domains" api:"required"`
 	// Cloudflare products that support this application.
 	Supported []ResourceLibraryApplicationGetResponseSupported `json:"supported" api:"required"`
@@ -206,8 +208,10 @@ type ResourceLibraryApplicationGetResponse struct {
 	// Returns the application version.
 	Version string `json:"version" api:"required"`
 	// Returns the score composition breakdown for the application.
-	ApplicationScoreComposition interface{}                               `json:"application_score_composition" api:"nullable"`
-	JSON                        resourceLibraryApplicationGetResponseJSON `json:"-"`
+	ApplicationScoreComposition interface{} `json:"application_score_composition" api:"nullable"`
+	// Returns the Intel API ID for the application.
+	IntelID int64                                     `json:"intel_id" api:"nullable"`
+	JSON    resourceLibraryApplicationGetResponseJSON `json:"-"`
 }
 
 // resourceLibraryApplicationGetResponseJSON contains the JSON metadata for the
@@ -218,7 +222,6 @@ type resourceLibraryApplicationGetResponseJSON struct {
 	ApplicationSource           apijson.Field
 	ApplicationType             apijson.Field
 	ApplicationTypeDescription  apijson.Field
-	CategoryID                  apijson.Field
 	CreatedAt                   apijson.Field
 	GenAIScore                  apijson.Field
 	Hostnames                   apijson.Field
@@ -231,6 +234,7 @@ type resourceLibraryApplicationGetResponseJSON struct {
 	UpdatedAt                   apijson.Field
 	Version                     apijson.Field
 	ApplicationScoreComposition apijson.Field
+	IntelID                     apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -264,7 +268,7 @@ type ResourceLibraryApplicationListParams struct {
 	// Filter applications using key:value format. Supported filter keys:
 	//
 	//   - name: Filter by application name (e.g., name:HR)
-	//   - id: Filter by application ID (e.g., id:498)
+	//   - id: Filter by application ID (e.g., id:0b63249c-95bf-4cc0-a7cc-d7faaaf1dac0)
 	//   - human_id: Filter by human-readable ID (e.g., human_id:HR)
 	//   - hostname: Filter by hostname or support domain (e.g.,
 	//     hostname:portal.example.com)
@@ -272,7 +276,10 @@ type ResourceLibraryApplicationListParams struct {
 	//   - ip_subnet: Filter by IP subnet using CIDR containment — returns applications
 	//     where any stored subnet contains the search value (e.g., ip_subnet:10.0.1.5/32
 	//     matches apps with 10.0.0.0/16)
-	//   - category_id: Filter by category ID (e.g., category_id:12).
+	//   - intel_id: Filter by Intel API ID (e.g., intel_id:498). also supports multiple
+	//     values (e.g., intel_id:498,1001)
+	//   - category_id: Filter by category ID (e.g.,
+	//     category_id:37f8ec03-8766-49d4-9a15-369b044c842c).
 	//   - category_name: Filter by category name (e.g., category_name:HR).
 	//   - supported: Filter by supported Cloudflare product (e.g., supported:ACCESS).
 	//     Values: GATEWAY, ACCESS, CASB. .
@@ -429,7 +436,7 @@ func (r resourceLibraryApplicationGetResponseEnvelopeMessagesSourceJSON) RawJSON
 	return r.raw
 }
 
-// Indicates whether the API call was successful.
+// ResourceLibraryApplicationGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type ResourceLibraryApplicationGetResponseEnvelopeSuccess bool
 
 const (

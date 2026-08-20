@@ -122,7 +122,7 @@ func (r ispsISPJSON) RawJSON() string {
 	return r.raw
 }
 
-// IP address information for the ISP hop. Fields marked as PII-gated (`name`,
+// ISPsISPsIP iP address information for the ISP hop. Fields marked as PII-gated (`name`,
 // `address`, `netmask`, and all `location` sub-fields) will be returned as the
 // literal string `"REDACTED"` for callers that do not have the PII permission.
 // `asn`, `aso`, and `version` are always returned regardless of PII access.
@@ -167,7 +167,7 @@ func (r ispsISPsIPJSON) RawJSON() string {
 	return r.raw
 }
 
-// Geographic location information. All fields are returned as the literal string
+// ISPsISPsIPLocation geographic location information. All fields are returned as the literal string
 // `"REDACTED"` for callers that do not have the PII permission.
 type ISPsISPsIPLocation struct {
 	// City name. Returned as `"REDACTED"` without PII permission.
@@ -227,7 +227,7 @@ func (r DEXDeviceISPListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// The field to sort results by.
+// DEXDeviceISPListParamsSortBy is the field to sort results by.
 type DEXDeviceISPListParamsSortBy string
 
 const (
@@ -242,7 +242,7 @@ func (r DEXDeviceISPListParamsSortBy) IsKnown() bool {
 	return false
 }
 
-// The order to sort results.
+// DEXDeviceISPListParamsSortOrder is the order to sort results.
 type DEXDeviceISPListParamsSortOrder string
 
 const (

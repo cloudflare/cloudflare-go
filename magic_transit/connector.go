@@ -25,10 +25,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewConnectorService] method instead.
 type ConnectorService struct {
-	Options    []option.RequestOption
-	Interrupts *ConnectorInterruptService
-	Events     *ConnectorEventService
-	Snapshots  *ConnectorSnapshotService
+	Options   []option.RequestOption
+	Events    *ConnectorEventService
+	Snapshots *ConnectorSnapshotService
 }
 
 // NewConnectorService generates a new service that applies the given options to
@@ -37,13 +36,12 @@ type ConnectorService struct {
 func NewConnectorService(opts ...option.RequestOption) (r *ConnectorService) {
 	r = &ConnectorService{}
 	r.Options = opts
-	r.Interrupts = NewConnectorInterruptService(opts...)
 	r.Events = NewConnectorEventService(opts...)
 	r.Snapshots = NewConnectorSnapshotService(opts...)
 	return
 }
 
-// Creates a Magic WAN Connector.
+// Add a connector to your account
 func (r *ConnectorService) New(ctx context.Context, params ConnectorNewParams, opts ...option.RequestOption) (res *ConnectorNewResponse, err error) {
 	var env ConnectorNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,8 +58,7 @@ func (r *ConnectorService) New(ctx context.Context, params ConnectorNewParams, o
 	return res, nil
 }
 
-// Updates properties of a Magic WAN Connector. May be used to re-provision a
-// license key.
+// Replace Connector or Re-provision License Key
 func (r *ConnectorService) Update(ctx context.Context, connectorID string, params ConnectorUpdateParams, opts ...option.RequestOption) (res *ConnectorUpdateResponse, err error) {
 	var env ConnectorUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -82,7 +79,7 @@ func (r *ConnectorService) Update(ctx context.Context, connectorID string, param
 	return res, nil
 }
 
-// Lists Magic WAN Connectors.
+// List Connectors
 func (r *ConnectorService) List(ctx context.Context, params ConnectorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConnectorListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -104,12 +101,12 @@ func (r *ConnectorService) List(ctx context.Context, params ConnectorListParams,
 	return res, nil
 }
 
-// Lists Magic WAN Connectors.
+// List Connectors
 func (r *ConnectorService) ListAutoPaging(ctx context.Context, params ConnectorListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ConnectorListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes a Magic WAN Connector.
+// Remove a connector from your account
 func (r *ConnectorService) Delete(ctx context.Context, connectorID string, body ConnectorDeleteParams, opts ...option.RequestOption) (res *ConnectorDeleteResponse, err error) {
 	var env ConnectorDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -130,8 +127,7 @@ func (r *ConnectorService) Delete(ctx context.Context, connectorID string, body 
 	return res, nil
 }
 
-// Edits properties of a Magic WAN Connector. May be used to re-provision a license
-// key.
+// Edit Connector to update specific properties or Re-provision License Key
 func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params ConnectorEditParams, opts ...option.RequestOption) (res *ConnectorEditResponse, err error) {
 	var env ConnectorEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -152,7 +148,7 @@ func (r *ConnectorService) Edit(ctx context.Context, connectorID string, params 
 	return res, nil
 }
 
-// Gets a Magic WAN Connector.
+// Fetch Connector
 func (r *ConnectorService) Get(ctx context.Context, connectorID string, query ConnectorGetParams, opts ...option.RequestOption) (res *ConnectorGetResponse, err error) {
 	var env ConnectorGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

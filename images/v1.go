@@ -51,9 +51,9 @@ func NewV1Service(opts ...option.RequestOption) (r *V1Service) {
 	return
 }
 
-// Upload an image to CF Images. Images up to 10 Megabytes can be uploaded using a
-// single HTTP POST (multipart/form-data) request by sending an image file or
-// passing a URL accessible to the API.
+// Upload an image with up to 10 Megabytes using a single HTTP POST
+// (multipart/form-data) request. An image can be uploaded by sending an image file
+// or passing an accessible to an API url.
 func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.RequestOption) (res *Image, err error) {
 	var env V1NewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,8 +125,8 @@ func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeletePar
 	return res, nil
 }
 
-// Update a CF Images image's metadata, creator, or access control. On access
-// control change, all copies of the image are purged from cache.
+// Update image access control. On access control change, all copies of the image
+// are purged from cache.
 func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParams, opts ...option.RequestOption) (res *Image, err error) {
 	var env V1EditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -147,7 +147,7 @@ func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParam
 	return res, nil
 }
 
-// Fetch details for a CF Images image.
+// Fetch details for a single image.
 func (r *V1Service) Get(ctx context.Context, imageID string, query V1GetParams, opts ...option.RequestOption) (res *Image, err error) {
 	var env V1GetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

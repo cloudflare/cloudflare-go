@@ -151,9 +151,6 @@ type CustomPage struct {
 	Name string `json:"name" api:"required"`
 	// Custom page type.
 	Type CustomPageType `json:"type" api:"required"`
-	// Contract version of the page's Liquid template. Present (>= 1) marks a sanitized
-	// template; absent or 0 marks a legacy page served verbatim.
-	ContractVersion int64 `json:"contract_version"`
 	// UUID.
 	UID  string         `json:"uid"`
 	JSON customPageJSON `json:"-"`
@@ -161,13 +158,12 @@ type CustomPage struct {
 
 // customPageJSON contains the JSON metadata for the struct [CustomPage]
 type customPageJSON struct {
-	CustomHTML      apijson.Field
-	Name            apijson.Field
-	Type            apijson.Field
-	ContractVersion apijson.Field
-	UID             apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	CustomHTML  apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UID         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *CustomPage) UnmarshalJSON(data []byte) (err error) {
@@ -178,19 +174,17 @@ func (r customPageJSON) RawJSON() string {
 	return r.raw
 }
 
-// Custom page type.
+// CustomPageType custom page type.
 type CustomPageType string
 
 const (
 	CustomPageTypeIdentityDenied CustomPageType = "identity_denied"
 	CustomPageTypeForbidden      CustomPageType = "forbidden"
-	CustomPageTypeLogin          CustomPageType = "login"
-	CustomPageTypeInterstitial   CustomPageType = "interstitial"
 )
 
 func (r CustomPageType) IsKnown() bool {
 	switch r {
-	case CustomPageTypeIdentityDenied, CustomPageTypeForbidden, CustomPageTypeLogin, CustomPageTypeInterstitial:
+	case CustomPageTypeIdentityDenied, CustomPageTypeForbidden:
 		return true
 	}
 	return false
@@ -203,9 +197,6 @@ type CustomPageParam struct {
 	Name param.Field[string] `json:"name" api:"required"`
 	// Custom page type.
 	Type param.Field[CustomPageType] `json:"type" api:"required"`
-	// Contract version of the page's Liquid template. Present (>= 1) marks a sanitized
-	// template; absent or 0 marks a legacy page served verbatim.
-	ContractVersion param.Field[int64] `json:"contract_version"`
 }
 
 func (r CustomPageParam) MarshalJSON() (data []byte, err error) {
@@ -217,27 +208,19 @@ type CustomPageWithoutHTML struct {
 	Name string `json:"name" api:"required"`
 	// Custom page type.
 	Type CustomPageWithoutHTMLType `json:"type" api:"required"`
-	// Contract version of the page's Liquid template. Present (>= 1) marks a sanitized
-	// template; absent or 0 marks a legacy page served verbatim.
-	ContractVersion int64 `json:"contract_version"`
 	// UUID.
-	UID string `json:"uid"`
-	// Advisory validation findings returned when creating or updating a template.
-	// Omitted when empty.
-	Warnings []CustomPageWithoutHTMLWarning `json:"warnings"`
-	JSON     customPageWithoutHTMLJSON      `json:"-"`
+	UID  string                    `json:"uid"`
+	JSON customPageWithoutHTMLJSON `json:"-"`
 }
 
 // customPageWithoutHTMLJSON contains the JSON metadata for the struct
 // [CustomPageWithoutHTML]
 type customPageWithoutHTMLJSON struct {
-	Name            apijson.Field
-	Type            apijson.Field
-	ContractVersion apijson.Field
-	UID             apijson.Field
-	Warnings        apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UID         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *CustomPageWithoutHTML) UnmarshalJSON(data []byte) (err error) {
@@ -248,51 +231,20 @@ func (r customPageWithoutHTMLJSON) RawJSON() string {
 	return r.raw
 }
 
-// Custom page type.
+// CustomPageWithoutHTMLType custom page type.
 type CustomPageWithoutHTMLType string
 
 const (
 	CustomPageWithoutHTMLTypeIdentityDenied CustomPageWithoutHTMLType = "identity_denied"
 	CustomPageWithoutHTMLTypeForbidden      CustomPageWithoutHTMLType = "forbidden"
-	CustomPageWithoutHTMLTypeLogin          CustomPageWithoutHTMLType = "login"
-	CustomPageWithoutHTMLTypeInterstitial   CustomPageWithoutHTMLType = "interstitial"
 )
 
 func (r CustomPageWithoutHTMLType) IsKnown() bool {
 	switch r {
-	case CustomPageWithoutHTMLTypeIdentityDenied, CustomPageWithoutHTMLTypeForbidden, CustomPageWithoutHTMLTypeLogin, CustomPageWithoutHTMLTypeInterstitial:
+	case CustomPageWithoutHTMLTypeIdentityDenied, CustomPageWithoutHTMLTypeForbidden:
 		return true
 	}
 	return false
-}
-
-// A single validation finding for a template.
-type CustomPageWithoutHTMLWarning struct {
-	// Human-readable description of the finding.
-	Message string `json:"message" api:"required"`
-	// The validation tier that produced the finding (e.g. html, liquid).
-	Tier string `json:"tier" api:"required"`
-	// Optional pointer to the part of the template the finding refers to.
-	Ref  string                           `json:"ref"`
-	JSON customPageWithoutHTMLWarningJSON `json:"-"`
-}
-
-// customPageWithoutHTMLWarningJSON contains the JSON metadata for the struct
-// [CustomPageWithoutHTMLWarning]
-type customPageWithoutHTMLWarningJSON struct {
-	Message     apijson.Field
-	Tier        apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomPageWithoutHTMLWarning) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customPageWithoutHTMLWarningJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessCustomPageDeleteResponse struct {
@@ -451,7 +403,7 @@ func (r accessCustomPageNewResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessCustomPageNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessCustomPageNewResponseEnvelopeSuccess bool
 
 const (
@@ -600,7 +552,7 @@ func (r accessCustomPageUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessCustomPageUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessCustomPageUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -762,7 +714,7 @@ func (r accessCustomPageDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessCustomPageDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessCustomPageDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -906,7 +858,7 @@ func (r accessCustomPageGetResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessCustomPageGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessCustomPageGetResponseEnvelopeSuccess bool
 
 const (

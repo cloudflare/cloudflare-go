@@ -99,7 +99,7 @@ func (r accessApplicationPolicyTestNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the policy test request.
+// AccessApplicationPolicyTestNewResponseStatus is the status of the policy test request.
 type AccessApplicationPolicyTestNewResponseStatus string
 
 const (
@@ -163,7 +163,7 @@ func (r accessApplicationPolicyTestGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the policy test.
+// AccessApplicationPolicyTestGetResponseStatus is the status of the policy test.
 type AccessApplicationPolicyTestGetResponseStatus string
 
 const (
@@ -191,7 +191,7 @@ func (r AccessApplicationPolicyTestNewParams) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-// The UUID of the reusable policy you wish to test
+// AccessApplicationPolicyTestNewParamsPolicyUnion is the UUID of the reusable policy you wish to test
 //
 // Satisfied by [zero_trust.AccessApplicationPolicyTestNewParamsPoliciesObject],
 // [shared.UnionString].
@@ -245,7 +245,7 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObject) MarshalJSON() (data 
 func (r AccessApplicationPolicyTestNewParamsPoliciesObject) ImplementsAccessApplicationPolicyTestNewParamsPolicyUnion() {
 }
 
-// The rules that define how users may connect to targets secured by your
+// AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules is the rules that define how users may connect to targets secured by your
 // application.
 type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules struct {
 	// The RDP-specific rules that define clipboard behavior for RDP connections.
@@ -256,7 +256,7 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRules) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-// The RDP-specific rules that define clipboard behavior for RDP connections.
+// AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDP is the RDP-specific rules that define clipboard behavior for RDP connections.
 type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDP struct {
 	// Clipboard formats allowed when copying from local machine to remote RDP session.
 	AllowedClipboardLocalToRemoteFormats param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat] `json:"allowed_clipboard_local_to_remote_formats"`
@@ -268,39 +268,37 @@ func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDP) Ma
 	return apijson.MarshalRoot(r)
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat clipboard format for RDP connections.
 type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat string
 
 const (
 	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "text"
-	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat = "file"
 )
 
 func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText, AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatFile:
+	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardLocalToRemoteFormatText:
 		return true
 	}
 	return false
 }
 
-// Clipboard format for RDP connections.
+// AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat clipboard format for RDP connections.
 type AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat string
 
 const (
 	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "text"
-	AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat = "file"
 )
 
 func (r AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormat) IsKnown() bool {
 	switch r {
-	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText, AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatFile:
+	case AccessApplicationPolicyTestNewParamsPoliciesObjectConnectionRulesRDPAllowedClipboardRemoteToLocalFormatText:
 		return true
 	}
 	return false
 }
 
-// Configures multi-factor authentication (MFA) settings.
+// AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfig configures multi-factor authentication (MFA) settings.
 type AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfig struct {
 	// Lists the MFA methods that users can authenticate with.
 	AllowedAuthenticators param.Field[[]AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfigAllowedAuthenticator] `json:"allowed_authenticators"`
@@ -458,7 +456,7 @@ func (r accessApplicationPolicyTestNewResponseEnvelopeMessagesSourceJSON) RawJSO
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationPolicyTestNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationPolicyTestNewResponseEnvelopeSuccess bool
 
 const (
@@ -604,7 +602,7 @@ func (r accessApplicationPolicyTestGetResponseEnvelopeMessagesSourceJSON) RawJSO
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessApplicationPolicyTestGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessApplicationPolicyTestGetResponseEnvelopeSuccess bool
 
 const (

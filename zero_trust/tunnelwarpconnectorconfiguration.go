@@ -119,7 +119,7 @@ func (r tunnelWARPConnectorConfigurationUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// High-availability mode for the WARP Connector tunnel. `none` means HA is enabled
+// TunnelWARPConnectorConfigurationUpdateResponseHaMode high-availability mode for the WARP Connector tunnel. `none` means HA is enabled
 // but no provider is configured yet (newly created tunnels default to this).
 // `disabled` means HA is explicitly turned off. `aws` uses AWS ENI move for
 // failover. `local` uses virtual IPs (VIPs) on the local interface.
@@ -140,7 +140,7 @@ func (r TunnelWARPConnectorConfigurationUpdateResponseHaMode) IsKnown() bool {
 	return false
 }
 
-// Provider-specific configuration. Present for `aws` and `local` modes.
+// TunnelWARPConnectorConfigurationUpdateResponseConfig provider-specific configuration. Present for `aws` and `local` modes.
 type TunnelWARPConnectorConfigurationUpdateResponseConfig struct {
 	// Floating Network Resource ID — the secondary ENI that is moved between nodes on
 	// failover.
@@ -188,7 +188,7 @@ func (r TunnelWARPConnectorConfigurationUpdateResponseConfig) AsUnion() TunnelWA
 	return r.union
 }
 
-// Provider-specific configuration. Present for `aws` and `local` modes.
+// TunnelWARPConnectorConfigurationUpdateResponseConfigUnion provider-specific configuration. Present for `aws` and `local` modes.
 //
 // Union satisfied by
 // [TunnelWARPConnectorConfigurationUpdateResponseConfigTunnelMeshAwsConfig] or
@@ -354,7 +354,7 @@ func (r tunnelWARPConnectorConfigurationGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// High-availability mode for the WARP Connector tunnel. `none` means HA is enabled
+// TunnelWARPConnectorConfigurationGetResponseHaMode high-availability mode for the WARP Connector tunnel. `none` means HA is enabled
 // but no provider is configured yet (newly created tunnels default to this).
 // `disabled` means HA is explicitly turned off. `aws` uses AWS ENI move for
 // failover. `local` uses virtual IPs (VIPs) on the local interface.
@@ -375,7 +375,7 @@ func (r TunnelWARPConnectorConfigurationGetResponseHaMode) IsKnown() bool {
 	return false
 }
 
-// Provider-specific configuration. Present for `aws` and `local` modes.
+// TunnelWARPConnectorConfigurationGetResponseConfig provider-specific configuration. Present for `aws` and `local` modes.
 type TunnelWARPConnectorConfigurationGetResponseConfig struct {
 	// Floating Network Resource ID — the secondary ENI that is moved between nodes on
 	// failover.
@@ -423,7 +423,7 @@ func (r TunnelWARPConnectorConfigurationGetResponseConfig) AsUnion() TunnelWARPC
 	return r.union
 }
 
-// Provider-specific configuration. Present for `aws` and `local` modes.
+// TunnelWARPConnectorConfigurationGetResponseConfigUnion provider-specific configuration. Present for `aws` and `local` modes.
 //
 // Union satisfied by
 // [TunnelWARPConnectorConfigurationGetResponseConfigTunnelMeshAwsConfig] or
@@ -567,7 +567,7 @@ func (r TunnelWARPConnectorConfigurationUpdateParams) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-// High-availability mode for the WARP Connector tunnel. `none` means HA is enabled
+// TunnelWARPConnectorConfigurationUpdateParamsHaMode high-availability mode for the WARP Connector tunnel. `none` means HA is enabled
 // but no provider is configured yet (newly created tunnels default to this).
 // `disabled` means HA is explicitly turned off. `aws` uses AWS ENI move for
 // failover. `local` uses virtual IPs (VIPs) on the local interface.
@@ -588,7 +588,7 @@ func (r TunnelWARPConnectorConfigurationUpdateParamsHaMode) IsKnown() bool {
 	return false
 }
 
-// Provider-specific configuration. Required shape depends on ha_mode. For `aws`,
+// TunnelWARPConnectorConfigurationUpdateParamsConfig provider-specific configuration. Required shape depends on ha_mode. For `aws`,
 // must contain `fnr_id`. For `local`, must contain `vips`. For `none` and
 // `disabled`, must be empty or omitted.
 type TunnelWARPConnectorConfigurationUpdateParamsConfig struct {
@@ -606,7 +606,7 @@ func (r TunnelWARPConnectorConfigurationUpdateParamsConfig) MarshalJSON() (data 
 func (r TunnelWARPConnectorConfigurationUpdateParamsConfig) implementsTunnelWARPConnectorConfigurationUpdateParamsConfigUnion() {
 }
 
-// Provider-specific configuration. Required shape depends on ha_mode. For `aws`,
+// TunnelWARPConnectorConfigurationUpdateParamsConfigUnion provider-specific configuration. Required shape depends on ha_mode. For `aws`,
 // must contain `fnr_id`. For `local`, must contain `vips`. For `none` and
 // `disabled`, must be empty or omitted.
 //
@@ -793,7 +793,7 @@ func (r tunnelWARPConnectorConfigurationUpdateResponseEnvelopeMessagesSourceJSON
 	return r.raw
 }
 
-// Whether the API call was successful.
+// TunnelWARPConnectorConfigurationUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type TunnelWARPConnectorConfigurationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -941,7 +941,7 @@ func (r tunnelWARPConnectorConfigurationGetResponseEnvelopeMessagesSourceJSON) R
 	return r.raw
 }
 
-// Whether the API call was successful.
+// TunnelWARPConnectorConfigurationGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type TunnelWARPConnectorConfigurationGetResponseEnvelopeSuccess bool
 
 const (

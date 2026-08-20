@@ -105,13 +105,13 @@ func (r investigateTraceGetResponseInboundJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseInboundLine struct {
-	// Line number in the trace log.
+	// Line number in the trace log
 	Lineno   int64     `json:"lineno"`
 	LoggedAt time.Time `json:"logged_at" api:"nullable" format:"date-time"`
 	Message  string    `json:"message"`
 	// Deprecated, use `logged_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `logged_at` instead.
+	// Deprecated: deprecated
 	Ts   string                                     `json:"ts"`
 	JSON investigateTraceGetResponseInboundLineJSON `json:"-"`
 }
@@ -159,13 +159,13 @@ func (r investigateTraceGetResponseOutboundJSON) RawJSON() string {
 }
 
 type InvestigateTraceGetResponseOutboundLine struct {
-	// Line number in the trace log.
+	// Line number in the trace log
 	Lineno   int64     `json:"lineno"`
 	LoggedAt time.Time `json:"logged_at" api:"nullable" format:"date-time"`
 	Message  string    `json:"message"`
 	// Deprecated, use `logged_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `logged_at` instead.
+	// Deprecated: deprecated
 	Ts   string                                      `json:"ts"`
 	JSON investigateTraceGetResponseOutboundLineJSON `json:"-"`
 }

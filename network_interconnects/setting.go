@@ -34,7 +34,7 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	return
 }
 
-// Updates configuration settings for the specified resource or service.
+// Update the current settings for the active account
 func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams, opts ...option.RequestOption) (res *SettingUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -46,7 +46,7 @@ func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams,
 	return res, err
 }
 
-// Retrieves current settings configuration for the specified resource or service.
+// Get the current settings for the active account
 func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

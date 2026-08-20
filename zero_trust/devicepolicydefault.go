@@ -195,7 +195,7 @@ func (r devicePolicyDefaultEditResponseDNSSearchSuffixJSON) RawJSON() string {
 	return r.raw
 }
 
-// Global Acceleration settings for China. When configured, WARP clients connect to
+// DevicePolicyDefaultEditResponseGlobalAcceleration global Acceleration settings for China. When configured, WARP clients connect to
 // the Global Accelerator addresses instead of the default ones. Please contact
 // your account representative to enable this feature on your account. See
 // https://developers.cloudflare.com/china-network/concepts/global-acceleration/.
@@ -257,7 +257,7 @@ func (r devicePolicyDefaultEditResponseServiceModeV2JSON) RawJSON() string {
 	return r.raw
 }
 
-// Virtual network access settings for the device.
+// DevicePolicyDefaultEditResponseVirtualNetworks virtual network access settings for the device.
 type DevicePolicyDefaultEditResponseVirtualNetworks struct {
 	// List of virtual network IDs the device is allowed to access. When
 	// virtual_networks is set, at least one entry is required.
@@ -402,7 +402,7 @@ func (r devicePolicyDefaultGetResponseDNSSearchSuffixJSON) RawJSON() string {
 	return r.raw
 }
 
-// Global Acceleration settings for China. When configured, WARP clients connect to
+// DevicePolicyDefaultGetResponseGlobalAcceleration global Acceleration settings for China. When configured, WARP clients connect to
 // the Global Accelerator addresses instead of the default ones. Please contact
 // your account representative to enable this feature on your account. See
 // https://developers.cloudflare.com/china-network/concepts/global-acceleration/.
@@ -464,7 +464,7 @@ func (r devicePolicyDefaultGetResponseServiceModeV2JSON) RawJSON() string {
 	return r.raw
 }
 
-// Virtual network access settings for the device.
+// DevicePolicyDefaultGetResponseVirtualNetworks virtual network access settings for the device.
 type DevicePolicyDefaultGetResponseVirtualNetworks struct {
 	// List of virtual network IDs the device is allowed to access. When
 	// virtual_networks is set, at least one entry is required.
@@ -564,7 +564,7 @@ func (r DevicePolicyDefaultEditParamsDNSSearchSuffix) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-// Global Acceleration settings for China. When configured, WARP clients connect to
+// DevicePolicyDefaultEditParamsGlobalAcceleration global Acceleration settings for China. When configured, WARP clients connect to
 // the Global Accelerator addresses instead of the default ones. Please contact
 // your account representative to enable this feature on your account. See
 // https://developers.cloudflare.com/china-network/concepts/global-acceleration/.
@@ -596,7 +596,7 @@ func (r DevicePolicyDefaultEditParamsServiceModeV2) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-// Virtual network access settings for the device.
+// DevicePolicyDefaultEditParamsVirtualNetworks virtual network access settings for the device.
 type DevicePolicyDefaultEditParamsVirtualNetworks struct {
 	// List of virtual network IDs the device is allowed to access. When
 	// virtual_networks is set, at least one entry is required.
@@ -637,7 +637,7 @@ func (r devicePolicyDefaultEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DevicePolicyDefaultEditResponseEnvelopeSuccess indicates whether the API call was successful.
 type DevicePolicyDefaultEditResponseEnvelopeSuccess bool
 
 const (
@@ -684,7 +684,7 @@ func (r devicePolicyDefaultGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DevicePolicyDefaultGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DevicePolicyDefaultGetResponseEnvelopeSuccess bool
 
 const (

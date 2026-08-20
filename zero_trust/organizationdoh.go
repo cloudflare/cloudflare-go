@@ -81,15 +81,9 @@ type OrganizationDOHUpdateResponse struct {
 	// Default expiration is 24h
 	DOHJWTDuration string `json:"doh_jwt_duration"`
 	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens.
-	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
-	// hours (8760h).
-	Duration string `json:"duration"`
-	// Whether the service token is enabled. A disabled service token cannot be used to
-	// authenticate; both its current and previous `client_secret` stop being accepted,
-	// but the token itself is preserved and can be re-enabled at any time. Defaults to
-	// enabled when omitted on create.
-	Enabled   bool      `json:"enabled"`
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration  string    `json:"duration"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
 	// The name of the service token.
 	Name string                            `json:"name"`
@@ -103,7 +97,6 @@ type organizationDOHUpdateResponseJSON struct {
 	ClientID       apijson.Field
 	DOHJWTDuration apijson.Field
 	Duration       apijson.Field
-	Enabled        apijson.Field
 	ExpiresAt      apijson.Field
 	Name           apijson.Field
 	raw            string
@@ -129,15 +122,9 @@ type OrganizationDOHGetResponse struct {
 	// duration for this setting is the same as the key rotation period on the account.
 	DOHJWTDuration string `json:"doh_jwt_duration"`
 	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens.
-	// Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in
-	// hours (8760h).
-	Duration string `json:"duration"`
-	// Whether the service token is enabled. A disabled service token cannot be used to
-	// authenticate; both its current and previous `client_secret` stop being accepted,
-	// but the token itself is preserved and can be re-enabled at any time. Defaults to
-	// enabled when omitted on create.
-	Enabled   bool      `json:"enabled"`
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration  string    `json:"duration"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
 	// The name of the service token.
 	Name string                         `json:"name"`
@@ -151,7 +138,6 @@ type organizationDOHGetResponseJSON struct {
 	ClientID       apijson.Field
 	DOHJWTDuration apijson.Field
 	Duration       apijson.Field
-	Enabled        apijson.Field
 	ExpiresAt      apijson.Field
 	Name           apijson.Field
 	raw            string
@@ -306,7 +292,7 @@ func (r organizationDOHUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() strin
 	return r.raw
 }
 
-// Whether the API call was successful.
+// OrganizationDOHUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type OrganizationDOHUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -450,7 +436,7 @@ func (r organizationDOHGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// OrganizationDOHGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type OrganizationDOHGetResponseEnvelopeSuccess bool
 
 const (

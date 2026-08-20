@@ -16,7 +16,6 @@ import (
 )
 
 func TestObservabilitySharedQueryNewWithOptionalParams(t *testing.T) {
-	t.Skip("HTTP 400 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -37,7 +36,6 @@ func TestObservabilitySharedQueryNewWithOptionalParams(t *testing.T) {
 			To:   cloudflare.F(0.000000),
 		}),
 		Chart:           cloudflare.F(true),
-		ChartType:       cloudflare.F(workers.ObservabilitySharedQueryNewParamsChartTypeTimeseriesAndAggregate),
 		Compare:         cloudflare.F(true),
 		Dry:             cloudflare.F(true),
 		Granularity:     cloudflare.F(0.000000),
@@ -47,11 +45,11 @@ func TestObservabilitySharedQueryNewWithOptionalParams(t *testing.T) {
 		OffsetBy:        cloudflare.F(0.000000),
 		OffsetDirection: cloudflare.F("offsetDirection"),
 		Parameters: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParameters{
-			Calculations: cloudflare.F([]workers.ObservabilitySharedQueryNewParamsParametersCalculationUnion{workers.ObservabilitySharedQueryNewParamsParametersCalculationsObject{
-				Operator: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersCalculationsObjectOperatorCount),
+			Calculations: cloudflare.F([]workers.ObservabilitySharedQueryNewParamsParametersCalculation{{
+				Operator: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersCalculationsOperatorUniq),
 				Alias:    cloudflare.F("alias"),
 				Key:      cloudflare.F("key"),
-				KeyType:  cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersCalculationsObjectKeyTypeString),
+				KeyType:  cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersCalculationsKeyTypeString),
 			}}),
 			Datasets:          cloudflare.F([]string{"string"}),
 			FilterCombination: cloudflare.F(workers.ObservabilitySharedQueryNewParamsParametersFilterCombinationAnd),

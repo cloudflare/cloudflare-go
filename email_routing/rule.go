@@ -7,15 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 )
 
 // RuleService contains methods and other services that help with interacting with
@@ -42,7 +39,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // Rules consist of a set of criteria for matching emails (such as an email being
 // sent to a specific custom email address) plus a set of actions to take on the
 // email (like forwarding it to a specific destination address). Forward actions
-// require exactly one verified destination address.
+// require all destination addresses to be verified.
 func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	var env RuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +57,7 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 }
 
 // Update actions and matches, or enable/disable specific routing rules. Forward
-// actions require exactly one verified destination address.
+// actions require all destination addresses to be verified.
 func (r *RuleService) Update(ctx context.Context, ruleIdentifier string, params RuleUpdateParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	var env RuleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -79,47 +76,6 @@ func (r *RuleService) Update(ctx context.Context, ruleIdentifier string, params 
 	}
 	res = &env.Result
 	return res, nil
-}
-
-// Lists existing routing rules across all zones in the account or zone.
-func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccountRule], err error) {
-	var raw *http.Response
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
-		err = errors.New("account ID and zone ID are mutually exclusive")
-		return
-	}
-	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
-		err = errors.New("either account ID or zone ID must be provided")
-		return
-	}
-	if params.AccountID.Value != "" {
-		accountOrZone = "accounts"
-		accountOrZoneID = params.AccountID
-	}
-	if params.ZoneID.Value != "" {
-		accountOrZone = "zones"
-		accountOrZoneID = params.ZoneID
-	}
-	path := fmt.Sprintf("%s/%s/email/routing/rules", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Lists existing routing rules across all zones in the account or zone.
-func (r *RuleService) ListAutoPaging(ctx context.Context, params RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccountRule] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a specific routing rule.
@@ -229,10 +185,6 @@ type EmailRoutingRule struct {
 	Name string `json:"name"`
 	// Priority of the routing rule.
 	Priority float64 `json:"priority"`
-	// Who manages the rule. `api` covers dashboard, generic API, and Terraform;
-	// `wrangler` means the rule is managed by a Worker's wrangler.jsonc. Defaults to
-	// `api` when omitted on write.
-	Source EmailRoutingRuleSource `json:"source"`
 	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
 	//
 	// Deprecated: deprecated
@@ -249,7 +201,6 @@ type emailRoutingRuleJSON struct {
 	Matchers    apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
-	Source      apijson.Field
 	Tag         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -274,24 +225,6 @@ const (
 func (r EmailRoutingRuleEnabled) IsKnown() bool {
 	switch r {
 	case EmailRoutingRuleEnabledTrue, EmailRoutingRuleEnabledFalse:
-		return true
-	}
-	return false
-}
-
-// Who manages the rule. `api` covers dashboard, generic API, and Terraform;
-// `wrangler` means the rule is managed by a Worker's wrangler.jsonc. Defaults to
-// `api` when omitted on write.
-type EmailRoutingRuleSource string
-
-const (
-	EmailRoutingRuleSourceAPI      EmailRoutingRuleSource = "api"
-	EmailRoutingRuleSourceWrangler EmailRoutingRuleSource = "wrangler"
-)
-
-func (r EmailRoutingRuleSource) IsKnown() bool {
-	switch r {
-	case EmailRoutingRuleSourceAPI, EmailRoutingRuleSourceWrangler:
 		return true
 	}
 	return false
@@ -381,15 +314,8 @@ type RuleNewParams struct {
 	Enabled param.Field[RuleNewParamsEnabled] `json:"enabled"`
 	// Routing rule name.
 	Name param.Field[string] `json:"name"`
-	// Public tag (script_tag) of the Worker that owns this rule. Required when
-	// `source` is `wrangler`.
-	OwnerWorkerTag param.Field[string] `json:"owner_worker_tag"`
 	// Priority of the routing rule.
 	Priority param.Field[float64] `json:"priority"`
-	// Who manages the rule. `api` covers dashboard, generic API, and Terraform;
-	// `wrangler` means the rule is managed by a Worker's wrangler.jsonc. Defaults to
-	// `api` when omitted on write.
-	Source param.Field[RuleNewParamsSource] `json:"source"`
 }
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
@@ -407,24 +333,6 @@ const (
 func (r RuleNewParamsEnabled) IsKnown() bool {
 	switch r {
 	case RuleNewParamsEnabledTrue, RuleNewParamsEnabledFalse:
-		return true
-	}
-	return false
-}
-
-// Who manages the rule. `api` covers dashboard, generic API, and Terraform;
-// `wrangler` means the rule is managed by a Worker's wrangler.jsonc. Defaults to
-// `api` when omitted on write.
-type RuleNewParamsSource string
-
-const (
-	RuleNewParamsSourceAPI      RuleNewParamsSource = "api"
-	RuleNewParamsSourceWrangler RuleNewParamsSource = "wrangler"
-)
-
-func (r RuleNewParamsSource) IsKnown() bool {
-	switch r {
-	case RuleNewParamsSourceAPI, RuleNewParamsSourceWrangler:
 		return true
 	}
 	return false
@@ -580,15 +488,8 @@ type RuleUpdateParams struct {
 	Enabled param.Field[RuleUpdateParamsEnabled] `json:"enabled"`
 	// Routing rule name.
 	Name param.Field[string] `json:"name"`
-	// Public tag (script_tag) of the Worker that owns this rule. Required when
-	// `source` is `wrangler`.
-	OwnerWorkerTag param.Field[string] `json:"owner_worker_tag"`
 	// Priority of the routing rule.
 	Priority param.Field[float64] `json:"priority"`
-	// Who manages the rule. `api` covers dashboard, generic API, and Terraform;
-	// `wrangler` means the rule is managed by a Worker's wrangler.jsonc. Defaults to
-	// `api` when omitted on write.
-	Source param.Field[RuleUpdateParamsSource] `json:"source"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -606,24 +507,6 @@ const (
 func (r RuleUpdateParamsEnabled) IsKnown() bool {
 	switch r {
 	case RuleUpdateParamsEnabledTrue, RuleUpdateParamsEnabledFalse:
-		return true
-	}
-	return false
-}
-
-// Who manages the rule. `api` covers dashboard, generic API, and Terraform;
-// `wrangler` means the rule is managed by a Worker's wrangler.jsonc. Defaults to
-// `api` when omitted on write.
-type RuleUpdateParamsSource string
-
-const (
-	RuleUpdateParamsSourceAPI      RuleUpdateParamsSource = "api"
-	RuleUpdateParamsSourceWrangler RuleUpdateParamsSource = "wrangler"
-)
-
-func (r RuleUpdateParamsSource) IsKnown() bool {
-	switch r {
-	case RuleUpdateParamsSourceAPI, RuleUpdateParamsSourceWrangler:
 		return true
 	}
 	return false
@@ -763,43 +646,6 @@ const (
 func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case RuleUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RuleListParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// Filter by enabled routing rules.
-	Enabled param.Field[RuleListParamsEnabled] `query:"enabled"`
-	// Page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// Maximum number of results per page.
-	PerPage param.Field[float64] `query:"per_page"`
-}
-
-// URLQuery serializes [RuleListParams]'s query parameters as `url.Values`.
-func (r RuleListParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-// Filter by enabled routing rules.
-type RuleListParamsEnabled bool
-
-const (
-	RuleListParamsEnabledTrue  RuleListParamsEnabled = true
-	RuleListParamsEnabledFalse RuleListParamsEnabled = false
-)
-
-func (r RuleListParamsEnabled) IsKnown() bool {
-	switch r {
-	case RuleListParamsEnabledTrue, RuleListParamsEnabledFalse:
 		return true
 	}
 	return false

@@ -31,7 +31,7 @@ import (
 // the [NewUserSchemaService] method instead.
 //
 // Deprecated: Use the
-// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SchemaService] service
+// [github.com/cloudflare/cloudflare-go/v7/schema_validation.SchemaService] service
 // instead
 type UserSchemaService struct {
 	Options    []option.RequestOption
@@ -50,8 +50,7 @@ func NewUserSchemaService(opts ...option.RequestOption) (r *UserSchemaService) {
 	return
 }
 
-// Uploads a new OpenAPI schema for API Shield schema validation. The schema
-// defines expected request/response formats for API endpoints.
+// Upload a schema to a zone
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)

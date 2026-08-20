@@ -1868,33 +1868,14 @@ type EmailRoutingTimeseriesGroupARCParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[EmailRoutingTimeseriesGroupARCParamsAggInterval] `query:"aggInterval"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailRoutingTimeseriesGroupARCParamsDKIM] `query:"dkim"`
@@ -1925,9 +1906,6 @@ func (r EmailRoutingTimeseriesGroupARCParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type EmailRoutingTimeseriesGroupARCParamsAggInterval string
 
 const (
@@ -2066,35 +2044,16 @@ type EmailRoutingTimeseriesGroupDKIMParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[EmailRoutingTimeseriesGroupDKIMParamsAggInterval] `query:"aggInterval"`
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingTimeseriesGroupDKIMParamsARC] `query:"arc"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DMARC (Domain-based Message Authentication, Reporting and
 	// Conformance) validation status.
@@ -2123,9 +2082,6 @@ func (r EmailRoutingTimeseriesGroupDKIMParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type EmailRoutingTimeseriesGroupDKIMParamsAggInterval string
 
 const (
@@ -2264,35 +2220,16 @@ type EmailRoutingTimeseriesGroupDMARCParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[EmailRoutingTimeseriesGroupDMARCParamsAggInterval] `query:"aggInterval"`
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingTimeseriesGroupDMARCParamsARC] `query:"arc"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailRoutingTimeseriesGroupDMARCParamsDKIM] `query:"dkim"`
@@ -2320,9 +2257,6 @@ func (r EmailRoutingTimeseriesGroupDMARCParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type EmailRoutingTimeseriesGroupDMARCParamsAggInterval string
 
 const (
@@ -2461,35 +2395,16 @@ type EmailRoutingTimeseriesGroupEncryptedParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[EmailRoutingTimeseriesGroupEncryptedParamsAggInterval] `query:"aggInterval"`
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingTimeseriesGroupEncryptedParamsARC] `query:"arc"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailRoutingTimeseriesGroupEncryptedParamsDKIM] `query:"dkim"`
@@ -2518,9 +2433,6 @@ func (r EmailRoutingTimeseriesGroupEncryptedParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type EmailRoutingTimeseriesGroupEncryptedParamsAggInterval string
 
 const (
@@ -2660,35 +2572,16 @@ type EmailRoutingTimeseriesGroupIPVersionParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[EmailRoutingTimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingTimeseriesGroupIPVersionParamsARC] `query:"arc"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailRoutingTimeseriesGroupIPVersionParamsDKIM] `query:"dkim"`
@@ -2717,9 +2610,6 @@ func (r EmailRoutingTimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type EmailRoutingTimeseriesGroupIPVersionParamsAggInterval string
 
 const (
@@ -2859,35 +2749,16 @@ type EmailRoutingTimeseriesGroupSPFParams struct {
 	// Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 	// Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	// When omitted, the interval is auto-selected from the requested date range; finer
-	// intervals are only available for shorter ranges. If the requested interval is
-	// too granular for the date range, the request is rejected.
 	AggInterval param.Field[EmailRoutingTimeseriesGroupSPFParamsAggInterval] `query:"aggInterval"`
 	// Filters results by ARC (Authenticated Received Chain) validation.
 	ARC param.Field[[]EmailRoutingTimeseriesGroupSPFParamsARC] `query:"arc"`
-	// End of the date range (inclusive). Alternative to `dateRange`; provide together
-	// with `dateStart`. When requesting comparison series, every series must resolve
-	// to the same duration as the main series. Each `dateStart`/`dateEnd` is floored
-	// to the nearest 15 minutes before evaluation, so windows whose durations match
-	// only before alignment may be rejected.
+	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
-	// Filters results by relative date range ending at the current time, with each
-	// value producing a separate series. Use `<n>d` for days (up to `364d`) or `<n>w`
-	// for weeks (up to `52w`). Append `control` to request the equivalent previous
-	// period for comparison: the comparison window is shifted back by the current
-	// window's length rounded up to a whole number of weeks, so it keeps the same
-	// weekday alignment and does not overlap the current window (e.g. `7dcontrol`
-	// covers days -14 to -7, `10dcontrol` covers days -24 to -14). For example, pass
-	// `7d` and `7dcontrol` to compare this week with the previous week. All series
-	// must resolve to the same duration as the main series; relative ranges (including
-	// `control`) satisfy this automatically. Use this parameter or set specific start
-	// and end dates (`dateStart` and `dateEnd` parameters).
+	// Filters results by date range. For example, use `7d` and `7dcontrol` to compare
+	// this week with the previous week. Use this parameter or set specific start and
+	// end dates (`dateStart` and `dateEnd` parameters).
 	DateRange param.Field[[]string] `query:"dateRange"`
-	// Start of the date range. Alternative to `dateRange`; provide together with
-	// `dateEnd`. When requesting comparison series, every series must resolve to the
-	// same duration as the main series. Each `dateStart`/`dateEnd` is floored to the
-	// nearest 15 minutes before evaluation, so windows whose durations match only
-	// before alignment may be rejected.
+	// Start of the date range.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filters results by DKIM (DomainKeys Identified Mail) validation status.
 	DKIM param.Field[[]EmailRoutingTimeseriesGroupSPFParamsDKIM] `query:"dkim"`
@@ -2916,9 +2787,6 @@ func (r EmailRoutingTimeseriesGroupSPFParams) URLQuery() (v url.Values) {
 // Aggregation interval of the results (e.g., in 15 minutes or 1 hour intervals).
 // Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-// When omitted, the interval is auto-selected from the requested date range; finer
-// intervals are only available for shorter ranges. If the requested interval is
-// too granular for the date range, the request is rejected.
 type EmailRoutingTimeseriesGroupSPFParamsAggInterval string
 
 const (

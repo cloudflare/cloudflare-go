@@ -67,7 +67,7 @@ func (r NetworkSubnetCloudflareSourceUpdateParams) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// IP address family, either `v4` (IPv4) or `v6` (IPv6)
+// NetworkSubnetCloudflareSourceUpdateParamsAddressFamily iP address family, either `v4` (IPv4) or `v6` (IPv6)
 type NetworkSubnetCloudflareSourceUpdateParamsAddressFamily string
 
 const (
@@ -111,7 +111,7 @@ func (r networkSubnetCloudflareSourceUpdateResponseEnvelopeJSON) RawJSON() strin
 	return r.raw
 }
 
-// Whether the API call was successful
+// NetworkSubnetCloudflareSourceUpdateResponseEnvelopeSuccess indicates whether the API call was successful
 type NetworkSubnetCloudflareSourceUpdateResponseEnvelopeSuccess bool
 
 const (

@@ -8,6 +8,7 @@ Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/custom_certificates">custom_certificates</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/custom_certificates#CustomCertificate">CustomCertificate</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/custom_certificates">custom_certificates</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/custom_certificates#GeoRestrictions">GeoRestrictions</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/custom_certificates">custom_certificates</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/custom_certificates#Status">Status</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/custom_certificates">custom_certificates</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/custom_certificates#CustomCertificateDeleteResponse">CustomCertificateDeleteResponse</a>
 
 Methods:

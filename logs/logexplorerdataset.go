@@ -43,11 +43,15 @@ func NewLogExplorerDatasetService(opts ...option.RequestOption) (r *LogExplorerD
 
 // Create a new Log Explorer dataset for the account or zone.
 //
-// List available account or zone datasets to see the dataset types and fields you
-// can use.
+// Use the
+// `/account or zones/{account or zone_id}/logs/explorer/datasets/available`
+// endpoint to list dataset types you can create along with their available fields.
 //
 // The `fields` property is optional. If not specified, all available fields will
 // be enabled.
+//
+// For zone-level datasets use the zone-scoped endpoint: POST
+// /zones/{zone_id}/logs/explorer/datasets
 //
 // For dataset field definitions, see:
 // https://developers.cloudflare.com/logs/logpush/logpush-job/datasets/
@@ -166,42 +170,6 @@ func (r *LogExplorerDatasetService) ListAutoPaging(ctx context.Context, params L
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes a Log Explorer dataset for the account or zone. Dataset deletion must
-// not be protected.
-func (r *LogExplorerDatasetService) Delete(ctx context.Context, datasetID string, body LogExplorerDatasetDeleteParams, opts ...option.RequestOption) (res *Dataset, err error) {
-	var env LogExplorerDatasetDeleteResponseEnvelope
-	opts = slices.Concat(r.Options, opts)
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
-		err = errors.New("account ID and zone ID are mutually exclusive")
-		return
-	}
-	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
-		err = errors.New("either account ID or zone ID must be provided")
-		return
-	}
-	if body.AccountID.Value != "" {
-		accountOrZone = "accounts"
-		accountOrZoneID = body.AccountID
-	}
-	if body.ZoneID.Value != "" {
-		accountOrZone = "zones"
-		accountOrZoneID = body.ZoneID
-	}
-	if datasetID == "" {
-		err = errors.New("missing required dataset_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("%s/%s/logs/explorer/datasets/%s", accountOrZone, accountOrZoneID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
-}
-
 // Retrieve a single Log Explorer dataset by ID for the account or zone.
 func (r *LogExplorerDatasetService) Get(ctx context.Context, datasetID string, query LogExplorerDatasetGetParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	var env LogExplorerDatasetGetResponseEnvelope
@@ -243,11 +211,6 @@ type CreateRequestParam struct {
 	// Controls which fields the API ingests. Defaults to all available fields when
 	// absent.
 	Fields param.Field[[]CreateRequestFieldParam] `json:"fields"`
-	// Optional Logpush filter predicate to restrict which events are ingested. If
-	// provided, replaces the dataset's default filter entirely. See
-	// [Logpush filters](https://developers.cloudflare.com/logs/reference/filters/) for
-	// syntax and examples.
-	Filter param.Field[string] `json:"filter"`
 }
 
 func (r CreateRequestParam) MarshalJSON() (data []byte, err error) {
@@ -274,38 +237,31 @@ type Dataset struct {
 	Dataset string `json:"dataset" api:"required"`
 	// Unique dataset ID.
 	DatasetID string `json:"dataset_id" api:"required"`
-	// Whether deletion is blocked. Set to `false` before deleting the dataset.
-	DeletionProtection bool `json:"deletion_protection" api:"required"`
 	// Whether log ingest is currently active for this dataset.
 	Enabled bool `json:"enabled" api:"required"`
-	// The field configuration for this dataset.
-	Fields []DatasetField `json:"fields" api:"required"`
 	// Public ID of the account or zone that owns this dataset.
 	ObjectID string `json:"object_id" api:"required"`
 	// Whether this dataset belongs to an account or a zone.
 	ObjectType DatasetObjectType `json:"object_type" api:"required"`
 	// RFC3339 timestamp recording when the API last updated this dataset.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
-	// The Logpush filter predicate applied to this dataset. Omitted when no filter is
-	// set.
-	Filter string      `json:"filter"`
-	JSON   datasetJSON `json:"-"`
+	// The field configuration for this dataset.
+	Fields []DatasetField `json:"fields"`
+	JSON   datasetJSON    `json:"-"`
 }
 
 // datasetJSON contains the JSON metadata for the struct [Dataset]
 type datasetJSON struct {
-	CreatedAt          apijson.Field
-	Dataset            apijson.Field
-	DatasetID          apijson.Field
-	DeletionProtection apijson.Field
-	Enabled            apijson.Field
-	Fields             apijson.Field
-	ObjectID           apijson.Field
-	ObjectType         apijson.Field
-	UpdatedAt          apijson.Field
-	Filter             apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	CreatedAt   apijson.Field
+	Dataset     apijson.Field
+	DatasetID   apijson.Field
+	Enabled     apijson.Field
+	ObjectID    apijson.Field
+	ObjectType  apijson.Field
+	UpdatedAt   apijson.Field
+	Fields      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *Dataset) UnmarshalJSON(data []byte) (err error) {
@@ -314,6 +270,22 @@ func (r *Dataset) UnmarshalJSON(data []byte) (err error) {
 
 func (r datasetJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether this dataset belongs to an account or a zone.
+type DatasetObjectType string
+
+const (
+	DatasetObjectTypeAccount DatasetObjectType = "account"
+	DatasetObjectTypeZone    DatasetObjectType = "zone"
+)
+
+func (r DatasetObjectType) IsKnown() bool {
+	switch r {
+	case DatasetObjectTypeAccount, DatasetObjectTypeZone:
+		return true
+	}
+	return false
 }
 
 type DatasetField struct {
@@ -340,22 +312,6 @@ func (r datasetFieldJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether this dataset belongs to an account or a zone.
-type DatasetObjectType string
-
-const (
-	DatasetObjectTypeAccount DatasetObjectType = "account"
-	DatasetObjectTypeZone    DatasetObjectType = "zone"
-)
-
-func (r DatasetObjectType) IsKnown() bool {
-	switch r {
-	case DatasetObjectTypeAccount, DatasetObjectTypeZone:
-		return true
-	}
-	return false
-}
-
 // A Log Explorer dataset summary. List endpoints return this type and omit field
 // configuration; use the single-dataset endpoint to retrieve it.
 type DatasetSummary struct {
@@ -365,8 +321,6 @@ type DatasetSummary struct {
 	Dataset string `json:"dataset" api:"required"`
 	// Unique dataset ID.
 	DatasetID string `json:"dataset_id" api:"required"`
-	// Whether deletion is blocked. Set to `false` before deleting the dataset.
-	DeletionProtection bool `json:"deletion_protection" api:"required"`
 	// Whether log ingest is currently active for this dataset.
 	Enabled bool `json:"enabled" api:"required"`
 	// Public ID of the account or zone that owns this dataset.
@@ -380,16 +334,15 @@ type DatasetSummary struct {
 
 // datasetSummaryJSON contains the JSON metadata for the struct [DatasetSummary]
 type datasetSummaryJSON struct {
-	CreatedAt          apijson.Field
-	Dataset            apijson.Field
-	DatasetID          apijson.Field
-	DeletionProtection apijson.Field
-	Enabled            apijson.Field
-	ObjectID           apijson.Field
-	ObjectType         apijson.Field
-	UpdatedAt          apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	CreatedAt   apijson.Field
+	Dataset     apijson.Field
+	DatasetID   apijson.Field
+	Enabled     apijson.Field
+	ObjectID    apijson.Field
+	ObjectType  apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *DatasetSummary) UnmarshalJSON(data []byte) (err error) {
@@ -419,17 +372,9 @@ func (r DatasetSummaryObjectType) IsKnown() bool {
 type UpdateRequestParam struct {
 	// Whether to enable or disable log ingest for this dataset.
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
-	// Set to `false` to allow deletion of this dataset.
-	DeletionProtection param.Field[bool] `json:"deletion_protection"`
 	// Controls which fields the API ingests after the update. Defaults to all
 	// available fields when absent.
 	Fields param.Field[[]UpdateRequestFieldParam] `json:"fields"`
-	// Optional Logpush filter predicate to restrict which events are ingested. If
-	// omitted, the existing filter is left unchanged. Set to an empty string (`""`) to
-	// clear the filter. Otherwise, replaces the dataset's filter entirely. See
-	// [Logpush filters](https://developers.cloudflare.com/logs/reference/filters/) for
-	// syntax and examples.
-	Filter param.Field[string] `json:"filter"`
 }
 
 func (r UpdateRequestParam) MarshalJSON() (data []byte, err error) {
@@ -545,42 +490,6 @@ func (r LogExplorerDatasetListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type LogExplorerDatasetDeleteParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-type LogExplorerDatasetDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []string              `json:"messages" api:"required"`
-	Success  bool                  `json:"success" api:"required"`
-	// A Log Explorer dataset summary. List endpoints return this type and omit field
-	// configuration; use the single-dataset endpoint to retrieve it.
-	Result Dataset                                      `json:"result"`
-	JSON   logExplorerDatasetDeleteResponseEnvelopeJSON `json:"-"`
-}
-
-// logExplorerDatasetDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LogExplorerDatasetDeleteResponseEnvelope]
-type logExplorerDatasetDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LogExplorerDatasetDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r logExplorerDatasetDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }
 
 type LogExplorerDatasetGetParams struct {

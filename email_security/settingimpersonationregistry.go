@@ -157,21 +157,21 @@ func (r *SettingImpersonationRegistryService) Get(ctx context.Context, impersona
 	return res, nil
 }
 
-// An impersonation registry entry.
+// An impersonation registry entry
 type SettingImpersonationRegistryNewResponse struct {
-	// Impersonation registry entry identifier.
+	// Impersonation registry entry identifier
 	ID              string    `json:"id" format:"uuid"`
 	Comments        string    `json:"comments" api:"nullable"`
 	CreatedAt       time.Time `json:"created_at" format:"date-time"`
 	DirectoryID     int64     `json:"directory_id" api:"nullable"`
 	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
 	Email           string    `json:"email"`
-	// Deprecated: This field is deprecated.
+	// Deprecated: deprecated
 	ExternalDirectoryNodeID string `json:"external_directory_node_id" api:"nullable"`
 	IsEmailRegex            bool   `json:"is_email_regex"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified time.Time                                         `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                                         `json:"modified_at" format:"date-time"`
 	Name         string                                            `json:"name"`
@@ -223,21 +223,21 @@ func (r SettingImpersonationRegistryNewResponseProvenance) IsKnown() bool {
 	return false
 }
 
-// An impersonation registry entry.
+// An impersonation registry entry
 type SettingImpersonationRegistryListResponse struct {
-	// Impersonation registry entry identifier.
+	// Impersonation registry entry identifier
 	ID              string    `json:"id" format:"uuid"`
 	Comments        string    `json:"comments" api:"nullable"`
 	CreatedAt       time.Time `json:"created_at" format:"date-time"`
 	DirectoryID     int64     `json:"directory_id" api:"nullable"`
 	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
 	Email           string    `json:"email"`
-	// Deprecated: This field is deprecated.
+	// Deprecated: deprecated
 	ExternalDirectoryNodeID string `json:"external_directory_node_id" api:"nullable"`
 	IsEmailRegex            bool   `json:"is_email_regex"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified time.Time                                          `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                                          `json:"modified_at" format:"date-time"`
 	Name         string                                             `json:"name"`
@@ -290,7 +290,7 @@ func (r SettingImpersonationRegistryListResponseProvenance) IsKnown() bool {
 }
 
 type SettingImpersonationRegistryDeleteResponse struct {
-	// Impersonation registry entry identifier.
+	// Impersonation registry entry identifier
 	ID   string                                         `json:"id" api:"required" format:"uuid"`
 	JSON settingImpersonationRegistryDeleteResponseJSON `json:"-"`
 }
@@ -311,21 +311,21 @@ func (r settingImpersonationRegistryDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// An impersonation registry entry.
+// An impersonation registry entry
 type SettingImpersonationRegistryEditResponse struct {
-	// Impersonation registry entry identifier.
+	// Impersonation registry entry identifier
 	ID              string    `json:"id" format:"uuid"`
 	Comments        string    `json:"comments" api:"nullable"`
 	CreatedAt       time.Time `json:"created_at" format:"date-time"`
 	DirectoryID     int64     `json:"directory_id" api:"nullable"`
 	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
 	Email           string    `json:"email"`
-	// Deprecated: This field is deprecated.
+	// Deprecated: deprecated
 	ExternalDirectoryNodeID string `json:"external_directory_node_id" api:"nullable"`
 	IsEmailRegex            bool   `json:"is_email_regex"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified time.Time                                          `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                                          `json:"modified_at" format:"date-time"`
 	Name         string                                             `json:"name"`
@@ -377,21 +377,21 @@ func (r SettingImpersonationRegistryEditResponseProvenance) IsKnown() bool {
 	return false
 }
 
-// An impersonation registry entry.
+// An impersonation registry entry
 type SettingImpersonationRegistryGetResponse struct {
-	// Impersonation registry entry identifier.
+	// Impersonation registry entry identifier
 	ID              string    `json:"id" format:"uuid"`
 	Comments        string    `json:"comments" api:"nullable"`
 	CreatedAt       time.Time `json:"created_at" format:"date-time"`
 	DirectoryID     int64     `json:"directory_id" api:"nullable"`
 	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
 	Email           string    `json:"email"`
-	// Deprecated: This field is deprecated.
+	// Deprecated: deprecated
 	ExternalDirectoryNodeID string `json:"external_directory_node_id" api:"nullable"`
 	IsEmailRegex            bool   `json:"is_email_regex"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified time.Time                                         `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                                         `json:"modified_at" format:"date-time"`
 	Name         string                                            `json:"name"`
@@ -482,7 +482,7 @@ type SettingImpersonationRegistryNewResponseEnvelope struct {
 	Messages []SettingImpersonationRegistryNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingImpersonationRegistryNewResponseEnvelopeSuccess `json:"success" api:"required"`
-	// An impersonation registry entry.
+	// An impersonation registry entry
 	Result SettingImpersonationRegistryNewResponse             `json:"result"`
 	JSON   settingImpersonationRegistryNewResponseEnvelopeJSON `json:"-"`
 }
@@ -882,7 +882,7 @@ type SettingImpersonationRegistryEditResponseEnvelope struct {
 	Messages []SettingImpersonationRegistryEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingImpersonationRegistryEditResponseEnvelopeSuccess `json:"success" api:"required"`
-	// An impersonation registry entry.
+	// An impersonation registry entry
 	Result SettingImpersonationRegistryEditResponse             `json:"result"`
 	JSON   settingImpersonationRegistryEditResponseEnvelopeJSON `json:"-"`
 }
@@ -1030,7 +1030,7 @@ type SettingImpersonationRegistryGetResponseEnvelope struct {
 	Messages []SettingImpersonationRegistryGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success SettingImpersonationRegistryGetResponseEnvelopeSuccess `json:"success" api:"required"`
-	// An impersonation registry entry.
+	// An impersonation registry entry
 	Result SettingImpersonationRegistryGetResponse             `json:"result"`
 	JSON   settingImpersonationRegistryGetResponseEnvelopeJSON `json:"-"`
 }

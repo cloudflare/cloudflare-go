@@ -107,12 +107,11 @@ func (r matchGetResponseJSON) RawJSON() string {
 }
 
 type MatchDownloadParams struct {
-	AccountID        param.Field[string] `path:"account_id" api:"required"`
-	ID               param.Field[string] `query:"id"`
-	IncludeDismissed param.Field[bool]   `query:"include_dismissed"`
-	IncludeDomainID  param.Field[bool]   `query:"include_domain_id"`
-	Limit            param.Field[int64]  `query:"limit"`
-	Offset           param.Field[int64]  `query:"offset"`
+	AccountID       param.Field[string] `path:"account_id" api:"required"`
+	ID              param.Field[string] `query:"id"`
+	IncludeDomainID param.Field[bool]   `query:"include_domain_id"`
+	Limit           param.Field[int64]  `query:"limit"`
+	Offset          param.Field[int64]  `query:"offset"`
 }
 
 // URLQuery serializes [MatchDownloadParams]'s query parameters as `url.Values`.
@@ -124,12 +123,11 @@ func (r MatchDownloadParams) URLQuery() (v url.Values) {
 }
 
 type MatchGetParams struct {
-	AccountID        param.Field[string] `path:"account_id" api:"required"`
-	ID               param.Field[string] `query:"id"`
-	IncludeDismissed param.Field[bool]   `query:"include_dismissed"`
-	IncludeDomainID  param.Field[bool]   `query:"include_domain_id"`
-	Limit            param.Field[int64]  `query:"limit"`
-	Offset           param.Field[int64]  `query:"offset"`
+	AccountID       param.Field[string] `path:"account_id" api:"required"`
+	ID              param.Field[string] `query:"id"`
+	IncludeDomainID param.Field[bool]   `query:"include_domain_id"`
+	Limit           param.Field[int64]  `query:"limit"`
+	Offset          param.Field[int64]  `query:"offset"`
 }
 
 // URLQuery serializes [MatchGetParams]'s query parameters as `url.Values`.

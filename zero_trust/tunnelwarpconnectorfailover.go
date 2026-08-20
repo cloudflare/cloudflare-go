@@ -99,7 +99,7 @@ func (r tunnelWARPConnectorFailoverUpdateResponseEnvelopeJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful
+// TunnelWARPConnectorFailoverUpdateResponseEnvelopeSuccess indicates whether the API call was successful
 type TunnelWARPConnectorFailoverUpdateResponseEnvelopeSuccess bool
 
 const (

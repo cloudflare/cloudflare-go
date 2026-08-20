@@ -36,11 +36,8 @@ func TestDeviceRegistrationListWithOptionalParams(t *testing.T) {
 		Device: cloudflare.F(zero_trust.DeviceRegistrationListParamsDevice{
 			ID: cloudflare.F("id"),
 		}),
-		Include: cloudflare.F("include"),
-		PerPage: cloudflare.F(int64(0)),
-		Policy: cloudflare.F(zero_trust.DeviceRegistrationListParamsPolicy{
-			ID: cloudflare.F("11ffb86f-3f0c-4306-b4a2-e62f872b166a"),
-		}),
+		Include:    cloudflare.F("include"),
+		PerPage:    cloudflare.F(int64(0)),
 		Search:     cloudflare.F("search"),
 		SeenAfter:  cloudflare.F("seen_after"),
 		SeenBefore: cloudflare.F("seen_before"),

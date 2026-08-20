@@ -150,7 +150,6 @@ func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
 			To:   cloudflare.F(0.000000),
 		}),
 		Chart:           cloudflare.F(true),
-		ChartType:       cloudflare.F(workers.ObservabilityTelemetryQueryParamsChartTypeTimeseriesAndAggregate),
 		Compare:         cloudflare.F(true),
 		Dry:             cloudflare.F(true),
 		Granularity:     cloudflare.F(0.000000),
@@ -160,11 +159,11 @@ func TestObservabilityTelemetryQueryWithOptionalParams(t *testing.T) {
 		OffsetBy:        cloudflare.F(0.000000),
 		OffsetDirection: cloudflare.F("offsetDirection"),
 		Parameters: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParameters{
-			Calculations: cloudflare.F([]workers.ObservabilityTelemetryQueryParamsParametersCalculationUnion{workers.ObservabilityTelemetryQueryParamsParametersCalculationsObject{
-				Operator: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersCalculationsObjectOperatorCount),
+			Calculations: cloudflare.F([]workers.ObservabilityTelemetryQueryParamsParametersCalculation{{
+				Operator: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersCalculationsOperatorUniq),
 				Alias:    cloudflare.F("alias"),
 				Key:      cloudflare.F("key"),
-				KeyType:  cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersCalculationsObjectKeyTypeString),
+				KeyType:  cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersCalculationsKeyTypeString),
 			}}),
 			Datasets:          cloudflare.F([]string{"string"}),
 			FilterCombination: cloudflare.F(workers.ObservabilityTelemetryQueryParamsParametersFilterCombinationAnd),

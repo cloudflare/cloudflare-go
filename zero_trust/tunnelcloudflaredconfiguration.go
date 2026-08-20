@@ -77,7 +77,7 @@ func (r *TunnelCloudflaredConfigurationService) Get(ctx context.Context, tunnelI
 	return res, nil
 }
 
-// Cloudflare Tunnel configuration
+// TunnelCloudflaredConfigurationUpdateResponse cloudflare Tunnel configuration
 type TunnelCloudflaredConfigurationUpdateResponse struct {
 	// Identifier.
 	AccountID string `json:"account_id"`
@@ -116,7 +116,7 @@ func (r tunnelCloudflaredConfigurationUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The tunnel configuration and ingress rules.
+// TunnelCloudflaredConfigurationUpdateResponseConfig is the tunnel configuration and ingress rules.
 type TunnelCloudflaredConfigurationUpdateResponseConfig struct {
 	// List of public hostname definitions. At least one ingress rule needs to be
 	// defined for the tunnel.
@@ -144,7 +144,7 @@ func (r tunnelCloudflaredConfigurationUpdateResponseConfigJSON) RawJSON() string
 	return r.raw
 }
 
-// Public hostname
+// TunnelCloudflaredConfigurationUpdateResponseConfigIngress public hostname
 type TunnelCloudflaredConfigurationUpdateResponseConfigIngress struct {
 	// Public hostname for this service.
 	Hostname string `json:"hostname" api:"required"`
@@ -180,7 +180,7 @@ func (r tunnelCloudflaredConfigurationUpdateResponseConfigIngressJSON) RawJSON()
 	return r.raw
 }
 
-// Configuration parameters for the public hostname specific connection settings
+// TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequest configuration parameters for the public hostname specific connection settings
 // between cloudflared and origin server.
 type TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
@@ -258,7 +258,7 @@ func (r tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestJS
 	return r.raw
 }
 
-// For all L7 requests to this hostname, cloudflared will validate each request's
+// TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccess for all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
 type TunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
@@ -290,7 +290,7 @@ func (r tunnelCloudflaredConfigurationUpdateResponseConfigIngressOriginRequestAc
 	return r.raw
 }
 
-// Configuration parameters for the public hostname specific connection settings
+// TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequest configuration parameters for the public hostname specific connection settings
 // between cloudflared and origin server.
 type TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
@@ -368,7 +368,7 @@ func (r tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestJSON) Raw
 	return r.raw
 }
 
-// For all L7 requests to this hostname, cloudflared will validate each request's
+// TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccess for all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
 type TunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
@@ -400,7 +400,7 @@ func (r tunnelCloudflaredConfigurationUpdateResponseConfigOriginRequestAccessJSO
 	return r.raw
 }
 
-// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// TunnelCloudflaredConfigurationUpdateResponseSource indicates if this is a locally or remotely configured tunnel. If `local`, manage
 // the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 // tunnel's configuration on the Zero Trust dashboard.
 type TunnelCloudflaredConfigurationUpdateResponseSource string
@@ -418,7 +418,7 @@ func (r TunnelCloudflaredConfigurationUpdateResponseSource) IsKnown() bool {
 	return false
 }
 
-// Cloudflare Tunnel configuration
+// TunnelCloudflaredConfigurationGetResponse cloudflare Tunnel configuration
 type TunnelCloudflaredConfigurationGetResponse struct {
 	// Identifier.
 	AccountID string `json:"account_id"`
@@ -457,7 +457,7 @@ func (r tunnelCloudflaredConfigurationGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The tunnel configuration and ingress rules.
+// TunnelCloudflaredConfigurationGetResponseConfig is the tunnel configuration and ingress rules.
 type TunnelCloudflaredConfigurationGetResponseConfig struct {
 	// List of public hostname definitions. At least one ingress rule needs to be
 	// defined for the tunnel.
@@ -485,7 +485,7 @@ func (r tunnelCloudflaredConfigurationGetResponseConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Public hostname
+// TunnelCloudflaredConfigurationGetResponseConfigIngress public hostname
 type TunnelCloudflaredConfigurationGetResponseConfigIngress struct {
 	// Public hostname for this service.
 	Hostname string `json:"hostname" api:"required"`
@@ -520,7 +520,7 @@ func (r tunnelCloudflaredConfigurationGetResponseConfigIngressJSON) RawJSON() st
 	return r.raw
 }
 
-// Configuration parameters for the public hostname specific connection settings
+// TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequest configuration parameters for the public hostname specific connection settings
 // between cloudflared and origin server.
 type TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
@@ -598,7 +598,7 @@ func (r tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestJSON)
 	return r.raw
 }
 
-// For all L7 requests to this hostname, cloudflared will validate each request's
+// TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccess for all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
 type TunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
@@ -630,7 +630,7 @@ func (r tunnelCloudflaredConfigurationGetResponseConfigIngressOriginRequestAcces
 	return r.raw
 }
 
-// Configuration parameters for the public hostname specific connection settings
+// TunnelCloudflaredConfigurationGetResponseConfigOriginRequest configuration parameters for the public hostname specific connection settings
 // between cloudflared and origin server.
 type TunnelCloudflaredConfigurationGetResponseConfigOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
@@ -708,7 +708,7 @@ func (r tunnelCloudflaredConfigurationGetResponseConfigOriginRequestJSON) RawJSO
 	return r.raw
 }
 
-// For all L7 requests to this hostname, cloudflared will validate each request's
+// TunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccess for all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
 type TunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
@@ -740,7 +740,7 @@ func (r tunnelCloudflaredConfigurationGetResponseConfigOriginRequestAccessJSON) 
 	return r.raw
 }
 
-// Indicates if this is a locally or remotely configured tunnel. If `local`, manage
+// TunnelCloudflaredConfigurationGetResponseSource indicates if this is a locally or remotely configured tunnel. If `local`, manage
 // the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the
 // tunnel's configuration on the Zero Trust dashboard.
 type TunnelCloudflaredConfigurationGetResponseSource string
@@ -769,7 +769,7 @@ func (r TunnelCloudflaredConfigurationUpdateParams) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-// The tunnel configuration and ingress rules.
+// TunnelCloudflaredConfigurationUpdateParamsConfig is the tunnel configuration and ingress rules.
 type TunnelCloudflaredConfigurationUpdateParamsConfig struct {
 	// List of public hostname definitions. At least one ingress rule needs to be
 	// defined for the tunnel.
@@ -783,7 +783,7 @@ func (r TunnelCloudflaredConfigurationUpdateParamsConfig) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-// Public hostname
+// TunnelCloudflaredConfigurationUpdateParamsConfigIngress public hostname
 type TunnelCloudflaredConfigurationUpdateParamsConfigIngress struct {
 	// Public hostname for this service.
 	Hostname param.Field[string] `json:"hostname" api:"required"`
@@ -802,7 +802,7 @@ func (r TunnelCloudflaredConfigurationUpdateParamsConfigIngress) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-// Configuration parameters for the public hostname specific connection settings
+// TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequest configuration parameters for the public hostname specific connection settings
 // between cloudflared and origin server.
 type TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
@@ -852,7 +852,7 @@ func (r TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequest) Ma
 	return apijson.MarshalRoot(r)
 }
 
-// For all L7 requests to this hostname, cloudflared will validate each request's
+// TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequestAccess for all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
 type TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
@@ -868,7 +868,7 @@ func (r TunnelCloudflaredConfigurationUpdateParamsConfigIngressOriginRequestAcce
 	return apijson.MarshalRoot(r)
 }
 
-// Configuration parameters for the public hostname specific connection settings
+// TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequest configuration parameters for the public hostname specific connection settings
 // between cloudflared and origin server.
 type TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequest struct {
 	// For all L7 requests to this hostname, cloudflared will validate each request's
@@ -918,7 +918,7 @@ func (r TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequest) MarshalJS
 	return apijson.MarshalRoot(r)
 }
 
-// For all L7 requests to this hostname, cloudflared will validate each request's
+// TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequestAccess for all L7 requests to this hostname, cloudflared will validate each request's
 // Cf-Access-Jwt-Assertion request header.
 type TunnelCloudflaredConfigurationUpdateParamsConfigOriginRequestAccess struct {
 	// Access applications that are allowed to reach this hostname for this Tunnel.
@@ -1063,7 +1063,7 @@ func (r tunnelCloudflaredConfigurationUpdateResponseEnvelopeMessagesSourceJSON) 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type TunnelCloudflaredConfigurationUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1212,7 +1212,7 @@ func (r tunnelCloudflaredConfigurationGetResponseEnvelopeMessagesSourceJSON) Raw
 	return r.raw
 }
 
-// Whether the API call was successful.
+// TunnelCloudflaredConfigurationGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type TunnelCloudflaredConfigurationGetResponseEnvelopeSuccess bool
 
 const (

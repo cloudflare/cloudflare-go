@@ -198,36 +198,26 @@ type Widget struct {
 	// Secret key for this widget.
 	Secret string `json:"secret" api:"required"`
 	// Widget item identifier tag.
-	Sitekey string `json:"sitekey" api:"required"`
-	// Origin that created this widget, recorded at creation time and immutable
-	// afterward. Server-derived from the create request; not client-settable. Omitted
-	// from the response for widgets created before this field existed.
-	DeployedVia WidgetDeployedVia `json:"deployed_via"`
-	// Origin of the most recent mutation (create, update, delete, or secret rotation).
-	// Server-derived; not client-settable. Omitted for widgets last mutated before
-	// this field existed.
-	LastModifiedVia WidgetLastModifiedVia `json:"last_modified_via"`
-	JSON            widgetJSON            `json:"-"`
+	Sitekey string     `json:"sitekey" api:"required"`
+	JSON    widgetJSON `json:"-"`
 }
 
 // widgetJSON contains the JSON metadata for the struct [Widget]
 type widgetJSON struct {
-	BotFightMode    apijson.Field
-	ClearanceLevel  apijson.Field
-	CreatedOn       apijson.Field
-	Domains         apijson.Field
-	EphemeralID     apijson.Field
-	Mode            apijson.Field
-	ModifiedOn      apijson.Field
-	Name            apijson.Field
-	Offlabel        apijson.Field
-	Region          apijson.Field
-	Secret          apijson.Field
-	Sitekey         apijson.Field
-	DeployedVia     apijson.Field
-	LastModifiedVia apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	BotFightMode   apijson.Field
+	ClearanceLevel apijson.Field
+	CreatedOn      apijson.Field
+	Domains        apijson.Field
+	EphemeralID    apijson.Field
+	Mode           apijson.Field
+	ModifiedOn     apijson.Field
+	Name           apijson.Field
+	Offlabel       apijson.Field
+	Region         apijson.Field
+	Secret         apijson.Field
+	Sitekey        apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *Widget) UnmarshalJSON(data []byte) (err error) {
@@ -290,48 +280,6 @@ func (r WidgetRegion) IsKnown() bool {
 	return false
 }
 
-// Origin that created this widget, recorded at creation time and immutable
-// afterward. Server-derived from the create request; not client-settable. Omitted
-// from the response for widgets created before this field existed.
-type WidgetDeployedVia string
-
-const (
-	WidgetDeployedViaWrangler  WidgetDeployedVia = "wrangler"
-	WidgetDeployedViaDashboard WidgetDeployedVia = "dashboard"
-	WidgetDeployedViaSpin      WidgetDeployedVia = "spin"
-	WidgetDeployedViaAPI       WidgetDeployedVia = "api"
-	WidgetDeployedViaUnknown   WidgetDeployedVia = "unknown"
-)
-
-func (r WidgetDeployedVia) IsKnown() bool {
-	switch r {
-	case WidgetDeployedViaWrangler, WidgetDeployedViaDashboard, WidgetDeployedViaSpin, WidgetDeployedViaAPI, WidgetDeployedViaUnknown:
-		return true
-	}
-	return false
-}
-
-// Origin of the most recent mutation (create, update, delete, or secret rotation).
-// Server-derived; not client-settable. Omitted for widgets last mutated before
-// this field existed.
-type WidgetLastModifiedVia string
-
-const (
-	WidgetLastModifiedViaWrangler  WidgetLastModifiedVia = "wrangler"
-	WidgetLastModifiedViaDashboard WidgetLastModifiedVia = "dashboard"
-	WidgetLastModifiedViaSpin      WidgetLastModifiedVia = "spin"
-	WidgetLastModifiedViaAPI       WidgetLastModifiedVia = "api"
-	WidgetLastModifiedViaUnknown   WidgetLastModifiedVia = "unknown"
-)
-
-func (r WidgetLastModifiedVia) IsKnown() bool {
-	switch r {
-	case WidgetLastModifiedViaWrangler, WidgetLastModifiedViaDashboard, WidgetLastModifiedViaSpin, WidgetLastModifiedViaAPI, WidgetLastModifiedViaUnknown:
-		return true
-	}
-	return false
-}
-
 type WidgetDomain = string
 
 type WidgetDomainParam = string
@@ -362,36 +310,26 @@ type WidgetListResponse struct {
 	// Region where this widget can be used. This cannot be changed after creation.
 	Region WidgetListResponseRegion `json:"region" api:"required"`
 	// Widget item identifier tag.
-	Sitekey string `json:"sitekey" api:"required"`
-	// Origin that created this widget, recorded at creation time and immutable
-	// afterward. Server-derived from the create request; not client-settable. Omitted
-	// from the response for widgets created before this field existed.
-	DeployedVia WidgetListResponseDeployedVia `json:"deployed_via"`
-	// Origin of the most recent mutation (create, update, delete, or secret rotation).
-	// Server-derived; not client-settable. Omitted for widgets last mutated before
-	// this field existed.
-	LastModifiedVia WidgetListResponseLastModifiedVia `json:"last_modified_via"`
-	JSON            widgetListResponseJSON            `json:"-"`
+	Sitekey string                 `json:"sitekey" api:"required"`
+	JSON    widgetListResponseJSON `json:"-"`
 }
 
 // widgetListResponseJSON contains the JSON metadata for the struct
 // [WidgetListResponse]
 type widgetListResponseJSON struct {
-	BotFightMode    apijson.Field
-	ClearanceLevel  apijson.Field
-	CreatedOn       apijson.Field
-	Domains         apijson.Field
-	EphemeralID     apijson.Field
-	Mode            apijson.Field
-	ModifiedOn      apijson.Field
-	Name            apijson.Field
-	Offlabel        apijson.Field
-	Region          apijson.Field
-	Sitekey         apijson.Field
-	DeployedVia     apijson.Field
-	LastModifiedVia apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	BotFightMode   apijson.Field
+	ClearanceLevel apijson.Field
+	CreatedOn      apijson.Field
+	Domains        apijson.Field
+	EphemeralID    apijson.Field
+	Mode           apijson.Field
+	ModifiedOn     apijson.Field
+	Name           apijson.Field
+	Offlabel       apijson.Field
+	Region         apijson.Field
+	Sitekey        apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *WidgetListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -449,48 +387,6 @@ const (
 func (r WidgetListResponseRegion) IsKnown() bool {
 	switch r {
 	case WidgetListResponseRegionWorld, WidgetListResponseRegionChina:
-		return true
-	}
-	return false
-}
-
-// Origin that created this widget, recorded at creation time and immutable
-// afterward. Server-derived from the create request; not client-settable. Omitted
-// from the response for widgets created before this field existed.
-type WidgetListResponseDeployedVia string
-
-const (
-	WidgetListResponseDeployedViaWrangler  WidgetListResponseDeployedVia = "wrangler"
-	WidgetListResponseDeployedViaDashboard WidgetListResponseDeployedVia = "dashboard"
-	WidgetListResponseDeployedViaSpin      WidgetListResponseDeployedVia = "spin"
-	WidgetListResponseDeployedViaAPI       WidgetListResponseDeployedVia = "api"
-	WidgetListResponseDeployedViaUnknown   WidgetListResponseDeployedVia = "unknown"
-)
-
-func (r WidgetListResponseDeployedVia) IsKnown() bool {
-	switch r {
-	case WidgetListResponseDeployedViaWrangler, WidgetListResponseDeployedViaDashboard, WidgetListResponseDeployedViaSpin, WidgetListResponseDeployedViaAPI, WidgetListResponseDeployedViaUnknown:
-		return true
-	}
-	return false
-}
-
-// Origin of the most recent mutation (create, update, delete, or secret rotation).
-// Server-derived; not client-settable. Omitted for widgets last mutated before
-// this field existed.
-type WidgetListResponseLastModifiedVia string
-
-const (
-	WidgetListResponseLastModifiedViaWrangler  WidgetListResponseLastModifiedVia = "wrangler"
-	WidgetListResponseLastModifiedViaDashboard WidgetListResponseLastModifiedVia = "dashboard"
-	WidgetListResponseLastModifiedViaSpin      WidgetListResponseLastModifiedVia = "spin"
-	WidgetListResponseLastModifiedViaAPI       WidgetListResponseLastModifiedVia = "api"
-	WidgetListResponseLastModifiedViaUnknown   WidgetListResponseLastModifiedVia = "unknown"
-)
-
-func (r WidgetListResponseLastModifiedVia) IsKnown() bool {
-	switch r {
-	case WidgetListResponseLastModifiedViaWrangler, WidgetListResponseLastModifiedViaDashboard, WidgetListResponseLastModifiedViaSpin, WidgetListResponseLastModifiedViaAPI, WidgetListResponseLastModifiedViaUnknown:
 		return true
 	}
 	return false

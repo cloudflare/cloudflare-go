@@ -100,7 +100,7 @@ func (r categoryJSON) RawJSON() string {
 	return r.raw
 }
 
-// Specify which account types can create policies for this category. `blocked`
+// CategoryClass specify which account types can create policies for this category. `blocked`
 // Blocks unconditionally for all accounts. `removalPending` Allows removal from
 // policies but disables addition. `noBlock` Prevents blocking.
 type CategoryClass string
@@ -157,7 +157,7 @@ func (r categorySubcategoryJSON) RawJSON() string {
 	return r.raw
 }
 
-// Specify which account types can create policies for this category. `blocked`
+// CategorySubcategoriesClass specify which account types can create policies for this category. `blocked`
 // Blocks unconditionally for all accounts. `removalPending` Allows removal from
 // policies but disables addition. `noBlock` Prevents blocking.
 type CategorySubcategoriesClass string

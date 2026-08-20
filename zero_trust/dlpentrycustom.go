@@ -230,13 +230,10 @@ type DLPEntryCustomListResponse struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPEntryCustomListResponseObjectConfidence].
-	Confidence interface{} `json:"confidence"`
-	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated  bool    `json:"deprecated"`
-	Description string  `json:"description" api:"nullable"`
-	Pattern     Pattern `json:"pattern"`
+	Confidence  interface{} `json:"confidence"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
+	Description string      `json:"description" api:"nullable"`
+	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID    string                                 `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret       bool                                   `json:"secret"`
@@ -261,7 +258,6 @@ type dlpEntryCustomListResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
-	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -298,7 +294,7 @@ func (r DLPEntryCustomListResponse) AsUnion() DLPEntryCustomListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [DLPEntryCustomListResponseObject],
+// DLPEntryCustomListResponseUnion is satisfied by [DLPEntryCustomListResponseObject],
 // [DLPEntryCustomListResponseObject], [DLPEntryCustomListResponseObject],
 // [DLPEntryCustomListResponseObject], [DLPEntryCustomListResponseObject],
 // [DLPEntryCustomListResponseObject] or [DLPEntryCustomListResponseObject].
@@ -469,13 +465,10 @@ type DLPEntryCustomGetResponse struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [DLPEntryCustomGetResponseObjectConfidence].
-	Confidence interface{} `json:"confidence"`
-	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated  bool    `json:"deprecated"`
-	Description string  `json:"description" api:"nullable"`
-	Pattern     Pattern `json:"pattern"`
+	Confidence  interface{} `json:"confidence"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
+	Description string      `json:"description" api:"nullable"`
+	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// This field can have the runtime type of
@@ -503,7 +496,6 @@ type dlpEntryCustomGetResponseJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
-	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -541,7 +533,7 @@ func (r DLPEntryCustomGetResponse) AsUnion() DLPEntryCustomGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [DLPEntryCustomGetResponseObject],
+// DLPEntryCustomGetResponseUnion is satisfied by [DLPEntryCustomGetResponseObject],
 // [DLPEntryCustomGetResponseObject], [DLPEntryCustomGetResponseObject],
 // [DLPEntryCustomGetResponseObject], [DLPEntryCustomGetResponseObject],
 // [DLPEntryCustomGetResponseObject] or [DLPEntryCustomGetResponseObject].
@@ -643,7 +635,7 @@ func (r DLPEntryCustomGetResponseObjectType) IsKnown() bool {
 	return false
 }
 
-// Computed entry field for a profile that an entry is shared into.
+// DLPEntryCustomGetResponseObjectProfile computed entry field for a profile that an entry is shared into.
 type DLPEntryCustomGetResponseObjectProfile struct {
 	ID   string                                     `json:"id" api:"required" format:"uuid"`
 	Name string                                     `json:"name" api:"required"`
@@ -862,7 +854,7 @@ func (r dlpEntryCustomNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryCustomNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryCustomNewResponseEnvelopeSuccess bool
 
 const (
@@ -1013,7 +1005,7 @@ func (r dlpEntryCustomUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryCustomUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryCustomUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1160,7 +1152,7 @@ func (r dlpEntryCustomDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryCustomDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryCustomDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1303,7 +1295,7 @@ func (r dlpEntryCustomGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEntryCustomGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEntryCustomGetResponseEnvelopeSuccess bool
 
 const (

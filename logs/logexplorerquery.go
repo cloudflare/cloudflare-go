@@ -45,9 +45,14 @@ func NewLogExplorerQueryService(opts ...option.RequestOption) (r *LogExplorerQue
 // WHERE {timestamp_field} BETWEEN '2026-04-01T00:00:00Z' AND
 // '2026-04-30T23:59:59Z'
 //
-// List configured account or zone datasets to see enabled account or zone-level
-// datasets. Zone-level datasets will not appear here. List available account or
-// zone datasets to inspect their schemas and timestamp fields.
+// Check /account or zones/{account or zone_id}/logs/explorer/datasets to see
+// enabled account or zone level datasets. Zone-level datasets will not appear
+// here. Check /account or zones/{account or
+// zone_id}/logs/explorer/datasets/available for the schemas, and the name of the
+// timestamp fields.
+//
+// For zone-level datasets use the zone-scoped endpoint: POST
+// /zones/{zone_id}/logs/explorer/query/sql
 //
 // For more information about the datasets, and the meaning of each field, check
 // out https://developers.cloudflare.com/logs/logpush/logpush-job/datasets/
@@ -93,9 +98,14 @@ func (r *LogExplorerQueryService) Sql(ctx context.Context, body io.Reader, param
 // WHERE {timestamp_field} BETWEEN '2026-04-01T00:00:00Z' AND
 // '2026-04-30T23:59:59Z'
 //
-// List configured account or zone datasets to see enabled account or zone-level
-// datasets. Zone-level datasets will not appear here. List available account or
-// zone datasets to inspect their schemas and timestamp fields.
+// Check /account or zones/{account or zone_id}/logs/explorer/datasets to see
+// enabled account or zone level datasets. Zone-level datasets will not appear
+// here. Check /account or zones/{account or
+// zone_id}/logs/explorer/datasets/available for the schemas, and the name of the
+// timestamp fields.
+//
+// For zone-level datasets use the zone-scoped endpoint: POST
+// /zones/{zone_id}/logs/explorer/query/sql
 //
 // For more information about the datasets, and the meaning of each field, check
 // out https://developers.cloudflare.com/logs/logpush/logpush-job/datasets/

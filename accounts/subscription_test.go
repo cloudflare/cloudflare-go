@@ -30,6 +30,7 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Subscriptions.New(context.TODO(), accounts.SubscriptionNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Subscription: shared.SubscriptionParam{
 			Frequency: cloudflare.F(shared.SubscriptionFrequencyMonthly),
 			RatePlan: cloudflare.F(shared.RatePlanParam{
@@ -42,7 +43,6 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 				Sets:              cloudflare.F([]string{"string"}),
 			}),
 		},
-		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -125,7 +125,7 @@ func TestSubscriptionDelete(t *testing.T) {
 	}
 }
 
-func TestSubscriptionGetWithOptionalParams(t *testing.T) {
+func TestSubscriptionGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -140,7 +140,7 @@ func TestSubscriptionGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Subscriptions.Get(context.TODO(), accounts.SubscriptionGetParams{
-		AccountID: cloudflare.F("account_id"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

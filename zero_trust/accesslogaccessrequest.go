@@ -121,7 +121,7 @@ func (r AccessLogAccessRequestListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Operator for the `allowed` filter.
+// AccessLogAccessRequestListParamsAllowedOp operator for the `allowed` filter.
 type AccessLogAccessRequestListParamsAllowedOp string
 
 const (
@@ -137,7 +137,7 @@ func (r AccessLogAccessRequestListParamsAllowedOp) IsKnown() bool {
 	return false
 }
 
-// Operator for the `app_type` filter.
+// AccessLogAccessRequestListParamsAppTypeOp operator for the `app_type` filter.
 type AccessLogAccessRequestListParamsAppTypeOp string
 
 const (
@@ -153,7 +153,7 @@ func (r AccessLogAccessRequestListParamsAppTypeOp) IsKnown() bool {
 	return false
 }
 
-// Operator for the `app_uid` filter.
+// AccessLogAccessRequestListParamsAppUIDOp operator for the `app_uid` filter.
 type AccessLogAccessRequestListParamsAppUIDOp string
 
 const (
@@ -169,7 +169,7 @@ func (r AccessLogAccessRequestListParamsAppUIDOp) IsKnown() bool {
 	return false
 }
 
-// Operator for the `country_code` filter.
+// AccessLogAccessRequestListParamsCountryCodeOp operator for the `country_code` filter.
 type AccessLogAccessRequestListParamsCountryCodeOp string
 
 const (
@@ -185,7 +185,7 @@ func (r AccessLogAccessRequestListParamsCountryCodeOp) IsKnown() bool {
 	return false
 }
 
-// The chronological sorting order for the logs.
+// AccessLogAccessRequestListParamsDirection is the chronological sorting order for the logs.
 type AccessLogAccessRequestListParamsDirection string
 
 const (
@@ -201,7 +201,7 @@ func (r AccessLogAccessRequestListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Operator for the `email` filter. `contains` performs a substring
+// AccessLogAccessRequestListParamsEmailOp operator for the `email` filter. `contains` performs a substring
 // (case-sensitive) match. When `email_exact=true` is also set, `email_exact` takes
 // precedence and `contains` is ignored.
 type AccessLogAccessRequestListParamsEmailOp string
@@ -220,7 +220,7 @@ func (r AccessLogAccessRequestListParamsEmailOp) IsKnown() bool {
 	return false
 }
 
-// Operator for the `idp` filter.
+// AccessLogAccessRequestListParamsIdPOp operator for the `idp` filter.
 type AccessLogAccessRequestListParamsIdPOp string
 
 const (
@@ -236,7 +236,7 @@ func (r AccessLogAccessRequestListParamsIdPOp) IsKnown() bool {
 	return false
 }
 
-// Operator for the `non_identity` filter.
+// AccessLogAccessRequestListParamsNonIdentityOp operator for the `non_identity` filter.
 type AccessLogAccessRequestListParamsNonIdentityOp string
 
 const (
@@ -252,7 +252,7 @@ func (r AccessLogAccessRequestListParamsNonIdentityOp) IsKnown() bool {
 	return false
 }
 
-// Operator for the `ray_id` filter.
+// AccessLogAccessRequestListParamsRayIDOp operator for the `ray_id` filter.
 type AccessLogAccessRequestListParamsRayIDOp string
 
 const (
@@ -268,7 +268,7 @@ func (r AccessLogAccessRequestListParamsRayIDOp) IsKnown() bool {
 	return false
 }
 
-// Deprecated. Accepted for backward compatibility but no longer applied as a
+// AccessLogAccessRequestListParamsUserIDOp deprecated. Accepted for backward compatibility but no longer applied as a
 // filter (the `user_id` parameter is itself deprecated).
 type AccessLogAccessRequestListParamsUserIDOp string
 
@@ -410,7 +410,7 @@ func (r accessLogAccessRequestListResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// AccessLogAccessRequestListResponseEnvelopeSuccess indicates whether the API call was successful.
 type AccessLogAccessRequestListResponseEnvelopeSuccess bool
 
 const (

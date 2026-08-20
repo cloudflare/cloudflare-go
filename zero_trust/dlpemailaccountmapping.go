@@ -134,7 +134,7 @@ func (r DLPEmailAccountMappingNewResponseAuthRequirements) AsUnion() DLPEmailAcc
 	return r.union
 }
 
-// Union satisfied by [DLPEmailAccountMappingNewResponseAuthRequirementsObject] or
+// DLPEmailAccountMappingNewResponseAuthRequirementsUnion is satisfied by [DLPEmailAccountMappingNewResponseAuthRequirementsObject] or
 // [DLPEmailAccountMappingNewResponseAuthRequirementsType].
 type DLPEmailAccountMappingNewResponseAuthRequirementsUnion interface {
 	implementsDLPEmailAccountMappingNewResponseAuthRequirements()
@@ -297,7 +297,7 @@ func (r DLPEmailAccountMappingGetResponseAuthRequirements) AsUnion() DLPEmailAcc
 	return r.union
 }
 
-// Union satisfied by [DLPEmailAccountMappingGetResponseAuthRequirementsObject] or
+// DLPEmailAccountMappingGetResponseAuthRequirementsUnion is satisfied by [DLPEmailAccountMappingGetResponseAuthRequirementsObject] or
 // [DLPEmailAccountMappingGetResponseAuthRequirementsType].
 type DLPEmailAccountMappingGetResponseAuthRequirementsUnion interface {
 	implementsDLPEmailAccountMappingGetResponseAuthRequirements()
@@ -418,7 +418,7 @@ func (r DLPEmailAccountMappingNewParamsAuthRequirements) MarshalJSON() (data []b
 func (r DLPEmailAccountMappingNewParamsAuthRequirements) implementsDLPEmailAccountMappingNewParamsAuthRequirementsUnion() {
 }
 
-// Satisfied by [zero_trust.DLPEmailAccountMappingNewParamsAuthRequirementsObject],
+// DLPEmailAccountMappingNewParamsAuthRequirementsUnion satisfied by [zero_trust.DLPEmailAccountMappingNewParamsAuthRequirementsObject],
 // [zero_trust.DLPEmailAccountMappingNewParamsAuthRequirementsType],
 // [DLPEmailAccountMappingNewParamsAuthRequirements].
 type DLPEmailAccountMappingNewParamsAuthRequirementsUnion interface {
@@ -601,7 +601,7 @@ func (r dlpEmailAccountMappingNewResponseEnvelopeMessagesSourceJSON) RawJSON() s
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEmailAccountMappingNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEmailAccountMappingNewResponseEnvelopeSuccess bool
 
 const (
@@ -745,7 +745,7 @@ func (r dlpEmailAccountMappingGetResponseEnvelopeMessagesSourceJSON) RawJSON() s
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPEmailAccountMappingGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPEmailAccountMappingGetResponseEnvelopeSuccess bool
 
 const (

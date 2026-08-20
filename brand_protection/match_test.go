@@ -30,12 +30,11 @@ func TestMatchDownloadWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.BrandProtection.Matches.Download(context.TODO(), brand_protection.MatchDownloadParams{
-		AccountID:        cloudflare.F("x"),
-		ID:               cloudflare.F("id"),
-		IncludeDismissed: cloudflare.F(true),
-		IncludeDomainID:  cloudflare.F(true),
-		Limit:            cloudflare.F(int64(0)),
-		Offset:           cloudflare.F(int64(0)),
+		AccountID:       cloudflare.F("x"),
+		ID:              cloudflare.F("id"),
+		IncludeDomainID: cloudflare.F(true),
+		Limit:           cloudflare.F(int64(0)),
+		Offset:          cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,12 +61,11 @@ func TestMatchGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.BrandProtection.Matches.Get(context.TODO(), brand_protection.MatchGetParams{
-		AccountID:        cloudflare.F("x"),
-		ID:               cloudflare.F("id"),
-		IncludeDismissed: cloudflare.F(true),
-		IncludeDomainID:  cloudflare.F(true),
-		Limit:            cloudflare.F(int64(0)),
-		Offset:           cloudflare.F(int64(0)),
+		AccountID:       cloudflare.F("x"),
+		ID:              cloudflare.F("id"),
+		IncludeDomainID: cloudflare.F(true),
+		Limit:           cloudflare.F(int64(0)),
+		Offset:          cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

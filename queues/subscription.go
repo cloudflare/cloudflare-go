@@ -236,8 +236,6 @@ func (r SubscriptionNewResponseDestinationType) IsKnown() bool {
 type SubscriptionNewResponseSource struct {
 	// Name of the Workers AI model
 	ModelName string `json:"model_name"`
-	// Tag of the Worker script
-	ScriptTag string `json:"script_tag"`
 	// Type of source
 	Type SubscriptionNewResponseSourceType `json:"type"`
 	// Name of the worker
@@ -252,7 +250,6 @@ type SubscriptionNewResponseSource struct {
 // [SubscriptionNewResponseSource]
 type subscriptionNewResponseSourceJSON struct {
 	ModelName    apijson.Field
-	ScriptTag    apijson.Field
 	Type         apijson.Field
 	WorkerName   apijson.Field
 	WorkflowName apijson.Field
@@ -284,7 +281,6 @@ func (r *SubscriptionNewResponseSource) UnmarshalJSON(data []byte) (err error) {
 // [SubscriptionNewResponseSourceMqEventSourceVectorize],
 // [SubscriptionNewResponseSourceMqEventSourceWorkersAIModel],
 // [SubscriptionNewResponseSourceMqEventSourceWorkersBuildsWorker],
-// [SubscriptionNewResponseSourceMqEventSourceWorkersScript],
 // [SubscriptionNewResponseSourceMqEventSourceWorkflowsWorkflow].
 func (r SubscriptionNewResponseSource) AsUnion() SubscriptionNewResponseSourceUnion {
 	return r.union
@@ -298,8 +294,7 @@ func (r SubscriptionNewResponseSource) AsUnion() SubscriptionNewResponseSourceUn
 // [SubscriptionNewResponseSourceMqEventSourceSuperSlurper],
 // [SubscriptionNewResponseSourceMqEventSourceVectorize],
 // [SubscriptionNewResponseSourceMqEventSourceWorkersAIModel],
-// [SubscriptionNewResponseSourceMqEventSourceWorkersBuildsWorker],
-// [SubscriptionNewResponseSourceMqEventSourceWorkersScript] or
+// [SubscriptionNewResponseSourceMqEventSourceWorkersBuildsWorker] or
 // [SubscriptionNewResponseSourceMqEventSourceWorkflowsWorkflow].
 type SubscriptionNewResponseSourceUnion interface {
 	implementsSubscriptionNewResponseSource()
@@ -336,10 +331,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SubscriptionNewResponseSourceMqEventSourceWorkersBuildsWorker{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SubscriptionNewResponseSourceMqEventSourceWorkersScript{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -633,50 +624,6 @@ func (r SubscriptionNewResponseSourceMqEventSourceWorkersBuildsWorkerType) IsKno
 	return false
 }
 
-type SubscriptionNewResponseSourceMqEventSourceWorkersScript struct {
-	// Tag of the Worker script
-	ScriptTag string `json:"script_tag"`
-	// Type of source
-	Type SubscriptionNewResponseSourceMqEventSourceWorkersScriptType `json:"type"`
-	JSON subscriptionNewResponseSourceMqEventSourceWorkersScriptJSON `json:"-"`
-}
-
-// subscriptionNewResponseSourceMqEventSourceWorkersScriptJSON contains the JSON
-// metadata for the struct
-// [SubscriptionNewResponseSourceMqEventSourceWorkersScript]
-type subscriptionNewResponseSourceMqEventSourceWorkersScriptJSON struct {
-	ScriptTag   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionNewResponseSourceMqEventSourceWorkersScript) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionNewResponseSourceMqEventSourceWorkersScriptJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SubscriptionNewResponseSourceMqEventSourceWorkersScript) implementsSubscriptionNewResponseSource() {
-}
-
-// Type of source
-type SubscriptionNewResponseSourceMqEventSourceWorkersScriptType string
-
-const (
-	SubscriptionNewResponseSourceMqEventSourceWorkersScriptTypeWorkersScript SubscriptionNewResponseSourceMqEventSourceWorkersScriptType = "workers.script"
-)
-
-func (r SubscriptionNewResponseSourceMqEventSourceWorkersScriptType) IsKnown() bool {
-	switch r {
-	case SubscriptionNewResponseSourceMqEventSourceWorkersScriptTypeWorkersScript:
-		return true
-	}
-	return false
-}
-
 type SubscriptionNewResponseSourceMqEventSourceWorkflowsWorkflow struct {
 	// Type of source
 	Type SubscriptionNewResponseSourceMqEventSourceWorkflowsWorkflowType `json:"type"`
@@ -732,13 +679,12 @@ const (
 	SubscriptionNewResponseSourceTypeVectorize           SubscriptionNewResponseSourceType = "vectorize"
 	SubscriptionNewResponseSourceTypeWorkersAIModel      SubscriptionNewResponseSourceType = "workersAi.model"
 	SubscriptionNewResponseSourceTypeWorkersBuildsWorker SubscriptionNewResponseSourceType = "workersBuilds.worker"
-	SubscriptionNewResponseSourceTypeWorkersScript       SubscriptionNewResponseSourceType = "workers.script"
 	SubscriptionNewResponseSourceTypeWorkflowsWorkflow   SubscriptionNewResponseSourceType = "workflows.workflow"
 )
 
 func (r SubscriptionNewResponseSourceType) IsKnown() bool {
 	switch r {
-	case SubscriptionNewResponseSourceTypeImages, SubscriptionNewResponseSourceTypeKV, SubscriptionNewResponseSourceTypeR2, SubscriptionNewResponseSourceTypeSuperSlurper, SubscriptionNewResponseSourceTypeVectorize, SubscriptionNewResponseSourceTypeWorkersAIModel, SubscriptionNewResponseSourceTypeWorkersBuildsWorker, SubscriptionNewResponseSourceTypeWorkersScript, SubscriptionNewResponseSourceTypeWorkflowsWorkflow:
+	case SubscriptionNewResponseSourceTypeImages, SubscriptionNewResponseSourceTypeKV, SubscriptionNewResponseSourceTypeR2, SubscriptionNewResponseSourceTypeSuperSlurper, SubscriptionNewResponseSourceTypeVectorize, SubscriptionNewResponseSourceTypeWorkersAIModel, SubscriptionNewResponseSourceTypeWorkersBuildsWorker, SubscriptionNewResponseSourceTypeWorkflowsWorkflow:
 		return true
 	}
 	return false
@@ -832,8 +778,6 @@ func (r SubscriptionUpdateResponseDestinationType) IsKnown() bool {
 type SubscriptionUpdateResponseSource struct {
 	// Name of the Workers AI model
 	ModelName string `json:"model_name"`
-	// Tag of the Worker script
-	ScriptTag string `json:"script_tag"`
 	// Type of source
 	Type SubscriptionUpdateResponseSourceType `json:"type"`
 	// Name of the worker
@@ -848,7 +792,6 @@ type SubscriptionUpdateResponseSource struct {
 // [SubscriptionUpdateResponseSource]
 type subscriptionUpdateResponseSourceJSON struct {
 	ModelName    apijson.Field
-	ScriptTag    apijson.Field
 	Type         apijson.Field
 	WorkerName   apijson.Field
 	WorkflowName apijson.Field
@@ -880,7 +823,6 @@ func (r *SubscriptionUpdateResponseSource) UnmarshalJSON(data []byte) (err error
 // [SubscriptionUpdateResponseSourceMqEventSourceVectorize],
 // [SubscriptionUpdateResponseSourceMqEventSourceWorkersAIModel],
 // [SubscriptionUpdateResponseSourceMqEventSourceWorkersBuildsWorker],
-// [SubscriptionUpdateResponseSourceMqEventSourceWorkersScript],
 // [SubscriptionUpdateResponseSourceMqEventSourceWorkflowsWorkflow].
 func (r SubscriptionUpdateResponseSource) AsUnion() SubscriptionUpdateResponseSourceUnion {
 	return r.union
@@ -894,8 +836,7 @@ func (r SubscriptionUpdateResponseSource) AsUnion() SubscriptionUpdateResponseSo
 // [SubscriptionUpdateResponseSourceMqEventSourceSuperSlurper],
 // [SubscriptionUpdateResponseSourceMqEventSourceVectorize],
 // [SubscriptionUpdateResponseSourceMqEventSourceWorkersAIModel],
-// [SubscriptionUpdateResponseSourceMqEventSourceWorkersBuildsWorker],
-// [SubscriptionUpdateResponseSourceMqEventSourceWorkersScript] or
+// [SubscriptionUpdateResponseSourceMqEventSourceWorkersBuildsWorker] or
 // [SubscriptionUpdateResponseSourceMqEventSourceWorkflowsWorkflow].
 type SubscriptionUpdateResponseSourceUnion interface {
 	implementsSubscriptionUpdateResponseSource()
@@ -932,10 +873,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SubscriptionUpdateResponseSourceMqEventSourceWorkersBuildsWorker{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SubscriptionUpdateResponseSourceMqEventSourceWorkersScript{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1233,50 +1170,6 @@ func (r SubscriptionUpdateResponseSourceMqEventSourceWorkersBuildsWorkerType) Is
 	return false
 }
 
-type SubscriptionUpdateResponseSourceMqEventSourceWorkersScript struct {
-	// Tag of the Worker script
-	ScriptTag string `json:"script_tag"`
-	// Type of source
-	Type SubscriptionUpdateResponseSourceMqEventSourceWorkersScriptType `json:"type"`
-	JSON subscriptionUpdateResponseSourceMqEventSourceWorkersScriptJSON `json:"-"`
-}
-
-// subscriptionUpdateResponseSourceMqEventSourceWorkersScriptJSON contains the JSON
-// metadata for the struct
-// [SubscriptionUpdateResponseSourceMqEventSourceWorkersScript]
-type subscriptionUpdateResponseSourceMqEventSourceWorkersScriptJSON struct {
-	ScriptTag   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionUpdateResponseSourceMqEventSourceWorkersScript) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionUpdateResponseSourceMqEventSourceWorkersScriptJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SubscriptionUpdateResponseSourceMqEventSourceWorkersScript) implementsSubscriptionUpdateResponseSource() {
-}
-
-// Type of source
-type SubscriptionUpdateResponseSourceMqEventSourceWorkersScriptType string
-
-const (
-	SubscriptionUpdateResponseSourceMqEventSourceWorkersScriptTypeWorkersScript SubscriptionUpdateResponseSourceMqEventSourceWorkersScriptType = "workers.script"
-)
-
-func (r SubscriptionUpdateResponseSourceMqEventSourceWorkersScriptType) IsKnown() bool {
-	switch r {
-	case SubscriptionUpdateResponseSourceMqEventSourceWorkersScriptTypeWorkersScript:
-		return true
-	}
-	return false
-}
-
 type SubscriptionUpdateResponseSourceMqEventSourceWorkflowsWorkflow struct {
 	// Type of source
 	Type SubscriptionUpdateResponseSourceMqEventSourceWorkflowsWorkflowType `json:"type"`
@@ -1332,13 +1225,12 @@ const (
 	SubscriptionUpdateResponseSourceTypeVectorize           SubscriptionUpdateResponseSourceType = "vectorize"
 	SubscriptionUpdateResponseSourceTypeWorkersAIModel      SubscriptionUpdateResponseSourceType = "workersAi.model"
 	SubscriptionUpdateResponseSourceTypeWorkersBuildsWorker SubscriptionUpdateResponseSourceType = "workersBuilds.worker"
-	SubscriptionUpdateResponseSourceTypeWorkersScript       SubscriptionUpdateResponseSourceType = "workers.script"
 	SubscriptionUpdateResponseSourceTypeWorkflowsWorkflow   SubscriptionUpdateResponseSourceType = "workflows.workflow"
 )
 
 func (r SubscriptionUpdateResponseSourceType) IsKnown() bool {
 	switch r {
-	case SubscriptionUpdateResponseSourceTypeImages, SubscriptionUpdateResponseSourceTypeKV, SubscriptionUpdateResponseSourceTypeR2, SubscriptionUpdateResponseSourceTypeSuperSlurper, SubscriptionUpdateResponseSourceTypeVectorize, SubscriptionUpdateResponseSourceTypeWorkersAIModel, SubscriptionUpdateResponseSourceTypeWorkersBuildsWorker, SubscriptionUpdateResponseSourceTypeWorkersScript, SubscriptionUpdateResponseSourceTypeWorkflowsWorkflow:
+	case SubscriptionUpdateResponseSourceTypeImages, SubscriptionUpdateResponseSourceTypeKV, SubscriptionUpdateResponseSourceTypeR2, SubscriptionUpdateResponseSourceTypeSuperSlurper, SubscriptionUpdateResponseSourceTypeVectorize, SubscriptionUpdateResponseSourceTypeWorkersAIModel, SubscriptionUpdateResponseSourceTypeWorkersBuildsWorker, SubscriptionUpdateResponseSourceTypeWorkflowsWorkflow:
 		return true
 	}
 	return false
@@ -1432,8 +1324,6 @@ func (r SubscriptionListResponseDestinationType) IsKnown() bool {
 type SubscriptionListResponseSource struct {
 	// Name of the Workers AI model
 	ModelName string `json:"model_name"`
-	// Tag of the Worker script
-	ScriptTag string `json:"script_tag"`
 	// Type of source
 	Type SubscriptionListResponseSourceType `json:"type"`
 	// Name of the worker
@@ -1448,7 +1338,6 @@ type SubscriptionListResponseSource struct {
 // [SubscriptionListResponseSource]
 type subscriptionListResponseSourceJSON struct {
 	ModelName    apijson.Field
-	ScriptTag    apijson.Field
 	Type         apijson.Field
 	WorkerName   apijson.Field
 	WorkflowName apijson.Field
@@ -1480,7 +1369,6 @@ func (r *SubscriptionListResponseSource) UnmarshalJSON(data []byte) (err error) 
 // [SubscriptionListResponseSourceMqEventSourceVectorize],
 // [SubscriptionListResponseSourceMqEventSourceWorkersAIModel],
 // [SubscriptionListResponseSourceMqEventSourceWorkersBuildsWorker],
-// [SubscriptionListResponseSourceMqEventSourceWorkersScript],
 // [SubscriptionListResponseSourceMqEventSourceWorkflowsWorkflow].
 func (r SubscriptionListResponseSource) AsUnion() SubscriptionListResponseSourceUnion {
 	return r.union
@@ -1494,8 +1382,7 @@ func (r SubscriptionListResponseSource) AsUnion() SubscriptionListResponseSource
 // [SubscriptionListResponseSourceMqEventSourceSuperSlurper],
 // [SubscriptionListResponseSourceMqEventSourceVectorize],
 // [SubscriptionListResponseSourceMqEventSourceWorkersAIModel],
-// [SubscriptionListResponseSourceMqEventSourceWorkersBuildsWorker],
-// [SubscriptionListResponseSourceMqEventSourceWorkersScript] or
+// [SubscriptionListResponseSourceMqEventSourceWorkersBuildsWorker] or
 // [SubscriptionListResponseSourceMqEventSourceWorkflowsWorkflow].
 type SubscriptionListResponseSourceUnion interface {
 	implementsSubscriptionListResponseSource()
@@ -1532,10 +1419,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SubscriptionListResponseSourceMqEventSourceWorkersBuildsWorker{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SubscriptionListResponseSourceMqEventSourceWorkersScript{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1831,50 +1714,6 @@ func (r SubscriptionListResponseSourceMqEventSourceWorkersBuildsWorkerType) IsKn
 	return false
 }
 
-type SubscriptionListResponseSourceMqEventSourceWorkersScript struct {
-	// Tag of the Worker script
-	ScriptTag string `json:"script_tag"`
-	// Type of source
-	Type SubscriptionListResponseSourceMqEventSourceWorkersScriptType `json:"type"`
-	JSON subscriptionListResponseSourceMqEventSourceWorkersScriptJSON `json:"-"`
-}
-
-// subscriptionListResponseSourceMqEventSourceWorkersScriptJSON contains the JSON
-// metadata for the struct
-// [SubscriptionListResponseSourceMqEventSourceWorkersScript]
-type subscriptionListResponseSourceMqEventSourceWorkersScriptJSON struct {
-	ScriptTag   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionListResponseSourceMqEventSourceWorkersScript) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionListResponseSourceMqEventSourceWorkersScriptJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SubscriptionListResponseSourceMqEventSourceWorkersScript) implementsSubscriptionListResponseSource() {
-}
-
-// Type of source
-type SubscriptionListResponseSourceMqEventSourceWorkersScriptType string
-
-const (
-	SubscriptionListResponseSourceMqEventSourceWorkersScriptTypeWorkersScript SubscriptionListResponseSourceMqEventSourceWorkersScriptType = "workers.script"
-)
-
-func (r SubscriptionListResponseSourceMqEventSourceWorkersScriptType) IsKnown() bool {
-	switch r {
-	case SubscriptionListResponseSourceMqEventSourceWorkersScriptTypeWorkersScript:
-		return true
-	}
-	return false
-}
-
 type SubscriptionListResponseSourceMqEventSourceWorkflowsWorkflow struct {
 	// Type of source
 	Type SubscriptionListResponseSourceMqEventSourceWorkflowsWorkflowType `json:"type"`
@@ -1930,13 +1769,12 @@ const (
 	SubscriptionListResponseSourceTypeVectorize           SubscriptionListResponseSourceType = "vectorize"
 	SubscriptionListResponseSourceTypeWorkersAIModel      SubscriptionListResponseSourceType = "workersAi.model"
 	SubscriptionListResponseSourceTypeWorkersBuildsWorker SubscriptionListResponseSourceType = "workersBuilds.worker"
-	SubscriptionListResponseSourceTypeWorkersScript       SubscriptionListResponseSourceType = "workers.script"
 	SubscriptionListResponseSourceTypeWorkflowsWorkflow   SubscriptionListResponseSourceType = "workflows.workflow"
 )
 
 func (r SubscriptionListResponseSourceType) IsKnown() bool {
 	switch r {
-	case SubscriptionListResponseSourceTypeImages, SubscriptionListResponseSourceTypeKV, SubscriptionListResponseSourceTypeR2, SubscriptionListResponseSourceTypeSuperSlurper, SubscriptionListResponseSourceTypeVectorize, SubscriptionListResponseSourceTypeWorkersAIModel, SubscriptionListResponseSourceTypeWorkersBuildsWorker, SubscriptionListResponseSourceTypeWorkersScript, SubscriptionListResponseSourceTypeWorkflowsWorkflow:
+	case SubscriptionListResponseSourceTypeImages, SubscriptionListResponseSourceTypeKV, SubscriptionListResponseSourceTypeR2, SubscriptionListResponseSourceTypeSuperSlurper, SubscriptionListResponseSourceTypeVectorize, SubscriptionListResponseSourceTypeWorkersAIModel, SubscriptionListResponseSourceTypeWorkersBuildsWorker, SubscriptionListResponseSourceTypeWorkflowsWorkflow:
 		return true
 	}
 	return false
@@ -2030,8 +1868,6 @@ func (r SubscriptionDeleteResponseDestinationType) IsKnown() bool {
 type SubscriptionDeleteResponseSource struct {
 	// Name of the Workers AI model
 	ModelName string `json:"model_name"`
-	// Tag of the Worker script
-	ScriptTag string `json:"script_tag"`
 	// Type of source
 	Type SubscriptionDeleteResponseSourceType `json:"type"`
 	// Name of the worker
@@ -2046,7 +1882,6 @@ type SubscriptionDeleteResponseSource struct {
 // [SubscriptionDeleteResponseSource]
 type subscriptionDeleteResponseSourceJSON struct {
 	ModelName    apijson.Field
-	ScriptTag    apijson.Field
 	Type         apijson.Field
 	WorkerName   apijson.Field
 	WorkflowName apijson.Field
@@ -2078,7 +1913,6 @@ func (r *SubscriptionDeleteResponseSource) UnmarshalJSON(data []byte) (err error
 // [SubscriptionDeleteResponseSourceMqEventSourceVectorize],
 // [SubscriptionDeleteResponseSourceMqEventSourceWorkersAIModel],
 // [SubscriptionDeleteResponseSourceMqEventSourceWorkersBuildsWorker],
-// [SubscriptionDeleteResponseSourceMqEventSourceWorkersScript],
 // [SubscriptionDeleteResponseSourceMqEventSourceWorkflowsWorkflow].
 func (r SubscriptionDeleteResponseSource) AsUnion() SubscriptionDeleteResponseSourceUnion {
 	return r.union
@@ -2092,8 +1926,7 @@ func (r SubscriptionDeleteResponseSource) AsUnion() SubscriptionDeleteResponseSo
 // [SubscriptionDeleteResponseSourceMqEventSourceSuperSlurper],
 // [SubscriptionDeleteResponseSourceMqEventSourceVectorize],
 // [SubscriptionDeleteResponseSourceMqEventSourceWorkersAIModel],
-// [SubscriptionDeleteResponseSourceMqEventSourceWorkersBuildsWorker],
-// [SubscriptionDeleteResponseSourceMqEventSourceWorkersScript] or
+// [SubscriptionDeleteResponseSourceMqEventSourceWorkersBuildsWorker] or
 // [SubscriptionDeleteResponseSourceMqEventSourceWorkflowsWorkflow].
 type SubscriptionDeleteResponseSourceUnion interface {
 	implementsSubscriptionDeleteResponseSource()
@@ -2130,10 +1963,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SubscriptionDeleteResponseSourceMqEventSourceWorkersBuildsWorker{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SubscriptionDeleteResponseSourceMqEventSourceWorkersScript{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -2431,50 +2260,6 @@ func (r SubscriptionDeleteResponseSourceMqEventSourceWorkersBuildsWorkerType) Is
 	return false
 }
 
-type SubscriptionDeleteResponseSourceMqEventSourceWorkersScript struct {
-	// Tag of the Worker script
-	ScriptTag string `json:"script_tag"`
-	// Type of source
-	Type SubscriptionDeleteResponseSourceMqEventSourceWorkersScriptType `json:"type"`
-	JSON subscriptionDeleteResponseSourceMqEventSourceWorkersScriptJSON `json:"-"`
-}
-
-// subscriptionDeleteResponseSourceMqEventSourceWorkersScriptJSON contains the JSON
-// metadata for the struct
-// [SubscriptionDeleteResponseSourceMqEventSourceWorkersScript]
-type subscriptionDeleteResponseSourceMqEventSourceWorkersScriptJSON struct {
-	ScriptTag   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionDeleteResponseSourceMqEventSourceWorkersScript) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionDeleteResponseSourceMqEventSourceWorkersScriptJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SubscriptionDeleteResponseSourceMqEventSourceWorkersScript) implementsSubscriptionDeleteResponseSource() {
-}
-
-// Type of source
-type SubscriptionDeleteResponseSourceMqEventSourceWorkersScriptType string
-
-const (
-	SubscriptionDeleteResponseSourceMqEventSourceWorkersScriptTypeWorkersScript SubscriptionDeleteResponseSourceMqEventSourceWorkersScriptType = "workers.script"
-)
-
-func (r SubscriptionDeleteResponseSourceMqEventSourceWorkersScriptType) IsKnown() bool {
-	switch r {
-	case SubscriptionDeleteResponseSourceMqEventSourceWorkersScriptTypeWorkersScript:
-		return true
-	}
-	return false
-}
-
 type SubscriptionDeleteResponseSourceMqEventSourceWorkflowsWorkflow struct {
 	// Type of source
 	Type SubscriptionDeleteResponseSourceMqEventSourceWorkflowsWorkflowType `json:"type"`
@@ -2530,13 +2315,12 @@ const (
 	SubscriptionDeleteResponseSourceTypeVectorize           SubscriptionDeleteResponseSourceType = "vectorize"
 	SubscriptionDeleteResponseSourceTypeWorkersAIModel      SubscriptionDeleteResponseSourceType = "workersAi.model"
 	SubscriptionDeleteResponseSourceTypeWorkersBuildsWorker SubscriptionDeleteResponseSourceType = "workersBuilds.worker"
-	SubscriptionDeleteResponseSourceTypeWorkersScript       SubscriptionDeleteResponseSourceType = "workers.script"
 	SubscriptionDeleteResponseSourceTypeWorkflowsWorkflow   SubscriptionDeleteResponseSourceType = "workflows.workflow"
 )
 
 func (r SubscriptionDeleteResponseSourceType) IsKnown() bool {
 	switch r {
-	case SubscriptionDeleteResponseSourceTypeImages, SubscriptionDeleteResponseSourceTypeKV, SubscriptionDeleteResponseSourceTypeR2, SubscriptionDeleteResponseSourceTypeSuperSlurper, SubscriptionDeleteResponseSourceTypeVectorize, SubscriptionDeleteResponseSourceTypeWorkersAIModel, SubscriptionDeleteResponseSourceTypeWorkersBuildsWorker, SubscriptionDeleteResponseSourceTypeWorkersScript, SubscriptionDeleteResponseSourceTypeWorkflowsWorkflow:
+	case SubscriptionDeleteResponseSourceTypeImages, SubscriptionDeleteResponseSourceTypeKV, SubscriptionDeleteResponseSourceTypeR2, SubscriptionDeleteResponseSourceTypeSuperSlurper, SubscriptionDeleteResponseSourceTypeVectorize, SubscriptionDeleteResponseSourceTypeWorkersAIModel, SubscriptionDeleteResponseSourceTypeWorkersBuildsWorker, SubscriptionDeleteResponseSourceTypeWorkflowsWorkflow:
 		return true
 	}
 	return false
@@ -2630,8 +2414,6 @@ func (r SubscriptionGetResponseDestinationType) IsKnown() bool {
 type SubscriptionGetResponseSource struct {
 	// Name of the Workers AI model
 	ModelName string `json:"model_name"`
-	// Tag of the Worker script
-	ScriptTag string `json:"script_tag"`
 	// Type of source
 	Type SubscriptionGetResponseSourceType `json:"type"`
 	// Name of the worker
@@ -2646,7 +2428,6 @@ type SubscriptionGetResponseSource struct {
 // [SubscriptionGetResponseSource]
 type subscriptionGetResponseSourceJSON struct {
 	ModelName    apijson.Field
-	ScriptTag    apijson.Field
 	Type         apijson.Field
 	WorkerName   apijson.Field
 	WorkflowName apijson.Field
@@ -2678,7 +2459,6 @@ func (r *SubscriptionGetResponseSource) UnmarshalJSON(data []byte) (err error) {
 // [SubscriptionGetResponseSourceMqEventSourceVectorize],
 // [SubscriptionGetResponseSourceMqEventSourceWorkersAIModel],
 // [SubscriptionGetResponseSourceMqEventSourceWorkersBuildsWorker],
-// [SubscriptionGetResponseSourceMqEventSourceWorkersScript],
 // [SubscriptionGetResponseSourceMqEventSourceWorkflowsWorkflow].
 func (r SubscriptionGetResponseSource) AsUnion() SubscriptionGetResponseSourceUnion {
 	return r.union
@@ -2692,8 +2472,7 @@ func (r SubscriptionGetResponseSource) AsUnion() SubscriptionGetResponseSourceUn
 // [SubscriptionGetResponseSourceMqEventSourceSuperSlurper],
 // [SubscriptionGetResponseSourceMqEventSourceVectorize],
 // [SubscriptionGetResponseSourceMqEventSourceWorkersAIModel],
-// [SubscriptionGetResponseSourceMqEventSourceWorkersBuildsWorker],
-// [SubscriptionGetResponseSourceMqEventSourceWorkersScript] or
+// [SubscriptionGetResponseSourceMqEventSourceWorkersBuildsWorker] or
 // [SubscriptionGetResponseSourceMqEventSourceWorkflowsWorkflow].
 type SubscriptionGetResponseSourceUnion interface {
 	implementsSubscriptionGetResponseSource()
@@ -2730,10 +2509,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SubscriptionGetResponseSourceMqEventSourceWorkersBuildsWorker{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SubscriptionGetResponseSourceMqEventSourceWorkersScript{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -3027,50 +2802,6 @@ func (r SubscriptionGetResponseSourceMqEventSourceWorkersBuildsWorkerType) IsKno
 	return false
 }
 
-type SubscriptionGetResponseSourceMqEventSourceWorkersScript struct {
-	// Tag of the Worker script
-	ScriptTag string `json:"script_tag"`
-	// Type of source
-	Type SubscriptionGetResponseSourceMqEventSourceWorkersScriptType `json:"type"`
-	JSON subscriptionGetResponseSourceMqEventSourceWorkersScriptJSON `json:"-"`
-}
-
-// subscriptionGetResponseSourceMqEventSourceWorkersScriptJSON contains the JSON
-// metadata for the struct
-// [SubscriptionGetResponseSourceMqEventSourceWorkersScript]
-type subscriptionGetResponseSourceMqEventSourceWorkersScriptJSON struct {
-	ScriptTag   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionGetResponseSourceMqEventSourceWorkersScript) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionGetResponseSourceMqEventSourceWorkersScriptJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SubscriptionGetResponseSourceMqEventSourceWorkersScript) implementsSubscriptionGetResponseSource() {
-}
-
-// Type of source
-type SubscriptionGetResponseSourceMqEventSourceWorkersScriptType string
-
-const (
-	SubscriptionGetResponseSourceMqEventSourceWorkersScriptTypeWorkersScript SubscriptionGetResponseSourceMqEventSourceWorkersScriptType = "workers.script"
-)
-
-func (r SubscriptionGetResponseSourceMqEventSourceWorkersScriptType) IsKnown() bool {
-	switch r {
-	case SubscriptionGetResponseSourceMqEventSourceWorkersScriptTypeWorkersScript:
-		return true
-	}
-	return false
-}
-
 type SubscriptionGetResponseSourceMqEventSourceWorkflowsWorkflow struct {
 	// Type of source
 	Type SubscriptionGetResponseSourceMqEventSourceWorkflowsWorkflowType `json:"type"`
@@ -3126,13 +2857,12 @@ const (
 	SubscriptionGetResponseSourceTypeVectorize           SubscriptionGetResponseSourceType = "vectorize"
 	SubscriptionGetResponseSourceTypeWorkersAIModel      SubscriptionGetResponseSourceType = "workersAi.model"
 	SubscriptionGetResponseSourceTypeWorkersBuildsWorker SubscriptionGetResponseSourceType = "workersBuilds.worker"
-	SubscriptionGetResponseSourceTypeWorkersScript       SubscriptionGetResponseSourceType = "workers.script"
 	SubscriptionGetResponseSourceTypeWorkflowsWorkflow   SubscriptionGetResponseSourceType = "workflows.workflow"
 )
 
 func (r SubscriptionGetResponseSourceType) IsKnown() bool {
 	switch r {
-	case SubscriptionGetResponseSourceTypeImages, SubscriptionGetResponseSourceTypeKV, SubscriptionGetResponseSourceTypeR2, SubscriptionGetResponseSourceTypeSuperSlurper, SubscriptionGetResponseSourceTypeVectorize, SubscriptionGetResponseSourceTypeWorkersAIModel, SubscriptionGetResponseSourceTypeWorkersBuildsWorker, SubscriptionGetResponseSourceTypeWorkersScript, SubscriptionGetResponseSourceTypeWorkflowsWorkflow:
+	case SubscriptionGetResponseSourceTypeImages, SubscriptionGetResponseSourceTypeKV, SubscriptionGetResponseSourceTypeR2, SubscriptionGetResponseSourceTypeSuperSlurper, SubscriptionGetResponseSourceTypeVectorize, SubscriptionGetResponseSourceTypeWorkersAIModel, SubscriptionGetResponseSourceTypeWorkersBuildsWorker, SubscriptionGetResponseSourceTypeWorkflowsWorkflow:
 		return true
 	}
 	return false
@@ -3188,8 +2918,6 @@ func (r SubscriptionNewParamsDestinationType) IsKnown() bool {
 type SubscriptionNewParamsSource struct {
 	// Name of the Workers AI model
 	ModelName param.Field[string] `json:"model_name"`
-	// Tag of the Worker script
-	ScriptTag param.Field[string] `json:"script_tag"`
 	// Type of source
 	Type param.Field[SubscriptionNewParamsSourceType] `json:"type"`
 	// Name of the worker
@@ -3213,7 +2941,6 @@ func (r SubscriptionNewParamsSource) implementsSubscriptionNewParamsSourceUnion(
 // [queues.SubscriptionNewParamsSourceMqEventSourceVectorize],
 // [queues.SubscriptionNewParamsSourceMqEventSourceWorkersAIModel],
 // [queues.SubscriptionNewParamsSourceMqEventSourceWorkersBuildsWorker],
-// [queues.SubscriptionNewParamsSourceMqEventSourceWorkersScript],
 // [queues.SubscriptionNewParamsSourceMqEventSourceWorkflowsWorkflow],
 // [SubscriptionNewParamsSource].
 type SubscriptionNewParamsSourceUnion interface {
@@ -3411,35 +3138,6 @@ func (r SubscriptionNewParamsSourceMqEventSourceWorkersBuildsWorkerType) IsKnown
 	return false
 }
 
-type SubscriptionNewParamsSourceMqEventSourceWorkersScript struct {
-	// Tag of the Worker script
-	ScriptTag param.Field[string] `json:"script_tag"`
-	// Type of source
-	Type param.Field[SubscriptionNewParamsSourceMqEventSourceWorkersScriptType] `json:"type"`
-}
-
-func (r SubscriptionNewParamsSourceMqEventSourceWorkersScript) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SubscriptionNewParamsSourceMqEventSourceWorkersScript) implementsSubscriptionNewParamsSourceUnion() {
-}
-
-// Type of source
-type SubscriptionNewParamsSourceMqEventSourceWorkersScriptType string
-
-const (
-	SubscriptionNewParamsSourceMqEventSourceWorkersScriptTypeWorkersScript SubscriptionNewParamsSourceMqEventSourceWorkersScriptType = "workers.script"
-)
-
-func (r SubscriptionNewParamsSourceMqEventSourceWorkersScriptType) IsKnown() bool {
-	switch r {
-	case SubscriptionNewParamsSourceMqEventSourceWorkersScriptTypeWorkersScript:
-		return true
-	}
-	return false
-}
-
 type SubscriptionNewParamsSourceMqEventSourceWorkflowsWorkflow struct {
 	// Type of source
 	Type param.Field[SubscriptionNewParamsSourceMqEventSourceWorkflowsWorkflowType] `json:"type"`
@@ -3480,13 +3178,12 @@ const (
 	SubscriptionNewParamsSourceTypeVectorize           SubscriptionNewParamsSourceType = "vectorize"
 	SubscriptionNewParamsSourceTypeWorkersAIModel      SubscriptionNewParamsSourceType = "workersAi.model"
 	SubscriptionNewParamsSourceTypeWorkersBuildsWorker SubscriptionNewParamsSourceType = "workersBuilds.worker"
-	SubscriptionNewParamsSourceTypeWorkersScript       SubscriptionNewParamsSourceType = "workers.script"
 	SubscriptionNewParamsSourceTypeWorkflowsWorkflow   SubscriptionNewParamsSourceType = "workflows.workflow"
 )
 
 func (r SubscriptionNewParamsSourceType) IsKnown() bool {
 	switch r {
-	case SubscriptionNewParamsSourceTypeImages, SubscriptionNewParamsSourceTypeKV, SubscriptionNewParamsSourceTypeR2, SubscriptionNewParamsSourceTypeSuperSlurper, SubscriptionNewParamsSourceTypeVectorize, SubscriptionNewParamsSourceTypeWorkersAIModel, SubscriptionNewParamsSourceTypeWorkersBuildsWorker, SubscriptionNewParamsSourceTypeWorkersScript, SubscriptionNewParamsSourceTypeWorkflowsWorkflow:
+	case SubscriptionNewParamsSourceTypeImages, SubscriptionNewParamsSourceTypeKV, SubscriptionNewParamsSourceTypeR2, SubscriptionNewParamsSourceTypeSuperSlurper, SubscriptionNewParamsSourceTypeVectorize, SubscriptionNewParamsSourceTypeWorkersAIModel, SubscriptionNewParamsSourceTypeWorkersBuildsWorker, SubscriptionNewParamsSourceTypeWorkflowsWorkflow:
 		return true
 	}
 	return false

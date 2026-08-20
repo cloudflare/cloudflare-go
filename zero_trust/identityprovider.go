@@ -278,7 +278,7 @@ func (r AzureAD) implementsIdentityProvider() {}
 
 func (r AzureAD) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// AzureADConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AzureADConfig struct {
@@ -330,7 +330,7 @@ func (r azureADConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicates the type of user interaction that is required. prompt=login forces the
+// AzureADConfigPrompt indicates the type of user interaction that is required. prompt=login forces the
 // user to enter their credentials on that request, negating single-sign on.
 // prompt=none is the opposite. It ensures that the user isn't presented with any
 // interactive prompt. If the request can't be completed silently by using
@@ -354,7 +354,7 @@ func (r AzureADConfigPrompt) IsKnown() bool {
 	return false
 }
 
-// The SAML encryption certificate set details, including current and previous
+// AzureADSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type AzureADSAMLCertificateSet struct {
@@ -392,7 +392,7 @@ func (r azureAdsamlCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// AzureADSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type AzureADSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -453,7 +453,7 @@ func (r AzureADParam) MarshalJSON() (data []byte, err error) {
 
 func (r AzureADParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// AzureADConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AzureADConfigParam struct {
@@ -486,7 +486,7 @@ func (r AzureADConfigParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// AzureADSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type AzureADSAMLCertificateSetParam struct {
@@ -503,7 +503,7 @@ func (r AzureADSAMLCertificateSetParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// AzureADSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type AzureADSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -648,7 +648,7 @@ func (r IdentityProvider) AsUnion() IdentityProviderUnion {
 	return r.union
 }
 
-// Union satisfied by [AzureAD], [IdentityProviderAccessCentrify],
+// IdentityProviderUnion is satisfied by [AzureAD], [IdentityProviderAccessCentrify],
 // [IdentityProviderAccessFacebook], [IdentityProviderAccessGitHub],
 // [IdentityProviderAccessGoogle], [IdentityProviderAccessGoogleApps],
 // [IdentityProviderAccessLinkedin], [IdentityProviderAccessOIDC],
@@ -783,7 +783,7 @@ func (r identityProviderAccessCentrifyJSON) RawJSON() string {
 
 func (r IdentityProviderAccessCentrify) implementsIdentityProvider() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessCentrifyConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessCentrifyConfig struct {
@@ -823,7 +823,7 @@ func (r identityProviderAccessCentrifyConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessCentrifySAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessCentrifySAMLCertificateSet struct {
@@ -861,7 +861,7 @@ func (r identityProviderAccessCentrifySAMLCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessCentrifySAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessCentrifySAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -952,7 +952,7 @@ func (r identityProviderAccessFacebookJSON) RawJSON() string {
 
 func (r IdentityProviderAccessFacebook) implementsIdentityProvider() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessFacebookSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessFacebookSAMLCertificateSet struct {
@@ -990,7 +990,7 @@ func (r identityProviderAccessFacebookSAMLCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessFacebookSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessFacebookSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -1081,7 +1081,7 @@ func (r identityProviderAccessGitHubJSON) RawJSON() string {
 
 func (r IdentityProviderAccessGitHub) implementsIdentityProvider() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessGitHubSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessGitHubSAMLCertificateSet struct {
@@ -1119,7 +1119,7 @@ func (r identityProviderAccessGitHubSAMLCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessGitHubSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessGitHubSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -1210,7 +1210,7 @@ func (r identityProviderAccessGoogleJSON) RawJSON() string {
 
 func (r IdentityProviderAccessGoogle) implementsIdentityProvider() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessGoogleConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessGoogleConfig struct {
@@ -1244,7 +1244,7 @@ func (r identityProviderAccessGoogleConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessGoogleSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessGoogleSAMLCertificateSet struct {
@@ -1282,7 +1282,7 @@ func (r identityProviderAccessGoogleSAMLCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessGoogleSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessGoogleSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -1373,7 +1373,7 @@ func (r identityProviderAccessGoogleAppsJSON) RawJSON() string {
 
 func (r IdentityProviderAccessGoogleApps) implementsIdentityProvider() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessGoogleAppsConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessGoogleAppsConfig struct {
@@ -1410,7 +1410,7 @@ func (r identityProviderAccessGoogleAppsConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessGoogleAppsSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessGoogleAppsSAMLCertificateSet struct {
@@ -1448,7 +1448,7 @@ func (r identityProviderAccessGoogleAppsSAMLCertificateSetJSON) RawJSON() string
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessGoogleAppsSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessGoogleAppsSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -1539,7 +1539,7 @@ func (r identityProviderAccessLinkedinJSON) RawJSON() string {
 
 func (r IdentityProviderAccessLinkedin) implementsIdentityProvider() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessLinkedinSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessLinkedinSAMLCertificateSet struct {
@@ -1577,7 +1577,7 @@ func (r identityProviderAccessLinkedinSAMLCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessLinkedinSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessLinkedinSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -1668,7 +1668,7 @@ func (r identityProviderAccessOIDCJSON) RawJSON() string {
 
 func (r IdentityProviderAccessOIDC) implementsIdentityProvider() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessOIDCConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessOIDCConfig struct {
@@ -1717,7 +1717,7 @@ func (r identityProviderAccessOIDCConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessOIDCSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessOIDCSAMLCertificateSet struct {
@@ -1755,7 +1755,7 @@ func (r identityProviderAccessOidcsamlCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessOIDCSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessOIDCSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -1846,7 +1846,7 @@ func (r identityProviderAccessOktaJSON) RawJSON() string {
 
 func (r IdentityProviderAccessOkta) implementsIdentityProvider() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessOktaConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessOktaConfig struct {
@@ -1886,7 +1886,7 @@ func (r identityProviderAccessOktaConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessOktaSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessOktaSAMLCertificateSet struct {
@@ -1924,7 +1924,7 @@ func (r identityProviderAccessOktaSAMLCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessOktaSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessOktaSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -2015,7 +2015,7 @@ func (r identityProviderAccessOneloginJSON) RawJSON() string {
 
 func (r IdentityProviderAccessOnelogin) implementsIdentityProvider() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessOneloginConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessOneloginConfig struct {
@@ -2052,7 +2052,7 @@ func (r identityProviderAccessOneloginConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessOneloginSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessOneloginSAMLCertificateSet struct {
@@ -2090,7 +2090,7 @@ func (r identityProviderAccessOneloginSAMLCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessOneloginSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessOneloginSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -2181,7 +2181,7 @@ func (r identityProviderAccessPingoneJSON) RawJSON() string {
 
 func (r IdentityProviderAccessPingone) implementsIdentityProvider() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessPingoneConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessPingoneConfig struct {
@@ -2218,7 +2218,7 @@ func (r identityProviderAccessPingoneConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessPingoneSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessPingoneSAMLCertificateSet struct {
@@ -2256,7 +2256,7 @@ func (r identityProviderAccessPingoneSAMLCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessPingoneSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessPingoneSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -2347,7 +2347,7 @@ func (r identityProviderAccessSAMLJSON) RawJSON() string {
 
 func (r IdentityProviderAccessSAML) implementsIdentityProvider() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessSAMLConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessSAMLConfig struct {
@@ -2432,7 +2432,7 @@ func (r identityProviderAccessSAMLConfigHeaderAttributeJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessSAMLSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessSAMLSAMLCertificateSet struct {
@@ -2470,7 +2470,7 @@ func (r identityProviderAccessSamlsamlCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessSAMLSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessSAMLSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -2561,7 +2561,7 @@ func (r identityProviderAccessYandexJSON) RawJSON() string {
 
 func (r IdentityProviderAccessYandex) implementsIdentityProvider() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessYandexSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessYandexSAMLCertificateSet struct {
@@ -2599,7 +2599,7 @@ func (r identityProviderAccessYandexSAMLCertificateSetJSON) RawJSON() string {
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessYandexSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessYandexSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -2690,7 +2690,7 @@ func (r identityProviderAccessOnetimepinJSON) RawJSON() string {
 
 func (r IdentityProviderAccessOnetimepin) implementsIdentityProvider() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessOnetimepinConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessOnetimepinConfig struct {
@@ -2714,7 +2714,7 @@ func (r identityProviderAccessOnetimepinConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessOnetimepinSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessOnetimepinSAMLCertificateSet struct {
@@ -2752,7 +2752,7 @@ func (r identityProviderAccessOnetimepinSAMLCertificateSetJSON) RawJSON() string
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessOnetimepinSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessOnetimepinSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -2843,7 +2843,7 @@ func (r identityProviderAccessCloudflareJSON) RawJSON() string {
 
 func (r IdentityProviderAccessCloudflare) implementsIdentityProvider() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessCloudflareConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessCloudflareConfig struct {
@@ -2872,7 +2872,7 @@ func (r identityProviderAccessCloudflareConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessCloudflareSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessCloudflareSAMLCertificateSet struct {
@@ -2910,7 +2910,7 @@ func (r identityProviderAccessCloudflareSAMLCertificateSetJSON) RawJSON() string
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -2970,7 +2970,7 @@ func (r IdentityProviderParam) MarshalJSON() (data []byte, err error) {
 
 func (r IdentityProviderParam) implementsIdentityProviderUnionParam() {}
 
-// Satisfied by [zero_trust.AzureADParam],
+// IdentityProviderUnionParam satisfied by [zero_trust.AzureADParam],
 // [zero_trust.IdentityProviderAccessCentrifyParam],
 // [zero_trust.IdentityProviderAccessFacebookParam],
 // [zero_trust.IdentityProviderAccessGitHubParam],
@@ -3016,7 +3016,7 @@ func (r IdentityProviderAccessCentrifyParam) MarshalJSON() (data []byte, err err
 
 func (r IdentityProviderAccessCentrifyParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessCentrifyConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessCentrifyConfigParam struct {
@@ -3038,7 +3038,7 @@ func (r IdentityProviderAccessCentrifyConfigParam) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessCentrifySAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessCentrifySAMLCertificateSetParam struct {
@@ -3055,7 +3055,7 @@ func (r IdentityProviderAccessCentrifySAMLCertificateSetParam) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessCentrifySAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessCentrifySAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3100,7 +3100,7 @@ func (r IdentityProviderAccessFacebookParam) MarshalJSON() (data []byte, err err
 
 func (r IdentityProviderAccessFacebookParam) implementsIdentityProviderUnionParam() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessFacebookSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessFacebookSAMLCertificateSetParam struct {
@@ -3117,7 +3117,7 @@ func (r IdentityProviderAccessFacebookSAMLCertificateSetParam) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessFacebookSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessFacebookSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3162,7 +3162,7 @@ func (r IdentityProviderAccessGitHubParam) MarshalJSON() (data []byte, err error
 
 func (r IdentityProviderAccessGitHubParam) implementsIdentityProviderUnionParam() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessGitHubSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessGitHubSAMLCertificateSetParam struct {
@@ -3179,7 +3179,7 @@ func (r IdentityProviderAccessGitHubSAMLCertificateSetParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessGitHubSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessGitHubSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3224,7 +3224,7 @@ func (r IdentityProviderAccessGoogleParam) MarshalJSON() (data []byte, err error
 
 func (r IdentityProviderAccessGoogleParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessGoogleConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessGoogleConfigParam struct {
@@ -3242,7 +3242,7 @@ func (r IdentityProviderAccessGoogleConfigParam) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessGoogleSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessGoogleSAMLCertificateSetParam struct {
@@ -3259,7 +3259,7 @@ func (r IdentityProviderAccessGoogleSAMLCertificateSetParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessGoogleSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessGoogleSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3304,7 +3304,7 @@ func (r IdentityProviderAccessGoogleAppsParam) MarshalJSON() (data []byte, err e
 
 func (r IdentityProviderAccessGoogleAppsParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessGoogleAppsConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessGoogleAppsConfigParam struct {
@@ -3324,7 +3324,7 @@ func (r IdentityProviderAccessGoogleAppsConfigParam) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessGoogleAppsSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessGoogleAppsSAMLCertificateSetParam struct {
@@ -3341,7 +3341,7 @@ func (r IdentityProviderAccessGoogleAppsSAMLCertificateSetParam) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessGoogleAppsSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessGoogleAppsSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3386,7 +3386,7 @@ func (r IdentityProviderAccessLinkedinParam) MarshalJSON() (data []byte, err err
 
 func (r IdentityProviderAccessLinkedinParam) implementsIdentityProviderUnionParam() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessLinkedinSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessLinkedinSAMLCertificateSetParam struct {
@@ -3403,7 +3403,7 @@ func (r IdentityProviderAccessLinkedinSAMLCertificateSetParam) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessLinkedinSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessLinkedinSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3448,7 +3448,7 @@ func (r IdentityProviderAccessOIDCParam) MarshalJSON() (data []byte, err error) 
 
 func (r IdentityProviderAccessOIDCParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessOIDCConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessOIDCConfigParam struct {
@@ -3476,7 +3476,7 @@ func (r IdentityProviderAccessOIDCConfigParam) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessOIDCSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessOIDCSAMLCertificateSetParam struct {
@@ -3493,7 +3493,7 @@ func (r IdentityProviderAccessOIDCSAMLCertificateSetParam) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessOIDCSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessOIDCSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3538,7 +3538,7 @@ func (r IdentityProviderAccessOktaParam) MarshalJSON() (data []byte, err error) 
 
 func (r IdentityProviderAccessOktaParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessOktaConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessOktaConfigParam struct {
@@ -3560,7 +3560,7 @@ func (r IdentityProviderAccessOktaConfigParam) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessOktaSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessOktaSAMLCertificateSetParam struct {
@@ -3577,7 +3577,7 @@ func (r IdentityProviderAccessOktaSAMLCertificateSetParam) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessOktaSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessOktaSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3622,7 +3622,7 @@ func (r IdentityProviderAccessOneloginParam) MarshalJSON() (data []byte, err err
 
 func (r IdentityProviderAccessOneloginParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessOneloginConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessOneloginConfigParam struct {
@@ -3642,7 +3642,7 @@ func (r IdentityProviderAccessOneloginConfigParam) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessOneloginSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessOneloginSAMLCertificateSetParam struct {
@@ -3659,7 +3659,7 @@ func (r IdentityProviderAccessOneloginSAMLCertificateSetParam) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessOneloginSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessOneloginSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3704,7 +3704,7 @@ func (r IdentityProviderAccessPingoneParam) MarshalJSON() (data []byte, err erro
 
 func (r IdentityProviderAccessPingoneParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessPingoneConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessPingoneConfigParam struct {
@@ -3724,7 +3724,7 @@ func (r IdentityProviderAccessPingoneConfigParam) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessPingoneSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessPingoneSAMLCertificateSetParam struct {
@@ -3741,7 +3741,7 @@ func (r IdentityProviderAccessPingoneSAMLCertificateSetParam) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessPingoneSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessPingoneSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3786,7 +3786,7 @@ func (r IdentityProviderAccessSAMLParam) MarshalJSON() (data []byte, err error) 
 
 func (r IdentityProviderAccessSAMLParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessSAMLConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessSAMLConfigParam struct {
@@ -3837,7 +3837,7 @@ func (r IdentityProviderAccessSAMLConfigHeaderAttributeParam) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessSAMLSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessSAMLSAMLCertificateSetParam struct {
@@ -3854,7 +3854,7 @@ func (r IdentityProviderAccessSAMLSAMLCertificateSetParam) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessSAMLSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessSAMLSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3899,7 +3899,7 @@ func (r IdentityProviderAccessYandexParam) MarshalJSON() (data []byte, err error
 
 func (r IdentityProviderAccessYandexParam) implementsIdentityProviderUnionParam() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessYandexSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessYandexSAMLCertificateSetParam struct {
@@ -3916,7 +3916,7 @@ func (r IdentityProviderAccessYandexSAMLCertificateSetParam) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessYandexSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessYandexSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -3961,7 +3961,7 @@ func (r IdentityProviderAccessOnetimepinParam) MarshalJSON() (data []byte, err e
 
 func (r IdentityProviderAccessOnetimepinParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessOnetimepinConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessOnetimepinConfigParam struct {
@@ -3971,7 +3971,7 @@ func (r IdentityProviderAccessOnetimepinConfigParam) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessOnetimepinSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessOnetimepinSAMLCertificateSetParam struct {
@@ -3988,7 +3988,7 @@ func (r IdentityProviderAccessOnetimepinSAMLCertificateSetParam) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessOnetimepinSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessOnetimepinSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -4033,7 +4033,7 @@ func (r IdentityProviderAccessCloudflareParam) MarshalJSON() (data []byte, err e
 
 func (r IdentityProviderAccessCloudflareParam) implementsIdentityProviderUnionParam() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderAccessCloudflareConfigParam is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderAccessCloudflareConfigParam struct {
@@ -4047,7 +4047,7 @@ func (r IdentityProviderAccessCloudflareConfigParam) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderAccessCloudflareSAMLCertificateSetParam is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderAccessCloudflareSAMLCertificateSetParam struct {
@@ -4064,7 +4064,7 @@ func (r IdentityProviderAccessCloudflareSAMLCertificateSetParam) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificateParam is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificateParam struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent param.Field[bool] `json:"is_current" api:"required"`
@@ -4082,7 +4082,7 @@ func (r IdentityProviderAccessCloudflareSAMLCertificateSetCurrentCertificatePara
 	return apijson.MarshalRoot(r)
 }
 
-// The configuration settings for enabling a System for Cross-Domain Identity
+// IdentityProviderSCIMConfig is the configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderSCIMConfig struct {
 	// A flag to enable or disable SCIM for the identity provider.
@@ -4132,7 +4132,7 @@ func (r identityProviderSCIMConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicates how a SCIM event updates a user identity used for policy evaluation.
+// IdentityProviderSCIMConfigIdentityUpdateBehavior indicates how a SCIM event updates a user identity used for policy evaluation.
 // Use "automatic" to automatically update a user's identity and augment it with
 // fields from the SCIM user resource. Use "reauth" to force re-authentication on
 // group membership updates, user identity update will only occur after successful
@@ -4155,7 +4155,7 @@ func (r IdentityProviderSCIMConfigIdentityUpdateBehavior) IsKnown() bool {
 	return false
 }
 
-// The configuration settings for enabling a System for Cross-Domain Identity
+// IdentityProviderSCIMConfigParam is the configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderSCIMConfigParam struct {
 	// A flag to enable or disable SCIM for the identity provider.
@@ -4181,7 +4181,7 @@ func (r IdentityProviderSCIMConfigParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
+// IdentityProviderType is the type of identity provider. To determine the value for a specific provider,
 // refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderType string
@@ -4314,7 +4314,7 @@ func (r IdentityProviderListResponse) AsUnion() IdentityProviderListResponseUnio
 	return r.union
 }
 
-// Union satisfied by [AzureAD], [IdentityProviderListResponseAccessCentrify],
+// IdentityProviderListResponseUnion is satisfied by [AzureAD], [IdentityProviderListResponseAccessCentrify],
 // [IdentityProviderListResponseAccessFacebook],
 // [IdentityProviderListResponseAccessGitHub],
 // [IdentityProviderListResponseAccessGoogle],
@@ -4455,7 +4455,7 @@ func (r identityProviderListResponseAccessCentrifyJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessCentrify) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderListResponseAccessCentrifyConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderListResponseAccessCentrifyConfig struct {
@@ -4495,7 +4495,7 @@ func (r identityProviderListResponseAccessCentrifyConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessCentrifySAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessCentrifySAMLCertificateSet struct {
@@ -4534,7 +4534,7 @@ func (r identityProviderListResponseAccessCentrifySAMLCertificateSetJSON) RawJSO
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessCentrifySAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessCentrifySAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -4625,7 +4625,7 @@ func (r identityProviderListResponseAccessFacebookJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessFacebook) implementsIdentityProviderListResponse() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessFacebookSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessFacebookSAMLCertificateSet struct {
@@ -4664,7 +4664,7 @@ func (r identityProviderListResponseAccessFacebookSAMLCertificateSetJSON) RawJSO
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessFacebookSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessFacebookSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -4755,7 +4755,7 @@ func (r identityProviderListResponseAccessGitHubJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessGitHub) implementsIdentityProviderListResponse() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessGitHubSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessGitHubSAMLCertificateSet struct {
@@ -4794,7 +4794,7 @@ func (r identityProviderListResponseAccessGitHubSAMLCertificateSetJSON) RawJSON(
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessGitHubSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessGitHubSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -4885,7 +4885,7 @@ func (r identityProviderListResponseAccessGoogleJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessGoogle) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderListResponseAccessGoogleConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderListResponseAccessGoogleConfig struct {
@@ -4919,7 +4919,7 @@ func (r identityProviderListResponseAccessGoogleConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessGoogleSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessGoogleSAMLCertificateSet struct {
@@ -4958,7 +4958,7 @@ func (r identityProviderListResponseAccessGoogleSAMLCertificateSetJSON) RawJSON(
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessGoogleSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessGoogleSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -5049,7 +5049,7 @@ func (r identityProviderListResponseAccessGoogleAppsJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessGoogleApps) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderListResponseAccessGoogleAppsConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderListResponseAccessGoogleAppsConfig struct {
@@ -5086,7 +5086,7 @@ func (r identityProviderListResponseAccessGoogleAppsConfigJSON) RawJSON() string
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessGoogleAppsSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessGoogleAppsSAMLCertificateSet struct {
@@ -5125,7 +5125,7 @@ func (r identityProviderListResponseAccessGoogleAppsSAMLCertificateSetJSON) RawJ
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessGoogleAppsSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessGoogleAppsSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -5216,7 +5216,7 @@ func (r identityProviderListResponseAccessLinkedinJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessLinkedin) implementsIdentityProviderListResponse() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessLinkedinSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessLinkedinSAMLCertificateSet struct {
@@ -5255,7 +5255,7 @@ func (r identityProviderListResponseAccessLinkedinSAMLCertificateSetJSON) RawJSO
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessLinkedinSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessLinkedinSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -5346,7 +5346,7 @@ func (r identityProviderListResponseAccessOIDCJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessOIDC) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderListResponseAccessOIDCConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderListResponseAccessOIDCConfig struct {
@@ -5395,7 +5395,7 @@ func (r identityProviderListResponseAccessOIDCConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessOIDCSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessOIDCSAMLCertificateSet struct {
@@ -5434,7 +5434,7 @@ func (r identityProviderListResponseAccessOidcsamlCertificateSetJSON) RawJSON() 
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessOIDCSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessOIDCSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -5525,7 +5525,7 @@ func (r identityProviderListResponseAccessOktaJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessOkta) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderListResponseAccessOktaConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderListResponseAccessOktaConfig struct {
@@ -5565,7 +5565,7 @@ func (r identityProviderListResponseAccessOktaConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessOktaSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessOktaSAMLCertificateSet struct {
@@ -5604,7 +5604,7 @@ func (r identityProviderListResponseAccessOktaSAMLCertificateSetJSON) RawJSON() 
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessOktaSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessOktaSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -5695,7 +5695,7 @@ func (r identityProviderListResponseAccessOneloginJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessOnelogin) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderListResponseAccessOneloginConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderListResponseAccessOneloginConfig struct {
@@ -5732,7 +5732,7 @@ func (r identityProviderListResponseAccessOneloginConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessOneloginSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessOneloginSAMLCertificateSet struct {
@@ -5771,7 +5771,7 @@ func (r identityProviderListResponseAccessOneloginSAMLCertificateSetJSON) RawJSO
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessOneloginSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessOneloginSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -5862,7 +5862,7 @@ func (r identityProviderListResponseAccessPingoneJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessPingone) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderListResponseAccessPingoneConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderListResponseAccessPingoneConfig struct {
@@ -5899,7 +5899,7 @@ func (r identityProviderListResponseAccessPingoneConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessPingoneSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessPingoneSAMLCertificateSet struct {
@@ -5938,7 +5938,7 @@ func (r identityProviderListResponseAccessPingoneSAMLCertificateSetJSON) RawJSON
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessPingoneSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessPingoneSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -6029,7 +6029,7 @@ func (r identityProviderListResponseAccessSAMLJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessSAML) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderListResponseAccessSAMLConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderListResponseAccessSAMLConfig struct {
@@ -6115,7 +6115,7 @@ func (r identityProviderListResponseAccessSAMLConfigHeaderAttributeJSON) RawJSON
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessSAMLSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessSAMLSAMLCertificateSet struct {
@@ -6154,7 +6154,7 @@ func (r identityProviderListResponseAccessSamlsamlCertificateSetJSON) RawJSON() 
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessSAMLSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessSAMLSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -6245,7 +6245,7 @@ func (r identityProviderListResponseAccessYandexJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessYandex) implementsIdentityProviderListResponse() {}
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessYandexSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessYandexSAMLCertificateSet struct {
@@ -6284,7 +6284,7 @@ func (r identityProviderListResponseAccessYandexSAMLCertificateSetJSON) RawJSON(
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessYandexSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessYandexSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -6375,7 +6375,7 @@ func (r identityProviderListResponseAccessOnetimepinJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessOnetimepin) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderListResponseAccessOnetimepinConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderListResponseAccessOnetimepinConfig struct {
@@ -6399,7 +6399,7 @@ func (r identityProviderListResponseAccessOnetimepinConfigJSON) RawJSON() string
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessOnetimepinSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessOnetimepinSAMLCertificateSet struct {
@@ -6438,7 +6438,7 @@ func (r identityProviderListResponseAccessOnetimepinSAMLCertificateSetJSON) RawJ
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessOnetimepinSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessOnetimepinSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -6529,7 +6529,7 @@ func (r identityProviderListResponseAccessCloudflareJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessCloudflare) implementsIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
+// IdentityProviderListResponseAccessCloudflareConfig is the configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type IdentityProviderListResponseAccessCloudflareConfig struct {
@@ -6558,7 +6558,7 @@ func (r identityProviderListResponseAccessCloudflareConfigJSON) RawJSON() string
 	return r.raw
 }
 
-// The SAML encryption certificate set details, including current and previous
+// IdentityProviderListResponseAccessCloudflareSAMLCertificateSet is the SAML encryption certificate set details, including current and previous
 // certificates. Only present for SAML identity providers with a certificate set
 // assigned.
 type IdentityProviderListResponseAccessCloudflareSAMLCertificateSet struct {
@@ -6597,7 +6597,7 @@ func (r identityProviderListResponseAccessCloudflareSAMLCertificateSetJSON) RawJ
 	return r.raw
 }
 
-// The currently active certificate used for encrypting SAML assertions
+// IdentityProviderListResponseAccessCloudflareSAMLCertificateSetCurrentCertificate is the currently active certificate used for encrypting SAML assertions
 type IdentityProviderListResponseAccessCloudflareSAMLCertificateSetCurrentCertificate struct {
 	// Indicates whether this is the currently active certificate
 	IsCurrent bool `json:"is_current" api:"required"`
@@ -6790,7 +6790,7 @@ func (r identityProviderNewResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// IdentityProviderNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type IdentityProviderNewResponseEnvelopeSuccess bool
 
 const (
@@ -6941,7 +6941,7 @@ func (r identityProviderUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful.
+// IdentityProviderUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type IdentityProviderUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -7110,7 +7110,7 @@ func (r identityProviderDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() stri
 	return r.raw
 }
 
-// Whether the API call was successful.
+// IdentityProviderDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type IdentityProviderDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -7256,7 +7256,7 @@ func (r identityProviderGetResponseEnvelopeMessagesSourceJSON) RawJSON() string 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// IdentityProviderGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type IdentityProviderGetResponseEnvelopeSuccess bool
 
 const (

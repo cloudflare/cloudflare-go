@@ -67,7 +67,7 @@ func TestWebhookDeleteWebhook(t *testing.T) {
 	_, err := client.RealtimeKit.Webhooks.DeleteWebhook(
 		context.TODO(),
 		"app_id",
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"webhook_id",
 		realtime_kit.WebhookDeleteWebhookParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -99,7 +99,7 @@ func TestWebhookEditWebhookWithOptionalParams(t *testing.T) {
 	_, err := client.RealtimeKit.Webhooks.EditWebhook(
 		context.TODO(),
 		"app_id",
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"webhook_id",
 		realtime_kit.WebhookEditWebhookParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Enabled:   cloudflare.F(true),
@@ -135,7 +135,7 @@ func TestWebhookGetWebhookByID(t *testing.T) {
 	_, err := client.RealtimeKit.Webhooks.GetWebhookByID(
 		context.TODO(),
 		"app_id",
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"webhook_id",
 		realtime_kit.WebhookGetWebhookByIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -198,7 +198,7 @@ func TestWebhookReplaceWebhookWithOptionalParams(t *testing.T) {
 	_, err := client.RealtimeKit.Webhooks.ReplaceWebhook(
 		context.TODO(),
 		"app_id",
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"webhook_id",
 		realtime_kit.WebhookReplaceWebhookParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Events:    cloudflare.F([]realtime_kit.WebhookReplaceWebhookParamsEvent{realtime_kit.WebhookReplaceWebhookParamsEventMeetingStarted, realtime_kit.WebhookReplaceWebhookParamsEventMeetingEnded, realtime_kit.WebhookReplaceWebhookParamsEventMeetingParticipantJoined, realtime_kit.WebhookReplaceWebhookParamsEventMeetingParticipantLeft, realtime_kit.WebhookReplaceWebhookParamsEventMeetingChatSynced, realtime_kit.WebhookReplaceWebhookParamsEventRecordingStatusUpdate, realtime_kit.WebhookReplaceWebhookParamsEventLivestreamingStatusUpdate, realtime_kit.WebhookReplaceWebhookParamsEventMeetingTranscript, realtime_kit.WebhookReplaceWebhookParamsEventMeetingSummary}),

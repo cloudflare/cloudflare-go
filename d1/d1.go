@@ -79,12 +79,11 @@ type D1Jurisdiction string
 const (
 	D1JurisdictionEu      D1Jurisdiction = "eu"
 	D1JurisdictionFedramp D1Jurisdiction = "fedramp"
-	D1JurisdictionUs      D1Jurisdiction = "us"
 )
 
 func (r D1Jurisdiction) IsKnown() bool {
 	switch r {
-	case D1JurisdictionEu, D1JurisdictionFedramp, D1JurisdictionUs:
+	case D1JurisdictionEu, D1JurisdictionFedramp:
 		return true
 	}
 	return false

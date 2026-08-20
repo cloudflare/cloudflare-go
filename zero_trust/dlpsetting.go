@@ -52,7 +52,7 @@ func (r *DLPSettingService) Update(ctx context.Context, params DLPSettingUpdateP
 	return res, nil
 }
 
-// Deletes account-level DLP settings and returns the initial values.
+// Delete (reset) DLP account-level settings to initial values.
 func (r *DLPSettingService) Delete(ctx context.Context, body DLPSettingDeleteParams, opts ...option.RequestOption) (res *DLPSettings, err error) {
 	var env DLPSettingDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -86,7 +86,7 @@ func (r *DLPSettingService) Edit(ctx context.Context, params DLPSettingEditParam
 	return res, nil
 }
 
-// Gets the account-level DLP settings.
+// Get DLP account-level settings.
 func (r *DLPSettingService) Get(ctx context.Context, query DLPSettingGetParams, opts ...option.RequestOption) (res *DLPSettings, err error) {
 	var env DLPSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -103,7 +103,7 @@ func (r *DLPSettingService) Get(ctx context.Context, query DLPSettingGetParams, 
 	return res, nil
 }
 
-// DLP account-level settings response.
+// DLPSettings dLP account-level settings response.
 type DLPSettings struct {
 	// Whether AI context analysis is enabled at the account level.
 	AIContextAnalysis bool `json:"ai_context_analysis" api:"required"`
@@ -163,7 +163,7 @@ func (r dlpSettingsPayloadLoggingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Masking level for payload logs.
+// DLPSettingsPayloadLoggingMaskingLevel masking level for payload logs.
 //
 // - `full`: The entire payload is masked.
 // - `partial`: Only partial payload content is masked.
@@ -202,7 +202,7 @@ func (r DLPSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Request model for payload log settings within the DLP settings endpoint. Unlike
+// DLPSettingUpdateParamsPayloadLogging request model for payload log settings within the DLP settings endpoint. Unlike
 // the legacy endpoint, null and missing are treated identically here (both mean
 // "not provided" for PATCH, "reset to default" for PUT).
 type DLPSettingUpdateParamsPayloadLogging struct {
@@ -225,7 +225,7 @@ func (r DLPSettingUpdateParamsPayloadLogging) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-// Masking level for payload logs.
+// DLPSettingUpdateParamsPayloadLoggingMaskingLevel masking level for payload logs.
 //
 // - `full`: The entire payload is masked.
 // - `partial`: Only partial payload content is masked.
@@ -373,7 +373,7 @@ func (r dlpSettingUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPSettingUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPSettingUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -517,7 +517,7 @@ func (r dlpSettingDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPSettingDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPSettingDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -548,7 +548,7 @@ func (r DLPSettingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Request model for payload log settings within the DLP settings endpoint. Unlike
+// DLPSettingEditParamsPayloadLogging request model for payload log settings within the DLP settings endpoint. Unlike
 // the legacy endpoint, null and missing are treated identically here (both mean
 // "not provided" for PATCH, "reset to default" for PUT).
 type DLPSettingEditParamsPayloadLogging struct {
@@ -571,7 +571,7 @@ func (r DLPSettingEditParamsPayloadLogging) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-// Masking level for payload logs.
+// DLPSettingEditParamsPayloadLoggingMaskingLevel masking level for payload logs.
 //
 // - `full`: The entire payload is masked.
 // - `partial`: Only partial payload content is masked.
@@ -719,7 +719,7 @@ func (r dlpSettingEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPSettingEditResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPSettingEditResponseEnvelopeSuccess bool
 
 const (
@@ -863,7 +863,7 @@ func (r dlpSettingGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPSettingGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPSettingGetResponseEnvelopeSuccess bool
 
 const (

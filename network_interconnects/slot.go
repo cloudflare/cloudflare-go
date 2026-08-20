@@ -36,8 +36,7 @@ func NewSlotService(opts ...option.RequestOption) (r *SlotService) {
 	return
 }
 
-// Lists all available infrastructure slots for the account, showing allocation
-// status and capacity.
+// Retrieve a list of all slots matching the specified parameters
 func (r *SlotService) List(ctx context.Context, params SlotListParams, opts ...option.RequestOption) (res *SlotListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -49,7 +48,7 @@ func (r *SlotService) List(ctx context.Context, params SlotListParams, opts ...o
 	return res, err
 }
 
-// Gets information about a specific infrastructure slot allocation.
+// Get information about the specified slot
 func (r *SlotService) Get(ctx context.Context, slot string, query SlotGetParams, opts ...option.RequestOption) (res *SlotGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -97,23 +96,21 @@ type SlotListResponseItem struct {
 	Site     string `json:"site" api:"required"`
 	Speed    string `json:"speed" api:"required"`
 	// Customer account tag
-	Account       string                   `json:"account"`
-	CcrDeviceName string                   `json:"ccr_device_name" api:"nullable"`
-	JSON          slotListResponseItemJSON `json:"-"`
+	Account string                   `json:"account"`
+	JSON    slotListResponseItemJSON `json:"-"`
 }
 
 // slotListResponseItemJSON contains the JSON metadata for the struct
 // [SlotListResponseItem]
 type slotListResponseItemJSON struct {
-	ID            apijson.Field
-	Facility      apijson.Field
-	Occupied      apijson.Field
-	Site          apijson.Field
-	Speed         apijson.Field
-	Account       apijson.Field
-	CcrDeviceName apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID          apijson.Field
+	Facility    apijson.Field
+	Occupied    apijson.Field
+	Site        apijson.Field
+	Speed       apijson.Field
+	Account     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *SlotListResponseItem) UnmarshalJSON(data []byte) (err error) {
@@ -156,22 +153,20 @@ type SlotGetResponse struct {
 	Site     string `json:"site" api:"required"`
 	Speed    string `json:"speed" api:"required"`
 	// Customer account tag
-	Account       string              `json:"account"`
-	CcrDeviceName string              `json:"ccr_device_name" api:"nullable"`
-	JSON          slotGetResponseJSON `json:"-"`
+	Account string              `json:"account"`
+	JSON    slotGetResponseJSON `json:"-"`
 }
 
 // slotGetResponseJSON contains the JSON metadata for the struct [SlotGetResponse]
 type slotGetResponseJSON struct {
-	ID            apijson.Field
-	Facility      apijson.Field
-	Occupied      apijson.Field
-	Site          apijson.Field
-	Speed         apijson.Field
-	Account       apijson.Field
-	CcrDeviceName apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID          apijson.Field
+	Facility    apijson.Field
+	Occupied    apijson.Field
+	Site        apijson.Field
+	Speed       apijson.Field
+	Account     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *SlotGetResponse) UnmarshalJSON(data []byte) (err error) {

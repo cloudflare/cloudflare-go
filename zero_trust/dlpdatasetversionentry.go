@@ -255,7 +255,7 @@ func (r dlpDatasetVersionEntryNewResponseEnvelopeMessagesSourceJSON) RawJSON() s
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPDatasetVersionEntryNewResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPDatasetVersionEntryNewResponseEnvelopeSuccess bool
 
 const (

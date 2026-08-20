@@ -94,7 +94,6 @@ const (
 	ValueListParamsTypeAccessApplicationPolicy  ValueListParamsType = "access_application_policy"
 	ValueListParamsTypeAccessGroup              ValueListParamsType = "access_group"
 	ValueListParamsTypeAccount                  ValueListParamsType = "account"
-	ValueListParamsTypeAccountRuleset           ValueListParamsType = "account_ruleset"
 	ValueListParamsTypeAIGateway                ValueListParamsType = "ai_gateway"
 	ValueListParamsTypeAlertingPolicy           ValueListParamsType = "alerting_policy"
 	ValueListParamsTypeAlertingWebhook          ValueListParamsType = "alerting_webhook"
@@ -107,31 +106,22 @@ const (
 	ValueListParamsTypeDurableObjectNamespace   ValueListParamsType = "durable_object_namespace"
 	ValueListParamsTypeGatewayList              ValueListParamsType = "gateway_list"
 	ValueListParamsTypeGatewayRule              ValueListParamsType = "gateway_rule"
-	ValueListParamsTypeHealthcheck              ValueListParamsType = "healthcheck"
 	ValueListParamsTypeImage                    ValueListParamsType = "image"
-	ValueListParamsTypeInfrastructureTarget     ValueListParamsType = "infrastructure_target"
 	ValueListParamsTypeKVNamespace              ValueListParamsType = "kv_namespace"
-	ValueListParamsTypeLoadBalancer             ValueListParamsType = "load_balancer"
-	ValueListParamsTypeLoadBalancerMonitor      ValueListParamsType = "load_balancer_monitor"
-	ValueListParamsTypeLoadBalancerPool         ValueListParamsType = "load_balancer_pool"
 	ValueListParamsTypeManagedClientCertificate ValueListParamsType = "managed_client_certificate"
-	ValueListParamsTypePagesProject             ValueListParamsType = "pages_project"
 	ValueListParamsTypeQueue                    ValueListParamsType = "queue"
 	ValueListParamsTypeR2Bucket                 ValueListParamsType = "r2_bucket"
 	ValueListParamsTypeResourceShare            ValueListParamsType = "resource_share"
 	ValueListParamsTypeStreamLiveInput          ValueListParamsType = "stream_live_input"
 	ValueListParamsTypeStreamVideo              ValueListParamsType = "stream_video"
-	ValueListParamsTypeVectorizeIndex           ValueListParamsType = "vectorize_index"
 	ValueListParamsTypeWorker                   ValueListParamsType = "worker"
-	ValueListParamsTypeWorkerRoute              ValueListParamsType = "worker_route"
 	ValueListParamsTypeWorkerVersion            ValueListParamsType = "worker_version"
 	ValueListParamsTypeZone                     ValueListParamsType = "zone"
-	ValueListParamsTypeZoneRuleset              ValueListParamsType = "zone_ruleset"
 )
 
 func (r ValueListParamsType) IsKnown() bool {
 	switch r {
-	case ValueListParamsTypeAccessApplication, ValueListParamsTypeAccessApplicationPolicy, ValueListParamsTypeAccessGroup, ValueListParamsTypeAccount, ValueListParamsTypeAccountRuleset, ValueListParamsTypeAIGateway, ValueListParamsTypeAlertingPolicy, ValueListParamsTypeAlertingWebhook, ValueListParamsTypeAPIGatewayOperation, ValueListParamsTypeCloudflaredTunnel, ValueListParamsTypeCustomCertificate, ValueListParamsTypeCustomHostname, ValueListParamsTypeD1Database, ValueListParamsTypeDNSRecord, ValueListParamsTypeDurableObjectNamespace, ValueListParamsTypeGatewayList, ValueListParamsTypeGatewayRule, ValueListParamsTypeHealthcheck, ValueListParamsTypeImage, ValueListParamsTypeInfrastructureTarget, ValueListParamsTypeKVNamespace, ValueListParamsTypeLoadBalancer, ValueListParamsTypeLoadBalancerMonitor, ValueListParamsTypeLoadBalancerPool, ValueListParamsTypeManagedClientCertificate, ValueListParamsTypePagesProject, ValueListParamsTypeQueue, ValueListParamsTypeR2Bucket, ValueListParamsTypeResourceShare, ValueListParamsTypeStreamLiveInput, ValueListParamsTypeStreamVideo, ValueListParamsTypeVectorizeIndex, ValueListParamsTypeWorker, ValueListParamsTypeWorkerRoute, ValueListParamsTypeWorkerVersion, ValueListParamsTypeZone, ValueListParamsTypeZoneRuleset:
+	case ValueListParamsTypeAccessApplication, ValueListParamsTypeAccessApplicationPolicy, ValueListParamsTypeAccessGroup, ValueListParamsTypeAccount, ValueListParamsTypeAIGateway, ValueListParamsTypeAlertingPolicy, ValueListParamsTypeAlertingWebhook, ValueListParamsTypeAPIGatewayOperation, ValueListParamsTypeCloudflaredTunnel, ValueListParamsTypeCustomCertificate, ValueListParamsTypeCustomHostname, ValueListParamsTypeD1Database, ValueListParamsTypeDNSRecord, ValueListParamsTypeDurableObjectNamespace, ValueListParamsTypeGatewayList, ValueListParamsTypeGatewayRule, ValueListParamsTypeImage, ValueListParamsTypeKVNamespace, ValueListParamsTypeManagedClientCertificate, ValueListParamsTypeQueue, ValueListParamsTypeR2Bucket, ValueListParamsTypeResourceShare, ValueListParamsTypeStreamLiveInput, ValueListParamsTypeStreamVideo, ValueListParamsTypeWorker, ValueListParamsTypeWorkerVersion, ValueListParamsTypeZone:
 		return true
 	}
 	return false

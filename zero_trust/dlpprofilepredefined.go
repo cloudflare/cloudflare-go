@@ -160,13 +160,10 @@ type PredefinedProfileEntry struct {
 	CaseSensitive bool `json:"case_sensitive"`
 	// This field can have the runtime type of
 	// [PredefinedProfileEntriesPredefinedEntryConfidence].
-	Confidence interface{} `json:"confidence"`
-	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated  bool    `json:"deprecated"`
-	Description string  `json:"description" api:"nullable"`
-	Pattern     Pattern `json:"pattern"`
+	Confidence  interface{} `json:"confidence"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
+	Description string      `json:"description" api:"nullable"`
+	Pattern     Pattern     `json:"pattern"`
 	// Deprecated: deprecated
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
@@ -190,7 +187,6 @@ type predefinedProfileEntryJSON struct {
 	CaseSensitive apijson.Field
 	Confidence    apijson.Field
 	CreatedAt     apijson.Field
-	Deprecated    apijson.Field
 	Description   apijson.Field
 	Pattern       apijson.Field
 	ProfileID     apijson.Field
@@ -229,7 +225,7 @@ func (r PredefinedProfileEntry) AsUnion() PredefinedProfileEntriesUnion {
 	return r.union
 }
 
-// Union satisfied by [PredefinedProfileEntriesCustomEntry],
+// PredefinedProfileEntriesUnion is satisfied by [PredefinedProfileEntriesCustomEntry],
 // [PredefinedProfileEntriesCustomPromptTopicEntry],
 // [PredefinedProfileEntriesPredefinedEntry],
 // [PredefinedProfileEntriesIntegrationEntry],
@@ -387,9 +383,6 @@ type PredefinedProfileEntriesPredefinedEntry struct {
 	Enabled    bool                                              `json:"enabled" api:"required"`
 	Name       string                                            `json:"name" api:"required"`
 	Type       PredefinedProfileEntriesPredefinedEntryType       `json:"type" api:"required"`
-	// Whether this entry is deprecated for new use. This is computed from the static
-	// catalog and emitted only when true.
-	Deprecated bool `json:"deprecated"`
 	// Deprecated: deprecated
 	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
 	// A Predefined AI prompt classification topic entry.
@@ -405,7 +398,6 @@ type predefinedProfileEntriesPredefinedEntryJSON struct {
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
-	Deprecated  apijson.Field
 	ProfileID   apijson.Field
 	Variant     apijson.Field
 	raw         string
@@ -462,7 +454,7 @@ func (r PredefinedProfileEntriesPredefinedEntryType) IsKnown() bool {
 	return false
 }
 
-// A Predefined AI prompt classification topic entry.
+// PredefinedProfileEntriesPredefinedEntryVariant is a Predefined AI prompt classification topic entry.
 type PredefinedProfileEntriesPredefinedEntryVariant struct {
 	Type PredefinedProfileEntriesPredefinedEntryVariantType `json:"type" api:"required"`
 	// A customer-facing explanation of what this predefined AI prompt topic
@@ -506,7 +498,7 @@ func (r PredefinedProfileEntriesPredefinedEntryVariant) AsUnion() PredefinedProf
 	return r.union
 }
 
-// A Predefined AI prompt classification topic entry.
+// PredefinedProfileEntriesPredefinedEntryVariantUnion is a Predefined AI prompt classification topic entry.
 //
 // Union satisfied by [PredefinedProfileEntriesPredefinedEntryVariantObject] or
 // [PredefinedProfileEntriesPredefinedEntryVariantObject].
@@ -529,7 +521,7 @@ func init() {
 	)
 }
 
-// A Predefined AI prompt classification topic entry.
+// PredefinedProfileEntriesPredefinedEntryVariantObject is a Predefined AI prompt classification topic entry.
 type PredefinedProfileEntriesPredefinedEntryVariantObject struct {
 	TopicType PredefinedProfileEntriesPredefinedEntryVariantObjectTopicType `json:"topic_type" api:"required"`
 	Type      PredefinedProfileEntriesPredefinedEntryVariantObjectType      `json:"type" api:"required"`
@@ -995,7 +987,7 @@ func (r dlpProfilePredefinedUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPProfilePredefinedUpdateResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPProfilePredefinedUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -1139,7 +1131,7 @@ func (r dlpProfilePredefinedDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() 
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPProfilePredefinedDeleteResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPProfilePredefinedDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -1282,7 +1274,7 @@ func (r dlpProfilePredefinedGetResponseEnvelopeMessagesSourceJSON) RawJSON() str
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DLPProfilePredefinedGetResponseEnvelopeSuccess indicates whether the API call was successful.
 type DLPProfilePredefinedGetResponseEnvelopeSuccess bool
 
 const (

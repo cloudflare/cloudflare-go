@@ -34,7 +34,7 @@ func NewThreatEventCountryService(opts ...option.RequestOption) (r *ThreatEventC
 	return
 }
 
-// Lists countries referenced in Cloudforce One threat intelligence data.
+// Retrieves countries information for all countries
 func (r *ThreatEventCountryService) List(ctx context.Context, query ThreatEventCountryListParams, opts ...option.RequestOption) (res *[]ThreatEventCountryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

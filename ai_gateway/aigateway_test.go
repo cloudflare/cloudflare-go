@@ -45,7 +45,6 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		RetryBackoff:            cloudflare.F(ai_gateway.AIGatewayNewParamsRetryBackoffConstant),
 		RetryDelay:              cloudflare.F(int64(0)),
 		RetryMaxAttempts:        cloudflare.F(int64(1)),
-		StoreID:                 cloudflare.F("store_id"),
 		WorkersAIBillingMode:    cloudflare.F(ai_gateway.AIGatewayNewParamsWorkersAIBillingModePostpaid),
 		Zdr:                     cloudflare.F(true),
 	})
@@ -122,7 +121,6 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 					S9:  cloudflare.F(ai_gateway.AIGatewayUpdateParamsGuardrailsResponseS9Flag),
 				}),
 			}),
-			LogClassification:     cloudflare.F(true),
 			LogManagement:         cloudflare.F(int64(10000)),
 			LogManagementStrategy: cloudflare.F(ai_gateway.AIGatewayUpdateParamsLogManagementStrategyStopInserting),
 			Logpush:               cloudflare.F(true),

@@ -32,7 +32,7 @@ func TestDLPCustomPromptTopicNewWithOptionalParams(t *testing.T) {
 		AccountID:   cloudflare.F("account_id"),
 		Enabled:     cloudflare.F(true),
 		Name:        cloudflare.F("name"),
-		Topic:       cloudflare.F("xx"),
+		Topic:       cloudflare.F("topic"),
 		Description: cloudflare.F("description"),
 		ProfileID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 	})
@@ -66,7 +66,7 @@ func TestDLPCustomPromptTopicUpdateWithOptionalParams(t *testing.T) {
 			AccountID:   cloudflare.F("account_id"),
 			Enabled:     cloudflare.F(true),
 			Name:        cloudflare.F("name"),
-			Topic:       cloudflare.F("xx"),
+			Topic:       cloudflare.F("topic"),
 			Description: cloudflare.F("description"),
 		},
 	)

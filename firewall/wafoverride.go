@@ -38,10 +38,10 @@ func NewWAFOverrideService(opts ...option.RequestOption) (r *WAFOverrideService)
 	return
 }
 
-// **This endpoint has been deprecated and returns 410 Gone. Please use the
-// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+// Creates a URI-based WAF override for a zone.
 //
-// Previously created a URI-based WAF override for a zone.
+// **Note:** Applies only to the
+// [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 //
 // Deprecated: deprecated
 func (r *WAFOverrideService) New(ctx context.Context, params WAFOverrideNewParams, opts ...option.RequestOption) (res *Override, err error) {
@@ -60,10 +60,10 @@ func (r *WAFOverrideService) New(ctx context.Context, params WAFOverrideNewParam
 	return res, nil
 }
 
-// **This endpoint has been deprecated and returns 410 Gone. Please use the
-// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+// Updates an existing URI-based WAF override.
 //
-// Previously updated an existing URI-based WAF override.
+// **Note:** Applies only to the
+// [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 //
 // Deprecated: deprecated
 func (r *WAFOverrideService) Update(ctx context.Context, overridesID string, params WAFOverrideUpdateParams, opts ...option.RequestOption) (res *Override, err error) {
@@ -86,10 +86,10 @@ func (r *WAFOverrideService) Update(ctx context.Context, overridesID string, par
 	return res, nil
 }
 
-// **This endpoint has been deprecated and returns 410 Gone. Please use the
-// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+// Fetches the URI-based WAF overrides in a zone.
 //
-// Previously fetched the URI-based WAF overrides in a zone.
+// **Note:** Applies only to the
+// [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 //
 // Deprecated: deprecated
 func (r *WAFOverrideService) List(ctx context.Context, params WAFOverrideListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Override], err error) {
@@ -113,20 +113,20 @@ func (r *WAFOverrideService) List(ctx context.Context, params WAFOverrideListPar
 	return res, nil
 }
 
-// **This endpoint has been deprecated and returns 410 Gone. Please use the
-// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+// Fetches the URI-based WAF overrides in a zone.
 //
-// Previously fetched the URI-based WAF overrides in a zone.
+// **Note:** Applies only to the
+// [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 //
 // Deprecated: deprecated
 func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, params WAFOverrideListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Override] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// **This endpoint has been deprecated and returns 410 Gone. Please use the
-// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+// Deletes an existing URI-based WAF override.
 //
-// Previously deleted an existing URI-based WAF override.
+// **Note:** Applies only to the
+// [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 //
 // Deprecated: deprecated
 func (r *WAFOverrideService) Delete(ctx context.Context, overridesID string, body WAFOverrideDeleteParams, opts ...option.RequestOption) (res *WAFOverrideDeleteResponse, err error) {
@@ -149,10 +149,10 @@ func (r *WAFOverrideService) Delete(ctx context.Context, overridesID string, bod
 	return res, nil
 }
 
-// **This endpoint has been deprecated and returns 410 Gone. Please use the
-// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+// Fetches the details of a URI-based WAF override.
 //
-// Previously fetched the details of a URI-based WAF override.
+// **Note:** Applies only to the
+// [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 //
 // Deprecated: deprecated
 func (r *WAFOverrideService) Get(ctx context.Context, overridesID string, query WAFOverrideGetParams, opts ...option.RequestOption) (res *Override, err error) {

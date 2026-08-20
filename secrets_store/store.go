@@ -40,7 +40,7 @@ func NewStoreService(opts ...option.RequestOption) (r *StoreService) {
 	return
 }
 
-// Creates a store in the account.
+// Creates a store in the account
 func (r *StoreService) New(ctx context.Context, params StoreNewParams, opts ...option.RequestOption) (res *StoreNewResponse, err error) {
 	var env StoreNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +57,7 @@ func (r *StoreService) New(ctx context.Context, params StoreNewParams, opts ...o
 	return res, nil
 }
 
-// Lists all the stores in an account.
+// Lists all the stores in an account
 func (r *StoreService) List(ctx context.Context, params StoreListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[StoreListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -79,7 +79,7 @@ func (r *StoreService) List(ctx context.Context, params StoreListParams, opts ..
 	return res, nil
 }
 
-// Lists all the stores in an account.
+// Lists all the stores in an account
 func (r *StoreService) ListAutoPaging(ctx context.Context, params StoreListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[StoreListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -108,7 +108,7 @@ func (r *StoreService) Delete(ctx context.Context, storeID string, params StoreD
 	return res, nil
 }
 
-// Returns details of a single store.
+// Returns details of a single store
 func (r *StoreService) Get(ctx context.Context, storeID string, query StoreGetParams, opts ...option.RequestOption) (res *StoreGetResponse, err error) {
 	var env StoreGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -130,15 +130,15 @@ func (r *StoreService) Get(ctx context.Context, storeID string, query StoreGetPa
 }
 
 type StoreNewResponse struct {
-	// Store Identifier.
+	// Store Identifier
 	ID string `json:"id" api:"required"`
-	// When the secret was created.
+	// Whenthe secret was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// The name of the store.
+	// The name of the store
 	Name string `json:"name" api:"required"`
-	// Account Identifier.
+	// Account Identifier
 	AccountID string               `json:"account_id"`
 	JSON      storeNewResponseJSON `json:"-"`
 }
@@ -164,15 +164,15 @@ func (r storeNewResponseJSON) RawJSON() string {
 }
 
 type StoreListResponse struct {
-	// Store Identifier.
+	// Store Identifier
 	ID string `json:"id" api:"required"`
-	// When the secret was created.
+	// Whenthe secret was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// The name of the store.
+	// The name of the store
 	Name string `json:"name" api:"required"`
-	// Account Identifier.
+	// Account Identifier
 	AccountID string                `json:"account_id"`
 	JSON      storeListResponseJSON `json:"-"`
 }
@@ -200,15 +200,15 @@ func (r storeListResponseJSON) RawJSON() string {
 type StoreDeleteResponse = interface{}
 
 type StoreGetResponse struct {
-	// Store Identifier.
+	// Store Identifier
 	ID string `json:"id" api:"required"`
-	// When the secret was created.
+	// Whenthe secret was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// When the secret was modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// The name of the store.
+	// The name of the store
 	Name string `json:"name" api:"required"`
-	// Account Identifier.
+	// Account Identifier
 	AccountID string               `json:"account_id"`
 	JSON      storeGetResponseJSON `json:"-"`
 }
@@ -234,8 +234,9 @@ func (r storeGetResponseJSON) RawJSON() string {
 }
 
 type StoreNewParams struct {
+	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The name of the store.
+	// The name of the store
 	Name param.Field[string] `json:"name" api:"required"`
 }
 
@@ -419,14 +420,15 @@ func (r storeNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type StoreListParams struct {
+	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Direction to sort objects.
+	// Direction to sort objects
 	Direction param.Field[StoreListParamsDirection] `query:"direction"`
-	// Order stores by values in the given field.
+	// Order secrets by values in the given field
 	Order param.Field[StoreListParamsOrder] `query:"order"`
-	// Page number.
+	// Page number
 	Page param.Field[int64] `query:"page"`
-	// Number of objects to return per page.
+	// Number of objects to return per page
 	PerPage param.Field[int64] `query:"per_page"`
 }
 
@@ -438,7 +440,7 @@ func (r StoreListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Direction to sort objects.
+// Direction to sort objects
 type StoreListParamsDirection string
 
 const (
@@ -454,24 +456,27 @@ func (r StoreListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Order stores by values in the given field.
+// Order secrets by values in the given field
 type StoreListParamsOrder string
 
 const (
 	StoreListParamsOrderName     StoreListParamsOrder = "name"
+	StoreListParamsOrderComment  StoreListParamsOrder = "comment"
 	StoreListParamsOrderCreated  StoreListParamsOrder = "created"
 	StoreListParamsOrderModified StoreListParamsOrder = "modified"
+	StoreListParamsOrderStatus   StoreListParamsOrder = "status"
 )
 
 func (r StoreListParamsOrder) IsKnown() bool {
 	switch r {
-	case StoreListParamsOrderName, StoreListParamsOrderCreated, StoreListParamsOrderModified:
+	case StoreListParamsOrderName, StoreListParamsOrderComment, StoreListParamsOrderCreated, StoreListParamsOrderModified, StoreListParamsOrderStatus:
 		return true
 	}
 	return false
 }
 
 type StoreDeleteParams struct {
+	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// When true, cascade-deletes all secrets in the store before deleting the store
 	// itself. Required when deleting a non-empty store. Without this parameter,
@@ -628,6 +633,7 @@ func (r StoreDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type StoreGetParams struct {
+	// Account Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

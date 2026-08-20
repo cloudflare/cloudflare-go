@@ -133,7 +133,7 @@ func (r networkPathSlotJSON) RawJSON() string {
 	return r.raw
 }
 
-// Specifies the sampling applied, if any, to the slots response. When sampled,
+// NetworkPathSampling specifies the sampling applied, if any, to the slots response. When sampled,
 // results shown represent the first test run to the start of each sampling
 // interval.
 type NetworkPathSampling struct {

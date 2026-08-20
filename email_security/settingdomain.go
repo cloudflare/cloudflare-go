@@ -92,39 +92,6 @@ func (r *SettingDomainService) Delete(ctx context.Context, domainID string, body
 	return res, nil
 }
 
-// Removes protection from multiple email domains. Deprecated; use the batch
-// endpoint instead.
-//
-// Deprecated: deprecated
-func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingDomainBulkDeleteResponse], err error) {
-	var raw *http.Response
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if body.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/email-security/settings/domains", body.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Removes protection from multiple email domains. Deprecated; use the batch
-// endpoint instead.
-//
-// Deprecated: deprecated
-func (r *SettingDomainService) BulkDeleteAutoPaging(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingDomainBulkDeleteResponse] {
-	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, body, opts...))
-}
-
 // Updates configuration for a protected email domain. Only provided fields will be
 // modified. Changes affect delivery mode, security settings, and regional
 // processing.
@@ -171,22 +138,22 @@ func (r *SettingDomainService) Get(ctx context.Context, domainID string, query S
 }
 
 type SettingDomainListResponse struct {
-	// Domain identifier.
+	// Domain identifier
 	ID                   string                                         `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainListResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
 	Authorization        SettingDomainListResponseAuthorization         `json:"authorization"`
 	CreatedAt            time.Time                                      `json:"created_at" format:"date-time"`
-	DMARCStatus          SettingDomainListResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
+	DMARCStatus          SettingDomainListResponseDMARCStatus           `json:"dmarc_status"`
 	Domain               string                                         `json:"domain"`
 	DropDispositions     []SettingDomainListResponseDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainListResponseEmailsProcessed       `json:"emails_processed"`
-	Folder               SettingDomainListResponseFolder                `json:"folder" api:"nullable"`
+	Folder               SettingDomainListResponseFolder                `json:"folder"`
 	InboxProvider        SettingDomainListResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                         `json:"integration_id" api:"nullable" format:"uuid"`
 	IPRestrictions       []string                                       `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified       time.Time                          `json:"last_modified" format:"date-time"`
 	LookbackHops       int64                              `json:"lookback_hops"`
 	ModifiedAt         time.Time                          `json:"modified_at" format:"date-time"`
@@ -194,8 +161,8 @@ type SettingDomainListResponse struct {
 	Regions            []SettingDomainListResponseRegion  `json:"regions"`
 	RequireTLSInbound  bool                               `json:"require_tls_inbound" api:"nullable"`
 	RequireTLSOutbound bool                               `json:"require_tls_outbound" api:"nullable"`
-	SPFStatus          SettingDomainListResponseSPFStatus `json:"spf_status" api:"nullable"`
-	Status             SettingDomainListResponseStatus    `json:"status" api:"nullable"`
+	SPFStatus          SettingDomainListResponseSPFStatus `json:"spf_status"`
+	Status             SettingDomainListResponseStatus    `json:"status"`
 	Transport          string                             `json:"transport"`
 	JSON               settingDomainListResponseJSON      `json:"-"`
 }
@@ -428,7 +395,7 @@ func (r SettingDomainListResponseStatus) IsKnown() bool {
 }
 
 type SettingDomainDeleteResponse struct {
-	// Domain identifier.
+	// Domain identifier
 	ID   string                          `json:"id" api:"required" format:"uuid"`
 	JSON settingDomainDeleteResponseJSON `json:"-"`
 }
@@ -449,45 +416,23 @@ func (r settingDomainDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingDomainBulkDeleteResponse struct {
-	// Domain identifier.
-	ID   string                              `json:"id" api:"required" format:"uuid"`
-	JSON settingDomainBulkDeleteResponseJSON `json:"-"`
-}
-
-// settingDomainBulkDeleteResponseJSON contains the JSON metadata for the struct
-// [SettingDomainBulkDeleteResponse]
-type settingDomainBulkDeleteResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingDomainBulkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingDomainBulkDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingDomainEditResponse struct {
-	// Domain identifier.
+	// Domain identifier
 	ID                   string                                         `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainEditResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
 	Authorization        SettingDomainEditResponseAuthorization         `json:"authorization"`
 	CreatedAt            time.Time                                      `json:"created_at" format:"date-time"`
-	DMARCStatus          SettingDomainEditResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
+	DMARCStatus          SettingDomainEditResponseDMARCStatus           `json:"dmarc_status"`
 	Domain               string                                         `json:"domain"`
 	DropDispositions     []SettingDomainEditResponseDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainEditResponseEmailsProcessed       `json:"emails_processed"`
-	Folder               SettingDomainEditResponseFolder                `json:"folder" api:"nullable"`
+	Folder               SettingDomainEditResponseFolder                `json:"folder"`
 	InboxProvider        SettingDomainEditResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                         `json:"integration_id" api:"nullable" format:"uuid"`
 	IPRestrictions       []string                                       `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified       time.Time                          `json:"last_modified" format:"date-time"`
 	LookbackHops       int64                              `json:"lookback_hops"`
 	ModifiedAt         time.Time                          `json:"modified_at" format:"date-time"`
@@ -495,8 +440,8 @@ type SettingDomainEditResponse struct {
 	Regions            []SettingDomainEditResponseRegion  `json:"regions"`
 	RequireTLSInbound  bool                               `json:"require_tls_inbound" api:"nullable"`
 	RequireTLSOutbound bool                               `json:"require_tls_outbound" api:"nullable"`
-	SPFStatus          SettingDomainEditResponseSPFStatus `json:"spf_status" api:"nullable"`
-	Status             SettingDomainEditResponseStatus    `json:"status" api:"nullable"`
+	SPFStatus          SettingDomainEditResponseSPFStatus `json:"spf_status"`
+	Status             SettingDomainEditResponseStatus    `json:"status"`
 	Transport          string                             `json:"transport"`
 	JSON               settingDomainEditResponseJSON      `json:"-"`
 }
@@ -729,22 +674,22 @@ func (r SettingDomainEditResponseStatus) IsKnown() bool {
 }
 
 type SettingDomainGetResponse struct {
-	// Domain identifier.
+	// Domain identifier
 	ID                   string                                        `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainGetResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
 	Authorization        SettingDomainGetResponseAuthorization         `json:"authorization"`
 	CreatedAt            time.Time                                     `json:"created_at" format:"date-time"`
-	DMARCStatus          SettingDomainGetResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
+	DMARCStatus          SettingDomainGetResponseDMARCStatus           `json:"dmarc_status"`
 	Domain               string                                        `json:"domain"`
 	DropDispositions     []SettingDomainGetResponseDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainGetResponseEmailsProcessed       `json:"emails_processed"`
-	Folder               SettingDomainGetResponseFolder                `json:"folder" api:"nullable"`
+	Folder               SettingDomainGetResponseFolder                `json:"folder"`
 	InboxProvider        SettingDomainGetResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                        `json:"integration_id" api:"nullable" format:"uuid"`
 	IPRestrictions       []string                                      `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
-	// Deprecated: Use `modified_at` instead.
+	// Deprecated: deprecated
 	LastModified       time.Time                         `json:"last_modified" format:"date-time"`
 	LookbackHops       int64                             `json:"lookback_hops"`
 	ModifiedAt         time.Time                         `json:"modified_at" format:"date-time"`
@@ -752,8 +697,8 @@ type SettingDomainGetResponse struct {
 	Regions            []SettingDomainGetResponseRegion  `json:"regions"`
 	RequireTLSInbound  bool                              `json:"require_tls_inbound" api:"nullable"`
 	RequireTLSOutbound bool                              `json:"require_tls_outbound" api:"nullable"`
-	SPFStatus          SettingDomainGetResponseSPFStatus `json:"spf_status" api:"nullable"`
-	Status             SettingDomainGetResponseStatus    `json:"status" api:"nullable"`
+	SPFStatus          SettingDomainGetResponseSPFStatus `json:"spf_status"`
+	Status             SettingDomainGetResponseStatus    `json:"status"`
 	Transport          string                            `json:"transport"`
 	JSON               settingDomainGetResponseJSON      `json:"-"`
 }
@@ -1251,15 +1196,11 @@ func (r SettingDomainDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type SettingDomainBulkDeleteParams struct {
-	// Identifier.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-}
-
 type SettingDomainEditParams struct {
 	// Identifier.
 	AccountID            param.Field[string]                                       `path:"account_id" api:"required"`
 	AllowedDeliveryModes param.Field[[]SettingDomainEditParamsAllowedDeliveryMode] `json:"allowed_delivery_modes"`
+	Domain               param.Field[string]                                       `json:"domain"`
 	DropDispositions     param.Field[[]SettingDomainEditParamsDropDisposition]     `json:"drop_dispositions"`
 	Folder               param.Field[SettingDomainEditParamsFolder]                `json:"folder"`
 	IntegrationID        param.Field[string]                                       `json:"integration_id" format:"uuid"`

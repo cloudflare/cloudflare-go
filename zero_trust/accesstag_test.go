@@ -89,7 +89,7 @@ func TestAccessTagListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.Tags.List(context.TODO(), zero_trust.AccessTagListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:      cloudflare.F(int64(0)),
-		PerPage:   cloudflare.F(int64(1000)),
+		PerPage:   cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

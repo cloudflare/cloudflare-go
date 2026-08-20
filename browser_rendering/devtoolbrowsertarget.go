@@ -54,9 +54,9 @@ func (r *DevtoolBrowserTargetService) New(ctx context.Context, sessionID string,
 
 // Returns a list of all debuggable targets including tabs, pages, service workers,
 // and other browser contexts.
-func (r *DevtoolBrowserTargetService) List(ctx context.Context, sessionID string, params DevtoolBrowserTargetListParams, opts ...option.RequestOption) (res *[]DevtoolBrowserTargetListResponse, err error) {
+func (r *DevtoolBrowserTargetService) List(ctx context.Context, sessionID string, query DevtoolBrowserTargetListParams, opts ...option.RequestOption) (res *[]DevtoolBrowserTargetListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -64,8 +64,8 @@ func (r *DevtoolBrowserTargetService) List(ctx context.Context, sessionID string
 		err = errors.New("missing required session_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/browser-rendering/devtools/browser/%s/json/list", params.AccountID, sessionID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/browser-rendering/devtools/browser/%s/json/list", query.AccountID, sessionID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
 }
 
@@ -297,9 +297,7 @@ func (r devtoolBrowserTargetGetResponseJSON) RawJSON() string {
 type DevtoolBrowserTargetNewParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// How long the live view URL remains valid, in milliseconds (max 60 minutes)
-	LiveViewURLExpiresInMs param.Field[float64] `query:"liveViewUrlExpiresInMs"`
-	URL                    param.Field[string]  `query:"url" format:"uri"`
+	URL       param.Field[string] `query:"url" format:"uri"`
 }
 
 // URLQuery serializes [DevtoolBrowserTargetNewParams]'s query parameters as
@@ -314,17 +312,6 @@ func (r DevtoolBrowserTargetNewParams) URLQuery() (v url.Values) {
 type DevtoolBrowserTargetListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// How long the live view URLs remain valid, in milliseconds (max 60 minutes)
-	LiveViewURLExpiresInMs param.Field[float64] `query:"liveViewUrlExpiresInMs"`
-}
-
-// URLQuery serializes [DevtoolBrowserTargetListParams]'s query parameters as
-// `url.Values`.
-func (r DevtoolBrowserTargetListParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type DevtoolBrowserTargetActivateParams struct {

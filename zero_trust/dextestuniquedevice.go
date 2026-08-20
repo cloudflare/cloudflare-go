@@ -218,7 +218,7 @@ func (r dexTestUniqueDeviceListResponseEnvelopeMessagesSourceJSON) RawJSON() str
 	return r.raw
 }
 
-// Whether the API call was successful.
+// DEXTestUniqueDeviceListResponseEnvelopeSuccess indicates whether the API call was successful.
 type DEXTestUniqueDeviceListResponseEnvelopeSuccess bool
 
 const (

@@ -66,7 +66,6 @@ func TestVersionDeleteWithOptionalParams(t *testing.T) {
 		"1",
 		rulesets.VersionDeleteParams{
 			AccountID: cloudflare.F("account_id"),
-			DryRun:    cloudflare.F(true),
 		},
 	)
 	if err != nil {

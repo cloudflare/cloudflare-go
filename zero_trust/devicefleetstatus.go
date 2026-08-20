@@ -36,7 +36,8 @@ func NewDeviceFleetStatusService(opts ...option.RequestOption) (r *DeviceFleetSt
 	return
 }
 
-// Get the latest status of a device given device_id from the device_state table.
+// Get the live status of a latest device given device_id from the device_state
+// table
 func (r *DeviceFleetStatusService) Get(ctx context.Context, deviceID string, params DeviceFleetStatusGetParams, opts ...option.RequestOption) (res *DeviceFleetStatusGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -588,7 +589,7 @@ func (r deviceFleetStatusGetResponseRamUsedPctByAppJSON) RawJSON() string {
 	return r.raw
 }
 
-// Round-trip time statistics for the WARP tunnel.
+// DeviceFleetStatusGetResponseRTT round-trip time statistics for the WARP tunnel.
 type DeviceFleetStatusGetResponseRTT struct {
 	// Minimum round-trip time in microseconds.
 	MinRTTUs DeviceFleetStatusGetResponseRTTMinRTTUs `json:"minRttUs" api:"nullable"`
@@ -617,7 +618,7 @@ func (r deviceFleetStatusGetResponseRTTJSON) RawJSON() string {
 	return r.raw
 }
 
-// Minimum round-trip time in microseconds.
+// DeviceFleetStatusGetResponseRTTMinRTTUs minimum round-trip time in microseconds.
 type DeviceFleetStatusGetResponseRTTMinRTTUs struct {
 	Downstream int64                                       `json:"downstream" api:"nullable"`
 	Upstream   int64                                       `json:"upstream" api:"nullable"`
@@ -641,7 +642,7 @@ func (r deviceFleetStatusGetResponseRTTMinRTTUsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Round-trip time in microseconds.
+// DeviceFleetStatusGetResponseRTTRTTUs round-trip time in microseconds.
 type DeviceFleetStatusGetResponseRTTRTTUs struct {
 	Downstream int64                                    `json:"downstream" api:"nullable"`
 	Upstream   int64                                    `json:"upstream" api:"nullable"`
@@ -665,7 +666,7 @@ func (r deviceFleetStatusGetResponseRttrttUsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Round-trip time variance in microseconds.
+// DeviceFleetStatusGetResponseRTTRTTVarUs round-trip time variance in microseconds.
 type DeviceFleetStatusGetResponseRTTRTTVarUs struct {
 	Downstream int64                                       `json:"downstream" api:"nullable"`
 	Upstream   int64                                       `json:"upstream" api:"nullable"`
@@ -689,7 +690,7 @@ func (r deviceFleetStatusGetResponseRttrttVarUsJSON) RawJSON() string {
 	return r.raw
 }
 
-// WARP tunnel packet and byte counters.
+// DeviceFleetStatusGetResponseTunnelStats wARP tunnel packet and byte counters.
 type DeviceFleetStatusGetResponseTunnelStats struct {
 	// Number of bytes lost, split by direction.
 	BytesLost DeviceFleetStatusGetResponseTunnelStatsBytesLost `json:"bytesLost" api:"nullable"`
@@ -736,7 +737,7 @@ func (r deviceFleetStatusGetResponseTunnelStatsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Number of bytes lost, split by direction.
+// DeviceFleetStatusGetResponseTunnelStatsBytesLost number of bytes lost, split by direction.
 type DeviceFleetStatusGetResponseTunnelStatsBytesLost struct {
 	Downstream int64                                                `json:"downstream" api:"nullable"`
 	Upstream   int64                                                `json:"upstream" api:"nullable"`
@@ -760,7 +761,7 @@ func (r deviceFleetStatusGetResponseTunnelStatsBytesLostJSON) RawJSON() string {
 	return r.raw
 }
 
-// Number of bytes received, split by direction.
+// DeviceFleetStatusGetResponseTunnelStatsBytesReceived number of bytes received, split by direction.
 type DeviceFleetStatusGetResponseTunnelStatsBytesReceived struct {
 	Downstream int64                                                    `json:"downstream" api:"nullable"`
 	Upstream   int64                                                    `json:"upstream" api:"nullable"`
@@ -784,7 +785,7 @@ func (r deviceFleetStatusGetResponseTunnelStatsBytesReceivedJSON) RawJSON() stri
 	return r.raw
 }
 
-// Number of bytes retransmitted, split by direction.
+// DeviceFleetStatusGetResponseTunnelStatsBytesRetransmitted number of bytes retransmitted, split by direction.
 type DeviceFleetStatusGetResponseTunnelStatsBytesRetransmitted struct {
 	Downstream int64                                                         `json:"downstream" api:"nullable"`
 	Upstream   int64                                                         `json:"upstream" api:"nullable"`
@@ -809,7 +810,7 @@ func (r deviceFleetStatusGetResponseTunnelStatsBytesRetransmittedJSON) RawJSON()
 	return r.raw
 }
 
-// Number of bytes sent, split by direction.
+// DeviceFleetStatusGetResponseTunnelStatsBytesSent number of bytes sent, split by direction.
 type DeviceFleetStatusGetResponseTunnelStatsBytesSent struct {
 	Downstream int64                                                `json:"downstream" api:"nullable"`
 	Upstream   int64                                                `json:"upstream" api:"nullable"`
@@ -833,7 +834,7 @@ func (r deviceFleetStatusGetResponseTunnelStatsBytesSentJSON) RawJSON() string {
 	return r.raw
 }
 
-// Number of packets lost, split by direction.
+// DeviceFleetStatusGetResponseTunnelStatsPacketsLost number of packets lost, split by direction.
 type DeviceFleetStatusGetResponseTunnelStatsPacketsLost struct {
 	Downstream int64                                                  `json:"downstream" api:"nullable"`
 	Upstream   int64                                                  `json:"upstream" api:"nullable"`
@@ -857,7 +858,7 @@ func (r deviceFleetStatusGetResponseTunnelStatsPacketsLostJSON) RawJSON() string
 	return r.raw
 }
 
-// Number of packets received, split by direction.
+// DeviceFleetStatusGetResponseTunnelStatsPacketsReceived number of packets received, split by direction.
 type DeviceFleetStatusGetResponseTunnelStatsPacketsReceived struct {
 	Downstream int64                                                      `json:"downstream" api:"nullable"`
 	Upstream   int64                                                      `json:"upstream" api:"nullable"`
@@ -881,7 +882,7 @@ func (r deviceFleetStatusGetResponseTunnelStatsPacketsReceivedJSON) RawJSON() st
 	return r.raw
 }
 
-// Number of packets retransmitted, split by direction.
+// DeviceFleetStatusGetResponseTunnelStatsPacketsRetransmitted number of packets retransmitted, split by direction.
 type DeviceFleetStatusGetResponseTunnelStatsPacketsRetransmitted struct {
 	Downstream int64                                                           `json:"downstream" api:"nullable"`
 	Upstream   int64                                                           `json:"upstream" api:"nullable"`
@@ -906,7 +907,7 @@ func (r deviceFleetStatusGetResponseTunnelStatsPacketsRetransmittedJSON) RawJSON
 	return r.raw
 }
 
-// Number of packets sent, split by direction.
+// DeviceFleetStatusGetResponseTunnelStatsPacketsSent number of packets sent, split by direction.
 type DeviceFleetStatusGetResponseTunnelStatsPacketsSent struct {
 	Downstream int64                                                  `json:"downstream" api:"nullable"`
 	Upstream   int64                                                  `json:"upstream" api:"nullable"`

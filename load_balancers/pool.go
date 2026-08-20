@@ -219,15 +219,6 @@ type Pool struct {
 	// receive traffic and are excluded from health checks. Disabling a pool will cause
 	// any load balancers using it to failover to the next pool (if any).
 	Enabled bool `json:"enabled"`
-	// A list of health sources, ordered from highest to lowest priority, used to
-	// evaluate individual origin health and overall pool health. The load balancer
-	// uses the first source that has data and falls back to the next. Currently
-	// accepted values are null or the exact array ["regional", "global"]; any other
-	// combination is rejected. Null (the default) behaves like ["local", "global"].
-	// ["regional", "global"] makes each region steer on its own health, falling back
-	// to the global decision when a region has no fresh data. Setting regional
-	// requires at least one region in check_regions.
-	HealthSources []PoolHealthSource `json:"health_sources" api:"nullable"`
 	// The latitude of the data center containing the origins used in this pool in
 	// decimal degrees. If this is set, longitude must also be set.
 	Latitude float64 `json:"latitude"`
@@ -278,7 +269,6 @@ type poolJSON struct {
 	Description        apijson.Field
 	DisabledAt         apijson.Field
 	Enabled            apijson.Field
-	HealthSources      apijson.Field
 	Latitude           apijson.Field
 	LoadShedding       apijson.Field
 	Longitude          apijson.Field
@@ -302,29 +292,6 @@ func (r *Pool) UnmarshalJSON(data []byte) (err error) {
 
 func (r poolJSON) RawJSON() string {
 	return r.raw
-}
-
-// The scope a health decision is aggregated over. local: the result from the
-// single data center running the health check; only available when health checks
-// run from every data center (check_regions is ALL_DATACENTERS). regional: a
-// separate decision per region, each aggregated from the data centers within that
-// region, so regions steer independently; requires at least one region configured
-// in check_regions. global: one worldwide decision aggregated across all
-// configured regions, used as the fallback.
-type PoolHealthSource string
-
-const (
-	PoolHealthSourceLocal    PoolHealthSource = "local"
-	PoolHealthSourceRegional PoolHealthSource = "regional"
-	PoolHealthSourceGlobal   PoolHealthSource = "global"
-)
-
-func (r PoolHealthSource) IsKnown() bool {
-	switch r {
-	case PoolHealthSourceLocal, PoolHealthSourceRegional, PoolHealthSourceGlobal:
-		return true
-	}
-	return false
 }
 
 type PoolDeleteResponse struct {
@@ -460,15 +427,6 @@ type PoolUpdateParams struct {
 	// receive traffic and are excluded from health checks. Disabling a pool will cause
 	// any load balancers using it to failover to the next pool (if any).
 	Enabled param.Field[bool] `json:"enabled"`
-	// A list of health sources, ordered from highest to lowest priority, used to
-	// evaluate individual origin health and overall pool health. The load balancer
-	// uses the first source that has data and falls back to the next. Currently
-	// accepted values are null or the exact array ["regional", "global"]; any other
-	// combination is rejected. Null (the default) behaves like ["local", "global"].
-	// ["regional", "global"] makes each region steer on its own health, falling back
-	// to the global decision when a region has no fresh data. Setting regional
-	// requires at least one region in check_regions.
-	HealthSources param.Field[[]PoolUpdateParamsHealthSource] `json:"health_sources"`
 	// The latitude of the data center containing the origins used in this pool in
 	// decimal degrees. If this is set, longitude must also be set.
 	Latitude param.Field[float64] `json:"latitude"`
@@ -503,29 +461,6 @@ type PoolUpdateParams struct {
 
 func (r PoolUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The scope a health decision is aggregated over. local: the result from the
-// single data center running the health check; only available when health checks
-// run from every data center (check_regions is ALL_DATACENTERS). regional: a
-// separate decision per region, each aggregated from the data centers within that
-// region, so regions steer independently; requires at least one region configured
-// in check_regions. global: one worldwide decision aggregated across all
-// configured regions, used as the fallback.
-type PoolUpdateParamsHealthSource string
-
-const (
-	PoolUpdateParamsHealthSourceLocal    PoolUpdateParamsHealthSource = "local"
-	PoolUpdateParamsHealthSourceRegional PoolUpdateParamsHealthSource = "regional"
-	PoolUpdateParamsHealthSourceGlobal   PoolUpdateParamsHealthSource = "global"
-)
-
-func (r PoolUpdateParamsHealthSource) IsKnown() bool {
-	switch r {
-	case PoolUpdateParamsHealthSourceLocal, PoolUpdateParamsHealthSourceRegional, PoolUpdateParamsHealthSourceGlobal:
-		return true
-	}
-	return false
 }
 
 type PoolUpdateResponseEnvelope struct {
@@ -677,15 +612,6 @@ type PoolEditParams struct {
 	// receive traffic and are excluded from health checks. Disabling a pool will cause
 	// any load balancers using it to failover to the next pool (if any).
 	Enabled param.Field[bool] `json:"enabled"`
-	// A list of health sources, ordered from highest to lowest priority, used to
-	// evaluate individual origin health and overall pool health. The load balancer
-	// uses the first source that has data and falls back to the next. Currently
-	// accepted values are null or the exact array ["regional", "global"]; any other
-	// combination is rejected. Null (the default) behaves like ["local", "global"].
-	// ["regional", "global"] makes each region steer on its own health, falling back
-	// to the global decision when a region has no fresh data. Setting regional
-	// requires at least one region in check_regions.
-	HealthSources param.Field[[]PoolEditParamsHealthSource] `json:"health_sources"`
 	// The latitude of the data center containing the origins used in this pool in
 	// decimal degrees. If this is set, longitude must also be set.
 	Latitude param.Field[float64] `json:"latitude"`
@@ -726,29 +652,6 @@ type PoolEditParams struct {
 
 func (r PoolEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The scope a health decision is aggregated over. local: the result from the
-// single data center running the health check; only available when health checks
-// run from every data center (check_regions is ALL_DATACENTERS). regional: a
-// separate decision per region, each aggregated from the data centers within that
-// region, so regions steer independently; requires at least one region configured
-// in check_regions. global: one worldwide decision aggregated across all
-// configured regions, used as the fallback.
-type PoolEditParamsHealthSource string
-
-const (
-	PoolEditParamsHealthSourceLocal    PoolEditParamsHealthSource = "local"
-	PoolEditParamsHealthSourceRegional PoolEditParamsHealthSource = "regional"
-	PoolEditParamsHealthSourceGlobal   PoolEditParamsHealthSource = "global"
-)
-
-func (r PoolEditParamsHealthSource) IsKnown() bool {
-	switch r {
-	case PoolEditParamsHealthSourceLocal, PoolEditParamsHealthSourceRegional, PoolEditParamsHealthSourceGlobal:
-		return true
-	}
-	return false
 }
 
 type PoolEditResponseEnvelope struct {

@@ -35,7 +35,7 @@ func NewCustomNameserverService(opts ...option.RequestOption) (r *CustomNameserv
 	return
 }
 
-// Adds a custom nameserver to the account for use as a vanity nameserver on zones.
+// Add Account Custom Nameserver
 func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserverNewParams, opts ...option.RequestOption) (res *CustomNameserver, err error) {
 	var env CustomNameserverNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -52,7 +52,7 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 	return res, nil
 }
 
-// Removes a custom nameserver from the account.
+// Delete Account Custom Nameserver
 func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -78,7 +78,7 @@ func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string,
 	return res, nil
 }
 
-// Removes a custom nameserver from the account.
+// Delete Account Custom Nameserver
 func (r *CustomNameserverService) DeleteAutoPaging(ctx context.Context, customNSID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
 	return pagination.NewSinglePageAutoPager(r.Delete(ctx, customNSID, body, opts...))
 }

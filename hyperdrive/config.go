@@ -7,11 +7,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -55,11 +53,7 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 	return res, nil
 }
 
-// Replaces and returns the specified Hyperdrive configuration. The request must
-// include the name and complete origin connection details. Omitted caching
-// settings are reset to their defaults, while omitted mTLS settings and origin
-// connection limits are preserved. Use the update operation to modify only
-// selected fields.
+// Updates and returns the specified Hyperdrive configuration.
 func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params ConfigUpdateParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	var env ConfigUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -81,16 +75,16 @@ func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params 
 }
 
 // Returns a list of Hyperdrives.
-func (r *ConfigService) List(ctx context.Context, params ConfigListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Hyperdrive], err error) {
+func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Hyperdrive], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if params.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", params.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", query.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -103,8 +97,8 @@ func (r *ConfigService) List(ctx context.Context, params ConfigListParams, opts 
 }
 
 // Returns a list of Hyperdrives.
-func (r *ConfigService) ListAutoPaging(ctx context.Context, params ConfigListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Hyperdrive] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Hyperdrive] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes the specified Hyperdrive.
@@ -128,8 +122,8 @@ func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body Co
 	return res, nil
 }
 
-// Updates and returns the specified fields of the Hyperdrive configuration. Custom
-// caching settings are not kept if caching is disabled.
+// Patches and returns the specified Hyperdrive configuration. Custom caching
+// settings are not kept if caching is disabled.
 func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	var env ConfigEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -282,18 +276,6 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type ConfigListParams struct {
 	// Define configurations using a unique string identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Page number of paginated results.
-	Page param.Field[int64] `query:"page"`
-	// Maximum number of results per page.
-	PerPage param.Field[int64] `query:"per_page"`
-}
-
-// URLQuery serializes [ConfigListParams]'s query parameters as `url.Values`.
-func (r ConfigListParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type ConfigDeleteParams struct {
@@ -362,8 +344,7 @@ type ConfigEditParams struct {
 	// the origin database.
 	//
 	// Maximum allowed: 20 for free tier accounts, 100 for paid tier accounts. If not
-	// specified, defaults to 20 for free tier and 60 for paid tier. Certain
-	// Cloudflare-managed origins may be permitted a higher limit. Contact Cloudflare
+	// specified, defaults to 20 for free tier and 60 for paid tier. Contact Cloudflare
 	// if you need a higher limit.
 	OriginConnectionLimit param.Field[int64] `json:"origin_connection_limit"`
 }

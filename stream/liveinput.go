@@ -147,18 +147,11 @@ type LiveInput struct {
 	DeleteRecordingAfterDays float64 `json:"deleteRecordingAfterDays"`
 	// Indicates whether the live input is enabled and can accept streams.
 	Enabled bool `json:"enabled"`
-	// The date and time the live input keys were last rotated. Omitted for live inputs
-	// that have never had their keys rotated.
-	KeysRotatedAt time.Time `json:"keysRotatedAt" api:"nullable" format:"date-time"`
 	// A user modifiable key-value store used to reference other systems of record for
 	// managing live inputs.
 	Meta interface{} `json:"meta"`
 	// The date and time the live input was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
-	// When enabled, the live stream is delivered using Low-Latency HLS (LL-HLS),
-	// reducing glass-to-glass latency for viewers at the cost of reduced player
-	// compatibility.
-	PreferLowLatency bool `json:"preferLowLatency"`
 	// Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
 	// most cases, the video will initially be viewable as a live video and transition
 	// to on-demand after a condition is satisfied.
@@ -187,10 +180,8 @@ type liveInputJSON struct {
 	Created                  apijson.Field
 	DeleteRecordingAfterDays apijson.Field
 	Enabled                  apijson.Field
-	KeysRotatedAt            apijson.Field
 	Meta                     apijson.Field
 	Modified                 apijson.Field
-	PreferLowLatency         apijson.Field
 	Recording                apijson.Field
 	Rtmps                    apijson.Field
 	RtmpsPlayback            apijson.Field
@@ -536,10 +527,6 @@ type LiveInputNewParams struct {
 	// A user modifiable key-value store used to reference other systems of record for
 	// managing live inputs.
 	Meta param.Field[interface{}] `json:"meta"`
-	// When enabled, the live stream is delivered using Low-Latency HLS (LL-HLS),
-	// reducing glass-to-glass latency for viewers at the cost of reduced player
-	// compatibility.
-	PreferLowLatency param.Field[bool] `json:"preferLowLatency"`
 	// Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
 	// most cases, the video will initially be viewable as a live video and transition
 	// to on-demand after a condition is satisfied.
@@ -753,10 +740,6 @@ type LiveInputUpdateParams struct {
 	// A user modifiable key-value store used to reference other systems of record for
 	// managing live inputs.
 	Meta param.Field[interface{}] `json:"meta"`
-	// When enabled, the live stream is delivered using Low-Latency HLS (LL-HLS),
-	// reducing glass-to-glass latency for viewers at the cost of reduced player
-	// compatibility.
-	PreferLowLatency param.Field[bool] `json:"preferLowLatency"`
 	// Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
 	// most cases, the video will initially be viewable as a live video and transition
 	// to on-demand after a condition is satisfied.

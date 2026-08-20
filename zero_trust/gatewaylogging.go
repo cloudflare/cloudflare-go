@@ -95,7 +95,7 @@ func (r loggingSettingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure logging settings for each rule type.
+// LoggingSettingSettingsByRuleType configure logging settings for each rule type.
 type LoggingSettingSettingsByRuleType struct {
 	// Configure logging settings for DNS firewall.
 	DNS LoggingSettingSettingsByRuleTypeDNS `json:"dns"`
@@ -124,7 +124,7 @@ func (r loggingSettingSettingsByRuleTypeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure logging settings for DNS firewall.
+// LoggingSettingSettingsByRuleTypeDNS configure logging settings for DNS firewall.
 type LoggingSettingSettingsByRuleTypeDNS struct {
 	// Specify whether to log all requests to this service.
 	LogAll bool `json:"log_all"`
@@ -150,7 +150,7 @@ func (r loggingSettingSettingsByRuleTypeDNSJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure logging settings for HTTP/HTTPS firewall.
+// LoggingSettingSettingsByRuleTypeHTTP configure logging settings for HTTP/HTTPS firewall.
 type LoggingSettingSettingsByRuleTypeHTTP struct {
 	// Specify whether to log all requests to this service.
 	LogAll bool `json:"log_all"`
@@ -176,7 +176,7 @@ func (r loggingSettingSettingsByRuleTypeHTTPJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configure logging settings for Network firewall.
+// LoggingSettingSettingsByRuleTypeL4 configure logging settings for Network firewall.
 type LoggingSettingSettingsByRuleTypeL4 struct {
 	// Specify whether to log all requests to this service.
 	LogAll bool `json:"log_all"`
@@ -215,7 +215,7 @@ func (r LoggingSettingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Configure logging settings for each rule type.
+// LoggingSettingSettingsByRuleTypeParam configure logging settings for each rule type.
 type LoggingSettingSettingsByRuleTypeParam struct {
 	// Configure logging settings for DNS firewall.
 	DNS param.Field[LoggingSettingSettingsByRuleTypeDNSParam] `json:"dns"`
@@ -229,7 +229,7 @@ func (r LoggingSettingSettingsByRuleTypeParam) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-// Configure logging settings for DNS firewall.
+// LoggingSettingSettingsByRuleTypeDNSParam configure logging settings for DNS firewall.
 type LoggingSettingSettingsByRuleTypeDNSParam struct {
 	// Specify whether to log all requests to this service.
 	LogAll param.Field[bool] `json:"log_all"`
@@ -241,7 +241,7 @@ func (r LoggingSettingSettingsByRuleTypeDNSParam) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
-// Configure logging settings for HTTP/HTTPS firewall.
+// LoggingSettingSettingsByRuleTypeHTTPParam configure logging settings for HTTP/HTTPS firewall.
 type LoggingSettingSettingsByRuleTypeHTTPParam struct {
 	// Specify whether to log all requests to this service.
 	LogAll param.Field[bool] `json:"log_all"`
@@ -253,7 +253,7 @@ func (r LoggingSettingSettingsByRuleTypeHTTPParam) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// Configure logging settings for Network firewall.
+// LoggingSettingSettingsByRuleTypeL4Param configure logging settings for Network firewall.
 type LoggingSettingSettingsByRuleTypeL4Param struct {
 	// Specify whether to log all requests to this service.
 	LogAll param.Field[bool] `json:"log_all"`
@@ -302,7 +302,7 @@ func (r gatewayLoggingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayLoggingUpdateResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayLoggingUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -349,7 +349,7 @@ func (r gatewayLoggingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicate whether the API call was successful.
+// GatewayLoggingGetResponseEnvelopeSuccess indicate whether the API call was successful.
 type GatewayLoggingGetResponseEnvelopeSuccess bool
 
 const (

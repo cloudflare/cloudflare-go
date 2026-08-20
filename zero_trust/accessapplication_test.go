@@ -108,7 +108,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				DynamicClientRegistration: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationOAuthConfigurationDynamicClientRegistration{
 					AllowAnyOnLocalhost: cloudflare.F(true),
 					AllowAnyOnLoopback:  cloudflare.F(true),
-					AllowedURIs:         cloudflare.F([]string{"https://example.com/callback", "com.example.app:/oauth/callback"}),
+					AllowedURIs:         cloudflare.F([]string{"https://example.com/callback"}),
 					Enabled:             cloudflare.F(true),
 				}),
 				Enabled: cloudflare.F(true),
@@ -259,7 +259,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					DynamicClientRegistration: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationOAuthConfigurationDynamicClientRegistration{
 						AllowAnyOnLocalhost: cloudflare.F(true),
 						AllowAnyOnLoopback:  cloudflare.F(true),
-						AllowedURIs:         cloudflare.F([]string{"https://example.com/callback", "com.example.app:/oauth/callback"}),
+						AllowedURIs:         cloudflare.F([]string{"https://example.com/callback"}),
 						Enabled:             cloudflare.F(true),
 					}),
 					Enabled: cloudflare.F(true),
@@ -337,7 +337,7 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 		Exact:            cloudflare.F(true),
 		Name:             cloudflare.F("name"),
 		Page:             cloudflare.F(int64(0)),
-		PerPage:          cloudflare.F(int64(1000)),
+		PerPage:          cloudflare.F(int64(0)),
 		Search:           cloudflare.F("search"),
 		TargetAttributes: cloudflare.F("target_attributes"),
 	})

@@ -56,42 +56,11 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					Text: cloudflare.F("my_data"),
 					Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText),
 				}}),
-				BodyPart: cloudflare.F("worker.js"),
-				CacheOptions: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataCacheOptions{
-					Enabled:           cloudflare.F(true),
-					CrossVersionCache: cloudflare.F(true),
-				}),
+				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2021-01-01"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
-				Exports: cloudflare.F(map[string]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsUnion{
-					"Admin": workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExport{
-						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportTypeWorker),
-						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportCache{
-							Enabled: cloudflare.F(true),
-						}),
-						State: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportStateCreated),
-					},
-					"Counter": workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectExport{
-						Storage:   cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectExportStorageSqlite),
-						Type:      cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectExportTypeDurableObject),
-						Container: cloudflare.F("my-container"),
-						State:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectExportStateCreated),
-					},
-					"OldCounter": workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExport{
-						RenamedTo: cloudflare.F("Counter"),
-						State:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExportStateRenamed),
-						Type:      cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersDurableObjectRenamedExportTypeDurableObject),
-					},
-					"default": workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExport{
-						Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportTypeWorker),
-						Cache: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportCache{
-							Enabled: cloudflare.F(false),
-						}),
-						State: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsWorkersWorkerExportStateCreated),
-					},
-				}),
-				KeepAssets:   cloudflare.F(false),
-				KeepBindings: cloudflare.F([]string{"string"}),
+				KeepAssets:         cloudflare.F(false),
+				KeepBindings:       cloudflare.F([]string{"string"}),
 				Limits: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataLimits{
 					CPUMs:       cloudflare.F(int64(50)),
 					Subrequests: cloudflare.F(int64(1000)),
@@ -132,11 +101,6 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						PropagationPolicy: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicyAuthenticated),
 					}),
 				}),
-				PackageDependencies: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPackageDependency{{
-					InstalledVersion:   cloudflare.F("4.17.22"),
-					Name:               cloudflare.F("lodash"),
-					PackageJsonVersion: cloudflare.F("^4.17.21"),
-				}}),
 				Placement: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementUnion](workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementObject{
 					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementObjectModeSmart),
 				}),

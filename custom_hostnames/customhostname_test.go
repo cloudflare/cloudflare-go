@@ -35,8 +35,6 @@ func TestCustomHostnameNewWithOptionalParams(t *testing.T) {
 		CustomMetadata: cloudflare.F(map[string]string{
 			"foo": "string",
 		}),
-		CustomOriginServer: cloudflare.F("origin2.example.com"),
-		CustomOriginSNI:    cloudflare.F("sni.example.com"),
 		SSL: cloudflare.F(custom_hostnames.CustomHostnameNewParamsSSL{
 			BundleMethod:         cloudflare.F(custom_hostnames.BundleMethodUbiquitous),
 			CertificateAuthority: cloudflare.F(shared.CertificateCAGoogle),

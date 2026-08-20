@@ -36,10 +36,8 @@ func TestRuleCatchAllUpdateWithOptionalParams(t *testing.T) {
 		Matchers: cloudflare.F([]email_routing.CatchAllMatcherParam{{
 			Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
 		}}),
-		Enabled:        cloudflare.F(email_routing.RuleCatchAllUpdateParamsEnabledTrue),
-		Name:           cloudflare.F("Send to user@example.net rule."),
-		OwnerWorkerTag: cloudflare.F("a7e6fb77503c41d8a7f3113c6918f10c"),
-		Source:         cloudflare.F(email_routing.RuleCatchAllUpdateParamsSourceAPI),
+		Enabled: cloudflare.F(email_routing.RuleCatchAllUpdateParamsEnabledTrue),
+		Name:    cloudflare.F("Send to user@example.net rule."),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

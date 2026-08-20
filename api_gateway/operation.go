@@ -31,7 +31,7 @@ type OperationService struct {
 	Options []option.RequestOption
 	Labels  *OperationLabelService
 	// Deprecated: Use the
-	// [github.com/cloudflare/cloudflare-go/v6/schema_validation.SettingOperationService]
+	// [github.com/cloudflare/cloudflare-go/v7/schema_validation.SettingOperationService]
 	// service instead
 	SchemaValidation *OperationSchemaValidationService
 }
@@ -757,7 +757,7 @@ func (r OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo) impleme
 type OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
 	// Schema active on endpoint.
 	ActiveSchema OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema `json:"active_schema"`
-	// Deprecated. Always false.
+	// True if a Cloudflare-provided learned schema is available for this endpoint.
 	LearnedAvailable bool `json:"learned_available"`
 	// Action taken on requests failing validation.
 	MitigationAction OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction `json:"mitigation_action" api:"nullable"`
@@ -1488,7 +1488,7 @@ func (r OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfo) implem
 type OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
 	// Schema active on endpoint.
 	ActiveSchema OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema `json:"active_schema"`
-	// Deprecated. Always false.
+	// True if a Cloudflare-provided learned schema is available for this endpoint.
 	LearnedAvailable bool `json:"learned_available"`
 	// Action taken on requests failing validation.
 	MitigationAction OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction `json:"mitigation_action" api:"nullable"`
@@ -2173,7 +2173,7 @@ func (r OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo) imp
 type OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
 	// Schema active on endpoint.
 	ActiveSchema OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema `json:"active_schema"`
-	// Deprecated. Always false.
+	// True if a Cloudflare-provided learned schema is available for this endpoint.
 	LearnedAvailable bool `json:"learned_available"`
 	// Action taken on requests failing validation.
 	MitigationAction OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction `json:"mitigation_action" api:"nullable"`
@@ -2862,7 +2862,7 @@ func (r OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfo) impleme
 type OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
 	// Schema active on endpoint.
 	ActiveSchema OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema `json:"active_schema"`
-	// Deprecated. Always false.
+	// True if a Cloudflare-provided learned schema is available for this endpoint.
 	LearnedAvailable bool `json:"learned_available"`
 	// Action taken on requests failing validation.
 	MitigationAction OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction `json:"mitigation_action" api:"nullable"`

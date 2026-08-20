@@ -178,25 +178,25 @@ func (r organizationJSON) RawJSON() string {
 }
 
 type OrganizationMeta struct {
+	// Enable features for Organizations.
+	Flags OrganizationMetaFlags `json:"flags"`
 	// Ordered chain of organization tags from the root organization down to (and
 	// including) this organization itself. Root organizations return a single-element
 	// array containing their own tag; sub-organizations return
 	// `[rootTag, ...intermediateTags, parentTag, selfTag]`. Useful for constructing
 	// authorization scopes that need to cover every ancestor in the hierarchy.
-	HierarchyTags []string `json:"hierarchy_tags"`
-	ManagedBy     string   `json:"managed_by"`
-	// Enable features for Organizations.
-	TenantFlags OrganizationMetaTenantFlags `json:"tenant_flags"`
-	ExtraFields map[string]interface{}      `json:"-" api:"extrafields"`
-	JSON        organizationMetaJSON        `json:"-"`
+	HierarchyTags []string               `json:"hierarchy_tags"`
+	ManagedBy     string                 `json:"managed_by"`
+	ExtraFields   map[string]interface{} `json:"-" api:"extrafields"`
+	JSON          organizationMetaJSON   `json:"-"`
 }
 
 // organizationMetaJSON contains the JSON metadata for the struct
 // [OrganizationMeta]
 type organizationMetaJSON struct {
+	Flags         apijson.Field
 	HierarchyTags apijson.Field
 	ManagedBy     apijson.Field
-	TenantFlags   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -210,36 +210,32 @@ func (r organizationMetaJSON) RawJSON() string {
 }
 
 // Enable features for Organizations.
-type OrganizationMetaTenantFlags struct {
-	AccountCreation      string                          `json:"account_creation" api:"required"`
-	AccountDeletion      string                          `json:"account_deletion" api:"required"`
-	AccountMigration     string                          `json:"account_migration" api:"required"`
-	AccountMobility      string                          `json:"account_mobility" api:"required"`
-	EnterpriseCapability string                          `json:"enterprise_capability" api:"required"`
-	MemberManagement     string                          `json:"member_management" api:"required"`
-	SubOrgCreation       string                          `json:"sub_org_creation" api:"required"`
-	JSON                 organizationMetaTenantFlagsJSON `json:"-"`
+type OrganizationMetaFlags struct {
+	AccountCreation  string                    `json:"account_creation" api:"required"`
+	AccountDeletion  string                    `json:"account_deletion" api:"required"`
+	AccountMigration string                    `json:"account_migration" api:"required"`
+	AccountMobility  string                    `json:"account_mobility" api:"required"`
+	SubOrgCreation   string                    `json:"sub_org_creation" api:"required"`
+	JSON             organizationMetaFlagsJSON `json:"-"`
 }
 
-// organizationMetaTenantFlagsJSON contains the JSON metadata for the struct
-// [OrganizationMetaTenantFlags]
-type organizationMetaTenantFlagsJSON struct {
-	AccountCreation      apijson.Field
-	AccountDeletion      apijson.Field
-	AccountMigration     apijson.Field
-	AccountMobility      apijson.Field
-	EnterpriseCapability apijson.Field
-	MemberManagement     apijson.Field
-	SubOrgCreation       apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+// organizationMetaFlagsJSON contains the JSON metadata for the struct
+// [OrganizationMetaFlags]
+type organizationMetaFlagsJSON struct {
+	AccountCreation  apijson.Field
+	AccountDeletion  apijson.Field
+	AccountMigration apijson.Field
+	AccountMobility  apijson.Field
+	SubOrgCreation   apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
-func (r *OrganizationMetaTenantFlags) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationMetaFlags) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r organizationMetaTenantFlagsJSON) RawJSON() string {
+func (r organizationMetaFlagsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -278,16 +274,16 @@ func (r OrganizationParam) MarshalJSON() (data []byte, err error) {
 }
 
 type OrganizationMetaParam struct {
+	// Enable features for Organizations.
+	Flags param.Field[OrganizationMetaFlagsParam] `json:"flags"`
 	// Ordered chain of organization tags from the root organization down to (and
 	// including) this organization itself. Root organizations return a single-element
 	// array containing their own tag; sub-organizations return
 	// `[rootTag, ...intermediateTags, parentTag, selfTag]`. Useful for constructing
 	// authorization scopes that need to cover every ancestor in the hierarchy.
-	HierarchyTags param.Field[[]string] `json:"hierarchy_tags"`
-	ManagedBy     param.Field[string]   `json:"managed_by"`
-	// Enable features for Organizations.
-	TenantFlags param.Field[OrganizationMetaTenantFlagsParam] `json:"tenant_flags"`
-	ExtraFields map[string]interface{}                        `json:"-,extras"`
+	HierarchyTags param.Field[[]string]  `json:"hierarchy_tags"`
+	ManagedBy     param.Field[string]    `json:"managed_by"`
+	ExtraFields   map[string]interface{} `json:"-,extras"`
 }
 
 func (r OrganizationMetaParam) MarshalJSON() (data []byte, err error) {
@@ -295,17 +291,15 @@ func (r OrganizationMetaParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Enable features for Organizations.
-type OrganizationMetaTenantFlagsParam struct {
-	AccountCreation      param.Field[string] `json:"account_creation" api:"required"`
-	AccountDeletion      param.Field[string] `json:"account_deletion" api:"required"`
-	AccountMigration     param.Field[string] `json:"account_migration" api:"required"`
-	AccountMobility      param.Field[string] `json:"account_mobility" api:"required"`
-	EnterpriseCapability param.Field[string] `json:"enterprise_capability" api:"required"`
-	MemberManagement     param.Field[string] `json:"member_management" api:"required"`
-	SubOrgCreation       param.Field[string] `json:"sub_org_creation" api:"required"`
+type OrganizationMetaFlagsParam struct {
+	AccountCreation  param.Field[string] `json:"account_creation" api:"required"`
+	AccountDeletion  param.Field[string] `json:"account_deletion" api:"required"`
+	AccountMigration param.Field[string] `json:"account_migration" api:"required"`
+	AccountMobility  param.Field[string] `json:"account_mobility" api:"required"`
+	SubOrgCreation   param.Field[string] `json:"sub_org_creation" api:"required"`
 }
 
-func (r OrganizationMetaTenantFlagsParam) MarshalJSON() (data []byte, err error) {
+func (r OrganizationMetaFlagsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
