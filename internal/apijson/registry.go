@@ -2,6 +2,7 @@ package apijson
 
 import (
 	"reflect"
+	"sync"
 
 	"github.com/tidwall/gjson"
 )
@@ -12,8 +13,8 @@ type UnionVariant struct {
 	Type               reflect.Type
 }
 
-var unionRegistry = map[reflect.Type]unionEntry{}
-var unionVariants = map[reflect.Type]interface{}{}
+var unionRegistry sync.Map
+var unionVariants sync.Map
 
 type unionEntry struct {
 	discriminatorKey string
@@ -21,12 +22,12 @@ type unionEntry struct {
 }
 
 func RegisterUnion(typ reflect.Type, discriminator string, variants ...UnionVariant) {
-	unionRegistry[typ] = unionEntry{
+	unionRegistry.Store(typ, unionEntry{
 		discriminatorKey: discriminator,
 		variants:         variants,
-	}
+	})
 	for _, variant := range variants {
-		unionVariants[variant.Type] = typ
+		unionVariants.Store(variant.Type, typ)
 	}
 }
 
