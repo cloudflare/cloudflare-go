@@ -303,8 +303,8 @@ func TestLivestreamGetOrgAnalyticsWithOptionalParams(t *testing.T) {
 		"app_id",
 		realtime_kit.LivestreamGetOrgAnalyticsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			EndDate:   cloudflare.F("2022-09-22"),
-			StartDate: cloudflare.F("2022-09-01"),
+			EndDate:   cloudflare.F("2022-09-22T00:00:00Z"),
+			StartDate: cloudflare.F("2022-09-01T00:00:00Z"),
 		},
 	)
 	if err != nil {

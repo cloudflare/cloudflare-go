@@ -986,6 +986,8 @@ type ScriptObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptObservabilityLogs `json:"logs" api:"nullable"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces ScriptObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   scriptObservabilityJSON   `json:"-"`
@@ -994,12 +996,13 @@ type ScriptObservability struct {
 // scriptObservabilityJSON contains the JSON metadata for the struct
 // [ScriptObservability]
 type scriptObservabilityJSON struct {
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Logs             apijson.Field
-	Traces           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptObservability) UnmarshalJSON(data []byte) (err error) {
@@ -1058,11 +1061,11 @@ type ScriptObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
-	PropagationPolicy ScriptObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy ScriptObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
 	JSON              scriptObservabilityTracesJSON              `json:"-"`
 }
 
@@ -1087,10 +1090,10 @@ func (r scriptObservabilityTracesJSON) RawJSON() string {
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type ScriptObservabilityTracesPropagationPolicy string
 
 const (
@@ -1376,6 +1379,8 @@ type ScriptSettingObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptSettingObservabilityLogs `json:"logs" api:"nullable"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces ScriptSettingObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   scriptSettingObservabilityJSON   `json:"-"`
@@ -1384,12 +1389,13 @@ type ScriptSettingObservability struct {
 // scriptSettingObservabilityJSON contains the JSON metadata for the struct
 // [ScriptSettingObservability]
 type scriptSettingObservabilityJSON struct {
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Logs             apijson.Field
-	Traces           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptSettingObservability) UnmarshalJSON(data []byte) (err error) {
@@ -1448,11 +1454,11 @@ type ScriptSettingObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
-	PropagationPolicy ScriptSettingObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy ScriptSettingObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
 	JSON              scriptSettingObservabilityTracesJSON              `json:"-"`
 }
 
@@ -1477,10 +1483,10 @@ func (r scriptSettingObservabilityTracesJSON) RawJSON() string {
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type ScriptSettingObservabilityTracesPropagationPolicy string
 
 const (
@@ -1520,6 +1526,8 @@ type ScriptSettingObservabilityParam struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptSettingObservabilityLogsParam] `json:"logs"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString param.Field[bool] `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces param.Field[ScriptSettingObservabilityTracesParam] `json:"traces"`
 }
@@ -1559,10 +1567,10 @@ type ScriptSettingObservabilityTracesParam struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist param.Field[bool] `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
 	PropagationPolicy param.Field[ScriptSettingObservabilityTracesPropagationPolicy] `json:"propagation_policy"`
 }
 
@@ -2396,6 +2404,8 @@ type ScriptUpdateResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptUpdateResponseObservabilityLogs `json:"logs" api:"nullable"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces ScriptUpdateResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   scriptUpdateResponseObservabilityJSON   `json:"-"`
@@ -2404,12 +2414,13 @@ type ScriptUpdateResponseObservability struct {
 // scriptUpdateResponseObservabilityJSON contains the JSON metadata for the struct
 // [ScriptUpdateResponseObservability]
 type scriptUpdateResponseObservabilityJSON struct {
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Logs             apijson.Field
-	Traces           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptUpdateResponseObservability) UnmarshalJSON(data []byte) (err error) {
@@ -2468,11 +2479,11 @@ type ScriptUpdateResponseObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
-	PropagationPolicy ScriptUpdateResponseObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy ScriptUpdateResponseObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
 	JSON              scriptUpdateResponseObservabilityTracesJSON              `json:"-"`
 }
 
@@ -2497,10 +2508,10 @@ func (r scriptUpdateResponseObservabilityTracesJSON) RawJSON() string {
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type ScriptUpdateResponseObservabilityTracesPropagationPolicy string
 
 const (
@@ -3575,6 +3586,8 @@ type ScriptListResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptListResponseObservabilityLogs `json:"logs" api:"nullable"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces ScriptListResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   scriptListResponseObservabilityJSON   `json:"-"`
@@ -3583,12 +3596,13 @@ type ScriptListResponseObservability struct {
 // scriptListResponseObservabilityJSON contains the JSON metadata for the struct
 // [ScriptListResponseObservability]
 type scriptListResponseObservabilityJSON struct {
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Logs             apijson.Field
-	Traces           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptListResponseObservability) UnmarshalJSON(data []byte) (err error) {
@@ -3647,11 +3661,11 @@ type ScriptListResponseObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
-	PropagationPolicy ScriptListResponseObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy ScriptListResponseObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
 	JSON              scriptListResponseObservabilityTracesJSON              `json:"-"`
 }
 
@@ -3676,10 +3690,10 @@ func (r scriptListResponseObservabilityTracesJSON) RawJSON() string {
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type ScriptListResponseObservabilityTracesPropagationPolicy string
 
 const (
@@ -4250,6 +4264,9 @@ type ScriptUpdateParamsMetadataBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[ScriptUpdateParamsMetadataBindingsFormat] `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[ScriptUpdateParamsMetadataBindingsIdentity] `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -5618,6 +5635,9 @@ type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetwork struct {
 	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity] `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
@@ -5642,6 +5662,22 @@ const (
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -5711,6 +5747,22 @@ const (
 func (r ScriptUpdateParamsMetadataBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptUpdateParamsMetadataBindingsFormatRaw, ScriptUpdateParamsMetadataBindingsFormatPkcs8, ScriptUpdateParamsMetadataBindingsFormatSpki, ScriptUpdateParamsMetadataBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptUpdateParamsMetadataBindingsIdentity string
+
+const (
+	ScriptUpdateParamsMetadataBindingsIdentityRuntimeEmailAlpha ScriptUpdateParamsMetadataBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsIdentity) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -6540,6 +6592,8 @@ type ScriptUpdateParamsMetadataObservability struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString param.Field[bool] `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces param.Field[ScriptUpdateParamsMetadataObservabilityTraces] `json:"traces"`
 }
@@ -6579,10 +6633,10 @@ type ScriptUpdateParamsMetadataObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist param.Field[bool] `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
 	PropagationPolicy param.Field[ScriptUpdateParamsMetadataObservabilityTracesPropagationPolicy] `json:"propagation_policy"`
 }
 
@@ -6591,10 +6645,10 @@ func (r ScriptUpdateParamsMetadataObservabilityTraces) MarshalJSON() (data []byt
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type ScriptUpdateParamsMetadataObservabilityTracesPropagationPolicy string
 
 const (

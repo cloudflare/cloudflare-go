@@ -22,8 +22,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewEmailSendingService] method instead.
 type EmailSendingService struct {
-	Options    []option.RequestOption
-	Subdomains *SubdomainService
+	Options      []option.RequestOption
+	Suppressions *SuppressionService
+	Subdomains   *SubdomainService
 }
 
 // NewEmailSendingService generates a new service that applies the given options to
@@ -32,6 +33,7 @@ type EmailSendingService struct {
 func NewEmailSendingService(opts ...option.RequestOption) (r *EmailSendingService) {
 	r = &EmailSendingService{}
 	r.Options = opts
+	r.Suppressions = NewSuppressionService(opts...)
 	r.Subdomains = NewSubdomainService(opts...)
 	return
 }

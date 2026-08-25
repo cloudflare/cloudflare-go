@@ -64,10 +64,9 @@ func TestMeetingNewWithOptionalParams(t *testing.T) {
 				RealtimekitBucketConfig: cloudflare.F(realtime_kit.MeetingNewParamsRecordingConfigRealtimekitBucketConfig{
 					Enabled: cloudflare.F(true),
 				}),
-				StorageConfig: cloudflare.F(realtime_kit.MeetingNewParamsRecordingConfigStorageConfig{
-					Type:       cloudflare.F(realtime_kit.MeetingNewParamsRecordingConfigStorageConfigTypeAws),
+				StorageConfig: cloudflare.F[realtime_kit.MeetingNewParamsRecordingConfigStorageConfigUnion](realtime_kit.MeetingNewParamsRecordingConfigStorageConfigObject{
 					AccessKey:  cloudflare.F("access_key"),
-					AuthMethod: cloudflare.F(realtime_kit.MeetingNewParamsRecordingConfigStorageConfigAuthMethodKey),
+					AuthMethod: cloudflare.F(realtime_kit.MeetingNewParamsRecordingConfigStorageConfigObjectAuthMethodKey),
 					Bucket:     cloudflare.F("bucket"),
 					Host:       cloudflare.F("host"),
 					Password:   cloudflare.F("password"),
@@ -76,6 +75,7 @@ func TestMeetingNewWithOptionalParams(t *testing.T) {
 					PrivateKey: cloudflare.F("private_key"),
 					Region:     cloudflare.F("us-east-1"),
 					Secret:     cloudflare.F("secret"),
+					Type:       cloudflare.F(realtime_kit.MeetingNewParamsRecordingConfigStorageConfigObjectTypeGcs),
 					Username:   cloudflare.F("username"),
 				}),
 				VideoConfig: cloudflare.F(realtime_kit.MeetingNewParamsRecordingConfigVideoConfig{
@@ -433,10 +433,9 @@ func TestMeetingReplaceMeetingByIDWithOptionalParams(t *testing.T) {
 				RealtimekitBucketConfig: cloudflare.F(realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigRealtimekitBucketConfig{
 					Enabled: cloudflare.F(true),
 				}),
-				StorageConfig: cloudflare.F(realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfig{
-					Type:       cloudflare.F(realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeAws),
+				StorageConfig: cloudflare.F[realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigUnion](realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObject{
 					AccessKey:  cloudflare.F("access_key"),
-					AuthMethod: cloudflare.F(realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigAuthMethodKey),
+					AuthMethod: cloudflare.F(realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethodKey),
 					Bucket:     cloudflare.F("bucket"),
 					Host:       cloudflare.F("host"),
 					Password:   cloudflare.F("password"),
@@ -445,6 +444,7 @@ func TestMeetingReplaceMeetingByIDWithOptionalParams(t *testing.T) {
 					PrivateKey: cloudflare.F("private_key"),
 					Region:     cloudflare.F("us-east-1"),
 					Secret:     cloudflare.F("secret"),
+					Type:       cloudflare.F(realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectTypeGcs),
 					Username:   cloudflare.F("username"),
 				}),
 				VideoConfig: cloudflare.F(realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfig{
@@ -527,10 +527,9 @@ func TestMeetingUpdateMeetingByIDWithOptionalParams(t *testing.T) {
 				RealtimekitBucketConfig: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigRealtimekitBucketConfig{
 					Enabled: cloudflare.F(true),
 				}),
-				StorageConfig: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfig{
-					Type:       cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeAws),
+				StorageConfig: cloudflare.F[realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigUnion](realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObject{
 					AccessKey:  cloudflare.F("access_key"),
-					AuthMethod: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigAuthMethodKey),
+					AuthMethod: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethodKey),
 					Bucket:     cloudflare.F("bucket"),
 					Host:       cloudflare.F("host"),
 					Password:   cloudflare.F("password"),
@@ -539,6 +538,7 @@ func TestMeetingUpdateMeetingByIDWithOptionalParams(t *testing.T) {
 					PrivateKey: cloudflare.F("private_key"),
 					Region:     cloudflare.F("us-east-1"),
 					Secret:     cloudflare.F("secret"),
+					Type:       cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectTypeGcs),
 					Username:   cloudflare.F("username"),
 				}),
 				VideoConfig: cloudflare.F(realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfig{

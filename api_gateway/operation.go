@@ -47,11 +47,8 @@ func NewOperationService(opts ...option.RequestOption) (r *OperationService) {
 	return
 }
 
-// Add one operation to a zone. Endpoints can contain path variables. Host, method,
-// endpoint will be normalized to a canoncial form when creating an operation and
-// must be unique on the zone. Inserting an operation that matches an existing one
-// will return the record of the already existing operation and update its
-// last_updated date.
+// Creates one web or API operation. The host, method, and path are normalized; an
+// existing matching operation is returned instead of duplicated.
 func (r *OperationService) New(ctx context.Context, params OperationNewParams, opts ...option.RequestOption) (res *OperationNewResponse, err error) {
 	var env OperationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -68,8 +65,8 @@ func (r *OperationService) New(ctx context.Context, params OperationNewParams, o
 	return res, nil
 }
 
-// Lists all API operations tracked by API Shield for a zone with pagination.
-// Returns operation details including method, path, and feature configurations.
+// Lists web and API operations tracked for the zone, including each operation's
+// method, path, and feature configuration.
 func (r *OperationService) List(ctx context.Context, params OperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[OperationListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -91,14 +88,14 @@ func (r *OperationService) List(ctx context.Context, params OperationListParams,
 	return res, nil
 }
 
-// Lists all API operations tracked by API Shield for a zone with pagination.
-// Returns operation details including method, path, and feature configurations.
+// Lists web and API operations tracked for the zone, including each operation's
+// method, path, and feature configuration.
 func (r *OperationService) ListAutoPaging(ctx context.Context, params OperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[OperationListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Removes a single API operation from API Shield endpoint management. The
-// operation will no longer be tracked or protected by API Shield rules.
+// Deletes a web or API operation from endpoint management so its feature
+// configuration is no longer tracked.
 func (r *OperationService) Delete(ctx context.Context, operationID string, body OperationDeleteParams, opts ...option.RequestOption) (res *OperationDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
@@ -114,11 +111,8 @@ func (r *OperationService) Delete(ctx context.Context, operationID string, body 
 	return res, err
 }
 
-// Add one or more operations to a zone. Endpoints can contain path variables.
-// Host, method, endpoint will be normalized to a canoncial form when creating an
-// operation and must be unique on the zone. Inserting an operation that matches an
-// existing one will return the record of the already existing operation and update
-// its last_updated date.
+// Creates one or more web or API operations. Hosts, methods, and paths are
+// normalized; an existing matching operation is returned instead of duplicated.
 func (r *OperationService) BulkNew(ctx context.Context, params OperationBulkNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[OperationBulkNewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -140,17 +134,13 @@ func (r *OperationService) BulkNew(ctx context.Context, params OperationBulkNewP
 	return res, nil
 }
 
-// Add one or more operations to a zone. Endpoints can contain path variables.
-// Host, method, endpoint will be normalized to a canoncial form when creating an
-// operation and must be unique on the zone. Inserting an operation that matches an
-// existing one will return the record of the already existing operation and update
-// its last_updated date.
+// Creates one or more web or API operations. Hosts, methods, and paths are
+// normalized; an existing matching operation is returned instead of duplicated.
 func (r *OperationService) BulkNewAutoPaging(ctx context.Context, params OperationBulkNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OperationBulkNewResponse] {
 	return pagination.NewSinglePageAutoPager(r.BulkNew(ctx, params, opts...))
 }
 
-// Bulk removes multiple API operations from API Shield endpoint management in a
-// single request. Efficient for cleaning up unused endpoints.
+// Deletes multiple web or API operations from endpoint management in one request.
 func (r *OperationService) BulkDelete(ctx context.Context, body OperationBulkDeleteParams, opts ...option.RequestOption) (res *OperationBulkDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.ZoneID.Value == "" {
@@ -162,8 +152,8 @@ func (r *OperationService) BulkDelete(ctx context.Context, body OperationBulkDel
 	return res, err
 }
 
-// Gets detailed information about a specific API operation in API Shield,
-// including its schema validation settings and traffic statistics.
+// Returns a web or API operation, including its schema validation settings and
+// requested feature data.
 func (r *OperationService) Get(ctx context.Context, operationID string, params OperationGetParams, opts ...option.RequestOption) (res *OperationGetResponse, err error) {
 	var env OperationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -788,7 +778,9 @@ type OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoAc
 	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// True if schema is Cloudflare-provided.
+	// Deprecated. Always false.
+	//
+	// Deprecated: deprecated
 	IsLearned bool `json:"is_learned"`
 	// Schema file name.
 	Name string                                                                                    `json:"name"`
@@ -1519,7 +1511,9 @@ type OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoA
 	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// True if schema is Cloudflare-provided.
+	// Deprecated. Always false.
+	//
+	// Deprecated: deprecated
 	IsLearned bool `json:"is_learned"`
 	// Schema file name.
 	Name string                                                                                     `json:"name"`
@@ -2204,7 +2198,9 @@ type OperationBulkNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaIn
 	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// True if schema is Cloudflare-provided.
+	// Deprecated. Always false.
+	//
+	// Deprecated: deprecated
 	IsLearned bool `json:"is_learned"`
 	// Schema file name.
 	Name string                                                                                        `json:"name"`
@@ -2893,7 +2889,9 @@ type OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoAc
 	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// True if schema is Cloudflare-provided.
+	// Deprecated. Always false.
+	//
+	// Deprecated: deprecated
 	IsLearned bool `json:"is_learned"`
 	// Schema file name.
 	Name string                                                                                    `json:"name"`

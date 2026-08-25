@@ -36,7 +36,11 @@ func NewDetectionService(opts ...option.RequestOption) (r *DetectionService) {
 	return
 }
 
-// Create user-defined detection pattern for Leaked Credential Checks.
+// Create a detection location for credentials that the default scan locations do
+// not cover, using Rules language expressions such as
+// `lookup_json_string(http.request.body.raw, "user")`. Only the username
+// expression is required, and Leaked Credential Checks must be enabled on the
+// zone.
 func (r *DetectionService) New(ctx context.Context, params DetectionNewParams, opts ...option.RequestOption) (res *DetectionNewResponse, err error) {
 	var env DetectionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +57,9 @@ func (r *DetectionService) New(ctx context.Context, params DetectionNewParams, o
 	return res, nil
 }
 
-// Update user-defined detection pattern for Leaked Credential Checks.
+// Update the username and password expressions of an existing detection location,
+// identified by its detection ID. Both expressions are overwritten, so omitting
+// the password expression clears it.
 func (r *DetectionService) Update(ctx context.Context, detectionID string, params DetectionUpdateParams, opts ...option.RequestOption) (res *DetectionUpdateResponse, err error) {
 	var env DetectionUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -74,7 +80,9 @@ func (r *DetectionService) Update(ctx context.Context, detectionID string, param
 	return res, nil
 }
 
-// List user-defined detection patterns for Leaked Credential Checks.
+// List the user-defined detection locations configured for Leaked Credential
+// Checks, each with its own identifier. A custom detection location tells the WAF
+// where to find the username and password in requests to your application.
 func (r *DetectionService) List(ctx context.Context, query DetectionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DetectionListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -96,12 +104,16 @@ func (r *DetectionService) List(ctx context.Context, query DetectionListParams, 
 	return res, nil
 }
 
-// List user-defined detection patterns for Leaked Credential Checks.
+// List the user-defined detection locations configured for Leaked Credential
+// Checks, each with its own identifier. A custom detection location tells the WAF
+// where to find the username and password in requests to your application.
 func (r *DetectionService) ListAutoPaging(ctx context.Context, query DetectionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DetectionListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Remove user-defined detection pattern for Leaked Credential Checks.
+// Delete a user-defined detection location, identified by its detection ID.
+// Incoming requests are then scanned using only the default scan locations and the
+// detection locations that remain.
 func (r *DetectionService) Delete(ctx context.Context, detectionID string, body DetectionDeleteParams, opts ...option.RequestOption) (res *DetectionDeleteResponse, err error) {
 	var env DetectionDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -122,7 +134,8 @@ func (r *DetectionService) Delete(ctx context.Context, detectionID string, body 
 	return res, nil
 }
 
-// Get user-defined detection pattern for Leaked Credential Checks.
+// Get the username and password expressions of a single user-defined detection
+// location, identified by its detection ID.
 func (r *DetectionService) Get(ctx context.Context, detectionID string, query DetectionGetParams, opts ...option.RequestOption) (res *DetectionGetResponse, err error) {
 	var env DetectionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

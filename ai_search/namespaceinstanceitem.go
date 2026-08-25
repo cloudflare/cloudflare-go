@@ -868,10 +868,11 @@ type NamespaceInstanceItemUploadResponse struct {
 	NextAction NamespaceInstanceItemUploadResponseNextAction               `json:"next_action" api:"required,nullable"`
 	// Identifies which data source this item belongs to. "builtin" for uploaded files,
 	// "{type}:{source}" for external sources, null for legacy items.
-	SourceID string                                    `json:"source_id" api:"required,nullable"`
-	Status   NamespaceInstanceItemUploadResponseStatus `json:"status" api:"required"`
-	Error    string                                    `json:"error"`
-	JSON     namespaceInstanceItemUploadResponseJSON   `json:"-"`
+	SourceID string                                       `json:"source_id" api:"required,nullable"`
+	Status   NamespaceInstanceItemUploadResponseStatus    `json:"status" api:"required"`
+	Error    string                                       `json:"error"`
+	Warnings []NamespaceInstanceItemUploadResponseWarning `json:"warnings"`
+	JSON     namespaceInstanceItemUploadResponseJSON      `json:"-"`
 }
 
 // namespaceInstanceItemUploadResponseJSON contains the JSON metadata for the
@@ -890,6 +891,7 @@ type namespaceInstanceItemUploadResponseJSON struct {
 	SourceID    apijson.Field
 	Status      apijson.Field
 	Error       apijson.Field
+	Warnings    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -960,6 +962,159 @@ const (
 func (r NamespaceInstanceItemUploadResponseStatus) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceItemUploadResponseStatusQueued, NamespaceInstanceItemUploadResponseStatusRunning, NamespaceInstanceItemUploadResponseStatusCompleted, NamespaceInstanceItemUploadResponseStatusError, NamespaceInstanceItemUploadResponseStatusSkipped, NamespaceInstanceItemUploadResponseStatusOutdated:
+		return true
+	}
+	return false
+}
+
+type NamespaceInstanceItemUploadResponseWarning struct {
+	Code         NamespaceInstanceItemUploadResponseWarningsCode         `json:"code" api:"required"`
+	Field        string                                                  `json:"field" api:"required"`
+	ExpectedType NamespaceInstanceItemUploadResponseWarningsExpectedType `json:"expected_type"`
+	JSON         namespaceInstanceItemUploadResponseWarningJSON          `json:"-"`
+	union        NamespaceInstanceItemUploadResponseWarningsUnion
+}
+
+// namespaceInstanceItemUploadResponseWarningJSON contains the JSON metadata for
+// the struct [NamespaceInstanceItemUploadResponseWarning]
+type namespaceInstanceItemUploadResponseWarningJSON struct {
+	Code         apijson.Field
+	Field        apijson.Field
+	ExpectedType apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r namespaceInstanceItemUploadResponseWarningJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *NamespaceInstanceItemUploadResponseWarning) UnmarshalJSON(data []byte) (err error) {
+	*r = NamespaceInstanceItemUploadResponseWarning{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [NamespaceInstanceItemUploadResponseWarningsUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [NamespaceInstanceItemUploadResponseWarningsObject],
+// [NamespaceInstanceItemUploadResponseWarningsObject].
+func (r NamespaceInstanceItemUploadResponseWarning) AsUnion() NamespaceInstanceItemUploadResponseWarningsUnion {
+	return r.union
+}
+
+// Union satisfied by [NamespaceInstanceItemUploadResponseWarningsObject] or
+// [NamespaceInstanceItemUploadResponseWarningsObject].
+type NamespaceInstanceItemUploadResponseWarningsUnion interface {
+	implementsNamespaceInstanceItemUploadResponseWarning()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*NamespaceInstanceItemUploadResponseWarningsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NamespaceInstanceItemUploadResponseWarningsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NamespaceInstanceItemUploadResponseWarningsObject{}),
+		},
+	)
+}
+
+type NamespaceInstanceItemUploadResponseWarningsObject struct {
+	Code         NamespaceInstanceItemUploadResponseWarningsObjectCode         `json:"code" api:"required"`
+	ExpectedType NamespaceInstanceItemUploadResponseWarningsObjectExpectedType `json:"expected_type" api:"required"`
+	Field        string                                                        `json:"field" api:"required"`
+	JSON         namespaceInstanceItemUploadResponseWarningsObjectJSON         `json:"-"`
+}
+
+// namespaceInstanceItemUploadResponseWarningsObjectJSON contains the JSON metadata
+// for the struct [NamespaceInstanceItemUploadResponseWarningsObject]
+type namespaceInstanceItemUploadResponseWarningsObjectJSON struct {
+	Code         apijson.Field
+	ExpectedType apijson.Field
+	Field        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceItemUploadResponseWarningsObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceItemUploadResponseWarningsObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r NamespaceInstanceItemUploadResponseWarningsObject) implementsNamespaceInstanceItemUploadResponseWarning() {
+}
+
+type NamespaceInstanceItemUploadResponseWarningsObjectCode string
+
+const (
+	NamespaceInstanceItemUploadResponseWarningsObjectCodeCustomMetadataValueNotIndexed NamespaceInstanceItemUploadResponseWarningsObjectCode = "custom_metadata_value_not_indexed"
+)
+
+func (r NamespaceInstanceItemUploadResponseWarningsObjectCode) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceItemUploadResponseWarningsObjectCodeCustomMetadataValueNotIndexed:
+		return true
+	}
+	return false
+}
+
+type NamespaceInstanceItemUploadResponseWarningsObjectExpectedType string
+
+const (
+	NamespaceInstanceItemUploadResponseWarningsObjectExpectedTypeText     NamespaceInstanceItemUploadResponseWarningsObjectExpectedType = "text"
+	NamespaceInstanceItemUploadResponseWarningsObjectExpectedTypeNumber   NamespaceInstanceItemUploadResponseWarningsObjectExpectedType = "number"
+	NamespaceInstanceItemUploadResponseWarningsObjectExpectedTypeBoolean  NamespaceInstanceItemUploadResponseWarningsObjectExpectedType = "boolean"
+	NamespaceInstanceItemUploadResponseWarningsObjectExpectedTypeDatetime NamespaceInstanceItemUploadResponseWarningsObjectExpectedType = "datetime"
+)
+
+func (r NamespaceInstanceItemUploadResponseWarningsObjectExpectedType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceItemUploadResponseWarningsObjectExpectedTypeText, NamespaceInstanceItemUploadResponseWarningsObjectExpectedTypeNumber, NamespaceInstanceItemUploadResponseWarningsObjectExpectedTypeBoolean, NamespaceInstanceItemUploadResponseWarningsObjectExpectedTypeDatetime:
+		return true
+	}
+	return false
+}
+
+type NamespaceInstanceItemUploadResponseWarningsCode string
+
+const (
+	NamespaceInstanceItemUploadResponseWarningsCodeCustomMetadataValueNotIndexed    NamespaceInstanceItemUploadResponseWarningsCode = "custom_metadata_value_not_indexed"
+	NamespaceInstanceItemUploadResponseWarningsCodeCustomMetadataFieldNotFilterable NamespaceInstanceItemUploadResponseWarningsCode = "custom_metadata_field_not_filterable"
+)
+
+func (r NamespaceInstanceItemUploadResponseWarningsCode) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceItemUploadResponseWarningsCodeCustomMetadataValueNotIndexed, NamespaceInstanceItemUploadResponseWarningsCodeCustomMetadataFieldNotFilterable:
+		return true
+	}
+	return false
+}
+
+type NamespaceInstanceItemUploadResponseWarningsExpectedType string
+
+const (
+	NamespaceInstanceItemUploadResponseWarningsExpectedTypeText     NamespaceInstanceItemUploadResponseWarningsExpectedType = "text"
+	NamespaceInstanceItemUploadResponseWarningsExpectedTypeNumber   NamespaceInstanceItemUploadResponseWarningsExpectedType = "number"
+	NamespaceInstanceItemUploadResponseWarningsExpectedTypeBoolean  NamespaceInstanceItemUploadResponseWarningsExpectedType = "boolean"
+	NamespaceInstanceItemUploadResponseWarningsExpectedTypeDatetime NamespaceInstanceItemUploadResponseWarningsExpectedType = "datetime"
+)
+
+func (r NamespaceInstanceItemUploadResponseWarningsExpectedType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceItemUploadResponseWarningsExpectedTypeText, NamespaceInstanceItemUploadResponseWarningsExpectedTypeNumber, NamespaceInstanceItemUploadResponseWarningsExpectedTypeBoolean, NamespaceInstanceItemUploadResponseWarningsExpectedTypeDatetime:
 		return true
 	}
 	return false

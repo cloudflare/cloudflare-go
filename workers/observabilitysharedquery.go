@@ -178,7 +178,8 @@ type ObservabilitySharedQueryGetResponseRun struct {
 	Query ObservabilitySharedQueryGetResponseRunQuery `json:"query" api:"required"`
 	// Current execution status of the query run.
 	Status ObservabilitySharedQueryGetResponseRunStatus `json:"status" api:"required"`
-	// Time range for the query execution
+	// Time range for the query execution. 'from' must be earlier than 'to'. No
+	// fractional milliseconds.
 	Timeframe ObservabilitySharedQueryGetResponseRunTimeframe `json:"timeframe" api:"required"`
 	// ID of the user who initiated the query run.
 	UserID string `json:"userId" api:"required"`
@@ -223,16 +224,16 @@ func (r observabilitySharedQueryGetResponseRunJSON) RawJSON() string {
 type ObservabilitySharedQueryGetResponseRunQuery struct {
 	ID string `json:"id" api:"required"`
 	// If the query wasn't explcitly saved
-	Adhoc       bool   `json:"adhoc" api:"required"`
-	Created     string `json:"created" api:"required"`
-	CreatedBy   string `json:"createdBy" api:"required"`
-	Description string `json:"description" api:"required,nullable"`
+	Adhoc       bool                                                    `json:"adhoc" api:"required"`
+	Created     ObservabilitySharedQueryGetResponseRunQueryCreatedUnion `json:"created" api:"required" format:"date-time"`
+	CreatedBy   string                                                  `json:"createdBy" api:"required"`
+	Description string                                                  `json:"description" api:"required,nullable"`
 	// Query name
-	Name       string                                                `json:"name" api:"required"`
-	Parameters ObservabilitySharedQueryGetResponseRunQueryParameters `json:"parameters" api:"required"`
-	Updated    string                                                `json:"updated" api:"required"`
-	UpdatedBy  string                                                `json:"updatedBy" api:"required"`
-	JSON       observabilitySharedQueryGetResponseRunQueryJSON       `json:"-"`
+	Name       string                                                  `json:"name" api:"required"`
+	Parameters ObservabilitySharedQueryGetResponseRunQueryParameters   `json:"parameters" api:"required"`
+	Updated    ObservabilitySharedQueryGetResponseRunQueryUpdatedUnion `json:"updated" api:"required" format:"date-time"`
+	UpdatedBy  string                                                  `json:"updatedBy" api:"required"`
+	JSON       observabilitySharedQueryGetResponseRunQueryJSON         `json:"-"`
 }
 
 // observabilitySharedQueryGetResponseRunQueryJSON contains the JSON metadata for
@@ -257,6 +258,26 @@ func (r *ObservabilitySharedQueryGetResponseRunQuery) UnmarshalJSON(data []byte)
 
 func (r observabilitySharedQueryGetResponseRunQueryJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [shared.UnionString] or [shared.UnionTime].
+type ObservabilitySharedQueryGetResponseRunQueryCreatedUnion interface {
+	ImplementsObservabilitySharedQueryGetResponseRunQueryCreatedUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilitySharedQueryGetResponseRunQueryCreatedUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionTime(shared.UnionTime{})),
+		},
+	)
 }
 
 type ObservabilitySharedQueryGetResponseRunQueryParameters struct {
@@ -1283,6 +1304,26 @@ func (r ObservabilitySharedQueryGetResponseRunQueryParametersOrderByOrder) IsKno
 	return false
 }
 
+// Union satisfied by [shared.UnionString] or [shared.UnionTime].
+type ObservabilitySharedQueryGetResponseRunQueryUpdatedUnion interface {
+	ImplementsObservabilitySharedQueryGetResponseRunQueryUpdatedUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilitySharedQueryGetResponseRunQueryUpdatedUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionTime(shared.UnionTime{})),
+		},
+	)
+}
+
 // Current execution status of the query run.
 type ObservabilitySharedQueryGetResponseRunStatus string
 
@@ -1299,12 +1340,13 @@ func (r ObservabilitySharedQueryGetResponseRunStatus) IsKnown() bool {
 	return false
 }
 
-// Time range for the query execution
+// Time range for the query execution. 'from' must be earlier than 'to'. No
+// fractional milliseconds.
 type ObservabilitySharedQueryGetResponseRunTimeframe struct {
-	// Start timestamp for the query timeframe (Unix timestamp in milliseconds)
-	From float64 `json:"from" api:"required"`
-	// End timestamp for the query timeframe (Unix timestamp in milliseconds)
-	To   float64                                             `json:"to" api:"required"`
+	// Start timestamp for the query timeframe. Unix timestamp in milliseconds
+	From int64 `json:"from" api:"required"`
+	// End timestamp for the query timeframe. Unix timestamp in milliseconds
+	To   int64                                               `json:"to" api:"required"`
 	JSON observabilitySharedQueryGetResponseRunTimeframeJSON `json:"-"`
 }
 
@@ -1394,7 +1436,7 @@ func (r observabilitySharedQueryGetResponseStatisticsJSON) RawJSON() string {
 }
 
 type ObservabilitySharedQueryGetResponseAgent struct {
-	// Pagination cursor derived from the first agent invocation in the run.
+	// Stable pagination cursor for this agent run.
 	ID string `json:"id" api:"required"`
 	// Distinct errors reported by spans in the run.
 	Errors []string `json:"errors" api:"required"`
@@ -3149,8 +3191,9 @@ type ObservabilitySharedQueryNewParams struct {
 	// previously saved query's parameters. When providing parameters inline, pass any
 	// identifier (e.g. an ad-hoc ID).
 	QueryID param.Field[string] `json:"queryId" api:"required"`
-	// Timeframe for the query using Unix timestamps in milliseconds. Narrower
-	// timeframes produce faster responses and more specific results.
+	// Timeframe for the query using Unix timestamps in milliseconds. 'from' must be
+	// earlier than 'to'. Narrower timeframes produce faster responses and more
+	// specific results.
 	Timeframe param.Field[ObservabilitySharedQueryNewParamsTimeframe] `json:"timeframe" api:"required"`
 	// When true, includes time-series data in the response.
 	Chart param.Field[bool] `json:"chart"`
@@ -3164,6 +3207,11 @@ type ObservabilitySharedQueryNewParams struct {
 	// When true, includes a comparison dataset from the previous time period of equal
 	// length.
 	Compare param.Field[bool] `json:"compare"`
+	// Value-axis bucketing for chartType 'distribution'. Omitted or 'log': geometric
+	// buckets, best for heavy-tailed latency. 'linear': fixed-width buckets, clearer
+	// for narrow or additive ranges. Ignored for other chartTypes. The response echoes
+	// the scheme used in distribution.bucketMode.
+	DistributionScale param.Field[ObservabilitySharedQueryNewParamsDistributionScale] `json:"distributionScale"`
 	// When true, executes the query without persisting the results. Useful for
 	// validation or previewing.
 	Dry param.Field[bool] `json:"dry"`
@@ -3202,13 +3250,14 @@ func (r ObservabilitySharedQueryNewParams) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-// Timeframe for the query using Unix timestamps in milliseconds. Narrower
-// timeframes produce faster responses and more specific results.
+// Timeframe for the query using Unix timestamps in milliseconds. 'from' must be
+// earlier than 'to'. Narrower timeframes produce faster responses and more
+// specific results.
 type ObservabilitySharedQueryNewParamsTimeframe struct {
-	// Start timestamp for the query timeframe (Unix timestamp in milliseconds)
-	From param.Field[float64] `json:"from" api:"required"`
-	// End timestamp for the query timeframe (Unix timestamp in milliseconds)
-	To param.Field[float64] `json:"to" api:"required"`
+	// Start timestamp for the query timeframe. Unix timestamp in milliseconds
+	From param.Field[int64] `json:"from" api:"required"`
+	// End timestamp for the query timeframe. Unix timestamp in milliseconds
+	To param.Field[int64] `json:"to" api:"required"`
 }
 
 func (r ObservabilitySharedQueryNewParamsTimeframe) MarshalJSON() (data []byte, err error) {
@@ -3233,6 +3282,25 @@ const (
 func (r ObservabilitySharedQueryNewParamsChartType) IsKnown() bool {
 	switch r {
 	case ObservabilitySharedQueryNewParamsChartTypeTimeseriesAndAggregate, ObservabilitySharedQueryNewParamsChartTypeTimeseries, ObservabilitySharedQueryNewParamsChartTypeAggregate, ObservabilitySharedQueryNewParamsChartTypeDistribution:
+		return true
+	}
+	return false
+}
+
+// Value-axis bucketing for chartType 'distribution'. Omitted or 'log': geometric
+// buckets, best for heavy-tailed latency. 'linear': fixed-width buckets, clearer
+// for narrow or additive ranges. Ignored for other chartTypes. The response echoes
+// the scheme used in distribution.bucketMode.
+type ObservabilitySharedQueryNewParamsDistributionScale string
+
+const (
+	ObservabilitySharedQueryNewParamsDistributionScaleLog    ObservabilitySharedQueryNewParamsDistributionScale = "log"
+	ObservabilitySharedQueryNewParamsDistributionScaleLinear ObservabilitySharedQueryNewParamsDistributionScale = "linear"
+)
+
+func (r ObservabilitySharedQueryNewParamsDistributionScale) IsKnown() bool {
+	switch r {
+	case ObservabilitySharedQueryNewParamsDistributionScaleLog, ObservabilitySharedQueryNewParamsDistributionScaleLinear:
 		return true
 	}
 	return false
@@ -3283,7 +3351,7 @@ type ObservabilitySharedQueryNewParamsParametersCalculation struct {
 	// Custom label for this calculation in the results. Useful for distinguishing
 	// multiple calculations.
 	Alias param.Field[string] `json:"alias"`
-	// Field name to calculate over. Must exist in the data — verify with the keys
+	// Field name to calculate over. Must exist in the data. Verify with the keys
 	// endpoint. Required for every operator except `count`, which aggregates whole
 	// rows and may omit it.
 	Key param.Field[string] `json:"key"`
@@ -3314,7 +3382,7 @@ type ObservabilitySharedQueryNewParamsParametersCalculationsObject struct {
 	// Custom label for this calculation in the results. Useful for distinguishing
 	// multiple calculations.
 	Alias param.Field[string] `json:"alias"`
-	// Field name to calculate over. Must exist in the data — verify with the keys
+	// Field name to calculate over. Must exist in the data. Verify with the keys
 	// endpoint. Required for every operator except `count`, which aggregates whole
 	// rows and may omit it.
 	Key param.Field[string] `json:"key"`

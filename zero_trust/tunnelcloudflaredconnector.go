@@ -35,7 +35,9 @@ func NewTunnelCloudflaredConnectorService(opts ...option.RequestOption) (r *Tunn
 	return
 }
 
-// Fetches connector and connection details for a Cloudflare Tunnel.
+// Retrieves a connector and its connection details for a Cloudflare Tunnel,
+// including its cloudflared version, architecture, and connected Cloudflare
+// locations.
 func (r *TunnelCloudflaredConnectorService) Get(ctx context.Context, tunnelID string, connectorID string, query TunnelCloudflaredConnectorGetParams, opts ...option.RequestOption) (res *Client, err error) {
 	var env TunnelCloudflaredConnectorGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

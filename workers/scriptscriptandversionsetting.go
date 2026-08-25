@@ -224,6 +224,9 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format ScriptScriptAndVersionSettingEditResponseBindingsFormat `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity ScriptScriptAndVersionSettingEditResponseBindingsIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -310,6 +313,7 @@ type scriptScriptAndVersionSettingEditResponseBindingJSON struct {
 	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
+	Identity                    apijson.Field
 	IndexName                   apijson.Field
 	InstanceName                apijson.Field
 	Json                        apijson.Field
@@ -2512,6 +2516,9 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetwo
 	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentity `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -2526,6 +2533,7 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetwo
 type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
+	Identity    apijson.Field
 	NetworkID   apijson.Field
 	TunnelID    apijson.Field
 	raw         string
@@ -2553,6 +2561,22 @@ const (
 func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -2622,6 +2646,22 @@ const (
 func (r ScriptScriptAndVersionSettingEditResponseBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditResponseBindingsFormatRaw, ScriptScriptAndVersionSettingEditResponseBindingsFormatPkcs8, ScriptScriptAndVersionSettingEditResponseBindingsFormatSpki, ScriptScriptAndVersionSettingEditResponseBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptScriptAndVersionSettingEditResponseBindingsIdentity string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsIdentityRuntimeEmailAlpha ScriptScriptAndVersionSettingEditResponseBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsIdentity) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -3804,6 +3844,8 @@ type ScriptScriptAndVersionSettingEditResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptScriptAndVersionSettingEditResponseObservabilityLogs `json:"logs" api:"nullable"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces ScriptScriptAndVersionSettingEditResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   scriptScriptAndVersionSettingEditResponseObservabilityJSON   `json:"-"`
@@ -3812,12 +3854,13 @@ type ScriptScriptAndVersionSettingEditResponseObservability struct {
 // scriptScriptAndVersionSettingEditResponseObservabilityJSON contains the JSON
 // metadata for the struct [ScriptScriptAndVersionSettingEditResponseObservability]
 type scriptScriptAndVersionSettingEditResponseObservabilityJSON struct {
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Logs             apijson.Field
-	Traces           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptScriptAndVersionSettingEditResponseObservability) UnmarshalJSON(data []byte) (err error) {
@@ -3877,11 +3920,11 @@ type ScriptScriptAndVersionSettingEditResponseObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
-	PropagationPolicy ScriptScriptAndVersionSettingEditResponseObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy ScriptScriptAndVersionSettingEditResponseObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
 	JSON              scriptScriptAndVersionSettingEditResponseObservabilityTracesJSON              `json:"-"`
 }
 
@@ -3907,10 +3950,10 @@ func (r scriptScriptAndVersionSettingEditResponseObservabilityTracesJSON) RawJSO
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type ScriptScriptAndVersionSettingEditResponseObservabilityTracesPropagationPolicy string
 
 const (
@@ -4365,6 +4408,9 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format ScriptScriptAndVersionSettingGetResponseBindingsFormat `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity ScriptScriptAndVersionSettingGetResponseBindingsIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -4451,6 +4497,7 @@ type scriptScriptAndVersionSettingGetResponseBindingJSON struct {
 	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
+	Identity                    apijson.Field
 	IndexName                   apijson.Field
 	InstanceName                apijson.Field
 	Json                        apijson.Field
@@ -6653,6 +6700,9 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetwor
 	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentity `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -6667,6 +6717,7 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetwor
 type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
+	Identity    apijson.Field
 	NetworkID   apijson.Field
 	TunnelID    apijson.Field
 	raw         string
@@ -6694,6 +6745,22 @@ const (
 func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -6763,6 +6830,22 @@ const (
 func (r ScriptScriptAndVersionSettingGetResponseBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingGetResponseBindingsFormatRaw, ScriptScriptAndVersionSettingGetResponseBindingsFormatPkcs8, ScriptScriptAndVersionSettingGetResponseBindingsFormatSpki, ScriptScriptAndVersionSettingGetResponseBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptScriptAndVersionSettingGetResponseBindingsIdentity string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsIdentityRuntimeEmailAlpha ScriptScriptAndVersionSettingGetResponseBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsIdentity) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -7945,6 +8028,8 @@ type ScriptScriptAndVersionSettingGetResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptScriptAndVersionSettingGetResponseObservabilityLogs `json:"logs" api:"nullable"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces ScriptScriptAndVersionSettingGetResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   scriptScriptAndVersionSettingGetResponseObservabilityJSON   `json:"-"`
@@ -7953,12 +8038,13 @@ type ScriptScriptAndVersionSettingGetResponseObservability struct {
 // scriptScriptAndVersionSettingGetResponseObservabilityJSON contains the JSON
 // metadata for the struct [ScriptScriptAndVersionSettingGetResponseObservability]
 type scriptScriptAndVersionSettingGetResponseObservabilityJSON struct {
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Logs             apijson.Field
-	Traces           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptScriptAndVersionSettingGetResponseObservability) UnmarshalJSON(data []byte) (err error) {
@@ -8018,11 +8104,11 @@ type ScriptScriptAndVersionSettingGetResponseObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
-	PropagationPolicy ScriptScriptAndVersionSettingGetResponseObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy ScriptScriptAndVersionSettingGetResponseObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
 	JSON              scriptScriptAndVersionSettingGetResponseObservabilityTracesJSON              `json:"-"`
 }
 
@@ -8048,10 +8134,10 @@ func (r scriptScriptAndVersionSettingGetResponseObservabilityTracesJSON) RawJSON
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type ScriptScriptAndVersionSettingGetResponseObservabilityTracesPropagationPolicy string
 
 const (
@@ -8481,6 +8567,9 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat] `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsIdentity] `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -9851,6 +9940,9 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVP
 	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentity] `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
@@ -9875,6 +9967,22 @@ const (
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -9944,6 +10052,22 @@ const (
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatRaw, ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatPkcs8, ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatSpki, ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsIdentity string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsIdentityRuntimeEmailAlpha ScriptScriptAndVersionSettingEditParamsSettingsBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsIdentity) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -10776,6 +10900,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsObservability struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs] `json:"logs"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString param.Field[bool] `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservabilityTraces] `json:"traces"`
 }
@@ -10815,10 +10941,10 @@ type ScriptScriptAndVersionSettingEditParamsSettingsObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist param.Field[bool] `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
 	PropagationPolicy param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservabilityTracesPropagationPolicy] `json:"propagation_policy"`
 }
 
@@ -10827,10 +10953,10 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsObservabilityTraces) Mars
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type ScriptScriptAndVersionSettingEditParamsSettingsObservabilityTracesPropagationPolicy string
 
 const (

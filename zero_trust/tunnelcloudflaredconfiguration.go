@@ -35,7 +35,8 @@ func NewTunnelCloudflaredConfigurationService(opts ...option.RequestOption) (r *
 	return
 }
 
-// Adds or updates the configuration for a remotely-managed tunnel.
+// Replaces the configuration for a remotely managed Cloudflare Tunnel, including
+// its ingress rules and origin request settings.
 func (r *TunnelCloudflaredConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelCloudflaredConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelCloudflaredConfigurationUpdateResponse, err error) {
 	var env TunnelCloudflaredConfigurationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +57,7 @@ func (r *TunnelCloudflaredConfigurationService) Update(ctx context.Context, tunn
 	return res, nil
 }
 
-// Gets the configuration for a remotely-managed tunnel
+// Retrieves the configuration for a remotely managed Cloudflare Tunnel.
 func (r *TunnelCloudflaredConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelCloudflaredConfigurationGetParams, opts ...option.RequestOption) (res *TunnelCloudflaredConfigurationGetResponse, err error) {
 	var env TunnelCloudflaredConfigurationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

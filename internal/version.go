@@ -2,4 +2,5 @@
 
 package internal
 
-const PackageVersion = "7.7.0" // x-release-please-version
+const PackageVersion = "7.9.0" // x-release-please-version
+const APIVersion = ""

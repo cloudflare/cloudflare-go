@@ -39,7 +39,7 @@ func NewCookieService(opts ...option.RequestOption) (r *CookieService) {
 	return
 }
 
-// Lists all cookies collected by Page Shield.
+// Lists cookies detected on the zone.
 func (r *CookieService) List(ctx context.Context, params CookieListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CookieListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -61,12 +61,12 @@ func (r *CookieService) List(ctx context.Context, params CookieListParams, opts 
 	return res, nil
 }
 
-// Lists all cookies collected by Page Shield.
+// Lists cookies detected on the zone.
 func (r *CookieService) ListAutoPaging(ctx context.Context, params CookieListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CookieListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Fetches a cookie collected by Page Shield by cookie ID.
+// Returns a cookie detected on the zone by cookie ID.
 func (r *CookieService) Get(ctx context.Context, cookieID string, query CookieGetParams, opts ...option.RequestOption) (res *CookieGetResponse, err error) {
 	var env CookieGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

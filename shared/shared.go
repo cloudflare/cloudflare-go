@@ -317,6 +317,14 @@ type CloudflareTunnelConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	//
+	// Deprecated: This functionality has been removed. The is_pending_reconnect field
+	// will now always report false.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -329,15 +337,16 @@ type CloudflareTunnelConnection struct {
 // cloudflareTunnelConnectionJSON contains the JSON metadata for the struct
 // [CloudflareTunnelConnection]
 type cloudflareTunnelConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *CloudflareTunnelConnection) UnmarshalJSON(data []byte) (err error) {

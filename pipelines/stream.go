@@ -106,10 +106,10 @@ func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListPar
 }
 
 // Delete Stream in Account.
-func (r *StreamService) Delete(ctx context.Context, streamID string, params StreamDeleteParams, opts ...option.RequestOption) (res *StreamDeleteResponse, err error) {
+func (r *StreamService) Delete(ctx context.Context, streamID string, body StreamDeleteParams, opts ...option.RequestOption) (res *StreamDeleteResponse, err error) {
 	var env StreamDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -117,8 +117,8 @@ func (r *StreamService) Delete(ctx context.Context, streamID string, params Stre
 		err = errors.New("missing required stream_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/pipelines/v1/streams/%s", params.AccountID, streamID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pipelines/v1/streams/%s", body.AccountID, streamID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -5332,17 +5332,6 @@ func (r StreamListParams) URLQuery() (v url.Values) {
 type StreamDeleteParams struct {
 	// Specifies the public ID of the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Deprecated: Delete stream forcefully, including deleting any dependent
-	// pipelines.
-	Force param.Field[string] `query:"force"`
-}
-
-// URLQuery serializes [StreamDeleteParams]'s query parameters as `url.Values`.
-func (r StreamDeleteParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type StreamDeleteResponseEnvelope struct {

@@ -467,6 +467,9 @@ type VersionBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format VersionBindingsFormat `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity VersionBindingsIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -552,6 +555,7 @@ type versionBindingJSON struct {
 	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
+	Identity                    apijson.Field
 	IndexName                   apijson.Field
 	InstanceName                apijson.Field
 	Json                        apijson.Field
@@ -2681,6 +2685,9 @@ type VersionBindingsWorkersBindingKindVPCNetwork struct {
 	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type VersionBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity VersionBindingsWorkersBindingKindVPCNetworkIdentity `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -2694,6 +2701,7 @@ type VersionBindingsWorkersBindingKindVPCNetwork struct {
 type versionBindingsWorkersBindingKindVPCNetworkJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
+	Identity    apijson.Field
 	NetworkID   apijson.Field
 	TunnelID    apijson.Field
 	raw         string
@@ -2720,6 +2728,22 @@ const (
 func (r VersionBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case VersionBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type VersionBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	VersionBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha VersionBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r VersionBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -2789,6 +2813,22 @@ const (
 func (r VersionBindingsFormat) IsKnown() bool {
 	switch r {
 	case VersionBindingsFormatRaw, VersionBindingsFormatPkcs8, VersionBindingsFormatSpki, VersionBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type VersionBindingsIdentity string
+
+const (
+	VersionBindingsIdentityRuntimeEmailAlpha VersionBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r VersionBindingsIdentity) IsKnown() bool {
+	switch r {
+	case VersionBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -4465,6 +4505,9 @@ type VersionBindingParam struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[VersionBindingsFormat] `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[VersionBindingsIdentity] `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -5185,6 +5228,9 @@ type VersionBindingsWorkersBindingKindVPCNetworkParam struct {
 	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[VersionBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[VersionBindingsWorkersBindingKindVPCNetworkIdentity] `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`

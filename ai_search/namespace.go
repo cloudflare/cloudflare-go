@@ -1826,7 +1826,7 @@ type NamespaceChatCompletionsParams struct {
 	AccountID       param.Field[string]                                        `path:"account_id" api:"required"`
 	AISearchOptions param.Field[NamespaceChatCompletionsParamsAISearchOptions] `json:"ai_search_options" api:"required"`
 	Messages        param.Field[[]NamespaceChatCompletionsParamsMessage]       `json:"messages" api:"required"`
-	Model           param.Field[NamespaceChatCompletionsParamsModel]           `json:"model"`
+	Model           param.Field[string]                                        `json:"model"`
 	Stream          param.Field[bool]                                          `json:"stream"`
 }
 
@@ -1873,81 +1873,23 @@ func (r NamespaceChatCompletionsParamsAISearchOptionsCacheCacheThreshold) IsKnow
 }
 
 type NamespaceChatCompletionsParamsAISearchOptionsQueryRewrite struct {
-	Enabled       param.Field[bool]                                                           `json:"enabled"`
-	Model         param.Field[NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel] `json:"model"`
-	RewritePrompt param.Field[string]                                                         `json:"rewrite_prompt"`
+	Enabled       param.Field[bool]   `json:"enabled"`
+	Model         param.Field[string] `json:"model"`
+	RewritePrompt param.Field[string] `json:"rewrite_prompt"`
 }
 
 func (r NamespaceChatCompletionsParamsAISearchOptionsQueryRewrite) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel string
-
-const (
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash                   NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast         NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8          NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct       NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8                 NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct            NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt                  NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-3-12b-it"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt               NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5                  NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet              NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-7-sonnet"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4                NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-sonnet-4"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4                  NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-opus-4"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku               NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-5-haiku"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct        NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking        NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b                  NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-3.3-70b"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct     NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b                    NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/gpt-oss-120b"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash          NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro            NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelGrokGrok4                             NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "grok/grok-4"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile             NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.3-70b-versatile"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant                NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.1-8b-instant"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5                            NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini                        NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-mini"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano                        NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-nano"
-	NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelEmpty                                 NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel = ""
-)
-
-func (r NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModel) IsKnown() bool {
-	switch r {
-	case NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelGrokGrok4, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano, NamespaceChatCompletionsParamsAISearchOptionsQueryRewriteModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceChatCompletionsParamsAISearchOptionsReranking struct {
-	Enabled        param.Field[bool]                                                        `json:"enabled"`
-	MatchThreshold param.Field[float64]                                                     `json:"match_threshold"`
-	Model          param.Field[NamespaceChatCompletionsParamsAISearchOptionsRerankingModel] `json:"model"`
+	Enabled        param.Field[bool]    `json:"enabled"`
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	Model          param.Field[string]  `json:"model"`
 }
 
 func (r NamespaceChatCompletionsParamsAISearchOptionsReranking) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type NamespaceChatCompletionsParamsAISearchOptionsRerankingModel string
-
-const (
-	NamespaceChatCompletionsParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase NamespaceChatCompletionsParamsAISearchOptionsRerankingModel = "@cf/baai/bge-reranker-base"
-	NamespaceChatCompletionsParamsAISearchOptionsRerankingModelEmpty                 NamespaceChatCompletionsParamsAISearchOptionsRerankingModel = ""
-)
-
-func (r NamespaceChatCompletionsParamsAISearchOptionsRerankingModel) IsKnown() bool {
-	switch r {
-	case NamespaceChatCompletionsParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase, NamespaceChatCompletionsParamsAISearchOptionsRerankingModelEmpty:
-		return true
-	}
-	return false
 }
 
 type NamespaceChatCompletionsParamsAISearchOptionsRetrieval struct {
@@ -2166,49 +2108,6 @@ func (r NamespaceChatCompletionsParamsMessagesRole) IsKnown() bool {
 	return false
 }
 
-type NamespaceChatCompletionsParamsModel string
-
-const (
-	NamespaceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceChatCompletionsParamsModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceChatCompletionsParamsModelCfZaiOrgGlm4_7Flash                   NamespaceChatCompletionsParamsModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFast         NamespaceChatCompletionsParamsModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFp8          NamespaceChatCompletionsParamsModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceChatCompletionsParamsModelCfMetaLlama4Scout17b16eInstruct       NamespaceChatCompletionsParamsModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceChatCompletionsParamsModelCfQwenQwen3_30bA3bFp8                 NamespaceChatCompletionsParamsModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceChatCompletionsParamsModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceChatCompletionsParamsModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceChatCompletionsParamsModelCfMoonshotaiKimiK2Instruct            NamespaceChatCompletionsParamsModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceChatCompletionsParamsModelCfGoogleGemma3_12bIt                  NamespaceChatCompletionsParamsModel = "@cf/google/gemma-3-12b-it"
-	NamespaceChatCompletionsParamsModelCfGoogleGemma4_26bA4bIt               NamespaceChatCompletionsParamsModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceChatCompletionsParamsModelCfMoonshotaiKimiK2_5                  NamespaceChatCompletionsParamsModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceChatCompletionsParamsModelAnthropicClaude3_7Sonnet              NamespaceChatCompletionsParamsModel = "anthropic/claude-3-7-sonnet"
-	NamespaceChatCompletionsParamsModelAnthropicClaudeSonnet4                NamespaceChatCompletionsParamsModel = "anthropic/claude-sonnet-4"
-	NamespaceChatCompletionsParamsModelAnthropicClaudeOpus4                  NamespaceChatCompletionsParamsModel = "anthropic/claude-opus-4"
-	NamespaceChatCompletionsParamsModelAnthropicClaude3_5Haiku               NamespaceChatCompletionsParamsModel = "anthropic/claude-3-5-haiku"
-	NamespaceChatCompletionsParamsModelCerebrasQwen3_235bA22bInstruct        NamespaceChatCompletionsParamsModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceChatCompletionsParamsModelCerebrasQwen3_235bA22bThinking        NamespaceChatCompletionsParamsModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceChatCompletionsParamsModelCerebrasLlama3_3_70b                  NamespaceChatCompletionsParamsModel = "cerebras/llama-3.3-70b"
-	NamespaceChatCompletionsParamsModelCerebrasLlama4Maverick17b128eInstruct NamespaceChatCompletionsParamsModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceChatCompletionsParamsModelCerebrasLlama4Scout17b16eInstruct     NamespaceChatCompletionsParamsModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceChatCompletionsParamsModelCerebrasGptOSs120b                    NamespaceChatCompletionsParamsModel = "cerebras/gpt-oss-120b"
-	NamespaceChatCompletionsParamsModelGoogleAIStudioGemini2_5Flash          NamespaceChatCompletionsParamsModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceChatCompletionsParamsModelGoogleAIStudioGemini2_5Pro            NamespaceChatCompletionsParamsModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceChatCompletionsParamsModelGrokGrok4                             NamespaceChatCompletionsParamsModel = "grok/grok-4"
-	NamespaceChatCompletionsParamsModelGroqLlama3_3_70bVersatile             NamespaceChatCompletionsParamsModel = "groq/llama-3.3-70b-versatile"
-	NamespaceChatCompletionsParamsModelGroqLlama3_1_8bInstant                NamespaceChatCompletionsParamsModel = "groq/llama-3.1-8b-instant"
-	NamespaceChatCompletionsParamsModelOpenAIGpt5                            NamespaceChatCompletionsParamsModel = "openai/gpt-5"
-	NamespaceChatCompletionsParamsModelOpenAIGpt5Mini                        NamespaceChatCompletionsParamsModel = "openai/gpt-5-mini"
-	NamespaceChatCompletionsParamsModelOpenAIGpt5Nano                        NamespaceChatCompletionsParamsModel = "openai/gpt-5-nano"
-	NamespaceChatCompletionsParamsModelEmpty                                 NamespaceChatCompletionsParamsModel = ""
-)
-
-func (r NamespaceChatCompletionsParamsModel) IsKnown() bool {
-	switch r {
-	case NamespaceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceChatCompletionsParamsModelCfZaiOrgGlm4_7Flash, NamespaceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFast, NamespaceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFp8, NamespaceChatCompletionsParamsModelCfMetaLlama4Scout17b16eInstruct, NamespaceChatCompletionsParamsModelCfQwenQwen3_30bA3bFp8, NamespaceChatCompletionsParamsModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceChatCompletionsParamsModelCfMoonshotaiKimiK2Instruct, NamespaceChatCompletionsParamsModelCfGoogleGemma3_12bIt, NamespaceChatCompletionsParamsModelCfGoogleGemma4_26bA4bIt, NamespaceChatCompletionsParamsModelCfMoonshotaiKimiK2_5, NamespaceChatCompletionsParamsModelAnthropicClaude3_7Sonnet, NamespaceChatCompletionsParamsModelAnthropicClaudeSonnet4, NamespaceChatCompletionsParamsModelAnthropicClaudeOpus4, NamespaceChatCompletionsParamsModelAnthropicClaude3_5Haiku, NamespaceChatCompletionsParamsModelCerebrasQwen3_235bA22bInstruct, NamespaceChatCompletionsParamsModelCerebrasQwen3_235bA22bThinking, NamespaceChatCompletionsParamsModelCerebrasLlama3_3_70b, NamespaceChatCompletionsParamsModelCerebrasLlama4Maverick17b128eInstruct, NamespaceChatCompletionsParamsModelCerebrasLlama4Scout17b16eInstruct, NamespaceChatCompletionsParamsModelCerebrasGptOSs120b, NamespaceChatCompletionsParamsModelGoogleAIStudioGemini2_5Flash, NamespaceChatCompletionsParamsModelGoogleAIStudioGemini2_5Pro, NamespaceChatCompletionsParamsModelGrokGrok4, NamespaceChatCompletionsParamsModelGroqLlama3_3_70bVersatile, NamespaceChatCompletionsParamsModelGroqLlama3_1_8bInstant, NamespaceChatCompletionsParamsModelOpenAIGpt5, NamespaceChatCompletionsParamsModelOpenAIGpt5Mini, NamespaceChatCompletionsParamsModelOpenAIGpt5Nano, NamespaceChatCompletionsParamsModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceReadParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
@@ -2307,81 +2206,23 @@ func (r NamespaceSearchParamsAISearchOptionsCacheCacheThreshold) IsKnown() bool 
 }
 
 type NamespaceSearchParamsAISearchOptionsQueryRewrite struct {
-	Enabled       param.Field[bool]                                                  `json:"enabled"`
-	Model         param.Field[NamespaceSearchParamsAISearchOptionsQueryRewriteModel] `json:"model"`
-	RewritePrompt param.Field[string]                                                `json:"rewrite_prompt"`
+	Enabled       param.Field[bool]   `json:"enabled"`
+	Model         param.Field[string] `json:"model"`
+	RewritePrompt param.Field[string] `json:"rewrite_prompt"`
 }
 
 func (r NamespaceSearchParamsAISearchOptionsQueryRewrite) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type NamespaceSearchParamsAISearchOptionsQueryRewriteModel string
-
-const (
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash                   NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast         NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8          NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct       NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8                 NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct            NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt                  NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-3-12b-it"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt               NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5                  NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet              NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-7-sonnet"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4                NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-sonnet-4"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4                  NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-opus-4"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku               NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-5-haiku"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct        NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking        NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b                  NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-3.3-70b"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct     NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b                    NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/gpt-oss-120b"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash          NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro            NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelGrokGrok4                             NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "grok/grok-4"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile             NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.3-70b-versatile"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant                NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.1-8b-instant"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5                            NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini                        NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-mini"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano                        NamespaceSearchParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-nano"
-	NamespaceSearchParamsAISearchOptionsQueryRewriteModelEmpty                                 NamespaceSearchParamsAISearchOptionsQueryRewriteModel = ""
-)
-
-func (r NamespaceSearchParamsAISearchOptionsQueryRewriteModel) IsKnown() bool {
-	switch r {
-	case NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5, NamespaceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet, NamespaceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4, NamespaceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4, NamespaceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct, NamespaceSearchParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b, NamespaceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash, NamespaceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro, NamespaceSearchParamsAISearchOptionsQueryRewriteModelGrokGrok4, NamespaceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile, NamespaceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant, NamespaceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5, NamespaceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini, NamespaceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano, NamespaceSearchParamsAISearchOptionsQueryRewriteModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceSearchParamsAISearchOptionsReranking struct {
-	Enabled        param.Field[bool]                                               `json:"enabled"`
-	MatchThreshold param.Field[float64]                                            `json:"match_threshold"`
-	Model          param.Field[NamespaceSearchParamsAISearchOptionsRerankingModel] `json:"model"`
+	Enabled        param.Field[bool]    `json:"enabled"`
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	Model          param.Field[string]  `json:"model"`
 }
 
 func (r NamespaceSearchParamsAISearchOptionsReranking) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type NamespaceSearchParamsAISearchOptionsRerankingModel string
-
-const (
-	NamespaceSearchParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase NamespaceSearchParamsAISearchOptionsRerankingModel = "@cf/baai/bge-reranker-base"
-	NamespaceSearchParamsAISearchOptionsRerankingModelEmpty                 NamespaceSearchParamsAISearchOptionsRerankingModel = ""
-)
-
-func (r NamespaceSearchParamsAISearchOptionsRerankingModel) IsKnown() bool {
-	switch r {
-	case NamespaceSearchParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase, NamespaceSearchParamsAISearchOptionsRerankingModelEmpty:
-		return true
-	}
-	return false
 }
 
 type NamespaceSearchParamsAISearchOptionsRetrieval struct {

@@ -117,7 +117,7 @@ func TestSinkListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSinkDeleteWithOptionalParams(t *testing.T) {
+func TestSinkDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -136,7 +136,6 @@ func TestSinkDeleteWithOptionalParams(t *testing.T) {
 		"0223105f4ecef8ad9ca31a8372d0c353",
 		pipelines.SinkDeleteParams{
 			AccountID: cloudflare.F("0123105f4ecef8ad9ca31a8372d0c353"),
-			Force:     cloudflare.F("force"),
 		},
 	)
 	if err != nil {

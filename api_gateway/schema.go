@@ -36,7 +36,8 @@ func NewSchemaService(opts ...option.RequestOption) (r *SchemaService) {
 	return
 }
 
-// Retrieves API operations and their features exported as OpenAPI schemas.
+// Returns tracked web and API operations and their feature configuration rendered
+// as OpenAPI schemas.
 func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) (res *SchemaListResponse, err error) {
 	var env SchemaListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

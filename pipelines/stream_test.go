@@ -143,7 +143,7 @@ func TestStreamListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestStreamDeleteWithOptionalParams(t *testing.T) {
+func TestStreamDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -162,7 +162,6 @@ func TestStreamDeleteWithOptionalParams(t *testing.T) {
 		"033e105f4ecef8ad9ca31a8372d0c353",
 		pipelines.StreamDeleteParams{
 			AccountID: cloudflare.F("0123105f4ecef8ad9ca31a8372d0c353"),
-			Force:     cloudflare.F("force"),
 		},
 	)
 	if err != nil {

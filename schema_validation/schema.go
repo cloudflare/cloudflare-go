@@ -39,8 +39,8 @@ func NewSchemaService(opts ...option.RequestOption) (r *SchemaService) {
 	return
 }
 
-// Uploads a new OpenAPI schema for API Shield schema validation. The schema
-// defines expected request/response formats for API endpoints.
+// Uploads an OpenAPI schema that defines expected request formats for API
+// operations.
 func (r *SchemaService) New(ctx context.Context, params SchemaNewParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +57,7 @@ func (r *SchemaService) New(ctx context.Context, params SchemaNewParams, opts ..
 	return res, nil
 }
 
-// Lists all OpenAPI schemas uploaded to API Shield with pagination support.
+// Lists all OpenAPI schemas uploaded to API Security.
 func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PublicSchema], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -79,13 +79,13 @@ func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts 
 	return res, nil
 }
 
-// Lists all OpenAPI schemas uploaded to API Shield with pagination support.
+// Lists all OpenAPI schemas uploaded to API Security.
 func (r *SchemaService) ListAutoPaging(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PublicSchema] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Permanently removes an uploaded OpenAPI schema from API Shield. Operations using
-// this schema will lose their validation rules.
+// Permanently removes an uploaded OpenAPI schema from API Security. Operations
+// using this schema will lose their validation rules.
 func (r *SchemaService) Delete(ctx context.Context, schemaID string, body SchemaDeleteParams, opts ...option.RequestOption) (res *SchemaDeleteResponse, err error) {
 	var env SchemaDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -106,8 +106,8 @@ func (r *SchemaService) Delete(ctx context.Context, schemaID string, body Schema
 	return res, nil
 }
 
-// Modifies an existing OpenAPI schema in API Shield, updating the validation rules
-// for associated API operations.
+// Enables or disables validation for an uploaded OpenAPI schema without changing
+// the schema document.
 func (r *SchemaService) Edit(ctx context.Context, schemaID string, params SchemaEditParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -129,7 +129,7 @@ func (r *SchemaService) Edit(ctx context.Context, schemaID string, params Schema
 }
 
 // Gets the contents and metadata of a specific OpenAPI schema uploaded to API
-// Shield.
+// Security.
 func (r *SchemaService) Get(ctx context.Context, schemaID string, params SchemaGetParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
 	var env SchemaGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -201,27 +201,7 @@ func (r PublicSchemaKind) IsKnown() bool {
 	return false
 }
 
-type SchemaDeleteResponse struct {
-	// The ID of the schema that was just deleted
-	ID   string                   `json:"id" api:"required" format:"uuid"`
-	JSON schemaDeleteResponseJSON `json:"-"`
-}
-
-// schemaDeleteResponseJSON contains the JSON metadata for the struct
-// [SchemaDeleteResponse]
-type schemaDeleteResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SchemaDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r schemaDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
+type SchemaDeleteResponse = interface{}
 
 type SchemaNewParams struct {
 	// Identifier.
@@ -438,9 +418,10 @@ type SchemaDeleteParams struct {
 }
 
 type SchemaDeleteResponseEnvelope struct {
-	Errors   api_gateway.Message  `json:"errors" api:"required"`
-	Messages api_gateway.Message  `json:"messages" api:"required"`
-	Result   SchemaDeleteResponse `json:"result" api:"required"`
+	Errors   api_gateway.Message `json:"errors" api:"required"`
+	Messages api_gateway.Message `json:"messages" api:"required"`
+	// Schema deletion returns no result body.
+	Result SchemaDeleteResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful.
 	Success SchemaDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    schemaDeleteResponseEnvelopeJSON    `json:"-"`

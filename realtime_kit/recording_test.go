@@ -191,10 +191,9 @@ func TestRecordingStartRecordingsWithOptionalParams(t *testing.T) {
 			RtmpOutConfig: cloudflare.F(realtime_kit.RecordingStartRecordingsParamsRtmpOutConfig{
 				RtmpURL: cloudflare.F("rtmp://a.rtmp.youtube.com/live2"),
 			}),
-			StorageConfig: cloudflare.F(realtime_kit.RecordingStartRecordingsParamsStorageConfig{
-				Type:       cloudflare.F(realtime_kit.RecordingStartRecordingsParamsStorageConfigTypeAws),
+			StorageConfig: cloudflare.F[realtime_kit.RecordingStartRecordingsParamsStorageConfigUnion](realtime_kit.RecordingStartRecordingsParamsStorageConfigObject{
 				AccessKey:  cloudflare.F("access_key"),
-				AuthMethod: cloudflare.F(realtime_kit.RecordingStartRecordingsParamsStorageConfigAuthMethodKey),
+				AuthMethod: cloudflare.F(realtime_kit.RecordingStartRecordingsParamsStorageConfigObjectAuthMethodKey),
 				Bucket:     cloudflare.F("bucket"),
 				Host:       cloudflare.F("host"),
 				Password:   cloudflare.F("password"),
@@ -203,6 +202,7 @@ func TestRecordingStartRecordingsWithOptionalParams(t *testing.T) {
 				PrivateKey: cloudflare.F("private_key"),
 				Region:     cloudflare.F("us-east-1"),
 				Secret:     cloudflare.F("secret"),
+				Type:       cloudflare.F(realtime_kit.RecordingStartRecordingsParamsStorageConfigObjectTypeGcs),
 				Username:   cloudflare.F("username"),
 			}),
 			URL: cloudflare.F("https://example.com"),

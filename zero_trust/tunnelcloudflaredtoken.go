@@ -35,7 +35,8 @@ func NewTunnelCloudflaredTokenService(opts ...option.RequestOption) (r *TunnelCl
 	return
 }
 
-// Gets the token used to associate cloudflared with a specific tunnel.
+// Retrieves the token used to run cloudflared and associate it with a specific
+// Cloudflare Tunnel. Treat the token as a secret.
 func (r *TunnelCloudflaredTokenService) Get(ctx context.Context, tunnelID string, query TunnelCloudflaredTokenGetParams, opts ...option.RequestOption) (res *string, err error) {
 	var env TunnelCloudflaredTokenGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

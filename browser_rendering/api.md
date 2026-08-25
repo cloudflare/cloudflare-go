@@ -123,7 +123,7 @@ Methods:
 
 Methods:
 
-- <code title="get /accounts/{account_id}/browser-rendering/devtools/browser/{session_id}/page/{target_id}">client.BrowserRendering.Devtools.Browser.Page.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/browser_rendering#DevtoolBrowserPageService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, sessionID <a href="https://pkg.go.dev/builtin#string">string</a>, targetID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/browser_rendering#DevtoolBrowserPageGetParams">DevtoolBrowserPageGetParams</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
+- <code title="get /accounts/{account_id}/browser-rendering/devtools/browser/{session_id}/page/{target_id}">client.BrowserRendering.Devtools.Browser.Page.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/browser_rendering#DevtoolBrowserPageService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, sessionID <a href="https://pkg.go.dev/builtin#string">string</a>, targetID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/browser_rendering">browser_rendering</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/browser_rendering#DevtoolBrowserPageGetParams">DevtoolBrowserPageGetParams</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
 
 #### Targets
 

@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
-func TestNamespaceNew(t *testing.T) {
+func TestNamespaceNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,8 +29,9 @@ func TestNamespaceNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.KV.Namespaces.New(context.TODO(), kv.NamespaceNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Title:     cloudflare.F("My Own Namespace"),
+		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Title:        cloudflare.F("My Own Namespace"),
+		Jurisdiction: cloudflare.F(kv.NamespaceNewParamsJurisdictionEu),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -193,12 +193,17 @@ func (r dmarcReportEditResponseApprovedSourceJSON) RawJSON() string {
 type DMARCReportEditResponseRecords struct {
 	// BIMI TXT records
 	BimiRecords []DMARCReportEditResponseRecordsBimiRecord `json:"bimi_records"`
-	// CNAME records for DKIM
+	// CNAME records for DKIM selectors. Each selector is resolved independently; when
+	// a selector's CNAME resolves to a DKIM TXT record, the API returns that record's
+	// content in the `resolved` field of the corresponding entry.
 	CNAMEDKIMRecords []DMARCReportEditResponseRecordsCnamedkimRecord `json:"cname_dkim_records"`
 	// CNAME records at \_dmarc. When such a CNAME resolves to a DMARC TXT record, the
-	// API returns that record in resolved_dmarc_records.
+	// API returns that record's content in the `resolved` field of the corresponding
+	// entry.
 	CNAMEDMARCRecords []DMARCReportEditResponseRecordsCnamedmarcRecord `json:"cname_dmarc_records"`
-	// CNAME records for SPF
+	// CNAME records at the zone apex. When such a CNAME resolves to an SPF TXT record,
+	// the API returns that record's content in the `resolved` field of the
+	// corresponding entry.
 	CNAMESPFRecords []DMARCReportEditResponseRecordsCnamespfRecord `json:"cname_spf_records"`
 	// DKIM TXT records
 	DKIMRecords []DMARCReportEditResponseRecordsDKIMRecord `json:"dkim_records"`
@@ -207,6 +212,9 @@ type DMARCReportEditResponseRecords struct {
 	// DMARC records that a recursive lookup of \_dmarc.{zone} returned. The API
 	// populates this only when the zone lacks a DMARC TXT record of its own, which
 	// usually means a CNAME delegates DMARC to another zone.
+	//
+	// Deprecated: Use the `resolved` field on the corresponding entry in
+	// cname_dmarc_records instead.
 	ResolvedDMARCRecords []DMARCReportEditResponseRecordsResolvedDMARCRecord `json:"resolved_dmarc_records"`
 	// SPF TXT records
 	SPFRecords []DMARCReportEditResponseRecordsSPFRecord `json:"spf_records"`
@@ -244,6 +252,13 @@ type DMARCReportEditResponseRecordsBimiRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -257,6 +272,7 @@ type dmarcReportEditResponseRecordsBimiRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -279,6 +295,13 @@ type DMARCReportEditResponseRecordsCnamedkimRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -292,6 +315,7 @@ type dmarcReportEditResponseRecordsCnamedkimRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -314,6 +338,13 @@ type DMARCReportEditResponseRecordsCnamedmarcRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -327,6 +358,7 @@ type dmarcReportEditResponseRecordsCnamedmarcRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -349,6 +381,13 @@ type DMARCReportEditResponseRecordsCnamespfRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -362,6 +401,7 @@ type dmarcReportEditResponseRecordsCnamespfRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -384,6 +424,13 @@ type DMARCReportEditResponseRecordsDKIMRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -397,6 +444,7 @@ type dmarcReportEditResponseRecordsDKIMRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -419,6 +467,13 @@ type DMARCReportEditResponseRecordsDMARCRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -432,6 +487,7 @@ type dmarcReportEditResponseRecordsDMARCRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -450,6 +506,8 @@ func (r dmarcReportEditResponseRecordsDMARCRecordJSON) RawJSON() string {
 // record usually lives in another zone outside this account's control, so this
 // schema omits the DNS record ID. The API therefore treats such a record as
 // read-only.
+//
+// Deprecated: deprecated
 type DMARCReportEditResponseRecordsResolvedDMARCRecord struct {
 	// The TXT record value. The API joins all character-strings into a single string.
 	Content string `json:"content"`
@@ -483,6 +541,13 @@ type DMARCReportEditResponseRecordsSPFRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -496,6 +561,7 @@ type dmarcReportEditResponseRecordsSPFRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -518,15 +584,16 @@ func (r dmarcReportEditResponseRecordsSPFRecordJSON) RawJSON() string {
 type DMARCReportEditResponseStatus string
 
 const (
-	DMARCReportEditResponseStatusMissingDMARCReport   DMARCReportEditResponseStatus = "missing-dmarc-report"
-	DMARCReportEditResponseStatusMultipleDMARCReports DMARCReportEditResponseStatus = "multiple-dmarc-reports"
-	DMARCReportEditResponseStatusMissingDMARCRua      DMARCReportEditResponseStatus = "missing-dmarc-rua"
-	DMARCReportEditResponseStatusCNAMEOnDMARCRecord   DMARCReportEditResponseStatus = "cname-on-dmarc-record"
+	DMARCReportEditResponseStatusMissingDMARCReport          DMARCReportEditResponseStatus = "missing-dmarc-report"
+	DMARCReportEditResponseStatusMultipleDMARCReports        DMARCReportEditResponseStatus = "multiple-dmarc-reports"
+	DMARCReportEditResponseStatusMissingDMARCRua             DMARCReportEditResponseStatus = "missing-dmarc-rua"
+	DMARCReportEditResponseStatusCNAMEOnDMARCRecord          DMARCReportEditResponseStatus = "cname-on-dmarc-record"
+	DMARCReportEditResponseStatusUnauthorizedReportingDomain DMARCReportEditResponseStatus = "unauthorized-reporting-domain"
 )
 
 func (r DMARCReportEditResponseStatus) IsKnown() bool {
 	switch r {
-	case DMARCReportEditResponseStatusMissingDMARCReport, DMARCReportEditResponseStatusMultipleDMARCReports, DMARCReportEditResponseStatusMissingDMARCRua, DMARCReportEditResponseStatusCNAMEOnDMARCRecord:
+	case DMARCReportEditResponseStatusMissingDMARCReport, DMARCReportEditResponseStatusMultipleDMARCReports, DMARCReportEditResponseStatusMissingDMARCRua, DMARCReportEditResponseStatusCNAMEOnDMARCRecord, DMARCReportEditResponseStatusUnauthorizedReportingDomain:
 		return true
 	}
 	return false
@@ -653,12 +720,17 @@ func (r dmarcReportGetResponseApprovedSourceJSON) RawJSON() string {
 type DMARCReportGetResponseRecords struct {
 	// BIMI TXT records
 	BimiRecords []DMARCReportGetResponseRecordsBimiRecord `json:"bimi_records"`
-	// CNAME records for DKIM
+	// CNAME records for DKIM selectors. Each selector is resolved independently; when
+	// a selector's CNAME resolves to a DKIM TXT record, the API returns that record's
+	// content in the `resolved` field of the corresponding entry.
 	CNAMEDKIMRecords []DMARCReportGetResponseRecordsCnamedkimRecord `json:"cname_dkim_records"`
 	// CNAME records at \_dmarc. When such a CNAME resolves to a DMARC TXT record, the
-	// API returns that record in resolved_dmarc_records.
+	// API returns that record's content in the `resolved` field of the corresponding
+	// entry.
 	CNAMEDMARCRecords []DMARCReportGetResponseRecordsCnamedmarcRecord `json:"cname_dmarc_records"`
-	// CNAME records for SPF
+	// CNAME records at the zone apex. When such a CNAME resolves to an SPF TXT record,
+	// the API returns that record's content in the `resolved` field of the
+	// corresponding entry.
 	CNAMESPFRecords []DMARCReportGetResponseRecordsCnamespfRecord `json:"cname_spf_records"`
 	// DKIM TXT records
 	DKIMRecords []DMARCReportGetResponseRecordsDKIMRecord `json:"dkim_records"`
@@ -667,6 +739,9 @@ type DMARCReportGetResponseRecords struct {
 	// DMARC records that a recursive lookup of \_dmarc.{zone} returned. The API
 	// populates this only when the zone lacks a DMARC TXT record of its own, which
 	// usually means a CNAME delegates DMARC to another zone.
+	//
+	// Deprecated: Use the `resolved` field on the corresponding entry in
+	// cname_dmarc_records instead.
 	ResolvedDMARCRecords []DMARCReportGetResponseRecordsResolvedDMARCRecord `json:"resolved_dmarc_records"`
 	// SPF TXT records
 	SPFRecords []DMARCReportGetResponseRecordsSPFRecord `json:"spf_records"`
@@ -704,6 +779,13 @@ type DMARCReportGetResponseRecordsBimiRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -717,6 +799,7 @@ type dmarcReportGetResponseRecordsBimiRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -739,6 +822,13 @@ type DMARCReportGetResponseRecordsCnamedkimRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -752,6 +842,7 @@ type dmarcReportGetResponseRecordsCnamedkimRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -774,6 +865,13 @@ type DMARCReportGetResponseRecordsCnamedmarcRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -787,6 +885,7 @@ type dmarcReportGetResponseRecordsCnamedmarcRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -809,6 +908,13 @@ type DMARCReportGetResponseRecordsCnamespfRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -822,6 +928,7 @@ type dmarcReportGetResponseRecordsCnamespfRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -844,6 +951,13 @@ type DMARCReportGetResponseRecordsDKIMRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -857,6 +971,7 @@ type dmarcReportGetResponseRecordsDKIMRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -879,6 +994,13 @@ type DMARCReportGetResponseRecordsDMARCRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -892,6 +1014,7 @@ type dmarcReportGetResponseRecordsDMARCRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -910,6 +1033,8 @@ func (r dmarcReportGetResponseRecordsDMARCRecordJSON) RawJSON() string {
 // record usually lives in another zone outside this account's control, so this
 // schema omits the DNS record ID. The API therefore treats such a record as
 // read-only.
+//
+// Deprecated: deprecated
 type DMARCReportGetResponseRecordsResolvedDMARCRecord struct {
 	// The TXT record value. The API joins all character-strings into a single string.
 	Content string `json:"content"`
@@ -943,6 +1068,13 @@ type DMARCReportGetResponseRecordsSPFRecord struct {
 	Content string `json:"content"`
 	// DNS record name
 	Name string `json:"name"`
+	// For a CNAME record, the TXT content(s) found by following the CNAME chain to its
+	// target. An empty array means the chain was resolved but nothing usable was found
+	// there; omitted/null means resolution was not attempted for this record (always
+	// the case for non-CNAME entries). A CNAME chain that terminates in more than one
+	// TXT value at the target yields multiple entries. Populated on entries in
+	// cname_dmarc_records, cname_spf_records, and cname_dkim_records.
+	Resolved []string `json:"resolved" api:"nullable"`
 	// Time to live in seconds
 	TTL int64 `json:"ttl"`
 	// Record type
@@ -956,6 +1088,7 @@ type dmarcReportGetResponseRecordsSPFRecordJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	Name        apijson.Field
+	Resolved    apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
@@ -978,15 +1111,16 @@ func (r dmarcReportGetResponseRecordsSPFRecordJSON) RawJSON() string {
 type DMARCReportGetResponseStatus string
 
 const (
-	DMARCReportGetResponseStatusMissingDMARCReport   DMARCReportGetResponseStatus = "missing-dmarc-report"
-	DMARCReportGetResponseStatusMultipleDMARCReports DMARCReportGetResponseStatus = "multiple-dmarc-reports"
-	DMARCReportGetResponseStatusMissingDMARCRua      DMARCReportGetResponseStatus = "missing-dmarc-rua"
-	DMARCReportGetResponseStatusCNAMEOnDMARCRecord   DMARCReportGetResponseStatus = "cname-on-dmarc-record"
+	DMARCReportGetResponseStatusMissingDMARCReport          DMARCReportGetResponseStatus = "missing-dmarc-report"
+	DMARCReportGetResponseStatusMultipleDMARCReports        DMARCReportGetResponseStatus = "multiple-dmarc-reports"
+	DMARCReportGetResponseStatusMissingDMARCRua             DMARCReportGetResponseStatus = "missing-dmarc-rua"
+	DMARCReportGetResponseStatusCNAMEOnDMARCRecord          DMARCReportGetResponseStatus = "cname-on-dmarc-record"
+	DMARCReportGetResponseStatusUnauthorizedReportingDomain DMARCReportGetResponseStatus = "unauthorized-reporting-domain"
 )
 
 func (r DMARCReportGetResponseStatus) IsKnown() bool {
 	switch r {
-	case DMARCReportGetResponseStatusMissingDMARCReport, DMARCReportGetResponseStatusMultipleDMARCReports, DMARCReportGetResponseStatusMissingDMARCRua, DMARCReportGetResponseStatusCNAMEOnDMARCRecord:
+	case DMARCReportGetResponseStatusMissingDMARCReport, DMARCReportGetResponseStatusMultipleDMARCReports, DMARCReportGetResponseStatusMissingDMARCRua, DMARCReportGetResponseStatusCNAMEOnDMARCRecord, DMARCReportGetResponseStatusUnauthorizedReportingDomain:
 		return true
 	}
 	return false

@@ -32,6 +32,26 @@ func TestThreatEventTagCategoryNewWithOptionalParams(t *testing.T) {
 		AccountID:   cloudflare.F("account_id"),
 		Name:        cloudflare.F("Actor"),
 		Description: cloudflare.F("description"),
+		Schema: cloudflare.F([]cloudforce_one.ThreatEventTagCategoryNewParamsSchema{{
+			Key:           cloudflare.F("family"),
+			Kind:          cloudflare.F(cloudforce_one.ThreatEventTagCategoryNewParamsSchemaKindString),
+			AllowedValues: cloudflare.F([]string{"low", "medium", "high", "critical"}),
+			Annotations: cloudflare.F(cloudforce_one.ThreatEventTagCategoryNewParamsSchemaAnnotations{
+				Confidence: cloudflare.F(true),
+				TLP:        cloudflare.F(true),
+			}),
+			Enforcement: cloudflare.F(cloudforce_one.ThreatEventTagCategoryNewParamsSchemaEnforcementError),
+			Format:      cloudflare.F(cloudforce_one.ThreatEventTagCategoryNewParamsSchemaFormatDate),
+			Label:       cloudflare.F("Attacker Name"),
+			MaxLength:   cloudflare.F(int64(1)),
+			NumberConstraint: cloudflare.F(cloudforce_one.ThreatEventTagCategoryNewParamsSchemaNumberConstraint{
+				Integer: cloudflare.F(true),
+				Max:     cloudflare.F(0.000000),
+				Min:     cloudflare.F(0.000000),
+			}),
+			Properties: cloudflare.F(map[string]interface{}{}),
+			Required:   cloudflare.F(true),
+		}}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -120,6 +140,26 @@ func TestThreatEventTagCategoryEditWithOptionalParams(t *testing.T) {
 			AccountID:   cloudflare.F("account_id"),
 			Description: cloudflare.F("description"),
 			Name:        cloudflare.F("name"),
+			Schema: cloudflare.F([]cloudforce_one.ThreatEventTagCategoryEditParamsSchema{{
+				Key:           cloudflare.F("family"),
+				Kind:          cloudflare.F(cloudforce_one.ThreatEventTagCategoryEditParamsSchemaKindString),
+				AllowedValues: cloudflare.F([]string{"low", "medium", "high", "critical"}),
+				Annotations: cloudflare.F(cloudforce_one.ThreatEventTagCategoryEditParamsSchemaAnnotations{
+					Confidence: cloudflare.F(true),
+					TLP:        cloudflare.F(true),
+				}),
+				Enforcement: cloudflare.F(cloudforce_one.ThreatEventTagCategoryEditParamsSchemaEnforcementError),
+				Format:      cloudflare.F(cloudforce_one.ThreatEventTagCategoryEditParamsSchemaFormatDate),
+				Label:       cloudflare.F("Attacker Name"),
+				MaxLength:   cloudflare.F(int64(1)),
+				NumberConstraint: cloudflare.F(cloudforce_one.ThreatEventTagCategoryEditParamsSchemaNumberConstraint{
+					Integer: cloudflare.F(true),
+					Max:     cloudflare.F(0.000000),
+					Min:     cloudflare.F(0.000000),
+				}),
+				Properties: cloudflare.F(map[string]interface{}{}),
+				Required:   cloudflare.F(true),
+			}}),
 		},
 	)
 	if err != nil {

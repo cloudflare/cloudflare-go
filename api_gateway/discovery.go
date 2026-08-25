@@ -37,8 +37,8 @@ func NewDiscoveryService(opts ...option.RequestOption) (r *DiscoveryService) {
 	return
 }
 
-// Retrieve the most up to date view of discovered operations, rendered as OpenAPI
-// schemas
+// Returns the latest API operations discovered from zone traffic, rendered as
+// OpenAPI schemas.
 func (r *DiscoveryService) Get(ctx context.Context, query DiscoveryGetParams, opts ...option.RequestOption) (res *DiscoveryGetResponse, err error) {
 	var env DiscoveryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

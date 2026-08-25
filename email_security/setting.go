@@ -16,6 +16,7 @@ type SettingService struct {
 	Options                   []option.RequestOption
 	AllowPolicies             *SettingAllowPolicyService
 	BlockSenders              *SettingBlockSenderService
+	ContentPolicies           *SettingContentPolicyService
 	Domains                   *SettingDomainService
 	ImpersonationRegistry     *SettingImpersonationRegistryService
 	SendingDomainRestrictions *SettingSendingDomainRestrictionService
@@ -31,6 +32,7 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r.Options = opts
 	r.AllowPolicies = NewSettingAllowPolicyService(opts...)
 	r.BlockSenders = NewSettingBlockSenderService(opts...)
+	r.ContentPolicies = NewSettingContentPolicyService(opts...)
 	r.Domains = NewSettingDomainService(opts...)
 	r.ImpersonationRegistry = NewSettingImpersonationRegistryService(opts...)
 	r.SendingDomainRestrictions = NewSettingSendingDomainRestrictionService(opts...)

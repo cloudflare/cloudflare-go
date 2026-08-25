@@ -199,6 +199,9 @@ type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSettingEditResponseBindingsFormat `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity DispatchNamespaceScriptSettingEditResponseBindingsIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -285,6 +288,7 @@ type dispatchNamespaceScriptSettingEditResponseBindingJSON struct {
 	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
+	Identity                    apijson.Field
 	IndexName                   apijson.Field
 	InstanceName                apijson.Field
 	Json                        apijson.Field
@@ -2487,6 +2491,9 @@ type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetw
 	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentity `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -2501,6 +2508,7 @@ type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetw
 type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
+	Identity    apijson.Field
 	NetworkID   apijson.Field
 	TunnelID    apijson.Field
 	raw         string
@@ -2528,6 +2536,22 @@ const (
 func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -2597,6 +2621,22 @@ const (
 func (r DispatchNamespaceScriptSettingEditResponseBindingsFormat) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptSettingEditResponseBindingsFormatRaw, DispatchNamespaceScriptSettingEditResponseBindingsFormatPkcs8, DispatchNamespaceScriptSettingEditResponseBindingsFormatSpki, DispatchNamespaceScriptSettingEditResponseBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type DispatchNamespaceScriptSettingEditResponseBindingsIdentity string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseBindingsIdentityRuntimeEmailAlpha DispatchNamespaceScriptSettingEditResponseBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseBindingsIdentity) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -3781,6 +3821,8 @@ type DispatchNamespaceScriptSettingEditResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
 	Logs DispatchNamespaceScriptSettingEditResponseObservabilityLogs `json:"logs" api:"nullable"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces DispatchNamespaceScriptSettingEditResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   dispatchNamespaceScriptSettingEditResponseObservabilityJSON   `json:"-"`
@@ -3790,12 +3832,13 @@ type DispatchNamespaceScriptSettingEditResponseObservability struct {
 // metadata for the struct
 // [DispatchNamespaceScriptSettingEditResponseObservability]
 type dispatchNamespaceScriptSettingEditResponseObservabilityJSON struct {
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Logs             apijson.Field
-	Traces           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceScriptSettingEditResponseObservability) UnmarshalJSON(data []byte) (err error) {
@@ -3855,11 +3898,11 @@ type DispatchNamespaceScriptSettingEditResponseObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
-	PropagationPolicy DispatchNamespaceScriptSettingEditResponseObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy DispatchNamespaceScriptSettingEditResponseObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
 	JSON              dispatchNamespaceScriptSettingEditResponseObservabilityTracesJSON              `json:"-"`
 }
 
@@ -3885,10 +3928,10 @@ func (r dispatchNamespaceScriptSettingEditResponseObservabilityTracesJSON) RawJS
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type DispatchNamespaceScriptSettingEditResponseObservabilityTracesPropagationPolicy string
 
 const (
@@ -4311,6 +4354,9 @@ type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptSettingGetResponseBindingsFormat `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity DispatchNamespaceScriptSettingGetResponseBindingsIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -4397,6 +4443,7 @@ type dispatchNamespaceScriptSettingGetResponseBindingJSON struct {
 	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
+	Identity                    apijson.Field
 	IndexName                   apijson.Field
 	InstanceName                apijson.Field
 	Json                        apijson.Field
@@ -6599,6 +6646,9 @@ type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetwo
 	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentity `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -6613,6 +6663,7 @@ type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetwo
 type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
+	Identity    apijson.Field
 	NetworkID   apijson.Field
 	TunnelID    apijson.Field
 	raw         string
@@ -6640,6 +6691,22 @@ const (
 func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -6709,6 +6776,22 @@ const (
 func (r DispatchNamespaceScriptSettingGetResponseBindingsFormat) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptSettingGetResponseBindingsFormatRaw, DispatchNamespaceScriptSettingGetResponseBindingsFormatPkcs8, DispatchNamespaceScriptSettingGetResponseBindingsFormatSpki, DispatchNamespaceScriptSettingGetResponseBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type DispatchNamespaceScriptSettingGetResponseBindingsIdentity string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseBindingsIdentityRuntimeEmailAlpha DispatchNamespaceScriptSettingGetResponseBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseBindingsIdentity) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -7893,6 +7976,8 @@ type DispatchNamespaceScriptSettingGetResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
 	Logs DispatchNamespaceScriptSettingGetResponseObservabilityLogs `json:"logs" api:"nullable"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces DispatchNamespaceScriptSettingGetResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   dispatchNamespaceScriptSettingGetResponseObservabilityJSON   `json:"-"`
@@ -7901,12 +7986,13 @@ type DispatchNamespaceScriptSettingGetResponseObservability struct {
 // dispatchNamespaceScriptSettingGetResponseObservabilityJSON contains the JSON
 // metadata for the struct [DispatchNamespaceScriptSettingGetResponseObservability]
 type dispatchNamespaceScriptSettingGetResponseObservabilityJSON struct {
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Logs             apijson.Field
-	Traces           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceScriptSettingGetResponseObservability) UnmarshalJSON(data []byte) (err error) {
@@ -7966,11 +8052,11 @@ type DispatchNamespaceScriptSettingGetResponseObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
-	PropagationPolicy DispatchNamespaceScriptSettingGetResponseObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy DispatchNamespaceScriptSettingGetResponseObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
 	JSON              dispatchNamespaceScriptSettingGetResponseObservabilityTracesJSON              `json:"-"`
 }
 
@@ -7996,10 +8082,10 @@ func (r dispatchNamespaceScriptSettingGetResponseObservabilityTracesJSON) RawJSO
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type DispatchNamespaceScriptSettingGetResponseObservabilityTracesPropagationPolicy string
 
 const (
@@ -8417,6 +8503,9 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsFormat] `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsIdentity] `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -9787,6 +9876,9 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindV
 	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentity] `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
@@ -9811,6 +9903,22 @@ const (
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -9880,6 +9988,22 @@ const (
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsFormat) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsFormatRaw, DispatchNamespaceScriptSettingEditParamsSettingsBindingsFormatPkcs8, DispatchNamespaceScriptSettingEditParamsSettingsBindingsFormatSpki, DispatchNamespaceScriptSettingEditParamsSettingsBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsIdentity string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsIdentityRuntimeEmailAlpha DispatchNamespaceScriptSettingEditParamsSettingsBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsIdentity) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -10712,6 +10836,8 @@ type DispatchNamespaceScriptSettingEditParamsSettingsObservability struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservabilityLogs] `json:"logs"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString param.Field[bool] `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservabilityTraces] `json:"traces"`
 }
@@ -10751,10 +10877,10 @@ type DispatchNamespaceScriptSettingEditParamsSettingsObservabilityTraces struct 
 	// Whether trace persistence is enabled for the Worker.
 	Persist param.Field[bool] `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
 	PropagationPolicy param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservabilityTracesPropagationPolicy] `json:"propagation_policy"`
 }
 
@@ -10763,10 +10889,10 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsObservabilityTraces) Mar
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type DispatchNamespaceScriptSettingEditParamsSettingsObservabilityTracesPropagationPolicy string
 
 const (

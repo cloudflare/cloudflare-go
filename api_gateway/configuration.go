@@ -38,8 +38,8 @@ func NewConfigurationService(opts ...option.RequestOption) (r *ConfigurationServ
 	return
 }
 
-// Updates API Shield configuration settings for a zone. Can modify validation
-// strictness, enforcement mode, and other global settings.
+// Replaces the zone's authentication identifier characteristics used to identify
+// distinct API sessions.
 func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationUpdateParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigurationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,8 +56,8 @@ func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationU
 	return res, nil
 }
 
-// Gets the current API Shield configuration settings for a zone, including
-// validation behavior and enforcement mode.
+// Returns the authentication identifier characteristics configured for the zone.
+// Header, cookie, or JWT claim values identify distinct API sessions.
 func (r *ConfigurationService) Get(ctx context.Context, params ConfigurationGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigurationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

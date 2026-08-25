@@ -97,8 +97,6 @@ type AvailableRatePlan struct {
 	Frequency AvailableRatePlanFrequency `json:"frequency"`
 	// Indicates whether you are currently subscribed to this plan.
 	IsSubscribed bool `json:"is_subscribed"`
-	// Indicates whether this plan has a legacy discount applied.
-	LegacyDiscount bool `json:"legacy_discount"`
 	// The legacy identifier for this rate plan, if any.
 	LegacyID string `json:"legacy_id"`
 	// The plan name.
@@ -117,7 +115,6 @@ type availableRatePlanJSON struct {
 	ExternallyManaged apijson.Field
 	Frequency         apijson.Field
 	IsSubscribed      apijson.Field
-	LegacyDiscount    apijson.Field
 	LegacyID          apijson.Field
 	Name              apijson.Field
 	Price             apijson.Field

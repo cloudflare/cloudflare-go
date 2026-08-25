@@ -35,7 +35,7 @@ func NewTenantCustomNameserverService(opts ...option.RequestOption) (r *TenantCu
 	return
 }
 
-// Add Tenant Custom Nameserver
+// Adds a custom nameserver for a tenant.
 func (r *TenantCustomNameserverService) New(ctx context.Context, tenantTag string, body TenantCustomNameserverNewParams, opts ...option.RequestOption) (res *TenantCustomNameserverNewResponse, err error) {
 	var env TenantCustomNameserverNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -52,7 +52,7 @@ func (r *TenantCustomNameserverService) New(ctx context.Context, tenantTag strin
 	return res, nil
 }
 
-// Delete Tenant Custom Nameserver
+// Deletes a tenant's custom nameserver.
 func (r *TenantCustomNameserverService) Delete(ctx context.Context, tenantTag string, customNSID string, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -78,12 +78,12 @@ func (r *TenantCustomNameserverService) Delete(ctx context.Context, tenantTag st
 	return res, nil
 }
 
-// Delete Tenant Custom Nameserver
+// Deletes a tenant's custom nameserver.
 func (r *TenantCustomNameserverService) DeleteAutoPaging(ctx context.Context, tenantTag string, customNSID string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
 	return pagination.NewSinglePageAutoPager(r.Delete(ctx, tenantTag, customNSID, opts...))
 }
 
-// List a tenant's custom nameservers.
+// Lists a tenant's custom nameservers.
 func (r *TenantCustomNameserverService) Get(ctx context.Context, tenantTag string, opts ...option.RequestOption) (res *pagination.SinglePage[TenantCustomNameserverGetResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -105,7 +105,7 @@ func (r *TenantCustomNameserverService) Get(ctx context.Context, tenantTag strin
 	return res, nil
 }
 
-// List a tenant's custom nameservers.
+// Lists a tenant's custom nameservers.
 func (r *TenantCustomNameserverService) GetAutoPaging(ctx context.Context, tenantTag string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TenantCustomNameserverGetResponse] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, tenantTag, opts...))
 }

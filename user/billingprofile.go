@@ -62,7 +62,6 @@ type BillingProfileGetResponse struct {
 	Company                string                        `json:"company"`
 	Country                string                        `json:"country"`
 	CreatedOn              time.Time                     `json:"created_on" format:"date-time"`
-	DeviceData             string                        `json:"device_data"`
 	EditedOn               time.Time                     `json:"edited_on" format:"date-time"`
 	EnterpriseBillingEmail string                        `json:"enterprise_billing_email"`
 	EnterprisePrimaryEmail string                        `json:"enterprise_primary_email"`
@@ -76,16 +75,13 @@ type BillingProfileGetResponse struct {
 	PaymentCountry         string                        `json:"payment_country"`
 	PaymentEmail           string                        `json:"payment_email"`
 	PaymentFirstName       string                        `json:"payment_first_name"`
-	PaymentGateway         string                        `json:"payment_gateway"`
 	PaymentLastName        string                        `json:"payment_last_name"`
-	PaymentNonce           string                        `json:"payment_nonce"`
 	PaymentState           string                        `json:"payment_state"`
 	PaymentZipcode         string                        `json:"payment_zipcode"`
 	PrimaryEmail           string                        `json:"primary_email"`
 	State                  string                        `json:"state"`
 	TaxIDType              string                        `json:"tax_id_type"`
 	Telephone              string                        `json:"telephone"`
-	UseLegacy              bool                          `json:"use_legacy"`
 	ValidationCode         string                        `json:"validation_code"`
 	Vat                    string                        `json:"vat"`
 	Zipcode                string                        `json:"zipcode"`
@@ -107,7 +103,6 @@ type billingProfileGetResponseJSON struct {
 	Company                apijson.Field
 	Country                apijson.Field
 	CreatedOn              apijson.Field
-	DeviceData             apijson.Field
 	EditedOn               apijson.Field
 	EnterpriseBillingEmail apijson.Field
 	EnterprisePrimaryEmail apijson.Field
@@ -121,16 +116,13 @@ type billingProfileGetResponseJSON struct {
 	PaymentCountry         apijson.Field
 	PaymentEmail           apijson.Field
 	PaymentFirstName       apijson.Field
-	PaymentGateway         apijson.Field
 	PaymentLastName        apijson.Field
-	PaymentNonce           apijson.Field
 	PaymentState           apijson.Field
 	PaymentZipcode         apijson.Field
 	PrimaryEmail           apijson.Field
 	State                  apijson.Field
 	TaxIDType              apijson.Field
 	Telephone              apijson.Field
-	UseLegacy              apijson.Field
 	ValidationCode         apijson.Field
 	Vat                    apijson.Field
 	Zipcode                apijson.Field

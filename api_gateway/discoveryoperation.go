@@ -37,7 +37,7 @@ func NewDiscoveryOperationService(opts ...option.RequestOption) (r *DiscoveryOpe
 	return
 }
 
-// Retrieve the most up to date view of discovered operations
+// Returns the latest web and API operations discovered from zone traffic.
 func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DiscoveryOperation], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -59,12 +59,12 @@ func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOp
 	return res, nil
 }
 
-// Retrieve the most up to date view of discovered operations
+// Returns the latest web and API operations discovered from zone traffic.
 func (r *DiscoveryOperationService) ListAutoPaging(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DiscoveryOperation] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Update the `state` on one or more discovered operations
+// Updates the state of one or more discovered web and API operations.
 func (r *DiscoveryOperationService) BulkEdit(ctx context.Context, params DiscoveryOperationBulkEditParams, opts ...option.RequestOption) (res *DiscoveryOperationBulkEditResponse, err error) {
 	var env DiscoveryOperationBulkEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

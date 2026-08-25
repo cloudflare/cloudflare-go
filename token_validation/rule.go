@@ -39,7 +39,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 	return
 }
 
-// Create a token validation rule.
+// Creates a token validation rule for the zone.
 func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *TokenValidationRule, err error) {
 	var env RuleNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +56,8 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 	return res, nil
 }
 
-// List token validation rules
+// Lists token validation rules for the zone, with filters for configuration,
+// action, state, ID, and host.
 func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[TokenValidationRule], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -78,12 +79,13 @@ func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...o
 	return res, nil
 }
 
-// List token validation rules
+// Lists token validation rules for the zone, with filters for configuration,
+// action, state, ID, and host.
 func (r *RuleService) ListAutoPaging(ctx context.Context, params RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[TokenValidationRule] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a zone token validation rule.
+// Deletes a token validation rule from the zone.
 func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
 	var env RuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -104,9 +106,7 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 	return res, nil
 }
 
-// Create zone token validation rules.
-//
-// A request can create multiple Token Validation Rules.
+// Creates multiple token validation rules for the zone in one request.
 func (r *RuleService) BulkNew(ctx context.Context, params RuleBulkNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[TokenValidationRule], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -128,20 +128,13 @@ func (r *RuleService) BulkNew(ctx context.Context, params RuleBulkNewParams, opt
 	return res, nil
 }
 
-// Create zone token validation rules.
-//
-// A request can create multiple Token Validation Rules.
+// Creates multiple token validation rules for the zone in one request.
 func (r *RuleService) BulkNewAutoPaging(ctx context.Context, params RuleBulkNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenValidationRule] {
 	return pagination.NewSinglePageAutoPager(r.BulkNew(ctx, params, opts...))
 }
 
-// Edit token validation rules.
-//
-// A request can update multiple Token Validation Rules.
-//
-// Rules can be re-ordered using the `position` field.
-//
-// Returns all updated rules.
+// Updates and reorders multiple token validation rules in one request, then
+// returns the updated rules.
 func (r *RuleService) BulkEdit(ctx context.Context, params RuleBulkEditParams, opts ...option.RequestOption) (res *pagination.SinglePage[TokenValidationRule], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -163,18 +156,13 @@ func (r *RuleService) BulkEdit(ctx context.Context, params RuleBulkEditParams, o
 	return res, nil
 }
 
-// Edit token validation rules.
-//
-// A request can update multiple Token Validation Rules.
-//
-// Rules can be re-ordered using the `position` field.
-//
-// Returns all updated rules.
+// Updates and reorders multiple token validation rules in one request, then
+// returns the updated rules.
 func (r *RuleService) BulkEditAutoPaging(ctx context.Context, params RuleBulkEditParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenValidationRule] {
 	return pagination.NewSinglePageAutoPager(r.BulkEdit(ctx, params, opts...))
 }
 
-// Edit a zone token validation rule.
+// Updates only the supplied fields on a token validation rule.
 func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *TokenValidationRule, err error) {
 	var env RuleEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -195,7 +183,7 @@ func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditPa
 	return res, nil
 }
 
-// Get a zone token validation rule.
+// Returns a token validation rule by ID.
 func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParams, opts ...option.RequestOption) (res *TokenValidationRule, err error) {
 	var env RuleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

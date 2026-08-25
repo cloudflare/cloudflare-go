@@ -49,6 +49,7 @@ TEST_PATHS=(
 	zones/setting_test.go
 	zones/transformationsallowedorigin_test.go
 	zones/transformationsc2pa_test.go
+	zones/nel_test.go
 	zones/environment_test.go
 	zones/customnameserver_test.go
 	zones/hold_test.go
@@ -133,6 +134,7 @@ TEST_PATHS=(
 	email_security/phishguardreport_test.go
 	email_security/settingallowpolicy_test.go
 	email_security/settingblocksender_test.go
+	email_security/settingcontentpolicy_test.go
 	email_security/settingdomain_test.go
 	email_security/settingimpersonationregistry_test.go
 	email_security/settingsendingdomainrestriction_test.go
@@ -148,6 +150,7 @@ TEST_PATHS=(
 	email_routing/accountrule_test.go
 	email_routing/address_test.go
 	email_sending/emailsending_test.go
+	email_sending/suppression_test.go
 	email_sending/subdomain_test.go
 	email_sending/subdomaindns_test.go
 	filters/filter_test.go
@@ -167,6 +170,9 @@ TEST_PATHS=(
 	logpush/edge_test.go
 	logpush/job_test.go
 	logpush/ownership_test.go
+	logpush/transformer_test.go
+	logpush/transformercontent_test.go
+	logpush/transformerversion_test.go
 	logpush/validate_test.go
 	logs/logexplorerquery_test.go
 	logs/logexplorerdataset_test.go

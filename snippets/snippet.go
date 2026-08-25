@@ -93,7 +93,8 @@ func (r *SnippetService) ListAutoPaging(ctx context.Context, params SnippetListP
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes a snippet belonging to the zone.
+// Deletes a snippet belonging to the zone. Returns a 4XX response if the zone or
+// snippet no longer exists.
 func (r *SnippetService) Delete(ctx context.Context, snippetName string, body SnippetDeleteParams, opts ...option.RequestOption) (res *SnippetDeleteResponse, err error) {
 	var env SnippetDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

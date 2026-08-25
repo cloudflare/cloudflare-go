@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
-func TestDevtoolBrowserPageGet(t *testing.T) {
+func TestDevtoolBrowserPageGetWithOptionalParams(t *testing.T) {
 	t.Skip("HTTP 101 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -34,7 +34,8 @@ func TestDevtoolBrowserPageGet(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		"target_id",
 		browser_rendering.DevtoolBrowserPageGetParams{
-			AccountID: cloudflare.F("account_id"),
+			AccountID:         cloudflare.F("account_id"),
+			CfBrapiGuardrails: cloudflare.F("eyJtb2RlIjoicmVhZG9ubHkifQ"),
 		},
 	)
 	if err != nil {

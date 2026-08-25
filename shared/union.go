@@ -10,12 +10,15 @@ type UnionTime time.Time
 
 func (UnionTime) ImplementsAuditLogListParamsBeforeUnion()                             {}
 func (UnionTime) ImplementsAuditLogListParamsSinceUnion()                              {}
+func (UnionTime) ImplementsObservabilityTelemetryQueryResponseRunQueryCreatedUnion()   {}
+func (UnionTime) ImplementsObservabilityTelemetryQueryResponseRunQueryUpdatedUnion()   {}
+func (UnionTime) ImplementsObservabilitySharedQueryGetResponseRunQueryCreatedUnion()   {}
+func (UnionTime) ImplementsObservabilitySharedQueryGetResponseRunQueryUpdatedUnion()   {}
 func (UnionTime) ImplementsThreatEventIndicatorAggregateListParamsCreatedAfterUnion()  {}
 func (UnionTime) ImplementsThreatEventIndicatorAggregateListParamsCreatedBeforeUnion() {}
 
 type UnionString string
 
-func (UnionString) ImplementsSettingEditParamsBodyValueValueUnion()                                {}
 func (UnionString) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
 func (UnionString) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                     {}
 func (UnionString) ImplementsAnalyticsQueryTopNParamsFiltersValueUnion()                           {}
@@ -32,10 +35,12 @@ func (UnionString) ImplementsEmailSendingSendParamsToUnion()                    
 func (UnionString) ImplementsEmailSendingSendParamsToArrayItemUnion()                              {}
 func (UnionString) ImplementsReceivedGetParamsEndUnion()                                           {}
 func (UnionString) ImplementsReceivedGetParamsStartUnion()                                         {}
+func (UnionString) ImplementsObservabilityTelemetryQueryResponseRunQueryCreatedUnion()             {}
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseRunQueryParametersNeedleValueUnion() {
 }
+func (UnionString) ImplementsObservabilityTelemetryQueryResponseRunQueryUpdatedUnion() {}
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseCalculationsAggregatesGroupsValueUnion() {
 }
 func (UnionString) ImplementsObservabilityTelemetryQueryResponseCalculationsSeriesDataGroupsValueUnion() {
@@ -74,11 +79,13 @@ func (UnionString) ImplementsObservabilityQueryListResponseParametersFiltersWork
 func (UnionString) ImplementsObservabilityQueryListResponseParametersNeedleValueUnion() {}
 func (UnionString) ImplementsObservabilityQueryNewParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
-func (UnionString) ImplementsObservabilityQueryNewParamsParametersNeedleValueUnion() {}
+func (UnionString) ImplementsObservabilityQueryNewParamsParametersNeedleValueUnion()   {}
+func (UnionString) ImplementsObservabilitySharedQueryGetResponseRunQueryCreatedUnion() {}
 func (UnionString) ImplementsObservabilitySharedQueryGetResponseRunQueryParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionString) ImplementsObservabilitySharedQueryGetResponseRunQueryParametersNeedleValueUnion() {
 }
+func (UnionString) ImplementsObservabilitySharedQueryGetResponseRunQueryUpdatedUnion() {}
 func (UnionString) ImplementsObservabilitySharedQueryGetResponseCalculationsAggregatesGroupsValueUnion() {
 }
 func (UnionString) ImplementsObservabilitySharedQueryGetResponseCalculationsSeriesDataGroupsValueUnion() {
@@ -181,8 +188,22 @@ func (UnionString) ImplementsThreatEventIndicatorListParamsTagSearchValueUnion()
 func (UnionString) ImplementsThreatEventIndicatorListParamsTagSearchValueArrayItemUnion()     {}
 func (UnionString) ImplementsThreatEventIndicatorAggregateListParamsCreatedAfterUnion()       {}
 func (UnionString) ImplementsThreatEventIndicatorAggregateListParamsCreatedBeforeUnion()      {}
+func (UnionString) ImplementsThreatEventTagNewParamsActiveDurationUnion()                     {}
+func (UnionString) ImplementsThreatEventTagNewParamsActorCategoryUnion()                      {}
+func (UnionString) ImplementsThreatEventTagNewParamsAttributionOrganizationUnion()            {}
+func (UnionString) ImplementsThreatEventTagNewParamsMotiveUnion()                             {}
+func (UnionString) ImplementsThreatEventTagNewParamsOpsecLevelUnion()                         {}
+func (UnionString) ImplementsThreatEventTagNewParamsOriginCountryISOUnion()                   {}
+func (UnionString) ImplementsThreatEventTagNewParamsSophisticationLevelUnion()                {}
 func (UnionString) ImplementsThreatEventTagListParamsFiltersValueUnion()                      {}
 func (UnionString) ImplementsThreatEventTagListParamsFiltersValueArrayItemUnion()             {}
+func (UnionString) ImplementsThreatEventTagEditParamsActiveDurationUnion()                    {}
+func (UnionString) ImplementsThreatEventTagEditParamsActorCategoryUnion()                     {}
+func (UnionString) ImplementsThreatEventTagEditParamsAttributionOrganizationUnion()           {}
+func (UnionString) ImplementsThreatEventTagEditParamsMotiveUnion()                            {}
+func (UnionString) ImplementsThreatEventTagEditParamsOpsecLevelUnion()                        {}
+func (UnionString) ImplementsThreatEventTagEditParamsOriginCountryISOUnion()                  {}
+func (UnionString) ImplementsThreatEventTagEditParamsSophisticationLevelUnion()               {}
 func (UnionString) ImplementsThreatEventTagIndicatorListParamsSearchValueUnion()              {}
 func (UnionString) ImplementsThreatEventTagIndicatorByDatasetListParamsSearchValueUnion()     {}
 func (UnionString) ImplementsLogListParamsFiltersValueUnion()                                 {}
@@ -634,8 +655,10 @@ func (UnionFloat) ImplementsThreatEventListParamsSearchValueUnion()             
 func (UnionFloat) ImplementsThreatEventListParamsSearchValueArrayItemUnion()                 {}
 func (UnionFloat) ImplementsThreatEventIndicatorListParamsTagSearchValueUnion()              {}
 func (UnionFloat) ImplementsThreatEventIndicatorListParamsTagSearchValueArrayItemUnion()     {}
+func (UnionFloat) ImplementsThreatEventTagNewParamsPriorityUnion()                           {}
 func (UnionFloat) ImplementsThreatEventTagListParamsFiltersValueUnion()                      {}
 func (UnionFloat) ImplementsThreatEventTagListParamsFiltersValueArrayItemUnion()             {}
+func (UnionFloat) ImplementsThreatEventTagEditParamsPriorityUnion()                          {}
 func (UnionFloat) ImplementsLogListParamsFiltersValueUnion()                                 {}
 func (UnionFloat) ImplementsLogDeleteParamsFiltersValueUnion()                               {}
 func (UnionFloat) ImplementsLogEditParamsMetadataUnion()                                     {}

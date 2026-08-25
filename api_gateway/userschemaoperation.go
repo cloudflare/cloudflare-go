@@ -41,7 +41,8 @@ func NewUserSchemaOperationService(opts ...option.RequestOption) (r *UserSchemaO
 }
 
 // Retrieves all operations from the schema. Operations that already exist in API
-// Shield Endpoint Management will be returned as full operations.
+// Shield Endpoint Management will be returned as full operations. Deprecated; use
+// `/zones/{zone_id}/schema_validation/schemas/{schema_id}/operations` instead.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
@@ -72,7 +73,8 @@ func (r *UserSchemaOperationService) List(ctx context.Context, schemaID string, 
 }
 
 // Retrieves all operations from the schema. Operations that already exist in API
-// Shield Endpoint Management will be returned as full operations.
+// Shield Endpoint Management will be returned as full operations. Deprecated; use
+// `/zones/{zone_id}/schema_validation/schemas/{schema_id}/operations` instead.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
@@ -764,7 +766,9 @@ type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperation
 	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// True if schema is Cloudflare-provided.
+	// Deprecated. Always false.
+	//
+	// Deprecated: deprecated
 	IsLearned bool `json:"is_learned"`
 	// Schema file name.
 	Name string                                                                                                                 `json:"name"`

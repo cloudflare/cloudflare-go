@@ -227,6 +227,8 @@ type WorkerObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs WorkerObservabilityLogs `json:"logs"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces WorkerObservabilityTraces `json:"traces"`
 	JSON   workerObservabilityJSON   `json:"-"`
@@ -235,12 +237,13 @@ type WorkerObservability struct {
 // workerObservabilityJSON contains the JSON metadata for the struct
 // [WorkerObservability]
 type workerObservabilityJSON struct {
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Logs             apijson.Field
-	Traces           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *WorkerObservability) UnmarshalJSON(data []byte) (err error) {
@@ -299,11 +302,11 @@ type WorkerObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
-	PropagationPolicy WorkerObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy WorkerObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
 	JSON              workerObservabilityTracesJSON              `json:"-"`
 }
 
@@ -328,10 +331,10 @@ func (r workerObservabilityTracesJSON) RawJSON() string {
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type WorkerObservabilityTracesPropagationPolicy string
 
 const (
@@ -624,6 +627,8 @@ type WorkerObservabilityParam struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs param.Field[WorkerObservabilityLogsParam] `json:"logs"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString param.Field[bool] `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces param.Field[WorkerObservabilityTracesParam] `json:"traces"`
 }
@@ -663,10 +668,10 @@ type WorkerObservabilityTracesParam struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist param.Field[bool] `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
 	PropagationPolicy param.Field[WorkerObservabilityTracesPropagationPolicy] `json:"propagation_policy"`
 }
 

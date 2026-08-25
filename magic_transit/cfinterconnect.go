@@ -165,14 +165,14 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the interconnect.
 	Description string `json:"description"`
-	// The configuration specific to GRE interconnects.
+	// Omitted in responses for version 1.5 interconnects.
 	GRE         CfInterconnectUpdateResponseModifiedInterconnectGRE `json:"gre"`
 	HealthCheck HealthCheck                                         `json:"health_check"`
 	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
-	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
-	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
-	// .3 host of the subnet (the fourth address overall; the network address is not
-	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
+	// /30 or /31 prefix. For GRE Interconnects, a /30 or /31 prefix may be used.
+	// Version 1.5 interconnects require a /31 prefix and may also use a prefix from
+	// the account's authorized prefixes; otherwise, select the subnet from RFC 1918 or
+	// the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -295,7 +295,7 @@ func (r cfInterconnectUpdateResponseModifiedInterconnectBGPJSON) RawJSON() strin
 	return r.raw
 }
 
-// The configuration specific to GRE interconnects.
+// Omitted in responses for version 1.5 interconnects.
 type CfInterconnectUpdateResponseModifiedInterconnectGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
@@ -354,14 +354,14 @@ type CfInterconnectListResponseInterconnect struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the interconnect.
 	Description string `json:"description"`
-	// The configuration specific to GRE interconnects.
+	// Omitted in responses for version 1.5 interconnects.
 	GRE         CfInterconnectListResponseInterconnectsGRE `json:"gre"`
 	HealthCheck HealthCheck                                `json:"health_check"`
 	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
-	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
-	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
-	// .3 host of the subnet (the fourth address overall; the network address is not
-	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
+	// /30 or /31 prefix. For GRE Interconnects, a /30 or /31 prefix may be used.
+	// Version 1.5 interconnects require a /31 prefix and may also use a prefix from
+	// the account's authorized prefixes; otherwise, select the subnet from RFC 1918 or
+	// the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -484,7 +484,7 @@ func (r cfInterconnectListResponseInterconnectsBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The configuration specific to GRE interconnects.
+// Omitted in responses for version 1.5 interconnects.
 type CfInterconnectListResponseInterconnectsGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
@@ -545,14 +545,14 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the interconnect.
 	Description string `json:"description"`
-	// The configuration specific to GRE interconnects.
+	// Omitted in responses for version 1.5 interconnects.
 	GRE         CfInterconnectBulkUpdateResponseModifiedInterconnectsGRE `json:"gre"`
 	HealthCheck HealthCheck                                              `json:"health_check"`
 	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
-	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
-	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
-	// .3 host of the subnet (the fourth address overall; the network address is not
-	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
+	// /30 or /31 prefix. For GRE Interconnects, a /30 or /31 prefix may be used.
+	// Version 1.5 interconnects require a /31 prefix and may also use a prefix from
+	// the account's authorized prefixes; otherwise, select the subnet from RFC 1918 or
+	// the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -676,7 +676,7 @@ func (r cfInterconnectBulkUpdateResponseModifiedInterconnectsBGPJSON) RawJSON() 
 	return r.raw
 }
 
-// The configuration specific to GRE interconnects.
+// Omitted in responses for version 1.5 interconnects.
 type CfInterconnectBulkUpdateResponseModifiedInterconnectsGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
@@ -736,14 +736,14 @@ type CfInterconnectGetResponseInterconnect struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the interconnect.
 	Description string `json:"description"`
-	// The configuration specific to GRE interconnects.
+	// Omitted in responses for version 1.5 interconnects.
 	GRE         CfInterconnectGetResponseInterconnectGRE `json:"gre"`
 	HealthCheck HealthCheck                              `json:"health_check"`
 	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
-	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
-	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
-	// .3 host of the subnet (the fourth address overall; the network address is not
-	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
+	// /30 or /31 prefix. For GRE Interconnects, a /30 or /31 prefix may be used.
+	// Version 1.5 interconnects require a /31 prefix and may also use a prefix from
+	// the account's authorized prefixes; otherwise, select the subnet from RFC 1918 or
+	// the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -866,7 +866,7 @@ func (r cfInterconnectGetResponseInterconnectBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The configuration specific to GRE interconnects.
+// Omitted in responses for version 1.5 interconnects.
 type CfInterconnectGetResponseInterconnectGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
@@ -900,14 +900,14 @@ type CfInterconnectUpdateParams struct {
 	BGP                    param.Field[CfInterconnectUpdateParamsBGP] `json:"bgp"`
 	// An optional description of the interconnect.
 	Description param.Field[string] `json:"description"`
-	// The configuration specific to GRE interconnects.
+	// Not configurable for version 1.5 interconnects; supplying it returns an error.
 	GRE         param.Field[CfInterconnectUpdateParamsGRE] `json:"gre"`
 	HealthCheck param.Field[HealthCheckParam]              `json:"health_check"`
 	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
-	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
-	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
-	// .3 host of the subnet (the fourth address overall; the network address is not
-	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
+	// /30 or /31 prefix. For GRE Interconnects, a /30 or /31 prefix may be used.
+	// Version 1.5 interconnects require a /31 prefix and may also use a prefix from
+	// the account's authorized prefixes; otherwise, select the subnet from RFC 1918 or
+	// the approved link-local ranges.
 	InterfaceAddress param.Field[string] `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -973,7 +973,7 @@ func (r CfInterconnectUpdateParamsBGP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The configuration specific to GRE interconnects.
+// Not configurable for version 1.5 interconnects; supplying it returns an error.
 type CfInterconnectUpdateParamsGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.

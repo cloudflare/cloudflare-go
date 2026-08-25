@@ -100,9 +100,6 @@ type ConnectorEventLatestListResponseItem struct {
 	// - `StartUpgrade`: Started upgrade
 	// - `FinishUpgradeSuccess`: Finished upgrade
 	// - `FinishUpgradeFailure`: Failed upgrade
-	// - `BlessSlotSuccess`: Blessed boot entry slot
-	// - `BlessSlotPending`: Boot entry slot is not yet blessed
-	// - `BlessSlotFailure`: Failed to bless boot entry slot
 	// - `Reconcile`: Reconciled
 	// - `ConfigureCloudflaredTunnel`: Configured Cloudflared tunnel
 	// - `RekeyInstallBoth`: Installed initial inbound and outbound keys
@@ -162,9 +159,6 @@ func (r connectorEventLatestListResponseItemJSON) RawJSON() string {
 // - `StartUpgrade`: Started upgrade
 // - `FinishUpgradeSuccess`: Finished upgrade
 // - `FinishUpgradeFailure`: Failed upgrade
-// - `BlessSlotSuccess`: Blessed boot entry slot
-// - `BlessSlotPending`: Boot entry slot is not yet blessed
-// - `BlessSlotFailure`: Failed to bless boot entry slot
 // - `Reconcile`: Reconciled
 // - `ConfigureCloudflaredTunnel`: Configured Cloudflared tunnel
 // - `RekeyInstallBoth`: Installed initial inbound and outbound keys
@@ -1263,9 +1257,6 @@ const (
 	ConnectorEventLatestListResponseItemsEKStartUpgrade                ConnectorEventLatestListResponseItemsEK = "StartUpgrade"
 	ConnectorEventLatestListResponseItemsEKFinishUpgradeSuccess        ConnectorEventLatestListResponseItemsEK = "FinishUpgradeSuccess"
 	ConnectorEventLatestListResponseItemsEKFinishUpgradeFailure        ConnectorEventLatestListResponseItemsEK = "FinishUpgradeFailure"
-	ConnectorEventLatestListResponseItemsEKBlessSlotSuccess            ConnectorEventLatestListResponseItemsEK = "BlessSlotSuccess"
-	ConnectorEventLatestListResponseItemsEKBlessSlotPending            ConnectorEventLatestListResponseItemsEK = "BlessSlotPending"
-	ConnectorEventLatestListResponseItemsEKBlessSlotFailure            ConnectorEventLatestListResponseItemsEK = "BlessSlotFailure"
 	ConnectorEventLatestListResponseItemsEKReconcile                   ConnectorEventLatestListResponseItemsEK = "Reconcile"
 	ConnectorEventLatestListResponseItemsEKConfigureCloudflaredTunnel  ConnectorEventLatestListResponseItemsEK = "ConfigureCloudflaredTunnel"
 	ConnectorEventLatestListResponseItemsEKRekeyInstallBoth            ConnectorEventLatestListResponseItemsEK = "RekeyInstallBoth"
@@ -1282,7 +1273,7 @@ const (
 
 func (r ConnectorEventLatestListResponseItemsEK) IsKnown() bool {
 	switch r {
-	case ConnectorEventLatestListResponseItemsEKInit, ConnectorEventLatestListResponseItemsEKLeave, ConnectorEventLatestListResponseItemsEKStartAttestation, ConnectorEventLatestListResponseItemsEKFinishAttestationSuccess, ConnectorEventLatestListResponseItemsEKFinishAttestationFailure, ConnectorEventLatestListResponseItemsEKStartRotateCryptKey, ConnectorEventLatestListResponseItemsEKFinishRotateCryptKeySuccess, ConnectorEventLatestListResponseItemsEKFinishRotateCryptKeyFailure, ConnectorEventLatestListResponseItemsEKStartRotatePki, ConnectorEventLatestListResponseItemsEKFinishRotatePkiSuccess, ConnectorEventLatestListResponseItemsEKFinishRotatePkiFailure, ConnectorEventLatestListResponseItemsEKStartUpgrade, ConnectorEventLatestListResponseItemsEKFinishUpgradeSuccess, ConnectorEventLatestListResponseItemsEKFinishUpgradeFailure, ConnectorEventLatestListResponseItemsEKBlessSlotSuccess, ConnectorEventLatestListResponseItemsEKBlessSlotPending, ConnectorEventLatestListResponseItemsEKBlessSlotFailure, ConnectorEventLatestListResponseItemsEKReconcile, ConnectorEventLatestListResponseItemsEKConfigureCloudflaredTunnel, ConnectorEventLatestListResponseItemsEKRekeyInstallBoth, ConnectorEventLatestListResponseItemsEKRekeyStart, ConnectorEventLatestListResponseItemsEKRekeyRestart, ConnectorEventLatestListResponseItemsEKRekeyAdvance, ConnectorEventLatestListResponseItemsEKRekeyComplete, ConnectorEventLatestListResponseItemsEKRekeyReset, ConnectorEventLatestListResponseItemsEKHaTransition, ConnectorEventLatestListResponseItemsEKHaError, ConnectorEventLatestListResponseItemsEKHaInit, ConnectorEventLatestListResponseItemsEKHaLeave:
+	case ConnectorEventLatestListResponseItemsEKInit, ConnectorEventLatestListResponseItemsEKLeave, ConnectorEventLatestListResponseItemsEKStartAttestation, ConnectorEventLatestListResponseItemsEKFinishAttestationSuccess, ConnectorEventLatestListResponseItemsEKFinishAttestationFailure, ConnectorEventLatestListResponseItemsEKStartRotateCryptKey, ConnectorEventLatestListResponseItemsEKFinishRotateCryptKeySuccess, ConnectorEventLatestListResponseItemsEKFinishRotateCryptKeyFailure, ConnectorEventLatestListResponseItemsEKStartRotatePki, ConnectorEventLatestListResponseItemsEKFinishRotatePkiSuccess, ConnectorEventLatestListResponseItemsEKFinishRotatePkiFailure, ConnectorEventLatestListResponseItemsEKStartUpgrade, ConnectorEventLatestListResponseItemsEKFinishUpgradeSuccess, ConnectorEventLatestListResponseItemsEKFinishUpgradeFailure, ConnectorEventLatestListResponseItemsEKReconcile, ConnectorEventLatestListResponseItemsEKConfigureCloudflaredTunnel, ConnectorEventLatestListResponseItemsEKRekeyInstallBoth, ConnectorEventLatestListResponseItemsEKRekeyStart, ConnectorEventLatestListResponseItemsEKRekeyRestart, ConnectorEventLatestListResponseItemsEKRekeyAdvance, ConnectorEventLatestListResponseItemsEKRekeyComplete, ConnectorEventLatestListResponseItemsEKRekeyReset, ConnectorEventLatestListResponseItemsEKHaTransition, ConnectorEventLatestListResponseItemsEKHaError, ConnectorEventLatestListResponseItemsEKHaInit, ConnectorEventLatestListResponseItemsEKHaLeave:
 		return true
 	}
 	return false

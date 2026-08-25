@@ -233,7 +233,16 @@ func (r logAuditListResponseActionJSON) RawJSON() string {
 type LogAuditListResponseActor struct {
 	// The ID of the actor who performed the action. If a user performed the action,
 	// this will be their User ID.
-	ID      string                           `json:"id"`
+	ID string `json:"id"`
+	// The context in which the action was initiated.
+	//
+	//   - `api`: The action was performed through the API. The specific credential type
+	//     was not recorded.
+	//   - `api_key`: The action was authenticated with a Cloudflare Global API Key.
+	//   - `api_token`: The action was authenticated with an API token.
+	//   - `dash`: The action was performed through the Cloudflare dashboard.
+	//   - `oauth`: The action was authenticated with an OAuth token.
+	//   - `origin_ca_key`: The action was authenticated with an Origin CA key.
 	Context LogAuditListResponseActorContext `json:"context"`
 	// The email of the actor who performed the action.
 	Email string `json:"email" format:"email"`
@@ -270,9 +279,19 @@ func (r logAuditListResponseActorJSON) RawJSON() string {
 	return r.raw
 }
 
+// The context in which the action was initiated.
+//
+//   - `api`: The action was performed through the API. The specific credential type
+//     was not recorded.
+//   - `api_key`: The action was authenticated with a Cloudflare Global API Key.
+//   - `api_token`: The action was authenticated with an API token.
+//   - `dash`: The action was performed through the Cloudflare dashboard.
+//   - `oauth`: The action was authenticated with an OAuth token.
+//   - `origin_ca_key`: The action was authenticated with an Origin CA key.
 type LogAuditListResponseActorContext string
 
 const (
+	LogAuditListResponseActorContextAPI         LogAuditListResponseActorContext = "api"
 	LogAuditListResponseActorContextAPIKey      LogAuditListResponseActorContext = "api_key"
 	LogAuditListResponseActorContextAPIToken    LogAuditListResponseActorContext = "api_token"
 	LogAuditListResponseActorContextDash        LogAuditListResponseActorContext = "dash"
@@ -282,7 +301,7 @@ const (
 
 func (r LogAuditListResponseActorContext) IsKnown() bool {
 	switch r {
-	case LogAuditListResponseActorContextAPIKey, LogAuditListResponseActorContextAPIToken, LogAuditListResponseActorContextDash, LogAuditListResponseActorContextOAuth, LogAuditListResponseActorContextOriginCAKey:
+	case LogAuditListResponseActorContextAPI, LogAuditListResponseActorContextAPIKey, LogAuditListResponseActorContextAPIToken, LogAuditListResponseActorContextDash, LogAuditListResponseActorContextOAuth, LogAuditListResponseActorContextOriginCAKey:
 		return true
 	}
 	return false
@@ -292,15 +311,16 @@ func (r LogAuditListResponseActorContext) IsKnown() bool {
 type LogAuditListResponseActorType string
 
 const (
-	LogAuditListResponseActorTypeAccount         LogAuditListResponseActorType = "account"
-	LogAuditListResponseActorTypeCloudflareAdmin LogAuditListResponseActorType = "cloudflare_admin"
-	LogAuditListResponseActorTypeSystem          LogAuditListResponseActorType = "system"
-	LogAuditListResponseActorTypeUser            LogAuditListResponseActorType = "user"
+	LogAuditListResponseActorTypeAccount          LogAuditListResponseActorType = "account"
+	LogAuditListResponseActorTypeCloudflareAdmin  LogAuditListResponseActorType = "cloudflare_admin"
+	LogAuditListResponseActorTypeDelegatedService LogAuditListResponseActorType = "delegated_service"
+	LogAuditListResponseActorTypeSystem           LogAuditListResponseActorType = "system"
+	LogAuditListResponseActorTypeUser             LogAuditListResponseActorType = "user"
 )
 
 func (r LogAuditListResponseActorType) IsKnown() bool {
 	switch r {
-	case LogAuditListResponseActorTypeAccount, LogAuditListResponseActorTypeCloudflareAdmin, LogAuditListResponseActorTypeSystem, LogAuditListResponseActorTypeUser:
+	case LogAuditListResponseActorTypeAccount, LogAuditListResponseActorTypeCloudflareAdmin, LogAuditListResponseActorTypeDelegatedService, LogAuditListResponseActorTypeSystem, LogAuditListResponseActorTypeUser:
 		return true
 	}
 	return false
@@ -505,7 +525,16 @@ func (r logAuditHistoryResponseActionJSON) RawJSON() string {
 type LogAuditHistoryResponseActor struct {
 	// The ID of the actor who performed the action. If a user performed the action,
 	// this will be their User ID.
-	ID      string                              `json:"id"`
+	ID string `json:"id"`
+	// The context in which the action was initiated.
+	//
+	//   - `api`: The action was performed through the API. The specific credential type
+	//     was not recorded.
+	//   - `api_key`: The action was authenticated with a Cloudflare Global API Key.
+	//   - `api_token`: The action was authenticated with an API token.
+	//   - `dash`: The action was performed through the Cloudflare dashboard.
+	//   - `oauth`: The action was authenticated with an OAuth token.
+	//   - `origin_ca_key`: The action was authenticated with an Origin CA key.
 	Context LogAuditHistoryResponseActorContext `json:"context"`
 	// The email of the actor who performed the action.
 	Email string `json:"email" format:"email"`
@@ -542,9 +571,19 @@ func (r logAuditHistoryResponseActorJSON) RawJSON() string {
 	return r.raw
 }
 
+// The context in which the action was initiated.
+//
+//   - `api`: The action was performed through the API. The specific credential type
+//     was not recorded.
+//   - `api_key`: The action was authenticated with a Cloudflare Global API Key.
+//   - `api_token`: The action was authenticated with an API token.
+//   - `dash`: The action was performed through the Cloudflare dashboard.
+//   - `oauth`: The action was authenticated with an OAuth token.
+//   - `origin_ca_key`: The action was authenticated with an Origin CA key.
 type LogAuditHistoryResponseActorContext string
 
 const (
+	LogAuditHistoryResponseActorContextAPI         LogAuditHistoryResponseActorContext = "api"
 	LogAuditHistoryResponseActorContextAPIKey      LogAuditHistoryResponseActorContext = "api_key"
 	LogAuditHistoryResponseActorContextAPIToken    LogAuditHistoryResponseActorContext = "api_token"
 	LogAuditHistoryResponseActorContextDash        LogAuditHistoryResponseActorContext = "dash"
@@ -554,7 +593,7 @@ const (
 
 func (r LogAuditHistoryResponseActorContext) IsKnown() bool {
 	switch r {
-	case LogAuditHistoryResponseActorContextAPIKey, LogAuditHistoryResponseActorContextAPIToken, LogAuditHistoryResponseActorContextDash, LogAuditHistoryResponseActorContextOAuth, LogAuditHistoryResponseActorContextOriginCAKey:
+	case LogAuditHistoryResponseActorContextAPI, LogAuditHistoryResponseActorContextAPIKey, LogAuditHistoryResponseActorContextAPIToken, LogAuditHistoryResponseActorContextDash, LogAuditHistoryResponseActorContextOAuth, LogAuditHistoryResponseActorContextOriginCAKey:
 		return true
 	}
 	return false
@@ -564,15 +603,16 @@ func (r LogAuditHistoryResponseActorContext) IsKnown() bool {
 type LogAuditHistoryResponseActorType string
 
 const (
-	LogAuditHistoryResponseActorTypeAccount         LogAuditHistoryResponseActorType = "account"
-	LogAuditHistoryResponseActorTypeCloudflareAdmin LogAuditHistoryResponseActorType = "cloudflare_admin"
-	LogAuditHistoryResponseActorTypeSystem          LogAuditHistoryResponseActorType = "system"
-	LogAuditHistoryResponseActorTypeUser            LogAuditHistoryResponseActorType = "user"
+	LogAuditHistoryResponseActorTypeAccount          LogAuditHistoryResponseActorType = "account"
+	LogAuditHistoryResponseActorTypeCloudflareAdmin  LogAuditHistoryResponseActorType = "cloudflare_admin"
+	LogAuditHistoryResponseActorTypeDelegatedService LogAuditHistoryResponseActorType = "delegated_service"
+	LogAuditHistoryResponseActorTypeSystem           LogAuditHistoryResponseActorType = "system"
+	LogAuditHistoryResponseActorTypeUser             LogAuditHistoryResponseActorType = "user"
 )
 
 func (r LogAuditHistoryResponseActorType) IsKnown() bool {
 	switch r {
-	case LogAuditHistoryResponseActorTypeAccount, LogAuditHistoryResponseActorTypeCloudflareAdmin, LogAuditHistoryResponseActorTypeSystem, LogAuditHistoryResponseActorTypeUser:
+	case LogAuditHistoryResponseActorTypeAccount, LogAuditHistoryResponseActorTypeCloudflareAdmin, LogAuditHistoryResponseActorTypeDelegatedService, LogAuditHistoryResponseActorTypeSystem, LogAuditHistoryResponseActorTypeUser:
 		return true
 	}
 	return false
@@ -878,6 +918,14 @@ func (r LogAuditListParamsActionTypeNot) IsKnown() bool {
 
 type LogAuditListParamsActorContext struct {
 	// Filters out audit logs by the actor context.
+	//
+	//   - `api`: The action was performed through the API. The specific credential type
+	//     was not recorded.
+	//   - `api_key`: The action was authenticated with a Cloudflare Global API Key.
+	//   - `api_token`: The action was authenticated with an API token.
+	//   - `dash`: The action was performed through the Cloudflare dashboard.
+	//   - `oauth`: The action was authenticated with an OAuth token.
+	//   - `origin_ca_key`: The action was authenticated with an Origin CA key.
 	Not param.Field[[]LogAuditListParamsActorContextNot] `query:"not"`
 }
 
@@ -893,6 +941,7 @@ func (r LogAuditListParamsActorContext) URLQuery() (v url.Values) {
 type LogAuditListParamsActorContextNot string
 
 const (
+	LogAuditListParamsActorContextNotAPI         LogAuditListParamsActorContextNot = "api"
 	LogAuditListParamsActorContextNotAPIKey      LogAuditListParamsActorContextNot = "api_key"
 	LogAuditListParamsActorContextNotAPIToken    LogAuditListParamsActorContextNot = "api_token"
 	LogAuditListParamsActorContextNotDash        LogAuditListParamsActorContextNot = "dash"
@@ -902,7 +951,7 @@ const (
 
 func (r LogAuditListParamsActorContextNot) IsKnown() bool {
 	switch r {
-	case LogAuditListParamsActorContextNotAPIKey, LogAuditListParamsActorContextNotAPIToken, LogAuditListParamsActorContextNotDash, LogAuditListParamsActorContextNotOAuth, LogAuditListParamsActorContextNotOriginCAKey:
+	case LogAuditListParamsActorContextNotAPI, LogAuditListParamsActorContextNotAPIKey, LogAuditListParamsActorContextNotAPIToken, LogAuditListParamsActorContextNotDash, LogAuditListParamsActorContextNotOAuth, LogAuditListParamsActorContextNotOriginCAKey:
 		return true
 	}
 	return false
@@ -998,15 +1047,16 @@ func (r LogAuditListParamsActorType) URLQuery() (v url.Values) {
 type LogAuditListParamsActorTypeNot string
 
 const (
-	LogAuditListParamsActorTypeNotAccount         LogAuditListParamsActorTypeNot = "account"
-	LogAuditListParamsActorTypeNotCloudflareAdmin LogAuditListParamsActorTypeNot = "cloudflare_admin"
-	LogAuditListParamsActorTypeNotSystem          LogAuditListParamsActorTypeNot = "system"
-	LogAuditListParamsActorTypeNotUser            LogAuditListParamsActorTypeNot = "user"
+	LogAuditListParamsActorTypeNotAccount          LogAuditListParamsActorTypeNot = "account"
+	LogAuditListParamsActorTypeNotCloudflareAdmin  LogAuditListParamsActorTypeNot = "cloudflare_admin"
+	LogAuditListParamsActorTypeNotDelegatedService LogAuditListParamsActorTypeNot = "delegated_service"
+	LogAuditListParamsActorTypeNotSystem           LogAuditListParamsActorTypeNot = "system"
+	LogAuditListParamsActorTypeNotUser             LogAuditListParamsActorTypeNot = "user"
 )
 
 func (r LogAuditListParamsActorTypeNot) IsKnown() bool {
 	switch r {
-	case LogAuditListParamsActorTypeNotAccount, LogAuditListParamsActorTypeNotCloudflareAdmin, LogAuditListParamsActorTypeNotSystem, LogAuditListParamsActorTypeNotUser:
+	case LogAuditListParamsActorTypeNotAccount, LogAuditListParamsActorTypeNotCloudflareAdmin, LogAuditListParamsActorTypeNotDelegatedService, LogAuditListParamsActorTypeNotSystem, LogAuditListParamsActorTypeNotUser:
 		return true
 	}
 	return false

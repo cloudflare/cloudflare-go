@@ -49,7 +49,9 @@ func NewTunnelCloudflaredService(opts ...option.RequestOption) (r *TunnelCloudfl
 	return
 }
 
-// Creates a new Cloudflare Tunnel in an account.
+// Creates a remotely or locally managed Cloudflare Tunnel in an account. After
+// creation, retrieve its token and run cloudflared to establish the connector
+// connection.
 func (r *TunnelCloudflaredService) New(ctx context.Context, params TunnelCloudflaredNewParams, opts ...option.RequestOption) (res *shared.CloudflareTunnel, err error) {
 	var env TunnelCloudflaredNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -93,7 +95,8 @@ func (r *TunnelCloudflaredService) ListAutoPaging(ctx context.Context, params Tu
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes a Cloudflare Tunnel from an account.
+// Permanently deletes a Cloudflare Tunnel from an account. The tunnel must have no
+// active connections.
 func (r *TunnelCloudflaredService) Delete(ctx context.Context, tunnelID string, body TunnelCloudflaredDeleteParams, opts ...option.RequestOption) (res *shared.CloudflareTunnel, err error) {
 	var env TunnelCloudflaredDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -114,7 +117,7 @@ func (r *TunnelCloudflaredService) Delete(ctx context.Context, tunnelID string, 
 	return res, nil
 }
 
-// Updates an existing Cloudflare Tunnel.
+// Updates the name or secret of an existing Cloudflare Tunnel.
 func (r *TunnelCloudflaredService) Edit(ctx context.Context, tunnelID string, params TunnelCloudflaredEditParams, opts ...option.RequestOption) (res *shared.CloudflareTunnel, err error) {
 	var env TunnelCloudflaredEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -63,7 +63,8 @@ func (r *TunnelCloudflaredConnectionService) Delete(ctx context.Context, tunnelI
 	return res, nil
 }
 
-// Fetches connection details for a Cloudflare Tunnel.
+// Lists the connections for a Cloudflare Tunnel, including connector IDs,
+// cloudflared versions, and Cloudflare locations.
 func (r *TunnelCloudflaredConnectionService) Get(ctx context.Context, tunnelID string, query TunnelCloudflaredConnectionGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[Client], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -89,7 +90,8 @@ func (r *TunnelCloudflaredConnectionService) Get(ctx context.Context, tunnelID s
 	return res, nil
 }
 
-// Fetches connection details for a Cloudflare Tunnel.
+// Lists the connections for a Cloudflare Tunnel, including connector IDs,
+// cloudflared versions, and Cloudflare locations.
 func (r *TunnelCloudflaredConnectionService) GetAutoPaging(ctx context.Context, tunnelID string, query TunnelCloudflaredConnectionGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Client] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, tunnelID, query, opts...))
 }
@@ -145,6 +147,14 @@ type ClientConn struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	//
+	// Deprecated: This functionality has been removed. The is_pending_reconnect field
+	// will now always report false.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -156,15 +166,16 @@ type ClientConn struct {
 
 // clientConnJSON contains the JSON metadata for the struct [ClientConn]
 type clientConnJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *ClientConn) UnmarshalJSON(data []byte) (err error) {

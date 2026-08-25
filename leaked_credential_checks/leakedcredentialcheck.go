@@ -37,7 +37,11 @@ func NewLeakedCredentialCheckService(opts ...option.RequestOption) (r *LeakedCre
 	return
 }
 
-// Updates the current status of Leaked Credential Checks.
+// Update the Leaked Credential Checks status for the zone, enabling or disabling
+// the detection. While enabled, the detection populates the
+// `cf.waf.credential_check.*` fields, which you can reference in custom rules and
+// rate limiting rules to challenge or block requests carrying compromised
+// credentials.
 func (r *LeakedCredentialCheckService) New(ctx context.Context, params LeakedCredentialCheckNewParams, opts ...option.RequestOption) (res *LeakedCredentialCheckNewResponse, err error) {
 	var env LeakedCredentialCheckNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,7 +58,9 @@ func (r *LeakedCredentialCheckService) New(ctx context.Context, params LeakedCre
 	return res, nil
 }
 
-// Retrieves the current status of Leaked Credential Checks.
+// Get the current Leaked Credential Checks status for the zone. While enabled,
+// Cloudflare scans incoming requests for usernames and passwords that were exposed
+// in known data breaches.
 func (r *LeakedCredentialCheckService) Get(ctx context.Context, query LeakedCredentialCheckGetParams, opts ...option.RequestOption) (res *LeakedCredentialCheckGetResponse, err error) {
 	var env LeakedCredentialCheckGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

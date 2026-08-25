@@ -48,6 +48,8 @@ func NewPrecursorService(opts ...option.RequestOption) (r *PrecursorService) {
 //   - Rule `id` is read-only (assigned by Cloudflare) and ignored on input.
 //   - Rule `mode` must be `min-friction` or `max-security` (`off` is not a valid
 //     rule mode; use `default_mode` to disable enforcement).
+//   - Rule `expression` is limited to 4000 characters. The limit applies to each
+//     rule individually, not to the combined size of all rules.
 func (r *PrecursorService) Update(ctx context.Context, params PrecursorUpdateParams, opts ...option.RequestOption) (res *PrecursorConfig, err error) {
 	var env PrecursorUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

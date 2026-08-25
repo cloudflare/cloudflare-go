@@ -85,10 +85,10 @@ func (r *SinkService) ListAutoPaging(ctx context.Context, params SinkListParams,
 }
 
 // Delete Sink in Account.
-func (r *SinkService) Delete(ctx context.Context, sinkID string, params SinkDeleteParams, opts ...option.RequestOption) (res *SinkDeleteResponse, err error) {
+func (r *SinkService) Delete(ctx context.Context, sinkID string, body SinkDeleteParams, opts ...option.RequestOption) (res *SinkDeleteResponse, err error) {
 	var env SinkDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -96,8 +96,8 @@ func (r *SinkService) Delete(ctx context.Context, sinkID string, params SinkDele
 		err = errors.New("missing required sink_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/pipelines/v1/sinks/%s", params.AccountID, sinkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pipelines/v1/sinks/%s", body.AccountID, sinkID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -5784,16 +5784,6 @@ func (r SinkListParams) URLQuery() (v url.Values) {
 type SinkDeleteParams struct {
 	// Specifies the public ID of the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Deprecated: Delete sink forcefully, including deleting any dependent pipelines.
-	Force param.Field[string] `query:"force"`
-}
-
-// URLQuery serializes [SinkDeleteParams]'s query parameters as `url.Values`.
-func (r SinkDeleteParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type SinkDeleteResponseEnvelope struct {

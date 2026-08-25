@@ -104,7 +104,7 @@ type SettingUpdateResponse struct {
 	// for the whole zone.
 	//
 	// - `"none"` will skip running schema validation entirely for the request
-	ValidationOverrideMitigationAction SettingUpdateResponseValidationOverrideMitigationAction `json:"validation_override_mitigation_action"`
+	ValidationOverrideMitigationAction SettingUpdateResponseValidationOverrideMitigationAction `json:"validation_override_mitigation_action" api:"nullable"`
 	JSON                               settingUpdateResponseJSON                               `json:"-"`
 }
 
@@ -181,7 +181,7 @@ type SettingEditResponse struct {
 	// for the whole zone.
 	//
 	// - `"none"` will skip running schema validation entirely for the request
-	ValidationOverrideMitigationAction SettingEditResponseValidationOverrideMitigationAction `json:"validation_override_mitigation_action"`
+	ValidationOverrideMitigationAction SettingEditResponseValidationOverrideMitigationAction `json:"validation_override_mitigation_action" api:"nullable"`
 	JSON                               settingEditResponseJSON                               `json:"-"`
 }
 
@@ -258,7 +258,7 @@ type SettingGetResponse struct {
 	// for the whole zone.
 	//
 	// - `"none"` will skip running schema validation entirely for the request
-	ValidationOverrideMitigationAction SettingGetResponseValidationOverrideMitigationAction `json:"validation_override_mitigation_action"`
+	ValidationOverrideMitigationAction SettingGetResponseValidationOverrideMitigationAction `json:"validation_override_mitigation_action" api:"nullable"`
 	JSON                               settingGetResponseJSON                               `json:"-"`
 }
 

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 	"time"
 
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/tidwall/gjson"
 )
 
 // RecordingService contains methods and other services that help with interacting
@@ -547,75 +549,170 @@ func (r RecordingGetOneRecordingResponseDataStopReasonReason) IsKnown() bool {
 }
 
 type RecordingGetOneRecordingResponseDataStorageConfig struct {
-	// Type of storage media.
-	Type RecordingGetOneRecordingResponseDataStorageConfigType `json:"type" api:"required"`
+	// This field can have the runtime type of [string], [interface{}].
+	AccessKey interface{} `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod RecordingGetOneRecordingResponseDataStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket string `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
 	Host string `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password string `json:"password"`
 	// Path relative to the bucket root at which the recording will be placed.
 	Path string `json:"path"`
 	// SSH destination server port for SFTP type storage medium
 	Port float64 `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey string `json:"private_key"`
-	// Region of the storage medium.
-	Region string `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret string `json:"secret"`
+	// This field can have the runtime type of [string], [interface{}].
+	Region interface{}                                           `json:"region"`
+	Type   RecordingGetOneRecordingResponseDataStorageConfigType `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username string                                                `json:"username"`
 	JSON     recordingGetOneRecordingResponseDataStorageConfigJSON `json:"-"`
+	union    RecordingGetOneRecordingResponseDataStorageConfigUnion
 }
 
 // recordingGetOneRecordingResponseDataStorageConfigJSON contains the JSON metadata
 // for the struct [RecordingGetOneRecordingResponseDataStorageConfig]
 type recordingGetOneRecordingResponseDataStorageConfigJSON struct {
-	Type        apijson.Field
+	AccessKey   apijson.Field
 	AuthMethod  apijson.Field
 	Bucket      apijson.Field
 	Host        apijson.Field
-	Password    apijson.Field
 	Path        apijson.Field
 	Port        apijson.Field
-	PrivateKey  apijson.Field
 	Region      apijson.Field
-	Secret      apijson.Field
+	Type        apijson.Field
 	Username    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordingGetOneRecordingResponseDataStorageConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r recordingGetOneRecordingResponseDataStorageConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of storage media.
-type RecordingGetOneRecordingResponseDataStorageConfigType string
+func (r *RecordingGetOneRecordingResponseDataStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	*r = RecordingGetOneRecordingResponseDataStorageConfig{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [RecordingGetOneRecordingResponseDataStorageConfigUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RecordingGetOneRecordingResponseDataStorageConfigObject],
+// [RecordingGetOneRecordingResponseDataStorageConfigObject],
+// [RecordingGetOneRecordingResponseDataStorageConfigObject],
+// [RecordingGetOneRecordingResponseDataStorageConfigObject].
+func (r RecordingGetOneRecordingResponseDataStorageConfig) AsUnion() RecordingGetOneRecordingResponseDataStorageConfigUnion {
+	return r.union
+}
+
+// Union satisfied by [RecordingGetOneRecordingResponseDataStorageConfigObject],
+// [RecordingGetOneRecordingResponseDataStorageConfigObject],
+// [RecordingGetOneRecordingResponseDataStorageConfigObject] or
+// [RecordingGetOneRecordingResponseDataStorageConfigObject].
+type RecordingGetOneRecordingResponseDataStorageConfigUnion interface {
+	implementsRecordingGetOneRecordingResponseDataStorageConfig()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RecordingGetOneRecordingResponseDataStorageConfigUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetOneRecordingResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetOneRecordingResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetOneRecordingResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetOneRecordingResponseDataStorageConfigObject{}),
+		},
+	)
+}
+
+type RecordingGetOneRecordingResponseDataStorageConfigObject struct {
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod RecordingGetOneRecordingResponseDataStorageConfigObjectAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Region of the storage medium.
+	Region string                                                      `json:"region"`
+	Type   RecordingGetOneRecordingResponseDataStorageConfigObjectType `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                      `json:"username"`
+	JSON     recordingGetOneRecordingResponseDataStorageConfigObjectJSON `json:"-"`
+}
+
+// recordingGetOneRecordingResponseDataStorageConfigObjectJSON contains the JSON
+// metadata for the struct
+// [RecordingGetOneRecordingResponseDataStorageConfigObject]
+type recordingGetOneRecordingResponseDataStorageConfigObjectJSON struct {
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	Region      apijson.Field
+	Type        apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingGetOneRecordingResponseDataStorageConfigObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetOneRecordingResponseDataStorageConfigObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RecordingGetOneRecordingResponseDataStorageConfigObject) implementsRecordingGetOneRecordingResponseDataStorageConfig() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type RecordingGetOneRecordingResponseDataStorageConfigObjectAuthMethod string
 
 const (
-	RecordingGetOneRecordingResponseDataStorageConfigTypeAws          RecordingGetOneRecordingResponseDataStorageConfigType = "aws"
-	RecordingGetOneRecordingResponseDataStorageConfigTypeAzure        RecordingGetOneRecordingResponseDataStorageConfigType = "azure"
-	RecordingGetOneRecordingResponseDataStorageConfigTypeDigitalocean RecordingGetOneRecordingResponseDataStorageConfigType = "digitalocean"
-	RecordingGetOneRecordingResponseDataStorageConfigTypeGcs          RecordingGetOneRecordingResponseDataStorageConfigType = "gcs"
-	RecordingGetOneRecordingResponseDataStorageConfigTypeSftp         RecordingGetOneRecordingResponseDataStorageConfigType = "sftp"
+	RecordingGetOneRecordingResponseDataStorageConfigObjectAuthMethodKey      RecordingGetOneRecordingResponseDataStorageConfigObjectAuthMethod = "KEY"
+	RecordingGetOneRecordingResponseDataStorageConfigObjectAuthMethodPassword RecordingGetOneRecordingResponseDataStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r RecordingGetOneRecordingResponseDataStorageConfigType) IsKnown() bool {
+func (r RecordingGetOneRecordingResponseDataStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case RecordingGetOneRecordingResponseDataStorageConfigTypeAws, RecordingGetOneRecordingResponseDataStorageConfigTypeAzure, RecordingGetOneRecordingResponseDataStorageConfigTypeDigitalocean, RecordingGetOneRecordingResponseDataStorageConfigTypeGcs, RecordingGetOneRecordingResponseDataStorageConfigTypeSftp:
+	case RecordingGetOneRecordingResponseDataStorageConfigObjectAuthMethodKey, RecordingGetOneRecordingResponseDataStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingGetOneRecordingResponseDataStorageConfigObjectType string
+
+const (
+	RecordingGetOneRecordingResponseDataStorageConfigObjectTypeGcs RecordingGetOneRecordingResponseDataStorageConfigObjectType = "gcs"
+)
+
+func (r RecordingGetOneRecordingResponseDataStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case RecordingGetOneRecordingResponseDataStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -632,6 +729,24 @@ const (
 func (r RecordingGetOneRecordingResponseDataStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case RecordingGetOneRecordingResponseDataStorageConfigAuthMethodKey, RecordingGetOneRecordingResponseDataStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingGetOneRecordingResponseDataStorageConfigType string
+
+const (
+	RecordingGetOneRecordingResponseDataStorageConfigTypeGcs          RecordingGetOneRecordingResponseDataStorageConfigType = "gcs"
+	RecordingGetOneRecordingResponseDataStorageConfigTypeAws          RecordingGetOneRecordingResponseDataStorageConfigType = "aws"
+	RecordingGetOneRecordingResponseDataStorageConfigTypeAzure        RecordingGetOneRecordingResponseDataStorageConfigType = "azure"
+	RecordingGetOneRecordingResponseDataStorageConfigTypeDigitalocean RecordingGetOneRecordingResponseDataStorageConfigType = "digitalocean"
+	RecordingGetOneRecordingResponseDataStorageConfigTypeSftp         RecordingGetOneRecordingResponseDataStorageConfigType = "sftp"
+)
+
+func (r RecordingGetOneRecordingResponseDataStorageConfigType) IsKnown() bool {
+	switch r {
+	case RecordingGetOneRecordingResponseDataStorageConfigTypeGcs, RecordingGetOneRecordingResponseDataStorageConfigTypeAws, RecordingGetOneRecordingResponseDataStorageConfigTypeAzure, RecordingGetOneRecordingResponseDataStorageConfigTypeDigitalocean, RecordingGetOneRecordingResponseDataStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -961,76 +1076,173 @@ func (r recordingGetRecordingsResponseDataMeetingRecordingConfigRealtimekitBucke
 }
 
 type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig struct {
-	// Type of storage media.
-	Type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType `json:"type" api:"required"`
+	// This field can have the runtime type of [string], [interface{}].
+	AccessKey interface{} `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket string `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
 	Host string `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password string `json:"password"`
 	// Path relative to the bucket root at which the recording will be placed.
 	Path string `json:"path"`
 	// SSH destination server port for SFTP type storage medium
 	Port float64 `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey string `json:"private_key"`
-	// Region of the storage medium.
-	Region string `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret string `json:"secret"`
+	// This field can have the runtime type of [string], [interface{}].
+	Region interface{}                                                               `json:"region"`
+	Type   RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username string                                                                    `json:"username"`
 	JSON     recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigJSON `json:"-"`
+	union    RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigUnion
 }
 
 // recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigJSON
 // contains the JSON metadata for the struct
 // [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig]
 type recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigJSON struct {
-	Type        apijson.Field
+	AccessKey   apijson.Field
 	AuthMethod  apijson.Field
 	Bucket      apijson.Field
 	Host        apijson.Field
-	Password    apijson.Field
 	Path        apijson.Field
 	Port        apijson.Field
-	PrivateKey  apijson.Field
 	Region      apijson.Field
-	Secret      apijson.Field
+	Type        apijson.Field
 	Username    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of storage media.
-type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType string
+func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	*r = RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject],
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject],
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject],
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject].
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig) AsUnion() RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigUnion {
+	return r.union
+}
+
+// Union satisfied by
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject],
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject],
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject] or
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject].
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigUnion interface {
+	implementsRecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject{}),
+		},
+	)
+}
+
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject struct {
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Region of the storage medium.
+	Region string                                                                          `json:"region"`
+	Type   RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectType `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                                          `json:"username"`
+	JSON     recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectJSON `json:"-"`
+}
+
+// recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectJSON
+// contains the JSON metadata for the struct
+// [RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject]
+type recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectJSON struct {
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	Region      apijson.Field
+	Type        apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObject) implementsRecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfig() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectAuthMethod string
 
 const (
-	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAws          RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "aws"
-	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAzure        RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "azure"
-	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeDigitalocean RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "digitalocean"
-	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeGcs          RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "gcs"
-	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeSftp         RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "sftp"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectAuthMethodKey      RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectAuthMethod = "KEY"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectAuthMethodPassword RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType) IsKnown() bool {
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAws, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAzure, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeDigitalocean, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeGcs, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeSftp:
+	case RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectAuthMethodKey, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectType string
+
+const (
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectTypeGcs RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectType = "gcs"
+)
+
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -1047,6 +1259,24 @@ const (
 func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethodKey, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType string
+
+const (
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeGcs          RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "gcs"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAws          RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "aws"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAzure        RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "azure"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeDigitalocean RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "digitalocean"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeSftp         RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType = "sftp"
+)
+
+func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigType) IsKnown() bool {
+	switch r {
+	case RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeGcs, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAws, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeAzure, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeDigitalocean, RecordingGetRecordingsResponseDataMeetingRecordingConfigStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -1093,11 +1323,12 @@ type RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodec st
 const (
 	RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecH264 RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodec = "H264"
 	RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecVp8  RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodec = "VP8"
+	RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecVp9  RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodec = "VP9"
 )
 
 func (r RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodec) IsKnown() bool {
 	switch r {
-	case RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecH264, RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecVp8:
+	case RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecH264, RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecVp8, RecordingGetRecordingsResponseDataMeetingRecordingConfigVideoConfigCodecVp9:
 		return true
 	}
 	return false
@@ -1196,75 +1427,169 @@ func (r RecordingGetRecordingsResponseDataMeetingStatus) IsKnown() bool {
 }
 
 type RecordingGetRecordingsResponseDataStorageConfig struct {
-	// Type of storage media.
-	Type RecordingGetRecordingsResponseDataStorageConfigType `json:"type" api:"required"`
+	// This field can have the runtime type of [string], [interface{}].
+	AccessKey interface{} `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod RecordingGetRecordingsResponseDataStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket string `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
 	Host string `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password string `json:"password"`
 	// Path relative to the bucket root at which the recording will be placed.
 	Path string `json:"path"`
 	// SSH destination server port for SFTP type storage medium
 	Port float64 `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey string `json:"private_key"`
-	// Region of the storage medium.
-	Region string `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret string `json:"secret"`
+	// This field can have the runtime type of [string], [interface{}].
+	Region interface{}                                         `json:"region"`
+	Type   RecordingGetRecordingsResponseDataStorageConfigType `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username string                                              `json:"username"`
 	JSON     recordingGetRecordingsResponseDataStorageConfigJSON `json:"-"`
+	union    RecordingGetRecordingsResponseDataStorageConfigUnion
 }
 
 // recordingGetRecordingsResponseDataStorageConfigJSON contains the JSON metadata
 // for the struct [RecordingGetRecordingsResponseDataStorageConfig]
 type recordingGetRecordingsResponseDataStorageConfigJSON struct {
-	Type        apijson.Field
+	AccessKey   apijson.Field
 	AuthMethod  apijson.Field
 	Bucket      apijson.Field
 	Host        apijson.Field
-	Password    apijson.Field
 	Path        apijson.Field
 	Port        apijson.Field
-	PrivateKey  apijson.Field
 	Region      apijson.Field
-	Secret      apijson.Field
+	Type        apijson.Field
 	Username    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordingGetRecordingsResponseDataStorageConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r recordingGetRecordingsResponseDataStorageConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of storage media.
-type RecordingGetRecordingsResponseDataStorageConfigType string
+func (r *RecordingGetRecordingsResponseDataStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	*r = RecordingGetRecordingsResponseDataStorageConfig{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [RecordingGetRecordingsResponseDataStorageConfigUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RecordingGetRecordingsResponseDataStorageConfigObject],
+// [RecordingGetRecordingsResponseDataStorageConfigObject],
+// [RecordingGetRecordingsResponseDataStorageConfigObject],
+// [RecordingGetRecordingsResponseDataStorageConfigObject].
+func (r RecordingGetRecordingsResponseDataStorageConfig) AsUnion() RecordingGetRecordingsResponseDataStorageConfigUnion {
+	return r.union
+}
+
+// Union satisfied by [RecordingGetRecordingsResponseDataStorageConfigObject],
+// [RecordingGetRecordingsResponseDataStorageConfigObject],
+// [RecordingGetRecordingsResponseDataStorageConfigObject] or
+// [RecordingGetRecordingsResponseDataStorageConfigObject].
+type RecordingGetRecordingsResponseDataStorageConfigUnion interface {
+	implementsRecordingGetRecordingsResponseDataStorageConfig()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RecordingGetRecordingsResponseDataStorageConfigUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetRecordingsResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetRecordingsResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetRecordingsResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingGetRecordingsResponseDataStorageConfigObject{}),
+		},
+	)
+}
+
+type RecordingGetRecordingsResponseDataStorageConfigObject struct {
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod RecordingGetRecordingsResponseDataStorageConfigObjectAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Region of the storage medium.
+	Region string                                                    `json:"region"`
+	Type   RecordingGetRecordingsResponseDataStorageConfigObjectType `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                    `json:"username"`
+	JSON     recordingGetRecordingsResponseDataStorageConfigObjectJSON `json:"-"`
+}
+
+// recordingGetRecordingsResponseDataStorageConfigObjectJSON contains the JSON
+// metadata for the struct [RecordingGetRecordingsResponseDataStorageConfigObject]
+type recordingGetRecordingsResponseDataStorageConfigObjectJSON struct {
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	Region      apijson.Field
+	Type        apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingGetRecordingsResponseDataStorageConfigObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingGetRecordingsResponseDataStorageConfigObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RecordingGetRecordingsResponseDataStorageConfigObject) implementsRecordingGetRecordingsResponseDataStorageConfig() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type RecordingGetRecordingsResponseDataStorageConfigObjectAuthMethod string
 
 const (
-	RecordingGetRecordingsResponseDataStorageConfigTypeAws          RecordingGetRecordingsResponseDataStorageConfigType = "aws"
-	RecordingGetRecordingsResponseDataStorageConfigTypeAzure        RecordingGetRecordingsResponseDataStorageConfigType = "azure"
-	RecordingGetRecordingsResponseDataStorageConfigTypeDigitalocean RecordingGetRecordingsResponseDataStorageConfigType = "digitalocean"
-	RecordingGetRecordingsResponseDataStorageConfigTypeGcs          RecordingGetRecordingsResponseDataStorageConfigType = "gcs"
-	RecordingGetRecordingsResponseDataStorageConfigTypeSftp         RecordingGetRecordingsResponseDataStorageConfigType = "sftp"
+	RecordingGetRecordingsResponseDataStorageConfigObjectAuthMethodKey      RecordingGetRecordingsResponseDataStorageConfigObjectAuthMethod = "KEY"
+	RecordingGetRecordingsResponseDataStorageConfigObjectAuthMethodPassword RecordingGetRecordingsResponseDataStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r RecordingGetRecordingsResponseDataStorageConfigType) IsKnown() bool {
+func (r RecordingGetRecordingsResponseDataStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case RecordingGetRecordingsResponseDataStorageConfigTypeAws, RecordingGetRecordingsResponseDataStorageConfigTypeAzure, RecordingGetRecordingsResponseDataStorageConfigTypeDigitalocean, RecordingGetRecordingsResponseDataStorageConfigTypeGcs, RecordingGetRecordingsResponseDataStorageConfigTypeSftp:
+	case RecordingGetRecordingsResponseDataStorageConfigObjectAuthMethodKey, RecordingGetRecordingsResponseDataStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingGetRecordingsResponseDataStorageConfigObjectType string
+
+const (
+	RecordingGetRecordingsResponseDataStorageConfigObjectTypeGcs RecordingGetRecordingsResponseDataStorageConfigObjectType = "gcs"
+)
+
+func (r RecordingGetRecordingsResponseDataStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case RecordingGetRecordingsResponseDataStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -1281,6 +1606,24 @@ const (
 func (r RecordingGetRecordingsResponseDataStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case RecordingGetRecordingsResponseDataStorageConfigAuthMethodKey, RecordingGetRecordingsResponseDataStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingGetRecordingsResponseDataStorageConfigType string
+
+const (
+	RecordingGetRecordingsResponseDataStorageConfigTypeGcs          RecordingGetRecordingsResponseDataStorageConfigType = "gcs"
+	RecordingGetRecordingsResponseDataStorageConfigTypeAws          RecordingGetRecordingsResponseDataStorageConfigType = "aws"
+	RecordingGetRecordingsResponseDataStorageConfigTypeAzure        RecordingGetRecordingsResponseDataStorageConfigType = "azure"
+	RecordingGetRecordingsResponseDataStorageConfigTypeDigitalocean RecordingGetRecordingsResponseDataStorageConfigType = "digitalocean"
+	RecordingGetRecordingsResponseDataStorageConfigTypeSftp         RecordingGetRecordingsResponseDataStorageConfigType = "sftp"
+)
+
+func (r RecordingGetRecordingsResponseDataStorageConfigType) IsKnown() bool {
+	switch r {
+	case RecordingGetRecordingsResponseDataStorageConfigTypeGcs, RecordingGetRecordingsResponseDataStorageConfigTypeAws, RecordingGetRecordingsResponseDataStorageConfigTypeAzure, RecordingGetRecordingsResponseDataStorageConfigTypeDigitalocean, RecordingGetRecordingsResponseDataStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -1607,76 +1950,173 @@ func (r RecordingPauseResumeStopRecordingResponseDataStopReasonReason) IsKnown()
 }
 
 type RecordingPauseResumeStopRecordingResponseDataStorageConfig struct {
-	// Type of storage media.
-	Type RecordingPauseResumeStopRecordingResponseDataStorageConfigType `json:"type" api:"required"`
+	// This field can have the runtime type of [string], [interface{}].
+	AccessKey interface{} `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod RecordingPauseResumeStopRecordingResponseDataStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket string `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
 	Host string `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password string `json:"password"`
 	// Path relative to the bucket root at which the recording will be placed.
 	Path string `json:"path"`
 	// SSH destination server port for SFTP type storage medium
 	Port float64 `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey string `json:"private_key"`
-	// Region of the storage medium.
-	Region string `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret string `json:"secret"`
+	// This field can have the runtime type of [string], [interface{}].
+	Region interface{}                                                    `json:"region"`
+	Type   RecordingPauseResumeStopRecordingResponseDataStorageConfigType `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username string                                                         `json:"username"`
 	JSON     recordingPauseResumeStopRecordingResponseDataStorageConfigJSON `json:"-"`
+	union    RecordingPauseResumeStopRecordingResponseDataStorageConfigUnion
 }
 
 // recordingPauseResumeStopRecordingResponseDataStorageConfigJSON contains the JSON
 // metadata for the struct
 // [RecordingPauseResumeStopRecordingResponseDataStorageConfig]
 type recordingPauseResumeStopRecordingResponseDataStorageConfigJSON struct {
-	Type        apijson.Field
+	AccessKey   apijson.Field
 	AuthMethod  apijson.Field
 	Bucket      apijson.Field
 	Host        apijson.Field
-	Password    apijson.Field
 	Path        apijson.Field
 	Port        apijson.Field
-	PrivateKey  apijson.Field
 	Region      apijson.Field
-	Secret      apijson.Field
+	Type        apijson.Field
 	Username    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordingPauseResumeStopRecordingResponseDataStorageConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r recordingPauseResumeStopRecordingResponseDataStorageConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of storage media.
-type RecordingPauseResumeStopRecordingResponseDataStorageConfigType string
+func (r *RecordingPauseResumeStopRecordingResponseDataStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	*r = RecordingPauseResumeStopRecordingResponseDataStorageConfig{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [RecordingPauseResumeStopRecordingResponseDataStorageConfigUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RecordingPauseResumeStopRecordingResponseDataStorageConfigObject],
+// [RecordingPauseResumeStopRecordingResponseDataStorageConfigObject],
+// [RecordingPauseResumeStopRecordingResponseDataStorageConfigObject],
+// [RecordingPauseResumeStopRecordingResponseDataStorageConfigObject].
+func (r RecordingPauseResumeStopRecordingResponseDataStorageConfig) AsUnion() RecordingPauseResumeStopRecordingResponseDataStorageConfigUnion {
+	return r.union
+}
+
+// Union satisfied by
+// [RecordingPauseResumeStopRecordingResponseDataStorageConfigObject],
+// [RecordingPauseResumeStopRecordingResponseDataStorageConfigObject],
+// [RecordingPauseResumeStopRecordingResponseDataStorageConfigObject] or
+// [RecordingPauseResumeStopRecordingResponseDataStorageConfigObject].
+type RecordingPauseResumeStopRecordingResponseDataStorageConfigUnion interface {
+	implementsRecordingPauseResumeStopRecordingResponseDataStorageConfig()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RecordingPauseResumeStopRecordingResponseDataStorageConfigUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingPauseResumeStopRecordingResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingPauseResumeStopRecordingResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingPauseResumeStopRecordingResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingPauseResumeStopRecordingResponseDataStorageConfigObject{}),
+		},
+	)
+}
+
+type RecordingPauseResumeStopRecordingResponseDataStorageConfigObject struct {
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Region of the storage medium.
+	Region string                                                               `json:"region"`
+	Type   RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectType `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                               `json:"username"`
+	JSON     recordingPauseResumeStopRecordingResponseDataStorageConfigObjectJSON `json:"-"`
+}
+
+// recordingPauseResumeStopRecordingResponseDataStorageConfigObjectJSON contains
+// the JSON metadata for the struct
+// [RecordingPauseResumeStopRecordingResponseDataStorageConfigObject]
+type recordingPauseResumeStopRecordingResponseDataStorageConfigObjectJSON struct {
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	Region      apijson.Field
+	Type        apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingPauseResumeStopRecordingResponseDataStorageConfigObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingPauseResumeStopRecordingResponseDataStorageConfigObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RecordingPauseResumeStopRecordingResponseDataStorageConfigObject) implementsRecordingPauseResumeStopRecordingResponseDataStorageConfig() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectAuthMethod string
 
 const (
-	RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeAws          RecordingPauseResumeStopRecordingResponseDataStorageConfigType = "aws"
-	RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeAzure        RecordingPauseResumeStopRecordingResponseDataStorageConfigType = "azure"
-	RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeDigitalocean RecordingPauseResumeStopRecordingResponseDataStorageConfigType = "digitalocean"
-	RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeGcs          RecordingPauseResumeStopRecordingResponseDataStorageConfigType = "gcs"
-	RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeSftp         RecordingPauseResumeStopRecordingResponseDataStorageConfigType = "sftp"
+	RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectAuthMethodKey      RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectAuthMethod = "KEY"
+	RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectAuthMethodPassword RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r RecordingPauseResumeStopRecordingResponseDataStorageConfigType) IsKnown() bool {
+func (r RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeAws, RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeAzure, RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeDigitalocean, RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeGcs, RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeSftp:
+	case RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectAuthMethodKey, RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectType string
+
+const (
+	RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectTypeGcs RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectType = "gcs"
+)
+
+func (r RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case RecordingPauseResumeStopRecordingResponseDataStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -1693,6 +2133,24 @@ const (
 func (r RecordingPauseResumeStopRecordingResponseDataStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case RecordingPauseResumeStopRecordingResponseDataStorageConfigAuthMethodKey, RecordingPauseResumeStopRecordingResponseDataStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingPauseResumeStopRecordingResponseDataStorageConfigType string
+
+const (
+	RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeGcs          RecordingPauseResumeStopRecordingResponseDataStorageConfigType = "gcs"
+	RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeAws          RecordingPauseResumeStopRecordingResponseDataStorageConfigType = "aws"
+	RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeAzure        RecordingPauseResumeStopRecordingResponseDataStorageConfigType = "azure"
+	RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeDigitalocean RecordingPauseResumeStopRecordingResponseDataStorageConfigType = "digitalocean"
+	RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeSftp         RecordingPauseResumeStopRecordingResponseDataStorageConfigType = "sftp"
+)
+
+func (r RecordingPauseResumeStopRecordingResponseDataStorageConfigType) IsKnown() bool {
+	switch r {
+	case RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeGcs, RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeAws, RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeAzure, RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeDigitalocean, RecordingPauseResumeStopRecordingResponseDataStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -1990,75 +2448,170 @@ func (r RecordingStartRecordingsResponseDataStopReasonReason) IsKnown() bool {
 }
 
 type RecordingStartRecordingsResponseDataStorageConfig struct {
-	// Type of storage media.
-	Type RecordingStartRecordingsResponseDataStorageConfigType `json:"type" api:"required"`
+	// This field can have the runtime type of [string], [interface{}].
+	AccessKey interface{} `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod RecordingStartRecordingsResponseDataStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket string `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
 	Host string `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password string `json:"password"`
 	// Path relative to the bucket root at which the recording will be placed.
 	Path string `json:"path"`
 	// SSH destination server port for SFTP type storage medium
 	Port float64 `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey string `json:"private_key"`
-	// Region of the storage medium.
-	Region string `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret string `json:"secret"`
+	// This field can have the runtime type of [string], [interface{}].
+	Region interface{}                                           `json:"region"`
+	Type   RecordingStartRecordingsResponseDataStorageConfigType `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username string                                                `json:"username"`
 	JSON     recordingStartRecordingsResponseDataStorageConfigJSON `json:"-"`
+	union    RecordingStartRecordingsResponseDataStorageConfigUnion
 }
 
 // recordingStartRecordingsResponseDataStorageConfigJSON contains the JSON metadata
 // for the struct [RecordingStartRecordingsResponseDataStorageConfig]
 type recordingStartRecordingsResponseDataStorageConfigJSON struct {
-	Type        apijson.Field
+	AccessKey   apijson.Field
 	AuthMethod  apijson.Field
 	Bucket      apijson.Field
 	Host        apijson.Field
-	Password    apijson.Field
 	Path        apijson.Field
 	Port        apijson.Field
-	PrivateKey  apijson.Field
 	Region      apijson.Field
-	Secret      apijson.Field
+	Type        apijson.Field
 	Username    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordingStartRecordingsResponseDataStorageConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r recordingStartRecordingsResponseDataStorageConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of storage media.
-type RecordingStartRecordingsResponseDataStorageConfigType string
+func (r *RecordingStartRecordingsResponseDataStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	*r = RecordingStartRecordingsResponseDataStorageConfig{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [RecordingStartRecordingsResponseDataStorageConfigUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RecordingStartRecordingsResponseDataStorageConfigObject],
+// [RecordingStartRecordingsResponseDataStorageConfigObject],
+// [RecordingStartRecordingsResponseDataStorageConfigObject],
+// [RecordingStartRecordingsResponseDataStorageConfigObject].
+func (r RecordingStartRecordingsResponseDataStorageConfig) AsUnion() RecordingStartRecordingsResponseDataStorageConfigUnion {
+	return r.union
+}
+
+// Union satisfied by [RecordingStartRecordingsResponseDataStorageConfigObject],
+// [RecordingStartRecordingsResponseDataStorageConfigObject],
+// [RecordingStartRecordingsResponseDataStorageConfigObject] or
+// [RecordingStartRecordingsResponseDataStorageConfigObject].
+type RecordingStartRecordingsResponseDataStorageConfigUnion interface {
+	implementsRecordingStartRecordingsResponseDataStorageConfig()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RecordingStartRecordingsResponseDataStorageConfigUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingStartRecordingsResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingStartRecordingsResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingStartRecordingsResponseDataStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RecordingStartRecordingsResponseDataStorageConfigObject{}),
+		},
+	)
+}
+
+type RecordingStartRecordingsResponseDataStorageConfigObject struct {
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod RecordingStartRecordingsResponseDataStorageConfigObjectAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Region of the storage medium.
+	Region string                                                      `json:"region"`
+	Type   RecordingStartRecordingsResponseDataStorageConfigObjectType `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                      `json:"username"`
+	JSON     recordingStartRecordingsResponseDataStorageConfigObjectJSON `json:"-"`
+}
+
+// recordingStartRecordingsResponseDataStorageConfigObjectJSON contains the JSON
+// metadata for the struct
+// [RecordingStartRecordingsResponseDataStorageConfigObject]
+type recordingStartRecordingsResponseDataStorageConfigObjectJSON struct {
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	Region      apijson.Field
+	Type        apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordingStartRecordingsResponseDataStorageConfigObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordingStartRecordingsResponseDataStorageConfigObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RecordingStartRecordingsResponseDataStorageConfigObject) implementsRecordingStartRecordingsResponseDataStorageConfig() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type RecordingStartRecordingsResponseDataStorageConfigObjectAuthMethod string
 
 const (
-	RecordingStartRecordingsResponseDataStorageConfigTypeAws          RecordingStartRecordingsResponseDataStorageConfigType = "aws"
-	RecordingStartRecordingsResponseDataStorageConfigTypeAzure        RecordingStartRecordingsResponseDataStorageConfigType = "azure"
-	RecordingStartRecordingsResponseDataStorageConfigTypeDigitalocean RecordingStartRecordingsResponseDataStorageConfigType = "digitalocean"
-	RecordingStartRecordingsResponseDataStorageConfigTypeGcs          RecordingStartRecordingsResponseDataStorageConfigType = "gcs"
-	RecordingStartRecordingsResponseDataStorageConfigTypeSftp         RecordingStartRecordingsResponseDataStorageConfigType = "sftp"
+	RecordingStartRecordingsResponseDataStorageConfigObjectAuthMethodKey      RecordingStartRecordingsResponseDataStorageConfigObjectAuthMethod = "KEY"
+	RecordingStartRecordingsResponseDataStorageConfigObjectAuthMethodPassword RecordingStartRecordingsResponseDataStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r RecordingStartRecordingsResponseDataStorageConfigType) IsKnown() bool {
+func (r RecordingStartRecordingsResponseDataStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case RecordingStartRecordingsResponseDataStorageConfigTypeAws, RecordingStartRecordingsResponseDataStorageConfigTypeAzure, RecordingStartRecordingsResponseDataStorageConfigTypeDigitalocean, RecordingStartRecordingsResponseDataStorageConfigTypeGcs, RecordingStartRecordingsResponseDataStorageConfigTypeSftp:
+	case RecordingStartRecordingsResponseDataStorageConfigObjectAuthMethodKey, RecordingStartRecordingsResponseDataStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingStartRecordingsResponseDataStorageConfigObjectType string
+
+const (
+	RecordingStartRecordingsResponseDataStorageConfigObjectTypeGcs RecordingStartRecordingsResponseDataStorageConfigObjectType = "gcs"
+)
+
+func (r RecordingStartRecordingsResponseDataStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case RecordingStartRecordingsResponseDataStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -2075,6 +2628,24 @@ const (
 func (r RecordingStartRecordingsResponseDataStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case RecordingStartRecordingsResponseDataStorageConfigAuthMethodKey, RecordingStartRecordingsResponseDataStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingStartRecordingsResponseDataStorageConfigType string
+
+const (
+	RecordingStartRecordingsResponseDataStorageConfigTypeGcs          RecordingStartRecordingsResponseDataStorageConfigType = "gcs"
+	RecordingStartRecordingsResponseDataStorageConfigTypeAws          RecordingStartRecordingsResponseDataStorageConfigType = "aws"
+	RecordingStartRecordingsResponseDataStorageConfigTypeAzure        RecordingStartRecordingsResponseDataStorageConfigType = "azure"
+	RecordingStartRecordingsResponseDataStorageConfigTypeDigitalocean RecordingStartRecordingsResponseDataStorageConfigType = "digitalocean"
+	RecordingStartRecordingsResponseDataStorageConfigTypeSftp         RecordingStartRecordingsResponseDataStorageConfigType = "sftp"
+)
+
+func (r RecordingStartRecordingsResponseDataStorageConfigType) IsKnown() bool {
+	switch r {
+	case RecordingStartRecordingsResponseDataStorageConfigTypeGcs, RecordingStartRecordingsResponseDataStorageConfigTypeAws, RecordingStartRecordingsResponseDataStorageConfigTypeAzure, RecordingStartRecordingsResponseDataStorageConfigTypeDigitalocean, RecordingStartRecordingsResponseDataStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -2349,7 +2920,7 @@ type RecordingStartRecordingsParams struct {
 	MaxSeconds              param.Field[int64]                                                 `json:"max_seconds"`
 	RealtimekitBucketConfig param.Field[RecordingStartRecordingsParamsRealtimekitBucketConfig] `json:"realtimekit_bucket_config"`
 	RtmpOutConfig           param.Field[RecordingStartRecordingsParamsRtmpOutConfig]           `json:"rtmp_out_config"`
-	StorageConfig           param.Field[RecordingStartRecordingsParamsStorageConfig]           `json:"storage_config"`
+	StorageConfig           param.Field[RecordingStartRecordingsParamsStorageConfigUnion]      `json:"storage_config"`
 	// Pass a custom url to record arbitary screen
 	URL         param.Field[string]                                    `json:"url" format:"uri"`
 	VideoConfig param.Field[RecordingStartRecordingsParamsVideoConfig] `json:"video_config"`
@@ -2459,15 +3030,57 @@ func (r RecordingStartRecordingsParamsRtmpOutConfig) MarshalJSON() (data []byte,
 }
 
 type RecordingStartRecordingsParamsStorageConfig struct {
-	// Type of storage media.
-	Type param.Field[RecordingStartRecordingsParamsStorageConfigType] `json:"type" api:"required"`
+	AccessKey param.Field[interface{}] `json:"access_key"`
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod param.Field[RecordingStartRecordingsParamsStorageConfigAuthMethod] `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket param.Field[string] `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host param.Field[string] `json:"host"`
+	// SSH destination server password for SFTP type storage medium when auth_method is
+	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
+	// private key.
+	Password param.Field[string] `json:"password"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path param.Field[string] `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port param.Field[float64] `json:"port"`
+	// Private key used to login to destination SSH server for SFTP type storage
+	// medium, when auth_method used is "KEY"
+	PrivateKey param.Field[string]      `json:"private_key"`
+	Region     param.Field[interface{}] `json:"region"`
+	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
+	// by clients, not readable.
+	Secret param.Field[string]                                          `json:"secret"`
+	Type   param.Field[RecordingStartRecordingsParamsStorageConfigType] `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username param.Field[string] `json:"username"`
+}
+
+func (r RecordingStartRecordingsParamsStorageConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordingStartRecordingsParamsStorageConfig) implementsRecordingStartRecordingsParamsStorageConfigUnion() {
+}
+
+// Satisfied by [realtime_kit.RecordingStartRecordingsParamsStorageConfigObject],
+// [realtime_kit.RecordingStartRecordingsParamsStorageConfigObject],
+// [realtime_kit.RecordingStartRecordingsParamsStorageConfigObject],
+// [realtime_kit.RecordingStartRecordingsParamsStorageConfigObject],
+// [RecordingStartRecordingsParamsStorageConfig].
+type RecordingStartRecordingsParamsStorageConfigUnion interface {
+	implementsRecordingStartRecordingsParamsStorageConfigUnion()
+}
+
+type RecordingStartRecordingsParamsStorageConfigObject struct {
 	// Access key of the storage medium. Access key is not required for the `gcs`
 	// storage media type.
 	//
 	// Note that this field is not readable by clients, only writeable.
 	AccessKey param.Field[string] `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
-	AuthMethod param.Field[RecordingStartRecordingsParamsStorageConfigAuthMethod] `json:"auth_method"`
+	AuthMethod param.Field[RecordingStartRecordingsParamsStorageConfigObjectAuthMethod] `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket param.Field[string] `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
@@ -2487,29 +3100,44 @@ type RecordingStartRecordingsParamsStorageConfig struct {
 	Region param.Field[string] `json:"region"`
 	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
 	// by clients, not readable.
-	Secret param.Field[string] `json:"secret"`
+	Secret param.Field[string]                                                `json:"secret"`
+	Type   param.Field[RecordingStartRecordingsParamsStorageConfigObjectType] `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username param.Field[string] `json:"username"`
 }
 
-func (r RecordingStartRecordingsParamsStorageConfig) MarshalJSON() (data []byte, err error) {
+func (r RecordingStartRecordingsParamsStorageConfigObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Type of storage media.
-type RecordingStartRecordingsParamsStorageConfigType string
+func (r RecordingStartRecordingsParamsStorageConfigObject) implementsRecordingStartRecordingsParamsStorageConfigUnion() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type RecordingStartRecordingsParamsStorageConfigObjectAuthMethod string
 
 const (
-	RecordingStartRecordingsParamsStorageConfigTypeAws          RecordingStartRecordingsParamsStorageConfigType = "aws"
-	RecordingStartRecordingsParamsStorageConfigTypeAzure        RecordingStartRecordingsParamsStorageConfigType = "azure"
-	RecordingStartRecordingsParamsStorageConfigTypeDigitalocean RecordingStartRecordingsParamsStorageConfigType = "digitalocean"
-	RecordingStartRecordingsParamsStorageConfigTypeGcs          RecordingStartRecordingsParamsStorageConfigType = "gcs"
-	RecordingStartRecordingsParamsStorageConfigTypeSftp         RecordingStartRecordingsParamsStorageConfigType = "sftp"
+	RecordingStartRecordingsParamsStorageConfigObjectAuthMethodKey      RecordingStartRecordingsParamsStorageConfigObjectAuthMethod = "KEY"
+	RecordingStartRecordingsParamsStorageConfigObjectAuthMethodPassword RecordingStartRecordingsParamsStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r RecordingStartRecordingsParamsStorageConfigType) IsKnown() bool {
+func (r RecordingStartRecordingsParamsStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case RecordingStartRecordingsParamsStorageConfigTypeAws, RecordingStartRecordingsParamsStorageConfigTypeAzure, RecordingStartRecordingsParamsStorageConfigTypeDigitalocean, RecordingStartRecordingsParamsStorageConfigTypeGcs, RecordingStartRecordingsParamsStorageConfigTypeSftp:
+	case RecordingStartRecordingsParamsStorageConfigObjectAuthMethodKey, RecordingStartRecordingsParamsStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingStartRecordingsParamsStorageConfigObjectType string
+
+const (
+	RecordingStartRecordingsParamsStorageConfigObjectTypeGcs RecordingStartRecordingsParamsStorageConfigObjectType = "gcs"
+)
+
+func (r RecordingStartRecordingsParamsStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case RecordingStartRecordingsParamsStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -2526,6 +3154,24 @@ const (
 func (r RecordingStartRecordingsParamsStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case RecordingStartRecordingsParamsStorageConfigAuthMethodKey, RecordingStartRecordingsParamsStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type RecordingStartRecordingsParamsStorageConfigType string
+
+const (
+	RecordingStartRecordingsParamsStorageConfigTypeGcs          RecordingStartRecordingsParamsStorageConfigType = "gcs"
+	RecordingStartRecordingsParamsStorageConfigTypeAws          RecordingStartRecordingsParamsStorageConfigType = "aws"
+	RecordingStartRecordingsParamsStorageConfigTypeAzure        RecordingStartRecordingsParamsStorageConfigType = "azure"
+	RecordingStartRecordingsParamsStorageConfigTypeDigitalocean RecordingStartRecordingsParamsStorageConfigType = "digitalocean"
+	RecordingStartRecordingsParamsStorageConfigTypeSftp         RecordingStartRecordingsParamsStorageConfigType = "sftp"
+)
+
+func (r RecordingStartRecordingsParamsStorageConfigType) IsKnown() bool {
+	switch r {
+	case RecordingStartRecordingsParamsStorageConfigTypeGcs, RecordingStartRecordingsParamsStorageConfigTypeAws, RecordingStartRecordingsParamsStorageConfigTypeAzure, RecordingStartRecordingsParamsStorageConfigTypeDigitalocean, RecordingStartRecordingsParamsStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -2554,11 +3200,12 @@ type RecordingStartRecordingsParamsVideoConfigCodec string
 const (
 	RecordingStartRecordingsParamsVideoConfigCodecH264 RecordingStartRecordingsParamsVideoConfigCodec = "H264"
 	RecordingStartRecordingsParamsVideoConfigCodecVp8  RecordingStartRecordingsParamsVideoConfigCodec = "VP8"
+	RecordingStartRecordingsParamsVideoConfigCodecVp9  RecordingStartRecordingsParamsVideoConfigCodec = "VP9"
 )
 
 func (r RecordingStartRecordingsParamsVideoConfigCodec) IsKnown() bool {
 	switch r {
-	case RecordingStartRecordingsParamsVideoConfigCodecH264, RecordingStartRecordingsParamsVideoConfigCodecVp8:
+	case RecordingStartRecordingsParamsVideoConfigCodecH264, RecordingStartRecordingsParamsVideoConfigCodecVp8, RecordingStartRecordingsParamsVideoConfigCodecVp9:
 		return true
 	}
 	return false

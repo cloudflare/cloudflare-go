@@ -39,7 +39,8 @@ func NewUserSchemaHostService(opts ...option.RequestOption) (r *UserSchemaHostSe
 }
 
 // Lists all unique hosts found in uploaded OpenAPI schemas for the zone. Useful
-// for understanding which domains have schema coverage.
+// for understanding which domains have schema coverage. Deprecated; use
+// `/zones/{zone_id}/schema_validation/schemas/hosts` instead.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
@@ -66,7 +67,8 @@ func (r *UserSchemaHostService) List(ctx context.Context, params UserSchemaHostL
 }
 
 // Lists all unique hosts found in uploaded OpenAPI schemas for the zone. Useful
-// for understanding which domains have schema coverage.
+// for understanding which domains have schema coverage. Deprecated; use
+// `/zones/{zone_id}/schema_validation/schemas/hosts` instead.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)

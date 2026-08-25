@@ -521,8 +521,8 @@ type ActiveSessionKickAllParticipantsParams struct {
 type ActiveSessionKickParticipantsParams struct {
 	// The account identifier tag.
 	AccountID            param.Field[string]   `path:"account_id" api:"required"`
-	CustomParticipantIDs param.Field[[]string] `json:"custom_participant_ids" api:"required"`
-	ParticipantIDs       param.Field[[]string] `json:"participant_ids" api:"required"`
+	CustomParticipantIDs param.Field[[]string] `json:"custom_participant_ids"`
+	ParticipantIDs       param.Field[[]string] `json:"participant_ids" format:"uuid"`
 }
 
 func (r ActiveSessionKickParticipantsParams) MarshalJSON() (data []byte, err error) {

@@ -157,12 +157,11 @@ const (
 	RuleUpdateResponseProviderCloudflareR2 RuleUpdateResponseProvider = "cloudflare_r2"
 	RuleUpdateResponseProviderGcpStorage   RuleUpdateResponseProvider = "gcp_storage"
 	RuleUpdateResponseProviderAzureStorage RuleUpdateResponseProvider = "azure_storage"
-	RuleUpdateResponseProviderOciStorage   RuleUpdateResponseProvider = "oci_storage"
 )
 
 func (r RuleUpdateResponseProvider) IsKnown() bool {
 	switch r {
-	case RuleUpdateResponseProviderAwsS3, RuleUpdateResponseProviderCloudflareR2, RuleUpdateResponseProviderGcpStorage, RuleUpdateResponseProviderAzureStorage, RuleUpdateResponseProviderOciStorage:
+	case RuleUpdateResponseProviderAwsS3, RuleUpdateResponseProviderCloudflareR2, RuleUpdateResponseProviderGcpStorage, RuleUpdateResponseProviderAzureStorage:
 		return true
 	}
 	return false
@@ -232,12 +231,11 @@ const (
 	RuleListResponseProviderCloudflareR2 RuleListResponseProvider = "cloudflare_r2"
 	RuleListResponseProviderGcpStorage   RuleListResponseProvider = "gcp_storage"
 	RuleListResponseProviderAzureStorage RuleListResponseProvider = "azure_storage"
-	RuleListResponseProviderOciStorage   RuleListResponseProvider = "oci_storage"
 )
 
 func (r RuleListResponseProvider) IsKnown() bool {
 	switch r {
-	case RuleListResponseProviderAwsS3, RuleListResponseProviderCloudflareR2, RuleListResponseProviderGcpStorage, RuleListResponseProviderAzureStorage, RuleListResponseProviderOciStorage:
+	case RuleListResponseProviderAwsS3, RuleListResponseProviderCloudflareR2, RuleListResponseProviderGcpStorage, RuleListResponseProviderAzureStorage:
 		return true
 	}
 	return false
@@ -286,12 +284,11 @@ const (
 	RuleUpdateParamsRulesProviderCloudflareR2 RuleUpdateParamsRulesProvider = "cloudflare_r2"
 	RuleUpdateParamsRulesProviderGcpStorage   RuleUpdateParamsRulesProvider = "gcp_storage"
 	RuleUpdateParamsRulesProviderAzureStorage RuleUpdateParamsRulesProvider = "azure_storage"
-	RuleUpdateParamsRulesProviderOciStorage   RuleUpdateParamsRulesProvider = "oci_storage"
 )
 
 func (r RuleUpdateParamsRulesProvider) IsKnown() bool {
 	switch r {
-	case RuleUpdateParamsRulesProviderAwsS3, RuleUpdateParamsRulesProviderCloudflareR2, RuleUpdateParamsRulesProviderGcpStorage, RuleUpdateParamsRulesProviderAzureStorage, RuleUpdateParamsRulesProviderOciStorage:
+	case RuleUpdateParamsRulesProviderAwsS3, RuleUpdateParamsRulesProviderCloudflareR2, RuleUpdateParamsRulesProviderGcpStorage, RuleUpdateParamsRulesProviderAzureStorage:
 		return true
 	}
 	return false

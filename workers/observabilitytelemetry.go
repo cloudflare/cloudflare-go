@@ -285,7 +285,8 @@ type ObservabilityTelemetryQueryResponseRun struct {
 	Query ObservabilityTelemetryQueryResponseRunQuery `json:"query" api:"required"`
 	// Current execution status of the query run.
 	Status ObservabilityTelemetryQueryResponseRunStatus `json:"status" api:"required"`
-	// Time range for the query execution
+	// Time range for the query execution. 'from' must be earlier than 'to'. No
+	// fractional milliseconds.
 	Timeframe ObservabilityTelemetryQueryResponseRunTimeframe `json:"timeframe" api:"required"`
 	// ID of the user who initiated the query run.
 	UserID string `json:"userId" api:"required"`
@@ -330,16 +331,16 @@ func (r observabilityTelemetryQueryResponseRunJSON) RawJSON() string {
 type ObservabilityTelemetryQueryResponseRunQuery struct {
 	ID string `json:"id" api:"required"`
 	// If the query wasn't explcitly saved
-	Adhoc       bool   `json:"adhoc" api:"required"`
-	Created     string `json:"created" api:"required"`
-	CreatedBy   string `json:"createdBy" api:"required"`
-	Description string `json:"description" api:"required,nullable"`
+	Adhoc       bool                                                    `json:"adhoc" api:"required"`
+	Created     ObservabilityTelemetryQueryResponseRunQueryCreatedUnion `json:"created" api:"required" format:"date-time"`
+	CreatedBy   string                                                  `json:"createdBy" api:"required"`
+	Description string                                                  `json:"description" api:"required,nullable"`
 	// Query name
-	Name       string                                                `json:"name" api:"required"`
-	Parameters ObservabilityTelemetryQueryResponseRunQueryParameters `json:"parameters" api:"required"`
-	Updated    string                                                `json:"updated" api:"required"`
-	UpdatedBy  string                                                `json:"updatedBy" api:"required"`
-	JSON       observabilityTelemetryQueryResponseRunQueryJSON       `json:"-"`
+	Name       string                                                  `json:"name" api:"required"`
+	Parameters ObservabilityTelemetryQueryResponseRunQueryParameters   `json:"parameters" api:"required"`
+	Updated    ObservabilityTelemetryQueryResponseRunQueryUpdatedUnion `json:"updated" api:"required" format:"date-time"`
+	UpdatedBy  string                                                  `json:"updatedBy" api:"required"`
+	JSON       observabilityTelemetryQueryResponseRunQueryJSON         `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseRunQueryJSON contains the JSON metadata for
@@ -364,6 +365,26 @@ func (r *ObservabilityTelemetryQueryResponseRunQuery) UnmarshalJSON(data []byte)
 
 func (r observabilityTelemetryQueryResponseRunQueryJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [shared.UnionString] or [shared.UnionTime].
+type ObservabilityTelemetryQueryResponseRunQueryCreatedUnion interface {
+	ImplementsObservabilityTelemetryQueryResponseRunQueryCreatedUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilityTelemetryQueryResponseRunQueryCreatedUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionTime(shared.UnionTime{})),
+		},
+	)
 }
 
 type ObservabilityTelemetryQueryResponseRunQueryParameters struct {
@@ -1390,6 +1411,26 @@ func (r ObservabilityTelemetryQueryResponseRunQueryParametersOrderByOrder) IsKno
 	return false
 }
 
+// Union satisfied by [shared.UnionString] or [shared.UnionTime].
+type ObservabilityTelemetryQueryResponseRunQueryUpdatedUnion interface {
+	ImplementsObservabilityTelemetryQueryResponseRunQueryUpdatedUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ObservabilityTelemetryQueryResponseRunQueryUpdatedUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionTime(shared.UnionTime{})),
+		},
+	)
+}
+
 // Current execution status of the query run.
 type ObservabilityTelemetryQueryResponseRunStatus string
 
@@ -1406,12 +1447,13 @@ func (r ObservabilityTelemetryQueryResponseRunStatus) IsKnown() bool {
 	return false
 }
 
-// Time range for the query execution
+// Time range for the query execution. 'from' must be earlier than 'to'. No
+// fractional milliseconds.
 type ObservabilityTelemetryQueryResponseRunTimeframe struct {
-	// Start timestamp for the query timeframe (Unix timestamp in milliseconds)
-	From float64 `json:"from" api:"required"`
-	// End timestamp for the query timeframe (Unix timestamp in milliseconds)
-	To   float64                                             `json:"to" api:"required"`
+	// Start timestamp for the query timeframe. Unix timestamp in milliseconds
+	From int64 `json:"from" api:"required"`
+	// End timestamp for the query timeframe. Unix timestamp in milliseconds
+	To   int64                                               `json:"to" api:"required"`
 	JSON observabilityTelemetryQueryResponseRunTimeframeJSON `json:"-"`
 }
 
@@ -1501,7 +1543,7 @@ func (r observabilityTelemetryQueryResponseStatisticsJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseAgent struct {
-	// Pagination cursor derived from the first agent invocation in the run.
+	// Stable pagination cursor for this agent run.
 	ID string `json:"id" api:"required"`
 	// Distinct errors reported by spans in the run.
 	Errors []string `json:"errors" api:"required"`
@@ -4817,8 +4859,9 @@ type ObservabilityTelemetryQueryParams struct {
 	// previously saved query's parameters. When providing parameters inline, pass any
 	// identifier (e.g. an ad-hoc ID).
 	QueryID param.Field[string] `json:"queryId" api:"required"`
-	// Timeframe for the query using Unix timestamps in milliseconds. Narrower
-	// timeframes produce faster responses and more specific results.
+	// Timeframe for the query using Unix timestamps in milliseconds. 'from' must be
+	// earlier than 'to'. Narrower timeframes produce faster responses and more
+	// specific results.
 	Timeframe param.Field[ObservabilityTelemetryQueryParamsTimeframe] `json:"timeframe" api:"required"`
 	// When true, includes time-series data in the response.
 	Chart param.Field[bool] `json:"chart"`
@@ -4832,6 +4875,11 @@ type ObservabilityTelemetryQueryParams struct {
 	// When true, includes a comparison dataset from the previous time period of equal
 	// length.
 	Compare param.Field[bool] `json:"compare"`
+	// Value-axis bucketing for chartType 'distribution'. Omitted or 'log': geometric
+	// buckets, best for heavy-tailed latency. 'linear': fixed-width buckets, clearer
+	// for narrow or additive ranges. Ignored for other chartTypes. The response echoes
+	// the scheme used in distribution.bucketMode.
+	DistributionScale param.Field[ObservabilityTelemetryQueryParamsDistributionScale] `json:"distributionScale"`
 	// When true, executes the query without persisting the results. Useful for
 	// validation or previewing.
 	Dry param.Field[bool] `json:"dry"`
@@ -4870,13 +4918,14 @@ func (r ObservabilityTelemetryQueryParams) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-// Timeframe for the query using Unix timestamps in milliseconds. Narrower
-// timeframes produce faster responses and more specific results.
+// Timeframe for the query using Unix timestamps in milliseconds. 'from' must be
+// earlier than 'to'. Narrower timeframes produce faster responses and more
+// specific results.
 type ObservabilityTelemetryQueryParamsTimeframe struct {
-	// Start timestamp for the query timeframe (Unix timestamp in milliseconds)
-	From param.Field[float64] `json:"from" api:"required"`
-	// End timestamp for the query timeframe (Unix timestamp in milliseconds)
-	To param.Field[float64] `json:"to" api:"required"`
+	// Start timestamp for the query timeframe. Unix timestamp in milliseconds
+	From param.Field[int64] `json:"from" api:"required"`
+	// End timestamp for the query timeframe. Unix timestamp in milliseconds
+	To param.Field[int64] `json:"to" api:"required"`
 }
 
 func (r ObservabilityTelemetryQueryParamsTimeframe) MarshalJSON() (data []byte, err error) {
@@ -4901,6 +4950,25 @@ const (
 func (r ObservabilityTelemetryQueryParamsChartType) IsKnown() bool {
 	switch r {
 	case ObservabilityTelemetryQueryParamsChartTypeTimeseriesAndAggregate, ObservabilityTelemetryQueryParamsChartTypeTimeseries, ObservabilityTelemetryQueryParamsChartTypeAggregate, ObservabilityTelemetryQueryParamsChartTypeDistribution:
+		return true
+	}
+	return false
+}
+
+// Value-axis bucketing for chartType 'distribution'. Omitted or 'log': geometric
+// buckets, best for heavy-tailed latency. 'linear': fixed-width buckets, clearer
+// for narrow or additive ranges. Ignored for other chartTypes. The response echoes
+// the scheme used in distribution.bucketMode.
+type ObservabilityTelemetryQueryParamsDistributionScale string
+
+const (
+	ObservabilityTelemetryQueryParamsDistributionScaleLog    ObservabilityTelemetryQueryParamsDistributionScale = "log"
+	ObservabilityTelemetryQueryParamsDistributionScaleLinear ObservabilityTelemetryQueryParamsDistributionScale = "linear"
+)
+
+func (r ObservabilityTelemetryQueryParamsDistributionScale) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryParamsDistributionScaleLog, ObservabilityTelemetryQueryParamsDistributionScaleLinear:
 		return true
 	}
 	return false
@@ -4951,7 +5019,7 @@ type ObservabilityTelemetryQueryParamsParametersCalculation struct {
 	// Custom label for this calculation in the results. Useful for distinguishing
 	// multiple calculations.
 	Alias param.Field[string] `json:"alias"`
-	// Field name to calculate over. Must exist in the data — verify with the keys
+	// Field name to calculate over. Must exist in the data. Verify with the keys
 	// endpoint. Required for every operator except `count`, which aggregates whole
 	// rows and may omit it.
 	Key param.Field[string] `json:"key"`
@@ -4982,7 +5050,7 @@ type ObservabilityTelemetryQueryParamsParametersCalculationsObject struct {
 	// Custom label for this calculation in the results. Useful for distinguishing
 	// multiple calculations.
 	Alias param.Field[string] `json:"alias"`
-	// Field name to calculate over. Must exist in the data — verify with the keys
+	// Field name to calculate over. Must exist in the data. Verify with the keys
 	// endpoint. Required for every operator except `count`, which aggregates whole
 	// rows and may omit it.
 	Key param.Field[string] `json:"key"`

@@ -39,7 +39,7 @@ func NewLabelManagedService(opts ...option.RequestOption) (r *LabelManagedServic
 	return
 }
 
-// Retrieve managed label
+// Returns a managed label and the web and API operations associated with it.
 func (r *LabelManagedService) Get(ctx context.Context, name string, params LabelManagedGetParams, opts ...option.RequestOption) (res *LabelManagedGetResponse, err error) {
 	var env LabelManagedGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

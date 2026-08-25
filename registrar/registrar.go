@@ -311,12 +311,13 @@ func (r registrationJSON) RawJSON() string {
 type RegistrationPrivacyMode string
 
 const (
+	RegistrationPrivacyModeOff       RegistrationPrivacyMode = "off"
 	RegistrationPrivacyModeRedaction RegistrationPrivacyMode = "redaction"
 )
 
 func (r RegistrationPrivacyMode) IsKnown() bool {
 	switch r {
-	case RegistrationPrivacyModeRedaction:
+	case RegistrationPrivacyModeOff, RegistrationPrivacyModeRedaction:
 		return true
 	}
 	return false

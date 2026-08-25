@@ -49,7 +49,7 @@ func NewRegistrationService(opts ...option.RequestOption) (r *RegistrationServic
 //     Set this up at
 //     `https://dash.cloudflare.com/{account_id}/billing/payment-info`.
 //   - The account must not already be at the maximum supported domain limit. A
-//     single account may own up to 100 domains in total across registrations created
+//     single account may own up to 500 domains in total across registrations created
 //     through either the dashboard or this API.
 //   - The domain must be on a supported extension for programmatic registration.
 //   - Use `POST /domain-check` immediately before calling this endpoint to confirm
@@ -607,12 +607,13 @@ func (r RegistrationNewParamsContactsTechnicalPostalInfoAddress) MarshalJSON() (
 type RegistrationNewParamsPrivacyMode string
 
 const (
+	RegistrationNewParamsPrivacyModeOff       RegistrationNewParamsPrivacyMode = "off"
 	RegistrationNewParamsPrivacyModeRedaction RegistrationNewParamsPrivacyMode = "redaction"
 )
 
 func (r RegistrationNewParamsPrivacyMode) IsKnown() bool {
 	switch r {
-	case RegistrationNewParamsPrivacyModeRedaction:
+	case RegistrationNewParamsPrivacyModeOff, RegistrationNewParamsPrivacyModeRedaction:
 		return true
 	}
 	return false

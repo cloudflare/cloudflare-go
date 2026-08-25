@@ -2376,6 +2376,11 @@ type IdentityProviderAccessSAMLConfig struct {
 	IdPPublicCERTs []string `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL string `json:"issuer_url"`
+	// The maximum URL length the IdP accepts for the SSO redirect URL. When the
+	// constructed SSO URL would exceed this length, the RelayState is stored
+	// server-side and a short nonce is passed to the IdP instead. Set this if your IdP
+	// enforces a URL length limit.
+	MaxSSOURLLength int64 `json:"max_sso_url_length"`
 	// Sign the SAML authentication request with Access credentials. To verify the
 	// signature, use the public key from the Access certs endpoints.
 	SignRequest bool `json:"sign_request"`
@@ -2393,6 +2398,7 @@ type identityProviderAccessSAMLConfigJSON struct {
 	HeaderAttributes   apijson.Field
 	IdPPublicCERTs     apijson.Field
 	IssuerURL          apijson.Field
+	MaxSSOURLLength    apijson.Field
 	SignRequest        apijson.Field
 	SSOTargetURL       apijson.Field
 	raw                string
@@ -3815,6 +3821,11 @@ type IdentityProviderAccessSAMLConfigParam struct {
 	IdPPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL param.Field[string] `json:"issuer_url"`
+	// The maximum URL length the IdP accepts for the SSO redirect URL. When the
+	// constructed SSO URL would exceed this length, the RelayState is stored
+	// server-side and a short nonce is passed to the IdP instead. Set this if your IdP
+	// enforces a URL length limit.
+	MaxSSOURLLength param.Field[int64] `json:"max_sso_url_length"`
 	// Sign the SAML authentication request with Access credentials. To verify the
 	// signature, use the public key from the Access certs endpoints.
 	SignRequest param.Field[bool] `json:"sign_request"`
@@ -6058,6 +6069,11 @@ type IdentityProviderListResponseAccessSAMLConfig struct {
 	IdPPublicCERTs []string `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL string `json:"issuer_url"`
+	// The maximum URL length the IdP accepts for the SSO redirect URL. When the
+	// constructed SSO URL would exceed this length, the RelayState is stored
+	// server-side and a short nonce is passed to the IdP instead. Set this if your IdP
+	// enforces a URL length limit.
+	MaxSSOURLLength int64 `json:"max_sso_url_length"`
 	// Sign the SAML authentication request with Access credentials. To verify the
 	// signature, use the public key from the Access certs endpoints.
 	SignRequest bool `json:"sign_request"`
@@ -6075,6 +6091,7 @@ type identityProviderListResponseAccessSAMLConfigJSON struct {
 	HeaderAttributes   apijson.Field
 	IdPPublicCERTs     apijson.Field
 	IssuerURL          apijson.Field
+	MaxSSOURLLength    apijson.Field
 	SignRequest        apijson.Field
 	SSOTargetURL       apijson.Field
 	raw                string

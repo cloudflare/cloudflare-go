@@ -231,6 +231,9 @@ type Namespace struct {
 	ID string `json:"id" api:"required"`
 	// A human-readable string name for a Namespace.
 	Title string `json:"title" api:"required"`
+	// Specify the jurisdiction to restrict the KV namespace to durably store data
+	// within. Can only be set at namespace creation time.
+	Jurisdiction NamespaceJurisdiction `json:"jurisdiction"`
 	// True if keys written on the URL will be URL-decoded before storing. For example,
 	// if set to "true", a key written on the URL as "%3F" will be stored as "?".
 	SupportsURLEncoding bool          `json:"supports_url_encoding"`
@@ -241,6 +244,7 @@ type Namespace struct {
 type namespaceJSON struct {
 	ID                  apijson.Field
 	Title               apijson.Field
+	Jurisdiction        apijson.Field
 	SupportsURLEncoding apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -252,6 +256,24 @@ func (r *Namespace) UnmarshalJSON(data []byte) (err error) {
 
 func (r namespaceJSON) RawJSON() string {
 	return r.raw
+}
+
+// Specify the jurisdiction to restrict the KV namespace to durably store data
+// within. Can only be set at namespace creation time.
+type NamespaceJurisdiction string
+
+const (
+	NamespaceJurisdictionEu      NamespaceJurisdiction = "eu"
+	NamespaceJurisdictionFedramp NamespaceJurisdiction = "fedramp"
+	NamespaceJurisdictionUs      NamespaceJurisdiction = "us"
+)
+
+func (r NamespaceJurisdiction) IsKnown() bool {
+	switch r {
+	case NamespaceJurisdictionEu, NamespaceJurisdictionFedramp, NamespaceJurisdictionUs:
+		return true
+	}
+	return false
 }
 
 type NamespaceDeleteResponse struct {
@@ -509,10 +531,31 @@ type NamespaceNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A human-readable string name for a Namespace.
 	Title param.Field[string] `json:"title" api:"required"`
+	// Specify the jurisdiction to restrict the KV namespace to durably store data
+	// within. Can only be set at namespace creation time.
+	Jurisdiction param.Field[NamespaceNewParamsJurisdiction] `json:"jurisdiction"`
 }
 
 func (r NamespaceNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Specify the jurisdiction to restrict the KV namespace to durably store data
+// within. Can only be set at namespace creation time.
+type NamespaceNewParamsJurisdiction string
+
+const (
+	NamespaceNewParamsJurisdictionEu      NamespaceNewParamsJurisdiction = "eu"
+	NamespaceNewParamsJurisdictionFedramp NamespaceNewParamsJurisdiction = "fedramp"
+	NamespaceNewParamsJurisdictionUs      NamespaceNewParamsJurisdiction = "us"
+)
+
+func (r NamespaceNewParamsJurisdiction) IsKnown() bool {
+	switch r {
+	case NamespaceNewParamsJurisdictionEu, NamespaceNewParamsJurisdictionFedramp, NamespaceNewParamsJurisdictionUs:
+		return true
+	}
+	return false
 }
 
 type NamespaceNewResponseEnvelope struct {

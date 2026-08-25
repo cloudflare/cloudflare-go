@@ -104,6 +104,27 @@ func (r *SubdomainService) Delete(ctx context.Context, subdomainID string, body 
 	return res, err
 }
 
+// Updates the activity-log preview preference for a sending subdomain.
+func (r *SubdomainService) Edit(ctx context.Context, subdomainID string, params SubdomainEditParams, opts ...option.RequestOption) (res *SubdomainEditResponse, err error) {
+	var env SubdomainEditResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return nil, err
+	}
+	if subdomainID == "" {
+		err = errors.New("missing required subdomain_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/email/sending/subdomains/%s", params.ZoneID, subdomainID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 // Gets information for a specific sending subdomain.
 func (r *SubdomainService) Get(ctx context.Context, subdomainID string, query SubdomainGetParams, opts ...option.RequestOption) (res *SubdomainGetResponse, err error) {
 	var env SubdomainGetResponseEnvelope
@@ -137,6 +158,10 @@ type SubdomainNewResponse struct {
 	// The DKIM selector used for email signing. Wildcard rows publish the selector and
 	// sign with `d=<base>`.
 	DKIMSelector string `json:"dkim_selector"`
+	// Whether a send request that includes a recipient suppressed on this subdomain
+	// drops that recipient and still delivers to the rest, instead of failing the
+	// entire request.
+	DropSuppressedRecipients bool `json:"drop_suppressed_recipients"`
 	// The date and time the destination address was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Whether sent messages from this subdomain can be previewed in the activity log.
@@ -150,16 +175,17 @@ type SubdomainNewResponse struct {
 // subdomainNewResponseJSON contains the JSON metadata for the struct
 // [SubdomainNewResponse]
 type subdomainNewResponseJSON struct {
-	Enabled          apijson.Field
-	Name             apijson.Field
-	Tag              apijson.Field
-	Created          apijson.Field
-	DKIMSelector     apijson.Field
-	Modified         apijson.Field
-	PreviewEnabled   apijson.Field
-	ReturnPathDomain apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled                  apijson.Field
+	Name                     apijson.Field
+	Tag                      apijson.Field
+	Created                  apijson.Field
+	DKIMSelector             apijson.Field
+	DropSuppressedRecipients apijson.Field
+	Modified                 apijson.Field
+	PreviewEnabled           apijson.Field
+	ReturnPathDomain         apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *SubdomainNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -182,6 +208,10 @@ type SubdomainListResponse struct {
 	// The DKIM selector used for email signing. Wildcard rows publish the selector and
 	// sign with `d=<base>`.
 	DKIMSelector string `json:"dkim_selector"`
+	// Whether a send request that includes a recipient suppressed on this subdomain
+	// drops that recipient and still delivers to the rest, instead of failing the
+	// entire request.
+	DropSuppressedRecipients bool `json:"drop_suppressed_recipients"`
 	// The date and time the destination address was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Whether sent messages from this subdomain can be previewed in the activity log.
@@ -195,16 +225,17 @@ type SubdomainListResponse struct {
 // subdomainListResponseJSON contains the JSON metadata for the struct
 // [SubdomainListResponse]
 type subdomainListResponseJSON struct {
-	Enabled          apijson.Field
-	Name             apijson.Field
-	Tag              apijson.Field
-	Created          apijson.Field
-	DKIMSelector     apijson.Field
-	Modified         apijson.Field
-	PreviewEnabled   apijson.Field
-	ReturnPathDomain apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled                  apijson.Field
+	Name                     apijson.Field
+	Tag                      apijson.Field
+	Created                  apijson.Field
+	DKIMSelector             apijson.Field
+	DropSuppressedRecipients apijson.Field
+	Modified                 apijson.Field
+	PreviewEnabled           apijson.Field
+	ReturnPathDomain         apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *SubdomainListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -352,6 +383,56 @@ func (r SubdomainDeleteResponseSuccess) IsKnown() bool {
 	return false
 }
 
+type SubdomainEditResponse struct {
+	// Whether Email Sending is enabled on this subdomain.
+	Enabled bool `json:"enabled" api:"required"`
+	// The exact domain name or a leftmost wildcard such as `*.example.com`.
+	Name string `json:"name" api:"required"`
+	// Sending subdomain identifier.
+	Tag string `json:"tag" api:"required"`
+	// The date and time the destination address has been created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The DKIM selector used for email signing. Wildcard rows publish the selector and
+	// sign with `d=<base>`.
+	DKIMSelector string `json:"dkim_selector"`
+	// Whether a send request that includes a recipient suppressed on this subdomain
+	// drops that recipient and still delivers to the rest, instead of failing the
+	// entire request.
+	DropSuppressedRecipients bool `json:"drop_suppressed_recipients"`
+	// The date and time the destination address was last modified.
+	Modified time.Time `json:"modified" format:"date-time"`
+	// Whether sent messages from this subdomain can be previewed in the activity log.
+	PreviewEnabled bool `json:"preview_enabled"`
+	// The return-path domain used for bounce handling. Wildcard rows use
+	// `cf-bounce.<base>`.
+	ReturnPathDomain string                    `json:"return_path_domain"`
+	JSON             subdomainEditResponseJSON `json:"-"`
+}
+
+// subdomainEditResponseJSON contains the JSON metadata for the struct
+// [SubdomainEditResponse]
+type subdomainEditResponseJSON struct {
+	Enabled                  apijson.Field
+	Name                     apijson.Field
+	Tag                      apijson.Field
+	Created                  apijson.Field
+	DKIMSelector             apijson.Field
+	DropSuppressedRecipients apijson.Field
+	Modified                 apijson.Field
+	PreviewEnabled           apijson.Field
+	ReturnPathDomain         apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *SubdomainEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SubdomainGetResponse struct {
 	// Whether Email Sending is enabled on this subdomain.
 	Enabled bool `json:"enabled" api:"required"`
@@ -364,6 +445,10 @@ type SubdomainGetResponse struct {
 	// The DKIM selector used for email signing. Wildcard rows publish the selector and
 	// sign with `d=<base>`.
 	DKIMSelector string `json:"dkim_selector"`
+	// Whether a send request that includes a recipient suppressed on this subdomain
+	// drops that recipient and still delivers to the rest, instead of failing the
+	// entire request.
+	DropSuppressedRecipients bool `json:"drop_suppressed_recipients"`
 	// The date and time the destination address was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// Whether sent messages from this subdomain can be previewed in the activity log.
@@ -377,16 +462,17 @@ type SubdomainGetResponse struct {
 // subdomainGetResponseJSON contains the JSON metadata for the struct
 // [SubdomainGetResponse]
 type subdomainGetResponseJSON struct {
-	Enabled          apijson.Field
-	Name             apijson.Field
-	Tag              apijson.Field
-	Created          apijson.Field
-	DKIMSelector     apijson.Field
-	Modified         apijson.Field
-	PreviewEnabled   apijson.Field
-	ReturnPathDomain apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled                  apijson.Field
+	Name                     apijson.Field
+	Tag                      apijson.Field
+	Created                  apijson.Field
+	DKIMSelector             apijson.Field
+	DropSuppressedRecipients apijson.Field
+	Modified                 apijson.Field
+	PreviewEnabled           apijson.Field
+	ReturnPathDomain         apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *SubdomainGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -557,6 +643,160 @@ type SubdomainListParams struct {
 type SubdomainDeleteParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+}
+
+type SubdomainEditParams struct {
+	// Identifier.
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	// Whether a send request that includes a recipient suppressed on this subdomain
+	// drops that recipient and still delivers to the rest, instead of failing the
+	// entire request.
+	DropSuppressedRecipients param.Field[bool] `json:"drop_suppressed_recipients"`
+	// Whether sent messages from this subdomain can be previewed in the activity log.
+	PreviewEnabled param.Field[bool] `json:"preview_enabled"`
+}
+
+func (r SubdomainEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SubdomainEditResponseEnvelope struct {
+	Errors   []SubdomainEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SubdomainEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success SubdomainEditResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  SubdomainEditResponse                `json:"result"`
+	JSON    subdomainEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// subdomainEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SubdomainEditResponseEnvelope]
+type subdomainEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubdomainEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainEditResponseEnvelopeErrors struct {
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           SubdomainEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             subdomainEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// subdomainEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SubdomainEditResponseEnvelopeErrors]
+type subdomainEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SubdomainEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    subdomainEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// subdomainEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [SubdomainEditResponseEnvelopeErrorsSource]
+type subdomainEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubdomainEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainEditResponseEnvelopeMessages struct {
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           SubdomainEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             subdomainEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// subdomainEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SubdomainEditResponseEnvelopeMessages]
+type subdomainEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SubdomainEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SubdomainEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    subdomainEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// subdomainEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [SubdomainEditResponseEnvelopeMessagesSource]
+type subdomainEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubdomainEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subdomainEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type SubdomainEditResponseEnvelopeSuccess bool
+
+const (
+	SubdomainEditResponseEnvelopeSuccessTrue SubdomainEditResponseEnvelopeSuccess = true
+)
+
+func (r SubdomainEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubdomainEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type SubdomainGetParams struct {

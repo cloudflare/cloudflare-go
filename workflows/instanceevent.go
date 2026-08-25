@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
@@ -63,7 +64,29 @@ func (r *InstanceEventService) New(ctx context.Context, workflowName string, ins
 	return res, nil
 }
 
-type InstanceEventNewResponse = interface{}
+type InstanceEventNewResponse struct {
+	InstanceID string `json:"instanceId" api:"required"`
+	// Accepts ISO 8601 with no timezone offsets and in UTC.
+	Timestamp time.Time                    `json:"timestamp" api:"required" format:"date-time"`
+	JSON      instanceEventNewResponseJSON `json:"-"`
+}
+
+// instanceEventNewResponseJSON contains the JSON metadata for the struct
+// [InstanceEventNewResponse]
+type instanceEventNewResponseJSON struct {
+	InstanceID  apijson.Field
+	Timestamp   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceEventNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceEventNewResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type InstanceEventNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -77,8 +100,8 @@ func (r InstanceEventNewParams) MarshalJSON() (data []byte, err error) {
 type InstanceEventNewResponseEnvelope struct {
 	Errors     []InstanceEventNewResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages   []InstanceEventNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result     InstanceEventNewResponse                   `json:"result" api:"required"`
 	Success    InstanceEventNewResponseEnvelopeSuccess    `json:"success" api:"required"`
-	Result     InstanceEventNewResponse                   `json:"result"`
 	ResultInfo InstanceEventNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       instanceEventNewResponseEnvelopeJSON       `json:"-"`
 }
@@ -88,8 +111,8 @@ type InstanceEventNewResponseEnvelope struct {
 type instanceEventNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

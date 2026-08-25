@@ -229,6 +229,9 @@ type ScriptVersionNewResponseResourcesBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format ScriptVersionNewResponseResourcesBindingsFormat `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity ScriptVersionNewResponseResourcesBindingsIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -315,6 +318,7 @@ type scriptVersionNewResponseResourcesBindingJSON struct {
 	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
+	Identity                    apijson.Field
 	IndexName                   apijson.Field
 	InstanceName                apijson.Field
 	Json                        apijson.Field
@@ -2516,6 +2520,9 @@ type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetwork struc
 	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentity `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -2530,6 +2537,7 @@ type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetwork struc
 type scriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetworkJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
+	Identity    apijson.Field
 	NetworkID   apijson.Field
 	TunnelID    apijson.Field
 	raw         string
@@ -2557,6 +2565,22 @@ const (
 func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case ScriptVersionNewResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -2626,6 +2650,22 @@ const (
 func (r ScriptVersionNewResponseResourcesBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptVersionNewResponseResourcesBindingsFormatRaw, ScriptVersionNewResponseResourcesBindingsFormatPkcs8, ScriptVersionNewResponseResourcesBindingsFormatSpki, ScriptVersionNewResponseResourcesBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptVersionNewResponseResourcesBindingsIdentity string
+
+const (
+	ScriptVersionNewResponseResourcesBindingsIdentityRuntimeEmailAlpha ScriptVersionNewResponseResourcesBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptVersionNewResponseResourcesBindingsIdentity) IsKnown() bool {
+	switch r {
+	case ScriptVersionNewResponseResourcesBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -4028,6 +4068,9 @@ type ScriptVersionGetResponseResourcesBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format ScriptVersionGetResponseResourcesBindingsFormat `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity ScriptVersionGetResponseResourcesBindingsIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -4114,6 +4157,7 @@ type scriptVersionGetResponseResourcesBindingJSON struct {
 	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
+	Identity                    apijson.Field
 	IndexName                   apijson.Field
 	InstanceName                apijson.Field
 	Json                        apijson.Field
@@ -6315,6 +6359,9 @@ type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetwork struc
 	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentity `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -6329,6 +6376,7 @@ type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetwork struc
 type scriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetworkJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
+	Identity    apijson.Field
 	NetworkID   apijson.Field
 	TunnelID    apijson.Field
 	raw         string
@@ -6356,6 +6404,22 @@ const (
 func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case ScriptVersionGetResponseResourcesBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -6425,6 +6489,22 @@ const (
 func (r ScriptVersionGetResponseResourcesBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptVersionGetResponseResourcesBindingsFormatRaw, ScriptVersionGetResponseResourcesBindingsFormatPkcs8, ScriptVersionGetResponseResourcesBindingsFormatSpki, ScriptVersionGetResponseResourcesBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptVersionGetResponseResourcesBindingsIdentity string
+
+const (
+	ScriptVersionGetResponseResourcesBindingsIdentityRuntimeEmailAlpha ScriptVersionGetResponseResourcesBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptVersionGetResponseResourcesBindingsIdentity) IsKnown() bool {
+	switch r {
+	case ScriptVersionGetResponseResourcesBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -7397,8 +7477,23 @@ func (r ScriptVersionNewParamsMetadata) MarshalJSON() (data []byte, err error) {
 type ScriptVersionNewParamsMetadataAnnotations struct {
 	// Associated alias for a version.
 	WorkersAlias param.Field[string] `json:"workers/alias"`
+	// Full commit SHA associated with the version, detected from the CI environment.
+	// Maximum 64 bytes.
+	WorkersCommitSha param.Field[string] `json:"workers/commit_sha"`
 	// Human-readable message about the version. Truncated to 1000 bytes if longer.
 	WorkersMessage param.Field[string] `json:"workers/message"`
+	// Number of the pull or merge request associated with the version, detected from
+	// the CI environment. Maximum 20 bytes.
+	WorkersPullRequestNumber param.Field[string] `json:"workers/pull_request_number"`
+	// Title of the pull or merge request associated with the version, detected from
+	// the CI environment. Maximum 512 bytes.
+	WorkersPullRequestTitle param.Field[string] `json:"workers/pull_request_title"`
+	// URL of the pull or merge request associated with the version, detected from the
+	// CI environment. Maximum 512 bytes.
+	WorkersPullRequestURL param.Field[string] `json:"workers/pull_request_url"`
+	// URL of the source repository the version was built from, detected from the CI
+	// environment. Maximum 512 bytes.
+	WorkersRepositoryURL param.Field[string] `json:"workers/repository_url"`
 	// User-provided identifier for the version. Maximum 100 bytes.
 	WorkersTag param.Field[string] `json:"workers/tag"`
 }
@@ -7443,6 +7538,9 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[ScriptVersionNewParamsMetadataBindingsFormat] `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[ScriptVersionNewParamsMetadataBindingsIdentity] `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -8813,6 +8911,9 @@ type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVPCNetwork struct {
 	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity] `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
@@ -8837,6 +8938,22 @@ const (
 func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -8906,6 +9023,22 @@ const (
 func (r ScriptVersionNewParamsMetadataBindingsFormat) IsKnown() bool {
 	switch r {
 	case ScriptVersionNewParamsMetadataBindingsFormatRaw, ScriptVersionNewParamsMetadataBindingsFormatPkcs8, ScriptVersionNewParamsMetadataBindingsFormatSpki, ScriptVersionNewParamsMetadataBindingsFormatJwk:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type ScriptVersionNewParamsMetadataBindingsIdentity string
+
+const (
+	ScriptVersionNewParamsMetadataBindingsIdentityRuntimeEmailAlpha ScriptVersionNewParamsMetadataBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r ScriptVersionNewParamsMetadataBindingsIdentity) IsKnown() bool {
+	switch r {
+	case ScriptVersionNewParamsMetadataBindingsIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false

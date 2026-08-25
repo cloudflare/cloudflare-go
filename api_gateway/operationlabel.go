@@ -36,7 +36,7 @@ func NewOperationLabelService(opts ...option.RequestOption) (r *OperationLabelSe
 	return
 }
 
-// Attach label(s) on an operation in endpoint management
+// Attaches one or more labels to a web or API operation.
 func (r *OperationLabelService) New(ctx context.Context, operationID string, params OperationLabelNewParams, opts ...option.RequestOption) (res *OperationLabelNewResponse, err error) {
 	var env OperationLabelNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +57,7 @@ func (r *OperationLabelService) New(ctx context.Context, operationID string, par
 	return res, nil
 }
 
-// Replace label(s) on an operation in endpoint management
+// Replaces the complete label set on a web or API operation.
 func (r *OperationLabelService) Update(ctx context.Context, operationID string, params OperationLabelUpdateParams, opts ...option.RequestOption) (res *OperationLabelUpdateResponse, err error) {
 	var env OperationLabelUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -78,7 +78,7 @@ func (r *OperationLabelService) Update(ctx context.Context, operationID string, 
 	return res, nil
 }
 
-// Remove label(s) on an operation in endpoint management
+// Removes one or more labels from a web or API operation.
 func (r *OperationLabelService) Delete(ctx context.Context, operationID string, body OperationLabelDeleteParams, opts ...option.RequestOption) (res *OperationLabelDeleteResponse, err error) {
 	var env OperationLabelDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -99,7 +99,7 @@ func (r *OperationLabelService) Delete(ctx context.Context, operationID string, 
 	return res, nil
 }
 
-// Bulk attach label(s) on operation(s) in endpoint management
+// Attaches labels to multiple web or API operations in one request.
 func (r *OperationLabelService) BulkNew(ctx context.Context, params OperationLabelBulkNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[OperationLabelBulkNewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -121,12 +121,12 @@ func (r *OperationLabelService) BulkNew(ctx context.Context, params OperationLab
 	return res, nil
 }
 
-// Bulk attach label(s) on operation(s) in endpoint management
+// Attaches labels to multiple web or API operations in one request.
 func (r *OperationLabelService) BulkNewAutoPaging(ctx context.Context, params OperationLabelBulkNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OperationLabelBulkNewResponse] {
 	return pagination.NewSinglePageAutoPager(r.BulkNew(ctx, params, opts...))
 }
 
-// Bulk remove label(s) on operation(s) in endpoint management
+// Removes labels from multiple web or API operations in one request.
 func (r *OperationLabelService) BulkDelete(ctx context.Context, body OperationLabelBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[OperationLabelBulkDeleteResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -148,12 +148,13 @@ func (r *OperationLabelService) BulkDelete(ctx context.Context, body OperationLa
 	return res, nil
 }
 
-// Bulk remove label(s) on operation(s) in endpoint management
+// Removes labels from multiple web or API operations in one request.
 func (r *OperationLabelService) BulkDeleteAutoPaging(ctx context.Context, body OperationLabelBulkDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OperationLabelBulkDeleteResponse] {
 	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, body, opts...))
 }
 
-// Bulk replace label(s) on operation(s) in endpoint management
+// Replaces the complete label sets on multiple web or API operations in one
+// request.
 func (r *OperationLabelService) BulkUpdate(ctx context.Context, params OperationLabelBulkUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[OperationLabelBulkUpdateResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -175,7 +176,8 @@ func (r *OperationLabelService) BulkUpdate(ctx context.Context, params Operation
 	return res, nil
 }
 
-// Bulk replace label(s) on operation(s) in endpoint management
+// Replaces the complete label sets on multiple web or API operations in one
+// request.
 func (r *OperationLabelService) BulkUpdateAutoPaging(ctx context.Context, params OperationLabelBulkUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OperationLabelBulkUpdateResponse] {
 	return pagination.NewSinglePageAutoPager(r.BulkUpdate(ctx, params, opts...))
 }

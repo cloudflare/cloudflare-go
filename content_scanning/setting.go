@@ -35,7 +35,8 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	return
 }
 
-// Retrieve the current status of Content Scanning.
+// Get the current Content Scanning status for the zone, together with the date the
+// status was last modified.
 func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
 	var env SettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
