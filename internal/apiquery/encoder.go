@@ -285,7 +285,11 @@ func (e *encoder) newPrimitiveTypeEncoder(t reflect.Type) encoderFunc {
 		return func(key string, v reflect.Value) []Pair {
 			return []Pair{{key, strconv.FormatUint(v.Uint(), 10)}}
 		}
-	case reflect.Float32, reflect.Float64:
+	case reflect.Float32:
+		return func(key string, v reflect.Value) []Pair {
+			return []Pair{{key, strconv.FormatFloat(v.Float(), 'f', -1, 32)}}
+		}
+	case reflect.Float64:
 		return func(key string, v reflect.Value) []Pair {
 			return []Pair{{key, strconv.FormatFloat(v.Float(), 'f', -1, 64)}}
 		}
