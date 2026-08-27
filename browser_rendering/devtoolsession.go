@@ -67,8 +67,8 @@ func (r *DevtoolSessionService) Get(ctx context.Context, sessionID string, query
 type DevtoolSessionListResponse struct {
 	// Session ID.
 	SessionID string `json:"sessionId" api:"required" format:"uuid"`
-	// Reason for session closure.
-	CloseReason string `json:"closeReason"`
+	// Reason code for session closure.
+	CloseReason float64 `json:"closeReason"`
 	// Human-readable close reason.
 	CloseReasonText string `json:"closeReasonText"`
 	// Connection end time.
@@ -119,8 +119,8 @@ func (r devtoolSessionListResponseJSON) RawJSON() string {
 type DevtoolSessionGetResponse struct {
 	// Session ID.
 	SessionID string `json:"sessionId" api:"required" format:"uuid"`
-	// Reason for session closure.
-	CloseReason string `json:"closeReason"`
+	// Reason code for session closure.
+	CloseReason float64 `json:"closeReason"`
 	// Human-readable close reason.
 	CloseReasonText string `json:"closeReasonText"`
 	// Connection end time.

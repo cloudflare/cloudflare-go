@@ -2614,6 +2614,9 @@ type ResourceTaggingListParams struct {
 	// Filter by resource ID. Can be repeated up to 50 times to filter by multiple IDs.
 	// Example: ?id=abc&id=def
 	ID param.Field[[]string] `query:"id"`
+	// Match `tag` keys and values case-insensitively. Stored casing is unchanged.
+	// Example: ?tag=environment=production&case_insensitive=true
+	CaseInsensitive param.Field[bool] `query:"case_insensitive"`
 	// Cursor for pagination.
 	Cursor param.Field[string] `query:"cursor"`
 	// Filter by resource name. Performs a case-insensitive substring match. Example:
