@@ -50,6 +50,7 @@ func TestCrawlNewWithOptionalParams(t *testing.T) {
 				Username: cloudflare.F("x"),
 			}),
 			BestAttempt: cloudflare.F(true),
+			ContentUse:  cloudflare.F(browser_rendering.CrawlNewParamsBodyObjectContentUseReference),
 			Cookies: cloudflare.F([]browser_rendering.CrawlNewParamsBodyObjectCookie{{
 				Name:         cloudflare.F("name"),
 				Value:        cloudflare.F("value"),

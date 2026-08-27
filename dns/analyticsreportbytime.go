@@ -42,6 +42,9 @@ func NewAnalyticsReportBytimeService(opts ...option.RequestOption) (r *Analytics
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
+//
+// Deprecated: This endpoint is deprecated. See
+// [the API deprecation notice](https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-12-09).
 func (r *AnalyticsReportBytimeService) Get(ctx context.Context, params AnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *ByTime, err error) {
 	var env AnalyticsReportBytimeGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

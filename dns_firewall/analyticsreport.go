@@ -45,6 +45,9 @@ func NewAnalyticsReportService(opts ...option.RequestOption) (r *AnalyticsReport
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
+//
+// Deprecated: This endpoint is deprecated. See
+// [the API deprecation notice](https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-12-09).
 func (r *AnalyticsReportService) Get(ctx context.Context, dnsFirewallID string, params AnalyticsReportGetParams, opts ...option.RequestOption) (res *dns.Report, err error) {
 	var env AnalyticsReportGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

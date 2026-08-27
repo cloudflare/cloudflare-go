@@ -36,6 +36,9 @@ func TestWorkflowUpdateWithOptionalParams(t *testing.T) {
 			AccountID:  cloudflare.F("account_id"),
 			ClassName:  cloudflare.F("x"),
 			ScriptName: cloudflare.F("x"),
+			Concurrency: cloudflare.F(workflows.WorkflowUpdateParamsConcurrency{
+				Limit: cloudflare.F(int64(1)),
+			}),
 			DefaultRetention: cloudflare.F(workflows.WorkflowUpdateParamsDefaultRetention{
 				ErrorRetention:   cloudflare.F[workflows.WorkflowUpdateParamsDefaultRetentionErrorRetentionUnion](shared.UnionString("5 minutes")),
 				SuccessRetention: cloudflare.F[workflows.WorkflowUpdateParamsDefaultRetentionSuccessRetentionUnion](shared.UnionString("5 minutes")),

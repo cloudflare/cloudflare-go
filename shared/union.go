@@ -19,6 +19,7 @@ func (UnionTime) ImplementsThreatEventIndicatorAggregateListParamsCreatedBeforeU
 
 type UnionString string
 
+func (UnionString) ImplementsSettingEditParamsBodyValueValueUnion()                                {}
 func (UnionString) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
 func (UnionString) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                     {}
 func (UnionString) ImplementsAnalyticsQueryTopNParamsFiltersValueUnion()                           {}
@@ -99,16 +100,21 @@ func (UnionString) ImplementsObservabilitySharedQueryNewParamsParametersFiltersO
 }
 func (UnionString) ImplementsObservabilitySharedQueryNewParamsParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
-func (UnionString) ImplementsObservabilitySharedQueryNewParamsParametersNeedleValueUnion()         {}
-func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()           {}
-func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()        {}
-func (UnionString) ImplementsNamespaceValueUpdateParamsValueUnion()                                {}
-func (UnionString) ImplementsOriginPortUnionParam()                                                {}
-func (UnionString) ImplementsOriginPortUnion()                                                     {}
-func (UnionString) ImplementsV2QueryGetResponseEnvelopeErrorsCode()                                {}
-func (UnionString) ImplementsV2QueryGetResponseEnvelopeMessagesCode()                              {}
-func (UnionString) ImplementsHealthCheckTargetUnionParam()                                         {}
-func (UnionString) ImplementsHealthCheckTargetUnion()                                              {}
+func (UnionString) ImplementsObservabilitySharedQueryNewParamsParametersNeedleValueUnion()  {}
+func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()    {}
+func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionString) ImplementsNamespaceValueUpdateParamsValueUnion()                         {}
+func (UnionString) ImplementsOriginPortUnionParam()                                         {}
+func (UnionString) ImplementsOriginPortUnion()                                              {}
+func (UnionString) ImplementsV2QueryGetResponseEnvelopeErrorsCode()                         {}
+func (UnionString) ImplementsV2QueryGetResponseEnvelopeMessagesCode()                       {}
+func (UnionString) ImplementsCfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsCfInterconnectListResponseInterconnectsHealthCheckTargetUnion() {}
+func (UnionString) ImplementsCfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsCfInterconnectGetResponseInterconnectHealthCheckTargetUnion()         {}
+func (UnionString) ImplementsCfInterconnectUpdateParamsHealthCheckTargetUnion()                    {}
 func (UnionString) ImplementsGRETunnelNewResponseHealthCheckTargetUnion()                          {}
 func (UnionString) ImplementsGRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion()      {}
 func (UnionString) ImplementsGRETunnelListResponseGRETunnelsHealthCheckTargetUnion()               {}

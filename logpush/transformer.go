@@ -141,20 +141,31 @@ func (r *TransformerService) Get(ctx context.Context, transformerID int64, query
 
 // Executes a SQL transformer against a single input record and returns the
 // transformed output. This is a stateless endpoint — nothing is persisted.
-func (r *TransformerService) Preview(ctx context.Context, params TransformerPreviewParams, opts ...option.RequestOption) (res *TransformerPreviewResponse, err error) {
-	var env TransformerPreviewResponseEnvelope
+func (r *TransformerService) Preview(ctx context.Context, params TransformerPreviewParams, opts ...option.RequestOption) (res *pagination.SinglePage[TransformerPreviewResponse], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/logpush/transformers/preview", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
-	res = &env.Result
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
 	return res, nil
+}
+
+// Executes a SQL transformer against a single input record and returns the
+// transformed output. This is a stateless endpoint — nothing is persisted.
+func (r *TransformerService) PreviewAutoPaging(ctx context.Context, params TransformerPreviewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TransformerPreviewResponse] {
+	return pagination.NewSinglePageAutoPager(r.Preview(ctx, params, opts...))
 }
 
 type TransformerNewResponse struct {
@@ -1152,144 +1163,4 @@ type TransformerPreviewParams struct {
 
 func (r TransformerPreviewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type TransformerPreviewResponseEnvelope struct {
-	Errors   []TransformerPreviewResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []TransformerPreviewResponseEnvelopeMessages `json:"messages" api:"required"`
-	// Whether the API call was successful.
-	Success TransformerPreviewResponseEnvelopeSuccess `json:"success" api:"required"`
-	// The transformed log record, or null if the query filtered it out.
-	Result TransformerPreviewResponse             `json:"result" api:"nullable"`
-	JSON   transformerPreviewResponseEnvelopeJSON `json:"-"`
-}
-
-// transformerPreviewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TransformerPreviewResponseEnvelope]
-type transformerPreviewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TransformerPreviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r transformerPreviewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TransformerPreviewResponseEnvelopeErrors struct {
-	Code             int64                                          `json:"code" api:"required"`
-	Message          string                                         `json:"message" api:"required"`
-	DocumentationURL string                                         `json:"documentation_url"`
-	Source           TransformerPreviewResponseEnvelopeErrorsSource `json:"source"`
-	JSON             transformerPreviewResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// transformerPreviewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [TransformerPreviewResponseEnvelopeErrors]
-type transformerPreviewResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *TransformerPreviewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r transformerPreviewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TransformerPreviewResponseEnvelopeErrorsSource struct {
-	Pointer string                                             `json:"pointer"`
-	JSON    transformerPreviewResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// transformerPreviewResponseEnvelopeErrorsSourceJSON contains the JSON metadata
-// for the struct [TransformerPreviewResponseEnvelopeErrorsSource]
-type transformerPreviewResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TransformerPreviewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r transformerPreviewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type TransformerPreviewResponseEnvelopeMessages struct {
-	Code             int64                                            `json:"code" api:"required"`
-	Message          string                                           `json:"message" api:"required"`
-	DocumentationURL string                                           `json:"documentation_url"`
-	Source           TransformerPreviewResponseEnvelopeMessagesSource `json:"source"`
-	JSON             transformerPreviewResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// transformerPreviewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [TransformerPreviewResponseEnvelopeMessages]
-type transformerPreviewResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *TransformerPreviewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r transformerPreviewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type TransformerPreviewResponseEnvelopeMessagesSource struct {
-	Pointer string                                               `json:"pointer"`
-	JSON    transformerPreviewResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// transformerPreviewResponseEnvelopeMessagesSourceJSON contains the JSON metadata
-// for the struct [TransformerPreviewResponseEnvelopeMessagesSource]
-type transformerPreviewResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TransformerPreviewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r transformerPreviewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type TransformerPreviewResponseEnvelopeSuccess bool
-
-const (
-	TransformerPreviewResponseEnvelopeSuccessTrue TransformerPreviewResponseEnvelopeSuccess = true
-)
-
-func (r TransformerPreviewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TransformerPreviewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

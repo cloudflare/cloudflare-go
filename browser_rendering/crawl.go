@@ -285,9 +285,14 @@ type CrawlNewParamsBody struct {
 	AllowResourceTypes  param.Field[interface{}] `json:"allowResourceTypes"`
 	Authenticate        param.Field[interface{}] `json:"authenticate"`
 	// Attempt to proceed when 'awaited' events fail or timeout.
-	BestAttempt   param.Field[bool]        `json:"bestAttempt"`
-	Cookies       param.Field[interface{}] `json:"cookies"`
-	CrawlPurposes param.Field[interface{}] `json:"crawlPurposes"`
+	BestAttempt param.Field[bool] `json:"bestAttempt"`
+	// Intended content use level to respect the `use` Content-Signal directive in
+	// robots.txt. Levels (least to most permissive): 'reference', 'full'. A URL is
+	// disallowed when the publisher's declared `use` level is lower than this intent.
+	// Learn more: https://contentsignals.org/. Default: 'full'.
+	ContentUse    param.Field[CrawlNewParamsBodyContentUse] `json:"contentUse"`
+	Cookies       param.Field[interface{}]                  `json:"cookies"`
+	CrawlPurposes param.Field[interface{}]                  `json:"crawlPurposes"`
 	// Maximum number of levels deep the crawler will traverse from the starting URL.
 	Depth            param.Field[float64]     `json:"depth"`
 	EmulateMediaType param.Field[string]      `json:"emulateMediaType"`
@@ -358,6 +363,11 @@ type CrawlNewParamsBodyObject struct {
 	Authenticate param.Field[CrawlNewParamsBodyObjectAuthenticate] `json:"authenticate"`
 	// Attempt to proceed when 'awaited' events fail or timeout.
 	BestAttempt param.Field[bool] `json:"bestAttempt"`
+	// Intended content use level to respect the `use` Content-Signal directive in
+	// robots.txt. Levels (least to most permissive): 'reference', 'full'. A URL is
+	// disallowed when the publisher's declared `use` level is lower than this intent.
+	// Learn more: https://contentsignals.org/. Default: 'full'.
+	ContentUse param.Field[CrawlNewParamsBodyObjectContentUse] `json:"contentUse"`
 	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
 	Cookies param.Field[[]CrawlNewParamsBodyObjectCookie] `json:"cookies"`
 	// List of crawl purposes to respect Content-Signal directives in robots.txt.
@@ -476,6 +486,25 @@ type CrawlNewParamsBodyObjectAuthenticate struct {
 
 func (r CrawlNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Intended content use level to respect the `use` Content-Signal directive in
+// robots.txt. Levels (least to most permissive): 'reference', 'full'. A URL is
+// disallowed when the publisher's declared `use` level is lower than this intent.
+// Learn more: https://contentsignals.org/. Default: 'full'.
+type CrawlNewParamsBodyObjectContentUse string
+
+const (
+	CrawlNewParamsBodyObjectContentUseReference CrawlNewParamsBodyObjectContentUse = "reference"
+	CrawlNewParamsBodyObjectContentUseFull      CrawlNewParamsBodyObjectContentUse = "full"
+)
+
+func (r CrawlNewParamsBodyObjectContentUse) IsKnown() bool {
+	switch r {
+	case CrawlNewParamsBodyObjectContentUseReference, CrawlNewParamsBodyObjectContentUseFull:
+		return true
+	}
+	return false
 }
 
 type CrawlNewParamsBodyObjectCookie struct {
@@ -816,6 +845,25 @@ const (
 func (r CrawlNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 	switch r {
 	case CrawlNewParamsBodyObjectWaitForSelectorVisibleTrue:
+		return true
+	}
+	return false
+}
+
+// Intended content use level to respect the `use` Content-Signal directive in
+// robots.txt. Levels (least to most permissive): 'reference', 'full'. A URL is
+// disallowed when the publisher's declared `use` level is lower than this intent.
+// Learn more: https://contentsignals.org/. Default: 'full'.
+type CrawlNewParamsBodyContentUse string
+
+const (
+	CrawlNewParamsBodyContentUseReference CrawlNewParamsBodyContentUse = "reference"
+	CrawlNewParamsBodyContentUseFull      CrawlNewParamsBodyContentUse = "full"
+)
+
+func (r CrawlNewParamsBodyContentUse) IsKnown() bool {
+	switch r {
+	case CrawlNewParamsBodyContentUseReference, CrawlNewParamsBodyContentUseFull:
 		return true
 	}
 	return false

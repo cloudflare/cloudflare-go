@@ -891,8 +891,10 @@ type ResourceLibraryApplicationListParams struct {
 	Limit param.Field[int64] `query:"limit"`
 	// Offset of results to return.
 	Offset param.Field[int64] `query:"offset"`
-	// Order results by field name and direction (e.g., name:asc). Ignored when search
-	// is provided; results are ranked by relevance instead.
+	// Order results using field:direction format. Supported fields are name, id,
+	// human_id, category_id, application_type, application_confidence_score, and
+	// gen_ai_score. Supported directions are asc and desc. Ignored when search is
+	// provided; results are ranked by relevance instead.
 	OrderBy param.Field[string] `query:"order_by"`
 	// Fuzzy search across application name and hostnames. Results are ranked by
 	// relevance. Must be between 2 and 200 characters. Can be combined with filter

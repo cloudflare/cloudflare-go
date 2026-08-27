@@ -404,9 +404,10 @@ func (r workflowGetResponseScheduleJSON) RawJSON() string {
 }
 
 type WorkflowUpdateParams struct {
-	AccountID  param.Field[string] `path:"account_id" api:"required"`
-	ClassName  param.Field[string] `json:"class_name" api:"required"`
-	ScriptName param.Field[string] `json:"script_name" api:"required"`
+	AccountID   param.Field[string]                          `path:"account_id" api:"required"`
+	ClassName   param.Field[string]                          `json:"class_name" api:"required"`
+	ScriptName  param.Field[string]                          `json:"script_name" api:"required"`
+	Concurrency param.Field[WorkflowUpdateParamsConcurrency] `json:"concurrency"`
 	// Default retention applied to instances of this version when they do not set
 	// their own retention.
 	DefaultRetention param.Field[WorkflowUpdateParamsDefaultRetention] `json:"default_retention"`
@@ -415,6 +416,17 @@ type WorkflowUpdateParams struct {
 }
 
 func (r WorkflowUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type WorkflowUpdateParamsConcurrency struct {
+	// Maximum number of instances of this workflow that can run concurrently.
+	// Additional instances are queued and started as running instances complete. Must
+	// not exceed the account concurrency limit.
+	Limit param.Field[int64] `json:"limit"`
+}
+
+func (r WorkflowUpdateParamsConcurrency) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

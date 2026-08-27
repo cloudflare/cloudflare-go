@@ -355,6 +355,8 @@ type CasbPostureFindingTypeListParams struct {
 	Page param.Field[int64] `query:"page"`
 	// Number of results to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
+	// Filter finding types by name or ID (case-insensitive substring match).
+	Search param.Field[string] `query:"search"`
 	// Filter finding types by vendor. Supports multiple comma-separated values.
 	Vendors param.Field[[]CasbPostureFindingTypeListParamsVendor] `query:"vendors"`
 }

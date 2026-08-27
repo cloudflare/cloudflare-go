@@ -488,7 +488,7 @@ type UsageGetAccountUsageV1Response struct {
 	ContractedCost float64 `json:"ContractedCost" api:"required"`
 	// Specifies the cumulated cost for the billing period in the billing currency.
 	CumulatedContractedCost float64 `json:"CumulatedContractedCost" api:"required"`
-	// Specifies the cumulated pricing quantity for the billing period.
+	// Specifies the portion of usage that is actually subject to a unit price.
 	CumulatedPricingQuantity int64 `json:"CumulatedPricingQuantity" api:"required"`
 	// The amortized cost of the charge. PayGo has no upfront commitments, so this
 	// equals ContractedCost.
@@ -835,7 +835,7 @@ type UsagePaygoResponse struct {
 	ContractedCost float64 `json:"ContractedCost" api:"required"`
 	// Specifies the cumulated cost for the billing period in the billing currency.
 	CumulatedContractedCost float64 `json:"CumulatedContractedCost" api:"required"`
-	// Specifies the cumulated pricing quantity for the billing period.
+	// Specifies the portion of usage that is actually subject to a unit price.
 	CumulatedPricingQuantity int64 `json:"CumulatedPricingQuantity" api:"required"`
 	// The amortized cost of the charge. PayGo has no upfront commitments, so this
 	// equals ContractedCost.

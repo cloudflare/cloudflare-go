@@ -2,13 +2,11 @@
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit#HealthCheckParam">HealthCheckParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit#HealthCheckRate">HealthCheckRate</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit#HealthCheckType">HealthCheckType</a>
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit#HealthCheck">HealthCheck</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit#HealthCheckRate">HealthCheckRate</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit">magic_transit</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/magic_transit#HealthCheckType">HealthCheckType</a>
 

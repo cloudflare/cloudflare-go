@@ -127,10 +127,11 @@ type VersionListResponse struct {
 	ClassName string    `json:"class_name" api:"required"`
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	HasDag    bool      `json:"has_dag" api:"required"`
-	// The programming language of the workflow implementation
+	// The programming language of the workflow implementation.
 	Language         VersionListResponseLanguage         `json:"language" api:"required"`
 	ModifiedOn       time.Time                           `json:"modified_on" api:"required" format:"date-time"`
 	WorkflowID       string                              `json:"workflow_id" api:"required" format:"uuid"`
+	Concurrency      VersionListResponseConcurrency      `json:"concurrency"`
 	DefaultRetention VersionListResponseDefaultRetention `json:"default_retention"`
 	Limits           VersionListResponseLimits           `json:"limits"`
 	JSON             versionListResponseJSON             `json:"-"`
@@ -146,6 +147,7 @@ type versionListResponseJSON struct {
 	Language         apijson.Field
 	ModifiedOn       apijson.Field
 	WorkflowID       apijson.Field
+	Concurrency      apijson.Field
 	DefaultRetention apijson.Field
 	Limits           apijson.Field
 	raw              string
@@ -160,7 +162,7 @@ func (r versionListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The programming language of the workflow implementation
+// The programming language of the workflow implementation.
 type VersionListResponseLanguage string
 
 const (
@@ -174,6 +176,30 @@ func (r VersionListResponseLanguage) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type VersionListResponseConcurrency struct {
+	// Maximum number of instances of this workflow that can run concurrently.
+	// Additional instances are queued and started as running instances complete. Must
+	// not exceed the account concurrency limit.
+	Limit int64                              `json:"limit"`
+	JSON  versionListResponseConcurrencyJSON `json:"-"`
+}
+
+// versionListResponseConcurrencyJSON contains the JSON metadata for the struct
+// [VersionListResponseConcurrency]
+type versionListResponseConcurrencyJSON struct {
+	Limit       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionListResponseConcurrency) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionListResponseConcurrencyJSON) RawJSON() string {
+	return r.raw
 }
 
 type VersionListResponseDefaultRetention struct {
@@ -227,10 +253,11 @@ type VersionGetResponse struct {
 	ClassName string    `json:"class_name" api:"required"`
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	HasDag    bool      `json:"has_dag" api:"required"`
-	// The programming language of the workflow implementation
+	// The programming language of the workflow implementation.
 	Language         VersionGetResponseLanguage         `json:"language" api:"required"`
 	ModifiedOn       time.Time                          `json:"modified_on" api:"required" format:"date-time"`
 	WorkflowID       string                             `json:"workflow_id" api:"required" format:"uuid"`
+	Concurrency      VersionGetResponseConcurrency      `json:"concurrency"`
 	DefaultRetention VersionGetResponseDefaultRetention `json:"default_retention"`
 	Limits           VersionGetResponseLimits           `json:"limits"`
 	JSON             versionGetResponseJSON             `json:"-"`
@@ -246,6 +273,7 @@ type versionGetResponseJSON struct {
 	Language         apijson.Field
 	ModifiedOn       apijson.Field
 	WorkflowID       apijson.Field
+	Concurrency      apijson.Field
 	DefaultRetention apijson.Field
 	Limits           apijson.Field
 	raw              string
@@ -260,7 +288,7 @@ func (r versionGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The programming language of the workflow implementation
+// The programming language of the workflow implementation.
 type VersionGetResponseLanguage string
 
 const (
@@ -274,6 +302,30 @@ func (r VersionGetResponseLanguage) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type VersionGetResponseConcurrency struct {
+	// Maximum number of instances of this workflow that can run concurrently.
+	// Additional instances are queued and started as running instances complete. Must
+	// not exceed the account concurrency limit.
+	Limit int64                             `json:"limit"`
+	JSON  versionGetResponseConcurrencyJSON `json:"-"`
+}
+
+// versionGetResponseConcurrencyJSON contains the JSON metadata for the struct
+// [VersionGetResponseConcurrency]
+type versionGetResponseConcurrencyJSON struct {
+	Limit       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseConcurrency) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseConcurrencyJSON) RawJSON() string {
+	return r.raw
 }
 
 type VersionGetResponseDefaultRetention struct {
