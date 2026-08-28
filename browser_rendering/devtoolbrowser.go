@@ -24,9 +24,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDevtoolBrowserService] method instead.
 type DevtoolBrowserService struct {
-	Options []option.RequestOption
-	Page    *DevtoolBrowserPageService
-	Targets *DevtoolBrowserTargetService
+	Options  []option.RequestOption
+	LiveView *DevtoolBrowserLiveViewService
+	Page     *DevtoolBrowserPageService
+	Targets  *DevtoolBrowserTargetService
 }
 
 // NewDevtoolBrowserService generates a new service that applies the given options
@@ -35,6 +36,7 @@ type DevtoolBrowserService struct {
 func NewDevtoolBrowserService(opts ...option.RequestOption) (r *DevtoolBrowserService) {
 	r = &DevtoolBrowserService{}
 	r.Options = opts
+	r.LiveView = NewDevtoolBrowserLiveViewService(opts...)
 	r.Page = NewDevtoolBrowserPageService(opts...)
 	r.Targets = NewDevtoolBrowserTargetService(opts...)
 	return

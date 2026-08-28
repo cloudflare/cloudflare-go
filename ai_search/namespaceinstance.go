@@ -3473,7 +3473,7 @@ func (r namespaceInstanceChatCompletionsResponseChoiceJSON) RawJSON() string {
 }
 
 type NamespaceInstanceChatCompletionsResponseChoicesMessage struct {
-	Content     NamespaceInstanceChatCompletionsResponseChoicesMessageContentUnion `json:"content" api:"required,nullable"`
+	Content     NamespaceInstanceChatCompletionsResponseChoicesMessageContentUnion `json:"content" api:"required"`
 	Role        NamespaceInstanceChatCompletionsResponseChoicesMessageRole         `json:"role" api:"required"`
 	ExtraFields map[string]interface{}                                             `json:"-" api:"extrafields"`
 	JSON        namespaceInstanceChatCompletionsResponseChoicesMessageJSON         `json:"-"`
@@ -3496,8 +3496,9 @@ func (r namespaceInstanceChatCompletionsResponseChoicesMessageJSON) RawJSON() st
 	return r.raw
 }
 
-// Union satisfied by [shared.UnionString] or
-// [NamespaceInstanceChatCompletionsResponseChoicesMessageContentArray].
+// Union satisfied by [shared.UnionString],
+// [NamespaceInstanceChatCompletionsResponseChoicesMessageContentArray] or
+// [shared.UnionString].
 type NamespaceInstanceChatCompletionsResponseChoicesMessageContentUnion interface {
 	ImplementsNamespaceInstanceChatCompletionsResponseChoicesMessageContentUnion()
 }
@@ -3513,6 +3514,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(NamespaceInstanceChatCompletionsResponseChoicesMessageContentArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
@@ -5988,7 +5993,8 @@ func (r NamespaceInstanceChatCompletionsParamsMessage) MarshalJSON() (data []byt
 }
 
 // Satisfied by [shared.UnionString],
-// [ai_search.NamespaceInstanceChatCompletionsParamsMessagesContentArray].
+// [ai_search.NamespaceInstanceChatCompletionsParamsMessagesContentArray],
+// [shared.UnionString].
 type NamespaceInstanceChatCompletionsParamsMessagesContentUnion interface {
 	ImplementsNamespaceInstanceChatCompletionsParamsMessagesContentUnion()
 }
@@ -6475,7 +6481,8 @@ func (r NamespaceInstanceSearchParamsMessage) MarshalJSON() (data []byte, err er
 }
 
 // Satisfied by [shared.UnionString],
-// [ai_search.NamespaceInstanceSearchParamsMessagesContentArray].
+// [ai_search.NamespaceInstanceSearchParamsMessagesContentArray],
+// [shared.UnionString].
 type NamespaceInstanceSearchParamsMessagesContentUnion interface {
 	ImplementsNamespaceInstanceSearchParamsMessagesContentUnion()
 }

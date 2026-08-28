@@ -241,12 +241,16 @@ func (r SubmissionListResponseType) IsKnown() bool {
 type SubmissionListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The sorting direction.
+	Direction param.Field[SubmissionListParamsDirection] `query:"direction"`
 	// The end of the search date range. Defaults to `now`.
 	End param.Field[time.Time] `query:"end" format:"date-time"`
 	// When true, return only submissions that were escalated by an end user (vs. by
 	// the security team). When false, return only submissions that were not escalated
 	// by an end user. When omitted, no filter is applied.
-	EscalatedFromUser   param.Field[bool]                                    `query:"escalated_from_user"`
+	EscalatedFromUser param.Field[bool] `query:"escalated_from_user"`
+	// Field to sort by.
+	Order               param.Field[SubmissionListParamsOrder]               `query:"order"`
 	OriginalDisposition param.Field[SubmissionListParamsOriginalDisposition] `query:"original_disposition"`
 	OutcomeDisposition  param.Field[SubmissionListParamsOutcomeDisposition]  `query:"outcome_disposition"`
 	// Current page within paginated list of results.
@@ -268,6 +272,42 @@ func (r SubmissionListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// The sorting direction.
+type SubmissionListParamsDirection string
+
+const (
+	SubmissionListParamsDirectionAsc  SubmissionListParamsDirection = "asc"
+	SubmissionListParamsDirectionDesc SubmissionListParamsDirection = "desc"
+)
+
+func (r SubmissionListParamsDirection) IsKnown() bool {
+	switch r {
+	case SubmissionListParamsDirectionAsc, SubmissionListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
+// Field to sort by.
+type SubmissionListParamsOrder string
+
+const (
+	SubmissionListParamsOrderSubmissionID         SubmissionListParamsOrder = "submission_id"
+	SubmissionListParamsOrderSubject              SubmissionListParamsOrder = "subject"
+	SubmissionListParamsOrderOriginalDisposition  SubmissionListParamsOrder = "original_disposition"
+	SubmissionListParamsOrderRequestedDisposition SubmissionListParamsOrder = "requested_disposition"
+	SubmissionListParamsOrderOutcomeDisposition   SubmissionListParamsOrder = "outcome_disposition"
+	SubmissionListParamsOrderRequestedAt          SubmissionListParamsOrder = "requested_at"
+)
+
+func (r SubmissionListParamsOrder) IsKnown() bool {
+	switch r {
+	case SubmissionListParamsOrderSubmissionID, SubmissionListParamsOrderSubject, SubmissionListParamsOrderOriginalDisposition, SubmissionListParamsOrderRequestedDisposition, SubmissionListParamsOrderOutcomeDisposition, SubmissionListParamsOrderRequestedAt:
+		return true
+	}
+	return false
 }
 
 type SubmissionListParamsOriginalDisposition string

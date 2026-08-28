@@ -68,7 +68,9 @@ type TenantAccount struct {
 	Name      string                `json:"name" api:"required,nullable"`
 	Settings  TenantAccountSettings `json:"settings" api:"required"`
 	Type      TenantAccountType     `json:"type" api:"required"`
-	JSON      tenantAccountJSON     `json:"-"`
+	// Account tags, present only when `include_tags=true` is requested.
+	Tags map[string]string `json:"tags"`
+	JSON tenantAccountJSON `json:"-"`
 }
 
 // tenantAccountJSON contains the JSON metadata for the struct [TenantAccount]
@@ -78,6 +80,7 @@ type tenantAccountJSON struct {
 	Name        apijson.Field
 	Settings    apijson.Field
 	Type        apijson.Field
+	Tags        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

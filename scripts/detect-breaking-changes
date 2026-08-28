@@ -874,6 +874,7 @@ TEST_PATHS=(
 	browser_rendering/crawl_test.go
 	browser_rendering/devtoolsession_test.go
 	browser_rendering/devtoolbrowser_test.go
+	browser_rendering/devtoolbrowserliveview_test.go
 	browser_rendering/devtoolbrowserpage_test.go
 	browser_rendering/devtoolbrowsertarget_test.go
 	custom_pages/custompage_test.go

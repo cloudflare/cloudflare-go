@@ -3431,7 +3431,7 @@ func (r instanceChatCompletionsResponseChoiceJSON) RawJSON() string {
 }
 
 type InstanceChatCompletionsResponseChoicesMessage struct {
-	Content     InstanceChatCompletionsResponseChoicesMessageContentUnion `json:"content" api:"required,nullable"`
+	Content     InstanceChatCompletionsResponseChoicesMessageContentUnion `json:"content" api:"required"`
 	Role        InstanceChatCompletionsResponseChoicesMessageRole         `json:"role" api:"required"`
 	ExtraFields map[string]interface{}                                    `json:"-" api:"extrafields"`
 	JSON        instanceChatCompletionsResponseChoicesMessageJSON         `json:"-"`
@@ -3454,8 +3454,9 @@ func (r instanceChatCompletionsResponseChoicesMessageJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [shared.UnionString] or
-// [InstanceChatCompletionsResponseChoicesMessageContentArray].
+// Union satisfied by [shared.UnionString],
+// [InstanceChatCompletionsResponseChoicesMessageContentArray] or
+// [shared.UnionString].
 type InstanceChatCompletionsResponseChoicesMessageContentUnion interface {
 	ImplementsInstanceChatCompletionsResponseChoicesMessageContentUnion()
 }
@@ -3471,6 +3472,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(InstanceChatCompletionsResponseChoicesMessageContentArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
@@ -5941,7 +5946,8 @@ func (r InstanceChatCompletionsParamsMessage) MarshalJSON() (data []byte, err er
 }
 
 // Satisfied by [shared.UnionString],
-// [ai_search.InstanceChatCompletionsParamsMessagesContentArray].
+// [ai_search.InstanceChatCompletionsParamsMessagesContentArray],
+// [shared.UnionString].
 type InstanceChatCompletionsParamsMessagesContentUnion interface {
 	ImplementsInstanceChatCompletionsParamsMessagesContentUnion()
 }
@@ -6428,7 +6434,7 @@ func (r InstanceSearchParamsMessage) MarshalJSON() (data []byte, err error) {
 }
 
 // Satisfied by [shared.UnionString],
-// [ai_search.InstanceSearchParamsMessagesContentArray].
+// [ai_search.InstanceSearchParamsMessagesContentArray], [shared.UnionString].
 type InstanceSearchParamsMessagesContentUnion interface {
 	ImplementsInstanceSearchParamsMessagesContentUnion()
 }

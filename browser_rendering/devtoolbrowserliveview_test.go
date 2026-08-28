@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package realtime_kit_test
+package browser_rendering_test
 
 import (
 	"context"
@@ -9,13 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v7"
+	"github.com/cloudflare/cloudflare-go/v7/browser_rendering"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/realtime_kit"
 )
 
-func TestAnalyticsGetOrgAnalyticsWithOptionalParams(t *testing.T) {
-	t.Skip("requires accumulated historical data")
+func TestDevtoolBrowserLiveViewNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,13 +28,17 @@ func TestAnalyticsGetOrgAnalyticsWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RealtimeKit.Analytics.GetOrgAnalytics(
+	_, err := client.BrowserRendering.Devtools.Browser.LiveView.New(
 		context.TODO(),
-		"app_id",
-		realtime_kit.AnalyticsGetOrgAnalyticsParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			EndDate:   cloudflare.F("2022-09-22T00:00:00Z"),
-			StartDate: cloudflare.F("2022-09-01T00:00:00Z"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		browser_rendering.DevtoolBrowserLiveViewNewParams{
+			AccountID:   cloudflare.F("account_id"),
+			ExpiresInMs: cloudflare.F(60000.000000),
+			Guardrails: cloudflare.F(browser_rendering.DevtoolBrowserLiveViewNewParamsGuardrails{
+				Mode: cloudflare.F(browser_rendering.DevtoolBrowserLiveViewNewParamsGuardrailsModeReadonly),
+			}),
+			Mode:     cloudflare.F(browser_rendering.DevtoolBrowserLiveViewNewParamsModeDevtools),
+			TargetID: cloudflare.F("targetId"),
 		},
 	)
 	if err != nil {

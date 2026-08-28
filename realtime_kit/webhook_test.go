@@ -15,7 +15,7 @@ import (
 )
 
 func TestWebhookNewWebhookWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -50,7 +50,7 @@ func TestWebhookNewWebhookWithOptionalParams(t *testing.T) {
 }
 
 func TestWebhookDeleteWebhook(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -82,7 +82,7 @@ func TestWebhookDeleteWebhook(t *testing.T) {
 }
 
 func TestWebhookEditWebhookWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -118,7 +118,7 @@ func TestWebhookEditWebhookWithOptionalParams(t *testing.T) {
 }
 
 func TestWebhookGetWebhookByID(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -150,7 +150,7 @@ func TestWebhookGetWebhookByID(t *testing.T) {
 }
 
 func TestWebhookGetWebhooks(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -181,7 +181,7 @@ func TestWebhookGetWebhooks(t *testing.T) {
 }
 
 func TestWebhookReplaceWebhookWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

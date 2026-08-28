@@ -16,7 +16,7 @@ import (
 )
 
 func TestMeetingNewWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -109,7 +109,7 @@ func TestMeetingNewWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingAddParticipantWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -145,7 +145,7 @@ func TestMeetingAddParticipantWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingDeleteMeetingParticipant(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -178,7 +178,7 @@ func TestMeetingDeleteMeetingParticipant(t *testing.T) {
 }
 
 func TestMeetingEditParticipantWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -214,7 +214,7 @@ func TestMeetingEditParticipantWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingGetWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -251,7 +251,7 @@ func TestMeetingGetWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingGetMeetingByIDWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -284,7 +284,7 @@ func TestMeetingGetMeetingByIDWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingGetMeetingParticipant(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -317,7 +317,7 @@ func TestMeetingGetMeetingParticipant(t *testing.T) {
 }
 
 func TestMeetingGetMeetingParticipantsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -351,7 +351,7 @@ func TestMeetingGetMeetingParticipantsWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingRefreshParticipantToken(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -384,7 +384,7 @@ func TestMeetingRefreshParticipantToken(t *testing.T) {
 }
 
 func TestMeetingReplaceMeetingByIDWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -478,7 +478,7 @@ func TestMeetingReplaceMeetingByIDWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingUpdateMeetingByIDWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

@@ -141,6 +141,10 @@ func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetPa
 type BotFightModeConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection BotFightModeConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled bool `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant BotFightModeConfigurationCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with
@@ -169,17 +173,18 @@ type BotFightModeConfiguration struct {
 // botFightModeConfigurationJSON contains the JSON metadata for the struct
 // [BotFightModeConfiguration]
 type botFightModeConfigurationJSON struct {
-	AIBotsProtection       apijson.Field
-	CfRobotsVariant        apijson.Field
-	ContentBotsProtection  apijson.Field
-	CrawlerProtection      apijson.Field
-	EnableJS               apijson.Field
-	FightMode              apijson.Field
-	IsRobotsTXTManaged     apijson.Field
-	StaleZoneConfiguration apijson.Field
-	UsingLatestModel       apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	AIBotsProtection         apijson.Field
+	BotPreferenceSyncEnabled apijson.Field
+	CfRobotsVariant          apijson.Field
+	ContentBotsProtection    apijson.Field
+	CrawlerProtection        apijson.Field
+	EnableJS                 apijson.Field
+	FightMode                apijson.Field
+	IsRobotsTXTManaged       apijson.Field
+	StaleZoneConfiguration   apijson.Field
+	UsingLatestModel         apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *BotFightModeConfiguration) UnmarshalJSON(data []byte) (err error) {
@@ -305,6 +310,10 @@ func (r botFightModeConfigurationStaleZoneConfigurationJSON) RawJSON() string {
 type BotFightModeConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[BotFightModeConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled param.Field[bool] `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant param.Field[BotFightModeConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with
@@ -362,6 +371,10 @@ type SubscriptionConfiguration struct {
 	// Indicates that the bot management cookie can be placed on end user devices
 	// accessing the site. Defaults to true
 	BmCookieEnabled bool `json:"bm_cookie_enabled"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled bool `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant SubscriptionConfigurationCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with
@@ -391,19 +404,20 @@ type SubscriptionConfiguration struct {
 // subscriptionConfigurationJSON contains the JSON metadata for the struct
 // [SubscriptionConfiguration]
 type subscriptionConfigurationJSON struct {
-	AIBotsProtection       apijson.Field
-	AutoUpdateModel        apijson.Field
-	BmCookieEnabled        apijson.Field
-	CfRobotsVariant        apijson.Field
-	ContentBotsProtection  apijson.Field
-	CrawlerProtection      apijson.Field
-	EnableJS               apijson.Field
-	IsRobotsTXTManaged     apijson.Field
-	StaleZoneConfiguration apijson.Field
-	SuppressSessionScore   apijson.Field
-	UsingLatestModel       apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	AIBotsProtection         apijson.Field
+	AutoUpdateModel          apijson.Field
+	BmCookieEnabled          apijson.Field
+	BotPreferenceSyncEnabled apijson.Field
+	CfRobotsVariant          apijson.Field
+	ContentBotsProtection    apijson.Field
+	CrawlerProtection        apijson.Field
+	EnableJS                 apijson.Field
+	IsRobotsTXTManaged       apijson.Field
+	StaleZoneConfiguration   apijson.Field
+	SuppressSessionScore     apijson.Field
+	UsingLatestModel         apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *SubscriptionConfiguration) UnmarshalJSON(data []byte) (err error) {
@@ -536,6 +550,10 @@ type SubscriptionConfigurationParam struct {
 	// Indicates that the bot management cookie can be placed on end user devices
 	// accessing the site. Defaults to true
 	BmCookieEnabled param.Field[bool] `json:"bm_cookie_enabled"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled param.Field[bool] `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant param.Field[SubscriptionConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with
@@ -587,6 +605,10 @@ func (r SubscriptionConfigurationStaleZoneConfigurationParam) MarshalJSON() (dat
 type SuperBotFightModeDefinitelyConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection SuperBotFightModeDefinitelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled bool `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant SuperBotFightModeDefinitelyConfigurationCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with
@@ -624,6 +646,7 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 // struct [SuperBotFightModeDefinitelyConfiguration]
 type superBotFightModeDefinitelyConfigurationJSON struct {
 	AIBotsProtection             apijson.Field
+	BotPreferenceSyncEnabled     apijson.Field
 	CfRobotsVariant              apijson.Field
 	ContentBotsProtection        apijson.Field
 	CrawlerProtection            apijson.Field
@@ -783,6 +806,10 @@ func (r superBotFightModeDefinitelyConfigurationStaleZoneConfigurationJSON) RawJ
 type SuperBotFightModeDefinitelyConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[SuperBotFightModeDefinitelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled param.Field[bool] `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant param.Field[SuperBotFightModeDefinitelyConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with
@@ -833,6 +860,10 @@ func (r SuperBotFightModeDefinitelyConfigurationStaleZoneConfigurationParam) Mar
 type SuperBotFightModeLikelyConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection SuperBotFightModeLikelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled bool `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant SuperBotFightModeLikelyConfigurationCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with
@@ -872,6 +903,7 @@ type SuperBotFightModeLikelyConfiguration struct {
 // struct [SuperBotFightModeLikelyConfiguration]
 type superBotFightModeLikelyConfigurationJSON struct {
 	AIBotsProtection             apijson.Field
+	BotPreferenceSyncEnabled     apijson.Field
 	CfRobotsVariant              apijson.Field
 	ContentBotsProtection        apijson.Field
 	CrawlerProtection            apijson.Field
@@ -1045,6 +1077,10 @@ func (r superBotFightModeLikelyConfigurationStaleZoneConfigurationJSON) RawJSON(
 type SuperBotFightModeLikelyConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[SuperBotFightModeLikelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled param.Field[bool] `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant param.Field[SuperBotFightModeLikelyConfigurationCfRobotsVariant] `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with
@@ -1100,6 +1136,10 @@ type BotManagementUpdateResponse struct {
 	// Indicates that the bot management cookie can be placed on end user devices
 	// accessing the site. Defaults to true
 	BmCookieEnabled bool `json:"bm_cookie_enabled"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled bool `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant BotManagementUpdateResponseCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with
@@ -1150,6 +1190,7 @@ type botManagementUpdateResponseJSON struct {
 	AIBotsProtection             apijson.Field
 	AutoUpdateModel              apijson.Field
 	BmCookieEnabled              apijson.Field
+	BotPreferenceSyncEnabled     apijson.Field
 	CfRobotsVariant              apijson.Field
 	ContentBotsProtection        apijson.Field
 	CrawlerProtection            apijson.Field
@@ -1348,6 +1389,10 @@ type BotManagementGetResponse struct {
 	// Indicates that the bot management cookie can be placed on end user devices
 	// accessing the site. Defaults to true
 	BmCookieEnabled bool `json:"bm_cookie_enabled"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled bool `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant BotManagementGetResponseCfRobotsVariant `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with
@@ -1398,6 +1443,7 @@ type botManagementGetResponseJSON struct {
 	AIBotsProtection             apijson.Field
 	AutoUpdateModel              apijson.Field
 	BmCookieEnabled              apijson.Field
+	BotPreferenceSyncEnabled     apijson.Field
 	CfRobotsVariant              apijson.Field
 	ContentBotsProtection        apijson.Field
 	CrawlerProtection            apijson.Field
@@ -1606,6 +1652,10 @@ type BotManagementUpdateParamsBody struct {
 	// Indicates that the bot management cookie can be placed on end user devices
 	// accessing the site. Defaults to true
 	BmCookieEnabled param.Field[bool] `json:"bm_cookie_enabled"`
+	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
+	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
+	// preferences.
+	BotPreferenceSyncEnabled param.Field[bool] `json:"bot_preference_sync_enabled"`
 	// Specifies the Robots Access Control License variant to use.
 	CfRobotsVariant param.Field[BotManagementUpdateParamsBodyCfRobotsVariant] `json:"cf_robots_variant"`
 	// Enable rule to block content bots. When enabled, blocks automated traffic with

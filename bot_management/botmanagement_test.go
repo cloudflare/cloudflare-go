@@ -31,13 +31,14 @@ func TestBotManagementUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.BotManagement.Update(context.TODO(), bot_management.BotManagementUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: bot_management.BotFightModeConfigurationParam{
-			AIBotsProtection:      cloudflare.F(bot_management.BotFightModeConfigurationAIBotsProtectionDisabled),
-			CfRobotsVariant:       cloudflare.F(bot_management.BotFightModeConfigurationCfRobotsVariantOff),
-			ContentBotsProtection: cloudflare.F(bot_management.BotFightModeConfigurationContentBotsProtectionDisabled),
-			CrawlerProtection:     cloudflare.F(bot_management.BotFightModeConfigurationCrawlerProtectionDisabled),
-			EnableJS:              cloudflare.F(true),
-			FightMode:             cloudflare.F(true),
-			IsRobotsTXTManaged:    cloudflare.F(false),
+			AIBotsProtection:         cloudflare.F(bot_management.BotFightModeConfigurationAIBotsProtectionDisabled),
+			BotPreferenceSyncEnabled: cloudflare.F(true),
+			CfRobotsVariant:          cloudflare.F(bot_management.BotFightModeConfigurationCfRobotsVariantOff),
+			ContentBotsProtection:    cloudflare.F(bot_management.BotFightModeConfigurationContentBotsProtectionDisabled),
+			CrawlerProtection:        cloudflare.F(bot_management.BotFightModeConfigurationCrawlerProtectionDisabled),
+			EnableJS:                 cloudflare.F(true),
+			FightMode:                cloudflare.F(true),
+			IsRobotsTXTManaged:       cloudflare.F(false),
 		},
 	})
 	if err != nil {

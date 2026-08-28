@@ -16,7 +16,7 @@ import (
 )
 
 func TestSessionGenerateSummaryOfTranscripts(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires completed session with participant data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -48,7 +48,7 @@ func TestSessionGenerateSummaryOfTranscripts(t *testing.T) {
 }
 
 func TestSessionGetParticipantDataFromPeerIDWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires completed session with participant data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -82,7 +82,7 @@ func TestSessionGetParticipantDataFromPeerIDWithOptionalParams(t *testing.T) {
 }
 
 func TestSessionGetSessionChat(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires completed session with participant data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -114,7 +114,7 @@ func TestSessionGetSessionChat(t *testing.T) {
 }
 
 func TestSessionGetSessionDetailsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires completed session with participant data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -147,7 +147,7 @@ func TestSessionGetSessionDetailsWithOptionalParams(t *testing.T) {
 }
 
 func TestSessionGetSessionParticipantDetailsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires completed session with participant data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -181,7 +181,7 @@ func TestSessionGetSessionParticipantDetailsWithOptionalParams(t *testing.T) {
 }
 
 func TestSessionGetSessionParticipantsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires completed session with participant data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -220,7 +220,7 @@ func TestSessionGetSessionParticipantsWithOptionalParams(t *testing.T) {
 }
 
 func TestSessionGetSessionSummary(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires completed session with participant data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -252,7 +252,7 @@ func TestSessionGetSessionSummary(t *testing.T) {
 }
 
 func TestSessionGetSessionTranscriptsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires completed session with participant data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -285,7 +285,7 @@ func TestSessionGetSessionTranscriptsWithOptionalParams(t *testing.T) {
 }
 
 func TestSessionGetSessionsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires completed session with participant data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
