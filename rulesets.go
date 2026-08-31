@@ -242,6 +242,7 @@ type RulesetRuleActionParameters struct {
 	AutomaticHTTPSRewrites   *bool                                             `json:"automatic_https_rewrites,omitempty"`
 	AutoMinify               *RulesetRuleActionParametersAutoMinify            `json:"autominify,omitempty"`
 	BrowserIntegrityCheck    *bool                                             `json:"bic,omitempty"`
+	ContentConverter         *bool                                             `json:"content_converter,omitempty"`
 	DisableApps              *bool                                             `json:"disable_apps,omitempty"`
 	DisableZaraz             *bool                                             `json:"disable_zaraz,omitempty"`
 	DisableRailgun           *bool                                             `json:"disable_railgun,omitempty"`
