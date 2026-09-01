@@ -1,0 +1,25 @@
+zero_trust/casbapplication.go
+  s_21ae8a3d54ed60::t_666bb920b18a4f 13-17,68-80,105,127-161,165-168,174,248-251,257
+zero_trust/casbapplication_test.go
+  s_21ae8a3d54ed60::t_ce537ed05c61be 11-14
+zero_trust/casbapplicationauthmethod.go
+  s_21ae8a3d54ed60::t_68f0e0660b57bd 12-15
+zero_trust/casbapplicationauthmethod_test.go
+  s_21ae8a3d54ed60::t_f4c888481ad7cd 11-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "74aeeeae7fca8e56310b6f3fd52d7c091b87eb2a",
+  "prompts": {},
+  "sessions": {
+    "s_21ae8a3d54ed60": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0946c8c5dffeNB2fL15yOqtFRA",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}

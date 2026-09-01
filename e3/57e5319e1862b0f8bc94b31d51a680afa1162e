@@ -1,0 +1,21 @@
+billing/baddebt_test.go
+  s_7fb3048ded12b4::t_d23f1cb1dcebf2 16,18-20,34,36-38
+dns/record.go
+  s_7fb3048ded12b4::t_743856bdc94e21 2735-2736,2758,2790-2816,2863-2864,2892-2905,3440-3443,6701-6704,6714,6804-6807
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "e357e5319e1862b0f8bc94b31d51a680afa1162e",
+  "prompts": {},
+  "sessions": {
+    "s_7fb3048ded12b4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fc5c6f082ffesJ9KoPP8x4k36E",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Vaishak Dinesh <vaishak@cloudflare.com>"
+    }
+  }
+}

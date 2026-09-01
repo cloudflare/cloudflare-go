@@ -1,0 +1,19 @@
+client.go
+  s_106fbb49e78746::t_acd3d91da72c5b 477
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "fe3246403077fcace81350aaa51397c12709e124",
+  "prompts": {},
+  "sessions": {
+    "s_106fbb49e78746": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fea0e51e7ffewNj3oZFMs3BSzv",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}

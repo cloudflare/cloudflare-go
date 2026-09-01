@@ -1,0 +1,25 @@
+CHANGELOG.md
+  s_9446f63c0cb33d::t_cd1448a4e66c01 3-59,64,79,122,155,372
+  s_9446f63c0cb33d::t_48909d33b6d2a9 60-63
+  s_9446f63c0cb33d::t_4e60e86115e32b 65-67,76-78
+  s_9446f63c0cb33d::t_649ff69e1e43e2 80-82,119-121
+  s_9446f63c0cb33d::t_d1abde075b0243 123-125
+  s_9446f63c0cb33d::t_6a7af18b6718af 369-371
+  s_9446f63c0cb33d::t_4d056e39094977 373-375
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "28fa46c25c45de21a76d8f6a386add5b806af62f",
+  "prompts": {},
+  "sessions": {
+    "s_9446f63c0cb33d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_06a5afba4ffeQqNOrhAJypIKE7",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}

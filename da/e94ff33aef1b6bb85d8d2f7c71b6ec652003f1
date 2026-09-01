@@ -1,0 +1,19 @@
+README.md
+  s_61da62741c44d2::t_df74504d714b17 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "dae94ff33aef1b6bb85d8d2f7c71b6ec652003f1",
+  "prompts": {},
+  "sessions": {
+    "s_61da62741c44d2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe50ff9abffeP8gfxSYNYTQ5CZ",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}

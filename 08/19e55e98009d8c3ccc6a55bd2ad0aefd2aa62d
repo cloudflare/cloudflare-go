@@ -1,0 +1,26 @@
+dns/record.go
+  s_705f874974d177::t_9501b3676a1016 2735-2736,2758,2790-2816,2863-2864,2892-2905,3440-3443,6701-6704,6714,6804-6807
+zero_trust/accessaicontrolmcpportal.go
+  h_5f12c8df3da73f 613-615
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "0819e55e98009d8c3ccc6a55bd2ad0aefd2aa62d",
+  "prompts": {},
+  "humans": {
+    "h_5f12c8df3da73f": {
+      "author": "Vaishak Dinesh <vaishak@cloudflare.com>"
+    }
+  },
+  "sessions": {
+    "s_705f874974d177": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_046c07751ffeYAfHwWfsEPfxCu",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Vaishak Dinesh <vaishak@cloudflare.com>"
+    }
+  }
+}

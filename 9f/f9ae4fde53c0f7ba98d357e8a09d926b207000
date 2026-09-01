@@ -1,0 +1,21 @@
+internal/apijson/encoder.go
+  s_c99265931e4245::t_5de3de0db1874a 186-193,197,200,202-203,205,207-208
+internal/apijson/array_bench_test.go
+  s_c99265931e4245::t_af0befd7e85876 1-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "9ff9ae4fde53c0f7ba98d357e8a09d926b207000",
+  "prompts": {},
+  "sessions": {
+    "s_c99265931e4245": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_04bbdfb58ffeMSxjK0uiYekuzf",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Sarah Sicard <ssicard@cloudflare.com>"
+    }
+  }
+}
