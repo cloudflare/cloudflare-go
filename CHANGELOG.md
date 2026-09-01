@@ -1,4 +1,14 @@
-## 0.117.0 (Unreleased)
+## 0.118.0 (September 1st, 2026)
+
+ENHANCEMENTS:
+
+* rulesets: add `content_converter` to `RulesetRuleActionParameters` for `http_config_settings` `set_config` rules ([#4359](https://github.com/cloudflare/cloudflare-go/issues/4359))
+
+## 0.117.0 (May 20th, 2026)
+
+ENHANCEMENTS:
+
+* rulesets: add `asset_name` to `RulesetRuleActionParameters` for `http_custom_errors` `serve_error` rules ([#4312](https://github.com/cloudflare/cloudflare-go/issues/4312))
 
 ## 0.116.0 (September 5th, 2025)
 
