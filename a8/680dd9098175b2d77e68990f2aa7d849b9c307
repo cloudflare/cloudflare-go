@@ -1,0 +1,21 @@
+stream/webhook.go
+  s_a08f0fec70bad4::t_20772df6429c06 148
+stream/webhook_test.go
+  s_a08f0fec70bad4::t_0159864aea1232 31-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "a8680dd9098175b2d77e68990f2aa7d849b9c307",
+  "prompts": {},
+  "sessions": {
+    "s_a08f0fec70bad4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa2240e7cffectjn4lSf1JIKQJ",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
